@@ -5,6 +5,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Splash from './Splash';
 import Login from './Login';
 import Filter from './Filter';
+import Home from './Home';
 const Stack = createStackNavigator();
 
 export default class AppNavigater extends React.Component {
@@ -14,6 +15,7 @@ export default class AppNavigater extends React.Component {
         <Stack.Navigator>
           <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+          <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
           <Stack.Screen name="Filter" component={Filter} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>

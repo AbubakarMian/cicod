@@ -38,7 +38,7 @@ export default class MyVues extends React.Component {
                 </View>
                
                 <TouchableOpacity
-                onPress={()=>this.props.navigation.navigate('Filter')}
+                onPress={()=>this.props.navigation.navigate('Home')}
                 style={[{}, styles.btnContinuueView]}>
                     <Text style={{ color: '#FFFFFF' }}>Continuue</Text>
                 </TouchableOpacity>
