@@ -1,10 +1,10 @@
 import React from 'react'
 import { View, ImageBackground, Text, Dimensions, Image, Platform, TouchableOpacity, ScrollView } from 'react-native'
 import splashImg from '../images/splash.jpg'
-
+import styles from '../css/DashboardCss'
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
-export default class Home extends React.Component {
+export default class Dashnoard extends React.Component {
   render() {
     return (
       <View style={{ height: height, width: width, alignItems: 'center', position: 'relative', backgroundColor: '#aaa',paddingVertical:20 }}>
@@ -20,9 +20,7 @@ export default class Home extends React.Component {
         <ScrollView>
           <View style={{ marginBottom: 10 }}>
             <View style={[{ flexDirection: 'row', width: width, paddingHorizontal: 10, marginTop: 10 }]}>
-              <TouchableOpacity
-              onPress={()=>this.props.navigation.navigate('Dashnoard')}
-              >
+              <TouchableOpacity>
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 20,
                 justifyContent: 'center', alignItems: 'center',

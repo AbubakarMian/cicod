@@ -6,6 +6,8 @@ import Splash from './Splash';
 import Login from './Login';
 import Filter from './Filter';
 import Home from './Home';
+import Dashnoard from './Dashnoard';
+
 const Stack = createStackNavigator();
 
 export default class AppNavigater extends React.Component {
@@ -16,6 +18,7 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+          <Stack.Screen name="Dashnoard" component={Dashnoard} options={{ headerShown: false }} />
           <Stack.Screen name="Filter" component={Filter} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
