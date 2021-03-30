@@ -8,14 +8,16 @@ import SearchBar from 'react-native-search-bar';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 export default class CreateOrder extends React.Component {
-  render() {
-    return (
-      <View style={[{}, styles.mainView]}>
-        <Header />
-        <View>
-            
-        </View>
-      </View>
-    )
-  }
+    render() {
+        return (
+            <View style={[{}, styles.mainView]}>
+                <Header />
+                <View style={[{}, styles.backHeaderRowView]}>
+                    <TouchableOpacity>
+                        <Icon name="arrow-left" size={25} color="#929497" />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        )
+    }
 }
