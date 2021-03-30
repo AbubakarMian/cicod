@@ -29,6 +29,7 @@
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "^2.18.1",
     "react-native-search-bar": "^3.5.1",
+    "react-native-simple-radio-button": "^2.7.4",
     "react-native-svg": "^12.1.0",
     "react-native-vector-icons": "^8.1.0"
   },
