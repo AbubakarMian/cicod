@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/cicod.iml" filepath="$PROJECT_DIR$/.idea/modules/cicod.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/cicod.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/cicod.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-412338940/cicod.react-native-community_masked-view.iml" filepath="$PROJECT_DIR$/.idea/modules/-412338940/cicod.react-native-community_masked-view.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/179006547/cicod.react-native-gesture-handler.iml" filepath="$PROJECT_DIR$/.idea/modules/179006547/cicod.react-native-gesture-handler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-142243351/cicod.react-native-reanimated.iml" filepath="$PROJECT_DIR$/.idea/modules/-142243351/cicod.react-native-reanimated.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/877968380/cicod.react-native-safe-area-context.iml" filepath="$PROJECT_DIR$/.idea/modules/877968380/cicod.react-native-safe-area-context.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-1869633772/cicod.react-native-screens.iml" filepath="$PROJECT_DIR$/.idea/modules/-1869633772/cicod.react-native-screens.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/-859618205/cicod.react-native-vector-icons.iml" filepath="$PROJECT_DIR$/.idea/modules/-859618205/cicod.react-native-vector-icons.iml" />
+    </modules>
+  </component>
+</project>
