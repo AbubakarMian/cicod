@@ -14,6 +14,7 @@ import Order from './Order';
 import OrderDetail from './OrderDetail';
 import OrderFilter from './OrderFilter';
 import CreateOrder from './CreateOrder';
+import MakePayment from './MakePayment';
 import Customer from './Customer';
 import CustomersDetal from '../views/CustomersDetal';
 import Supplier from '../views/Supplier'
@@ -44,6 +45,7 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="OrderDetail" component={OrderDetail} options={{ headerShown: false }} />
           <Stack.Screen name="OrderFilter" component={OrderFilter} options={{ headerShown: false }} />
           <Stack.Screen name="CreateOrder" component={CreateOrder} options={{ headerShown: false }} />
+          <Stack.Screen name="MakePayment" component={MakePayment} options={{ headerShown: false }} />
           
           <Stack.Screen name="Customer" component={Customer} options={{ headerShown: false }} />
           <Stack.Screen name="CustomersDetal" component={CustomersDetal} options={{ headerShown: false }} />
