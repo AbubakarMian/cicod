@@ -1,20 +1,24 @@
 import React from 'react'
 import { View, ImageBackground, Text, Dimensions, Image, Platform, TouchableOpacity, ScrollView } from 'react-native'
 import splashImg from '../images/splash.jpg'
-
+import Header from '../views/Header';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 export default class Home extends React.Component {
   render() {
     return (
-      <View style={{ height: height, width: width, alignItems: 'center', position: 'relative', backgroundColor: '#aaa',paddingVertical:20 }}>
-        <View style={[{ flexDirection: 'row' }]}>
+      <View style={{ height: height, width: width, alignItems: 'center', position: 'relative', backgroundColor: '#F0F0F0' }}>
+       <Header />
+        <View style={[{ flexDirection: 'row',paddingVertical:10 }]}>
           <View style={{ flex: 1, paddingHorizontal: 10 }}>
             <Text style={[{ color: '#B1272C', fontWeight: 'bold', fontSize: 20 }]}>Welcome,</Text>
-            <Text>Johnson</Text>
+            <Text style={{fontWeight:'500'}}>Johnson</Text>
           </View>
           <View style={{ flex: 1, alignItems: 'flex-end', padding: 10 }}>
-            <Text>Picter</Text>
+           <Image 
+           style={{height:50,width:50}}
+           source={require('../images/profilepic.png')}
+           />
           </View>
         </View>
         <ScrollView>
@@ -51,7 +55,9 @@ export default class Home extends React.Component {
             </View>
             
             <View style={[{ flexDirection: 'row', width: width, paddingHorizontal: 10, marginTop: 10 }]}>
-            <TouchableOpacity>
+            <TouchableOpacity
+            onPress={()=>this.props.navigation.navigate('Order')}
+            >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: height / 4,
                 justifyContent: 'center', alignItems: 'center',
@@ -64,7 +70,9 @@ export default class Home extends React.Component {
                 <Text style={[{ fontWeight: 'bold' }]}>Orders</Text>
               </View>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity
+              onPress={()=>this.props.navigation.navigate('Customer')}
+              >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: height / 4,
                 justifyContent: 'center', alignItems: 'center', marginLeft: 10,
@@ -79,7 +87,9 @@ export default class Home extends React.Component {
               </TouchableOpacity>
             </View>
             <View style={[{ flexDirection: 'row', width: width, paddingHorizontal: 10, marginTop: 10 }]}>
-              <TouchableOpacity>
+              <TouchableOpacity
+              onPress={()=>this.props.navigation.navigate('Products')}
+              >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: height / 4,
                 justifyContent: 'center', alignItems: 'center',
@@ -92,7 +102,9 @@ export default class Home extends React.Component {
                 <Text style={[{ fontWeight: 'bold' }]}>Products</Text>
               </View>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity
+              onPress={()=>this.props.navigation.navigate('Buy')}
+              >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: height / 4,
                 justifyContent: 'center', alignItems: 'center', marginLeft: 10,
@@ -107,7 +119,9 @@ export default class Home extends React.Component {
               </TouchableOpacity>
             </View>
             <View style={[{ flexDirection: 'row', width: width, paddingHorizontal: 10, marginTop: 10 }]}>
-              <TouchableOpacity>
+              <TouchableOpacity
+              onPress={()=>this.props.navigation.navigate('Supplier')}
+              >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: height / 4,
                 justifyContent: 'center', alignItems: 'center',
@@ -120,7 +134,9 @@ export default class Home extends React.Component {
                 <Text style={[{ fontWeight: 'bold' }]}>Suppliers</Text>
               </View>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity
+              onPress={()=>this.props.navigation.navigate('Buyers')}
+              >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: height / 4,
                 justifyContent: 'center', alignItems: 'center', marginLeft: 10,
@@ -136,7 +152,9 @@ export default class Home extends React.Component {
 
             </View>
             <View style={[{ flexDirection: 'row', width: width, paddingHorizontal: 10, marginTop: 10 }]}>
-              <TouchableOpacity>
+              <TouchableOpacity
+              onPress={()=>this.props.navigation.navigate('Connect')}
+              >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: height / 4,
                 justifyContent: 'center', alignItems: 'center',

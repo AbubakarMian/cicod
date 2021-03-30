@@ -13,7 +13,8 @@
 'use strict';
 
 const babelRegisterOnly = require('metro-babel-register');
-const createCacheKeyFunction = require('fbjs-scripts/jest/createCacheKeyFunction');
+const createCacheKeyFunction = require('@jest/create-cache-key-function')
+  .default;
 
 const {transformSync: babelTransformSync} = require('@babel/core');
 const generate = require('@babel/generator').default;
@@ -40,8 +41,6 @@ module.exports = {
       }).code;
     }
 
-    /* $FlowFixMe(>=0.99.0 site=react_native_fb) This fixme can be removed after metro releases
-     * 0.58 and RN upgrades its dependency */
     const {ast} = transformer.transform({
       filename: file,
       options: {
@@ -49,6 +48,7 @@ module.exports = {
         dev: true,
         enableBabelRuntime: false,
         experimentalImportSupport: false,
+        globalPrefix: '',
         hot: false,
         inlineRequires: true,
         minify: false,

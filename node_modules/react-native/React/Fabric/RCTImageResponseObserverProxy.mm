@@ -7,8 +7,9 @@
 
 #import "RCTImageResponseObserverProxy.h"
 
-#import <react/imagemanager/ImageResponse.h>
-#import <react/imagemanager/ImageResponseObserver.h>
+#import <React/RCTUtils.h>
+#import <react/renderer/imagemanager/ImageResponse.h>
+#import <react/renderer/imagemanager/ImageResponseObserver.h>
 #import <react/utils/ManagedObjectWrapper.h>
 
 namespace facebook {
@@ -22,10 +23,11 @@ RCTImageResponseObserverProxy::RCTImageResponseObserverProxy(id<RCTImageResponse
 void RCTImageResponseObserverProxy::didReceiveImage(ImageResponse const &imageResponse) const
 {
   UIImage *image = (UIImage *)unwrapManagedObject(imageResponse.getImage());
+  id metadata = unwrapManagedObject(imageResponse.getMetadata());
   id<RCTImageResponseDelegate> delegate = delegate_;
   auto this_ = this;
-  dispatch_async(dispatch_get_main_queue(), ^{
-    [delegate didReceiveImage:image fromObserver:this_];
+  RCTExecuteOnMainQueue(^{
+    [delegate didReceiveImage:image metadata:metadata fromObserver:this_];
   });
 }
 
@@ -33,7 +35,7 @@ void RCTImageResponseObserverProxy::didReceiveProgress(float progress) const
 {
   auto this_ = this;
   id<RCTImageResponseDelegate> delegate = delegate_;
-  dispatch_async(dispatch_get_main_queue(), ^{
+  RCTExecuteOnMainQueue(^{
     [delegate didReceiveProgress:progress fromObserver:this_];
   });
 }
@@ -42,7 +44,7 @@ void RCTImageResponseObserverProxy::didReceiveFailure() const
 {
   auto this_ = this;
   id<RCTImageResponseDelegate> delegate = delegate_;
-  dispatch_async(dispatch_get_main_queue(), ^{
+  RCTExecuteOnMainQueue(^{
     [delegate didReceiveFailureFromObserver:this_];
   });
 }
