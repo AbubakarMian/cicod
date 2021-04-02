@@ -32,6 +32,27 @@ export default StyleSheet.create({
         color:'#929497',
         fontWeight:'bold',
         marginHorizontal:15
+    },
+    cardTouch:{
+        backgroundColor:'#fff',
+        width:width-20,
+        alignSelf:'center',
+        marginTop:10,
+        padding:10,
+        position:'relative',
+        justifyContent:'center'
+    },
+    cardHeadingText:{
+        fontWeight:'bold',
+        color:'#4E4D4D'
+    },
+    cardDescText:{
+        color:'#929497',
+        fontSize:10
+    },
+    cardImageView:{
+        position:'absolute',
+        right:10
     }
    
 })

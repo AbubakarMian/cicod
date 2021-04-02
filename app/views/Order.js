@@ -4,25 +4,61 @@ import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss'
 import Header from '../views/Header';
 import CalendarPicker from 'react-native-calendar-picker';
+import { connect } from 'react-redux';
+import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 import DropDownPicker from 'react-native-dropdown-picker';
-export default class Products extends React.Component {
+
+class Order extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             selectedStartDate: null,
-            calenderModal: false
+            calenderModal: false,
+            data: []
         };
         this.onDateChange = this.onDateChange.bind(this);
     }
+    componentDidMount() {
+        this.setState({ Spinner: true })
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            },
 
+        };//Constants.Products
+        fetch('https://com.cicodsaasstaging.com/com/api/orders', postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                console.log("###############",responseJson)
+                if (responseJson.status === 'success') {
+                    this.setState({ Spinner: false });
+                    this.setState({
+                        data: responseJson.data
+                    });
+                    // this.props.navigation.navigate('DrawerNavigation')
+                } else {
+                    let message = JSON.stringify(responseJson.error.message)
+                    Alert.alert('Error', message)
+                }
+
+            })
+
+    }
     onDateChange(date) {
         this.setState({
             selectedStartDate: date,
         });
     }
-
+    itemDetail(item) {
+        const id=item.id
+        console.log("item_id item_id item_id item_id ",id)
+        this.props.navigation.navigate('OrderDetail',{id})
+    }
     render() {
 
         const { selectedStartDate } = this.state;
@@ -46,7 +82,6 @@ export default class Products extends React.Component {
                             style={{ backgroundColor: '#fafafa' }}
                             itemStyle={{
                                 justifyContent: 'flex-start',
-
                             }}
                             dropDownStyle={{ backgroundColor: '#fafafa' }}
                             onChangeItem={item => this.setState({
@@ -56,8 +91,8 @@ export default class Products extends React.Component {
                         />
                     </View>
                     <View style={{ position: 'absolute', right: 0 }}>
-                        <TouchableOpacity 
-                        onPress={()=>this.props.navigation.navigate('CreateOrder')}
+                        <TouchableOpacity
+                            onPress={() => this.props.navigation.navigate('CreateOrder')}
                         >
                             <Image
                                 source={require('../images/products/circlePlus.png')}
@@ -107,23 +142,22 @@ export default class Products extends React.Component {
                         <View >
                             <Text style={{ color: '#909090', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PAID FROM CREDIT</Text>
                         </View>
-
                     </View>
                 </ScrollView>
-
                 <ScrollView>
                     <FlatList
-                        data={[
-                            { title: '103943535', key: 'item1', customer: 'James Abinibi', brand: 'Pure Juice ', date: '2017-01-30 / 10:45 AM' },
-                            { title: '103943535', key: 'item1', customer: 'James Abinibi', brand: 'Pure Juice ' },
-                            { title: '103943535', key: 'item1', customer: 'James Abinibi', brand: 'Pure Juice ' },
-                            { title: '103943535', key: 'item1', customer: 'James Abinibi', brand: 'Pure Juice ' },
-                            { title: '103943535', key: 'item1', customer: 'James Abinibi', brand: 'Pure Juice ' },
-                            { title: '103943535', key: 'item1', customer: 'James Abinibi', brand: 'Pure Juice ' },
-                            { title: '103943535', key: 'item1', customer: 'James Abinibi', brand: 'Pure Juice ' },
-                            { title: '103943535', key: 'item1', customer: 'James Abinibi', brand: 'Pure Juice ' },
+                        data={this.state.data}
+                        // data={[
+                        //     { title: '10', key: 'item1', customer: 'James ', brand: 'Pure  ', date: '2017-01-30 ' },
+                        //     { title: '10', key: 'item2', customer: 'James ', brand: 'Pure  ', date: '2017-01-30 ' },
+                        //     { title: '10', key: 'item3', customer: 'James ', brand: 'Pure  ', date: '2017-01-30 ' },
+                        //     { title: '10', key: 'item4', customer: 'James ', brand: 'Pure  ', date: '2017-01-30 ' },
+                        //     { title: '10', key: 'item5', customer: 'James ', brand: 'Pure  ', date: '2017-01-30 ' },
+                        //     { title: '10', key: 'item6', customer: 'James ', brand: 'Pure  ', date: '2017-01-30 ' },
+                        //     { title: '10', key: 'item7', customer: 'James ', brand: 'Pure  ', date: '2017-01-30 ' },
 
-                        ]}
+
+                        // ]}
                         ItemSeparatorComponent={
                             Platform.OS !== 'android' &&
                             (({ highlighted }) => (
@@ -139,7 +173,7 @@ export default class Products extends React.Component {
                         renderItem={({ item, index, separators }) => (
                             <TouchableHighlight
                                 key={item.key}
-                                onPress={() => this.props.navigation.navigate('OrderDetail')}
+                                onPress={() => this.itemDetail(item)}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
                                 <View style={{ position: 'relative', alignSelf: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 5 }}>
@@ -150,17 +184,17 @@ export default class Products extends React.Component {
                                                     source={require('../images/Order/bage.png')}
                                                 />
                                                 <View style={{ flexDirection: 'column' }}>
-                                                    <Text style={{ fontWeight: 'bold' }}>{item.title}</Text>
-                                                    <Text style={[{ color: '#aaa' }]}>{item.customer}</Text>
+                                                    <Text style={{ fontWeight: 'bold' }}>{item.cicod_order_id}</Text>
+                                                    <Text style={[{ color: '#aaa' }]}>{item.customer.name}</Text>
                                                 </View>
                                             </View>
-                                            <Text style={[{ color: '#aaa' }]}>2017-01-30 / 10:45 AM</Text>
+                                            <Text style={[{ color: '#aaa' }]}>{item.order_date}</Text>
                                         </View>
                                     </View>
                                     <View style={{ flex: 1, alignItems: 'flex-end', flexDirection: 'column' }}>
-                                        <Text style={{ fontWeight: 'bold' }}>N500,000</Text>
+                                        <Text style={{ fontWeight: 'bold' }}>N{item.amount}</Text>
                                         <View style={[{ backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
-                                            <Text style={[{ color: '#26C281' }]}>PAID</Text>
+                                            <Text style={[{ color: '#26C281' }]}>{item.payment_status}</Text>
                                         </View>
                                     </View>
                                 </View>
@@ -173,3 +207,15 @@ export default class Products extends React.Component {
         )
     }
 }
+function mapStateToProps(state) {
+    return {
+        user: state.userReducer
+    }
+};
+function mapDispatchToProps(dispatch) {
+    return {
+        setUser: (value) => dispatch({ type: SET_USER, value: value }),
+        logoutUser: () => dispatch({ type: LOGOUT_USER })
+    }
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Order)

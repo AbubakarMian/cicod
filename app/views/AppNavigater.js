@@ -22,7 +22,13 @@ import Connect from './Connect';
 import Buyers from './Buyers';
 import BuyersFilter from './BuyersFilter';
 import Buy from './Buy';
-
+import User from './User';
+import ChangePassword from './ChangePassword';
+import TabNavigater from './TabNavigater';
+import Sell from './Sell';
+import PayByPos from './payByPos';
+import PayByCash from './PayByCash';
+import PayByUssd from './PayByUssd';
 const Stack = createStackNavigator();
 
 export default class AppNavigater extends React.Component {
@@ -30,14 +36,14 @@ export default class AppNavigater extends React.Component {
     return (
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
+          {/* <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
          
-        <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
+        <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} /> */}
         
           
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-          <Stack.Screen name="Dashnoard" component={Dashnoard} options={{ headerShown: false }} />
+          <Stack.Screen name="Dashnoard" component={TabNavigater} options={{ headerShown: false }} />
           <Stack.Screen name="Products" component={Products} options={{ headerShown: false }} />
           <Stack.Screen name="ProductFilter" component={ProductFilter} options={{ headerShown: false }} />
           
@@ -56,6 +62,12 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="Buyers" component={Buyers} options={{ headerShown: false }} />
           <Stack.Screen name="BuyersFilter" component={BuyersFilter} options={{ headerShown: false }} />
           <Stack.Screen name="Buy" component={Buy} options={{ headerShown: false }} />
+          <Stack.Screen name="User" component={User} options={{ headerShown: false }} />
+          <Stack.Screen name="ChangePassword" component={ChangePassword} options={{ headerShown: false }} />
+          <Stack.Screen name="Sell" component={Sell} options={{ headerShown: false }} />
+          <Stack.Screen name="PayByPos" component={PayByPos} options={{ headerShown: false }} />
+          <Stack.Screen name="PayByCash" component={PayByCash} options={{ headerShown: false }} />
+          <Stack.Screen name="PayByUssd" component={PayByUssd} options={{ headerShown: false }} />
           
         </Stack.Navigator>
       </NavigationContainer>

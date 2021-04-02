@@ -45,47 +45,63 @@ export default class MakePayment extends React.Component {
                 <Text style={[{}, styles.heading]}>Please select preferred payment method</Text>
                 <View>
                     <ScrollView>
-                        <FlatList
-                            data={[
-                                { title: 'Pay Online', key: 'item1', qty: 'Make payment using card', brand: 'Pure Juice ' },
-                                { title: 'Pay by POS', key: 'item1', qty: 'Make payment using POS', brand: 'Pure Juice ' },
-                                { title: 'Pay by USSD', key: 'item1', qty: 'Make payment using Bank USSD code', brand: 'Pure Juice ' },
-                                { title: 'Pay by cash', key: 'item1', qty: 'Make payment using cash', brand: 'Pure Juice ' },
-                            ]}
-                            ItemSeparatorComponent={
-                                Platform.OS !== 'android' &&
-                                (({ highlighted }) => (
-                                    <View
-                                        style={[
-                                            style.separator,
-                                            highlighted && { marginLeft: 0 }
-                                        ]}
-                                    />
-                                ))
-                            }
-                            renderItem={({ item, index, separators }) => (
-                                <TouchableHighlight
-                                    key={item.key}
-                                    // onPress={()=>this.props.navigation.navigate('CustomersDetal')}//() => this._onPress(item)
-                                    onShowUnderlay={separators.highlight}
-                                    onHideUnderlay={separators.unhighlight}>
-                                    <View style={{ position: 'relative', alignSelf: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 5 }}>
-                                        <View style={[{ flexDirection: 'row' }]}>
-
-                                        </View>
-                                        <View style={{ position: 'relative', flex: 3 }}>
-                                            <Text>{item.title}</Text>
-                                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-
-                                                <Text style={{ fontSize: 10, color: '#929497' }}>{item.qty}</Text>
-                                                <Image style={{ position: 'absolute', right: 0, }} source={require('../images/payment/cash.png')} />
-
-                                            </View>
-                                        </View>
-                                    </View>
-                                </TouchableHighlight>
-                            )}
-                        />
+                        <View>
+                        <TouchableOpacity
+                        style={[{},styles.cardTouch]}
+                        >
+                            <View>
+                                <View>
+                                    <Text style={[{},styles.cardHeadingText]}>Pay Online</Text>
+                                    <Text style={[{},styles.cardDescText]}>Make payment using card</Text>
+                                </View>
+                            </View>
+                            <View style={[{},styles.cardImageView]}>
+                                <Image source={require('../images/payonline.png')}/>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                        onPress={()=>this.props.navigation.navigate('PayByPos')}
+                        style={[{},styles.cardTouch]}
+                        >
+                            <View>
+                                <View>
+                                    <Text style={[{},styles.cardHeadingText]}>Pay by POS</Text>
+                                    <Text style={[{},styles.cardDescText]}>Make payment using POS</Text>
+                                </View>
+                            </View>
+                            <View style={[{},styles.cardImageView]}>
+                                <Image source={require('../images/payonline.png')}/>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                        onPress={()=>this.props.navigation.navigate('PayByUssd')}
+                        style={[{},styles.cardTouch]}
+                        >
+                            <View>
+                                <View>
+                                    <Text style={[{},styles.cardHeadingText]}>Pay by USSD</Text>
+                                    <Text style={[{},styles.cardDescText]}>Make payment using Bank USSD code</Text>
+                                </View>
+                            </View>
+                            <View style={[{},styles.cardImageView]}>
+                                <Image source={require('../images/payByUssd.png')}/>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                        onPress={()=>this.props.navigation.navigate('PayByCash')}
+                        style={[{},styles.cardTouch]}
+                        >
+                            <View>
+                                <View>
+                                    <Text style={[{},styles.cardHeadingText]}>Pay by cash</Text>
+                                    <Text style={[{},styles.cardDescText]}>Make payment using cash</Text>
+                                </View>
+                            </View>
+                            <View style={[{},styles.cardImageView]}>
+                                <Image source={require('../images/payByCash.png')}/>
+                            </View>
+                        </TouchableOpacity>
+                        </View>
                     </ScrollView>
                 </View>
             </View>
