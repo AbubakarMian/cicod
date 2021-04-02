@@ -45,7 +45,7 @@ export default class PayByCash extends React.Component {
                 <View>
                     <ScrollView>
                         <View style={[{}, styles.contentContainer]}>
-                            <Image source={require('../images/payByUssd.png')} />
+                            <Image style={{height:60,width:40}} source={require('../images/pos-terminal.png')} />
                             <Text style={[{}, styles.collectText]}>Collect the sum of</Text>
                             <Text style={[{}, styles.payText]}>N50,000.00</Text>
                             <View style={{flexDirection:'row'}}>

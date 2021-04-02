@@ -49,9 +49,19 @@ export default class PayByUssd extends React.Component {
                             <Text style={[{}, styles.collectText]}>Collect the sum of</Text>
                             <Text style={[{}, styles.payText]}>N50,000.00</Text>
                             <Text style={[{}, styles.collectText]}>omotayo.odupitan@cicod.com</Text>
-                            
+                            <View style={[{}, styles.selectBankView]}>
+                                <TextInput
+                                    placeholder="Select Bank"
+                                />
+                                <View style={[{}, styles.iconView]}>
+                                    <Icon name="caret-down" size={20} color={'#4E4D4D'} />
+                                </View>
+                            </View>
+
                         </View>
-                       
+                        <View style={[{}, styles.bankDetailView]}>
+                            <Text style={[{},styles.bankDetailText]}>Select a bank above to get USSD CODE</Text>
+                        </View>
                     </ScrollView>
                 </View>
             </View>
