@@ -79,7 +79,29 @@ export default StyleSheet.create({
     },
     touchText:{
         color:'#fff'
-    },   
+    },
+    selectBankView:{
+        width:width-50,
+        alignItems:'center',
+        position:'relative',
+        flexDirection:'row'
+    },
+    iconView:{
+        position:'absolute',
+        right:20
+    },
+    bankDetailView:{
+        marginTop:20,
+        backgroundColor:'#fff',
+        paddingVertical:50,
+        width:width-20,
+        alignSelf:'center',
+        paddingHorizontal:10,
+        alignItems:'center'
+    },
+    bankDetailText:{
+        color:'#929497'
+    }   
 })
 
 

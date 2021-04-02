@@ -69,13 +69,15 @@ export default StyleSheet.create({
        
         paddingHorizontal:50,
         alignSelf:'center',
-        paddingVertical:10,
+        paddingVertical:12,
         justifyContent:'center',
         alignItems:'center',
         borderRadius:100,
         marginHorizontal:10,
         marginTop:20,
-        // backgroundColor:'#B1272C'
+        width:width/1.4,
+
+        backgroundColor:'#B1272C'
     },
     touchText:{
         color:'#fff'
