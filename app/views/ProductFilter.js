@@ -6,9 +6,49 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import SearchBar from 'react-native-search-bar';
 import { ScrollView } from 'react-native-gesture-handler';
+import { connect } from 'react-redux';
+import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
-export default class ProductFilter extends React.Component {
+
+class ProductFilter extends React.Component {  
+  constructor(props) {
+    super(props);
+    this.state = {
+        data:[],
+    };
+}
+  componentDidMount(){
+    // this.setState({ Spinner: true })
+    let postData = {
+        method: 'GET',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+            Authorization: this.props.user.access_token,
+        },
+       
+    };//Constants.Products
+     fetch('https://com.cicodsaasstaging.com/com/api/orders', postData)
+        .then(response => response.json())
+        .then(async responseJson => {
+            console.log('response !!!!!!!!',responseJson)
+            this.setState({ Spinner: false });
+            this.setState({
+                list:responseJson,
+                data:responseJson.data
+            });
+            if (responseJson.status === true) {
+                console.log("dataset",data)
+                // this.props.navigation.navigate('DrawerNavigation')
+            } else {
+                let message = JSON.stringify(responseJson.error.message)
+                Alert.alert('Error', message)
+            }
+
+        })
+       
+}
   render() {
     return (
       <View style={[{}, styles.mainView]}>
@@ -135,3 +175,16 @@ export default class ProductFilter extends React.Component {
     )
   }
 }
+
+function mapStateToProps(state) {
+  return {
+      user: state.userReducer
+  }
+};
+function mapDispatchToProps(dispatch) {
+  return {
+      setUser: (value) => dispatch({ type: SET_USER, value: value }),
+      logoutUser: () => dispatch({ type: LOGOUT_USER })
+  }
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ProductFilter)

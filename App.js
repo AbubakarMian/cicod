@@ -44,8 +44,8 @@
  import 'react-native-gesture-handler';
  import AppNavigation from './app/views/AppNavigater';
  import CustomSplashScreen from './app/views/Splash';
-//  import configureStore from './app/redux/store/configureStore';
-//  import { Provider } from 'react-redux';
+ import configureStore from './app/redux/store/configureStore';
+ import { Provider } from 'react-redux';
  
  export default class App extends Component {
    constructor(props) {
@@ -73,12 +73,12 @@
        return <CustomSplashScreen />;
      } else {
        return (
-        //  <Provider store={configureStore}>
+         <Provider store={configureStore}>
          <View style={{ flex: 1 }}>
             <StatusBar hidden={true} translucent={true} />
            <AppNavigation />
          </View>
-      //  </Provider>
+        </Provider>
        );
      }
    }

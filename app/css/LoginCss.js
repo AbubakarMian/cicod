@@ -22,7 +22,10 @@ export default StyleSheet.create({
      borderColor:'#CFCFCF',
      width:width-50,
      marginTop:10,
-     paddingLeft:10
+     paddingLeft:10,
+     flexDirection:'row',
+     alignItems:'center',
+     position:'relative'
  },
 
 btnContinuueView:{

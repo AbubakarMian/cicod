@@ -2,9 +2,12 @@ import React from 'react'
 import { View, ImageBackground, Text, Dimensions, Image, Platform, TouchableOpacity, ScrollView } from 'react-native'
 import splashImg from '../images/splash.jpg'
 import Header from '../views/Header';
+import { connect } from 'react-redux';
+import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { Constants } from '../views/Constant';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
-export default class Home extends React.Component {
+class Home extends React.Component {
   render() {
     return (
       <View style={{ height: height, width: width, alignItems: 'center', position: 'relative', backgroundColor: '#F0F0F0' }}>
@@ -12,7 +15,7 @@ export default class Home extends React.Component {
         <View style={[{ flexDirection: 'row',paddingVertical:10 }]}>
           <View style={{ flex: 1, paddingHorizontal: 10 }}>
             <Text style={[{ color: '#B1272C', fontWeight: 'bold', fontSize: 20 }]}>Welcome,</Text>
-            <Text style={{fontWeight:'500'}}>Johnson</Text>
+            <Text style={{fontWeight:'500'}}>{this.props.user.firstname}</Text>
           </View>
           <View style={{ flex: 1, alignItems: 'flex-end', padding: 10 }}>
            <Image 
@@ -39,7 +42,9 @@ export default class Home extends React.Component {
                 <Text style={[{ fontWeight: 'bold' }]}>Dashboard</Text>
               </View>
               </TouchableOpacity>
-              <TouchableOpacity>
+              <TouchableOpacity
+              onPress={()=>this.props.navigation.navigate('Sell')}
+              >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 20,
                 justifyContent: 'center', alignItems: 'center', marginLeft: 10,
@@ -174,3 +179,15 @@ export default class Home extends React.Component {
     )
   }
 }
+function mapStateToProps(state) {
+  return {
+      user: state.userReducer
+  }
+};
+function mapDispatchToProps(dispatch) {
+  return {
+      setUser: (value) => dispatch({ type: SET_USER, value: value }),
+      logoutUser: () => dispatch({ type: LOGOUT_USER })
+  }
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Home)

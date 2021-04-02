@@ -4,24 +4,54 @@ import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss'
 import CalendarPicker from 'react-native-calendar-picker';
 import SearchBar from 'react-native-search-bar';
+import Spinner from 'react-native-loading-spinner-overlay';
 import Header from '../views/Header';
+import { connect } from 'react-redux';
+import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 import DropDownPicker from 'react-native-dropdown-picker';
-export default class Products extends React.Component {
+import { Constants } from '../views/Constant';
+
+class Products extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             selectedStartDate: null,
-            calenderModal: false
+            calenderModal: false,
+            data:[],
         };
         this.onDateChange = this.onDateChange.bind(this);
     }
-
     onDateChange(date) {
         this.setState({
             selectedStartDate: date,
         });
+    }
+    componentDidMount(){
+        this.setState({ Spinner: true })
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            }, 
+        };
+         fetch('https://com.cicodsaasstaging.com/com/api/products', postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                this.setState({
+                    Spinner: false,
+                    data:responseJson.data
+                });
+                if (responseJson.status === true) {
+                    this.props.navigation.navigate('DrawerNavigation')
+                } else {
+                    let message = JSON.stringify(responseJson.error.message)
+                    Alert.alert('Error', message)
+                }
+            })
     }
 
     render() {
@@ -30,6 +60,12 @@ export default class Products extends React.Component {
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
             <View style={{ height: height, width: width, position: 'relative', backgroundColor: '#F0F0F0' }}>
+                <Spinner
+                        visible={this.state.Spinner}
+                        textContent={'Please Wait...'}
+                        textStyle={{ color: '#fff' }}
+                        color={'#fff'}
+                    />
                 <Header />
                <View style={{flexDirection:'row',paddingHorizontal:10,alignItems:'center',justifyContent:'center'}}>
                 <View style={{flex:1}}>
@@ -68,17 +104,7 @@ export default class Products extends React.Component {
 
                 <ScrollView>
                     <FlatList
-                        data={[
-                            { title: 'Pure ORANGE JUICE 12PACK', key: 'item1', qty: '100', brand: 'Pure Juice ' },
-                            { title: 'Pure ORANGE JUICE 12PACK', key: 'item1', qty: '100', brand: 'Pure Juice ' },
-                            { title: 'Pure ORANGE JUICE 12PACK', key: 'item1', qty: '100', brand: 'Pure Juice ' },
-                            { title: 'Pure ORANGE JUICE 12PACK', key: 'item1', qty: '100', brand: 'Pure Juice ' },
-                            { title: 'Pure ORANGE JUICE 12PACK', key: 'item1', qty: '100', brand: 'Pure Juice ' },
-                            { title: 'Pure ORANGE JUICE 12PACK', key: 'item1', qty: '100', brand: 'Pure Juice ' },
-                            { title: 'Pure ORANGE JUICE 12PACK', key: 'item1', qty: '100', brand: 'Pure Juice ' },
-                            { title: 'Pure ORANGE JUICE 12PACK', key: 'item1', qty: '100', brand: 'Pure Juice ' },
-
-                        ]}
+                        data={this.state.data}
                         ItemSeparatorComponent={
                             Platform.OS !== 'android' &&
                             (({ highlighted }) => (
@@ -101,16 +127,14 @@ export default class Products extends React.Component {
                                     <View style={[{ flexDirection: 'row' }]}>
                                         <Image
                                             style={[{ height: 50, width: 50 }]}
-                                            source={require('../images/products/ticket.png')}
+                                            source={{uri:item.image}}
                                         />
 
                                     </View>
-
                                     <View style={{ position: 'relative', flex: 3 }}>
-                                        <Text>{item.title}</Text>
+                                        <Text>{item.name}</Text>
                                         <View style={{ flexDirection: 'row', }}>
-
-                                            <Text>QTY:  {item.qty}</Text>
+                                            <Text>QTY:  {item.quantity}</Text>
                                             <View style={[{ position: 'absolute', right: 0, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
                                                 <Text style={[{ color: '#26C281' }]}>ACTIVE</Text>
                                             </View>
@@ -129,3 +153,15 @@ export default class Products extends React.Component {
         )
     }
 }
+function mapStateToProps(state) {
+    return {
+        user: state.userReducer
+    }
+  };
+  function mapDispatchToProps(dispatch) {
+    return {
+        setUser: (value) => dispatch({ type: SET_USER, value: value }),
+        logoutUser: () => dispatch({ type: LOGOUT_USER })
+    }
+  };
+  export default connect(mapStateToProps, mapDispatchToProps)(Products)
