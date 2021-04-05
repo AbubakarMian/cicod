@@ -18,8 +18,8 @@ class Products extends React.Component {
         super(props);
         this.state = {
             selectedStartDate: null,
-            calenderModal: false, 
-            data:[],
+            calenderModal: false,
+            data: [],
         };
         this.onDateChange = this.onDateChange.bind(this);
     }
@@ -28,41 +28,40 @@ class Products extends React.Component {
             selectedStartDate: date,
         });
     }
-    componentDidMount(){
+    componentDidMount() {
         this.getData(Constants.productslist);
         return;
-        console.log('this.props.params',this.props.route);
-        if(this.props.params != undefined){
-    let filters = this.props.route.params.filters;
-        let filter = '?';
-        for(let i=0;i<filters.length;i++){
-            filter = filter+filters[i].key+'='+filters[i].value;
-            if(i != filters.length-1){
-                filter = filter+'&';
+        console.log('this.props.params', this.props.route);
+        if (this.props.params != undefined) {
+            let filters = this.props.route.params.filters;
+            let filter = '?';
+            for (let i = 0; i < filters.length; i++) {
+                filter = filter + filters[i].key + '=' + filters[i].value;
+                if (i != filters.length - 1) {
+                    filter = filter + '&';
+                }
             }
+            this.getData(Constants.productslist + filter);
         }
-        this.getData(Constants.productslist+filter);
-        }
-       
+
     }
-    componentWillReceiveProps(){
-        console.log('this.props.route',this.props.route);
-        console.log('this.props.route',this.props.route.params);
+    componentWillReceiveProps() {
+        console.log('this.props.route', this.props.route.params.filters);
+        // console.log('this.props.route',this.props.route.params);
         // this.getData(Constants.productslist);
-        // return;
         let filters = this.props.route.params.filters;
         let filter = '?';
-        for(let i=0;i<filters.length;i++){
-            filter = filter+filters[i].key+'='+filters[i].value;
-            if(i != filters.length-1){
-                filter = filter+'&';
+        for (let i = 0; i < filters.length; i++) {
+            filter = filter + filters[i].key + '=' + filters[i].value;
+            if (i != filters.length - 1) {
+                filter = filter + '&';
             }
         }
-        
-        this.getData(Constants.productslist+filter);
+
+        this.getData(Constants.productslist + filter);
     }
 
-    getData(url){
+    getData(url) {
 
         console.log('products');
         this.setState({ Spinner: true })
@@ -72,16 +71,19 @@ class Products extends React.Component {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
                 Authorization: this.props.user.access_token,
-            }, 
+            },
         };
-         fetch(url, postData)
+        fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({
                     Spinner: false,
-                    data:responseJson.data
+                    data: responseJson.data
                 });
                 if (responseJson.status === true) {
+
+                    
+
                     this.props.navigation.navigate('DrawerNavigation')
                 } else {
                     let message = JSON.stringify(responseJson.error.message)
@@ -91,30 +93,30 @@ class Products extends React.Component {
     }
 
     render() {
-
+        console.log('this.state.data', this.state.data);
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
             <View style={{ height: height, width: width, position: 'relative', backgroundColor: '#F0F0F0' }}>
                 <Spinner
-                        visible={this.state.Spinner}
-                        textContent={'Please Wait...'}
-                        textStyle={{ color: '#fff' }}
-                        color={'#fff'}
-                    />
+                    visible={this.state.Spinner}
+                    textContent={'Please Wait...'}
+                    textStyle={{ color: '#fff' }}
+                    color={'#fff'}
+                />
                 <Header />
-               <View style={{flexDirection:'row',paddingHorizontal:10,alignItems:'center',justifyContent:'center'}}>
-                <View style={{flex:1}}>
-                  <Text style={{fontWeight:'bold',color:'#2F2E7C'}}>Products</Text>
+                <View style={{ flexDirection: 'row', paddingHorizontal: 10, alignItems: 'center', justifyContent: 'center' }}>
+                    <View style={{ flex: 1 }}>
+                        <Text style={{ fontWeight: 'bold', color: '#2F2E7C' }}>Products</Text>
+                    </View>
+                    <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+                        <Text style={{ fontSize: 12, color: '#B1272C', marginRight: 10 }}>View Product Category</Text>
+                        <Image
+                            source={require('../images/products/circlePlus.png')}
+                        />
+                    </View>
                 </View>
-                <View style={{flex:2,flexDirection:'row',justifyContent:'flex-end',alignItems:'center'}}>
-                  <Text style={{fontSize:12,color:'#B1272C',marginRight:10}}>View Product Category</Text>
-                  <Image 
-                  source={require('../images/products/circlePlus.png')}
-                  />
-                </View>
-               </View>
-                
+
 
 
                 <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, backgroundColor: '#fff', alignSelf: 'center', paddingHorizontal: 10, borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
@@ -128,7 +130,7 @@ class Products extends React.Component {
                     </View>
                     <View style={{ position: 'absolute', right: 0, alignSelf: 'center', }}>
                         <TouchableOpacity
-                        onPress={()=>this.props.navigation.navigate('ProductFilter')}
+                            onPress={() => this.props.navigation.navigate('ProductFilter')}
                         >
                             <Image
                                 source={require('../images/Order/settingicon.png')}
@@ -163,7 +165,7 @@ class Products extends React.Component {
                                     <View style={[{ flexDirection: 'row' }]}>
                                         <Image
                                             style={[{ height: 50, width: 50 }]}
-                                            source={{uri:item.image}}
+                                            source={{ uri: item.image }}
                                         />
 
                                     </View>
@@ -171,9 +173,13 @@ class Products extends React.Component {
                                         <Text>{item.name}</Text>
                                         <View style={{ flexDirection: 'row', }}>
                                             <Text>QTY:  {item.quantity}</Text>
-                                            <View style={[{ position: 'absolute', right: 0, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
-                                                <Text style={[{ color: '#26C281' }]}>ACTIVE</Text>
-                                            </View>
+                                            {(item.is_active == false) ?
+                                                <View style={[{ position: 'absolute', right: 0, backgroundColor: '#e3b8be', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                                                    <Text style={[{ color: '#ba071f' }]}>IN ACTIVE</Text>
+                                                </View> :
+                                                <View style={[{ position: 'absolute', right: 0, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                                                    <Text style={[{ color: '#26C281' }]}>ACTIVE</Text>
+                                                </View>}
                                         </View>
                                     </View>
 
@@ -193,11 +199,11 @@ function mapStateToProps(state) {
     return {
         user: state.userReducer
     }
-  };
-  function mapDispatchToProps(dispatch) {
+};
+function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
         logoutUser: () => dispatch({ type: LOGOUT_USER })
     }
-  };
-  export default connect(mapStateToProps, mapDispatchToProps)(Products)
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Products)
