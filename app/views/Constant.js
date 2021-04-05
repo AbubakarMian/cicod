@@ -10,6 +10,7 @@ export const Constants = {
   customerlist: `${base_url}/customers`,
   productslist: `${base_url}/products`,
   orderslist: `${base_url}/orders`,
+  productcategorylist: `${base_url}/categories`, //https://com.cicodsaasstaging.com/com/api/categories
 };
 
 
