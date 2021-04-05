@@ -16,6 +16,7 @@ class ProductFilter extends React.Component {
     super(props);
     this.state = {
         data:[],
+        filters:[]
     };
 }
   componentDidMount(){
@@ -49,6 +50,33 @@ class ProductFilter extends React.Component {
         })
        
 }
+onQuantityText(text){
+  let filters = this.state.filters;
+  filters.push({key:'quantity',value:text});
+  this.setState({
+    filters:filters
+  })
+}
+
+onCategoryText(text){
+  let filters = this.state.filters;
+  filters.push({key:'category',value:text});
+  this.setState({
+    filters:filters
+  })
+}
+activeSet(value){
+  let filters = this.state.filters;
+  filters.push({key:'is_active',value:value})
+  this.setState({
+    filters:filters
+  })
+}
+applyFilter=()=>{
+  console.log('this.state.filters',this.state.filters);
+
+  this.props.navigation.navigate('Products',{filters:this.state.filters});
+}
   render() {
     return (
       <View style={[{}, styles.mainView]}>
@@ -62,11 +90,11 @@ class ProductFilter extends React.Component {
             <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>FILTER</Text>
 
           </View>
-          <Text style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20,top:20 }]}>Clear Filter</Text>
+          <Text onPress={()=>{this.setState({filters:[]})}} style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20,top:20 }]}>Clear Filter</Text>
         </View>
         <View style={{width:width-20,backgroundColor:'#fff',paddingVertical:10,marginTop:20}}>
         <View style={{borderBottomWidth:1,borderBottomColor:'#E6E6E6',marginHorizontal:5,flexDirection:'row',position:'relative'}}>
-             <TextInput 
+             <TextInput onChangeText={text => this.onQuantityText(text)}
              placeholder="Quantity"
              />
              <View style={{position:'absolute',right:10,bottom:10}}>
@@ -74,7 +102,7 @@ class ProductFilter extends React.Component {
              </View>  
           </View>
           <View style={{borderBottomWidth:1,borderBottomColor:'#E6E6E6',marginHorizontal:5,flexDirection:'row',position:'relative'}}>
-             <TextInput 
+             <TextInput onChangeText={text => this.onCategoryText(text)}
              placeholder="Category"
              />
              <View style={{position:'absolute',right:10,bottom:10}}>
@@ -148,12 +176,12 @@ class ProductFilter extends React.Component {
           >
           <View style={[{ paddingRight: 20 }, styles.mainRow]}>
             <View style={[{ marginRight:10 }]}>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={()=>this.activeSet(1)}>
                 <Text style={[{ color: '#929497',borderRadius:50,backgroundColor:'#E6E6E6',paddingHorizontal:5 }]}>ACTIVE</Text>
               </TouchableOpacity>
             </View>
             <View style={[{  }]}>
-              <TouchableOpacity>
+              <TouchableOpacity  onPress={()=>this.activeSet(0)}>
                 <Text style={[{ color: '#929497',borderRadius:50,backgroundColor:'#E6E6E6',paddingHorizontal:5 }]}>INACTIVE</Text>
               </TouchableOpacity>
             </View>
@@ -166,7 +194,7 @@ class ProductFilter extends React.Component {
         </View>
       
         <TouchableOpacity
-        onPress={()=>this.props.navigation.navigate('Products')}
+        onPress={this.applyFilter}
         style={{width:width/1.5,marginTop:20, alignSelf:'center',backgroundColor:'#B1272C',justifyContent:'center',alignItems:'center',paddingVertical:15,borderRadius:50}}
         >
           <Text style={{color:'#fff',fontWeight:'bold'}}>Apply</Text>

@@ -18,7 +18,7 @@ class Products extends React.Component {
         super(props);
         this.state = {
             selectedStartDate: null,
-            calenderModal: false,
+            calenderModal: false, 
             data:[],
         };
         this.onDateChange = this.onDateChange.bind(this);
@@ -29,6 +29,40 @@ class Products extends React.Component {
         });
     }
     componentDidMount(){
+        this.getData(Constants.productslist);
+        return;
+        console.log('this.props.params',this.props.route);
+        if(this.props.params != undefined){
+    let filters = this.props.route.params.filters;
+        let filter = '?';
+        for(let i=0;i<filters.length;i++){
+            filter = filter+filters[i].key+'='+filters[i].value;
+            if(i != filters.length-1){
+                filter = filter+'&';
+            }
+        }
+        this.getData(Constants.productslist+filter);
+        }
+       
+    }
+    componentWillReceiveProps(){
+        console.log('this.props.route',this.props.route);
+        // return;
+        // let filters = this.props.route.params.filters;
+        // let filter = '?';
+        // for(let i=0;i<filters.length;i++){
+        //     filter = filter+filters[i].key+'='+filters[i].value;
+        //     if(i != filters.length-1){
+        //         filter = filter+'&';
+        //     }
+        // }
+        this.getData(Constants.productslist);
+        // this.getData(Constants.productslist+filter);
+    }
+
+    getData(url){
+
+        console.log('products');
         this.setState({ Spinner: true })
         let postData = {
             method: 'GET',
@@ -38,7 +72,7 @@ class Products extends React.Component {
                 Authorization: this.props.user.access_token,
             }, 
         };
-         fetch('https://com.cicodsaasstaging.com/com/api/products', postData)
+         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({
