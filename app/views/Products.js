@@ -47,17 +47,19 @@ class Products extends React.Component {
     }
     componentWillReceiveProps(){
         console.log('this.props.route',this.props.route);
+        console.log('this.props.route',this.props.route.params);
+        // this.getData(Constants.productslist);
         // return;
-        // let filters = this.props.route.params.filters;
-        // let filter = '?';
-        // for(let i=0;i<filters.length;i++){
-        //     filter = filter+filters[i].key+'='+filters[i].value;
-        //     if(i != filters.length-1){
-        //         filter = filter+'&';
-        //     }
-        // }
-        this.getData(Constants.productslist);
-        // this.getData(Constants.productslist+filter);
+        let filters = this.props.route.params.filters;
+        let filter = '?';
+        for(let i=0;i<filters.length;i++){
+            filter = filter+filters[i].key+'='+filters[i].value;
+            if(i != filters.length-1){
+                filter = filter+'&';
+            }
+        }
+        
+        this.getData(Constants.productslist+filter);
     }
 
     getData(url){
