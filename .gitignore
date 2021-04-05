@@ -86,6 +86,3 @@ lint/outputs/
 lint/tmp/
 # lint/reports/
 node_modules/
-node_modules/@react-native-async-storage/async-storage/package.json
-*.json
-package-lock.json
