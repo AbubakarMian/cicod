@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { Constants } from './Constant';
 
 var { width, height } = Dimensions.get('window');
 
@@ -15,6 +16,7 @@ class OrderDetail extends React.Component {
         super(props);
         this.state = {
             Spinner: false,
+            order_id: this.props.route.params.id ?? 0 ,
             selectedStartDate: null,
             calenderModal: false,
             cicod_order_id: '',
@@ -44,7 +46,6 @@ class OrderDetail extends React.Component {
     }
     componentDidMount() {
         this.setState({ Spinner: true })
-        console.log("rrrrrrrrrrrrr", this.props.route.params.id)
         let postData = {
             method: 'GET',
             headers: {
@@ -79,6 +80,38 @@ class OrderDetail extends React.Component {
                 console.log("this.state.item.item_name this.state.item.item_name this.state.item.item_name", this.state.item.item_name)
             })
     }
+
+    ReciptResend() {
+        //https://com.cicodsaasstaging.com/com/api/orders/957?action=send_receipt
+        this.setState({ Spinner: true })
+        console.log("rrrrrrrrrrrrr", this.props.route.params.id)
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            },
+        };
+        let reciptUrl = Constants.orderslist+'/'+this.state.order_id ;
+
+        fetch(reciptUrl, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                this.setState({
+                    Spinner: false
+                });
+                if (responseJson.status === 'success') {
+                    console.log('data data data res res res ',responseJson.message)
+                    Alert.alert('Success',responseJson.message)
+                    // this.props.navigation.navigate('DrawerNavigation')
+                } else {
+                    // let message = JSON.stringify(responseJson.error.message)
+                    Alert.alert('Error', responseJson.message)
+                }
+            })
+
+    }
     render() {
         return (
             <ScrollView>
@@ -98,7 +131,7 @@ class OrderDetail extends React.Component {
                         <Text style={{ color: '#aaa' }}>{this.state.data.cicod_order_id}</Text>
                         <Text style={{ fontWeight: 'bold' }}>103943535</Text>
                         <TouchableOpacity
-                            // onPress={() => this.props.navigation.navigate('Home')}
+                            onPress={() => this.ReciptResend()}
                             style={[{}, styles.btnContinuueView]}>
                             <Text style={{ color: '#FFFFFF' }}>Send receipt</Text>
                         </TouchableOpacity>
