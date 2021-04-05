@@ -33,55 +33,50 @@ export default StyleSheet.create({
         fontWeight:'bold',
         marginHorizontal:15
     },
-    contentContainer:{
+    searchContainer:{
         backgroundColor:'#fff',
-        justifyContent:'center',
-        alignItems:'center',
-        paddingVertical:20,
-        width:width-20,
-        marginTop:20,
-        alignSelf:'center'
-    },
-    collectText:{
-        color:'#929497'
-    },
-    payText:{
-        color:'#4E4D4D',
-        fontWeight:'bold'
-    },
-    cashText:{
-        color:'#929497'
-    },
-    inputContainer:{
-        backgroundColor:'#fff',
-        paddingVertical:20,
-        width:width-20,
-        marginTop:20,
-        alignSelf:'center'
-    },
-    inputView:{
-        // borderBottomWidth:1,
-        // borderBottomColor:'#929497',
-        width:width-30,
-        alignSelf:'center'
-    },
-    touchView:{
-       
-        paddingHorizontal:50,
+        paddingHorizontal:10,
         alignSelf:'center',
-        paddingVertical:12,
-        justifyContent:'center',
-        alignItems:'center',
-        borderRadius:100,
-        marginHorizontal:10,
+        paddingVertical:20,
+        width:width-20,
         marginTop:20,
-        width:width/1.4,
-
-        backgroundColor:'#B1272C'
+        flexDirection:'row',
+        alignItems:'center',
+        borderBottomColor:'#e2e2e2',
+        borderBottomWidth:1,
+        position:'relative',
+        width:width-20,
     },
-    touchText:{
-        color:'#fff'
-    },   
+    contentView:{
+     justifyContent:'center',
+     alignItems:'center',
+     width:width-20,
+     alignSelf:'center',
+     minHeight:height/2
+    },
+    contentViewHeadingText:{
+        fontWeight:'bold',
+        color:'#929497',
+        marginTop:10
+    },
+    contentViewDescText:{
+        color:'#929497',
+        fontSize:12
+    },
+    searchByCatCOntainer:{
+        marginTop:10,
+        backgroundColor:'#fff',
+        width:width-20,
+        alignSelf:'center',
+        flexDirection:'row',
+        alignItems:'center',
+        position:'relative'
+    },
+    searchByCatCOntainerIconView:{
+        position:'absolute',
+        right:10
+    }
+    
 })
 
 

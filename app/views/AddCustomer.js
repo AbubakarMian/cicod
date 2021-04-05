@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, ImageBackground, ScrollView, TouchableHighlight, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
 import splashImg from '../images/splash.jpg'
-import styles from '../css/PayByUssdCss'
+import styles from '../css/AddCustomerCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import CheckBox from 'react-native-check-box';
@@ -9,7 +9,7 @@ import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'reac
 import SearchBar from 'react-native-search-bar';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
-export default class PayByUssd extends React.Component {
+export default class AddCustomer extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -39,29 +39,28 @@ export default class PayByUssd extends React.Component {
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
                     <View style={[{}, styles.backHeadingView]}>
-                        <Text style={[{}, styles.backHeadingText]}>MAKE PAYMENT</Text>
+                        <Text style={[{}, styles.backHeadingText]}>ADD CUSTOMER</Text>
                     </View>
                 </View>
                 <View>
                     <ScrollView>
-                        <View style={[{}, styles.contentContainer]}>
-                            <Image source={require('../images/payByUssd.png')} />
-                            <Text style={[{}, styles.collectText]}>Collect the sum of</Text>
-                            <Text style={[{}, styles.payText]}>N50,000.00</Text>
-                            <Text style={[{}, styles.collectText]}>omotayo.odupitan@cicod.com</Text>
-                            <View style={[{}, styles.selectBankView]}>
-                                <TextInput
-                                    placeholder="Select Bank"
-                                />
-                                <View style={[{}, styles.iconView]}>
-                                    <Icon name="caret-down" size={20} color={'#4E4D4D'} />
-                                </View>
-                            </View>
+                        <View style={[{}, styles.searchContainer]}>
+                            <Image 
+                            source={require('../images/products/searchicon.png')}
+                            />
+                            <TextInput 
+                            placeholder="Search Customer"
+                            />
+                        </View>
+                        <View style={[{},styles.contentView]}>
+                          <Image 
+                          source={require('../images/user-circle.png')}
+                          />
+                          <Text style={[{},styles.contentViewHeadingText]}>No customer selected</Text>
+                          <Text style={[{},styles.contentViewDescText]}>Search for a customer</Text>
+                        </View>
 
-                        </View>
-                        <View style={[{}, styles.bankDetailView]}>
-                            <Text style={[{},styles.bankDetailText]}>Select a bank above to get USSD CODE</Text>
-                        </View>
+                       
                     </ScrollView>
                 </View>
             </View>

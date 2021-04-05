@@ -52,7 +52,9 @@ export default class Sell extends React.Component {
                         </View>
                         <View style={[{}, styles.customerContainerView]}>
                             <Text style={[{}, styles.customerContainerhead]}>Custommer Detail</Text>
-                            <TouchableOpacity style={[{}, styles.customerContaineraddBtnView]}>
+                            <TouchableOpacity
+                            onPress={()=>this.props.navigation.navigate('AddCustomer')}
+                            style={[{}, styles.customerContaineraddBtnView]}>
                                 <Icon name="plus-circle" size={20} color={'#fff'} />
                                 <Text style={[{}, styles.customerContaineraddBtnText]}>Add</Text>
                             </TouchableOpacity>
@@ -60,12 +62,14 @@ export default class Sell extends React.Component {
                             <Text style={[{}, styles.customerContainerheading]}>No Customer added</Text>
                             <Text style={[{}, styles.customerContainerText]}>add customer</Text>
                         </View>
-                        <View style={[{}, styles.customerContaineraddProductView]}>
+                        <TouchableOpacity 
+                        onPress={()=>this.props.navigation.navigate('AddProduct')}
+                        style={[{}, styles.customerContaineraddProductView]}>
                             <Image
                                 source={require('../images/products/circlePlus.png')}
                             />
                             <Text style={[{}, styles.customerContaineraddProductText]}>Add Product</Text>
-                        </View>
+                        </TouchableOpacity>
                         <View style={[{}, styles.OrderDetailContainer]}>
                             <Text style={[{}, styles.customerContainerhead]}>Order Detail</Text>
                             <Image source={require('../images/cartSlash.png')}/>
@@ -137,7 +141,9 @@ export default class Sell extends React.Component {
                                 <Text style={[{}, styles.subTotleColumn1Text]}>subtotal:</Text>
                                 <Text style={[{}, styles.subTotleColumn1Text]}>Tax(7.5%)</Text>
                                 <Text style={[{}, styles.subTotleColumn1Text]}>TOTAL:</Text>
-                                <TouchableOpacity>
+                                <TouchableOpacity
+                                 onPress={()=>this.props.navigation.navigate('ApplyDiscount')}
+                                >
                                     <View style={{ flexDirection: 'row' }}>
                                         <Icon name="times-circle" size={20} color="#B1272C" />
                                         <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Apply for Discount</Text>
@@ -148,10 +154,12 @@ export default class Sell extends React.Component {
                                 <Text style={[{}, styles.subTotleColumn2Text]}>-</Text>
                                 <Text style={[{}, styles.subTotleColumn2Text]}>-</Text>
                                 <Text style={[{}, styles.subTotleColumn2Text]}>-</Text>
-                                <TouchableOpacity>
+                                <TouchableOpacity
+                               onPress={()=>this.props.navigation.navigate('AddNote')}
+                                >
                                     <View style={{ flexDirection: 'row' }}>
                                         <Icon name="times-circle" size={20} color="#B1272C" />
-                                        <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Apply for Discount</Text>
+                                        <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Add a Note</Text>
                                     </View>
                                 </TouchableOpacity>
                             </View>

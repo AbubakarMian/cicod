@@ -16,6 +16,7 @@ import OrderFilter from './OrderFilter';
 import CreateOrder from './CreateOrder';
 import MakePayment from './MakePayment';
 import Customer from './Customer';
+import AddCustomer from './AddCustomer';
 import CustomersDetal from '../views/CustomersDetal';
 import Supplier from '../views/Supplier'
 import Connect from './Connect';
@@ -29,6 +30,9 @@ import Sell from './Sell';
 import PayByPos from './payByPos';
 import PayByCash from './PayByCash';
 import PayByUssd from './PayByUssd';
+import AddProduct from './AddProduct';
+import ApplyDiscount from './ApplyDiscount';
+import AddNote from './AddNote';
 const Stack = createStackNavigator();
 
 export default class AppNavigater extends React.Component {
@@ -54,6 +58,7 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="MakePayment" component={MakePayment} options={{ headerShown: false }} />
           
           <Stack.Screen name="Customer" component={Customer} options={{ headerShown: false }} />
+          <Stack.Screen name="AddCustomer" component={AddCustomer} options={{ headerShown: false }} />
           <Stack.Screen name="CustomersDetal" component={CustomersDetal} options={{ headerShown: false }} />
           <Stack.Screen name="Supplier" component={Supplier} options={{ headerShown: false }} />
           
@@ -68,6 +73,9 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="PayByPos" component={PayByPos} options={{ headerShown: false }} />
           <Stack.Screen name="PayByCash" component={PayByCash} options={{ headerShown: false }} />
           <Stack.Screen name="PayByUssd" component={PayByUssd} options={{ headerShown: false }} />
+          <Stack.Screen name="AddProduct" component={AddProduct} options={{ headerShown: false }} />
+          <Stack.Screen name="ApplyDiscount" component={ApplyDiscount} options={{ headerShown: false }} />
+          <Stack.Screen name="AddNote" component={AddNote} options={{ headerShown: false }} />
           
         </Stack.Navigator>
       </NavigationContainer>

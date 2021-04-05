@@ -70,7 +70,7 @@ export default class MakePayment extends React.Component {
                                 </View>
                             </View>
                             <View style={[{},styles.cardImageView]}>
-                                <Image source={require('../images/payonline.png')}/>
+                            <Image style={{height:50,width:30}} source={require('../images/pos-terminal.png')} />
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity

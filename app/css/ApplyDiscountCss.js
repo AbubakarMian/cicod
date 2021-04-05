@@ -33,55 +33,37 @@ export default StyleSheet.create({
         fontWeight:'bold',
         marginHorizontal:15
     },
-    contentContainer:{
-        backgroundColor:'#fff',
-        justifyContent:'center',
-        alignItems:'center',
-        paddingVertical:20,
-        width:width-20,
-        marginTop:20,
-        alignSelf:'center'
-    },
-    collectText:{
-        color:'#929497'
-    },
-    payText:{
-        color:'#4E4D4D',
-        fontWeight:'bold'
-    },
-    cashText:{
-        color:'#929497'
-    },
-    inputContainer:{
-        backgroundColor:'#fff',
-        paddingVertical:20,
-        width:width-20,
-        marginTop:20,
-        alignSelf:'center'
-    },
-    inputView:{
-        // borderBottomWidth:1,
-        // borderBottomColor:'#929497',
-        width:width-30,
-        alignSelf:'center'
-    },
-    touchView:{
-       
-        paddingHorizontal:50,
-        alignSelf:'center',
-        paddingVertical:12,
-        justifyContent:'center',
-        alignItems:'center',
-        borderRadius:100,
-        marginHorizontal:10,
-        marginTop:20,
-        width:width/1.4,
 
-        backgroundColor:'#B1272C'
+    mainContentView:{
+        backgroundColor:'#fff',
+        paddingVertical:20,
+        width:width-20,
+        alignSelf:'center',
+        paddingHorizontal:10
     },
-    touchText:{
-        color:'#fff'
-    },   
+    formRow:{
+        flexDirection:'row',
+        alignItems:'center',
+        width:width,
+        alignSelf:'center',
+        justifyContent:'center'
+    },
+    radioButtonView:{
+        marginHorizontal:10,
+        padding:15,
+        paddingRight:50
+    },
+    btnView:{
+        backgroundColor:'#B1272C',
+        width:width-50,
+        alignSelf:'center',
+        justifyContent:'center',
+        alignItems:'center',
+        paddingVertical:15,
+        borderRadius:100,
+        marginTop:20
+    }
+ 
 })
 
 
