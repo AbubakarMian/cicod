@@ -11,6 +11,7 @@ export const Constants = {
   productslist: `${base_url}/products`,
   orderslist: `${base_url}/orders`,
   productcategorylist: `${base_url}/categories`, //https://com.cicodsaasstaging.com/com/api/categories
+  supplierlist:`${base_url}/value-chain/suppliers`
 };
 
 
