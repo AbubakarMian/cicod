@@ -41,27 +41,28 @@ export default class AppNavigater extends React.Component {
       <NavigationContainer>
         <Stack.Navigator>
           <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
+          <Stack.Screen name="AddProduct" component={AddProduct} options={{ headerShown: false }} />
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-         
-        <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
-        
-          
+
+          <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
+
+
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
           <Stack.Screen name="Dashnoard" component={TabNavigater} options={{ headerShown: false }} />
           <Stack.Screen name="Products" component={Products} options={{ headerShown: false }} />
           <Stack.Screen name="ProductFilter" component={ProductFilter} options={{ headerShown: false }} />
-          
+
           <Stack.Screen name="Order" component={Order} options={{ headerShown: false }} />
           <Stack.Screen name="OrderDetail" component={OrderDetail} options={{ headerShown: false }} />
           <Stack.Screen name="OrderFilter" component={OrderFilter} options={{ headerShown: false }} />
           <Stack.Screen name="CreateOrder" component={CreateOrder} options={{ headerShown: false }} />
           <Stack.Screen name="MakePayment" component={MakePayment} options={{ headerShown: false }} />
-          
+
           <Stack.Screen name="Customer" component={Customer} options={{ headerShown: false }} />
-          <Stack.Screen name="AddCustomer" component={AddCustomer} options={{ headerShown: false }} />
+
           <Stack.Screen name="CustomersDetal" component={CustomersDetal} options={{ headerShown: false }} />
           <Stack.Screen name="Supplier" component={Supplier} options={{ headerShown: false }} />
-          
+
           <Stack.Screen name="Filter" component={Filter} options={{ headerShown: false }} />
           <Stack.Screen name="Connect" component={Connect} options={{ headerShown: false }} />
           <Stack.Screen name="Buyers" component={Buyers} options={{ headerShown: false }} />
@@ -73,10 +74,10 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="PayByPos" component={PayByPos} options={{ headerShown: false }} />
           <Stack.Screen name="PayByCash" component={PayByCash} options={{ headerShown: false }} />
           <Stack.Screen name="PayByUssd" component={PayByUssd} options={{ headerShown: false }} />
-          <Stack.Screen name="AddProduct" component={AddProduct} options={{ headerShown: false }} />
+          {/* <Stack.Screen name="AddProduct" component={AddProduct} options={{ headerShown: false }} /> */}
           <Stack.Screen name="ApplyDiscount" component={ApplyDiscount} options={{ headerShown: false }} />
           <Stack.Screen name="AddNote" component={AddNote} options={{ headerShown: false }} />
-          
+
         </Stack.Navigator>
       </NavigationContainer>
     );
