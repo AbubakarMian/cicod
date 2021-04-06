@@ -31,6 +31,7 @@ import PayByPos from './payByPos';
 import PayByCash from './PayByCash';
 import PayByUssd from './PayByUssd';
 import AddProduct from './AddProduct';
+import CreateProduct from './CreateProduct';
 import ApplyDiscount from './ApplyDiscount';
 import AddNote from './AddNote';
 import EnableProduct from './EnableProduct';
@@ -84,7 +85,9 @@ export default class AppNavigater extends React.Component {
           {/* <Stack.Screen name="AddCustomer" component={AddCustomer} options={{ headerShown: false }} />  */}
           {/* <Stack.Screen name="ProductView" component={ProductView} options={{ headerShown: false }} />  */}
           {/* <Stack.Screen name="UpdateProduct" component={UpdateProduct} options={{ headerShown: false }} />  */}
-        <Stack.Screen name="AddNewCustomer" component={AddNewCustomer} options={{ headerShown: false }} /> 
+        {/* <Stack.Screen name="AddNewCustomer" component={AddNewCustomer} options={{ headerShown: false }} />  */}
+        {/* <Stack.Screen name="CreateOrder" component={CreateOrder} options={{ headerShown: false }} /> */}
+        <Stack.Screen name="CreateProduct" component={CreateProduct} options={{ headerShown: false }} />
           
         </Stack.Navigator>
       </NavigationContainer>
