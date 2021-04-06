@@ -31,6 +31,7 @@ import PayByPos from './payByPos';
 import PayByCash from './PayByCash';
 import PayByUssd from './PayByUssd';
 import AddProduct from './AddProduct';
+import CreateProduct from './CreateProduct';
 import ApplyDiscount from './ApplyDiscount';
 import AddNote from './AddNote';
 const Stack = createStackNavigator();
@@ -77,7 +78,15 @@ export default class AppNavigater extends React.Component {
           {/* <Stack.Screen name="AddProduct" component={AddProduct} options={{ headerShown: false }} /> */}
           <Stack.Screen name="ApplyDiscount" component={ApplyDiscount} options={{ headerShown: false }} />
           <Stack.Screen name="AddNote" component={AddNote} options={{ headerShown: false }} />
-
+          <Stack.Screen name="EnableProduct" component={EnableProduct} options={{ headerShown: false }} />  
+          <Stack.Screen name="AddNewCustomer" component={AddNewCustomer} options={{ headerShown: false }} /> 
+          {/* <Stack.Screen name="AddCustomer" component={AddCustomer} options={{ headerShown: false }} />  */}
+          {/* <Stack.Screen name="ProductView" component={ProductView} options={{ headerShown: false }} />  */}
+          {/* <Stack.Screen name="UpdateProduct" component={UpdateProduct} options={{ headerShown: false }} />  */}
+        {/* <Stack.Screen name="AddNewCustomer" component={AddNewCustomer} options={{ headerShown: false }} />  */}
+        {/* <Stack.Screen name="CreateOrder" component={CreateOrder} options={{ headerShown: false }} /> */}
+        <Stack.Screen name="CreateProduct" component={CreateProduct} options={{ headerShown: false }} />
+          
         </Stack.Navigator>
       </NavigationContainer>
     );
