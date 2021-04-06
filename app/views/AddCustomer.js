@@ -14,23 +14,23 @@ export default class AddCustomer extends React.Component {
         super(props);
         this.state = {
             value: 0,
-            isChecked: false
+            isChecked: false,
+            searchPress: 1
+        }
+
+    }
+    seacrhClick() {
+        if (this.state.searchPress === 1) {
+            console.log("**********")
+            this.setState({ searchPress: 2 })
+
+        } else if (this.state.searchPress === 2) {
+            console.log("#########")
+            this.setState({ searchPress: 2 })
         }
     }
     render() {
-        var radio_props_dilvery = [
-            { label: 'Dilivery', value: 0 },
 
-        ];
-        var radio_props_pickup = [
-            { label: 'Pickup', value: 1 },
-        ];
-        var radio_props_payment = [
-            { label: 'Pay Now', value: 0 },
-            { label: 'Pay Acount', value: 1 },
-            { label: 'Pay Invoice', value: 2 },
-            { label: 'Part Payment', value: 3 },
-        ];
         return (
             <View style={[{}, styles.mainView]}>
                 <Header />
@@ -45,22 +45,88 @@ export default class AddCustomer extends React.Component {
                 <View>
                     <ScrollView>
                         <View style={[{}, styles.searchContainer]}>
-                            <Image 
-                            source={require('../images/products/searchicon.png')}
+                            <Image
+                                source={require('../images/products/searchicon.png')}
                             />
-                            <TextInput 
-                            placeholder="Search Customer"
+                            <TextInput
+                                placeholder="Search Customer"
+                                onPressIn={() => this.seacrhClick()}
                             />
                         </View>
-                        <View style={[{},styles.contentView]}>
+                        {/* <View style={[{},styles.contentView]}>
                           <Image 
                           source={require('../images/user-circle.png')}
                           />
                           <Text style={[{},styles.contentViewHeadingText]}>No customer selected</Text>
                           <Text style={[{},styles.contentViewDescText]}>Search for a customer</Text>
+                        </View> */}
+
+                        <View
+                            style={[{}, styles.custommerDeatailContainerView]}
+                        >
+                            <View style={[{}, styles.custommerDtailCarView]}>
+                                <View style={[{}, styles.custommerNameRow]}>
+                                    <Icon name="user-circle" size={15} />
+                                    <Text style={[{}, styles.custommerNameText]}>Johnson James</Text>
+                                    <Icon
+                                        style={[{}, styles.custommerNameRightAngle]}
+                                        name="angle-right"
+                                        size={20} />
+                                </View>
+                                <View style={[{}, styles.custommerDtailCardRowView]}>
+                                    <Text style={[{}, styles.custommerDtailCardBoldText]}>Email: </Text>
+                                    <Text style={[{}, styles.custommerDtailCardNormalText]}>j.joghnson@gmail.com</Text>
+                                </View>
+                                <View style={[{}, styles.custommerDtailCardRowView]}>
+                                    <Text style={[{}, styles.custommerDtailCardBoldText]}>Phone: </Text>
+                                    <Text style={[{}, styles.custommerDtailCardNormalText]}>08123456789</Text>
+                                </View>
+                                <View style={[{}, styles.custommerDtailCardRowView]}>
+                                    <Text style={[{}, styles.custommerDtailCardBoldText]}>Customer Address: </Text>
+                                    <Text
+                                        numberOfLines={2}
+
+                                        style={[{}, styles.custommerDtailCardNormalText]}>45b,45b Admiralty way, Lekki Phase 1,Lagos</Text>
+                                </View>
+                            </View>
+                            <View style={[{}, styles.countingContainer]}>
+                                <View style={[{}, styles.countingRowView]}>
+                                    <Text style={[{}, styles.custommerDtailCardBoldText]}>Avail. Balance</Text>
+                                    <Text style={[{}, styles.custommerDtailCardNormalText]}>₦ 506,340.00</Text>
+                                </View>
+                                <View style={[{}, styles.countingRowView]}>
+                                    <Text style={[{}, styles.custommerDtailCardBoldText]}>Acct. Balance</Text>
+                                    <Text style={[{}, styles.custommerDtailCardNormalText]}>₦ 6,340.00</Text>
+                                </View>
+                                <View style={[{}, styles.countingRowView]}>
+                                    <Text style={[{}, styles.custommerDtailCardBoldText]}>Credit Balance</Text>
+                                    <Text style={[{}, styles.custommerDtailCardNormalText]}>₦ 500,000.00</Text>
+                                </View>
+
+                            </View>
+                            <View style={[{}, styles.countingContainer]}>
+                                <View style={[{}, styles.countingRowView]}>
+                                    <Text style={[{}, styles.custommerDtailCardBoldText]}>Loyalty Points</Text>
+                                    <Text style={[{}, styles.custommerDtailCardNormalText]}>70.00</Text>
+                                </View>
+                                <View style={[{}, styles.countingRowView]}>
+                                    <Text style={[{}, styles.custommerDtailCardBoldText]}>Credit Note</Text>
+                                    <Text style={[{}, styles.custommerDtailCardNormalText]}>₦ 16,000.00</Text>
+                                </View>
+                                <View style={[{}, styles.countingRowView]}>
+
+                                </View>
+
+                            </View>
+                            <TouchableOpacity 
+                            onPress={()=>this.props.navigation.navigate('AddNewCustomer')}
+                            style={[{},styles.addCustommerRowView]}>
+                              <Image source={require('../images/circlePlus.png')} />
+                              <Text style={[{},styles.addCustommerText]}>Add new customer</Text>
+                            </TouchableOpacity>
                         </View>
 
-                       
+
                     </ScrollView>
                 </View>
             </View>

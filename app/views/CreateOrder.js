@@ -68,7 +68,9 @@ export default class CreateOrder extends React.Component {
                         </View>
                         <View style={[{}, styles.OrderDetailContainer]}>
                             <Text style={[{}, styles.customerContainerhead]}>Order Detail</Text>
-                            <Icon name="shopping-cart" size={60} color="#D8D8D8" />
+                            <Image
+                            source={require('../images/cartSlash.png')}
+                            />
                             <Text style={[{}, styles.OrderDetailContainerHeadingText]}>No product added</Text>
                             <Text style={[{}, styles.OrderDetailContainerText]}>add a product</Text>
                         </View>
