@@ -6,6 +6,7 @@ import Header from '../views/Header';
 import CalendarPicker from 'react-native-calendar-picker';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { Constants } from '../views/Constant';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -21,6 +22,10 @@ class Order extends React.Component {
         this.onDateChange = this.onDateChange.bind(this);
     }
     componentDidMount() {
+        this.orderList();
+    }
+
+    orderList() {
         this.setState({ Spinner: true })
         let postData = {
             method: 'GET',
@@ -30,11 +35,11 @@ class Order extends React.Component {
                 Authorization: this.props.user.access_token,
             },
 
-        };//Constants.Products
-        fetch('https://com.cicodsaasstaging.com/com/api/orders', postData)
+        };
+        fetch(Constants.orderslist, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log("###############",responseJson)
+                console.log("###############", responseJson)
                 if (responseJson.status === 'success') {
                     this.setState({ Spinner: false });
                     this.setState({
@@ -55,9 +60,9 @@ class Order extends React.Component {
         });
     }
     itemDetail(item) {
-        const id=item.id
-        console.log("item_id item_id item_id item_id ",id)
-        this.props.navigation.navigate('OrderDetail',{id})
+        const id = item.id
+        console.log("item_id item_id item_id item_id ", id)
+        this.props.navigation.navigate('OrderDetail', { id })
     }
     render() {
 
@@ -122,14 +127,14 @@ class Order extends React.Component {
 
                 <ScrollView
                     horizontal={true}
-                    paddingHorizontal={20}
-                    marginBottom={20}
+                    paddingHorizontal={10}
+                    marginBottom={10}
                     scrollEnabled={true}
                 >
                     <View style={{ width: width - 20, flexDirection: 'row' }}>
-                        <View >
+                        <TouchableOpacity >
                             <Text style={{ marginRight: 5, backgroundColor: '#E6E6E6', paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff' }}>All</Text>
-                        </View>
+                        </TouchableOpacity>
                         <View >
                             <Text style={{ color: '#909090', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PENDING</Text>
                         </View>
