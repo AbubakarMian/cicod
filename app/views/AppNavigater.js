@@ -33,6 +33,10 @@ import PayByUssd from './PayByUssd';
 import AddProduct from './AddProduct';
 import ApplyDiscount from './ApplyDiscount';
 import AddNote from './AddNote';
+import EnableProduct from './EnableProduct';
+import AddNewCustomer from './AddNewCustomer';
+import ProductView from './ProductView';
+import UpdateProduct from './UpdateProduct';
 const Stack = createStackNavigator();
 
 export default class AppNavigater extends React.Component {
@@ -43,10 +47,11 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
          
+
         <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
-        
+
           
-          <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
           <Stack.Screen name="Dashnoard" component={TabNavigater} options={{ headerShown: false }} />
           <Stack.Screen name="Products" component={Products} options={{ headerShown: false }} />
           <Stack.Screen name="ProductFilter" component={ProductFilter} options={{ headerShown: false }} />
@@ -76,6 +81,11 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="AddProduct" component={AddProduct} options={{ headerShown: false }} />
           <Stack.Screen name="ApplyDiscount" component={ApplyDiscount} options={{ headerShown: false }} />
           <Stack.Screen name="AddNote" component={AddNote} options={{ headerShown: false }} />
+          <Stack.Screen name="EnableProduct" component={EnableProduct} options={{ headerShown: false }} />  
+          <Stack.Screen name="AddNewCustomer" component={AddNewCustomer} options={{ headerShown: false }} /> */}
+          {/* <Stack.Screen name="AddCustomer" component={AddCustomer} options={{ headerShown: false }} />  */}
+          {/* <Stack.Screen name="ProductView" component={ProductView} options={{ headerShown: false }} />  */}
+          <Stack.Screen name="UpdateProduct" component={UpdateProduct} options={{ headerShown: false }} /> 
           
         </Stack.Navigator>
       </NavigationContainer>
