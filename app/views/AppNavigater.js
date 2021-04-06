@@ -33,6 +33,7 @@ import PayByUssd from './PayByUssd';
 import AddProduct from './AddProduct';
 import ApplyDiscount from './ApplyDiscount';
 import AddNote from './AddNote';
+import AddNewCustomer from '../views/AddNewCustomer';
 const Stack = createStackNavigator();
 
 export default class AppNavigater extends React.Component {
@@ -77,6 +78,7 @@ export default class AppNavigater extends React.Component {
           {/* <Stack.Screen name="AddProduct" component={AddProduct} options={{ headerShown: false }} /> */}
           <Stack.Screen name="ApplyDiscount" component={ApplyDiscount} options={{ headerShown: false }} />
           <Stack.Screen name="AddNote" component={AddNote} options={{ headerShown: false }} />
+          <Stack.Screen name="AddNewCustomer" component={AddNewCustomer} options={{ headerShown: false }} />
 
         </Stack.Navigator>
       </NavigationContainer>
