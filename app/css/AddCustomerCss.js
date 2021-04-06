@@ -37,7 +37,6 @@ export default StyleSheet.create({
         backgroundColor:'#fff',
         paddingHorizontal:10,
         alignSelf:'center',
-        paddingVertical:20,
         width:width-20,
         marginTop:20,
         flexDirection:'row',
@@ -62,8 +61,66 @@ export default StyleSheet.create({
     contentViewDescText:{
         color:'#929497',
         fontSize:12
+    },
+    custommerDeatailContainerView:{
+        width:width-20,
+        alignSelf:'center',
+    },
+    custommerDtailCarView:{
+        backgroundColor:'#fff',
+        paddingVertical:10,
+    },
+    custommerNameRow:{
+        flexDirection:'row',
+        paddingLeft:5,
+        alignItems:'center',
+        position:'relative'
+    },
+    custommerNameText:{
+        color:'#4E4D4D',
+        fontWeight:'bold',
+        marginLeft:5
+    },
+    custommerNameRightAngle:{
+        position:'absolute',
+        right:width/10,
+    },
+    custommerDtailCardRowView:{
+        flexDirection:'row',
+        paddingHorizontal:10,
+    },
+    custommerDtailCardBoldText:{
+        color:'#929497',
+        fontWeight:'bold',
+        fontSize:12,
+    },
+    custommerDtailCardNormalText:{
+        color:'#929497',
+        fontSize:10,
+    },
+    countingContainer:{
+        flexDirection:'row',
+        backgroundColor:'#fff',
+        paddingVertical:10,
+        paddingHorizontal:10
+
+    },
+    countingRowView:{
+        flex:1,
+
+    },
+    addCustommerRowView:{
+        flexDirection:'row',
+        alignSelf:'center',
+        justifyContent:'center',
+        alignItems:'center',
+        marginTop:10
+    },
+    addCustommerText:{
+        fontWeight:'bold',
+        color:'#4E4D4D',
+        marginLeft:10
     }
-    
 })
 
 
