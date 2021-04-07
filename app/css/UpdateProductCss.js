@@ -78,17 +78,17 @@ export default StyleSheet.create({
         alignSelf:'center',
         alignItems:'center',
     },
-    flatelistHeadingView:{
+    HeadingView:{
         flexDirection:'row',
         position:'relative'
     },
-    flatelistHeadingText:{
+    HeadingText:{
         fontWeight:'bold',
         fontSize:15,
         color:'#4E4D4D',
         marginLeft:10
     },
-    flatelistHeadingIcon:{
+    HeadingIcon:{
         position:'absolute',
         
     },
