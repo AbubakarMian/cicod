@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import { View, ImageBackground, ScrollView, TouchableHighlight, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity, Modal } from 'react-native'
 import splashImg from '../images/splash.jpg'
 import styles from '../css/ProductViewCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -15,11 +15,12 @@ export default class ProductView extends React.Component {
         this.state = {
             value: 0,
             isChecked: false,
-            searchPress: 1
+            searchPress: 1,
+            productImageModal:false
         }
 
     }
-  
+
     render() {
 
         return (
@@ -33,65 +34,92 @@ export default class ProductView extends React.Component {
                         <Text style={[{}, styles.backHeadingText]}>PRODUCT</Text>
                     </View>
                 </View>
-                <View style={[{},styles.productDeatailContainer]}>
-                    <View style={[{},styles.productDeatailHeaderRow]}>
-                      <View style={[{},styles.aciveView]}>
-                          <Text style={{color:'#26C281'}}>ACTIVE</Text>
-                         
+                <View style={[{}, styles.productDeatailContainer]}>
+                    <View style={[{}, styles.productDeatailHeaderRow]}>
+                        <View style={[{}, styles.aciveView]}>
+                            <Text style={{ color: '#26C281' }}>ACTIVE</Text>
 
-                      </View>
-                      <Image 
-                      style={[{alignSelf:'baseline'}]}
-                      source={require('../images/ticket.png')} />
-                      <Icon 
-                          style={[{},styles.settingIcon]}
-                          size={25}
-                          color={'#929497'}
-                          name="ellipsis-h" />
-                           
+
+                        </View>
+                        <Image
+                            style={[{ alignSelf: 'baseline' }]}
+                            source={require('../images/ticket.png')} />
+                        <Icon
+                            style={[{}, styles.settingIcon]}
+                            size={25}
+                            color={'#929497'}
+                            name="ellipsis-h" />
+
                     </View>
-                    <Text style={[{},styles.productDeatailHeadingText]}>Pure ORANGE JUICE 12PACK</Text>
-                    <Text style={[{},styles.lightGrayTex]}>PJ836439</Text>
-                    <View style={{borderBottomWidth:1,borderColor:'#E6E6E6',marginVertical:10}}></View>
-                    <View style={[{},styles.descRow]}>
-                       <View style={[{},styles.descColumn]}>
-                           <Text style={[{},styles.lightGrayTex]}>Quantity</Text>
-                           <Text style={[{},styles.darkGarayText]}>100</Text>  
-                       </View>
-                       <View style={[{},styles.descColumn]}>
-                           <Text style={[{},styles.lightGrayTex]}>Category</Text>
-                           <Text style={[{},styles.darkGarayText]}>Pure Juice</Text>    
-                       </View>
-                       <View style={[{},styles.descColumn]}>
-                           <Text style={[{},styles.lightGrayTex]}>Price</Text>
-                           <Text style={[{},styles.darkGarayText]}>N40,500</Text>    
-                           
-                       </View>
+                    <Text style={[{}, styles.productDeatailHeadingText]}>Pure ORANGE JUICE 12PACK</Text>
+                    <Text style={[{}, styles.lightGrayTex]}>PJ836439</Text>
+                    <View style={{ borderBottomWidth: 1, borderColor: '#E6E6E6', marginVertical: 10 }}></View>
+                    <View style={[{}, styles.descRow]}>
+                        <View style={[{}, styles.descColumn]}>
+                            <Text style={[{}, styles.lightGrayTex]}>Quantity</Text>
+                            <Text style={[{}, styles.darkGarayText]}>100</Text>
+                        </View>
+                        <View style={[{}, styles.descColumn]}>
+                            <Text style={[{}, styles.lightGrayTex]}>Category</Text>
+                            <Text style={[{}, styles.darkGarayText]}>Pure Juice</Text>
+                        </View>
+                        <View style={[{}, styles.descColumn]}>
+                            <Text style={[{}, styles.lightGrayTex]}>Price</Text>
+                            <Text style={[{}, styles.darkGarayText]}>N40,500</Text>
+
+                        </View>
                     </View>
-                    <View style={[{},styles.descRow]}>
-                       <View style={[{},styles.descColumn]}>
-                           <Text style={[{},styles.lightGrayTex]}>Reservation (Days)</Text>
-                           <Text style={[{},styles.darkGarayText]}>0</Text>  
-                       </View>
-                       <View style={[{},styles.descColumn]}>
-                           <Text style={[{},styles.lightGrayTex]}>Category</Text>
-                           <Text style={[{},styles.darkGarayText]}>Andrew </Text>    
-                           <Text style={[{},styles.darkGarayText]}> Blakes</Text>    
-                       </View>
-                       <View style={[{},styles.descColumn]}>
-                           <Text style={[{},styles.lightGrayTex]}>Created Date</Text>
-                           <Text style={[{},styles.darkGarayText]}>2020-11-18</Text>    
-                           <Text style={[{},styles.darkGarayText]}>10:30 AM</Text>    
-                           
-                       </View>
-                       
+                    <View style={[{}, styles.descRow]}>
+                        <View style={[{}, styles.descColumn]}>
+                            <Text style={[{}, styles.lightGrayTex]}>Reservation (Days)</Text>
+                            <Text style={[{}, styles.darkGarayText]}>0</Text>
+                        </View>
+                        <View style={[{}, styles.descColumn]}>
+                            <Text style={[{}, styles.lightGrayTex]}>Category</Text>
+                            <Text style={[{}, styles.darkGarayText]}>Andrew </Text>
+                            <Text style={[{}, styles.darkGarayText]}> Blakes</Text>
+                        </View>
+                        <View style={[{}, styles.descColumn]}>
+                            <Text style={[{}, styles.lightGrayTex]}>Created Date</Text>
+                            <Text style={[{}, styles.darkGarayText]}>2020-11-18</Text>
+                            <Text style={[{}, styles.darkGarayText]}>10:30 AM</Text>
+
+                        </View>
+
                     </View>
-                    
+
                 </View>
-                <Text style={[{},styles.imageHeadingText]}>IMAGE</Text>
-                <Image 
-                style={[{},styles.productImage]}
-                source={require('../images/juice.png')}/>
+                <Text style={[{}, styles.imageHeadingText]}>IMAGE</Text>
+                <TouchableOpacity
+                onPress={()=>this.setState({productImageModal:true})}
+                >
+                    <Image
+                        style={[{}, styles.productImage]}
+                        source={require('../images/juice.png')} />
+                </TouchableOpacity>
+                <Modal
+                visible={this.state.productImageModal}
+                transparent={true}
+                >
+                    <View style={[{},styles.modalBackGroung]}>
+                      <TouchableOpacity
+                      onPress={()=>this.setState({productImageModal:false})}
+                      style={[{},styles.modalCloseTouch]}
+                      >
+                          <Icon name="close"
+                          color={'#fff'}
+                          size={25}
+                          />
+                          <Text style={{color:'#fff',marginLeft:10}}>Close</Text>
+                      </TouchableOpacity>
+                      
+                       <Image 
+                       style={{height:height/2,width:width/1.3}}
+                       source={require('../images/juice.png')}
+                       />
+                    </View>
+
+                </Modal>
             </View>
         )
     }

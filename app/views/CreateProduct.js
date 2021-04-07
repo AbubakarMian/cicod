@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, Text, Dimensions, Image, Platform, TouchableOpacity, TextInput } from 'react-native'
+import { View, ImageBackground, ScrollView, Text,Dimensions,  Image, Platform, TouchableOpacity, TextInput } from 'react-native'
 import splashImg from '../images/splash.jpg';
 import styles from '../css/CreateProductCss';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -9,7 +9,7 @@ import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'reac
 import SearchBar from 'react-native-search-bar';
 
 const { width, height } = Dimensions.get('window')
-const isAndroid = Platform.OS == 'android'
+
 export default class CreateProduct extends React.Component {
     constructor(props) {
         super(props);

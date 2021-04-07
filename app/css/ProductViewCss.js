@@ -94,7 +94,22 @@ export default StyleSheet.create({
         maxWidth:width/2,
         marginLeft:20,
         marginTop:20
-    }
+    },
+    modalBackGroung:{
+        height:height,
+        width:width,
+        justifyContent:'center',
+        alignItems:'center',
+        backgroundColor:'#00000057',
+        position:'relative'
+    },
+    modalCloseTouch:{
+        position:'absolute',
+        top:20,
+        right:20,
+        flexDirection:'row',
+        alignSelf:'flex-end'
+    },
 })
 
 
