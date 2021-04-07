@@ -8,6 +8,7 @@ export const Constants = {
   login: `${auth_url}/sso/auth/login`,
   products: `${base_url}/products`,
   customerlist: `${base_url}/customers`,
+  customerdelivery: `${base_url}/customer-delivery-address`,
   productslist: `${base_url}/products`,
   orderslist: `${base_url}/orders`,
   productcategorylist: `${base_url}/categories`, //https://com.cicodsaasstaging.com/com/api/categories

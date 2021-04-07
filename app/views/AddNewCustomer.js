@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, TouchableHighlight, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity, Modal, } from 'react-native'
+import { View, ImageBackground, TouchableHighlight, Alert, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity, Modal, } from 'react-native'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import CheckBox from 'react-native-check-box';
@@ -22,11 +22,11 @@ class AddNewCustomer extends React.Component {
             countries_arr: [],
             states_arr: [],
             lgas_arr: [],
-            lgas_id: 0,
+            lgas_id: 772,
             delivery_lgas_id: 0,
-            state_id: 0,
+            state_id: 36,
             delivery_state_id: 0,
-            country_id: 0,
+            country_id: 3,
             delivery_country_id: 0,
             delivery_house_no: '',
             delivery_street: '',
@@ -35,13 +35,14 @@ class AddNewCustomer extends React.Component {
             isFreeDelivery: false,
             isFreeVAT: false,
             is_same_as_customer: true,
-            first_name:'',
-            last_name:'',
-            customer_code:'',
-            phone_number:0,
-            house_no:'',
-            street:'',
-            landmark:'',
+            first_name: 'Joe',
+            last_name: 'Cross',
+            customer_code: '',
+            phone_number: '09011223344',
+            house_no: '3',
+            street: 'Gold Street',
+            landmark: 'Century',
+            email: 'jofedfsds@yopmail.com'
         }
 
     }
@@ -52,49 +53,58 @@ class AddNewCustomer extends React.Component {
 
     ceateCustomer() {
         this.setState({ spinner: true })
-        var formData = new FormData();
-        formData.append('first_name', this.state.first_name); // required
-        formData.append('last_name', this.state.last_name);// required
-        formData.append('email', this.state.tenantId);
-        formData.append('phone	', this.state.tenantId);
-        formData.append('country_id', this.state.tenantId); // required
-        formData.append('state_id', this.state.tenantId); // required
-        formData.append('lga_id', this.state.tenantId);
-        formData.append('house_no', this.state.tenantId);
-        formData.append('street', this.state.tenantId);
-        formData.append('landmark', this.state.tenantId);
-        formData.append('enable_free_vat', this.state.tenantId); // boolean
-        formData.append('enable_free_delivery', this.state.tenantId); // boolean
+
+        if (this.state.first_name === '' || this.state.last_name === '') {
+            Alert.alert("Warning", "First name and Last Name are required")
+            return;
+        }
+        else if (this.state.country_id === '' || this.state.delivery_country_id === '' || this.state.delivery_state_id === '' || this.state.state_id === '') {
+            Alert.alert("Warning", "Country and State are required")
+            return;
+        } else if (this.state.house_no === '' || this.state.delivery_house_no === '') {
+            Alert.alert("Warning", "House No required")
+            return;
+        }
 
         let postData = {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': Constants.autherizationKey,
-                'Authorization-Secure': Constants.autherizationKey,
-                // this.props.user.access_token,
+                'Authorization': this.props.user.access_token,
             },
             body: JSON.stringify({
                 username: this.state.username,//cicodsandbox@yopmail.com
                 password: this.state.password,//Sandbox@123
-                tenantId: this.state.tenantId//sandbox
+                tenantId: this.state.tenantId,//sandbox
+                first_name: this.state.first_name, // required
+                last_name: this.state.last_name,// required
+                email: this.state.email,
+                phone: this.state.phone_number,
+                country_id: this.state.country_id, // required
+                state_id: this.state.state_id, // required
+                lga_id: this.state.lgas_id,
+                house_no: this.state.house_no,
+                street: this.state.street,
+                landmark: this.state.landmark,
+                enable_free_vat: this.state.isFreeVAT,// boolean
+                enable_free_delivery: this.state.isFreeDelivery, // boolean
             })
         };
-        fetch(Constants.login, postData)
+        fetch(Constants.customerlist, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 console.log(" create customer response !!!!!!!!!!!", responseJson)
 
                 this.setState({ spinner: false })
-                if (responseJson.status === "SUCCESS") {
-
+                if (responseJson.status === "success") {
+                    Alert.alert('MESSAGE', responseJson.message)
+                    let customer_id = responseJson.data.id;
+                    this.createCustomerDelivery(customer_id);
                 } else {
-                    this.setState({ spinner: false })
                     // this.setState({ spinner: false })
-                    let message = JSON.stringify(responseJson.status)
+                    let message = JSON.stringify(responseJson.message)
                     Alert.alert('Error', message)
-                    this.refs.PopUp.setModal(true, responseJson.status);
                 }
             }
             )
@@ -103,49 +113,35 @@ class AddNewCustomer extends React.Component {
                 // Alert.alert(error.message);
             });
     }
-    createCustomerDelivery() {
+    createCustomerDelivery(customer_id) {
         this.setState({ spinner: true })
-        var formData = new FormData();
-        formData.append('customer_id', this.state.username); // required
-        formData.append('country_id', this.state.delivery_country_id);// required
-        formData.append('state_id', this.state.delivery_state_id);
-        formData.append('lga_id	', this.state.delivery_lgas_id);
-        formData.append('house_no', this.state.delivery_house_no); // required
-        formData.append('street', this.state.delivery_street); // required
-        formData.append('landmark', this.state.tenantId);
-        formData.append('is_default', this.state.tenantId);
+
 
         let postData = {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': Constants.autherizationKey,
-                'Authorization-Secure': Constants.autherizationKey,
-                // this.props.user.access_token,
+                'Authorization': this.props.user.access_token,
             },
             body: JSON.stringify({
-                username: this.state.username,//cicodsandbox@yopmail.com
-                password: this.state.password,//Sandbox@123
-                tenantId: this.state.tenantId//sandbox
+                customer_id: customer_id,
+                country_id: this.state.delivery_country_id ?? this.state.country_id,
+                state_id: this.state.delivery_state_id ?? this.state.state_id,
+                lga_id: this.state.delivery_lgas_id ?? this.state.lgas_id,
+                house_no: this.state.delivery_house_no ?? this.state.house_no,
+                street: this.state.delivery_street ?? this.state.street,
+                landmark: this.state.delivery_landmark ?? this.state.landmark,
+                is_default: this.state.is_default,
             })
         };
-        fetch(Constants.login, postData)
+        fetch(Constants.customerdelivery, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                // console.log("!!!!!!!!!!!",responseJson)
-                if (responseJson.status === "SUCCESS") {
-                    // console.log("!!!!!!!!!!!",responseJson)
-                    // console.log("!!!!!!!!!!!",responseJson.user.token)
-                    this.props.setUser({
-                        firstname: responseJson.user.firstname,
-                        lastname: responseJson.user.lastname,
-                        email: responseJson.user.email,
-                        phone: responseJson.user.phone,
-                        access_token: "Bearer fPw9BRvnBQeDw5E2pAwu" + responseJson.token
-                    });
-                    this.setState({ spinner: false })
-                    this.props.navigation.navigate('Home')
+                console.log(" delivery customer response!!!!!!!!!!!", responseJson)
+                this.setState({ spinner: false })
+                if (responseJson.status === "success") {
+
                 } else {
                     this.setState({ spinner: false })
                     // this.setState({ spinner: false })
@@ -313,7 +309,7 @@ class AddNewCustomer extends React.Component {
             <View style={[{}, styles.mainView]}>
                 <Header />
                 <Spinner
-                    visible={this.state.Spinner}
+                    visible={this.state.spinner}
                     textContent={'Please Wait...'}
                     textStyle={{ color: '#fff' }}
                     color={'#fff'}
@@ -481,12 +477,15 @@ class AddNewCustomer extends React.Component {
                                 <View>
                                     <TextInput
                                         placeholder="House No.*"
+                                        onChangeText={text => this.setState({ delivery_house_no: text })}
                                     />
                                     <TextInput
                                         placeholder="Street*"
+                                        onChangeText={text => this.setState({ delivery_street: text })}
                                     />
                                     <TextInput
                                         placeholder="Landmark"
+                                        onChangeText={text => this.setState({ delivery_landmark: text })}
                                     />
                                     <View style={[{}, styles.formRow]}>
                                         <View style={[{}, styles.formColumn]}>
@@ -556,6 +555,7 @@ class AddNewCustomer extends React.Component {
                                 </View>
                                 : null}
                             <TouchableOpacity
+                                onPress={() => this.ceateCustomer()}
                                 style={[{}, styles.redTouchView]}
                             >
                                 <Text style={{ color: '#fff' }}>Save</Text>
