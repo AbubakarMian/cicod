@@ -16,7 +16,7 @@ class OrderDetail extends React.Component {
         super(props);
         this.state = {
             Spinner: false,
-            order_id: this.props.route.params.id ?? 0 ,
+            order_id: this.props.route.params.id ?? 0,
             selectedStartDate: null,
             calenderModal: false,
             cicod_order_id: '',
@@ -93,7 +93,7 @@ class OrderDetail extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
-        let reciptUrl = Constants.orderslist+'/'+this.state.order_id ;
+        let reciptUrl = Constants.orderslist + '/' + this.state.order_id;
 
         fetch(reciptUrl, postData)
             .then(response => response.json())
@@ -102,8 +102,8 @@ class OrderDetail extends React.Component {
                     Spinner: false
                 });
                 if (responseJson.status === 'success') {
-                    console.log('data data data res res res ',responseJson.message)
-                    Alert.alert('Success',responseJson.message)
+                    console.log('data data data res res res ', responseJson.message)
+                    Alert.alert('Success', responseJson.message)
                     // this.props.navigation.navigate('DrawerNavigation')
                 } else {
                     // let message = JSON.stringify(responseJson.error.message)
