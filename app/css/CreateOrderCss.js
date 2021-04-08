@@ -58,6 +58,9 @@ export default StyleSheet.create({
         left:5,
         color:'#D8D8D8'
     },
+    customerContainerheadText:{
+        color:'#D8D8D8',
+    },
     customerContaineraddBtnView:{
        backgroundColor:'#B1272C',
        paddingHorizontal:5,
@@ -189,7 +192,104 @@ export default StyleSheet.create({
         alignItems:'center',
         marginTop:10,
         alignSelf:'center'
-    }
+    },
+    OrderDetailHeadingRow:{
+        position:'absolute',
+        top:5,
+        width:width,
+        left:5,
+        flexDirection:'row'
+    },
+    OrderDetailHeadingRowText:{
+        color:'#D8D8D8'
+    },
+    OrderDetailClearTouc:{
+        right:10,
+        top:5,
+        position:'absolute'
+    },
+    OrderDetailNotificationText:{
+        backgroundColor:'#B1272C',
+        color:'#fff',
+        marginLeft:10,
+        paddingHorizontal:15,
+        paddingVertical:2, 
+        borderRadius:100,
+    },
+    OrderDetailDataCOntainer:{
+        flexDirection:'row',
+        marginTop:10
+    },
+    OrderDetailDataCOntainerRow:{
+        flexDirection:'row',
+        width:width-20,
+        alignSelf:'center',
+        paddingHorizontal:5,
+        position:'relative',
+    },
+    OrderDetailDataCOntainerHeadingText:{
+        fontWeight:'700',
+        color:'#4E4D4D'
+    },
+    OrderDetailDataCOntainerCounterView:{
+        position:'absolute',
+        right:5,
+        borderWidth:0.5,
+        flexDirection:'row',
+        alignSelf:'center',
+        justifyContent:'center',
+        borderColor:'#929497',
+        borderRadius:5,
+        top:5
+        
+},
+iconView:{
+    paddingHorizontal:10,
+    alignItems:'center',
+    justifyContent:'center',
+    borderRightWidth:0.5
+},
+orderDetailAmmountRow:{
+    flexDirection:'row',
+    width:width-20,
+    alignSelf:'center',
+    paddingHorizontal:10,
+    marginTop:10
+},
+orderDetailAmmountColumn:{
+    flex:1
+},
+orderDetailAmmountColumnGaryBolText:{
+    fontWeight:'bold',
+    color:'#4E4D4D'
+},
+orderDetailAmmountColumnRedText:{
+    color:'#B1272C'
+},
+userDEtailCOntainer:{
+    marginTop:20,
+    paddingLeft:10
+},
+userDEtailCOntainerIconView:{
+    flexDirection:'row',
+    width:width-20,
+    marginBottom:10
+},
+userDEtailCOntainerText:{
+marginLeft:10,
+color:'#4E4D4D',
+fontWeight:'bold'
+},
+usetDetailInfoText:{
+    color:'#929497'
+},
+usetDetailLableText:{
+    color:'#929497',
+    fontWeight:'bold'
+},
+downIconView:{
+    alignSelf:'center'
+}
     
 
 
