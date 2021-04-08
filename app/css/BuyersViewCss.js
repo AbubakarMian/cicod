@@ -146,7 +146,8 @@ export default StyleSheet.create({
         opacity:0.7,
         alignItems:'center',
         justifyContent:'center', 
-        position:'relative'
+        position:'relative',
+        zIndex:-0.999
     },
     suspendTouch:{
         alignSelf:'baseline',
@@ -173,8 +174,49 @@ export default StyleSheet.create({
         right:20,
         flexDirection:'row',
         alignSelf:'flex-end'
+    },
+    moreDetailModalContentContainer:{
+        backgroundColor:'#fff',
+        paddingVertical:10,
+        position:'absolute',
+        bottom:20,
+        width:width,
+        borderTopRightRadius:30,
+        paddingHorizontal:20,
+        borderTopLeftRadius:30,
+        zIndex:-0.9999999999999
+    },
+    moreDeatialModalHeadingRow:{
+       flexDirection:'row',
+       width:width,
+       position:'relative',
+       paddingVertical:10,
+       alignItems:'center' 
+    },
+    moreDetailHeadingText:{
+        fontWeight:'bold',
+        color:'#2F2E7C'
+    },
+    moreDetailModalCloseTouch:{
+        paddingHorizontal:10,
+        marginRight:10,
+        position:'absolute',
+        right:20
+    },
+    moreDetailModalContentView:{
+        paddingVertical:10
+    },
+    moreDetailModalContentRow:{
+        flexDirection:'row',
+        marginVertical:5,
+    },
+    moreDetailModalContentRowLable:{
+        fontWeight:'bold',
+        color:'#707070'
+    },
+    moreDetailModalContentRowInfo:{
+        color:'#929497'
     }
-    
     
 })
 
