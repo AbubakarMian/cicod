@@ -4,19 +4,56 @@ import splashImg from '../images/splash.jpg'
 import styles from '../css/AddProductCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
+import Spinner from 'react-native-loading-spinner-overlay';
 import CheckBox from 'react-native-check-box';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
+import { Constants } from '../views/Constant';
+import { connect } from 'react-redux';
+import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import SearchBar from 'react-native-search-bar';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
-export default class AddProduct extends React.Component {
+class AddProduct extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             value: 0,
-            isChecked: false
+            isChecked: false,
+            spinner: false,
+            data: [],
         }
     }
+
+    getProductList() {
+        console.log('products');
+        this.setState({ Spinner: true })
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            },
+        };
+        fetch(Constants.productslist, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                this.setState({
+                    Spinner: false,
+                    data: responseJson.data
+                });
+                if (responseJson.status === true) {
+
+
+
+                    this.props.navigation.navigate('DrawerNavigation')
+                } else {
+                    let message = JSON.stringify(responseJson.error.message)
+                    Alert.alert('Error', message)
+                }
+            })
+    }
+
     render() {
         var radio_props_dilvery = [
             { label: 'Dilivery', value: 0 },
@@ -34,6 +71,13 @@ export default class AddProduct extends React.Component {
         return (
             <View style={[{}, styles.mainView]}>
                 <Header />
+
+                <Spinner
+                    visible={this.state.spinner}
+                    textContent={'Please Wait...'}
+                    textStyle={{ color: '#fff' }}
+                    color={'#fff'}
+                />
                 <View style={[{}, styles.backHeaderRowView]}>
                     <TouchableOpacity>
                         <Icon name="arrow-left" size={25} color="#929497" />
@@ -50,6 +94,7 @@ export default class AddProduct extends React.Component {
                             />
                             <TextInput
                                 placeholder="Search Customer"
+                                onSubmitEditing={() => this.myFunction()}
                             />
 
                         </View>
@@ -78,3 +123,16 @@ export default class AddProduct extends React.Component {
         )
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        user: state.userReducer
+    }
+};
+function mapDispatchToProps(dispatch) {
+    return {
+        setUser: (value) => dispatch({ type: SET_USER, value: value }),
+        logoutUser: () => dispatch({ type: LOGOUT_USER })
+    }
+};
+export default connect(mapStateToProps, mapDispatchToProps)(AddProduct)

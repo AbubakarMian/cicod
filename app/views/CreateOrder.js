@@ -5,18 +5,96 @@ import styles from '../css/CreateOrderCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import CheckBox from 'react-native-check-box';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { Constants } from '../views/Constant';
+import { connect } from 'react-redux';
+import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import SearchBar from 'react-native-search-bar';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
-export default class CreateOrder extends React.Component {
+class CreateOrder extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             value: 0,
-            isChecked: false
+            isChecked: false,
+            spinner: false,
+            customer_name: '',
+            customer_email: '',
+            customer_phone: '',
         }
     }
+
+    componentWillReceiveProps() {
+        console.log(' componentWillReceiveProps CreateOrder', this.props)
+        let customer_data = this.props.route.params.customer_data;
+
+        this.setState({
+            customer_name: customer_data.customer_name,
+            customer_email: customer_data.customer_email,
+            customer_phone: customer_data.customer_phone
+        })
+    }
+
+    createOrder() {
+        this.setState({ spinner: true })
+
+        if (this.state.name === '' || this.state.price === '') {
+            this.setState({ spinner: false })
+            Alert.alert("Warning", "Product name and Price are required")
+            return;
+        }
+        else {
+
+
+            let postData = {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': this.props.user.access_token,
+                },
+                body: JSON.stringify({
+                    customer_name: this.state.category_id,//required
+                    customer_phone: this.state.name,//required
+                    customer_email: this.state.quantity,//sandbox
+                    products: this.state.code,
+                    delivery_type: this.state.price,// required
+                    delivery_address: this.state.description,
+                    payment_mode: this.state.validity,//required
+                    country_id: this.state.is_qty_limit,
+                    state_id: this.state.state_id,
+                    lga_id: this.state.image,
+                    note: this.state.is_web_shop,
+                    discount_amount: this.state.is_web_shop,
+                    discount_percent: this.state.is_web_shop,
+                })
+            };
+            fetch(Constants.orderslist, postData)
+                .then(response => response.json())
+                .then(async responseJson => {
+                    console.log(" create customer response !!!!!!!!!!!", responseJson)
+
+                    this.setState({ spinner: false })
+                    if (responseJson.status === "success") {
+                        Alert.alert('MESSAGE', responseJson.message)
+                        let customer_id = responseJson.data.id;
+                        // this.createCustomerDelivery(customer_id);
+                    } else {
+                        // this.setState({ spinner: false })
+                        let message = JSON.stringify(responseJson.message)
+                        Alert.alert('Error', message)
+                    }
+                }
+                )
+                .catch((error) => {
+                    console.log("Api call error", error);
+                    // Alert.alert(error.message);
+                });
+        }
+    }
+
     render() {
         var radio_props_dilvery = [
             { label: 'Dilivery', value: 0 },
@@ -34,8 +112,14 @@ export default class CreateOrder extends React.Component {
         return (
             <View style={[{}, styles.mainView]}>
                 <Header />
+                <Spinner
+                    visible={this.state.spinner}
+                    textContent={'Please Wait...'}
+                    textStyle={{ color: '#fff' }}
+                    color={'#fff'}
+                />
                 <ScrollView>
-                    <View style={{paddingBottom:20}}>
+                    <View style={{ paddingBottom: 20 }}>
                         <View style={[{}, styles.backHeaderRowView]}>
                             <TouchableOpacity>
                                 <Icon name="arrow-left" size={25} color="#929497" />
@@ -52,7 +136,9 @@ export default class CreateOrder extends React.Component {
                         </View>
                         <View style={[{}, styles.customerContainerView]}>
                             <Text style={[{}, styles.customerContainerhead]}>Custommer Detail</Text>
-                            <TouchableOpacity style={[{}, styles.customerContaineraddBtnView]}>
+                            <TouchableOpacity style={[{}, styles.customerContaineraddBtnView]}
+                                onPress={() => this.props.navigation.navigate('AddCustomer')}
+                            >
                                 <Icon name="plus-circle" size={20} color={'#fff'} />
                                 <Text style={[{}, styles.customerContaineraddBtnText]}>Add</Text>
                             </TouchableOpacity>
@@ -60,16 +146,21 @@ export default class CreateOrder extends React.Component {
                             <Text style={[{}, styles.customerContainerheading]}>No Customer added</Text>
                             <Text style={[{}, styles.customerContainerText]}>add customer</Text>
                         </View>
-                        <View style={[{}, styles.customerContaineraddProductView]}>
+                        <TouchableOpacity 
+                            onPress={() => this.props.navigation.navigate('AddProduct')}
+                        >
+                            <View style={[{}, styles.customerContaineraddProductView]}>
+                                
                             <Image
-                                source={require('../images/products/circlePlus.png')}
-                            />
-                            <Text style={[{}, styles.customerContaineraddProductText]}>Add Product</Text>
-                        </View>
+                                    source={require('../images/products/circlePlus.png')}
+                                />
+                                <Text style={[{}, styles.customerContaineraddProductText]}>Add Product</Text>
+                            </View>
+                        </TouchableOpacity>
                         <View style={[{}, styles.OrderDetailContainer]}>
                             <Text style={[{}, styles.customerContainerhead]}>Order Detail</Text>
                             <Image
-                            source={require('../images/cartSlash.png')}
+                                source={require('../images/cartSlash.png')}
                             />
                             <Text style={[{}, styles.OrderDetailContainerHeadingText]}>No product added</Text>
                             <Text style={[{}, styles.OrderDetailContainerText]}>add a product</Text>
@@ -171,3 +262,15 @@ export default class CreateOrder extends React.Component {
         )
     }
 }
+function mapStateToProps(state) {
+    return {
+        user: state.userReducer
+    }
+};
+function mapDispatchToProps(dispatch) {
+    return {
+        setUser: (value) => dispatch({ type: SET_USER, value: value }),
+        logoutUser: () => dispatch({ type: LOGOUT_USER })
+    }
+};
+export default connect(mapStateToProps, mapDispatchToProps)(CreateOrder)
