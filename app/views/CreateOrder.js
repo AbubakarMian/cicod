@@ -27,7 +27,7 @@ class CreateOrder extends React.Component {
     }
 
     componentWillReceiveProps() {
-        console.log(' componentWillReceiveProps CreateOrder', this.props)
+        console.log(' componentWillReceiveProps CreateOrder', this.props.route)
         let customer_data = this.props.route.params.customer_data;
 
         this.setState({
@@ -134,7 +134,8 @@ class CreateOrder extends React.Component {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                        {/* <View style={[{}, styles.customerContainerView]}>
+
+                        <View style={[{}, styles.customerContainerView]}>
                             <Text style={[{}, styles.customerContainerhead]}>Custommer Detail</Text>
                             <TouchableOpacity style={[{}, styles.customerContaineraddBtnView]}
                                 onPress={() => this.props.navigation.navigate('AddCustomer')}
@@ -142,46 +143,42 @@ class CreateOrder extends React.Component {
                                 <Icon name="plus-circle" size={20} color={'#fff'} />
                                 <Text style={[{}, styles.customerContaineraddBtnText]}>Add</Text>
                             </TouchableOpacity>
-                            <Icon name="user-circle" size={50} color="#D8D8D8" />
-                            <Text style={[{}, styles.customerContainerheading]}>No Customer added</Text>
-                            <Text style={[{}, styles.customerContainerText]}>add customer</Text>
-                        </View> */}
-                        <View style={[{}, styles.customerContainerView]}>
-                            <Text style={[{}, styles.customerContainerhead]}>Custommer Detail</Text>
-                            <TouchableOpacity style={[{}, styles.customerContaineraddBtnView]}>
-                                <Icon name="plus-circle" size={20} color={'#fff'} />
-                                <Text style={[{}, styles.customerContaineraddBtnText]}>Add</Text>
-                            </TouchableOpacity>
-                           <View style={[{},styles.userDEtailCOntainer]}>
-                               <View style={[{},styles.userDEtailCOntainerIconView]}>
-                                   <Icon 
-                                   name="user-circle"
-                                   color="#D8D8D8"
-                                   size={20}
-                                   />
-                                   <Text style={[{},styles.userDEtailCOntainerText]}>Johnson James</Text>
-                               </View>
-                               <View style={[{},styles.userDEtailCOntainerIconView]}>
-                                   <Text style={[{},styles.usetDetailLableText]}>Email: </Text>
-                                   <Text style={[{},styles.usetDetailInfoText]}>j.joghnson@gmail.com</Text>
+                            {(this.state.customer_name == '') ?
+                                <View style={[{}, styles.customerContainerView]}>
+                                    <Icon name="user-circle" size={50} color="#D8D8D8" />
+                                    <Text style={[{}, styles.customerContainerheading]}>No Customer added</Text>
+                                    <Text style={[{}, styles.customerContainerText]}>add customer</Text>
                                 </View>
-                                <View style={[{},styles.userDEtailCOntainerIconView]}>
-                                   <Text style={[{},styles.usetDetailLableText]}>Phone: </Text>
-                                   <Text style={[{},styles.usetDetailInfoText]}>08123456789</Text>
-                                </View>
-                                <View style={[{},styles.downIconView]}>
-                                    <Icon name="angle-down"
-                                    size={20}
-                                    color={'#929497'}/>
-                                </View>
-                           </View>
+                                : <View style={[{}, styles.userDEtailCOntainer]}>
+                                    <View style={[{}, styles.userDEtailCOntainerIconView]}>
+                                        <Icon
+                                            name="user-circle"
+                                            color="#D8D8D8"
+                                            size={20}
+                                        />
+                                        <Text style={[{}, styles.userDEtailCOntainerText]}>Johnson James</Text>
+                                    </View>
+                                    <View style={[{}, styles.userDEtailCOntainerIconView]}>
+                                        <Text style={[{}, styles.usetDetailLableText]}>Email: </Text>
+                                        <Text style={[{}, styles.usetDetailInfoText]}>j.joghnson@gmail.com</Text>
+                                    </View>
+                                    <View style={[{}, styles.userDEtailCOntainerIconView]}>
+                                        <Text style={[{}, styles.usetDetailLableText]}>Phone: </Text>
+                                        <Text style={[{}, styles.usetDetailInfoText]}>08123456789</Text>
+                                    </View>
+                                    <View style={[{}, styles.downIconView]}>
+                                        <Icon name="angle-down"
+                                            size={20}
+                                            color={'#929497'} />
+                                    </View>
+                                </View>}
                         </View>
-                        <TouchableOpacity 
+                        <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('AddProduct')}
                         >
                             <View style={[{}, styles.customerContaineraddProductView]}>
-                                
-                            <Image
+
+                                <Image
                                     source={require('../images/products/circlePlus.png')}
                                 />
                                 <Text style={[{}, styles.customerContaineraddProductText]}>Add Product</Text>
@@ -196,127 +193,127 @@ class CreateOrder extends React.Component {
                             <Text style={[{}, styles.OrderDetailContainerText]}>add a product</Text>
                         </View>  */}
                         <View style={[{}, styles.OrderDetailContainer]}>
-                           <View style={[{},styles.OrderDetailHeadingRow]}>
-                               <Text style={[{},styles.OrderDetailHeadingRowText]}>Order Detail</Text>
-                               <Text style={[{},styles.OrderDetailNotificationText]}>3</Text>
-                           </View>
-                           <TouchableOpacity style={[{},styles.OrderDetailClearTouc]}>
-                                <Text style={[{},styles.OrderDetailHeadingRowText]}>Clear Order</Text>
-                           </TouchableOpacity>
-                           <View style={[{flexDirection:'column'}]}>
-                           <View style={[{},styles.OrderDetailDataCOntainer]}>
-                              <View style={[{},styles.OrderDetailDataCOntainerRow]}>
-                                  <View>
-                                  <Text style={[{},styles.OrderDetailDataCOntainerHeadingText]}>Pure ORANGE JUICE  12PACK</Text>
-                                      <Text style={[{},styles.OrderDetailHeadingRowText]}>LAGOS- Palms</Text>
-                                  </View>
-                                 
-                                  <View style={[{},styles.OrderDetailDataCOntainerCounterView]}>
-                                      <TouchableOpacity style={[{},styles.iconView]}>
-                                          <Icon name="minus"/>
-                                      </TouchableOpacity>
-                                      <View style={[{},styles.iconView]}>
-                                          <Text>10</Text>
-                                      </View>
-                                      <TouchableOpacity style={[{},styles.iconView]}>
-                                          <Icon name="plus"
-                                          color="#B1272C"
-                                          />
-                                      </TouchableOpacity>
-                                    </View>  
-                                    
-                              </View>
-                              
-                           </View>
-                           <View style={[{},styles.orderDetailAmmountRow]}>
-                                  <View style={[{},styles.orderDetailAmmountColumn]}>
-                                     <Text style={[{},styles.orderDetailAmmountColumnGaryBolText]}>N500,000</Text>
-                                  </View>
-                                  <View style={[{},styles.orderDetailAmmountColumn]}>
-                                     <TouchableOpacity
-                                     style={[{alignSelf:'flex-end'}]}
-                                     >
-                                         <Text style={[{},styles.orderDetailAmmountColumnRedText]}>Remove</Text>
-                                     </TouchableOpacity>
-                                  </View>
-                              </View>
-                           </View>
-                           <View style={[{flexDirection:'column'}]}>
-                           <View style={[{},styles.OrderDetailDataCOntainer]}>
-                              <View style={[{},styles.OrderDetailDataCOntainerRow]}>
-                                  <View>
-                                  <Text style={[{},styles.OrderDetailDataCOntainerHeadingText]}>Pure ORANGE JUICE  12PACK</Text>
-                                      <Text style={[{},styles.OrderDetailHeadingRowText]}>LAGOS- Palms</Text>
-                                  </View>
-                                 
-                                  <View style={[{},styles.OrderDetailDataCOntainerCounterView]}>
-                                      <TouchableOpacity style={[{},styles.iconView]}>
-                                          <Icon name="minus"/>
-                                      </TouchableOpacity>
-                                      <View style={[{},styles.iconView]}>
-                                          <Text>10</Text>
-                                      </View>
-                                      <TouchableOpacity style={[{},styles.iconView]}>
-                                          <Icon name="plus"
-                                          color="#B1272C"
-                                          />
-                                      </TouchableOpacity>
-                                    </View>  
-                                    
-                              </View>
-                              
-                           </View>
-                           <View style={[{},styles.orderDetailAmmountRow]}>
-                                  <View style={[{},styles.orderDetailAmmountColumn]}>
-                                     <Text style={[{},styles.orderDetailAmmountColumnGaryBolText]}>N500,000</Text>
-                                  </View>
-                                  <View style={[{},styles.orderDetailAmmountColumn]}>
-                                     <TouchableOpacity
-                                     style={[{alignSelf:'flex-end'}]}
-                                     >
-                                         <Text style={[{},styles.orderDetailAmmountColumnRedText]}>Remove</Text>
-                                     </TouchableOpacity>
-                                  </View>
-                              </View>
-                           </View>
-                           <View style={[{flexDirection:'column'}]}>
-                           <View style={[{},styles.OrderDetailDataCOntainer]}>
-                              <View style={[{},styles.OrderDetailDataCOntainerRow]}>
-                                  <View>
-                                  <Text style={[{},styles.OrderDetailDataCOntainerHeadingText]}>Pure ORANGE JUICE  12PACK</Text>
-                                      <Text style={[{},styles.OrderDetailHeadingRowText]}>LAGOS- Palms</Text>
-                                  </View>
-                                 
-                                  <View style={[{},styles.OrderDetailDataCOntainerCounterView]}>
-                                      <TouchableOpacity style={[{},styles.iconView]}>
-                                          <Icon name="minus"/>
-                                      </TouchableOpacity>
-                                      <View style={[{},styles.iconView]}>
-                                          <Text>10</Text>
-                                      </View>
-                                      <TouchableOpacity style={[{},styles.iconView]}>
-                                          <Icon name="plus"
-                                          color="#B1272C"
-                                          />
-                                      </TouchableOpacity>
-                                    </View>  
-                                    
-                              </View>
-                              
-                           </View>
-                           <View style={[{},styles.orderDetailAmmountRow]}>
-                                  <View style={[{},styles.orderDetailAmmountColumn]}>
-                                     <Text style={[{},styles.orderDetailAmmountColumnGaryBolText]}>N500,000</Text>
-                                  </View>
-                                  <View style={[{},styles.orderDetailAmmountColumn]}>
-                                     <TouchableOpacity
-                                     style={[{alignSelf:'flex-end'}]}
-                                     >
-                                         <Text style={[{},styles.orderDetailAmmountColumnRedText]}>Remove</Text>
-                                     </TouchableOpacity>
-                                  </View>
-                              </View>
-                           </View>
+                            <View style={[{}, styles.OrderDetailHeadingRow]}>
+                                <Text style={[{}, styles.OrderDetailHeadingRowText]}>Order Detail</Text>
+                                <Text style={[{}, styles.OrderDetailNotificationText]}>3</Text>
+                            </View>
+                            <TouchableOpacity style={[{}, styles.OrderDetailClearTouc]}>
+                                <Text style={[{}, styles.OrderDetailHeadingRowText]}>Clear Order</Text>
+                            </TouchableOpacity>
+                            <View style={[{ flexDirection: 'column' }]}>
+                                <View style={[{}, styles.OrderDetailDataCOntainer]}>
+                                    <View style={[{}, styles.OrderDetailDataCOntainerRow]}>
+                                        <View>
+                                            <Text style={[{}, styles.OrderDetailDataCOntainerHeadingText]}>Pure ORANGE JUICE  12PACK</Text>
+                                            <Text style={[{}, styles.OrderDetailHeadingRowText]}>LAGOS- Palms</Text>
+                                        </View>
+
+                                        <View style={[{}, styles.OrderDetailDataCOntainerCounterView]}>
+                                            <TouchableOpacity style={[{}, styles.iconView]}>
+                                                <Icon name="minus" />
+                                            </TouchableOpacity>
+                                            <View style={[{}, styles.iconView]}>
+                                                <Text>10</Text>
+                                            </View>
+                                            <TouchableOpacity style={[{}, styles.iconView]}>
+                                                <Icon name="plus"
+                                                    color="#B1272C"
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+
+                                    </View>
+
+                                </View>
+                                <View style={[{}, styles.orderDetailAmmountRow]}>
+                                    <View style={[{}, styles.orderDetailAmmountColumn]}>
+                                        <Text style={[{}, styles.orderDetailAmmountColumnGaryBolText]}>N500,000</Text>
+                                    </View>
+                                    <View style={[{}, styles.orderDetailAmmountColumn]}>
+                                        <TouchableOpacity
+                                            style={[{ alignSelf: 'flex-end' }]}
+                                        >
+                                            <Text style={[{}, styles.orderDetailAmmountColumnRedText]}>Remove</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </View>
+                            <View style={[{ flexDirection: 'column' }]}>
+                                <View style={[{}, styles.OrderDetailDataCOntainer]}>
+                                    <View style={[{}, styles.OrderDetailDataCOntainerRow]}>
+                                        <View>
+                                            <Text style={[{}, styles.OrderDetailDataCOntainerHeadingText]}>Pure ORANGE JUICE  12PACK</Text>
+                                            <Text style={[{}, styles.OrderDetailHeadingRowText]}>LAGOS- Palms</Text>
+                                        </View>
+
+                                        <View style={[{}, styles.OrderDetailDataCOntainerCounterView]}>
+                                            <TouchableOpacity style={[{}, styles.iconView]}>
+                                                <Icon name="minus" />
+                                            </TouchableOpacity>
+                                            <View style={[{}, styles.iconView]}>
+                                                <Text>10</Text>
+                                            </View>
+                                            <TouchableOpacity style={[{}, styles.iconView]}>
+                                                <Icon name="plus"
+                                                    color="#B1272C"
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+
+                                    </View>
+
+                                </View>
+                                <View style={[{}, styles.orderDetailAmmountRow]}>
+                                    <View style={[{}, styles.orderDetailAmmountColumn]}>
+                                        <Text style={[{}, styles.orderDetailAmmountColumnGaryBolText]}>N500,000</Text>
+                                    </View>
+                                    <View style={[{}, styles.orderDetailAmmountColumn]}>
+                                        <TouchableOpacity
+                                            style={[{ alignSelf: 'flex-end' }]}
+                                        >
+                                            <Text style={[{}, styles.orderDetailAmmountColumnRedText]}>Remove</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </View>
+                            <View style={[{ flexDirection: 'column' }]}>
+                                <View style={[{}, styles.OrderDetailDataCOntainer]}>
+                                    <View style={[{}, styles.OrderDetailDataCOntainerRow]}>
+                                        <View>
+                                            <Text style={[{}, styles.OrderDetailDataCOntainerHeadingText]}>Pure ORANGE JUICE  12PACK</Text>
+                                            <Text style={[{}, styles.OrderDetailHeadingRowText]}>LAGOS- Palms</Text>
+                                        </View>
+
+                                        <View style={[{}, styles.OrderDetailDataCOntainerCounterView]}>
+                                            <TouchableOpacity style={[{}, styles.iconView]}>
+                                                <Icon name="minus" />
+                                            </TouchableOpacity>
+                                            <View style={[{}, styles.iconView]}>
+                                                <Text>10</Text>
+                                            </View>
+                                            <TouchableOpacity style={[{}, styles.iconView]}>
+                                                <Icon name="plus"
+                                                    color="#B1272C"
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+
+                                    </View>
+
+                                </View>
+                                <View style={[{}, styles.orderDetailAmmountRow]}>
+                                    <View style={[{}, styles.orderDetailAmmountColumn]}>
+                                        <Text style={[{}, styles.orderDetailAmmountColumnGaryBolText]}>N500,000</Text>
+                                    </View>
+                                    <View style={[{}, styles.orderDetailAmmountColumn]}>
+                                        <TouchableOpacity
+                                            style={[{ alignSelf: 'flex-end' }]}
+                                        >
+                                            <Text style={[{}, styles.orderDetailAmmountColumnRedText]}>Remove</Text>
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </View>
                         </View>
                         <View style={[{}, styles.diliveryTypeContainerView]}>
                             <TouchableOpacity>
@@ -333,7 +330,7 @@ class CreateOrder extends React.Component {
                                         onPress={(value) => { this.setState({ value: value }) }}
                                     />
                                     <Text style={[{}, styles.smailGrayText]}>Dilivery to customer address</Text>
-                                    
+
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity>

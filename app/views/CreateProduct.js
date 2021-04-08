@@ -24,16 +24,16 @@ class CreateProduct extends React.Component {
             categoryarr: [],
             spinner: false,
             category_id: 0,
-            name: 'sdfasd assdf',
-            quantity: 10,
+            name: '',
+            quantity: 0,
             code: '',
-            price: 10,
+            price: 0,
             reservation_day: 0,
             description: '',
             is_web_shop: false,
             is_qty_limit: false,
             add_variation: false,
-            validity: '',
+            validity: 0,
             image: '',
         }
     }
@@ -102,7 +102,7 @@ class CreateProduct extends React.Component {
                     'Authorization': this.props.user.access_token,
                 },
                 body: JSON.stringify({
-                    category_id: this.state.category_id,
+                    category_id: 0,
                     name: this.state.name,//required
                     quantity: this.state.quantity,//sandbox
                     code: this.state.code,
@@ -115,8 +115,8 @@ class CreateProduct extends React.Component {
                     on_webshop: this.state.is_web_shop, //Boolean 
                 })
             };
-            console.log('Constants.productslist url ',Constants.productslist);
-            console.log('Constants.productslist post data ',postData);
+            console.log('Constants.productslist url ', Constants.productslist);
+            console.log('Constants.productslist post data ', postData);
             fetch(Constants.productslist, postData)
                 .then(response => response.json())
                 .then(async responseJson => {

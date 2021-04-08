@@ -73,6 +73,7 @@ class AddCustomer extends React.Component {
             customer_email: item.email,
             customer_phone: item.phone
         }
+        console.log(' user_data user_data user_data',user_data);
         this.props.navigation.navigate('CreateOrder', { customer_data: user_data })
     }
 
