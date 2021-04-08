@@ -11,7 +11,8 @@ export default class BuyersView extends React.Component {
     constructor(props){
         super(props);
         this.state={
-            supendModal:false
+            supendModal:false,
+            moreDeatailMOdal:false,
         }
     }
     render() {
@@ -92,7 +93,9 @@ export default class BuyersView extends React.Component {
                             </View>
 
                         </View>
-                        <TouchableOpacity style={[{}, styles.moreTOuct]}>
+                        <TouchableOpacity 
+                        onPress={()=>this.setState({moreDeatailMOdal:true})}
+                        style={[{}, styles.moreTOuct]}>
                             <Text style={[{ marginRight: 10 }, styles.lightGrayText]}>More Details</Text>
                             <Icon
                                 name="arrow-right"
@@ -184,6 +187,51 @@ export default class BuyersView extends React.Component {
                     </View>
                     </TouchableHighlight>
                     
+                </Modal>
+                {/* MoreDetail Modal */}
+                <Modal
+                  visible={this.state.moreDeatailMOdal}
+                  transparent={true}
+                >
+                 <View style={[{},styles.modalBackGround]}>
+                   <View style={[{},styles.moreDetailModalContentContainer]}>
+                      <View style={[{},styles.moreDeatialModalHeadingRow]}>
+                          <Text style={[{},styles.moreDetailHeadingText]}>MORE DETAIL</Text>
+                          <TouchableOpacity
+                          onPress={()=>this.setState({moreDeatailMOdal:false})}
+                          style={[{},styles.moreDetailModalCloseTouch]}
+                          >
+                          <Icon name="close" size={20}/>
+                          </TouchableOpacity>
+                      </View>
+                      <View style={[{},styles.moreDetailModalContentView]}>
+                          <View style={[{},styles.moreDetailModalContentRow]}>
+                              <Text style={[{},styles.moreDetailModalContentRowLable]}>Email: </Text>
+                              <Text style={[{},styles.moreDetailModalContentRowInfo]}>j.joghnson@gmail.com</Text>
+                          </View>
+                          <View style={[{},styles.moreDetailModalContentRow]}>
+                              <Text style={[{},styles.moreDetailModalContentRowLable]}>Phone: </Text>
+                              <Text style={[{},styles.moreDetailModalContentRowInfo]}>08123456789</Text>
+                          </View>
+                          <View style={[{},styles.moreDetailModalContentRow]}>
+                              <Text style={[{},styles.moreDetailModalContentRowLable]}>Address: </Text>
+                              <Text style={[{},styles.moreDetailModalContentRowInfo]}>45b,45b Admiralty way, Lekki Phase 1,</Text>
+                          </View>
+                          <View style={[{},styles.moreDetailModalContentRow]}>
+                              <Text style={[{},styles.moreDetailModalContentRowLable]}>Area: </Text>
+                              <Text style={[{},styles.moreDetailModalContentRowInfo]}>Eti Osa</Text>
+                          </View>
+                          <View style={[{},styles.moreDetailModalContentRow]}>
+                              <Text style={[{},styles.moreDetailModalContentRowLable]}>State: </Text>
+                              <Text style={[{},styles.moreDetailModalContentRowInfo]}>Lagos</Text>
+                          </View>
+                          <View style={[{},styles.moreDetailModalContentRow]}>
+                              <Text style={[{},styles.moreDetailModalContentRowLable]}>Country: </Text>
+                              <Text style={[{},styles.moreDetailModalContentRowInfo]}>Nigeria</Text>
+                          </View>
+                      </View>
+                   </View>
+                 </View>
                 </Modal>
             </View>
         );

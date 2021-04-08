@@ -112,7 +112,7 @@ class Customer extends React.Component {
                 <View style={[{}, styles.searchBoxDividerView]}></View>
                 <ScrollView>
                     <FlatList
-                    data={this.state.data}
+                     data={this.state.data}
                         // data={[
                         //     { title: 'Johnson James', key: 'item1', qty: 'j.joghnson@gmail.com . 08123456789', brand: 'Pure Juice ' },
                         //     { title: 'Johnson James', key: 'item1', qty: 'j.joghnson@gmail.com . 08123456789', brand: 'Pure Juice ' },
