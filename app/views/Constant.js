@@ -16,6 +16,8 @@ export const Constants = {
   stateslist:`${base_url}/states`,
   countrieslist:`${base_url}/countries`,
   lgaslist:`${base_url}/lgas`,
+  connectsentrequest:`${base_url}/value-chain/sent-requests`,
+  connectreceivedrequest:`${base_url}/value-chain/recieved-requests`,
 };
 
 
