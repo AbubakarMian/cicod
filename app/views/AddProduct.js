@@ -45,33 +45,33 @@ export default class AddProduct extends React.Component {
                 <View>
                     <ScrollView>
                         <View style={[{}, styles.searchContainer]}>
-                            <Image 
-                            source={require('../images/products/searchicon.png')}
+                            <Image
+                                source={require('../images/products/searchicon.png')}
                             />
-                            <TextInput 
-                            placeholder="Search Customer"
+                            <TextInput
+                                placeholder="Search Customer"
                             />
-                            
+
                         </View>
-                        <View style={[{},styles.searchByCatCOntainer]}>
-                            
-                            <TextInput 
-                            placeholder="Filter by Product Category"
+                        <View style={[{}, styles.searchByCatCOntainer]}>
+
+                            <TextInput
+                                placeholder="Filter by Product Category"
                             />
-                            <View style={[{},styles.searchByCatCOntainerIconView]}>
-                            <Icon name="caret-down" size={25}
-                            />
+                            <View style={[{}, styles.searchByCatCOntainerIconView]}>
+                                <Icon name="caret-down" size={25}
+                                />
                             </View>
                         </View>
-                        <View style={[{},styles.contentView]}>
-                          <Image 
-                          source={require('../images/noProduct.png')}
-                          />
-                          <Text style={[{},styles.contentViewHeadingText]}>No product selected</Text>
-                          <Text style={[{},styles.contentViewDescText]}>Search for a product</Text>
+                        <View style={[{}, styles.contentView]}>
+                            <Image
+                                source={require('../images/noProduct.png')}
+                            />
+                            <Text style={[{}, styles.contentViewHeadingText]}>No product selected</Text>
+                            <Text style={[{}, styles.contentViewDescText]}>Search for a product</Text>
                         </View>
 
-                       
+
                     </ScrollView>
                 </View>
             </View>

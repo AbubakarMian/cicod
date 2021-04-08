@@ -82,7 +82,7 @@ class Products extends React.Component {
                 });
                 if (responseJson.status === true) {
 
-                    
+
 
                     this.props.navigation.navigate('DrawerNavigation')
                 } else {
@@ -111,9 +111,13 @@ class Products extends React.Component {
                     </View>
                     <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
                         <Text style={{ fontSize: 12, color: '#B1272C', marginRight: 10 }}>View Product Category</Text>
-                        <Image
-                            source={require('../images/products/circlePlus.png')}
-                        />
+                        <TouchableOpacity 
+                        onPress={() => this.props.navigation.navigate('CreateProduct')}
+                        >
+                            <Image
+                                source={require('../images/products/circlePlus.png')}
+                            />
+                        </TouchableOpacity>
                     </View>
                 </View>
 

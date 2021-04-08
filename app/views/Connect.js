@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, TouchableHighlight, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity, } from 'react-native'
+import { View, ImageBackground, TouchableHighlight, Alert, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity, } from 'react-native'
 import splashImg from '../images/splash.jpg'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
@@ -7,15 +7,82 @@ import SearchBar from 'react-native-search-bar';
 import { ScrollView } from 'react-native-gesture-handler';
 import styles from '../css/ConnectCss';
 import { Container, Left, Body, Right, Button, Title, Segment, Content, } from 'native-base';
+import { Constants } from './Constant';
+import { connect } from 'react-redux';
+import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import Spinner from 'react-native-loading-spinner-overlay';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
-export default class Connect extends React.Component {
+class Connect extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            tabViewIndex: 1
+            tabViewIndex: 1,
+            received_arr: [],
+            send_arr: [],
+            spinner: false
         }
+    }
+    componentDidMount() {
+
+        this.getSendConnect()
+        this.getReceivedConnect()
+    }
+    getReceivedConnect() {
+        this.setState({ spinner: true })
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            },
+        };
+        fetch(Constants.connectreceivedrequest, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                console.log('response json received!!!!',responseJson);
+                this.setState({
+                    spinner: false
+                });
+                if (responseJson.success === true) {
+                    this.setState({
+                        received_arr:responseJson.data
+                    })
+                } else {
+                    let message =responseJson.message
+                    Alert.alert('Message', message)
+                }
+            })
+    }
+    getSendConnect() {
+        this.setState({ spinner: true })
+
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            },
+        };
+        fetch(Constants.connectsentrequest, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                this.setState({
+                    spinner: false,
+                });
+                console.log('responseJson sent conet ', responseJson)
+                if (responseJson.success === true) {
+                    this.setState({
+                        send_arr: responseJson.data
+                    })
+                } else {
+                    let message = JSON.stringify(responseJson.message)
+                    Alert.alert('Error', message)
+                }
+            })
     }
 
 
@@ -53,67 +120,57 @@ export default class Connect extends React.Component {
     recievedView() {
         return (
             <ScrollView>
-            <View>
-                <View style={[{}, styles.searchContainer]}>
-                    <Image
-                        source={require('../images/products/searchicon.png')}
-                    />
-                    <TextInput
-                        placeholder="Search a products"
-                    />
-                </View>
-                <View style={[{}, styles.recievedList]}>
-                    <FlatList
-                        ItemSeparatorComponent={
-                            Platform.OS !== 'android' &&
-                            (({ highlighted }) => (
-                                <View
-                                    style={[
-                                        style.separator,
+                <View>
+                    <View style={[{}, styles.searchContainer]}>
+                        <Image
+                            source={require('../images/products/searchicon.png')}
+                        />
+                        <TextInput
+                            placeholder="Search a products"
+                        />
+                    </View>
+                    <View style={[{}, styles.recievedList]}>
+                        <FlatList
+                            ItemSeparatorComponent={
+                                Platform.OS !== 'android' &&
+                                (({ highlighted }) => (
+                                    <View
+                                        style={[
+                                            style.separator,
 
-                                        highlighted && { marginLeft: 0 }
-                                    ]}
-                                />
-                            ))
-                        }
-                        data={[
-                            { title: 'Title Text', key: 'item1' },
-                            { title: 'Title Text', key: 'item1' },
-                            { title: 'Title Text', key: 'item1' },
-                            { title: 'Title Text', key: 'item1' },
-                            { title: 'Title Text', key: 'item1' },
-                            { title: 'Title Text', key: 'item1' },
-                            { title: 'Title Text', key: 'item1' },
-                            { title: 'Title Text', key: 'item1' },
-                            { title: 'Title Text', key: 'item1' },
-                        ]}
-                        renderItem={({ item, index, separators }) => (
-                            <TouchableHighlight
-                                key={item.key}
-                                onPress={() => this._onPress(item)}
-                                onShowUnderlay={separators.highlight}
-                                onHideUnderlay={separators.unhighlight}>
-                                <View style={[{}, styles.flatCardView]}>
-                                    <View style={{ flex: 1 }}>
-                                        <Image source={require('../images/Order/bage.png')} />
-                                    </View>
-                                    <View style={{ flex: 3, flexDirection: 'column' }}>
-                                        <Text>KNGS CROWN</Text>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <Text style={{ fontWeight: 'bold', fontSize: 12 }}>342345 .  </Text>
-                                            <Text style={{ color: '#aaa', fontSize: 10 }}>2017-01-30 / 10:45 AM</Text>
+                                            highlighted && { marginLeft: 0 }
+                                        ]}
+                                    />
+                                ))
+                            }
+                            data={this.state.received_arr}
+                            renderItem={({ item, index, separators }) => (
+                                <TouchableHighlight
+                                    key={item.key}
+                                    onPress={() => this._onPress(item)}
+                                    onShowUnderlay={separators.highlight}
+                                    onHideUnderlay={separators.unhighlight}>
+                                    <View style={[{}, styles.flatCardView]}>
+                                        <View style={{ flex: 1 }}>
+                                            <Image source={require('../images/Order/bage.png')} />
+                                        </View>
+                                        <View style={{ flex: 3, flexDirection: 'column' }}>
+                                            <Text>KNGS CROWN</Text>
+                                            <View style={{ flexDirection: 'row' }}>
+                                                <Text style={{ fontWeight: 'bold', fontSize: 12 }}>342345 .  </Text>
+                                                <Text style={{ color: '#aaa', fontSize: 10 }}>2017-01-30 / 10:45 AM</Text>
+                                            </View>
+                                        </View>
+
+                                        <View style={[{ position: 'absolute', right: 0, marginTop: 5, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                                            <Text style={[{ color: '#26C281' }]}>ACTIVE</Text>
                                         </View>
                                     </View>
-
-                                    <View style={[{ position: 'absolute', right: 0, marginTop: 5, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
-                                        <Text style={[{ color: '#26C281' }]}>ACTIVE</Text>
-                                    </View>
-                                </View>
-                            </TouchableHighlight>
-                        )}
-                    />
+                                </TouchableHighlight>
+                            )}
+                        />
+                    </View>
                 </View>
-            </View>
             </ScrollView>
         );
     }
@@ -142,12 +199,7 @@ export default class Connect extends React.Component {
                                 />
                             ))
                         }
-                        data={[
-                            { title: 'Title Text', key: 'item1' },
-                            { title: 'Title Text', key: 'item1' },
-                            { title: 'Title Text', key: 'item1' },
-                            
-                        ]}
+                        data={this.state.send_arr}
                         renderItem={({ item, index, separators }) => (
                             <TouchableHighlight
                                 key={item.key}
@@ -159,16 +211,23 @@ export default class Connect extends React.Component {
                                         <Image source={require('../images/Order/bage.png')} />
                                     </View>
                                     <View style={{ flex: 3, flexDirection: 'column' }}>
-                                        <Text>KNGS CROWN</Text>
+                                        <Text>{item.buyer_name}</Text>
                                         <View style={{ flexDirection: 'row' }}>
-                                            <Text style={{ fontWeight: 'bold', fontSize: 12 }}>342345 .  </Text>
-                                            <Text style={{ color: '#aaa', fontSize: 10 }}>2017-01-30 / 10:45 AM</Text>
+                                            <Text style={{ fontWeight: 'bold', fontSize: 12 }}>{item.buyer_id}  </Text>
+                                            <Text style={{ color: '#aaa', fontSize: 10 }}>{item.time_requested}</Text>
                                         </View>
                                     </View>
-
-                                    <View style={[{ position: 'absolute', right: 0, marginTop: 5, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
-                                        <Text style={[{ color: '#26C281' }]}>APROVED</Text>
-                                    </View>
+                                    {(item.status == 'PENDING') ?
+                                        <View style={[{ position: 'absolute', right: 0, marginTop: 5, backgroundColor: '#FFFF99', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                                            <Text style={[{ color: '#CCCC00' }]}>PENDING</Text>
+                                        </View>
+                                        :
+                                        (item.status == 'APPROVED') ?
+                                            <View style={[{ position: 'absolute', right: 0, marginTop: 5, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                                                <Text style={[{ color: '#26C281' }]}>APPROVED</Text>
+                                            </View>
+                                            : null
+                                    }
                                 </View>
                             </TouchableHighlight>
                         )}
@@ -193,6 +252,12 @@ export default class Connect extends React.Component {
         return (
             <View style={[{}, styles.mainView]}>
                 <Header />
+                <Spinner
+                    visible={this.state.spinner}
+                    textContent={'Please Wait...'}
+                    textStyle={{ color: '#fff' }}
+                    color={'#fff'}
+                />
                 <View style={[{}, styles.mainRow]}>
                     <View style={[{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }]}>
                         <Icon name="arrow-left" size={25} color="#929497" />
@@ -225,3 +290,16 @@ export default class Connect extends React.Component {
         )
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        user: state.userReducer
+    }
+};
+function mapDispatchToProps(dispatch) {
+    return {
+        setUser: (value) => dispatch({ type: SET_USER, value: value }),
+        logoutUser: () => dispatch({ type: LOGOUT_USER })
+    }
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Connect)
