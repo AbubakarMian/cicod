@@ -87,7 +87,7 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="AddCustomer" component={AddCustomer} options={{ headerShown: false }} />
           <Stack.Screen name="ProductView" component={ProductView} options={{ headerShown: false }} />
           <Stack.Screen name="UpdateProduct" component={UpdateProduct} options={{ headerShown: false }} />
-          <Stack.Screen name="CreateProduct" component={CreateProduct} options={{ headerShown: false }} /> 
+          <Stack.Screen name="CreateProduct" component={CreateProduct} options={{ headerShown: false }} />
           <Stack.Screen name="BuyersView" component={BuyersView} options={{ headerShown: false }} />
 
 

@@ -43,7 +43,7 @@ export default StyleSheet.create({
         paddingVertical:20,
         width:width-20,
         alignSelf:'center',
-        marginTop:10,
+        marginTop:20,
         justifyContent:'center',
         alignItems:'center',
         

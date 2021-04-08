@@ -75,7 +75,114 @@ export default StyleSheet.create({
     searchByCatCOntainerIconView:{
         position:'absolute',
         right:10
-    }
+    },
+    OrderDetailContainer:{
+        backgroundColor:'#fff',
+        paddingVertical:30,
+        width:width-20,
+        alignSelf:'center',
+        justifyContent:'center',
+        alignItems:'center'
+    },
+    OrderDetailHeadingRow:{
+        position:'absolute',
+        top:5,
+        width:width,
+        left:5,
+        flexDirection:'row'
+    },
+    OrderDetailHeadingRowText:{
+        color:'#D8D8D8'
+    },
+    OrderDetailClearTouc:{
+        right:10,
+        top:5,
+        position:'absolute'
+    },
+    OrderDetailNotificationText:{
+        backgroundColor:'#2F2E7C',
+        color:'#fff',
+        marginLeft:10,
+        paddingHorizontal:15,
+        paddingVertical:2, 
+        borderRadius:100,
+    },
+    OrderDetailDataCOntainer:{
+        flexDirection:'row',
+        marginTop:10
+    },
+    OrderDetailDataCOntainerRow:{
+        flexDirection:'row',
+        width:width-20,
+        alignSelf:'center',
+        paddingHorizontal:5,
+        position:'relative',
+    },
+    OrderDetailDataCOntainerHeadingText:{
+        fontWeight:'700',
+        color:'#4E4D4D'
+    },
+    OrderDetailDataCOntainerCounterView:{
+        position:'absolute',
+        
+        borderWidth:0.5,
+        flexDirection:'row',
+        alignSelf:'center',
+        justifyContent:'center',
+        borderColor:'#929497',
+        borderRadius:5,
+        
+        
+},
+iconView:{
+    paddingHorizontal:10,
+    alignItems:'center',
+    justifyContent:'center',
+    borderRightWidth:0.5
+},
+orderDetailAmmountRow:{
+    flexDirection:'row',
+    width:width-20,
+    alignSelf:'center',
+    paddingHorizontal:10,
+    marginTop:10
+},
+orderDetailAmmountColumn:{
+    flex:1,
+    flexDirection:'row',
+    
+},
+orderDetailAmmountColumnGaryBolText:{
+    fontWeight:'bold',
+    color:'#4E4D4D'
+},
+orderDetailAmmountColumnRedText:{
+    color:'#B1272C'
+},
+userDEtailCOntainer:{
+    marginTop:20,
+    paddingLeft:10
+},
+userDEtailCOntainerIconView:{
+    flexDirection:'row',
+    width:width-20,
+    marginBottom:10
+},
+userDEtailCOntainerText:{
+marginLeft:10,
+color:'#4E4D4D',
+fontWeight:'bold'
+},
+usetDetailInfoText:{
+    color:'#929497'
+},
+usetDetailLableText:{
+    color:'#929497',
+    fontWeight:'bold'
+},
+downIconView:{
+    alignSelf:'center'
+}
     
 })
 

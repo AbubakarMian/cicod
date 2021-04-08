@@ -1,23 +1,158 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import { View, Alert, ImageBackground, ScrollView, TouchableHighlight, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
 import splashImg from '../images/splash.jpg'
 import styles from '../css/AddProductCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
+import Spinner from 'react-native-loading-spinner-overlay';
 import CheckBox from 'react-native-check-box';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
+import { Constants } from '../views/Constant';
+import { connect } from 'react-redux';
+import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import DropDownPicker from 'react-native-dropdown-picker';
 import SearchBar from 'react-native-search-bar';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
-export default class AddProduct extends React.Component {
+class AddProduct extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             value: 0,
-            isChecked: false
+            isChecked: false,
+            spinner: false,
+            data: [],
+            search_product: '',
+            total_add_order: 0,
+            categoryarr: [],
+            category_id: 0,
+            count: 0,
+            selected_product: []
+
         }
     }
+
+    componentDidMount() {
+        this.getCategoryList();
+    }
+
+    getProductList() {
+        this.setState({ spinner: true })
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            },
+        };
+        fetch(Constants.productslist + '?is_active=1&search=' + this.state.search_product + '&category_id=' + this.state.category_id, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                this.setState({
+                    spinner: false
+                });
+                console.log('response !!!!!!!!', responseJson)
+                if (responseJson.status === "success") {
+                    let data = responseJson.data;
+                    for (let i = 0; i < data.length; i++) {
+                        data[i].purshed_quantity = 0;
+                        data[i].is_added = false;
+                    }
+                    this.setState({
+                        data: data
+                    })
+                } else {
+                    let message = JSON.stringify(responseJson.message)
+                    Alert.alert('Error', message)
+                }
+            })
+    }
+
+
+    getCategoryList() {
+        this.setState({ spinner: true })
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            },
+
+        };
+        fetch(Constants.productcategorylist, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                this.setState({ spinner: false });
+                if (responseJson.status === 'success') {
+
+                    let res = responseJson.data;
+                    let categoryarr = res.map((x, key) => { return { label: x.name, value: x.id } });
+                    this.setState({
+                        categoryarr: categoryarr,
+                    });
+                } else {
+                    let message = JSON.stringify(responseJson.error.message)
+                    Alert.alert('Error', message)
+                }
+
+            })
+
+    }
+
+    onCategoryText(text) {
+        console.log('text !!!!!!!!!!!!!!!!!', text);
+    }
+
+    addProduct(item, index) {
+
+        return ;
+        // product id || quantity
+        // let filters = this.state.filters;
+        // filters.push({ key: 'is_active', value: value })
+        // this.setState({
+        //   filters: filters
+        // })
+        let data = this.state.data;
+        data[index].is_added = !data[index].is_added;
+        let products = this.state.selected_product;
+        selected_product.push(products);
+        this.setState({
+            selected_product: selected_product,
+            data: data,
+        });
+
+
+    }
+    counterFun(action, index) {
+
+        let data = this.state.data;
+        console.log('fun called ');
+        if (action == 'add') {
+
+            if ((data[index].purshed_quantity + 1) > data[index].quantity) {
+                alert('Out of stock');
+            }
+            else {
+                data[index].purshed_quantity = data[index].purshed_quantity + 1;
+                this.setState({
+                    data: data
+                })
+            }
+        }
+        else {
+            if (data[index].purshed_quantity > 0) {
+                data[index].purshed_quantity = data[index].purshed_quantity - 1;
+                this.setState({
+                    data: data
+                })
+            }
+        }
+    }
+
     render() {
+        console.log('this.state.categoryarr', this.state.selected_product)
         var radio_props_dilvery = [
             { label: 'Dilivery', value: 0 },
 
@@ -34,6 +169,13 @@ export default class AddProduct extends React.Component {
         return (
             <View style={[{}, styles.mainView]}>
                 <Header />
+
+                <Spinner
+                    visible={this.state.spinner}
+                    textContent={'Please Wait...'}
+                    textStyle={{ color: '#fff' }}
+                    color={'#fff'}
+                />
                 <View style={[{}, styles.backHeaderRowView]}>
                     <TouchableOpacity>
                         <Icon name="arrow-left" size={25} color="#929497" />
@@ -49,26 +191,104 @@ export default class AddProduct extends React.Component {
                                 source={require('../images/products/searchicon.png')}
                             />
                             <TextInput
-                                placeholder="Search Customer"
+                                onChangeText={text => this.setState({ search_product: text })}
+                                placeholder="Search Product"
+                                onSubmitEditing={() => this.getProductList()}
                             />
 
                         </View>
                         <View style={[{}, styles.searchByCatCOntainer]}>
 
-                            <TextInput
-                                placeholder="Filter by Product Category"
-                            />
-                            <View style={[{}, styles.searchByCatCOntainerIconView]}>
-                                <Icon name="caret-down" size={25}
-                                />
-                            </View>
+                            {this.state.categoryarr.length < 1 ? null :
+                                <DropDownPicker
+                                    items={this.state.categoryarr}
+                                    containerStyle={{ height: 50, width: width - 25, marginTop: 15 }}
+                                    style={{ backgroundColor: '#fff' }}
+                                    itemStyle={{
+                                        justifyContent: 'flex-start', zIndex: 0.99
+                                    }}
+                                    placeholder="Catagory"
+                                    dropDownStyle={{ backgroundColor: '#000', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                                    labelStyle={{ color: '#A9A9A9' }}
+                                    onChangeItem={item => this.onCategoryText(item.value)}
+                                />}
                         </View>
-                        <View style={[{}, styles.contentView]}>
-                            <Image
-                                source={require('../images/noProduct.png')}
+
+
+                        <View style={[{}, styles.OrderDetailContainer]}>
+                            <View style={[{}, styles.OrderDetailHeadingRow]}>
+                                <Text style={[{}, styles.OrderDetailHeadingRowText]}>Order Detail</Text>
+                                <Text style={[{}, styles.OrderDetailNotificationText]}>{this.state.total_add_order}</Text>
+                            </View>
+                            {/* {(this.state.data === '') ? */}
+                            <FlatList
+                                data={this.state.data}
+                                ItemSeparatorComponent={
+                                    Platform.OS !== 'android' &&
+                                    (({ highlighted }) => (
+                                        <View
+                                            style={[
+                                                style.separator,
+                                                highlighted && { marginLeft: 0 }
+                                            ]}
+                                        />
+                                    ))
+                                }
+                                renderItem={({ item, index, separators }) => (
+                                    <View style={[{ flexDirection: 'column', marginBottom: 20 }]}>
+                                        <View style={[{}, styles.OrderDetailDataCOntainer]}>
+                                            <View style={[{}, styles.OrderDetailDataCOntainerRow]}>
+                                                <View>
+                                                    <Text style={[{}, styles.OrderDetailDataCOntainerHeadingText]}>{item.name}  {item.quantity}PACK</Text>
+                                                    <Text style={[{}, styles.OrderDetailHeadingRowText]}>LAGOS- Palms</Text>
+                                                </View>
+                                            </View>
+
+
+                                        </View>
+                                        <View style={[{}, styles.orderDetailAmmountRow]}>
+                                            <View style={[{}, styles.orderDetailAmmountColumn]}>
+                                                <Text style={[{}, styles.orderDetailAmmountColumnGaryBolText]}>N200,000</Text>
+                                            </View>
+                                            <View style={[{}, styles.orderDetailAmmountColumn]}>
+
+                                                <View style={[{}, styles.OrderDetailDataCOntainerCounterView]}>
+                                                    <TouchableOpacity
+                                                        onPress={() => this.counterFun('sub', index)}
+                                                        style={[{}, styles.iconView]}>
+                                                        <Icon name="minus" />
+                                                    </TouchableOpacity>
+                                                    <View style={[{}, styles.iconView]}>
+                                                        <Text>{item.purshed_quantity}</Text>
+                                                    </View>
+                                                    <TouchableOpacity style={[{}, styles.iconView]}
+                                                        onPress={() => this.counterFun('add', index)}
+                                                    >
+                                                        <Icon name="plus"
+                                                            color="#B1272C"
+                                                        />
+                                                    </TouchableOpacity>
+                                                </View>
+                                                <TouchableOpacity
+                                                    onPress={() => this.addProduct(item, index)}
+                                                    style={{ flexDirection: 'row', backgroundColor: '#B1272C', position: 'absolute', right: 2, paddingHorizontal: 10, borderRadius: 100, paddingVertical: 2, width: width / 6, alignItems: 'center' }}
+                                                >
+                                                    <Icon name="plus-circle" color={'#fff'} />
+                                                    <Text style={{ color: '#fff', marginLeft: 5 }}>Add</Text>
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+
+                                    </View>
+                                )}
                             />
-                            <Text style={[{}, styles.contentViewHeadingText]}>No product selected</Text>
-                            <Text style={[{}, styles.contentViewDescText]}>Search for a product</Text>
+                            {/* : <View style={[{}, styles.contentView]}>
+                                    <Image
+                                        source={require('../images/noProduct.png')}
+                                    />
+                                    <Text style={[{}, styles.contentViewHeadingText]}>No product selected</Text>
+                                    <Text style={[{}, styles.contentViewDescText]}>Search for a product</Text>
+                                </View>} */}
                         </View>
 
 
@@ -78,3 +298,16 @@ export default class AddProduct extends React.Component {
         )
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        user: state.userReducer
+    }
+};
+function mapDispatchToProps(dispatch) {
+    return {
+        setUser: (value) => dispatch({ type: SET_USER, value: value }),
+        logoutUser: () => dispatch({ type: LOGOUT_USER })
+    }
+};
+export default connect(mapStateToProps, mapDispatchToProps)(AddProduct)
