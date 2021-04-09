@@ -19,14 +19,11 @@ class CreateOrder extends React.Component {
         this.state = {
             value: 0,
             isChecked: false,
-<<<<<<< Updated upstream
             spinner: false,
             customer_name: '',
             customer_email: '',
             customer_phone: '',
-=======
             value3Index: 0
->>>>>>> Stashed changes
         }
     }
 
@@ -115,17 +112,13 @@ class CreateOrder extends React.Component {
         ];
         return (
             <View style={[{}, styles.mainView]}>
-<<<<<<< Updated upstream
-                <Header />
+                <Header navigation={this.props.navigation} />
                 <Spinner
                     visible={this.state.spinner}
                     textContent={'Please Wait...'}
                     textStyle={{ color: '#fff' }}
                     color={'#fff'}
                 />
-=======
-                <Header navigation={this.props.navigation}/>
->>>>>>> Stashed changes
                 <ScrollView>
                     <View style={{ paddingBottom: 20 }}>
                         <View style={[{}, styles.backHeaderRowView]}>
@@ -141,7 +134,7 @@ class CreateOrder extends React.Component {
                             <View style={[{}, styles.backHeadingCloseView]}>
                                 <Icon name="times" size={20} color="#929497" />
                                 <TouchableOpacity
-                                onPress={() => this.props.navigation.navigate('Order')}
+                                    onPress={() => this.props.navigation.navigate('Order')}
                                 >
                                     <Text style={[{}, styles.backHeadingCloseText]}>Close</Text>
                                 </TouchableOpacity>
@@ -150,7 +143,6 @@ class CreateOrder extends React.Component {
 
                         <View style={[{}, styles.customerContainerView]}>
                             <Text style={[{}, styles.customerContainerhead]}>Custommer Detail</Text>
-<<<<<<< Updated upstream
                             <TouchableOpacity style={[{}, styles.customerContaineraddBtnView]}
                                 onPress={() => this.props.navigation.navigate('AddCustomer')}
                             >
@@ -186,58 +178,17 @@ class CreateOrder extends React.Component {
                                             color={'#929497'} />
                                     </View>
                                 </View>}
-=======
-                            <TouchableOpacity 
-                            onPress={() => this.props.navigation.navigate('AddCustomer')}
-                            style={[{}, styles.customerContaineraddBtnView]}>
-                                <Icon name="plus-circle" size={20} color={'#fff'} />
-                                <Text style={[{}, styles.customerContaineraddBtnText]}>Add</Text>
-                            </TouchableOpacity>
-                            <View style={[{}, styles.userDEtailCOntainer]}>
-                                <View style={[{}, styles.userDEtailCOntainerIconView]}>
-                                    <Icon
-                                        name="user-circle"
-                                        color="#D8D8D8"
-                                        size={20}
-                                    />
-                                    <Text style={[{}, styles.userDEtailCOntainerText]}>Johnson James</Text>
-                                </View>
-                                <View style={[{}, styles.userDEtailCOntainerIconView]}>
-                                    <Text style={[{}, styles.usetDetailLableText]}>Email: </Text>
-                                    <Text style={[{}, styles.usetDetailInfoText]}>j.joghnson@gmail.com</Text>
-                                </View>
-                                <View style={[{}, styles.userDEtailCOntainerIconView]}>
-                                    <Text style={[{}, styles.usetDetailLableText]}>Phone: </Text>
-                                    <Text style={[{}, styles.usetDetailInfoText]}>08123456789</Text>
-                                </View>
-                                <View style={[{}, styles.downIconView]}>
-                                    <Icon name="angle-down"
-                                        size={20}
-                                        color={'#929497'} />
-                                </View>
-                            </View>
->>>>>>> Stashed changes
                         </View>
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('AddProduct')}
                         >
                             <View style={[{}, styles.customerContaineraddProductView]}>
 
-<<<<<<< Updated upstream
                                 <Image
                                     source={require('../images/products/circlePlus.png')}
                                 />
                                 <Text style={[{}, styles.customerContaineraddProductText]}>Add Product</Text>
                             </View>
-=======
-                        <TouchableOpacity 
-                        onPress={() => this.props.navigation.navigate('AddProduct')}
-                        style={[{}, styles.customerContaineraddProductView]}>
-                            <Image
-                                source={require('../images/products/circlePlus.png')}
-                            />
-                            <Text style={[{}, styles.customerContaineraddProductText]}>Add Product</Text>
->>>>>>> Stashed changes
                         </TouchableOpacity>
                         {/* <View style={[{}, styles.OrderDetailContainer]}>
                             <Text style={[{}, styles.customerContainerhead]}>Order Detail</Text>
