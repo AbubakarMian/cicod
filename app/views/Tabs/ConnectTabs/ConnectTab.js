@@ -42,11 +42,6 @@ export default function TabViewExample (props) {
       
       }}/>
       );
-     
-      
-      
-    
-  
   return(
     <TabView
       // navigation={props.navigation} 

@@ -115,7 +115,7 @@ class Login extends React.Component {
                     <View>
                         <Image
                             source={require('../images/loginlogo.png')}
-                            style={{ height: height / 5, width: width / 1.4 }}
+                            style={{ height: width / 3, width: width / 1.4 }}
                         />
                     </View>
                     <View style={{ paddingTop: height / 25 }}>

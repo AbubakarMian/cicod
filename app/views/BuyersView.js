@@ -22,7 +22,9 @@ export default class BuyersView extends React.Component {
                 <Header navigation={this.props.navigation}/>
                 <ScrollView>
                     <View style={[{}, styles.backRowView]}>
-                        <TouchableOpacity>
+                        <TouchableOpacity
+                        onPress={()=>this.props.navigation.navigate('Buyers')}
+                        >
                             <Icon name="arrow-left" size={25} color={'#929497'} />
                         </TouchableOpacity>
                         <View style={[{}, styles.backRowHeadingView]}>
@@ -32,8 +34,8 @@ export default class BuyersView extends React.Component {
                     <View style={{ backgroundColor: '#fff' }}>
                         <View style={[{}, styles.productDetailContainerView]}>
                             <Image source={require('../images/bage.png')} />
-                            <Text>WellFoods NG</Text>
-                            <Text>836439034</Text>
+                            <Text style={[{},styles.darkGrayBoldText]}>WellFoods NG</Text>
+                            <Text style={[{},styles.lightGrayText]}>836439034</Text>
                             <TouchableOpacity
                             onPress={()=>this.setState({supendModal:true})}
                                 style={[{}, styles.iconRight]}
@@ -68,8 +70,8 @@ export default class BuyersView extends React.Component {
                         </View>
                         <View style={[{}, styles.productDetailROwView]}>
                             <View style={[{}, styles.columnView]}>
-                                <Text style={[{}, styles.lightGrayText]}>No of Products</Text>
-                                <Text style={[{}, styles.darkGrayBoldText]}>25</Text>
+                                <Text style={[{}, styles.lightGrayText]}>Min. Spend</Text>
+                                <Text style={[{}, styles.darkGrayBoldText]}>N2,000,000</Text>
                             </View>
                             <View style={[{}, styles.columnView]}>
                             </View>

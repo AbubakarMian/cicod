@@ -168,18 +168,7 @@ class AddProduct extends React.Component {
         ];
         return (
             <View style={[{}, styles.mainView]}>
-<<<<<<< Updated upstream
-                <Header />
-
-                <Spinner
-                    visible={this.state.spinner}
-                    textContent={'Please Wait...'}
-                    textStyle={{ color: '#fff' }}
-                    color={'#fff'}
-                />
-=======
                 <Header navigation={this.props.navigation}/>
->>>>>>> Stashed changes
                 <View style={[{}, styles.backHeaderRowView]}>
                     <TouchableOpacity
                     onPress={()=>this.props.navigation.navigate('Sell')}
