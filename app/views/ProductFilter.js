@@ -12,6 +12,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { color } from 'react-native-reanimated';
+
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 
@@ -209,6 +210,7 @@ class ProductFilter extends React.Component {
 
             </View>
           </View>
+          
           <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 5, flexDirection: 'row', position: 'relative' }}>
              {this.state.createdby_arr.length < 1 ? null :
               <DropDownPicker
