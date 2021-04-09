@@ -129,7 +129,7 @@ class Products extends React.Component {
                     />
                     <View>
                         <TextInput
-                            placeholder="Search order ID, customer, amount, tic"
+                            placeholder="Search product, Price and code"
                         />
                     </View>
                     <View style={{ position: 'absolute', right: 0, alignSelf: 'center', }}>
@@ -142,7 +142,23 @@ class Products extends React.Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-
+                <View style={[{}, styles.formRowView]}>
+                                <View style={[{ position: 'relative' }, styles.formColumn]}>
+                                
+                                        <DropDownPicker
+                                            items={this.state.categoryarr}
+                                            containerStyle={{ height: 50, width: width - 20, marginTop: 5, alignSelf:'center' }}
+                                            style={{ backgroundColor: '#fff' }}
+                                            itemStyle={{
+                                                justifyContent: 'flex-start', zIndex: 0.99
+                                            }}
+                                            placeholder="Product Category"
+                                            dropDownStyle={{ backgroundColor: '#000', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                                            labelStyle={{ color: '#A9A9A9' }}
+                                            // onChangeItem={item => this.onCategoryText(item.value)}
+                                        />
+                                </View>
+                            </View>
 
                 <ScrollView>
                     <FlatList
