@@ -82,15 +82,20 @@ export default class Filter extends React.Component {
   render() {
     return (
       <View style={[{}, styles.mainView]}>
-        <Header />
+        <Header navigation={this.props.navigation}/>
         <View style={[{}, styles.mainRow]}>
           {/* <Image
           source={require('../images')}
           /> */}
           <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
-            <Icon name="arrow-left" size={25} color="#929497" />
+            <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Product')}
+            >  <Icon name="arrow-left" size={25} color="#929497" />
             <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>FILTER</Text>
 
+
+            </TouchableOpacity>
+         
           </View>
           <Text style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20 }]}>Clear Filter</Text>
         </View>

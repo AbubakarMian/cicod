@@ -23,16 +23,19 @@ export default class Headet extends React.Component {
     }
 
     render() {
-
+        console.log(' props !!!!!!!!!!!!!!!!',this.props )
+     const that=this;
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
             <View style={{ flexDirection:'row', width: width, position: 'relative', backgroundColor: '#FFFFFF', paddingVertical: 10,paddingHorizontal:10 }}>
-              <View style={{flex:1}}>
+              <TouchableOpacity 
+              onPress={()=>this.props.navigation.navigate('Home')}
+              style={{flex:1}}>
                   <Image 
                   source={require('../images/homeIcone.png')}
                   />
-              </View>
+              </TouchableOpacity>
               <View style={{flex:3,justifyContent:'center',alignItems:'center'}}>
                  <Image
                  style={{height:30,width:120}} 

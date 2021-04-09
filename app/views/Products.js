@@ -104,7 +104,7 @@ class Products extends React.Component {
                     textStyle={{ color: '#fff' }}
                     color={'#fff'}
                 />
-                <Header />
+                <Header navigation={this.props.navigation}/>
                 <View style={{ flexDirection: 'row', paddingHorizontal: 10, alignItems: 'center', justifyContent: 'center' }}>
                     <View style={{ flex: 1 }}>
                         <Text style={{ fontWeight: 'bold', color: '#2F2E7C' }}>Products</Text>

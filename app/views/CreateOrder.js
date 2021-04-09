@@ -19,10 +19,14 @@ class CreateOrder extends React.Component {
         this.state = {
             value: 0,
             isChecked: false,
+<<<<<<< Updated upstream
             spinner: false,
             customer_name: '',
             customer_email: '',
             customer_phone: '',
+=======
+            value3Index: 0
+>>>>>>> Stashed changes
         }
     }
 
@@ -111,6 +115,7 @@ class CreateOrder extends React.Component {
         ];
         return (
             <View style={[{}, styles.mainView]}>
+<<<<<<< Updated upstream
                 <Header />
                 <Spinner
                     visible={this.state.spinner}
@@ -118,10 +123,16 @@ class CreateOrder extends React.Component {
                     textStyle={{ color: '#fff' }}
                     color={'#fff'}
                 />
+=======
+                <Header navigation={this.props.navigation}/>
+>>>>>>> Stashed changes
                 <ScrollView>
                     <View style={{ paddingBottom: 20 }}>
                         <View style={[{}, styles.backHeaderRowView]}>
-                            <TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => this.props.navigation.navigate('Order')}
+
+                            >
                                 <Icon name="arrow-left" size={25} color="#929497" />
                             </TouchableOpacity>
                             <View style={[{}, styles.backHeadingView]}>
@@ -129,7 +140,9 @@ class CreateOrder extends React.Component {
                             </View>
                             <View style={[{}, styles.backHeadingCloseView]}>
                                 <Icon name="times" size={20} color="#929497" />
-                                <TouchableOpacity>
+                                <TouchableOpacity
+                                onPress={() => this.props.navigation.navigate('Order')}
+                                >
                                     <Text style={[{}, styles.backHeadingCloseText]}>Close</Text>
                                 </TouchableOpacity>
                             </View>
@@ -137,6 +150,7 @@ class CreateOrder extends React.Component {
 
                         <View style={[{}, styles.customerContainerView]}>
                             <Text style={[{}, styles.customerContainerhead]}>Custommer Detail</Text>
+<<<<<<< Updated upstream
                             <TouchableOpacity style={[{}, styles.customerContaineraddBtnView]}
                                 onPress={() => this.props.navigation.navigate('AddCustomer')}
                             >
@@ -172,17 +186,58 @@ class CreateOrder extends React.Component {
                                             color={'#929497'} />
                                     </View>
                                 </View>}
+=======
+                            <TouchableOpacity 
+                            onPress={() => this.props.navigation.navigate('AddCustomer')}
+                            style={[{}, styles.customerContaineraddBtnView]}>
+                                <Icon name="plus-circle" size={20} color={'#fff'} />
+                                <Text style={[{}, styles.customerContaineraddBtnText]}>Add</Text>
+                            </TouchableOpacity>
+                            <View style={[{}, styles.userDEtailCOntainer]}>
+                                <View style={[{}, styles.userDEtailCOntainerIconView]}>
+                                    <Icon
+                                        name="user-circle"
+                                        color="#D8D8D8"
+                                        size={20}
+                                    />
+                                    <Text style={[{}, styles.userDEtailCOntainerText]}>Johnson James</Text>
+                                </View>
+                                <View style={[{}, styles.userDEtailCOntainerIconView]}>
+                                    <Text style={[{}, styles.usetDetailLableText]}>Email: </Text>
+                                    <Text style={[{}, styles.usetDetailInfoText]}>j.joghnson@gmail.com</Text>
+                                </View>
+                                <View style={[{}, styles.userDEtailCOntainerIconView]}>
+                                    <Text style={[{}, styles.usetDetailLableText]}>Phone: </Text>
+                                    <Text style={[{}, styles.usetDetailInfoText]}>08123456789</Text>
+                                </View>
+                                <View style={[{}, styles.downIconView]}>
+                                    <Icon name="angle-down"
+                                        size={20}
+                                        color={'#929497'} />
+                                </View>
+                            </View>
+>>>>>>> Stashed changes
                         </View>
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('AddProduct')}
                         >
                             <View style={[{}, styles.customerContaineraddProductView]}>
 
+<<<<<<< Updated upstream
                                 <Image
                                     source={require('../images/products/circlePlus.png')}
                                 />
                                 <Text style={[{}, styles.customerContaineraddProductText]}>Add Product</Text>
                             </View>
+=======
+                        <TouchableOpacity 
+                        onPress={() => this.props.navigation.navigate('AddProduct')}
+                        style={[{}, styles.customerContaineraddProductView]}>
+                            <Image
+                                source={require('../images/products/circlePlus.png')}
+                            />
+                            <Text style={[{}, styles.customerContaineraddProductText]}>Add Product</Text>
+>>>>>>> Stashed changes
                         </TouchableOpacity>
                         {/* <View style={[{}, styles.OrderDetailContainer]}>
                             <Text style={[{}, styles.customerContainerhead]}>Order Detail</Text>
@@ -318,24 +373,64 @@ class CreateOrder extends React.Component {
                         <View style={[{}, styles.diliveryTypeContainerView]}>
                             <TouchableOpacity>
                                 <View style={[{}, styles.radioFormView]}>
-                                    <RadioForm
+                                    {/* <RadioForm
                                         isSelected={false}
-                                        color={'#000'}
-                                        buttonColor={'red'}
+                                        color={'green'}
+                                        buttonColor={'grey'}
                                         buttonSize={10}
                                         buttonOuterSize={20}
                                         radio_props={radio_props_dilvery}
 
                                         // initial={0}
                                         onPress={(value) => { this.setState({ value: value }) }}
+                                    /> */}
+                                    <RadioForm
+                                        isSelected={false}
+                                        color={'yellow'}
+                                        // radio_props={radio_props_payment}
+                                        size={5}
+                                        buttonColor={'green'}
+                                        buttonSize={10}
+                                        buttonOuterSize={20}
+                                        initial={0}
+                                        onPress={(value) => { this.setState({ value3Index: value }) }}
                                     />
+                                    {
+                                        radio_props_dilvery.map((obj, i) => (
+                                            <RadioButton labelHorizontal={true} key={i} >
+                                                {/*  You can set RadioButtonLabel before RadioButtonInput */}
+                                                <RadioButtonInput
+                                                    obj={obj}
+                                                    index={i}
+                                                    isSelected={this.state.value3Index === i}
+                                                    onPress={(value) => { this.setState({ value3Index: value }) }}
+                                                    borderWidth={1}
+                                                    buttonInnerColor={'#e74c3c'}
+                                                    buttonOuterColor={this.state.value3Index === i ? '#2196f3' : '#000'}
+                                                    buttonSize={10}
+                                                    buttonOuterSize={20}
+                                                    buttonStyle={{}}
+
+                                                    buttonWrapStyle={{ marginLeft: 10 }}
+                                                />
+                                                <RadioButtonLabel
+                                                    obj={obj}
+                                                    index={i}
+                                                    labelHorizontal={true}
+                                                    onPress={(value) => { this.setState({ value3Index: value }) }}
+                                                    // labelStyle={{fontSize: 20, color: '#2ecc71'}}
+                                                    labelWrapStyle={{}}
+                                                />
+                                            </RadioButton>
+                                        ))
+                                    }
                                     <Text style={[{}, styles.smailGrayText]}>Dilivery to customer address</Text>
 
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity>
                                 <View style={[{}, styles.radioFormView]}>
-                                    <RadioForm
+                                    {/* <RadioForm
                                         isSelected={false}
                                         buttonColor={'red'}
                                         buttonSize={10}
@@ -343,7 +438,47 @@ class CreateOrder extends React.Component {
                                         radio_props={radio_props_pickup}
                                         // initial={0}
                                         onPress={(value) => { this.setState({ value: value }) }}
+                                    /> */}
+                                    <RadioForm
+                                        isSelected={false}
+                                        color={'yellow'}
+                                        // radio_props={radio_props_payment}
+                                        size={5}
+                                        buttonColor={'green'}
+                                        buttonSize={10}
+                                        buttonOuterSize={20}
+                                        initial={0}
+                                        onPress={(value) => { this.setState({ value3Index: value }) }}
                                     />
+                                    {
+                                        radio_props_pickup.map((obj, i) => (
+                                            <RadioButton labelHorizontal={true} key={i} >
+                                                {/*  You can set RadioButtonLabel before RadioButtonInput */}
+                                                <RadioButtonInput
+                                                    obj={obj}
+                                                    index={i}
+                                                    isSelected={this.state.value3Index === i}
+                                                    onPress={(value) => { this.setState({ value3Index: value }) }}
+                                                    borderWidth={1}
+                                                    buttonInnerColor={'#e74c3c'}
+                                                    buttonOuterColor={this.state.value3Index === i ? '#2196f3' : '#000'}
+                                                    buttonSize={10}
+                                                    buttonOuterSize={20}
+                                                    buttonStyle={{}}
+
+                                                    buttonWrapStyle={{ marginLeft: 10 }}
+                                                />
+                                                <RadioButtonLabel
+                                                    obj={obj}
+                                                    index={i}
+                                                    labelHorizontal={true}
+                                                    onPress={(value) => { this.setState({ value3Index: value }) }}
+                                                    // labelStyle={{fontSize: 20, color: '#2ecc71'}}
+                                                    labelWrapStyle={{}}
+                                                />
+                                            </RadioButton>
+                                        ))
+                                    }
                                     <Text style={[{}, styles.smailGrayText]}>Pickup from our location</Text>
 
                                 </View>
@@ -354,16 +489,44 @@ class CreateOrder extends React.Component {
                             <View style={[{}, styles.radioFormView]}>
                                 <RadioForm
                                     isSelected={false}
-                                    color={'#000'}
-                                    radio_props={radio_props_payment}
+                                    color={'yellow'}
+                                    // radio_props={radio_props_payment}
                                     size={5}
-                                    buttonColor={'red'}
+                                    buttonColor={'green'}
                                     buttonSize={10}
                                     buttonOuterSize={20}
-                                    // initial={0}
-                                    onPress={(value) => { this.setState({ value: value }) }}
+                                    initial={0}
+                                    onPress={(value) => { this.setState({ value3Index: value }) }}
                                 />
+                                {
+                                    radio_props_payment.map((obj, i) => (
+                                        <RadioButton labelHorizontal={true} key={i} >
+                                            {/*  You can set RadioButtonLabel before RadioButtonInput */}
+                                            <RadioButtonInput
+                                                obj={obj}
+                                                index={i}
+                                                isSelected={this.state.value3Index === i}
+                                                onPress={(value) => { this.setState({ value3Index: value }) }}
+                                                borderWidth={1}
+                                                buttonInnerColor={'#e74c3c'}
+                                                buttonOuterColor={this.state.value3Index === i ? '#2196f3' : '#000'}
+                                                buttonSize={10}
+                                                buttonOuterSize={20}
+                                                buttonStyle={{}}
 
+                                                buttonWrapStyle={{ marginLeft: 10 }}
+                                            />
+                                            <RadioButtonLabel
+                                                obj={obj}
+                                                index={i}
+                                                labelHorizontal={true}
+                                                onPress={(value) => { this.setState({ value3Index: value }) }}
+                                                // labelStyle={{fontSize: 20, color: '#2ecc71'}}
+                                                labelWrapStyle={{}}
+                                            />
+                                        </RadioButton>
+                                    ))
+                                }
                             </View>
                             <View style={[{}, styles.paymentCheckboxView]}>
                                 <CheckBox

@@ -179,7 +179,7 @@ class ProductFilter extends React.Component {
     console.log('createdby_arr createdby_arr', this.state.createdby_arr)
     return (
       <View style={[{}, styles.mainView]}>
-        <Header />
+        <Header navigation={this.props.navigation}/>
         <Spinner
           visible={this.state.Spinner}
           textContent={'Please Wait...'}
@@ -190,11 +190,14 @@ class ProductFilter extends React.Component {
           {/* <Image
           source={require('../images')}
           /> */}
-          <View style={[{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }]}>
+          <TouchableOpacity
+            onPress={() => this.props.navigation.navigate('Products')}
+          
+          style={[{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }]}>
             <Icon name="arrow-left" size={25} color="#929497" />
             <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>FILTER</Text>
 
-          </View>
+          </TouchableOpacity>
           <Text onPress={() => { this.setState({ filters: [] }) }} style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20, top: 20 }]}>Clear Filter</Text>
         </View>
         <View style={{ width: width - 20, backgroundColor: '#fff', paddingVertical: 10, marginTop: 20 }}>
