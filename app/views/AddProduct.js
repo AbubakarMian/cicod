@@ -56,7 +56,7 @@ class AddProduct extends React.Component {
                 if (responseJson.status === "success") {
                     let data = responseJson.data;
                     for (let i = 0; i < data.length; i++) {
-                        data[i].purshed_quantity = 0;
+                        data[i].purshed_quantity = 1;
                         data[i].is_added = false;
                     }
                     this.setState({
@@ -107,21 +107,17 @@ class AddProduct extends React.Component {
 
     addProduct(item, index) {
 
-        return ;
-        // product id || quantity
-        // let filters = this.state.filters;
-        // filters.push({ key: 'is_active', value: value })
-        // this.setState({
-        //   filters: filters
-        // })
+        console.log('item !!!!!!!!!!!!', item)
+        console.log('index !!!!!!!!!!!!', index)
         let data = this.state.data;
         data[index].is_added = !data[index].is_added;
-        let products = this.state.selected_product;
-        selected_product.push(products);
+        let selected_product = this.state.selected_product ;
+        selected_product.push( item )
         this.setState({
-            selected_product: selected_product,
             data: data,
+            selected_product: selected_product,
         });
+      
 
 
     }
@@ -152,7 +148,7 @@ class AddProduct extends React.Component {
     }
 
     render() {
-        console.log('this.state.categoryarr', this.state.selected_product)
+        console.log('this.state.selected_product ', this.state.selected_product);
         var radio_props_dilvery = [
             { label: 'Dilivery', value: 0 },
 
@@ -269,13 +265,15 @@ class AddProduct extends React.Component {
                                                         />
                                                     </TouchableOpacity>
                                                 </View>
-                                                <TouchableOpacity
-                                                    onPress={() => this.addProduct(item, index)}
-                                                    style={{ flexDirection: 'row', backgroundColor: '#B1272C', position: 'absolute', right: 2, paddingHorizontal: 10, borderRadius: 100, paddingVertical: 2, width: width / 6, alignItems: 'center' }}
-                                                >
-                                                    <Icon name="plus-circle" color={'#fff'} />
-                                                    <Text style={{ color: '#fff', marginLeft: 5 }}>Add</Text>
-                                                </TouchableOpacity>
+                                                {(item.is_added === false) ?
+                                                    <TouchableOpacity
+                                                        onPress={() => this.addProduct(item, index)}
+                                                        style={{ flexDirection: 'row', backgroundColor: '#B1272C', position: 'absolute', right: 2, paddingHorizontal: 10, borderRadius: 100, paddingVertical: 2, width: width / 6, alignItems: 'center' }}
+                                                    >
+                                                        <Icon name="plus-circle" color={'#fff'} />
+                                                        <Text style={{ color: '#fff', marginLeft: 5 }}>Add</Text>
+                                                    </TouchableOpacity>
+                                                    : null}
                                             </View>
                                         </View>
 

@@ -8,6 +8,7 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import { TextInput } from 'react-native-gesture-handler';
 import * as Progress from 'react-native-progress';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { Constants } from '../views/Constant';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import {
@@ -24,7 +25,7 @@ class Dashnoard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            Spinner: false,
+            spinner: false,
             data: [],
             target: [],
             totalOrder: [],
@@ -36,7 +37,8 @@ class Dashnoard extends React.Component {
 
     }
     componentDidMount() {
-        this.setState({ Spinner: true })
+        console.log('fsd fsdf sdf sfdsdf sfdfds');
+        this.setState({ spinner: true })    
         let postData = {
             method: 'GET',
             headers: {
@@ -49,8 +51,7 @@ class Dashnoard extends React.Component {
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({
-                    Spinner: false,
-                    data: responseJson.data,
+                    spinner: false,
                 });
                 // console.log('response !!!!!!!!!!!!!@@@@@@@@@@@@@@',responseJson);
                 if (responseJson.status === 'success') {
@@ -69,14 +70,14 @@ class Dashnoard extends React.Component {
                         labels:graph_lable,
                         data:graph_total_orders_data,
                     };
-
+                    console.log(' total total graph ',graph_total_orders);
                     this.setState({
                         target: responseJson.data.target,
                         totalOrder: responseJson.data.total,
                         paidOrder: responseJson.data.paid,
                         pendingOrder: responseJson.data.pending,
                         canclledOrder: responseJson.data.cancelled,
-                        graph_total_orders: graph_total_orders,
+                        // graph_total_orders: graph_total_orders,
 
                     })
                     console.log("%%%%%%%%%%%%%%%%", graph_lable)
@@ -101,6 +102,12 @@ class Dashnoard extends React.Component {
         return (
             <View style={{ height: height, width: width, alignItems: 'center', position: 'relative', backgroundColor: '#F0F0F0', }}>
                 <Header />
+                <Spinner
+                    visible={this.state.spinner}
+                    textContent={'Please Wait...'}
+                    textStyle={{ color: '#fff' }}
+                    color={'#fff'}
+                />
                 <ScrollView>
                     <View style={{ marginBottom: 10 }}>
                         <View style={[{}, styles.headerRowView]}>
