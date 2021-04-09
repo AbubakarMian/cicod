@@ -42,7 +42,7 @@ class AddNewCustomer extends React.Component {
             house_no: '3',
             street: 'Gold Street',
             landmark: 'Century',
-            email: 'jofedfsds@yopmail.com'
+            email: 'jofedfscsdfvbds@yopmail.com'
         }
 
     }
@@ -54,14 +54,15 @@ class AddNewCustomer extends React.Component {
     ceateCustomer() {
         this.setState({ spinner: true })
 
-        if (this.state.first_name === '' || this.state.last_name === '') {
+        if (this.state.first_name === '' && this.state.last_name === '') {
             Alert.alert("Warning", "First name and Last Name are required")
             return;
         }
-        else if (this.state.country_id === '' || this.state.delivery_country_id === '' || this.state.delivery_state_id === '' || this.state.state_id === '') {
+        else if (this.state.country_id === '' && this.state.delivery_country_id === '' && this.state.delivery_state_id === '' && this.state.state_id === '') {
             Alert.alert("Warning", "Country and State are required")
             return;
-        } else if (this.state.house_no === '' || this.state.delivery_house_no === '') {
+        }
+         else if (this.state.house_no == '' && this.state.delivery_house_no == '') {
             Alert.alert("Warning", "House No required")
             return;
         }
