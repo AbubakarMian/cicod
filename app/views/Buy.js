@@ -31,11 +31,13 @@ export default class Buy extends React.Component {
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
             <View style={{ height: height, width: width, position: 'relative', backgroundColor: '#F0F0F0' }}>
-                <Header />
+                <Header navigation={this.props.navigation}/>
                 <View style={{ flexDirection: 'row',marginVertical:10, alignContent: 'center', alignItems: 'center', width: width - 20, alignSelf: 'center' }}>
-                    <View>
+                    <TouchableOpacity
+                    onPress={()=>this.props.navigation.navigate('Home')}
+                    >
                     <Icon name="arrow-left" size={25} color="#929497" />
-                    </View>
+                    </TouchableOpacity>
                     <View>
                     <Text style={{ color: '#2F2E7C', fontWeight: 'bold',marginHorizontal:20 }}>CREATE ORDER</Text>
                     </View>

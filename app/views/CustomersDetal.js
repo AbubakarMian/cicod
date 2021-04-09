@@ -69,7 +69,7 @@ class CustomersDetal extends React.Component {
     const startDate = selectedStartDate ? selectedStartDate.toString() : '';
     return (
       <View style={[{}, styles.mainView]}>
-        <Header />
+        <Header navigation={this.props.navigation}/>
         <Spinner
           visible={this.state.spinner}
           textContent={'Please Wait...'}

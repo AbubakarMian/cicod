@@ -100,7 +100,7 @@ class Dashnoard extends React.Component {
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
             <View style={{ height: height, width: width, alignItems: 'center', position: 'relative', backgroundColor: '#F0F0F0', }}>
-                <Header />
+                <Header navigation={this.props.navigation}/>
                 <ScrollView>
                     <View style={{ marginBottom: 10 }}>
                         <View style={[{}, styles.headerRowView]}>

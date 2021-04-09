@@ -39,13 +39,14 @@ import ProductView from './ProductView';
 import EnableProduct from './EnableProduct';
 import AddNewCustomer from './AddNewCustomer';
 import UpdateProduct from './UpdateProduct';
+import ProductCategory from './ProductCategory';
 const Stack = createStackNavigator();
 
 export default class AppNavigater extends React.Component {
   render() {
     return (
       <NavigationContainer>
-        <Stack.Navigator>
+        <Stack.Navigator >
           <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
 
@@ -89,6 +90,7 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="UpdateProduct" component={UpdateProduct} options={{ headerShown: false }} />
           <Stack.Screen name="CreateProduct" component={CreateProduct} options={{ headerShown: false }} />
           <Stack.Screen name="BuyersView" component={BuyersView} options={{ headerShown: false }} />
+          <Stack.Screen name="ProductCategory" component={ProductCategory} options={{ headerShown: false }} />
 
 
         </Stack.Navigator>

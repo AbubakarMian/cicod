@@ -11,7 +11,7 @@ class Home extends React.Component {
   render() {
     return (
       <View style={{ height: height, width: width, alignItems: 'center', position: 'relative', backgroundColor: '#F0F0F0' }}>
-       <Header />
+       <Header navigation={this.props.navigation}/>
         <View style={[{ flexDirection: 'row',paddingVertical:10 }]}>
           <View style={{ flex: 1, paddingHorizontal: 10 }}>
             <Text style={[{ color: '#B1272C', fontWeight: 'bold', fontSize: 20 }]}>Welcome,</Text>

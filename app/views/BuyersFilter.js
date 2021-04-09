@@ -12,16 +12,18 @@ export default class BuyersFilter extends React.Component {
   render() {
     return (
       <View style={[{}, styles.mainView]}>
-        <Header />
+        <Header navigation={this.props.navigation}/>
         <View style={[{}, styles.mainRow]}>
           {/* <Image
           source={require('../images')}
           /> */}
-          <View style={[{ flexDirection: 'row', alignItems: 'center',marginVertical:10 }]}>
+          <TouchableOpacity 
+          onPress={()=>this.props.navigation.navigate('Buyers')}
+          style={[{ flexDirection: 'row', alignItems: 'center',marginVertical:10,marginLeft:5 }]}>
             <Icon name="arrow-left" size={25} color="#929497" />
             <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>FILTER</Text>
 
-          </View>
+          </TouchableOpacity>
           <Text style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20,top:20 }]}>Clear Filter</Text>
         </View>
         <View style={{width:width-20,backgroundColor:'#fff',paddingVertical:10,marginTop:20}}>

@@ -70,7 +70,7 @@ class Order extends React.Component {
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
             <View style={{ height: height, width: width, position: 'relative', backgroundColor: '##F0F0F0', }}>
-                <Header />
+                <Header navigation={this.props.navigation}/>
                 <View style={{ flexDirection: 'row', alignContent: 'center', alignItems: 'center', width: width - 20, alignSelf: 'center' }}>
                     <View>
                         <Text style={{ color: '#2F2E7C', fontWeight: 'bold' }}>ORDER</Text>
@@ -133,20 +133,20 @@ class Order extends React.Component {
                 >
                     <View style={{ width: width - 20, flexDirection: 'row' }}>
                         <TouchableOpacity >
-                            <Text style={{ marginRight: 5, backgroundColor: '#E6E6E6', paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff' }}>All</Text>
+                            <Text style={{ marginRight: 5,paddingHorizontal:10, backgroundColor: '#E6E6E6', paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff' }}>All</Text>
                         </TouchableOpacity>
-                        <View >
+                        <TouchableOpacity >
                             <Text style={{ color: '#909090', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PENDING</Text>
-                        </View>
-                        <View >
+                        </TouchableOpacity>
+                        <TouchableOpacity >
                             <Text style={{ color: '#909090', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PAID</Text>
-                        </View>
-                        <View >
+                        </TouchableOpacity>
+                        <TouchableOpacity >
                             <Text style={{ color: '#909090', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PART PAYMENT</Text>
-                        </View>
-                        <View >
+                        </TouchableOpacity>
+                        <TouchableOpacity >
                             <Text style={{ color: '#909090', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PAID FROM CREDIT</Text>
-                        </View>
+                        </TouchableOpacity>
                     </View>
                 </ScrollView>
                 <ScrollView>

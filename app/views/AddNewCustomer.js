@@ -307,7 +307,7 @@ class AddNewCustomer extends React.Component {
         console.log('states_arr', this.state.states_arr)
         return (
             <View style={[{}, styles.mainView]}>
-                <Header />
+                <Header navigation={this.props.navigation}/>
                 <Spinner
                     visible={this.state.spinner}
                     textContent={'Please Wait...'}

@@ -33,11 +33,13 @@ export default class Sell extends React.Component {
         ];
         return (
             <View style={[{}, styles.mainView]}>
-                <Header />
+               <Header navigation={this.props.navigation}/>
                 <ScrollView>
                     <View style={{paddingBottom:20}}>
                         <View style={[{}, styles.backHeaderRowView]}>
-                            <TouchableOpacity>
+                            <TouchableOpacity
+                            onPress={()=>this.props.navigation.navigate('Home')}
+                            >
                                 <Icon name="arrow-left" size={25} color="#929497" />
                             </TouchableOpacity>
                             <View style={[{}, styles.backHeadingView]}>

@@ -81,7 +81,7 @@ class Customer extends React.Component {
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
             <View style={[{}, styles.mainView]}>
-                <Header />
+                <Header navigation={this.props.navigation}/>
                 <Spinner
                     visible={this.state.spinner}
                     textContent={'Please Wait...'}
@@ -89,9 +89,11 @@ class Customer extends React.Component {
                     color={'#fff'}
                 />
                 <View style={[{}, styles.headerRow]}>
-                    <View style={[{}, styles.headerRowBackiconView]}>
+                    <TouchableOpacity 
+                    onPress={()=>this.props.navigation.navigate('Home')}
+                    style={[{}, styles.headerRowBackiconView]}>
                         <Icon name="arrow-left" size={25} color="#929497" />
-                    </View>
+                    </TouchableOpacity>
                     <View>
                         <Text style={[{}, styles.headerRowText]}>customers</Text>
                     </View>

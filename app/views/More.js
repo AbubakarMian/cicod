@@ -23,7 +23,7 @@ export default class More extends React.Component {
     render() {
         return (
             <View style={[{}, styles.mainView]}>
-                <Header />
+                <Header navigation={this.props.navigation}/>
                 <View style={[{}, styles.headingRow]}>
                     <Text style={[{}, styles.moreText]}>MORE</Text>
                 </View>
