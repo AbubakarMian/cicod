@@ -84,9 +84,10 @@ export default class Sell extends React.Component {
                                     <RadioForm
                                         isSelected={false}
                                         color={'#000'}
-                                        buttonSize={10}
+                                        buttonSize={7}
                                         buttonOuterSize={20}
-                                        buttonColor={'#B1272C'}
+                                        buttonColor={'#aaa'}
+
                                         // buttonOuterColor={this.state.value3Index === i ? '#2196f3' : '#000'}
                                         radio_props={radio_props_dilvery}
 
@@ -102,8 +103,9 @@ export default class Sell extends React.Component {
                                     <RadioForm
                                         isSelected={false}
                                         color={'#000'}
-                                        buttonSize={10}
+                                        buttonSize={7}
                                         buttonOuterSize={20}
+                                        buttonColor={'#aaa'}
                                         radio_props={radio_props_pickup}
                                         // initial={0}
                                         onPress={(value) => { this.setState({ value: value }) }}
@@ -121,8 +123,9 @@ export default class Sell extends React.Component {
                                     isSelected={false}
                                     color={'#000'}
                                     radio_props={radio_props_payment}
-                                    buttonSize={10}
+                                    buttonSize={7}
                                     buttonOuterSize={20}
+                                    buttonColor={'#aaa'}
                                     size={5}
                                     // initial={0}
                                     onPress={(value) => { this.setState({ value: value }) }}

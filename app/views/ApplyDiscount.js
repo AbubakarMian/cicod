@@ -47,6 +47,9 @@ export default class ApplyDiscount extends React.Component {
                             <RadioForm
                                 isSelected={false}
                                 color={'#000'}
+                                buttonSize={7}
+                                buttonOuterSize={20}
+                                buttonColor={'#aaa'}
                                 radio_props={radio_props_dilvery}
 
                                 // initial={0}
@@ -58,6 +61,9 @@ export default class ApplyDiscount extends React.Component {
                             <RadioForm
                                 isSelected={false}
                                 color={'#000'}
+                                buttonSize={7}
+                                buttonOuterSize={20}
+                                buttonColor={'#aaa'}
                                 radio_props={radio_props_dilvery}
                                 // initial={0}
                                 onPress={(value) => { this.setState({ value: value }) }}
