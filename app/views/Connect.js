@@ -251,7 +251,7 @@ class Connect extends React.Component {
     render() {
         return (
             <View style={[{}, styles.mainView]}>
-                <Header />
+                <Header navigation={this.props.navigation}/>
                 <Spinner
                     visible={this.state.spinner}
                     textContent={'Please Wait...'}
@@ -259,10 +259,12 @@ class Connect extends React.Component {
                     color={'#fff'}
                 />
                 <View style={[{}, styles.mainRow]}>
-                    <View style={[{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }]}>
+                    <TouchableOpacity
+                    onPress={()=>this.props.navigation.navigate('Home')}
+                    style={[{ flexDirection: 'row', alignItems: 'center',marginLeft:5, marginVertical: 10 }]}>
                         <Icon name="arrow-left" size={25} color="#929497" />
                         <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>CONNECT</Text>
-                    </View>
+                    </TouchableOpacity>
                 </View>
                 <View style={[{}, styles.tabView]}>
                     <TouchableOpacity

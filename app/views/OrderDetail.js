@@ -116,7 +116,7 @@ class OrderDetail extends React.Component {
         return (
             <ScrollView>
                 <View style={[{}, styles.mainView]}>
-                    <Header />
+                    <Header navigation={this.props.navigation}/>
                     <Spinner
                         visible={this.state.Spinner}
                         textContent={'Please Wait...'}

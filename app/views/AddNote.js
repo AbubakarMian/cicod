@@ -28,9 +28,12 @@ export default class AddNote extends React.Component {
 
         return (
             <View style={[{}, styles.mainView]}>
-                <Header />
+                <Header navigation={this.props.navigation} />
                 <View style={[{}, styles.backHeaderRowView]}>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                    onPress={()=>this.props.navigation.navigate('Sell')}
+                    
+                    >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
                     <View style={[{}, styles.backHeadingView]}>

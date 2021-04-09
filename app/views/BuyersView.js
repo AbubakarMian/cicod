@@ -19,7 +19,7 @@ export default class BuyersView extends React.Component {
         return (
 
             <View>
-                <Header />
+                <Header navigation={this.props.navigation}/>
                 <ScrollView>
                     <View style={[{}, styles.backRowView]}>
                         <TouchableOpacity>

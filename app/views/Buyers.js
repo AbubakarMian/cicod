@@ -13,12 +13,14 @@ export default class Buyers extends React.Component {
     render() {
         return (
             <View style={[{}, styles.mainView]}>
-                <Header />
+                <Header navigation={this.props.navigation}/>
                 <View style={[{}, styles.mainRow]}>
-                    <View style={[{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }]}>
+                    <TouchableOpacity 
+                       onPress={()=>this.props.navigation.navigate('Home')}
+                       style={[{ flexDirection: 'row', alignItems: 'center', marginVertical: 10,marginLeft:5 }]}>
                         <Icon name="arrow-left" size={25} color="#929497" />
                         <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>BUYERS</Text>
-                    </View>
+                    </TouchableOpacity>
                 </View>
                 <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', paddingHorizontal: 10, borderRadius: 5, marginTop: 10, alignItems: 'center',borderBottomColor:'#E6E6E6',borderBottomWidth:2,paddingBottom:30 }}>
                     <View style={{backgroundColor:'#fff',flexDirection:'row',alignItems:'center',paddingHorizontal:10,width:width-30,alignSelf:'center'}}>

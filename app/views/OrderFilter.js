@@ -12,19 +12,14 @@ export default class Filter extends React.Component {
   render() {
     return (
       <View style={[{}, styles.mainView]}>
-        <Header />
+        <Header navigation={this.props.navigation}/>
         <View style={[{}, styles.mainRow]}>
-          {/* <Image
-          source={require('../images')}
-          /> */}
           <View style={[{ flexDirection: 'row', alignItems: 'center',marginVertical:10 }]}>
             <Icon name="arrow-left" size={25} color="#929497" />
             <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>FILTER</Text>
-
           </View>
           <Text style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20,top:20 }]}>Clear Filter</Text>
         </View>
-      
         <Text style={[{ color: '#929497', fontWeight: 'bold', fontSize: 20,marginVertical:10 }]}>Status</Text>
         <View>
           <ScrollView

@@ -23,7 +23,7 @@ export default class User extends React.Component {
     render() {
         return (
             <View style={[{}, styles.mainView]}>
-                <Header />
+                <Header navigation={this.props.navigation}/>
                 <View style={[{}, styles.headingRow]}>
                     <Icon name="arrow-left" size={20} color={'#929497'} />
                     <Text style={[{}, styles.moreText]}>USER</Text>
