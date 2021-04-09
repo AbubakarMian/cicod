@@ -159,10 +159,16 @@ class CreateProduct extends React.Component {
         ];
         return (
             <View style={[{}, styles.mainView]}>
-                <Header navigation={this.props.navigation}/>
+                <Header navigation={this.props.navigation} />
+                <Spinner
+                    visible={this.state.spinner}
+                    textContent={'Please Wait...'}
+                    textStyle={{ color: '#fff' }}
+                    color={'#fff'}
+                />
                 <View style={[{}, styles.backRowView]}>
                     <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate('Products')}
+                        onPress={() => this.props.navigation.navigate('Products')}
                     >
                         <Icon name="arrow-left" size={25} color={'#929497'} />
                     </TouchableOpacity>

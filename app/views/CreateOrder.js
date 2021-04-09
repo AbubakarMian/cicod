@@ -28,7 +28,7 @@ class CreateOrder extends React.Component {
     }
 
     componentWillReceiveProps() {
-        console.log(' componentWillReceiveProps CreateOrder', this.props.route)
+        console.log(' componentWillReceiveProps CreateOrder', this.props)
         let customer_data = this.props.route.params.customer_data;
 
         this.setState({
