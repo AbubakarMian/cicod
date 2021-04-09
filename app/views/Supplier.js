@@ -89,7 +89,7 @@ import { Constants } from '../views/Constant';
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
             <View style={{ height: height, width: width, position: 'relative', backgroundColor: '##F0F0F0', }}>
-               <Header props={this.props}/>
+               <Header navigation={this.props.navigation}/>
                 <Spinner
                     visible={this.state.spinner}
                     textContent={'Please Wait...'}

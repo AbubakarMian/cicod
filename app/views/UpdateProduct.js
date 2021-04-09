@@ -25,9 +25,11 @@ export default class UpdateProduct extends React.Component {
 
         return (
             <View style={[{}, styles.mainView]}>
-                <Header />
+                <Header navigation={this.props.navigation}/>
                 <View style={[{}, styles.backHeaderRowView]}>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                    onPress={()=>this.props.navigation.navigate('Buyers')}
+                    >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
                     <View style={[{}, styles.backHeadingView]}>
@@ -51,7 +53,9 @@ export default class UpdateProduct extends React.Component {
                             placeholder="Search product or product category"
                         />
                     </View>
-                    <TouchableOpacity style={[{}, styles.searchRowSettingIconView]}>
+                    <TouchableOpacity 
+                    onPress={()=>this.props.navigation.navigate('Filter')}
+                    style={[{}, styles.searchRowSettingIconView]}>
                         <Image
                             source={require('../images/Order/settingicon.png')}
                         />
@@ -107,7 +111,7 @@ export default class UpdateProduct extends React.Component {
                                 </TouchableHighlight>
                             )}
                         />
-                        <View style={{ marginTop: 5 }}>
+                        <View style={{ marginTop: 5,}}>
                             <Text style={[{}, styles.flatelistHeadingText]}>BUST JUICE</Text>
                             <Icon
                                 style={[{ right: 20 }, styles.flatelistHeadingIcon]}
@@ -274,7 +278,7 @@ export default class UpdateProduct extends React.Component {
                                 <Text style={{ color: '#fff' }}>Confirm</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
-                                
+                                onPress={()=>this.setState({updateProductModal:false})}
                                 style={[{backgroundColor:'#fff',}, styles.modalTouchView]}
                             >
                                 <Text style={{ color: '#929497' }}>Cancel</Text>

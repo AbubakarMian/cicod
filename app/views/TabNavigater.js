@@ -1,4 +1,4 @@
-import { View, Text,Image } from 'react-native';
+import { View, Text, Image,StyleSheet } from 'react-native';
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator, HeaderBackground } from '@react-navigation/stack';
@@ -13,45 +13,162 @@ const Tab = createBottomTabNavigator();
 
 
 export default class TabNavigater extends React.Component {
+  constructor(props){
+    super(props);
+    this.state={
+      orderActive:''
+    }
+  }
   render() {
     return (
-        <Tab.Navigator
+      <Tab.Navigator
         tabBarOptions={{
-          activeBackgroundColor:'#fff',
+          activeBackgroundColor: '#fff',
           inactiveBackgroundColor: '#fff',
+          activeTintColor:'#B1272C',
+          inactiveTintColor:'#929497'
         }}
-        >
-        <Tab.Screen name="Dashnoard" component={Dashnoard} options={{ headerShown: true,headerStyle:{backgroundColor:'#fff'}, 
-        tabBarIcon: ({ color, size }) => (
-          <Icon name="bar-chart" color={'#B1272C'} size={size} />
-        ), 
-        headerTintColor:'#fff',headerTitleAlign:'center'}} />
-         <Tab.Screen name="Order" component={Order} options={{ headerShown: true,headerStyle:{backgroundColor:'#fff'}, 
-        tabBarIcon: ({ color, size }) => (
-          <Icon name="home" color={color} size={size} />
-        ), 
-        headerTintColor:'#fff',headerTitleAlign:'center'}} />
-        <Tab.Screen name="Products" component={Products} options={{ headerShown: true,headerStyle:{backgroundColor:'#fff'}, 
-        tabBarIcon: ({ color, size }) => (
-          <Icon name="home" color={color} size={size} />
-        ), 
-        headerTintColor:'#fff',headerTitleAlign:'center'}} />
-        <Tab.Screen name="More" component={More} options={{ headerShown: true,headerStyle:{backgroundColor:'#fff'}, 
-        tabBarIcon: ({ color, size }) => (
-          <Icon name="home" color={color} size={size} />
-        ), 
-        headerTintColor:'#fff',headerTitleAlign:'center'}} />
-        {/* <Tab.Screen name="Events" component={Events} options={{ headerShown: true,headerStyle:{backgroundColor:'blue'},
-        tabBarIcon: ({ color, size }) => (
-          <Icon name="tasks" color={color} size={size} />
-        ), 
-        headerTintColor:'blue',headerTitleAlign:'center'}}  />
-        <Tab.Screen name="Map" component={Map} options={{ headerShown: true,headerStyle:{backgroundColor:'blue'},
-        tabBarIcon: ({ color, size }) => (
-          <Icon name="map-marker" color={color} size={size} />
-        ), 
-        headerTintColor:'blue',headerTitleAlign:'center'}}  /> */}
-        {/* <Tab.Screen name="Settings" component={SettingsScreen} /> */}
+      >
+        <Tab.Screen
+          name="Dashnoard"
+          component={Dashnoard} 
+          options={{
+            tabBarIcon: ({ color }) => (
+              <View
+                style={{
+                  alignSelf: 'center',
+                  backgroundColor: 'transparent',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  shadowColor: '#ffffff',
+                  shadowOffset: {
+                    width: 0,
+                    height: 1,
+                  },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 1.65,
+                  elevation: 0,
+                }}>
+                <Image
+                  source={require('../images/chart.png')}
+                  style={{
+                    width: 25,
+                    height: 25,
+                    borderColor: 'red',
+                    //tintColor: '#f1f6f9',
+                    alignContent: 'center',
+                  }}
+                />
+              </View>
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Order"
+          component={Order}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <View
+                style={{
+                  alignSelf: 'center',
+                  backgroundColor: 'transparent',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  shadowColor: '#ffffff',
+                  shadowOffset: {
+                    width: 0,
+                    height: 1,
+                  },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 1.65,
+                  elevation: 0,
+                }}>
+                <Image
+                  source={require('../images/orders.png')}
+                  style={{
+                    width: 25,
+                    height: 25,
+                    borderColor: 'red',
+                    //tintColor: '#f1f6f9',
+                    alignContent: 'center',
+                  }}
+                />
+              </View>
+            ),
+          }}
+        />
+
+<Tab.Screen
+          name="Products"
+          component={Products}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <View
+                style={{
+                  alignSelf: 'center',
+                  backgroundColor: 'transparent',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  shadowColor: '#ffffff',
+                  shadowOffset: {
+                    width: 0,
+                    height: 1,
+                  },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 1.65,
+                  elevation: 0,
+                }}>
+                <Image
+                  source={require('../images/noProduct.png')}
+                  style={{
+                    width: 25,
+                    height: 25,
+                    borderColor: 'red',
+                    //tintColor: '#f1f6f9',
+                    alignContent: 'center',
+                  }}
+                />
+              </View>
+            ),
+          }}
+        />
+
+<Tab.Screen
+          name="More"
+          component={More}
+          options={{
+            tabBarIcon: ({ color }) => (
+              <View
+                style={{
+                  alignSelf: 'center',
+                  backgroundColor: 'transparent',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                  shadowColor: '#ffffff',
+                  shadowOffset: {
+                    width: 0,
+                    height: 1,
+                  },
+                  shadowOpacity: 0.1,
+                  shadowRadius: 1.65,
+                  elevation: 0,
+                }}>
+                <Image
+                  source={require('../images/more.png')}
+                  style={{
+                    width: 25,
+                    height: 25,
+                    borderColor: 'red',
+                    //tintColor: '#f1f6f9',
+                    alignContent: 'center',
+                  }}
+                />
+              </View>
+            ),
+          }}
+        />        
+        
+
       </Tab.Navigator>
     );
   }

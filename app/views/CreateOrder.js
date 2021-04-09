@@ -531,7 +531,8 @@ class CreateOrder extends React.Component {
                     </View>
                 </ScrollView>
             </View>
-        )
+        
+        );
     }
 }
 function mapStateToProps(state) {

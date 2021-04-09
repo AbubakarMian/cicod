@@ -164,7 +164,7 @@ class AddProduct extends React.Component {
         ];
         return (
             <View style={[{}, styles.mainView]}>
-                <Header />
+                <Header navigation={this.props.navigation}/>
 
                 <Spinner
                     visible={this.state.spinner}

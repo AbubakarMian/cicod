@@ -118,6 +118,13 @@ export default StyleSheet.create({
         paddingVertical:15,
         borderRadius:100
     },
+    flatelistHeadingText:{
+        marginLeft:10,
+    },
+    flatelistHeadingIcon:{
+        position:'absolute',
+        
+    },
     //updateProductModal
     modalCOntainer:{
         width:width-20,
