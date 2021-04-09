@@ -190,10 +190,16 @@ class Products extends React.Component {
                                 onHideUnderlay={separators.unhighlight}>
                                 <View style={{ position: 'relative', alignSelf: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 5 }}>
                                     <View style={[{ flexDirection: 'row' }]}>
+                                        {(item.image == null)? 
+                                        <Image
+                                            style={[{ height: 50, width: 50 }]}
+                                            source={require('../images/ticket.png')}
+                                        />
+                                        :
                                         <Image
                                             style={[{ height: 50, width: 50 }]}
                                             source={{ uri: item.image }}
-                                        />
+                                        />}
 
                                     </View>
                                     <View style={{ position: 'relative', flex: 3 }}>
