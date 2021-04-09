@@ -32,13 +32,13 @@ class Dashnoard extends React.Component {
             paidOrder: [],
             pendingOrder: [],
             canclledOrder: [],
-            graph_total_orders:[],
+            graph_total_orders: [],
         };
 
     }
     componentDidMount() {
         console.log('fsd fsdf sdf sfdsdf sfdfds');
-        this.setState({ spinner: true })    
+        this.setState({ spinner: true })
         let postData = {
             method: 'GET',
             headers: {
@@ -57,20 +57,20 @@ class Dashnoard extends React.Component {
                 if (responseJson.status === 'success') {
                     // console.log('**************', this.state.data)
                     var total_orders = responseJson.data.graph.total_orders;
-                    var graph_total_orders_data=[];
-                    var graph_lable=[];
-                    console.log('total_orders 66666666666666666666666',total_orders);
-                    for(var i=0;i<total_orders.length;i++){
-                        console.log('total_orders[i].amount',total_orders[i].amount);
-                        console.log('total_orders[i].year',total_orders[i].year);
+                    var graph_total_orders_data = [];
+                    var graph_lable = [];
+                    console.log('total_orders 66666666666666666666666', total_orders);
+                    for (var i = 0; i < total_orders.length; i++) {
+                        console.log('total_orders[i].amount', total_orders[i].amount);
+                        console.log('total_orders[i].year', total_orders[i].year);
                         graph_total_orders_data.push(total_orders[i].amount);
                         graph_lable.push(total_orders[i].year);
                     }
                     var graph_total_orders = {
-                        labels:graph_lable,
-                        data:graph_total_orders_data,
+                        labels: graph_lable,
+                        data: graph_total_orders_data,
                     };
-                    console.log(' total total graph ',graph_total_orders);
+                    console.log(' total total graph ', graph_total_orders);
                     this.setState({
                         target: responseJson.data.target,
                         totalOrder: responseJson.data.total,
@@ -96,7 +96,7 @@ class Dashnoard extends React.Component {
         });
     }
     render() {
-        console.log('graph !!!!!!!!!!!!!!!!!!!!!',this.state.graph)
+        console.log('graph !!!!!!!!!!!!!!!!!!!!!', this.state.graph)
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
@@ -179,37 +179,37 @@ class Dashnoard extends React.Component {
                                     <Text>Paid Orders  </Text>
                                 </TouchableOpacity>
                             </View>
-                            {this.state.graph_total_orders.length==0 ?null:
-                            <LineChart
-                                data={this.state.graph_total_orders}
-                                width={Dimensions.get("window").width - 20} // from react-native
-                                height={height / 3}
-                                yAxisLabel="N25M"
-                                yAxisSuffix=""
-                                yAxisInterval={1} // optional, defaults to 1
-                                chartConfig={{
-                                    backgroundColor: "#e26a00",
-                                    backgroundGradientFrom: "#fb8c00",
-                                    backgroundGradientTo: "#ffa726",
-                                    decimalPlaces: 2, // optional, defaults to 2dp
-                                    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                                    labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                                    style: {
+                            {this.state.graph_total_orders.length == 0 ? null :
+                                <LineChart
+                                    data={this.state.graph_total_orders}
+                                    width={Dimensions.get("window").width - 20} // from react-native
+                                    height={height / 3}
+                                    yAxisLabel="N25M"
+                                    yAxisSuffix=""
+                                    yAxisInterval={1} // optional, defaults to 1
+                                    chartConfig={{
+                                        backgroundColor: "#e26a00",
+                                        backgroundGradientFrom: "#fb8c00",
+                                        backgroundGradientTo: "#ffa726",
+                                        decimalPlaces: 2, // optional, defaults to 2dp
+                                        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                        labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                        style: {
+                                            borderRadius: 16
+                                        },
+                                        propsForDots: {
+                                            r: "6",
+                                            strokeWidth: "2",
+                                            stroke: "#ffa726"
+                                        }
+                                    }}
+                                    bezier
+                                    style={{
+                                        marginVertical: 8,
                                         borderRadius: 16
-                                    },
-                                    propsForDots: {
-                                        r: "6",
-                                        strokeWidth: "2",
-                                        stroke: "#ffa726"
-                                    }
-                                }}
-                                bezier
-                                style={{
-                                    marginVertical: 8,
-                                    borderRadius: 16
-                                }}
-                            />
-                        }
+                                    }}
+                                />
+                            }
                         </View>
                         <View style={[{}, styles.bannerView]}>
                             <View style={[{}, styles.bannerContentView]}>

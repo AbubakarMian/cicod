@@ -1,7 +1,8 @@
 import { createStore, combineReducers } from 'redux';
 import userReducer from '../reducers/userReducer';
+import cartReducer from '../reducers/cartReducer';
 const rootReducer = combineReducers(
-    { userReducer }
+    { userReducer, cartReducer }
 );
 // const rootReducer = () => combineReducers(
 //     { count: reducer })

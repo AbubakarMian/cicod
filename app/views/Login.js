@@ -16,9 +16,9 @@ class Login extends React.Component {
         super(props);
         this.state = {
             Spinner: false,
-            tenantId: 'sandbox',//
-            username: 'cicodsandbox@yopmail.com',//
-            password: 'Sandbox@123',//
+            tenantId: '',//sandbox
+            username: '',//cicodsandbox@yopmail.com
+            password: '',//Sandbox@123
             isChecked: false
         }
     }
@@ -36,17 +36,17 @@ class Login extends React.Component {
         }
 
         else {
-            this.props.setUser({
+            // this.props.setUser({
 
-                firstname: "sandbox last", //responseJson.user.firstname,
-                lastname: "sandbox last", //responseJson.user.lastname,
-                email: "cicodsandbox@yopmail.com",//responsejson.user.email,
-                phone: "123314324",//responseJson.user.phone,
-                access_token: "Bearer 0Uq40sRptk1S5Lei9FGd",  //+ responseJson.token
-            });
-            this.setState({ Spinner: false })
-            this.props.navigation.navigate('Home')
-            return;
+            //     firstname: "sandbox last", //responseJson.user.firstname,
+            //     lastname: "sandbox last", //responseJson.user.lastname,
+            //     email: "cicodsandbox@yopmail.com",//responsejson.user.email,
+            //     phone: "123314324",//responseJson.user.phone,
+            //     access_token: "Bearer osRPba8lcxUvaGlTVtSE",  //+ responseJson.token
+            // });
+            // this.setState({ Spinner: false })
+            // this.props.navigation.navigate('Home')
+            // return;
             this.setState({ Spinner: true })
             var formData = new FormData();
             // formData.append('email', this.state.email);

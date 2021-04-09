@@ -9,7 +9,7 @@ import CheckBox from 'react-native-check-box';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import { Constants } from '../views/Constant';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER, ADD_TO_PRODUCT } from '../redux/constants/index';
 import DropDownPicker from 'react-native-dropdown-picker';
 import SearchBar from 'react-native-search-bar';
 const { width, height } = Dimensions.get('window')
@@ -27,7 +27,8 @@ class AddProduct extends React.Component {
             categoryarr: [],
             category_id: 0,
             count: 0,
-            selected_product: []
+            selected_product: [],
+            product_cart: []
 
         }
     }
@@ -54,10 +55,25 @@ class AddProduct extends React.Component {
                 });
                 console.log('response !!!!!!!!', responseJson)
                 if (responseJson.status === "success") {
+
+                    let cart_data = this.props.cart.cart;
+                    console.log('cart data : ', cart_data);
                     let data = responseJson.data;
                     for (let i = 0; i < data.length; i++) {
-                        data[i].purshed_quantity = 1;
-                        data[i].is_added = false;
+                        let product_found = false;
+                        for (let c = 0; c < cart_data.length; c++) {
+                            console.log('asd');
+                            if (cart_data[c].id == data[i].id) {
+                                data[i].purchased_quantity = cart_data[c].purchased_quantity;
+                                data[i].is_added = true;
+                                product_found = true;
+                            }
+                        }
+                        if (!product_found) {
+                            data[i].purchased_quantity = 0;
+                            data[i].is_added = false;
+                        }
+
                     }
                     this.setState({
                         data: data
@@ -111,14 +127,21 @@ class AddProduct extends React.Component {
         console.log('index !!!!!!!!!!!!', index)
         let data = this.state.data;
         data[index].is_added = !data[index].is_added;
-        let selected_product = this.state.selected_product ;
-        selected_product.push( item )
-        this.setState({
-            data: data,
-            selected_product: selected_product,
-        });
-      
+        // let selected_product = this.state.selected_product ;
+        // selected_product.push( item )
+        // this.setState({
+        //     data: data,
+        //     selected_product: selected_product,
+        // });
 
+        this.props.addProduct({
+            id: item.id,
+            name: item.name,
+            quantity: item.quantity,
+            purchased_quantity: item.purchased_quantity,
+            price: item.price,
+        })
+        this.props.navigation.navigate('CreateOrder', { screen: 'active' });
 
     }
     counterFun(action, index) {
@@ -127,24 +150,34 @@ class AddProduct extends React.Component {
         console.log('fun called ');
         if (action == 'add') {
 
-            if ((data[index].purshed_quantity + 1) > data[index].quantity) {
+            if ((data[index].purchased_quantity + 1) > data[index].quantity) {
                 alert('Out of stock');
             }
             else {
-                data[index].purshed_quantity = data[index].purshed_quantity + 1;
+                this.props.cartReducer(data[index]);
+                console.log('cart : ', this.props.cart);
+                data[index].purchased_quantity = data[index].purchased_quantity + 1;
                 this.setState({
                     data: data
                 })
             }
         }
         else {
-            if (data[index].purshed_quantity > 0) {
-                data[index].purshed_quantity = data[index].purshed_quantity - 1;
+            if (data[index].purchased_quantity > 0) {
+                data[index].purchased_quantity = data[index].purchased_quantity - 1;
                 this.setState({
                     data: data
                 })
             }
         }
+
+        let cart_product = this.state.product_cart;
+
+        // cart_product.forEach(item ,index, function(){
+
+        //     return item ;
+        // })
+
     }
 
     render() {
@@ -174,7 +207,7 @@ class AddProduct extends React.Component {
                 />
                 <View style={[{}, styles.backHeaderRowView]}>
                     <TouchableOpacity
-                    onPress={()=>this.props.navigation.navigate('Sell')}
+                        onPress={() => this.props.navigation.navigate('Sell')}
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
@@ -257,7 +290,7 @@ class AddProduct extends React.Component {
                                                         <Icon name="minus" />
                                                     </TouchableOpacity>
                                                     <View style={[{}, styles.iconView]}>
-                                                        <Text>{item.purshed_quantity}</Text>
+                                                        <Text>{item.purchased_quantity}</Text>
                                                     </View>
                                                     <TouchableOpacity style={[{}, styles.iconView]}
                                                         onPress={() => this.counterFun('add', index)}
@@ -301,12 +334,14 @@ class AddProduct extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        user: state.userReducer
+        user: state.userReducer,
+        cart: state.cartReducer
     }
 };
 function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
+        cartReducer: (value) => dispatch({ type: ADD_TO_PRODUCT, value: value }),
         logoutUser: () => dispatch({ type: LOGOUT_USER })
     }
 };
