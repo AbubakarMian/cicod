@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, Text, Modal, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback, TextInput } from 'react-native'
+import { View, ImageBackground, Text, Modal,Alert, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback, TextInput } from 'react-native'
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss'
 import CalendarPicker from 'react-native-calendar-picker';
@@ -29,6 +29,7 @@ class Products extends React.Component {
         });
     }
     componentDidMount() {
+        console.log('this.props.user.access_token !!!!!!!!!!!!!!!!!!!!!!!',this.props.user.access_token)
         this.getData(Constants.productslist);
         return;
         console.log('this.props.params', this.props.route);
@@ -63,37 +64,43 @@ class Products extends React.Component {
 
     getData(url) {
 
-        console.log('products');
+        let token = this.props.user.access_token;
+        console.log('products this.props.user.access_token',token);
         this.setState({ Spinner: true })
         let postData = {
             method: 'GET',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: this.props.user.access_token,
+                Authorization: token,
             },
         };
+        console.log('product URL !!!!!!!!!!!!!!!!',url)
+        console.log('postData postData !!!!!!!!!!!!!!!!',postData)
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
+                console.log('responseJson.message',responseJson);
+                console.log('responseJson.postData',postData);
                 this.setState({
                     Spinner: false,
-                    data: responseJson.data
+                    
                 });
-                if (responseJson.status === true) {
+                if (responseJson.status === "success") {
 
-
+                    this.setState({
+                        data: responseJson.data
+                    })
 
                     this.props.navigation.navigate('DrawerNavigation')
                 } else {
-                    let message = JSON.stringify(responseJson.error.message)
+                    let message = responseJson.message ;
                     Alert.alert('Error', message)
                 }
             })
     }
 
     render() {
-        console.log('this.state.data', this.state.data);
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
