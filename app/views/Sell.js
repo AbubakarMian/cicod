@@ -33,12 +33,12 @@ export default class Sell extends React.Component {
         ];
         return (
             <View style={[{}, styles.mainView]}>
-               <Header navigation={this.props.navigation}/>
+                <Header navigation={this.props.navigation} />
                 <ScrollView>
-                    <View style={{paddingBottom:20}}>
+                    <View style={{ paddingBottom: 20 }}>
                         <View style={[{}, styles.backHeaderRowView]}>
                             <TouchableOpacity
-                            onPress={()=>this.props.navigation.navigate('Home')}
+                                onPress={() => this.props.navigation.navigate('Home')}
                             >
                                 <Icon name="arrow-left" size={25} color="#929497" />
                             </TouchableOpacity>
@@ -55,8 +55,8 @@ export default class Sell extends React.Component {
                         <View style={[{}, styles.customerContainerView]}>
                             <Text style={[{}, styles.customerContainerhead]}>Custommer Detail</Text>
                             <TouchableOpacity
-                            onPress={()=>this.props.navigation.navigate('AddCustomer')}
-                            style={[{}, styles.customerContaineraddBtnView]}>
+                                onPress={() => this.props.navigation.navigate('AddCustomer')}
+                                style={[{}, styles.customerContaineraddBtnView]}>
                                 <Icon name="plus-circle" size={20} color={'#fff'} />
                                 <Text style={[{}, styles.customerContaineraddBtnText]}>Add</Text>
                             </TouchableOpacity>
@@ -64,9 +64,9 @@ export default class Sell extends React.Component {
                             <Text style={[{}, styles.customerContainerheading]}>No Customer added</Text>
                             <Text style={[{}, styles.customerContainerText]}>add customer</Text>
                         </View>
-                        <TouchableOpacity 
-                        onPress={()=>this.props.navigation.navigate('AddProduct')}
-                        style={[{}, styles.customerContaineraddProductView]}>
+                        <TouchableOpacity
+                            onPress={() => this.props.navigation.navigate('AddProduct')}
+                            style={[{}, styles.customerContaineraddProductView]}>
                             <Image
                                 source={require('../images/products/circlePlus.png')}
                             />
@@ -74,7 +74,7 @@ export default class Sell extends React.Component {
                         </TouchableOpacity>
                         <View style={[{}, styles.OrderDetailContainer]}>
                             <Text style={[{}, styles.customerContainerhead]}>Order Detail</Text>
-                            <Image source={require('../images/cartSlash.png')}/>
+                            <Image source={require('../images/cartSlash.png')} />
                             <Text style={[{}, styles.OrderDetailContainerHeadingText]}>No product added</Text>
                             <Text style={[{}, styles.OrderDetailContainerText]}>add a product</Text>
                         </View>
@@ -84,6 +84,10 @@ export default class Sell extends React.Component {
                                     <RadioForm
                                         isSelected={false}
                                         color={'#000'}
+                                        buttonSize={10}
+                                        buttonOuterSize={20}
+                                        buttonColor={'#B1272C'}
+                                        // buttonOuterColor={this.state.value3Index === i ? '#2196f3' : '#000'}
                                         radio_props={radio_props_dilvery}
 
                                         // initial={0}
@@ -98,6 +102,8 @@ export default class Sell extends React.Component {
                                     <RadioForm
                                         isSelected={false}
                                         color={'#000'}
+                                        buttonSize={10}
+                                        buttonOuterSize={20}
                                         radio_props={radio_props_pickup}
                                         // initial={0}
                                         onPress={(value) => { this.setState({ value: value }) }}
@@ -111,9 +117,12 @@ export default class Sell extends React.Component {
                             <Text style={[{}, styles.paymentHeadingText]}>Payment Options</Text>
                             <View style={[{}, styles.radioFormView]}>
                                 <RadioForm
+
                                     isSelected={false}
                                     color={'#000'}
                                     radio_props={radio_props_payment}
+                                    buttonSize={10}
+                                    buttonOuterSize={20}
                                     size={5}
                                     // initial={0}
                                     onPress={(value) => { this.setState({ value: value }) }}
@@ -144,7 +153,7 @@ export default class Sell extends React.Component {
                                 <Text style={[{}, styles.subTotleColumn1Text]}>Tax(7.5%)</Text>
                                 <Text style={[{}, styles.subTotleColumn1Text]}>TOTAL:</Text>
                                 <TouchableOpacity
-                                 onPress={()=>this.props.navigation.navigate('ApplyDiscount')}
+                                    onPress={() => this.props.navigation.navigate('ApplyDiscount')}
                                 >
                                     <View style={{ flexDirection: 'row' }}>
                                         <Icon name="times-circle" size={20} color="#B1272C" />
@@ -157,7 +166,7 @@ export default class Sell extends React.Component {
                                 <Text style={[{}, styles.subTotleColumn2Text]}>-</Text>
                                 <Text style={[{}, styles.subTotleColumn2Text]}>-</Text>
                                 <TouchableOpacity
-                               onPress={()=>this.props.navigation.navigate('AddNote')}
+                                    onPress={() => this.props.navigation.navigate('AddNote')}
                                 >
                                     <View style={{ flexDirection: 'row' }}>
                                         <Icon name="times-circle" size={20} color="#B1272C" />
