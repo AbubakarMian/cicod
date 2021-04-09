@@ -16,9 +16,9 @@ class Login extends React.Component {
         super(props);
         this.state = {
             Spinner: false,
-            tenantId: '',//sandbox
-            username: '',//cicodsandbox@yopmail.com
-            password: '',//Sandbox@123
+            tenantId: 'sandbox',//sandbox
+            username: 'cicodsandbox@yopmail.com',//cicodsandbox@yopmail.com
+            password: 'Sandbox@123',//Sandbox@123
             isChecked: false
         }
     }
@@ -48,21 +48,13 @@ class Login extends React.Component {
             // this.props.navigation.navigate('Home')
             // return;
             this.setState({ Spinner: true })
-            var formData = new FormData();
-            // formData.append('email', this.state.email);
-            // formData.append('password', this.state.password);
-            formData.append('username', this.state.username);
-            formData.append('password', this.state.password);
-            formData.append('tenantId', this.state.tenantId);
-
             let postData = {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
                     'Authorization': Constants.autherizationKey,
-                    'Authorization-Secure': Constants.autherizationKey,
-                    // this.props.user.access_token,
+                    'Authorization-Secure': Constants.autherizationKey
                 },
                 body: JSON.stringify({
                     username: this.state.username,//cicodsandbox@yopmail.com
@@ -73,25 +65,25 @@ class Login extends React.Component {
             fetch(Constants.login, postData)
                 .then(response => response.json())
                 .then(async responseJson => {
-                    // console.log("!!!!!!!!!!!",responseJson)
+                    console.log(" response Json responseJson responseJson!!!!!!!!!!!",responseJson.token)
                     if (responseJson.status === "SUCCESS") {
-                        // console.log("!!!!!!!!!!!",responseJson)
-                        // console.log("!!!!!!!!!!!",responseJson.user.token)
                         this.props.setUser({
                             firstname: responseJson.user.firstname,
                             lastname: responseJson.user.lastname,
                             email: responseJson.user.email,
                             phone: responseJson.user.phone,
-                            access_token: "Bearer fPw9BRvnBQeDw5E2pAwu" + responseJson.token
+                            access_token:  'Bearer '+responseJson.token
                         });
                         this.setState({ Spinner: false })
+
+
+                        console.log('get user !!!!!!!!!!!!!!!!', this.props.user)
                         this.props.navigation.navigate('Home')
                     } else {
                         this.setState({ Spinner: false })
                         // this.setState({ Spinner: false })
-                        let message = JSON.stringify(responseJson.status)
+                        let message = responseJson.messa
                         Alert.alert('Error', message)
-                        this.refs.PopUp.setModal(true, responseJson.status);
                     }
                 }
                 )
