@@ -1,26 +1,72 @@
 import React from 'react'
-import { View, ImageBackground, Text, FlatList, TouchableHighlight, Dimensions, Image, Platform, TouchableOpacity, TextInput } from 'react-native'
+import { View, ImageBackground, Text, FlatList, Alert, TouchableHighlight, Dimensions, Image, Platform, TouchableOpacity, TextInput } from 'react-native'
 import splashImg from '../images/splash.jpg'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
-
+import { connect } from 'react-redux';
+import { SET_USER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART } from '../redux/constants/index';
 import SearchBar from 'react-native-search-bar';
 import { ScrollView } from 'react-native-gesture-handler';
 import styles from '../css/BuyersCss';
+import Spinner from 'react-native-loading-spinner-overlay';
 import { Container, Left, Body, Right, Button, Title, Segment, Content, } from 'native-base';
+import { Constants } from './Constant';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
-export default class Buyers extends React.Component {
+class Buyers extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            toolTipVisible: false
+            toolTipVisible: false,
+            spinner: false,
+            data: []
+
         }
+    }
+
+    componentDidMount() {
+        this.buyerList();
+    }
+
+    buyerList() {
+
+        this.setState({ spinner: true })
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            },
+        };
+        fetch(Constants.buyerlist, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                console.log('responseJson @@@@@@@@###########', responseJson)
+                this.setState({
+                    spinner: false,
+                });
+                if (responseJson.success === true) {
+                    this.setState({
+                        data: responseJson.data
+                    })
+
+                } else {
+                    let message = responseJson.message;
+                    Alert.alert('Error', message)
+                }
+            })
     }
     render() {
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
+                <Spinner
+                    visible={this.state.spinner}
+                    textContent={'Please Wait...'}
+                    textStyle={{ color: '#fff' }}
+                    color={'#fff'}
+                />
                 <View style={[{}, styles.mainRow]}>
                     <TouchableOpacity
                         onPress={() => this.props.navigation.navigate('Home')}
@@ -59,14 +105,7 @@ export default class Buyers extends React.Component {
                     marginTop={10}
                 >
                     <FlatList
-                        data={[
-                            { title: 'WellFoods NG', key: 'item1', cat: 'Product Category: 5', brand: 'Pure Juice ' },
-                            { title: 'CPMART', key: 'item1', cat: 'Product Category: 5', brand: 'Pure Juice ' },
-                            { title: 'BuyTime Stores', key: 'item1', cat: 'Product Category: 5', brand: 'Pure Juice ' },
-                            { title: 'Allday Buy', key: 'item1', cat: 'Product Category: 5', brand: 'Pure Juice ' },
-                            { title: 'TIP SHOPS', key: 'item1', cat: 'Product Category: 5', brand: 'Pure Juice ' },
-
-                        ]}
+                        data={this.state.data}
                         ItemSeparatorComponent={
                             Platform.OS !== 'android' &&
                             (({ highlighted }) => (
@@ -82,7 +121,7 @@ export default class Buyers extends React.Component {
                         renderItem={({ item, index, separators }) => (
                             <TouchableHighlight
                                 key={item.key}
-                                onPress={()=>this.props.navigation.navigate('BuyersView')}
+                                onPress={() => this.props.navigation.navigate('BuyersView')}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
                                 <View style={[{}, styles.flatCardView]}>
@@ -102,12 +141,12 @@ export default class Buyers extends React.Component {
                                                     style={[{}, styles.cardActionTouch]}
                                                 >
                                                     <Icon name="ellipsis-h" color={'#929497'} size={20} />
-                                                    
+
                                                 </TouchableOpacity>
                                                 <Text style={[{}, styles.statusText]}>Active</Text>
-                                                 
+
                                             </View>
-                                            
+
                                         </View>
                                     </View>
 
@@ -121,3 +160,14 @@ export default class Buyers extends React.Component {
         )
     }
 }
+function mapStateToProps(state) {
+    return {
+        user: state.userReducer
+    }
+};
+function mapDispatchToProps(dispatch) {
+    return {
+        setUser: (value) => dispatch({ type: SET_USER, value: value }),
+    }
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Buyers)

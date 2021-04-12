@@ -75,7 +75,8 @@ class AddCustomer extends React.Component {
             customer_phone: item.phone
         }
         await this.props.setCustomer(user_data);
-        this.props.navigation.navigate('CreateOrder', { screen: 'active' })
+        console.log('user info !!!!!!!!!!!!!!! @@@@@@@@@@@@@',this.props);
+        this.props.navigation.goBack(); 
     }
 
     render() {

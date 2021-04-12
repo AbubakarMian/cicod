@@ -29,7 +29,13 @@ class CreateOrder extends React.Component {
     }
 
     componentWillReceiveProps() {
-        console.log(' componentWillReceiveProps CreateOrder', this.props)
+        console.log(' componentWillReceiveProps CreateOrder', this.props);
+
+        this.setState({
+            customer_name: this.props.customer.name ,
+            customer_email: this.props.customer.email ,
+            customer_phone: this.props.customer.phone ,
+        })
 
     }
 

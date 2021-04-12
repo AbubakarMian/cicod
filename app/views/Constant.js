@@ -13,6 +13,7 @@ export const Constants = {
   orderslist: `${base_url}/orders`,
   productcategorylist: `${base_url}/categories`, //https://com.cicodsaasstaging.com/com/api/categories
   supplierlist:`${base_url}/value-chain/suppliers`,
+  buyerlist:`${base_url}/value-chain/buyers`,
   stateslist:`${base_url}/states`,
   countrieslist:`${base_url}/countries`,
   lgaslist:`${base_url}/lgas`,
