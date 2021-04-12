@@ -10,7 +10,7 @@ import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'reac
 import SearchBar from 'react-native-search-bar';
 import { Constants } from '../views/Constant';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { SET_USER, SET_CUSTOMER } from '../redux/constants/index';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 class AddCustomer extends React.Component {
@@ -66,22 +66,23 @@ class AddCustomer extends React.Component {
             });
     }
 
-    userInfo(item) {
+    async userInfo(item) {
 
         let user_data = {
+            customer_id: item.id,
             customer_name: item.first_name + ' ' + item.last_name,
             customer_email: item.email,
             customer_phone: item.phone
         }
-        console.log(' user_data user_data user_data',user_data);
-        this.props.navigation.navigate('CreateOrder', { customer_data: user_data })
+        await this.props.setCustomer(user_data);
+        this.props.navigation.navigate('CreateOrder', { screen: 'active' })
     }
 
     render() {
 
         return (
             <View style={[{}, styles.mainView]}>
-                <Header navigation={this.props.navigation}/>
+                <Header navigation={this.props.navigation} />
                 <Spinner
                     visible={this.state.spinner}
                     textContent={'Please Wait...'}
@@ -90,7 +91,7 @@ class AddCustomer extends React.Component {
                 />
                 <View style={[{}, styles.backHeaderRowView]}>
                     <TouchableOpacity
-                    onPress={()=>this.props.navigation.navigate('Sell')}
+                        onPress={() => this.props.navigation.navigate('Sell')}
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
@@ -214,13 +215,13 @@ class AddCustomer extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        user: state.userReducer
+        user: state.userReducer,
+        customer: state.customReducer
     }
 };
 function mapDispatchToProps(dispatch) {
     return {
-        setUser: (value) => dispatch({ type: SET_USER, value: value }),
-        logoutUser: () => dispatch({ type: LOGOUT_USER })
+        setCustomer: (value) => dispatch({ type: SET_CUSTOMER, value: value }),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(AddCustomer)
