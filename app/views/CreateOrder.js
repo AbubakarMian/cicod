@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, Text, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import { View, ImageBackground, ScrollView, Text, Dimensions, Image, Platform, TouchableOpacity, FlatList } from 'react-native'
 import splashImg from '../images/splash.jpg'
 import styles from '../css/CreateOrderCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -8,7 +8,7 @@ import CheckBox from 'react-native-check-box';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Constants } from '../views/Constant';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER ,ADD_TO_PRODUCT, REMOVE_FROM_CART } from '../redux/constants/index';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import SearchBar from 'react-native-search-bar';
 const { width, height } = Dimensions.get('window')
@@ -20,22 +20,23 @@ class CreateOrder extends React.Component {
             value: 0,
             isChecked: false,
             spinner: false,
-            customer_name: '',
-            customer_email: '',
-            customer_phone: '',
+            customer_name: this.props.customer.name ?? '',
+            customer_email: this.props.customer.email ?? '',
+            customer_phone: this.props.customer.phone ?? '',
+            cart_arr: this.props.cart.cart ?? [],
             value3Index: 0
         }
     }
 
     componentWillReceiveProps() {
-        console.log(' componentWillReceiveProps CreateOrder', this.props)
-        let customer_data = this.props.route.params.customer_data;
+        console.log(' componentWillReceiveProps CreateOrder', this.props);
 
         this.setState({
-            customer_name: customer_data.customer_name,
-            customer_email: customer_data.customer_email,
-            customer_phone: customer_data.customer_phone
+            customer_name: this.props.customer.name ,
+            customer_email: this.props.customer.email ,
+            customer_phone: this.props.customer.phone ,
         })
+
     }
 
     createOrder() {
@@ -96,6 +97,53 @@ class CreateOrder extends React.Component {
         }
     }
 
+
+    async counterFun(action, index) {
+
+        let data = this.state.cart_arr;
+        console.log('fun called ');
+        if (action == 'add') {
+
+            let updated_purchased_quantity = data[index].purchased_quantity + 1;
+            if (updated_purchased_quantity > data[index].quantity) {
+                alert('Out of stock');
+            }
+            else {
+                console.log('here in else condition !!!!!!!!!', data[index].purchased_quantity);
+                await this.props.cartReducer(data[index]);
+                data[index].purchased_quantity = updated_purchased_quantity;
+                console.log('here in else condition !!!!!!!!! after : ', data[index].purchased_quantity);
+
+                this.setState({
+                    cart_arr: data
+                });
+
+                console.log('cart : ', this.props.cart);
+            }
+        }
+        else {
+            let updated_purchased_quantity = data[index].purchased_quantity - 1;
+
+            if (data[index].purchased_quantity > 0) {
+                await this.props.removeFromCart(data[index]);
+                data[index].purchased_quantity = updated_purchased_quantity;
+                this.setState({
+                    data: data
+                })
+                console.log(' remove from cart cart : ', this.props.cart);
+            }
+        }
+
+        let cart_product = this.state.product_cart;
+
+        // cart_product.forEach(item ,index, function(){
+
+        //     return item ;
+        // })
+
+    }
+
+
     render() {
         var radio_props_dilvery = [
             { label: 'Dilivery', value: 0 },
@@ -110,6 +158,7 @@ class CreateOrder extends React.Component {
             { label: 'Pay Invoice', value: 2 },
             { label: 'Part Payment', value: 3 },
         ];
+        console.log('cart_arr cart_arr cart_arr  ', this.state.cart_arr);
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
@@ -162,15 +211,15 @@ class CreateOrder extends React.Component {
                                             color="#D8D8D8"
                                             size={20}
                                         />
-                                        <Text style={[{}, styles.userDEtailCOntainerText]}>Johnson James</Text>
+                                        <Text style={[{}, styles.userDEtailCOntainerText]}>{this.state.customer_name}</Text>
                                     </View>
                                     <View style={[{}, styles.userDEtailCOntainerIconView]}>
                                         <Text style={[{}, styles.usetDetailLableText]}>Email: </Text>
-                                        <Text style={[{}, styles.usetDetailInfoText]}>j.joghnson@gmail.com</Text>
+                                        <Text style={[{}, styles.usetDetailInfoText]}>{this.state.customer_email}</Text>
                                     </View>
                                     <View style={[{}, styles.userDEtailCOntainerIconView]}>
                                         <Text style={[{}, styles.usetDetailLableText]}>Phone: </Text>
-                                        <Text style={[{}, styles.usetDetailInfoText]}>08123456789</Text>
+                                        <Text style={[{}, styles.usetDetailInfoText]}>{this.state.customer_phone}</Text>
                                     </View>
                                     <View style={[{}, styles.downIconView]}>
                                         <Icon name="angle-down"
@@ -201,125 +250,75 @@ class CreateOrder extends React.Component {
                         <View style={[{}, styles.OrderDetailContainer]}>
                             <View style={[{}, styles.OrderDetailHeadingRow]}>
                                 <Text style={[{}, styles.OrderDetailHeadingRowText]}>Order Detail</Text>
-                                <Text style={[{}, styles.OrderDetailNotificationText]}>3</Text>
+                                <Text style={[{}, styles.OrderDetailNotificationText]}>{this.state.cart_arr.length ?? 0}</Text>
                             </View>
                             <TouchableOpacity style={[{}, styles.OrderDetailClearTouc]}>
                                 <Text style={[{}, styles.OrderDetailHeadingRowText]}>Clear Order</Text>
                             </TouchableOpacity>
-                            <View style={[{ flexDirection: 'column' }]}>
-                                <View style={[{}, styles.OrderDetailDataCOntainer]}>
-                                    <View style={[{}, styles.OrderDetailDataCOntainerRow]}>
-                                        <View>
-                                            <Text style={[{}, styles.OrderDetailDataCOntainerHeadingText]}>Pure ORANGE JUICE  12PACK</Text>
-                                            <Text style={[{}, styles.OrderDetailHeadingRowText]}>LAGOS- Palms</Text>
-                                        </View>
 
-                                        <View style={[{}, styles.OrderDetailDataCOntainerCounterView]}>
-                                            <TouchableOpacity style={[{}, styles.iconView]}>
-                                                <Icon name="minus" />
-                                            </TouchableOpacity>
-                                            <View style={[{}, styles.iconView]}>
-                                                <Text>10</Text>
+
+                            <FlatList
+                                data={this.state.cart_arr}
+                                ItemSeparatorComponent={
+                                    Platform.OS !== 'android' &&
+                                    (({ highlighted }) => (
+                                        <View
+                                            style={[
+                                                style.separator,
+                                                highlighted && { marginLeft: 0 }
+                                            ]}
+                                        />
+                                    ))
+                                }
+                                renderItem={({ item, index, separators }) => (
+                                    <View style={[{ flexDirection: 'column' }]}>
+                                        <View style={[{}, styles.OrderDetailDataCOntainer]}>
+                                            <View style={[{}, styles.OrderDetailDataCOntainerRow]}>
+                                                <View>
+                                                    <Text style={[{}, styles.OrderDetailDataCOntainerHeadingText]}>{item.name}  {item.quantity} PACK</Text>
+                                                    <Text style={[{}, styles.OrderDetailHeadingRowText]}>{item.category}</Text>
+                                                </View>
+
+                                                <View style={[{}, styles.OrderDetailDataCOntainerCounterView]}>
+                                                    <TouchableOpacity style={[{}, styles.iconView]}
+                                                        onPress={() => this.counterFun('sub', index)}
+                                                    >
+                                                        <Icon name="minus" />
+                                                    </TouchableOpacity>
+                                                    <View style={[{}, styles.iconView]}>
+                                                        <Text>{item.purchased_quantity}</Text>
+                                                    </View>
+                                                    <TouchableOpacity style={[{}, styles.iconView]}
+                                                        onPress={() => this.counterFun('add', index)}
+                                                    >
+                                                        <Icon name="plus"
+                                                            color="#B1272C"
+                                                        />
+                                                    </TouchableOpacity>
+                                                </View>
+
                                             </View>
-                                            <TouchableOpacity style={[{}, styles.iconView]}>
-                                                <Icon name="plus"
-                                                    color="#B1272C"
-                                                />
-                                            </TouchableOpacity>
+
                                         </View>
-
-                                    </View>
-
-                                </View>
-                                <View style={[{}, styles.orderDetailAmmountRow]}>
-                                    <View style={[{}, styles.orderDetailAmmountColumn]}>
-                                        <Text style={[{}, styles.orderDetailAmmountColumnGaryBolText]}>N500,000</Text>
-                                    </View>
-                                    <View style={[{}, styles.orderDetailAmmountColumn]}>
-                                        <TouchableOpacity
-                                            style={[{ alignSelf: 'flex-end' }]}
-                                        >
-                                            <Text style={[{}, styles.orderDetailAmmountColumnRedText]}>Remove</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            </View>
-                            <View style={[{ flexDirection: 'column' }]}>
-                                <View style={[{}, styles.OrderDetailDataCOntainer]}>
-                                    <View style={[{}, styles.OrderDetailDataCOntainerRow]}>
-                                        <View>
-                                            <Text style={[{}, styles.OrderDetailDataCOntainerHeadingText]}>Pure ORANGE JUICE  12PACK</Text>
-                                            <Text style={[{}, styles.OrderDetailHeadingRowText]}>LAGOS- Palms</Text>
-                                        </View>
-
-                                        <View style={[{}, styles.OrderDetailDataCOntainerCounterView]}>
-                                            <TouchableOpacity style={[{}, styles.iconView]}>
-                                                <Icon name="minus" />
-                                            </TouchableOpacity>
-                                            <View style={[{}, styles.iconView]}>
-                                                <Text>10</Text>
+                                        <View style={[{}, styles.orderDetailAmmountRow]}>
+                                            <View style={[{}, styles.orderDetailAmmountColumn]}>
+                                                <Text style={[{}, styles.orderDetailAmmountColumnGaryBolText]}>N{item.price}</Text>
                                             </View>
-                                            <TouchableOpacity style={[{}, styles.iconView]}>
-                                                <Icon name="plus"
-                                                    color="#B1272C"
-                                                />
-                                            </TouchableOpacity>
-                                        </View>
-
-                                    </View>
-
-                                </View>
-                                <View style={[{}, styles.orderDetailAmmountRow]}>
-                                    <View style={[{}, styles.orderDetailAmmountColumn]}>
-                                        <Text style={[{}, styles.orderDetailAmmountColumnGaryBolText]}>N500,000</Text>
-                                    </View>
-                                    <View style={[{}, styles.orderDetailAmmountColumn]}>
-                                        <TouchableOpacity
-                                            style={[{ alignSelf: 'flex-end' }]}
-                                        >
-                                            <Text style={[{}, styles.orderDetailAmmountColumnRedText]}>Remove</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            </View>
-                            <View style={[{ flexDirection: 'column' }]}>
-                                <View style={[{}, styles.OrderDetailDataCOntainer]}>
-                                    <View style={[{}, styles.OrderDetailDataCOntainerRow]}>
-                                        <View>
-                                            <Text style={[{}, styles.OrderDetailDataCOntainerHeadingText]}>Pure ORANGE JUICE  12PACK</Text>
-                                            <Text style={[{}, styles.OrderDetailHeadingRowText]}>LAGOS- Palms</Text>
-                                        </View>
-
-                                        <View style={[{}, styles.OrderDetailDataCOntainerCounterView]}>
-                                            <TouchableOpacity style={[{}, styles.iconView]}>
-                                                <Icon name="minus" />
-                                            </TouchableOpacity>
-                                            <View style={[{}, styles.iconView]}>
-                                                <Text>10</Text>
+                                            <View style={[{}, styles.orderDetailAmmountColumn]}>
+                                                <TouchableOpacity
+                                                    style={[{ alignSelf: 'flex-end' }]}
+                                                >
+                                                    <Text style={[{}, styles.orderDetailAmmountColumnRedText]}>Remove</Text>
+                                                </TouchableOpacity>
                                             </View>
-                                            <TouchableOpacity style={[{}, styles.iconView]}>
-                                                <Icon name="plus"
-                                                    color="#B1272C"
-                                                />
-                                            </TouchableOpacity>
                                         </View>
+                                    </View>
+                                )}
+                            />
 
-                                    </View>
 
-                                </View>
-                                <View style={[{}, styles.orderDetailAmmountRow]}>
-                                    <View style={[{}, styles.orderDetailAmmountColumn]}>
-                                        <Text style={[{}, styles.orderDetailAmmountColumnGaryBolText]}>N500,000</Text>
-                                    </View>
-                                    <View style={[{}, styles.orderDetailAmmountColumn]}>
-                                        <TouchableOpacity
-                                            style={[{ alignSelf: 'flex-end' }]}
-                                        >
-                                            <Text style={[{}, styles.orderDetailAmmountColumnRedText]}>Remove</Text>
-                                        </TouchableOpacity>
-                                    </View>
-                                </View>
-                            </View>
+
+
                         </View>
                         <View style={[{}, styles.diliveryTypeContainerView]}>
                             <TouchableOpacity>
@@ -531,19 +530,23 @@ class CreateOrder extends React.Component {
                     </View>
                 </ScrollView>
             </View>
-        
+
         );
     }
 }
 function mapStateToProps(state) {
     return {
-        user: state.userReducer
+        user: state.userReducer,
+        customer: state.customReducer,
+        cart: state.cartReducer
     }
 };
 function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
-        logoutUser: () => dispatch({ type: LOGOUT_USER })
+        logoutUser: () => dispatch({ type: LOGOUT_USER }),
+        cartReducer: (value) => dispatch({ type: ADD_TO_PRODUCT, value: value }),
+        removeFromCart: (value) => dispatch({ type: REMOVE_FROM_CART, value: value }),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CreateOrder)

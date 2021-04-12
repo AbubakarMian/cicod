@@ -9,7 +9,7 @@ import CheckBox from 'react-native-check-box';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import { Constants } from '../views/Constant';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER, ADD_TO_PRODUCT } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART } from '../redux/constants/index';
 import DropDownPicker from 'react-native-dropdown-picker';
 import SearchBar from 'react-native-search-bar';
 const { width, height } = Dimensions.get('window')
@@ -47,7 +47,8 @@ class AddProduct extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
-        fetch(Constants.productslist + '?is_active=1&search=' + this.state.search_product + '&category_id=' + this.state.category_id, postData)
+        //+ '?is_active=1&search=' + this.state.search_product + '&category_id=' + this.state.category_id
+        fetch(Constants.productslist, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({
@@ -121,53 +122,45 @@ class AddProduct extends React.Component {
         console.log('text !!!!!!!!!!!!!!!!!', text);
     }
 
-    addProduct(item, index) {
+    addProduct() {
 
-        console.log('item !!!!!!!!!!!!', item)
-        console.log('index !!!!!!!!!!!!', index)
-        let data = this.state.data;
-        data[index].is_added = !data[index].is_added;
-        // let selected_product = this.state.selected_product ;
-        // selected_product.push( item )
-        // this.setState({
-        //     data: data,
-        //     selected_product: selected_product,
-        // });
-
-        this.props.addProduct({
-            id: item.id,
-            name: item.name,
-            quantity: item.quantity,
-            purchased_quantity: item.purchased_quantity,
-            price: item.price,
-        })
+        
         this.props.navigation.navigate('CreateOrder', { screen: 'active' });
 
     }
-    counterFun(action, index) {
+    async counterFun(action, index) {
 
         let data = this.state.data;
         console.log('fun called ');
         if (action == 'add') {
 
-            if ((data[index].purchased_quantity + 1) > data[index].quantity) {
+            let updated_purchased_quantity = data[index].purchased_quantity + 1;
+            if (updated_purchased_quantity > data[index].quantity) {
                 alert('Out of stock');
             }
             else {
-                this.props.cartReducer(data[index]);
-                console.log('cart : ', this.props.cart);
-                data[index].purchased_quantity = data[index].purchased_quantity + 1;
+                console.log('here in else condition !!!!!!!!!', data[index].purchased_quantity);
+                await this.props.cartReducer(data[index]);
+                data[index].purchased_quantity = updated_purchased_quantity;
+                console.log('here in else condition !!!!!!!!! after : ', data[index].purchased_quantity);
+
                 this.setState({
                     data: data
-                })
+                });
+
+                console.log('cart : ', this.props.cart);
             }
         }
         else {
+            let updated_purchased_quantity = data[index].purchased_quantity - 1;
+
             if (data[index].purchased_quantity > 0) {
-                data[index].purchased_quantity = data[index].purchased_quantity - 1;
+                await this.props.removeFromCart(data[index]);
+                data[index].purchased_quantity = updated_purchased_quantity;
                 this.setState({
                     data: data
                 })
+                console.log(' remove from cart cart : ', this.props.cart);
             }
         }
 
@@ -181,7 +174,6 @@ class AddProduct extends React.Component {
     }
 
     render() {
-        console.log('this.state.selected_product ', this.state.selected_product);
         var radio_props_dilvery = [
             { label: 'Dilivery', value: 0 },
 
@@ -197,7 +189,7 @@ class AddProduct extends React.Component {
         ];
         return (
             <View style={[{}, styles.mainView]}>
-                <Header navigation={this.props.navigation}/>
+                <Header navigation={this.props.navigation} />
 
                 <Spinner
                     visible={this.state.spinner}
@@ -251,77 +243,75 @@ class AddProduct extends React.Component {
                                 <Text style={[{}, styles.OrderDetailHeadingRowText]}>Order Detail</Text>
                                 <Text style={[{}, styles.OrderDetailNotificationText]}>{this.state.total_add_order}</Text>
                             </View>
-                            {/* {(this.state.data === '') ? */}
-                            <FlatList
-                                data={this.state.data}
-                                ItemSeparatorComponent={
-                                    Platform.OS !== 'android' &&
-                                    (({ highlighted }) => (
-                                        <View
-                                            style={[
-                                                style.separator,
-                                                highlighted && { marginLeft: 0 }
-                                            ]}
-                                        />
-                                    ))
-                                }
-                                renderItem={({ item, index, separators }) => (
-                                    <View style={[{ flexDirection: 'column', marginBottom: 20 }]}>
-                                        <View style={[{}, styles.OrderDetailDataCOntainer]}>
-                                            <View style={[{}, styles.OrderDetailDataCOntainerRow]}>
-                                                <View>
-                                                    <Text style={[{}, styles.OrderDetailDataCOntainerHeadingText]}>{item.name}  {item.quantity}PACK</Text>
-                                                    <Text style={[{}, styles.OrderDetailHeadingRowText]}>LAGOS- Palms</Text>
-                                                </View>
-                                            </View>
-
-
-                                        </View>
-                                        <View style={[{}, styles.orderDetailAmmountRow]}>
-                                            <View style={[{}, styles.orderDetailAmmountColumn]}>
-                                                <Text style={[{}, styles.orderDetailAmmountColumnGaryBolText]}>N200,000</Text>
-                                            </View>
-                                            <View style={[{}, styles.orderDetailAmmountColumn]}>
-
-                                                <View style={[{}, styles.OrderDetailDataCOntainerCounterView]}>
-                                                    <TouchableOpacity
-                                                        onPress={() => this.counterFun('sub', index)}
-                                                        style={[{}, styles.iconView]}>
-                                                        <Icon name="minus" />
-                                                    </TouchableOpacity>
-                                                    <View style={[{}, styles.iconView]}>
-                                                        <Text>{item.purchased_quantity}</Text>
+                            {(this.state.data.length != 0) ?
+                                <FlatList
+                                    data={this.state.data}
+                                    ItemSeparatorComponent={
+                                        Platform.OS !== 'android' &&
+                                        (({ highlighted }) => (
+                                            <View
+                                                style={[
+                                                    style.separator,
+                                                    highlighted && { marginLeft: 0 }
+                                                ]}
+                                            />
+                                        ))
+                                    }
+                                    renderItem={({ item, index, separators }) => (
+                                        <View style={[{ flexDirection: 'column', marginBottom: 20 }]}>
+                                            <View style={[{}, styles.OrderDetailDataCOntainer]}>
+                                                <View style={[{}, styles.OrderDetailDataCOntainerRow]}>
+                                                    <View>
+                                                        <Text style={[{}, styles.OrderDetailDataCOntainerHeadingText]}>{item.name} {item.quantity}PACK</Text>
+                                                        <Text style={[{}, styles.OrderDetailHeadingRowText]}>{item.name}</Text>
                                                     </View>
-                                                    <TouchableOpacity style={[{}, styles.iconView]}
-                                                        onPress={() => this.counterFun('add', index)}
-                                                    >
-                                                        <Icon name="plus"
-                                                            color="#B1272C"
-                                                        />
-                                                    </TouchableOpacity>
                                                 </View>
-                                                {(item.is_added === false) ?
+
+
+                                            </View>
+                                            <View style={[{}, styles.orderDetailAmmountRow]}>
+                                                <View style={[{}, styles.orderDetailAmmountColumn]}>
+                                                    <Text style={[{}, styles.orderDetailAmmountColumnGaryBolText]}>N{item.price}</Text>
+                                                </View>
+                                                <View style={[{}, styles.orderDetailAmmountColumn]}>
+
+                                                    <View style={[{}, styles.OrderDetailDataCOntainerCounterView]}>
+                                                        <TouchableOpacity
+                                                            onPress={() => this.counterFun('sub', index)}
+                                                            style={[{}, styles.iconView]}>
+                                                            <Icon name="minus" />
+                                                        </TouchableOpacity>
+                                                        <View style={[{}, styles.iconView]}>
+                                                            <Text>{item.purchased_quantity}</Text>
+                                                        </View>
+                                                        <TouchableOpacity style={[{}, styles.iconView]}
+                                                            onPress={() => this.counterFun('add', index)}
+                                                        >
+                                                            <Icon name="plus"
+                                                                color="#B1272C"
+                                                            />
+                                                        </TouchableOpacity>
+                                                    </View>
                                                     <TouchableOpacity
-                                                        onPress={() => this.addProduct(item, index)}
+                                                        onPress={() => this.addProduct()}
                                                         style={{ flexDirection: 'row', backgroundColor: '#B1272C', position: 'absolute', right: 2, paddingHorizontal: 10, borderRadius: 100, paddingVertical: 2, width: width / 6, alignItems: 'center' }}
                                                     >
                                                         <Icon name="plus-circle" color={'#fff'} />
                                                         <Text style={{ color: '#fff', marginLeft: 5 }}>Add</Text>
                                                     </TouchableOpacity>
-                                                    : null}
+                                                </View>
                                             </View>
-                                        </View>
 
-                                    </View>
-                                )}
-                            />
-                            {/* : <View style={[{}, styles.contentView]}>
+                                        </View>
+                                    )}
+                                />
+                                : <View style={[{}, styles.contentView]}>
                                     <Image
                                         source={require('../images/noProduct.png')}
                                     />
                                     <Text style={[{}, styles.contentViewHeadingText]}>No product selected</Text>
                                     <Text style={[{}, styles.contentViewDescText]}>Search for a product</Text>
-                                </View>} */}
+                                </View>}
                         </View>
 
 
@@ -342,6 +332,7 @@ function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
         cartReducer: (value) => dispatch({ type: ADD_TO_PRODUCT, value: value }),
+        removeFromCart: (value) => dispatch({ type: REMOVE_FROM_CART, value: value }),
         logoutUser: () => dispatch({ type: LOGOUT_USER })
     }
 };
