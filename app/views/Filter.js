@@ -82,20 +82,20 @@ export default class Filter extends React.Component {
   render() {
     return (
       <View style={[{}, styles.mainView]}>
-        <Header navigation={this.props.navigation}/>
+        <Header navigation={this.props.navigation} />
         <View style={[{}, styles.mainRow]}>
           {/* <Image
           source={require('../images')}
           /> */}
           <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
             <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Product')}
+              onPress={() => this.props.navigation.navigate('Product')}
             >  <Icon name="arrow-left" size={25} color="#929497" />
-            <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>FILTER</Text>
+              <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>FILTER</Text>
 
 
             </TouchableOpacity>
-         
+
           </View>
           <Text style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20 }]}>Clear Filter</Text>
         </View>
@@ -145,8 +145,6 @@ export default class Filter extends React.Component {
                 <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>IN ACTIVE </Text>
               </TouchableOpacity>
             </View>
-
-
           </View>
         </View>
         {/* <View style={[{ flexDirection: 'row' }]}>
@@ -158,7 +156,7 @@ export default class Filter extends React.Component {
           </View>
         </View> */}
         <TouchableOpacity
-         onPress={this.applyFilter}
+          onPress={this.applyFilter}
           style={{ width: width / 1.5, alignSelf: 'center', backgroundColor: '#B1272C', justifyContent: 'center', alignItems: 'center', paddingVertical: 15, borderRadius: 50, marginTop: 30 }}
         >
           <Text style={{ color: '#fff', fontWeight: 'bold' }}>Apply</Text>

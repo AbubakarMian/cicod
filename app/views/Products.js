@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, Text, Modal,Alert, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback, TextInput } from 'react-native'
+import { View, ImageBackground, Text, Modal, Alert, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback, TextInput } from 'react-native'
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss'
 import CalendarPicker from 'react-native-calendar-picker';
@@ -20,6 +20,7 @@ class Products extends React.Component {
             selectedStartDate: null,
             calenderModal: false,
             data: [],
+            search_product: ''
         };
         this.onDateChange = this.onDateChange.bind(this);
     }
@@ -29,7 +30,7 @@ class Products extends React.Component {
         });
     }
     componentDidMount() {
-        console.log('this.props.user.access_token !!!!!!!!!!!!!!!!!!!!!!!',this.props.user.access_token)
+        console.log('this.props.user.access_token !!!!!!!!!!!!!!!!!!!!!!!', this.props.user.access_token)
         this.getData(Constants.productslist);
         return;
         console.log('this.props.params', this.props.route);
@@ -65,7 +66,6 @@ class Products extends React.Component {
     getData(url) {
 
         let token = this.props.user.access_token;
-        console.log('products this.props.user.access_token',token);
         this.setState({ Spinner: true })
         let postData = {
             method: 'GET',
@@ -75,16 +75,14 @@ class Products extends React.Component {
                 Authorization: token,
             },
         };
-        console.log('product URL !!!!!!!!!!!!!!!!',url)
-        console.log('postData postData !!!!!!!!!!!!!!!!',postData)
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log('responseJson.message',responseJson);
-                console.log('responseJson.postData',postData);
+                console.log('responseJson.message', responseJson);
+                console.log('responseJson.postData', postData);
                 this.setState({
                     Spinner: false,
-                    
+
                 });
                 if (responseJson.status === "success") {
 
@@ -94,10 +92,17 @@ class Products extends React.Component {
 
                     this.props.navigation.navigate('DrawerNavigation')
                 } else {
-                    let message = responseJson.message ;
+                    let message = responseJson.message;
                     Alert.alert('Error', message)
                 }
             })
+    }
+
+    search() {
+
+        let search_url = Constants.productslist + '?search=' + this.state.search_product;
+        this.getData(search_url);
+
     }
 
     render() {
@@ -111,15 +116,15 @@ class Products extends React.Component {
                     textStyle={{ color: '#fff' }}
                     color={'#fff'}
                 />
-                <Header navigation={this.props.navigation}/>
+                <Header navigation={this.props.navigation} />
                 <View style={{ flexDirection: 'row', paddingHorizontal: 10, alignItems: 'center', justifyContent: 'center' }}>
                     <View style={{ flex: 1 }}>
                         <Text style={{ fontWeight: 'bold', color: '#2F2E7C' }}>Products</Text>
                     </View>
                     <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
                         <Text style={{ fontSize: 12, color: '#B1272C', marginRight: 10 }}>View Product Category</Text>
-                        <TouchableOpacity 
-                        onPress={() => this.props.navigation.navigate('CreateProduct')}
+                        <TouchableOpacity
+                            onPress={() => this.props.navigation.navigate('CreateProduct')}
                         >
                             <Image
                                 source={require('../images/products/circlePlus.png')}
@@ -137,6 +142,8 @@ class Products extends React.Component {
                     <View>
                         <TextInput
                             placeholder="Search product, Price and code"
+                            onChangeText={text => this.setState({ search_product: text })}
+                            onSubmitEditing={() => this.search()}
                         />
                     </View>
                     <View style={{ position: 'absolute', right: 0, alignSelf: 'center', }}>
@@ -150,22 +157,22 @@ class Products extends React.Component {
                     </View>
                 </View>
                 <View style={[{}, styles.formRowView]}>
-                                <View style={[{ position: 'relative' }, styles.formColumn]}>
-                                
-                                        <DropDownPicker
-                                            items={this.state.categoryarr}
-                                            containerStyle={{ height: 50, width: width - 20, marginTop: 5, alignSelf:'center' }}
-                                            style={{ backgroundColor: '#fff' }}
-                                            itemStyle={{
-                                                justifyContent: 'flex-start', zIndex: 0.99
-                                            }}
-                                            placeholder="Product Category"
-                                            dropDownStyle={{ backgroundColor: '#000', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
-                                            labelStyle={{ color: '#A9A9A9' }}
-                                            // onChangeItem={item => this.onCategoryText(item.value)}
-                                        />
-                                </View>
-                            </View>
+                    <View style={[{ position: 'relative' }, styles.formColumn]}>
+
+                        <DropDownPicker
+                            items={this.state.categoryarr}
+                            containerStyle={{ height: 50, width: width - 20, marginTop: 5, alignSelf: 'center' }}
+                            style={{ backgroundColor: '#fff' }}
+                            itemStyle={{
+                                justifyContent: 'flex-start', zIndex: 0.99
+                            }}
+                            placeholder="Product Category"
+                            dropDownStyle={{ backgroundColor: '#000', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                            labelStyle={{ color: '#A9A9A9' }}
+                        // onChangeItem={item => this.onCategoryText(item.value)}
+                        />
+                    </View>
+                </View>
 
                 <ScrollView>
                     <FlatList
@@ -185,21 +192,20 @@ class Products extends React.Component {
                         renderItem={({ item, index, separators }) => (
                             <TouchableHighlight
                                 key={item.key}
-                                onPress={() => this._onPress(item)}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
                                 <View style={{ position: 'relative', alignSelf: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 5 }}>
                                     <View style={[{ flexDirection: 'row' }]}>
-                                        {(item.image == null)? 
-                                        <Image
-                                            style={[{ height: 50, width: 50 }]}
-                                            source={require('../images/ticket.png')}
-                                        />
-                                        :
-                                        <Image
-                                            style={[{ height: 50, width: 50 }]}
-                                            source={{ uri: item.image }}
-                                        />}
+                                        {(item.image == null) ?
+                                            <Image
+                                                style={[{ height: 50, width: 50 }]}
+                                                source={require('../images/ticket.png')}
+                                            />
+                                            :
+                                            <Image
+                                                style={[{ height: 50, width: 50 }]}
+                                                source={{ uri: item.image }}
+                                            />}
 
                                     </View>
                                     <View style={{ position: 'relative', flex: 3 }}>
