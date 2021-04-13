@@ -37,7 +37,7 @@ export default class AddNote extends React.Component {
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
                     <View style={[{}, styles.backHeadingView]}>
-                        <Text style={[{}, styles.backHeadingText]}>APPLY DISCOUNT</Text>
+                        <Text style={[{}, styles.backHeadingText]}>APPLY NOTE</Text>
                     </View>
                 </View>
 
