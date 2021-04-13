@@ -18,13 +18,17 @@ export default class ApplyDiscount extends React.Component {
         }
     }
     render() {
-        var radio_props_dilvery = [
-            { label: 'Dilivery', value: 0 },
+        var radio_props_per = [
+            { label: 'Percentage', value: 0 },
+    
 
         ];
-        var radio_props_pickup = [
-            { label: 'Pickup', value: 1 },
+        var radio_props_val = [
+            { label: 'Percentage', value: 0 },
+    
+
         ];
+   
 
         return (
             <View style={[{}, styles.mainView]}>
@@ -50,7 +54,7 @@ export default class ApplyDiscount extends React.Component {
                                 buttonSize={7}
                                 buttonOuterSize={20}
                                 buttonColor={'#aaa'}
-                                radio_props={radio_props_dilvery}
+                                radio_props={radio_props_per}
 
                                 // initial={0}
                                 onPress={(value) => { this.setState({ value: value }) }}
@@ -64,7 +68,7 @@ export default class ApplyDiscount extends React.Component {
                                 buttonSize={7}
                                 buttonOuterSize={20}
                                 buttonColor={'#aaa'}
-                                radio_props={radio_props_dilvery}
+                                radio_props={radio_props_val}
                                 // initial={0}
                                 onPress={(value) => { this.setState({ value: value }) }}
                             />
