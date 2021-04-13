@@ -23,7 +23,6 @@ export default class Headet extends React.Component {
     }
 
     render() {
-        console.log(' props !!!!!!!!!!!!!!!!',this.props )
      const that=this;
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';

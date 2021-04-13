@@ -65,7 +65,7 @@ class Login extends React.Component {
             fetch(Constants.login, postData)
                 .then(response => response.json())
                 .then(async responseJson => {
-                    console.log(" response Json responseJson responseJson!!!!!!!!!!!",responseJson.token)
+                    console.log(" response Json responseJson responseJson!!!!!!!!!!!",responseJson)
                     if (responseJson.status === "SUCCESS") {
                         this.props.setUser({
                             firstname: responseJson.user.firstname,
