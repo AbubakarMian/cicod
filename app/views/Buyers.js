@@ -58,6 +58,7 @@ class Buyers extends React.Component {
             })
     }
     render() {
+        console.log('data data !!!!!!!!!!!!', this.state.data);
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
@@ -130,8 +131,8 @@ class Buyers extends React.Component {
                                             source={require('../images/bage.png')}
                                         />
                                         <View style={[{}, styles.cardContentView]}>
-                                            <Text style={[{}, styles.cardContentDarkText]}>{item.title}</Text>
-                                            <Text style={[{}, styles.lightGrayText]}>{item.cat}</Text>
+                                            <Text style={[{}, styles.cardContentDarkText]}>{item.buyer_name}</Text>
+                                            <Text style={[{}, styles.lightGrayText]}>{item.product_categories}</Text>
                                         </View>
                                         <View style={[{}, styles.cardActionView]}>
 
@@ -143,8 +144,9 @@ class Buyers extends React.Component {
                                                     <Icon name="ellipsis-h" color={'#929497'} size={20} />
 
                                                 </TouchableOpacity>
-                                                <Text style={[{}, styles.statusText]}>Active</Text>
-
+                                                {(item.is_active == 1) ?
+                                                    <Text style={[{}, styles.statusText]}>Active</Text>
+                                                    : <Text style={[{}, styles.statusPendingText]}>In Active</Text>}
                                             </View>
 
                                         </View>

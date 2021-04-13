@@ -163,6 +163,14 @@ export default StyleSheet.create({
        
        
     },
+    statusPendingText:{
+       color:'#DC143C',
+       backgroundColor:'#FA8072',
+       borderRadius:100,
+       paddingHorizontal:10,
+       
+       
+    },
     lightGrayText:{
         color:'#929497',
         fontSize:10,

@@ -90,15 +90,6 @@ class ProductFilter extends React.Component {
           this.setState({
             createdby_arr: createdby_arr,
           });
-          // for (let index = 0; index < responseJson.data.length; index++) {
-          //   // const created_by = responseJson.data[index].created_by;
-          //   let users = responseJson.data[index].created_by; //this.state.filters;
-          //   users.push({ lable: text, value: text, });
-          //   this.setState({
-          //     createdby_arr: users
-          //   })
-
-          // }
 
 
           this.props.navigation.navigate('DrawerNavigation')
