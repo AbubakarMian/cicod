@@ -316,7 +316,9 @@ class AddNewCustomer extends React.Component {
                     color={'#fff'}
                 />
                 <View style={[{}, styles.backRowView]}>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                    onPress={()=>this.props.navigation.navigate('Customer')}
+                    >
                         <Icon name="arrow-left" size={25} color={'#929497'} />
                     </TouchableOpacity>
                     <View style={[{}, styles.backRowHeadingView]}>
