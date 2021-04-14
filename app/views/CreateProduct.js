@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, Alert, Text, Dimensions, Image, Platform, TouchableOpacity, TextInput } from 'react-native'
+import { View, ImageBackground,TouchableHighlight, ScrollView, Alert, Text, Dimensions, Image, Platform, TouchableOpacity, TextInput } from 'react-native'
 import splashImg from '../images/splash.jpg';
 import styles from '../css/CreateProductCss';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -12,7 +12,14 @@ import SearchBar from 'react-native-search-bar';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import DropDownPicker from 'react-native-dropdown-picker';
-
+import Tooltip from 'react-native-walkthrough-tooltip';
+import {
+    Menu,
+    MenuOptions,
+    MenuOption,
+    MenuTrigger,
+  } from 'react-native-popup-menu';
+  
 const { width, height } = Dimensions.get('window')
 
 class CreateProduct extends React.Component {
@@ -35,6 +42,7 @@ class CreateProduct extends React.Component {
             add_variation: false,
             validity: 0,
             image: '',
+            toolTipVisible:false
         }
     }
 
@@ -327,12 +335,40 @@ class CreateProduct extends React.Component {
                                             />
                                         </View>
                                     </View>
+                                   
                                     <View style={[{}, styles.formRowView]}>
-                                        <TouchableOpacity style={[{ position: 'relative' }, styles.formColumn]}>
+                                        <TouchableOpacity 
+                                        onPress={()=>this.setState({toolTipVisible:true})}
+                                        style={[{ position: 'relative' }, styles.formColumn]}>
                                             <Text style={[{}, styles.redTouchText]}>
                                                 + Add another variation
-                                    </Text>
+                                                
+                                             </Text>
+                                             <Tooltip
+                                        isVisible={this.state.toolTipVisible}
+                                        content={
+                                        <View
+                                        style={[{},styles.toolTipMainView]}
+                                        >
+                                            <TextInput
+                                            placeholder="Attribute Name"
+                                            />
+                                            <TextInput
+                                            placeholder="Attribute Value"
+                                            />
+                                            <TouchableOpacity
+                                            style={[{},styles.toolTipSaveBtn]}
+                                            >
+                                                <Text style={{color:'#fff',fontSize:10}}>Save</Text>
+                                            </TouchableOpacity>
+                                        </View>}
+                                        placement="center"
+                                        onClose={() => this.setState({ toolTipVisible: false })}
+                                        >
+                                     
+                                        </Tooltip>
                                         </TouchableOpacity>
+                                         
                                         <View style={[{ position: 'relative' }, styles.formColumn]}>
                                             <CheckBox
                                                 style={[{ width: width / 2, }, styles.cheBox]}

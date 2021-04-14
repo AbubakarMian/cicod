@@ -103,6 +103,21 @@ export default StyleSheet.create({
         alignItems:'center',
         paddingVertical:15,
         borderRadius:100
+    },
+    toolTipMainView:{
+      
+      alignSelf:'center',
+     
+      justifyContent:'center',
+      paddingVertical:10,
+      paddingHorizontal:20,
+    },
+    toolTipSaveBtn:{
+        alignSelf:'center',
+        backgroundColor:'#B1272C',
+        borderRadius:100,
+        paddingHorizontal:10,
+        paddingVertical:3,
     }
     
 })
