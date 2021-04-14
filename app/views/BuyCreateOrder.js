@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, Text, Dimensions, Image, Platform, TouchableOpacity, FlatList } from 'react-native'
+import { View, ImageBackground, ScrollView,TouchableHighlight, Text, Dimensions, Modal, Image, Platform, TouchableOpacity, FlatList, TextInput } from 'react-native'
 import styles from '../css/BuyCreateOrderCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import CheckBox from 'react-native-check-box';
@@ -13,7 +13,8 @@ export default class BuyCreateOrder extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            spinner: false
+            spinner: false,
+            suppliereModal: false
         }
 
     }
@@ -63,7 +64,9 @@ export default class BuyCreateOrder extends React.Component {
                         </View>
                         <View style={[{}, styles.customerTitleRowView]}>
                             <Text style={[{}, styles.customerTitleRowHeadingText]}>TestKing Nigeria</Text>
-                            <TouchableOpacity>
+                            <TouchableOpacity
+                            onPress={()=>this.setState({suppliereModal:true})}
+                            >
                                 <Text style={[{}, styles.customerTitleRowchangesupplierText]}>Change Supplier</Text>
                             </TouchableOpacity>
                         </View>
@@ -108,7 +111,7 @@ export default class BuyCreateOrder extends React.Component {
                         </View>
                         <View style={[{}, styles.diliveryTypeContainerView]}>
                             <TouchableOpacity
-                            onPress={()=>this.props.navigation.navigate('DiliveryAddress')}
+                                onPress={() => this.props.navigation.navigate('DiliveryAddress')}
                             >
                                 <View style={[{}, styles.radioFormView]}>
                                     {/* <RadioForm
@@ -167,7 +170,7 @@ export default class BuyCreateOrder extends React.Component {
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity
-                            onPress={()=>this.props.navigation.navigate('PickUpLocation')}
+                                onPress={() => this.props.navigation.navigate('PickUpLocation')}
                             >
                                 <View style={[{}, styles.radioFormView]}>
                                     {/* <RadioForm
@@ -290,8 +293,8 @@ export default class BuyCreateOrder extends React.Component {
                                 <Text style={[{}, styles.subTotleColumn1Text]}>Tax(7.5%)</Text>
                                 <Text style={[{}, styles.subTotleColumn1Text]}>TOTAL:</Text>
                                 <TouchableOpacity
-                                onPress={()=>this.props.navigation.navigate('ApplyDiscount')}
-                                
+                                    onPress={() => this.props.navigation.navigate('ApplyDiscount')}
+
                                 >
                                     <View style={{ flexDirection: 'row' }}>
                                         <Icon name="times-circle" size={20} color="#B1272C" />
@@ -304,7 +307,7 @@ export default class BuyCreateOrder extends React.Component {
                                 <Text style={[{}, styles.subTotleColumn2Text]}>-</Text>
                                 <Text style={[{}, styles.subTotleColumn2Text]}>-</Text>
                                 <TouchableOpacity
-                                onPress={()=>this.props.navigation.navigate('AddNote')}
+                                    onPress={() => this.props.navigation.navigate('AddNote')}
                                 >
                                     <View style={{ flexDirection: 'row' }}>
                                         <Icon name="times-circle" size={20} color="#B1272C" />
@@ -320,6 +323,88 @@ export default class BuyCreateOrder extends React.Component {
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
+
+                <Modal
+                    visible={this.state.suppliereModal}
+                    transparent={true}
+                >
+                    <View style={[{}, styles.mainContainer]}>
+                        <TouchableOpacity
+                            style={[{}, styles.backgroundTouch]}
+                        >
+
+                        </TouchableOpacity>
+                        <View style={[{}, styles.contentView]}>
+                            <View style={[{}, styles.modalCancleRow]}>
+                                <Text style={[{}, styles.modalCancleText]}>SELECT SUPPLIERS</Text>
+                                <TouchableOpacity
+                                onPress={()=>this.setState({suppliereModal:false})}
+                                    style={[{}, styles.modalCancleTouch]}
+                                >
+                                    <Icon name="times" size={20} color="#929497" />
+                                </TouchableOpacity>
+                            </View>
+                            <View style={[{}, styles.searchRow]}>
+                                <Icon name="search" size={20} color="#929497" />
+                                <TextInput
+                                    placeholder="Search supplier"
+                                />
+                            </View>
+                            <ScrollView
+                        
+                            >
+                                <FlatList
+                                
+                                    ItemSeparatorComponent={
+                                        Platform.OS !== 'android' &&
+                                        (({ highlighted }) => (
+                                            <View
+                                                style={[
+                                                    style.separator,
+                                                    highlighted && { marginLeft: 0 }
+                                                ]}
+                                            />
+                                        ))
+                                    }
+                                    data={[
+                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item1' }, 
+                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item2' },
+                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item3' }, 
+                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item4' },
+                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item5' }, 
+                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item6' },
+                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item7' }, 
+                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item8' },
+                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item9' }, 
+                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item10' },
+                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item11' }, 
+                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item12' },
+                                    ]}
+                                    renderItem={({ item, index, separators }) => (
+                                        <TouchableHighlight
+                                            key={item.key}
+                                            onPress={() => this.props.navigation.navigate('Supplier')}
+                                            onShowUnderlay={separators.highlight}
+                                            onHideUnderlay={separators.unhighlight}>
+                                            <View style={[{},styles.modalListContainer]}>
+                                                <Image source={require('../images/bage.png')}/>
+                                                <View style={[{},styles.modalListContentView]}>
+                                                   <Text style={[{},styles.modalBoldeText]}>{item.title}</Text>
+                                                   <Text style={[{},styles.modalNumberText]}>{item.num}</Text>
+                                                </View>
+                                                <Icon 
+                                                style={[{},styles.modalListContentRightIcon]}
+                                                name="angle-right" size={20} color="#aaa"/>
+                                            </View>
+                                        </TouchableHighlight>
+                                    )}
+                                />
+                            </ScrollView>
+
+                        </View>
+                    </View>
+
+                </Modal>
             </View>
         );
     }

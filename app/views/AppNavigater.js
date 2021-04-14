@@ -49,7 +49,7 @@ export default class AppNavigater extends React.Component {
   render() {
     return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="DiliveryAddress">
+        <Stack.Navigator initialRouteName="BuyCreateOrder">
           <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
 
