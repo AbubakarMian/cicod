@@ -18,6 +18,7 @@ export const Constants = {
   countrieslist:`${base_url}/countries`,
   lgaslist:`${base_url}/lgas`,
   dashboard:`${base_url}/dashboard`,
+  marchantDetail:`${auth_url}/sso/auth/merchant_details`,
   connectsentrequest:`${base_url}/value-chain/sent-requests`,
   connectreceivedrequest:`${base_url}/value-chain/recieved-requests`,
 };

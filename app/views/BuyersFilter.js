@@ -25,6 +25,7 @@ class BuyersFilter extends React.Component {
       approvedby_arr: [],
       category_name: '',
       spinner: false,
+      date: '',
       isDatePickerVisible: false,
       setDatePickerVisibility: false
     };
@@ -102,17 +103,15 @@ class BuyersFilter extends React.Component {
   }
 
   onCategoryText(text) {
-    let filters = 'Freezer'; //this.state.filters;
+    let filters = this.state.filters;
     filters.push({ key: 'category', value: text });
     this.setState({
       filters: filters
     })
   }
-  onCreatedByText(text) {
-    // console.log(' category text text ', text);
-    // return
-    let filters = 'Freezer'; //this.state.filters;
-    filters.push({ key: 'createdBy', value: text });
+  approvedByText(text) {
+    let filters = this.state.filters; //this.state.filters;
+    filters.push({ key: 'approvedBy', value: text });
     this.setState({
       filters: filters
     })
@@ -129,19 +128,26 @@ class BuyersFilter extends React.Component {
     this.props.navigation.navigate('Buyers', { filters: this.state.filters });
   }
 
-  datePickerFun() {
-
+  datePickerFun = () => {
     this.setState({
-      setDatePickerVisibility: !this.state.setDatePickerVisibility
+      isDatePickerVisible: !this.state.isDatePickerVisible
     })
   }
 
   setDate = (date) => {
-    console.log(' date !!!!!!!!!!!!! ', date);
-  }
-  hideDatePicker(){
+
+    let filters = this.state.filters;
+    filters.push({ key: 'create_time', value: date });
     this.setState({
-      setDatePickerVisibility: !this.state.setDatePickerVisibility
+      isDatePickerVisible: !this.state.isDatePickerVisible,
+      filters: filters
+    })
+
+  }
+  hideDatePicker = () => {
+    this.setState({
+      // setDatePickerVisibility: !this.state.setDatePickerVisibility,
+      isDatePickerVisible: !this.state.isDatePickerVisible
     })
   }
 
@@ -154,6 +160,13 @@ class BuyersFilter extends React.Component {
           textContent={'Please Wait...'}
           textStyle={{ color: '#fff' }}
           color={'#fff'}
+        />
+        <DateTimePickerModal
+          isVisible={this.state.isDatePickerVisible}
+          mode="date"
+          date={new Date()}
+          onConfirm={this.setDate}
+          onCancel={this.hideDatePicker}
         />
         <View style={[{}, styles.mainRow]}>
           {/* <Image
@@ -198,21 +211,21 @@ class BuyersFilter extends React.Component {
                 placeholder="Created By"
                 dropDownStyle={{ backgroundColor: '#000', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
                 labelStyle={{ color: '#A9A9A9' }}
-                onChangeItem={item => this.onCreatedByText(item.value)}
+                onChangeItem={item => this.approvedByText(item.value)}
               />}
           </View>
         </View>
         <View style={[{ flexDirection: 'row', width: width / 2 }]}>
           <View style={[{ flex: 1, paddingVertical: 10 }]}>
             <Text style={{ color: '#929497', fontWeight: 'bold' }}>Approved Date</Text>
-            <TouchableOpacity 
-            onPress={()=>this.datePickerFun}
+            <TouchableOpacity
+              onPress={() => this.datePickerFun()}
             >
               <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginRight: 10, padding: 10, marginVertical: 10 }}>
                 <Image
                   source={require('../images/calenderIcon.png')}
                 />
-                <Text style={{ marginLeft: 10, color: '#aaa' }}>DD-MM-YY</Text>
+                <Text style={{ marginLeft: 10, color: '#aaa' }}>{(this.state.date) ? this.state.date : 'DD-MM-YY'}</Text>
               </View>
               <View style={{ position: 'absolute', right: 20, bottom: 10 }}>
                 <Icon
@@ -223,44 +236,33 @@ class BuyersFilter extends React.Component {
                 />
               </View>
             </TouchableOpacity>
-            <DateTimePickerModal
-              isVisible={this.state.isDatePickerVisible}
-              mode="date"
-              onConfirm={this.setDate()}
-              onCancel={this.state.hideDatePicker()}
-            />
+
           </View>
         </View>
         <Text style={[{ color: '#929497', fontWeight: 'bold', fontSize: 20, marginVertical: 10 }]}>Status</Text>
         <View>
-          <ScrollView
-            horizontal={true}
-          >
-            <View style={[{ paddingRight: 20 }, styles.mainRow]}>
-              <View style={[{ marginRight: 10 }]}>
-                <TouchableOpacity>
-                  <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>ACTIVE</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={[{}]}>
-                <TouchableOpacity>
-                  <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>INACTIVE</Text>
-                </TouchableOpacity>
-              </View>
 
-
-
-
+          <View style={[{ paddingRight: 20 }, styles.mainRow]}>
+            <View style={[{ marginRight: 10 }]}>
+            <TouchableOpacity onPress={() => this.activeSet(1)}>
+                <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 10 }]}>ACTIVE</Text>
+              </TouchableOpacity>
             </View>
-          </ScrollView>
+            <View style={[{}]}>
+            <TouchableOpacity onPress={() => this.activeSet(0)}>
+                <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 10 }]}>INACTIVE</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
         </View>
 
         <TouchableOpacity
-          onPress={() => applyFilter()}
+          onPress={() => this.applyFilter()}
           style={{ width: width / 1.5, marginTop: 20, alignSelf: 'center', backgroundColor: '#B1272C', justifyContent: 'center', alignItems: 'center', paddingVertical: 15, borderRadius: 50 }}
         >
           <Text style={{ color: '#fff', fontWeight: 'bold' }}>Apply</Text>
         </TouchableOpacity>
+
       </View>
     )
   }

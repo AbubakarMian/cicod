@@ -48,7 +48,7 @@ class AddProduct extends React.Component {
             },
         };
         //+ '?is_active=1&search=' + this.state.search_product + '&category_id=' + this.state.category_id
-        fetch(Constants.productslist, postData)
+        fetch(Constants.productslist + '?is_active=1&search=' + this.state.search_product + '&category_id=' + this.state.category_id, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({
@@ -124,7 +124,7 @@ class AddProduct extends React.Component {
 
     addProduct() {
 
-        
+
         this.props.navigation.navigate('CreateOrder', { screen: 'active' });
 
     }

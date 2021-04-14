@@ -20,16 +20,17 @@ class Buyers extends React.Component {
         this.state = {
             toolTipVisible: false,
             spinner: false,
-            data: []
+            data: [],
+            search_buyers: ''
 
         }
     }
 
     componentDidMount() {
-        this.buyerList();
+        this.buyerList(Constants.buyerlist);
     }
 
-    buyerList() {
+    buyerList(url) {
 
         this.setState({ spinner: true })
         let postData = {
@@ -40,7 +41,7 @@ class Buyers extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
-        fetch(Constants.buyerlist, postData)
+        fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 console.log('responseJson @@@@@@@@###########', responseJson)
@@ -58,6 +59,30 @@ class Buyers extends React.Component {
                 }
             })
     }
+
+    componentWillReceiveProps() {
+        console.log('this.props.route', this.props.route.params.filters);
+        let filters = this.props.route.params.filters;
+        let filter = '?';
+        for (let i = 0; i < filters.length; i++) {
+            filter = filter + filters[i].key + '=' + filters[i].value;
+            if (i != filters.length - 1) {
+                filter = filter + '&';
+            }
+        }
+        console.log(' will receive props !!!!!!!!!!!!!', filter);
+        return
+        this.getData(Constants.productslist + filter);
+    }
+
+    search() {
+
+        let search_url = Constants.buyerlist + '?filter[buyer_name]=' + this.state.search_buyers;
+        this.buyerList(search_url);
+        console.log('search_url search_url', search_url);
+    }
+
+
     render() {
         console.log('data data !!!!!!!!!!!!', this.state.data);
         return (
@@ -86,6 +111,8 @@ class Buyers extends React.Component {
                         <View>
                             <TextInput
                                 placeholder="Search buyers"
+                                onChangeText={text => this.setState({ search_buyers: text })}
+                                onSubmitEditing={() => this.search()}
 
                             />
                         </View>

@@ -76,7 +76,7 @@ class Order extends React.Component {
                         <Text style={{ color: '#2F2E7C', fontWeight: 'bold' }}>ORDER</Text>
                     </View>
                     <View>
-                        <DropDownPicker
+                        {/* <DropDownPicker
                             items={[
                                 { label: 'USA', value: 'usa', hidden: true },
                                 { label: 'UK', value: 'uk', },
@@ -90,10 +90,10 @@ class Order extends React.Component {
                             }}
                             dropDownStyle={{ backgroundColor: '#fafafa' }}
                             onChangeItem={item => this.setState({
-                                country: item.value
+                                date: item.value
                             })}
                             style={{ width: width / 2 - 30, alignSelf: 'center', marginTop: 10, marginLeft: 10 }}
-                        />
+                        /> */}
                     </View>
                     <View style={{ position: 'absolute', right: 0 }}>
                         <TouchableOpacity
