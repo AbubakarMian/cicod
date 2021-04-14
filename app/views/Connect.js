@@ -1,10 +1,10 @@
 import React from 'react'
-import { View, ImageBackground, TouchableHighlight, Alert, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity, } from 'react-native'
+import { View, ImageBackground,ScrollView, TouchableHighlight, Alert, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity, } from 'react-native'
 import splashImg from '../images/splash.jpg'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import SearchBar from 'react-native-search-bar';
-import { ScrollView } from 'react-native-gesture-handler';
+
 import styles from '../css/ConnectCss';
 import { Container, Left, Body, Right, Button, Title, Segment, Content, } from 'native-base';
 import { Constants } from './Constant';
@@ -88,6 +88,9 @@ class Connect extends React.Component {
 
     connectView() {
         return (
+            // <View>
+
+            // </View>
             <View>
                 <View style={[{}, styles.contentView]}>
                     <Image
@@ -105,7 +108,7 @@ class Connect extends React.Component {
 
 
                 </View>
-                <View style={[{}, styles.deatilcontentView]}>
+                {/* <View style={[{}, styles.deatilcontentView]}>
                     <Icon
                         name="briefcase"
                         size={100}
@@ -113,7 +116,62 @@ class Connect extends React.Component {
                     />
                     <Text style={{ fontWeight: 'bold', color: '#929497' }}>No Merchant</Text>
                     <Text style={{ color: '#929497', fontSize: 12 }}>Search for a merchant</Text>
+                </View> */}
+                <ScrollView>
+                <View style={[{},styles.detailContentView]}>
+                    <Image source={require('../images/bage.png')}/>
+                    <Text style={[{},styles.customerNameText]}>Godswill</Text>
+                    <View>
+                        <View style={[{},styles.marchentRow]}>
+                            <View style={[{},styles.marchentlableView]}>
+                            <Text style={[{},styles.marchentlableText]}>Merchant ID</Text>
+                            </View>
+                            <View style={[{},styles.marchentInfoView]}>
+                            <Text style={[{},styles.marchentInfoText]}>234134</Text>
+                            </View>
+                        </View>
+                        <View style={[{},styles.marchentRow]}>
+                            <View style={[{},styles.marchentlableView]}>
+                            <Text style={[{},styles.marchentlableText]}>Business Sector</Text>
+                            </View>
+                            <View style={[{},styles.marchentInfoView]}>
+                            <Text style={[{},styles.marchentInfoText]}>Manufacturing</Text>
+                            </View>
+                        </View>
+                        <View style={[{},styles.marchentRow]}>
+                            <View style={[{},styles.marchentlableView]}>
+                            <Text style={[{},styles.marchentlableText]}>Business Type</Text>
+                            </View>
+                            <View style={[{},styles.marchentInfoView]}>
+                            <Text style={[{},styles.marchentInfoText]}>Food Production</Text>
+                            </View>
+                        </View>
+                        <View style={[{},styles.marchentRow]}>
+                            <View style={[{},styles.marchentlableView]}>
+                            <Text style={[{},styles.marchentlableText]}>Area</Text>
+                            </View>
+                            <View style={[{},styles.marchentInfoView]}>
+                            <Text style={[{},styles.marchentInfoText]}>Eti-Osa</Text>
+                            </View>
+                        </View>
+                        <View style={[{},styles.marchentRow]}>
+                            <View style={[{},styles.marchentlableView]}>
+                            <Text style={[{},styles.marchentlableText]}>Date Joined</Text>
+                            </View>
+                            <View style={[{},styles.marchentInfoView]}>
+                            <Text style={[{},styles.marchentInfoText]}>November 18, 2020, 11:34 am</Text>
+                            </View>
+                        </View>
+                        <TouchableOpacity
+                style={[{},styles.connectBtn]}
+                >
+                    <Text style={{color:'#fff'}}>Connect</Text>
+                </TouchableOpacity>
+                    </View>
                 </View>
+                
+
+                </ScrollView>
             </View>
         );
     }
@@ -250,6 +308,7 @@ class Connect extends React.Component {
 
     render() {
         return (
+
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation}/>
                 <Spinner
@@ -258,6 +317,7 @@ class Connect extends React.Component {
                     textStyle={{ color: '#fff' }}
                     color={'#fff'}
                 />
+                <ScrollView>
                 <View style={[{}, styles.mainRow]}>
                     <TouchableOpacity
                     onPress={()=>this.props.navigation.navigate('Home')}
@@ -288,6 +348,7 @@ class Connect extends React.Component {
                 </View>
 
                 <this.tabView />
+                </ScrollView>
             </View>
         )
     }
