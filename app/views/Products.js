@@ -90,7 +90,7 @@ class Products extends React.Component {
                         data: responseJson.data
                     })
 
-                    this.props.navigation.navigate('DrawerNavigation')
+                    // this.props.navigation.navigate('DrawerNavigation')
                 } else {
                     let message = responseJson.message;
                     Alert.alert('Error', message)
@@ -164,10 +164,10 @@ class Products extends React.Component {
                             containerStyle={{ height: 50, width: width - 20, marginTop: 5, alignSelf: 'center' }}
                             style={{ backgroundColor: '#fff' }}
                             itemStyle={{
-                                justifyContent: 'flex-start', zIndex: 0.99
+                                justifyContent: 'flex-start', zIndex: 0.999
                             }}
                             placeholder="Product Category"
-                            dropDownStyle={{ backgroundColor: '#000', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                            dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
                             labelStyle={{ color: '#A9A9A9' }}
                         // onChangeItem={item => this.onCategoryText(item.value)}
                         />

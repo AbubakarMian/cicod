@@ -198,7 +198,7 @@ class CreateProduct extends React.Component {
                                                 justifyContent: 'flex-start', zIndex: 0.99
                                             }}
                                             placeholder="Catagory"
-                                            dropDownStyle={{ backgroundColor: '#000', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                                            dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
                                             labelStyle={{ color: '#A9A9A9' }}
                                             onChangeItem={item => this.onCategoryText(item.value)}
                                         />}
