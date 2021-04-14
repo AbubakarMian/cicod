@@ -17,7 +17,12 @@ class User extends React.Component {
         super(props);
         this.state = {
             isChecked: false,
-            spinner: false
+            spinner: false,
+            first_name: '',
+            last_name: '',
+            email: '',
+            phone: '',
+            role: '',
         }
     }
     ressetPassword() {
@@ -28,7 +33,6 @@ class User extends React.Component {
 
 
     componentDidMount() {
-        // marchantDetail
         this.getUserDetail();
     }
 
@@ -49,10 +53,14 @@ class User extends React.Component {
                 this.setState({
                     spinner: false,
                 });
-                if (responseJson.success === true) {
-                    // this.setState({
-                    //     data: responseJson.data
-                    // })
+                if (responseJson.status === 'SUCCESS') {
+                    let merchant_contact = responseJson.merchant
+                    this.setState({
+                        email: merchant_contact.email,
+                        first_name: merchant_contact.contactPerson,
+                        phone: merchant_contact.phone,
+                        role: merchant_contact.customerCategory,
+                    })
 
                 } else {
                     let message = responseJson.message;
@@ -60,6 +68,13 @@ class User extends React.Component {
                 }
             })
     }
+
+    logout_user(){
+
+        this.props.logoutUser();
+         this.props.navigation.navigate('Login');
+    }
+
     render() {
         return (
             <View style={[{}, styles.mainView]}>
@@ -78,15 +93,15 @@ class User extends React.Component {
                     <View>
                         <View style={[{}, styles.contentContainer]}>
                             <Text style={[{}, styles.userInfoLable]}>First Name</Text>
-                            <Text style={[{}, styles.userInfo]}>Johnson</Text>
+                            <Text style={[{}, styles.userInfo]}>{this.state.first_name}</Text>
                             <Text style={[{}, styles.userInfoLable]}>Last Name</Text>
-                            <Text style={[{}, styles.userInfo]}>Gilbert</Text>
+                            <Text style={[{}, styles.userInfo]}>{this.state.last_name ?? this.state.first_name}</Text>
                             <Text style={[{}, styles.userInfoLable]}>Email</Text>
-                            <Text style={[{}, styles.userInfo]}>Johnny.Gilbert@gmail.com</Text>
+                            <Text style={[{}, styles.userInfo]}>{this.state.email}</Text>
                             <Text style={[{}, styles.userInfoLable]}>Phone Number</Text>
-                            <Text style={[{}, styles.userInfo]}>08000111111</Text>
+                            <Text style={[{}, styles.userInfo]}>{this.state.phone}</Text>
                             <Text style={[{}, styles.userInfoLable]}>Role</Text>
-                            <Text style={[{}, styles.userInfo]}>SALES MANAGER</Text>
+                            <Text style={[{}, styles.userInfo]}>{this.state.role}</Text>
                             <TouchableOpacity
                                 onPress={() => this.props.navigation.navigate('ChangePassword')}
                                 style={[{}, styles.changePasswordView]}>
@@ -95,7 +110,9 @@ class User extends React.Component {
                             </TouchableOpacity>
                         </View>
 
-                        <TouchableOpacity style={[{}, styles.logoutView]}>
+                        <TouchableOpacity 
+                        onPress={()=> this.logout_user()}
+                        style={[{}, styles.logoutView]}>
                             <Icon name="sign-out" color={'#929497'} size={30} />
                             <Text style={[{}, styles.logoutText]}>Logout</Text>
                         </TouchableOpacity>
@@ -119,6 +136,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
+        logoutUser: () => dispatch({ type: LOGOUT_USER })
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(User)
