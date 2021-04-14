@@ -1,7 +1,8 @@
 import React from 'react'
 import { View, ImageBackground, Text, Modal, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback, TextInput } from 'react-native'
 import splashImg from '../images/splash.jpg'
-import styles from '../css/DashboardCss'
+// import styles from '../css/DashboardCss';
+import styles from '../css/OrderCss';
 import Header from '../views/Header';
 import CalendarPicker from 'react-native-calendar-picker';
 import { connect } from 'react-redux';
@@ -69,7 +70,7 @@ class Order extends React.Component {
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
-            <View style={{ height: height, width: width, position: 'relative', backgroundColor: '##F0F0F0', }}>
+            <View style={{width: width, position: 'relative', backgroundColor: '##F0F0F0', }}>
                 <Header navigation={this.props.navigation}/>
                 <View style={{ flexDirection: 'row', alignContent: 'center', alignItems: 'center', width: width - 20, alignSelf: 'center' }}>
                     <View>
