@@ -21,9 +21,9 @@ class Order extends React.Component {
         };
         this.onDateChange = this.onDateChange.bind(this);
     }
-    componentDidMount() {
-        this.orderList();
-    }
+    // componentDidMount() {
+    //     this.orderList();
+    // }
 
     orderList() {
         this.setState({ Spinner: true })
@@ -129,11 +129,13 @@ class Order extends React.Component {
                     horizontal={true}
                     paddingHorizontal={10}
                     marginBottom={10}
+                    height={50}
                     scrollEnabled={true}
                 >
-                    <View style={{ width: width - 20, flexDirection: 'row' }}>
-                        <TouchableOpacity >
-                            <Text style={{ marginRight: 5,paddingHorizontal:10, backgroundColor: '#E6E6E6', paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff' }}>All</Text>
+                    <View style={{ width: width - 20, flexDirection: 'row',marginVertical:10 }}>
+                        
+                    <TouchableOpacity >
+                            <Text style={{ fontWeight:'bold', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>ALL</Text>
                         </TouchableOpacity>
                         <TouchableOpacity >
                             <Text style={{ color: '#909090', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PENDING</Text>
