@@ -127,6 +127,49 @@ export default StyleSheet.create({
         borderBottomWidth:1,
         backgroundColor:'#fff',
         flexDirection:'row',
+    },
+    detailContentView:{
+        backgroundColor:'#fff',
+        width:width-20,
+        alignSelf:'center',
+        marginTop:5,
+        paddingVertical:20,
+        alignItems:'center',
+        flexDirection:'column',
+    },
+    customerNameText:{
+        color:'#4E4D4D',
+        fontWeight:'bold',
+    },
+    marchentRow:{
+        flexDirection:'row',
+        width:width-20,
+        paddingHorizontal:10,
+        paddingVertical:5,
+    },
+    marchentlableView:{
+        flex:1
+    },
+    marchentlableText:{
+        color:'#929497',
+    },
+    marchentInfoView:{
+        flex:1,
+        alignItems:'flex-end'
+    },
+    marchentInfoText:{
+        color:'#4E4D4D',
+        fontWeight:'bold'
+    },
+    connectBtn:{
+        backgroundColor:'#B1272C',
+        marginVertical:15,
+        justifyContent:'center',
+        alignItems:'center',
+        alignSelf:'center',
+        width:width/1.5,
+        paddingVertical:10,
+        borderRadius:100
     }
 
 })
