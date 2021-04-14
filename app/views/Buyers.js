@@ -4,6 +4,7 @@ import splashImg from '../images/splash.jpg'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import { connect } from 'react-redux';
+import { MenuProvider } from 'react-native-popup-menu';
 import { SET_USER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART } from '../redux/constants/index';
 import SearchBar from 'react-native-search-bar';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -133,7 +134,7 @@ class Buyers extends React.Component {
                     marginTop={10}
                 >
                     <FlatList
-                        data={this.state.data}
+                        // data={this.state.data}
                         ItemSeparatorComponent={
                             Platform.OS !== 'android' &&
                             (({ highlighted }) => (
@@ -165,11 +166,20 @@ class Buyers extends React.Component {
 
                                             <View style={[{}, styles.cardActionView]}>
                                                 <TouchableOpacity
-                                                    onPress={() => this.setState({ toolTipVisible: true })}
+                                                    // onPress={() => this.setState({ toolTipVisible: true })}
                                                     style={[{}, styles.cardActionTouch]}
                                                 >
                                                     <Icon name="ellipsis-h" color={'#929497'} size={20} />
-
+                                                    <Menu>
+                                                        <MenuTrigger text='Select action' />
+                                                        <MenuOptions>
+                                                            <MenuOption onSelect={() => alert(`Save`)} text='Save' />
+                                                            <MenuOption onSelect={() => alert(`Delete`)} >
+                                                                <Text style={{ color: 'red' }}>Delete</Text>
+                                                            </MenuOption>
+                                                            <MenuOption onSelect={() => alert(`Not called`)} disabled={true} text='Disabled' />
+                                                        </MenuOptions>
+                                                    </Menu>
                                                 </TouchableOpacity>
                                                 {(item.is_active == 1) ?
                                                     <Text style={[{}, styles.statusText]}>Active</Text>
