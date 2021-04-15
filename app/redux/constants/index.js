@@ -1,6 +1,8 @@
 export const SET_USER = 'SET_USER'
+export const SET_DISCOUNT = 'SET_DISCOUNT'
 export const SET_CUSTOMER = 'SET_CUSTOMER'
 export const LOGOUT_USER = 'LOGOUT_USER'
+export const SET_NOTES = 'SET_NOTES'
 export const ADD_TO_PRODUCT = 'ADD_TO_PRODUCT'
 export const REMOVE_FROM_CART = 'REMOVE_FROM_CART'
 export const REMOVE_PRODUCT_FORM_CART = 'REMOVE_PRODUCT_FORM_CART'
