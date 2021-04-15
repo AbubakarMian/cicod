@@ -13,30 +13,30 @@ export default class ApplyDiscount extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            value3Index: 0,
             value: 0,
-            isChecked: false
+            isChecked: false,
+            discount_percent: '',
+            discount_amount: '',
         }
     }
     render() {
+
         var radio_props_per = [
-            { label: 'Percentage', value: 0 },
-    
+            { label: 'Percentage', value: 1 },
+            { label: 'Value', value: 0 },
 
         ];
-        var radio_props_val = [
-            { label: 'Percentage', value: 0 },
-    
 
-        ];
-   
+
 
         return (
             <View style={[{}, styles.mainView]}>
-                <Header navigation={this.props.navigation}/>
+                <Header navigation={this.props.navigation} />
                 <View style={[{}, styles.backHeaderRowView]}>
                     <TouchableOpacity
-                    onPress={()=>this.props.navigation.navigate('Sell')}
-                    
+                        onPress={() => this.props.navigation.navigate('Sell')}
+
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
@@ -47,7 +47,56 @@ export default class ApplyDiscount extends React.Component {
 
                 <View style={[{}, styles.mainContentView]}>
                     <View style={[{}, styles.formRow]}>
-                        <View style={[{}, styles.radioButtonView]}>
+
+                        <RadioForm
+                            formHorizontal={true}
+                            animation={true}
+
+                            onPress={(index) => this.setState({ value3Index: index })}
+                        >
+
+                            {
+                                radio_props_per.map((obj, i) => (
+                                    <RadioButton labelHorizontal={true} key={i}
+                                        style={{justifyContent:'center',alignItems:'center', backgroundColor: this.state.value3Index === i ? '#F6EBEB' : '#fff' }}
+
+                                    >
+
+                                        <RadioButtonInput
+                                            obj={obj}
+                                            index={i}
+                                            isSelected={this.state.value3Index === i}
+                                            onPress={(index) => this.setState({ value3Index: index })}
+                                            //   onPress={()=>console.log('button input')}
+                                            borderWidth={2}
+                                            buttonInnerColor={'#e74c3c'}
+                                            buttonOuterColor={this.state.value3Index === i ? '#2196f3' : '#000'}
+                                            buttonSize={7}
+                                            buttonOuterSize={20}
+                                            buttonStyle={{}}
+                                            buttonWrapStyle={{ marginLeft: 10 }}
+                                        />
+                                        <RadioButtonLabel
+                                            obj={obj}
+                                            index={i}
+                                            labelHorizontal={true}
+                                            onPress={() => console.log('button RadioButtonLabel')}
+                                            labelStyle={{ fontSize: 20, color: '#000',paddingVertical:10 }}
+                                            labelWrapStyle={{ marginRight:10 }}
+                                        />
+                                    </RadioButton>
+                                ))
+                            }
+                        </RadioForm>
+
+
+
+
+
+
+
+
+                        {/* <View style={[{}, styles.radioButtonView]}>
                             <RadioForm
                                 isSelected={false}
                                 color={'#000'}
@@ -73,21 +122,21 @@ export default class ApplyDiscount extends React.Component {
                                 onPress={(value) => { this.setState({ value: value }) }}
                             />
 
-                        </View>
+                        </View> */}
 
                     </View>
                     <View>
-                        
+
                         <TextInput
-                        placeholder="Discount"
+                            placeholder="Discount"
                         />
                     </View>
                 </View>
                 <TouchableOpacity
-                onPress={()=>this.props.navigation.navigate('Sell')}
-                style={[{},styles.btnView]}
+                    onPress={() => this.props.navigation.navigate('Sell')}
+                    style={[{}, styles.btnView]}
                 >
-                    <Text style={{color:'#fff'}}>Apply</Text>
+                    <Text style={{ color: '#fff' }}>Apply</Text>
                 </TouchableOpacity>
 
             </View>

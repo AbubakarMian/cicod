@@ -22,9 +22,9 @@ class Order extends React.Component {
         };
         this.onDateChange = this.onDateChange.bind(this);
     }
-    // componentDidMount() {
-    //     this.orderList();
-    // }
+    componentDidMount() {
+        this.orderList();
+    }
 
     orderList() {
         this.setState({ Spinner: true })
