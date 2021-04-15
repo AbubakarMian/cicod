@@ -178,7 +178,7 @@ export default class DiliveryAddress extends React.Component {
                             </TouchableOpacity>
                      </View>
                         <TouchableOpacity
-                            // onPress={() => this.props.navigation.navigate('AddProduct')}
+                            onPress={() => this.props.navigation.navigate('AddDiliveryAddress')}
                         >
                             <View style={[{}, styles.customerContaineraddProductView]}>
 
