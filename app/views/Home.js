@@ -43,7 +43,7 @@ class Home extends React.Component {
               </View>
               </TouchableOpacity>
               <TouchableOpacity
-              onPress={()=>this.props.navigation.navigate('Sell')}
+              onPress={()=>this.props.navigation.navigate('CreateOrder')}
               >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 20,
@@ -108,7 +108,7 @@ class Home extends React.Component {
               </View>
               </TouchableOpacity>
               <TouchableOpacity
-              onPress={()=>this.props.navigation.navigate('BuyCreateOrder')}
+              onPress={()=>this.props.navigation.navigate('CreateOrder')}
               >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: height / 4,
