@@ -324,7 +324,7 @@ class CreateOrder extends React.Component {
                         </View>
                         <View style={[{}, styles.diliveryTypeContainerView]}>
                             <TouchableOpacity
-                                onPress={() => this.props.navigation.navigate('')}
+                                onPress={() => this.props.navigation.navigate('DiliveryAddress')}
                             >
                                 <View style={[{}, styles.radioFormView]}>
                                     {/* <RadioForm
@@ -382,7 +382,10 @@ class CreateOrder extends React.Component {
 
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => this.props.navigation.navigate('PickUpLocation')}
+                            
+                            >
                                 <View style={[{}, styles.radioFormView]}>
                                     {/* <RadioForm
                                         isSelected={false}
