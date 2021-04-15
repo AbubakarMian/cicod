@@ -46,6 +46,8 @@ export default class ProductCategory extends React.Component {
                         placeholder="Search a category"
                     />
                     <TouchableOpacity
+                        onPress={()=>this.props.navigation.navigate('Filter')}
+                    
                         style={[{}, styles.settingTouch]}
                     >
                         <Image source={require('../images/Order/settingicon.png')} />
