@@ -181,41 +181,44 @@ class BuyersFilter extends React.Component {
           </TouchableOpacity>
           <Text style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20, top: 20 }]}>Clear Filter</Text>
         </View>
+       
+       
         <View style={{ width: width - 20, backgroundColor: '#fff', paddingVertical: 10, marginTop: 20 }}>
-          <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 5, flexDirection: 'row', position: 'relative' }}>
-
-            {this.state.categoryarr.length < 1 ? null :
+        {this.state.categoryarr.length < 1 ? null :
+        
+          //     dropDownStyle={{ backgroundColor: '#fafafa' }}
+          //     onChangeItem={item => this.setState({
+          //         date: item.value
+          //     })}
+          //     style={{ width: width / 2 - 30, alignSelf: 'center', marginTop: 10, marginLeft: 10 }}
+          // />
               <DropDownPicker
                 items={this.state.categoryarr}
-                containerStyle={{ height: 50, width: width - 35, marginTop: 15 }}
+                containerStyle={{ height: 50}}
                 style={{ backgroundColor: '#fff' }}
                 itemStyle={{
-                  justifyContent: 'flex-start', zIndex: 0.99
+                  justifyContent: 'flex-start',
                 }}
                 placeholder="Catagory"
-                dropDownStyle={{ backgroundColor: '#000', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                dropDownStyle={{ backgroundColor: '#fff',maxHeight:50}}
                 labelStyle={{ color: '#A9A9A9' }}
                 onChangeItem={item => this.onCategoryText(item.value)}
               />}
-          </View>
-          <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 5, flexDirection: 'row', position: 'relative' }}>
-
-            {this.state.approvedby_arr.length < 1 ? null :
+           {this.state.approvedby_arr.length < 1 ? null :
               <DropDownPicker
                 items={this.state.approvedby_arr}
-                containerStyle={{ height: 50, width: width - 35, marginTop: 15 }}
+                containerStyle={{ height: 50}}
                 style={{ backgroundColor: '#fff' }}
                 itemStyle={{
-                  justifyContent: 'flex-start', zIndex: 0.99
+                  justifyContent: 'flex-start',
                 }}
-                placeholder="Created By"
-                dropDownStyle={{ backgroundColor: '#000', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                placeholder="Catagory"
+                dropDownStyle={{ backgroundColor: '#fff'}}
                 labelStyle={{ color: '#A9A9A9' }}
                 onChangeItem={item => this.approvedByText(item.value)}
-              />}
-          </View>
+              />}    
         </View>
-        <View style={[{ flexDirection: 'row', width: width / 2 }]}>
+        <View style={[{ flexDirection: 'row', width: width / 2,zIndex:-0.999 }]}>
           <View style={[{ flex: 1, paddingVertical: 10 }]}>
             <Text style={{ color: '#929497', fontWeight: 'bold' }}>Approved Date</Text>
             <TouchableOpacity
@@ -230,18 +233,15 @@ class BuyersFilter extends React.Component {
               <View style={{ position: 'absolute', right: 20, bottom: 10 }}>
                 <Icon
                   size={30}
-
                   name="caret-down"
                   color={'#707070'}
                 />
               </View>
             </TouchableOpacity>
-
           </View>
         </View>
         <Text style={[{ color: '#929497', fontWeight: 'bold', fontSize: 20, marginVertical: 10 }]}>Status</Text>
         <View>
-
           <View style={[{ paddingRight: 20 }, styles.mainRow]}>
             <View style={[{ marginRight: 10 }]}>
             <TouchableOpacity onPress={() => this.activeSet(1)}>
@@ -255,14 +255,12 @@ class BuyersFilter extends React.Component {
             </View>
           </View>
         </View>
-
         <TouchableOpacity
           onPress={() => this.applyFilter()}
           style={{ width: width / 1.5, marginTop: 20, alignSelf: 'center', backgroundColor: '#B1272C', justifyContent: 'center', alignItems: 'center', paddingVertical: 15, borderRadius: 50 }}
         >
           <Text style={{ color: '#fff', fontWeight: 'bold' }}>Apply</Text>
         </TouchableOpacity>
-
       </View>
     )
   }

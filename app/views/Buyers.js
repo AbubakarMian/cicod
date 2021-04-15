@@ -4,7 +4,13 @@ import splashImg from '../images/splash.jpg'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import { connect } from 'react-redux';
-import { MenuProvider } from 'react-native-popup-menu';
+import {
+    Menu,
+    MenuOptions,
+    MenuOption,
+    MenuTrigger,
+  } from 'react-native-popup-menu';
+  
 import { SET_USER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART } from '../redux/constants/index';
 import SearchBar from 'react-native-search-bar';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -44,7 +50,7 @@ class Buyers extends React.Component {
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log('responseJson @@@@@@@@###########', responseJson)
+                console.log('***************@@@@@@@@###########', responseJson)
                 this.setState({
                     spinner: false,
                 });
@@ -55,7 +61,7 @@ class Buyers extends React.Component {
 
                 } else {
                     let message = responseJson.message;
-                    Alert.alert('Error', message)
+                    // Alert.alert('Error', message)
                 }
             })
     }
@@ -134,7 +140,7 @@ class Buyers extends React.Component {
                     marginTop={10}
                 >
                     <FlatList
-                        // data={this.state.data}
+                        data={this.state.data}
                         ItemSeparatorComponent={
                             Platform.OS !== 'android' &&
                             (({ highlighted }) => (
@@ -170,7 +176,7 @@ class Buyers extends React.Component {
                                                     style={[{}, styles.cardActionTouch]}
                                                 >
                                                     <Icon name="ellipsis-h" color={'#929497'} size={20} />
-                                                    <Menu>
+                                                    {/* <Menu>
                                                         <MenuTrigger text='Select action' />
                                                         <MenuOptions>
                                                             <MenuOption onSelect={() => alert(`Save`)} text='Save' />
@@ -179,7 +185,7 @@ class Buyers extends React.Component {
                                                             </MenuOption>
                                                             <MenuOption onSelect={() => alert(`Not called`)} disabled={true} text='Disabled' />
                                                         </MenuOptions>
-                                                    </Menu>
+                                                    </Menu>  */}
                                                 </TouchableOpacity>
                                                 {(item.is_active == 1) ?
                                                     <Text style={[{}, styles.statusText]}>Active</Text>
