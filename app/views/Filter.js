@@ -105,13 +105,13 @@ export default class Filter extends React.Component {
           {this.state.categoryarr.length < 1 ? null :
             <DropDownPicker
               items={this.state.categoryarr}
-              containerStyle={{ height: 50, width: width - 25, marginTop: 15 }}
+              containerStyle={{ height: 50}}
               style={{ backgroundColor: '#fff' }}
               itemStyle={{
-                justifyContent: 'flex-start', zIndex: 0.99
+                justifyContent: 'flex-start',
               }}
               placeholder="Catagory"
-              dropDownStyle={{ backgroundColor: '#000', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+              dropDownStyle={{ backgroundColor: '#fff'}}
               labelStyle={{ color: '#A9A9A9' }}
               onChangeItem={item => this.onCategoryText(item.value)}
             />}
