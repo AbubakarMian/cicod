@@ -77,7 +77,7 @@ class Order extends React.Component {
                         <Text style={{ color: '#2F2E7C', fontWeight: 'bold' }}>ORDER</Text>
                     </View>
                     <View>
-                        {/* <DropDownPicker
+                        <DropDownPicker
                             items={[
                                 { label: 'USA', value: 'usa', hidden: true },
                                 { label: 'UK', value: 'uk', },
@@ -94,8 +94,11 @@ class Order extends React.Component {
                                 date: item.value
                             })}
                             style={{ width: width / 2 - 30, alignSelf: 'center', marginTop: 10, marginLeft: 10 }}
-                        /> */}
+                        />
                     </View>
+                    {/* style={{ width: width / 2 - 30, alignSelf: 'center', marginTop: 10, marginLeft: 10 }} 
+                    containerStyle={{ height: 50 }}
+                    */}
                     <View style={{ position: 'absolute', right: 0 }}>
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('CreateOrder')}
@@ -155,17 +158,6 @@ class Order extends React.Component {
                 <ScrollView>
                     <FlatList
                         data={this.state.data}
-                        // data={[
-                        //     { title: '10', key: 'item1', customer: 'James ', brand: 'Pure  ', date: '2017-01-30 ' },
-                        //     { title: '10', key: 'item2', customer: 'James ', brand: 'Pure  ', date: '2017-01-30 ' },
-                        //     { title: '10', key: 'item3', customer: 'James ', brand: 'Pure  ', date: '2017-01-30 ' },
-                        //     { title: '10', key: 'item4', customer: 'James ', brand: 'Pure  ', date: '2017-01-30 ' },
-                        //     { title: '10', key: 'item5', customer: 'James ', brand: 'Pure  ', date: '2017-01-30 ' },
-                        //     { title: '10', key: 'item6', customer: 'James ', brand: 'Pure  ', date: '2017-01-30 ' },
-                        //     { title: '10', key: 'item7', customer: 'James ', brand: 'Pure  ', date: '2017-01-30 ' },
-
-
-                        // ]}
                         ItemSeparatorComponent={
                             Platform.OS !== 'android' &&
                             (({ highlighted }) => (

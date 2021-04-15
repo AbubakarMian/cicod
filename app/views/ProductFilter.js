@@ -167,6 +167,7 @@ class ProductFilter extends React.Component {
     console.log('this.state.filters', this.state.filters);
     this.props.navigation.navigate('Products', { filters: this.state.filters });
   }
+  
   render() {
     console.log('createdby_arr createdby_arr', this.state.createdby_arr)
     return (
