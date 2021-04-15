@@ -1,7 +1,8 @@
 import React from 'react'
 import { View, ImageBackground, Text, Modal, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback, TextInput } from 'react-native'
 import splashImg from '../images/splash.jpg'
-import styles from '../css/DashboardCss'
+// import styles from '../css/DashboardCss';
+import styles from '../css/OrderCss';
 import Header from '../views/Header';
 import CalendarPicker from 'react-native-calendar-picker';
 import { connect } from 'react-redux';
@@ -21,9 +22,9 @@ class Order extends React.Component {
         };
         this.onDateChange = this.onDateChange.bind(this);
     }
-    componentDidMount() {
-        this.orderList();
-    }
+    // componentDidMount() {
+    //     this.orderList();
+    // }
 
     orderList() {
         this.setState({ Spinner: true })
@@ -69,7 +70,7 @@ class Order extends React.Component {
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
-            <View style={{ height: height, width: width, position: 'relative', backgroundColor: '##F0F0F0', }}>
+            <View style={{width: width, position: 'relative', backgroundColor: '##F0F0F0', }}>
                 <Header navigation={this.props.navigation}/>
                 <View style={{ flexDirection: 'row', alignContent: 'center', alignItems: 'center', width: width - 20, alignSelf: 'center' }}>
                     <View>
@@ -132,11 +133,13 @@ class Order extends React.Component {
                     horizontal={true}
                     paddingHorizontal={10}
                     marginBottom={10}
+                    height={50}
                     scrollEnabled={true}
                 >
-                    <View style={{ width: width - 20, flexDirection: 'row' }}>
-                        <TouchableOpacity >
-                            <Text style={{ marginRight: 5,paddingHorizontal:10, backgroundColor: '#E6E6E6', paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff' }}>All</Text>
+                    <View style={{ width: width - 20, flexDirection: 'row',marginVertical:10 }}>
+                        
+                    <TouchableOpacity >
+                            <Text style={{ fontWeight:'bold', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>ALL</Text>
                         </TouchableOpacity>
                         <TouchableOpacity >
                             <Text style={{ color: '#909090', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PENDING</Text>

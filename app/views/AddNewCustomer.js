@@ -316,7 +316,9 @@ class AddNewCustomer extends React.Component {
                     color={'#fff'}
                 />
                 <View style={[{}, styles.backRowView]}>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                    onPress={()=>this.props.navigation.navigate('Customer')}
+                    >
                         <Icon name="arrow-left" size={25} color={'#929497'} />
                     </TouchableOpacity>
                     <View style={[{}, styles.backRowHeadingView]}>
@@ -379,8 +381,8 @@ class AddNewCustomer extends React.Component {
                                                 justifyContent: 'flex-start', zIndex: 0.99
                                             }}
                                             placeholder="Country *"
-                                            dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, height: 100 }}
-                                            labelStyle={{ color: '#A9A9A9' }}
+                                            dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20,paddingBottom:20 }}
+                                            labelStyle={{ color: '#A9A9A9', height:30 }}
                                             onChangeItem={item => this.onSelectCountry(item.value)}
                                         />}
                                 </View>
@@ -418,7 +420,7 @@ class AddNewCustomer extends React.Component {
                                                 justifyContent: 'flex-start', zIndex: 0.99
                                             }}
                                             placeholder="LGA *"
-                                            dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                                            dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 ,height:height/5}}
                                             labelStyle={{ color: '#A9A9A9' }}
                                             onChangeItem={item => this.onSelectLgas(item.value)}
                                         />}
