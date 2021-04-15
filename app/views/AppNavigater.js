@@ -13,7 +13,7 @@ import ProductFilter from './ProductFilter';
 import Order from './Order';
 import OrderDetail from './OrderDetail';
 import OrderFilter from './OrderFilter';
-import CreateOrder from './CreateOrder';
+// import CreateOrder from './CreateOrder';
 import MakePayment from './MakePayment';
 import Customer from './Customer';
 import AddCustomer from './AddCustomer';
@@ -64,7 +64,7 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="Order" component={Order} options={{ headerShown: false }} />
           <Stack.Screen name="OrderDetail" component={OrderDetail} options={{ headerShown: false }} />
           <Stack.Screen name="OrderFilter" component={OrderFilter} options={{ headerShown: false }} />
-          <Stack.Screen name="CreateOrder" component={CreateOrder} options={{ headerShown: false }} />
+          {/* <Stack.Screen name="CreateOrder" component={CreateOrder} options={{ headerShown: false }} /> */}
           <Stack.Screen name="MakePayment" component={MakePayment} options={{ headerShown: false }} />
 
           <Stack.Screen name="Customer" component={Customer} options={{ headerShown: false }} />
