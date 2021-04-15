@@ -42,7 +42,7 @@ class Login extends React.Component {
             //     lastname: "sandbox last", //responseJson.user.lastname,
             //     email: "cicodsandbox@yopmail.com",//responsejson.user.email,
             //     phone: "123314324",//responseJson.user.phone,
-            //     access_token: "Bearer h8wlGVsF2nRobWPl5H8e",  //+ responseJson.token
+            //     access_token: "Bearer jLQiAnAFP14bKjhP1hsC",  //+ responseJson.token
             // });
             // this.setState({ Spinner: false })
             // this.props.navigation.navigate('Home')
@@ -65,14 +65,14 @@ class Login extends React.Component {
             fetch(Constants.login, postData)
                 .then(response => response.json())
                 .then(async responseJson => {
-                    console.log(" response Json responseJson responseJson!!!!!!!!!!!",responseJson)
+                    console.log(" response Json responseJson responseJson!!!!!!!!!!!", responseJson)
                     if (responseJson.status === "SUCCESS") {
                         this.props.setUser({
                             firstname: responseJson.user.firstname,
                             lastname: responseJson.user.lastname,
                             email: responseJson.user.email,
                             phone: responseJson.user.phone,
-                            access_token:  'Bearer '+responseJson.token
+                            access_token: 'Bearer ' + responseJson.token
                         });
                         this.setState({ Spinner: false })
 

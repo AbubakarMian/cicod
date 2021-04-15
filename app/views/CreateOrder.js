@@ -8,7 +8,7 @@ import CheckBox from 'react-native-check-box';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Constants } from '../views/Constant';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER ,ADD_TO_PRODUCT, REMOVE_FROM_CART } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART } from '../redux/constants/index';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import SearchBar from 'react-native-search-bar';
 const { width, height } = Dimensions.get('window')
@@ -32,9 +32,9 @@ class CreateOrder extends React.Component {
         console.log(' componentWillReceiveProps CreateOrder', this.props);
 
         this.setState({
-            customer_name: this.props.customer.name ,
-            customer_email: this.props.customer.email ,
-            customer_phone: this.props.customer.phone ,
+            customer_name: this.props.customer.name,
+            customer_email: this.props.customer.email,
+            customer_phone: this.props.customer.phone,
         })
 
     }
@@ -172,7 +172,8 @@ class CreateOrder extends React.Component {
                     <View style={{ paddingBottom: 20 }}>
                         <View style={[{}, styles.backHeaderRowView]}>
                             <TouchableOpacity
-                                onPress={() => this.props.navigation.navigate('Order')}
+                                // onPress={() => this.props.navigation.navigate('Order')}
+                                onPress={() => this.props.navigation.goBack()}
 
                             >
                                 <Icon name="arrow-left" size={25} color="#929497" />
@@ -183,7 +184,8 @@ class CreateOrder extends React.Component {
                             <View style={[{}, styles.backHeadingCloseView]}>
                                 <Icon name="times" size={20} color="#929497" />
                                 <TouchableOpacity
-                                    onPress={() => this.props.navigation.navigate('Order')}
+                                    // onPress={() => this.props.navigation.navigate('Order')}
+                                    onPress={() => this.props.navigation.goBack()}
                                 >
                                     <Text style={[{}, styles.backHeadingCloseText]}>Close</Text>
                                 </TouchableOpacity>
@@ -322,7 +324,7 @@ class CreateOrder extends React.Component {
                         </View>
                         <View style={[{}, styles.diliveryTypeContainerView]}>
                             <TouchableOpacity
-                            onPress={()=>this.props.navigation.navigate('')}
+                                onPress={() => this.props.navigation.navigate('')}
                             >
                                 <View style={[{}, styles.radioFormView]}>
                                     {/* <RadioForm
