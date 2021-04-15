@@ -84,13 +84,13 @@ export default class Filter extends React.Component {
       <View style={[{}, styles.mainView]}>
         <Header navigation={this.props.navigation} />
         <View style={[{}, styles.mainRow]}>
-          {/* <Image
-          source={require('../images')}
-          /> */}
+       
           <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
             <TouchableOpacity
+            style={{flexDirection:'row',alignItems:'center'}}
               onPress={() => this.props.navigation.navigate('Product')}
-            >  <Icon name="arrow-left" size={25} color="#929497" />
+            >  
+              <Icon name="arrow-left" size={25} color="#929497" />
               <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>FILTER</Text>
 
 
@@ -99,18 +99,7 @@ export default class Filter extends React.Component {
           </View>
           <Text style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20 }]}>Clear Filter</Text>
         </View>
-        {/* <View> */}
-        {/* <SearchBar
-            ref="searchBar"
-            placeholder="Product Category"
-            barTintColor={'#fff'}
-            backgroundColor={'#fff'}
-            tintColor={'#fff'}
-            
-          // onChangeText={...}
-          // onSearchButtonPress={...}
-          // onCancelButtonPress={...}
-          /> */}
+  
         <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 0, flexDirection: 'row', position: 'relative' }}>
 
           {this.state.categoryarr.length < 1 ? null :
@@ -129,7 +118,7 @@ export default class Filter extends React.Component {
 
         </View>
 
-        {/* </View> */}
+ 
         <View style={{ paddingVertical: 20 }}>
           <Text style={[{ color: '#929497', fontWeight: 'bold', fontSize: 18 }]}>Status</Text>
         </View>
@@ -147,14 +136,7 @@ export default class Filter extends React.Component {
             </View>
           </View>
         </View>
-        {/* <View style={[{ flexDirection: 'row' }]}>
-          <View style={[{ flex: 1 }]}>
-            <Text>Order Date</Text>
-          </View>
-          <View>
-            <Text>Order Date</Text>
-          </View>
-        </View> */}
+  
         <TouchableOpacity
           onPress={this.applyFilter}
           style={{ width: width / 1.5, alignSelf: 'center', backgroundColor: '#B1272C', justifyContent: 'center', alignItems: 'center', paddingVertical: 15, borderRadius: 50, marginTop: 30 }}
