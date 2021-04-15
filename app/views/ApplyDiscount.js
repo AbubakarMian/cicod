@@ -14,29 +14,30 @@ export default class ApplyDiscount extends React.Component {
         super(props);
         this.state = {
             value: 0,
-            isChecked: false
+            isChecked: false,
+            discount_percent: '',
+            discount_amount: '',
         }
     }
     render() {
         var radio_props_per = [
-            { label: 'Percentage', value: 0 },
-    
+            { label: 'Percentage', value: 1 },
 
         ];
         var radio_props_val = [
-            { label: 'Percentage', value: 0 },
-    
+            { label: 'Value', value: 1 },
+
 
         ];
-   
+
 
         return (
             <View style={[{}, styles.mainView]}>
-                <Header navigation={this.props.navigation}/>
+                <Header navigation={this.props.navigation} />
                 <View style={[{}, styles.backHeaderRowView]}>
                     <TouchableOpacity
-                    onPress={()=>this.props.navigation.navigate('Sell')}
-                    
+                        onPress={() => this.props.navigation.navigate('Sell')}
+
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
@@ -49,6 +50,7 @@ export default class ApplyDiscount extends React.Component {
                     <View style={[{}, styles.formRow]}>
                         <View style={[{}, styles.radioButtonView]}>
                             <RadioForm
+                                initial={0}
                                 isSelected={false}
                                 color={'#000'}
                                 buttonSize={7}
@@ -67,7 +69,7 @@ export default class ApplyDiscount extends React.Component {
                                 color={'#000'}
                                 buttonSize={7}
                                 buttonOuterSize={20}
-                                buttonColor={'#aaa'}
+                                buttonColor={'e74c3c'}
                                 radio_props={radio_props_val}
                                 // initial={0}
                                 onPress={(value) => { this.setState({ value: value }) }}
@@ -77,17 +79,17 @@ export default class ApplyDiscount extends React.Component {
 
                     </View>
                     <View>
-                        
+
                         <TextInput
-                        placeholder="Discount"
+                            placeholder="Discount"
                         />
                     </View>
                 </View>
                 <TouchableOpacity
-                onPress={()=>this.props.navigation.navigate('Sell')}
-                style={[{},styles.btnView]}
+                    onPress={() => this.props.navigation.navigate('Sell')}
+                    style={[{}, styles.btnView]}
                 >
-                    <Text style={{color:'#fff'}}>Apply</Text>
+                    <Text style={{ color: '#fff' }}>Apply</Text>
                 </TouchableOpacity>
 
             </View>

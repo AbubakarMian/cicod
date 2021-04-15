@@ -78,7 +78,7 @@ class Filter extends React.Component {
       filters: filters
     })
   }
- 
+
   onCreatedByText(text) {
     let filters = 'Freezer'; //this.state.filters;
     filters.push({ key: 'createdBy', value: text });
@@ -102,17 +102,18 @@ class Filter extends React.Component {
   }
   applyFilter = () => {
     console.log('this.state.filters', this.state.filters);
-    this.props.navigation.navigate('Products', { filters: this.state.filters });
+
+    this.props.navigation.navigate('Order', { filters: this.state.filters });
   }
 
-  datePickerFun = () => {
+  // datePickerFun = () => {
 
-    // let filters = this.state.filters;
-    // filters.push({ key: 'create_time', value: date });
-    this.setState({
-      isDatePickerVisible: !this.state.isDatePickerVisible
-    })
-  }
+  //   // let filters = this.state.filters;
+  //   // filters.push({ key: 'create_time', value: date });
+  //   this.setState({
+  //     isDatePickerVisible: !this.state.isDatePickerVisible
+  //   })
+  // }
 
   setDate(date = null, type = null) {
 
@@ -135,9 +136,9 @@ class Filter extends React.Component {
 
 
   }
-  hideDatePicker = () => {
+  hideDatePicker () {
+    console.log(' visibility !!!!!!!!!!!!!');
     this.setState({
-      // setDatePickerVisibility: !this.state.setDatePickerVisibility,
       isDatePickerVisible: !this.state.isDatePickerVisible
     })
   }
@@ -164,7 +165,7 @@ class Filter extends React.Component {
           mode="date"
           date={new Date()}
           onConfirm={(date) => this.setDate(date, this.state.type)}
-          onCancel={this.hideDatePicker}
+          // onCancel={()=>this.hideDatePicker()}
         />
         <View style={[{}, styles.mainRow]}>
           <View style={[{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }]}>

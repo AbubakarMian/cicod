@@ -24,7 +24,8 @@ class CreateOrder extends React.Component {
             customer_email: this.props.customer.email ?? '',
             customer_phone: this.props.customer.phone ?? '',
             cart_arr: this.props.cart.cart ?? [],
-            value3Index: 0
+            payment_option: 0,
+            delivery_type_btn: 0
         }
     }
 
@@ -174,7 +175,6 @@ class CreateOrder extends React.Component {
                             <TouchableOpacity
                                 // onPress={() => this.props.navigation.navigate('Order')}
                                 onPress={() => this.props.navigation.goBack()}
-
                             >
                                 <Icon name="arrow-left" size={25} color="#929497" />
                             </TouchableOpacity>
@@ -317,15 +317,11 @@ class CreateOrder extends React.Component {
                                     </View>
                                 )}
                             />
-
-
-
-
                         </View>
                         <View style={[{}, styles.diliveryTypeContainerView]}>
-                            <TouchableOpacity
+                            {/* <TouchableOpacity
                                 onPress={() => this.props.navigation.navigate('')}
-                            >
+                            > */}
                                 <View style={[{}, styles.radioFormView]}>
                                     {/* <RadioForm
                                         isSelected={false}
@@ -339,15 +335,14 @@ class CreateOrder extends React.Component {
                                         onPress={(value) => { this.setState({ value: value }) }}
                                     /> */}
                                     <RadioForm
-                                        isSelected={false}
+                                        isSelected={this.state.delivery_type_btn}
                                         color={'yellow'}
-                                        // radio_props={radio_props_payment}
                                         size={5}
                                         buttonColor={'green'}
                                         buttonSize={10}
                                         buttonOuterSize={20}
                                         initial={0}
-                                        onPress={(value) => { this.setState({ value3Index: value }) }}
+                                        onPress={(value) => { this.setState({ delivery_type_btn: value }) }}
                                     />
                                     {
                                         radio_props_dilvery.map((obj, i) => (
@@ -356,11 +351,11 @@ class CreateOrder extends React.Component {
                                                 <RadioButtonInput
                                                     obj={obj}
                                                     index={i}
-                                                    isSelected={this.state.value3Index === i}
-                                                    onPress={(value) => { this.setState({ value3Index: value }) }}
+                                                    isSelected={this.state.delivery_type_btn === i}
+                                                    onPress={(value) => { this.setState({ delivery_type_btn: value }) }}
                                                     borderWidth={1}
                                                     buttonInnerColor={'#e74c3c'}
-                                                    buttonOuterColor={this.state.value3Index === i ? '#2196f3' : '#000'}
+                                                    buttonOuterColor={this.state.delivery_type_btn === i ? '#e74c3c' : '#000'}
                                                     buttonSize={10}
                                                     buttonOuterSize={20}
                                                     buttonStyle={{}}
@@ -371,7 +366,7 @@ class CreateOrder extends React.Component {
                                                     obj={obj}
                                                     index={i}
                                                     labelHorizontal={true}
-                                                    onPress={(value) => { this.setState({ value3Index: value }) }}
+                                                    onPress={(value) => { this.setState({ delivery_type_btn: value }) }}
                                                     // labelStyle={{fontSize: 20, color: '#2ecc71'}}
                                                     labelWrapStyle={{}}
                                                 />
@@ -381,8 +376,8 @@ class CreateOrder extends React.Component {
                                     <Text style={[{}, styles.smailGrayText]}>Dilivery to customer address</Text>
 
                                 </View>
-                            </TouchableOpacity>
-                            <TouchableOpacity>
+                            {/* </TouchableOpacity> */}
+                            {/* <TouchableOpacity> */}
                                 <View style={[{}, styles.radioFormView]}>
                                     {/* <RadioForm
                                         isSelected={false}
@@ -402,7 +397,7 @@ class CreateOrder extends React.Component {
                                         buttonSize={10}
                                         buttonOuterSize={20}
                                         initial={0}
-                                        onPress={(value) => { this.setState({ value3Index: value }) }}
+                                        onPress={(value) => { this.setState({ delivery_type_btn: value }) }}
                                     />
                                     {
                                         radio_props_pickup.map((obj, i) => (
@@ -411,11 +406,11 @@ class CreateOrder extends React.Component {
                                                 <RadioButtonInput
                                                     obj={obj}
                                                     index={i}
-                                                    isSelected={this.state.value3Index === i}
-                                                    onPress={(value) => { this.setState({ value3Index: value }) }}
+                                                    isSelected={this.state.delivery_type_btn === i}
+                                                    onPress={(value) => { this.setState({ delivery_type_btn: value }) }}
                                                     borderWidth={1}
                                                     buttonInnerColor={'#e74c3c'}
-                                                    buttonOuterColor={this.state.value3Index === i ? '#2196f3' : '#000'}
+                                                    buttonOuterColor={this.state.delivery_type_btn === i ? '#e74c3c' : '#000'}
                                                     buttonSize={10}
                                                     buttonOuterSize={20}
                                                     buttonStyle={{}}
@@ -426,7 +421,7 @@ class CreateOrder extends React.Component {
                                                     obj={obj}
                                                     index={i}
                                                     labelHorizontal={true}
-                                                    onPress={(value) => { this.setState({ value3Index: value }) }}
+                                                    onPress={(value) => { this.setState({ delivery_type_btn: value }) }}
                                                     // labelStyle={{fontSize: 20, color: '#2ecc71'}}
                                                     labelWrapStyle={{}}
                                                 />
@@ -436,7 +431,7 @@ class CreateOrder extends React.Component {
                                     <Text style={[{}, styles.smailGrayText]}>Pickup from our location</Text>
 
                                 </View>
-                            </TouchableOpacity>
+                            {/* </TouchableOpacity> */}
                         </View>
                         <View style={[{}, styles.paymentContainerView]}>
                             <Text style={[{}, styles.paymentHeadingText]}>Payment Options</Text>
@@ -450,7 +445,7 @@ class CreateOrder extends React.Component {
                                     buttonSize={10}
                                     buttonOuterSize={20}
                                     initial={0}
-                                    onPress={(value) => { this.setState({ value3Index: value }) }}
+                                    onPress={(value) => { this.setState({ payment_option: value }) }}
                                 />
                                 {
                                     radio_props_payment.map((obj, i) => (
@@ -459,11 +454,11 @@ class CreateOrder extends React.Component {
                                             <RadioButtonInput
                                                 obj={obj}
                                                 index={i}
-                                                isSelected={this.state.value3Index === i}
-                                                onPress={(value) => { this.setState({ value3Index: value }) }}
+                                                isSelected={this.state.payment_option === i}
+                                                onPress={(value) => { this.setState({ payment_option: value }) }}
                                                 borderWidth={1}
                                                 buttonInnerColor={'#e74c3c'}
-                                                buttonOuterColor={this.state.value3Index === i ? '#2196f3' : '#000'}
+                                                buttonOuterColor={this.state.payment_option === i ? '#e74c3c' : '#000'}
                                                 buttonSize={10}
                                                 buttonOuterSize={20}
                                                 buttonStyle={{}}
@@ -474,7 +469,7 @@ class CreateOrder extends React.Component {
                                                 obj={obj}
                                                 index={i}
                                                 labelHorizontal={true}
-                                                onPress={(value) => { this.setState({ value3Index: value }) }}
+                                                onPress={(value) => { this.setState({ payment_option: value }) }}
                                                 // labelStyle={{fontSize: 20, color: '#2ecc71'}}
                                                 labelWrapStyle={{}}
                                             />
@@ -505,7 +500,9 @@ class CreateOrder extends React.Component {
                                 <Text style={[{}, styles.subTotleColumn1Text]}>subtotal:</Text>
                                 <Text style={[{}, styles.subTotleColumn1Text]}>Tax(7.5%)</Text>
                                 <Text style={[{}, styles.subTotleColumn1Text]}>TOTAL:</Text>
-                                <TouchableOpacity>
+                                <TouchableOpacity
+                                
+                                onPress={()=> this.props.navigation.navigate('ApplyDiscount') }>
                                     <View style={{ flexDirection: 'row' }}>
                                         <Icon name="times-circle" size={20} color="#B1272C" />
                                         <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Apply for Discount</Text>

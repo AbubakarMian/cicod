@@ -21,6 +21,8 @@ export const Constants = {
   marchantDetail:`${auth_url}/sso/auth/merchant_details`,
   connectsentrequest:`${base_url}/value-chain/sent-requests`,
   connectreceivedrequest:`${base_url}/value-chain/recieved-requests`,
+  searchMerchant:`${base_url}/value-chain/search-merchant`,
+  connectRequest:`${base_url}/value-chain/request`,
 };
 
 
