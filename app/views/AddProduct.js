@@ -48,7 +48,7 @@ class AddProduct extends React.Component {
             },
         };
         //+ '?is_active=1&search=' + this.state.search_product + '&category_id=' + this.state.category_id
-        fetch(Constants.productslist + '?is_active=1&search=' + this.state.search_product + '&category_id=' + this.state.category_id, postData)
+        fetch(Constants.productslist + '?is_active=1&search=' + this.state.search_product , postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({
@@ -96,7 +96,6 @@ class AddProduct extends React.Component {
                 'Content-Type': 'application/json',
                 Authorization: this.props.user.access_token,
             },
-
         };
         fetch(Constants.productcategorylist, postData)
             .then(response => response.json())

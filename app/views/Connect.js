@@ -1,10 +1,8 @@
 import React from 'react'
-import { View, ImageBackground,ScrollView, TouchableHighlight, Alert, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity, } from 'react-native'
+import { View, ImageBackground, ScrollView, TouchableHighlight, Alert, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity, } from 'react-native'
 import splashImg from '../images/splash.jpg'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
-import SearchBar from 'react-native-search-bar';
-
 import styles from '../css/ConnectCss';
 import { Container, Left, Body, Right, Button, Title, Segment, Content, } from 'native-base';
 import { Constants } from './Constant';
@@ -21,7 +19,14 @@ class Connect extends React.Component {
             tabViewIndex: 1,
             received_arr: [],
             send_arr: [],
-            spinner: false
+            spinner: false,
+            search_text: '',
+            area: '',
+            business_sector: '',
+            business_type: '',
+            merchant_id: 0,
+            merchant_name: '',
+            date_joined: '',
         }
     }
     componentDidMount() {
@@ -42,16 +47,16 @@ class Connect extends React.Component {
         fetch(Constants.connectreceivedrequest, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log('response json received!!!!',responseJson);
+                console.log('response json received!!!!', responseJson);
                 this.setState({
                     spinner: false
                 });
                 if (responseJson.success === true) {
                     this.setState({
-                        received_arr:responseJson.data
+                        received_arr: responseJson.data
                     })
                 } else {
-                    let message =responseJson.message
+                    let message = responseJson.message
                     Alert.alert('Message', message)
                 }
             })
@@ -85,6 +90,78 @@ class Connect extends React.Component {
             })
     }
 
+    getMerchant() {
+        this.setState({ spinner: true })
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            },
+        };
+
+        console.log('url !!!!!!!!!!!!!!!!!!', Constants.searchMerchant + '?merchantId=' + this.state.search_text)
+        fetch(Constants.searchMerchant + '?merchantId=' + this.state.search_text, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                console.log('response json received!!!!', responseJson);
+                this.setState({
+                    spinner: false
+                });
+                if (responseJson.success === true) {
+                    let merchatnt_detail = responseJson.data
+                    this.setState({
+                        area: merchatnt_detail.area,
+                        business_sector: merchatnt_detail.business_sector,
+                        business_type: merchatnt_detail.business_type,
+                        merchant_id: merchatnt_detail.merchant_id,
+                        merchant_name: merchatnt_detail.merchant_name,
+                        date_joined: merchatnt_detail.date_joined,
+                    })
+                } else {
+                    let message = responseJson.message
+                    Alert.alert('Message', 'Merchant Not Found');
+                }
+            })
+
+    }
+
+    sendConnectRequest(id) {
+        //https://com.cicodsaasstaging.com/com/api/value-chain/request
+        this.setState({ spinner: true })
+        let postData = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': this.props.user.access_token,
+            },
+            body: JSON.stringify({
+                merchant_id: id,
+            })
+        };
+        fetch(Constants.connectRequest, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                console.log(" response Json responseJson responseJson!!!!!!!!!!!", responseJson)
+                this.setState({ spinner: false })
+
+                if (responseJson.success === "true") {
+                    let res = responseJson.data.message;
+                    Alert.alert('Message',res);
+                } else {
+                    let message = responseJson.data.message
+                    Alert.alert('Error', message)
+                }
+            }
+            )
+            .catch((error) => {
+                console.log("Api call error", error);
+                // Alert.alert(error.message);
+            });
+
+    }
 
     connectView() {
         return (
@@ -103,73 +180,80 @@ class Connect extends React.Component {
                         />
                         <TextInput
                             placeholder="Merchant Domain Name"
+                            onChangeText={text => this.setState({ search_text: text })}
+                            onSubmitEditing={() => this.getMerchant()}
                         />
                     </View>
 
 
                 </View>
-                {/* <View style={[{}, styles.deatilcontentView]}>
-                    <Icon
-                        name="briefcase"
-                        size={100}
-                        color={'#D8D8D8'}
-                    />
-                    <Text style={{ fontWeight: 'bold', color: '#929497' }}>No Merchant</Text>
-                    <Text style={{ color: '#929497', fontSize: 12 }}>Search for a merchant</Text>
-                </View> */}
+
                 <ScrollView>
-                <View style={[{},styles.detailContentView]}>
-                    <Image source={require('../images/bage.png')}/>
-                    <Text style={[{},styles.customerNameText]}>Godswill</Text>
-                    <View>
-                        <View style={[{},styles.marchentRow]}>
-                            <View style={[{},styles.marchentlableView]}>
-                            <Text style={[{},styles.marchentlableText]}>Merchant ID</Text>
-                            </View>
-                            <View style={[{},styles.marchentInfoView]}>
-                            <Text style={[{},styles.marchentInfoText]}>234134</Text>
+                    {(this.state.merchant_id == 0) ?
+
+                        <View style={[{}, styles.deatilcontentView]}>
+                            <Icon
+                                name="briefcase"
+                                size={100}
+                                color={'#D8D8D8'}
+                            />
+                            <Text style={{ fontWeight: 'bold', color: '#929497' }}>No Merchant</Text>
+                            <Text style={{ color: '#929497', fontSize: 12 }}>Search for a merchant</Text>
+                        </View>
+                        :
+                        <View style={[{}, styles.detailContentView]}>
+                            <Image source={require('../images/bage.png')} />
+                            <Text style={[{}, styles.customerNameText]}>{this.state.merchant_name}</Text>
+                            <View>
+                                <View style={[{}, styles.marchentRow]}>
+                                    <View style={[{}, styles.marchentlableView]}>
+                                        <Text style={[{}, styles.marchentlableText]}>Merchant ID</Text>
+                                    </View>
+                                    <View style={[{}, styles.marchentInfoView]}>
+                                        <Text style={[{}, styles.marchentInfoText]}>{this.state.merchant_id}</Text>
+                                    </View>
+                                </View>
+                                <View style={[{}, styles.marchentRow]}>
+                                    <View style={[{}, styles.marchentlableView]}>
+                                        <Text style={[{}, styles.marchentlableText]}>Business Sector</Text>
+                                    </View>
+                                    <View style={[{}, styles.marchentInfoView]}>
+                                        <Text style={[{}, styles.marchentInfoText]}>{this.state.business_sector}</Text>
+                                    </View>
+                                </View>
+                                <View style={[{}, styles.marchentRow]}>
+                                    <View style={[{}, styles.marchentlableView]}>
+                                        <Text style={[{}, styles.marchentlableText]}>Business Type</Text>
+                                    </View>
+                                    <View style={[{}, styles.marchentInfoView]}>
+                                        <Text style={[{}, styles.marchentInfoText]}>{this.state.business_type ?? ' - -'}</Text>
+                                    </View>
+                                </View>
+                                <View style={[{}, styles.marchentRow]}>
+                                    <View style={[{}, styles.marchentlableView]}>
+                                        <Text style={[{}, styles.marchentlableText]}>Area</Text>
+                                    </View>
+                                    <View style={[{}, styles.marchentInfoView]}>
+                                        <Text style={[{}, styles.marchentInfoText]}>{this.state.area ?? ' - -'}</Text>
+                                    </View>
+                                </View>
+                                <View style={[{}, styles.marchentRow]}>
+                                    <View style={[{}, styles.marchentlableView]}>
+                                        <Text style={[{}, styles.marchentlableText]}>Date Joined</Text>
+                                    </View>
+                                    <View style={[{}, styles.marchentInfoView]}>
+                                        <Text style={[{}, styles.marchentInfoText]}>{this.state.date_joined ?? ' - -'}</Text>
+                                    </View>
+                                </View>
+                                <TouchableOpacity
+                                    onPress={() => this.sendConnectRequest(this.state.merchant_id)}
+                                    style={[{}, styles.connectBtn]}
+                                >
+                                    <Text style={{ color: '#fff' }}>Connect</Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
-                        <View style={[{},styles.marchentRow]}>
-                            <View style={[{},styles.marchentlableView]}>
-                            <Text style={[{},styles.marchentlableText]}>Business Sector</Text>
-                            </View>
-                            <View style={[{},styles.marchentInfoView]}>
-                            <Text style={[{},styles.marchentInfoText]}>Manufacturing</Text>
-                            </View>
-                        </View>
-                        <View style={[{},styles.marchentRow]}>
-                            <View style={[{},styles.marchentlableView]}>
-                            <Text style={[{},styles.marchentlableText]}>Business Type</Text>
-                            </View>
-                            <View style={[{},styles.marchentInfoView]}>
-                            <Text style={[{},styles.marchentInfoText]}>Food Production</Text>
-                            </View>
-                        </View>
-                        <View style={[{},styles.marchentRow]}>
-                            <View style={[{},styles.marchentlableView]}>
-                            <Text style={[{},styles.marchentlableText]}>Area</Text>
-                            </View>
-                            <View style={[{},styles.marchentInfoView]}>
-                            <Text style={[{},styles.marchentInfoText]}>Eti-Osa</Text>
-                            </View>
-                        </View>
-                        <View style={[{},styles.marchentRow]}>
-                            <View style={[{},styles.marchentlableView]}>
-                            <Text style={[{},styles.marchentlableText]}>Date Joined</Text>
-                            </View>
-                            <View style={[{},styles.marchentInfoView]}>
-                            <Text style={[{},styles.marchentInfoText]}>November 18, 2020, 11:34 am</Text>
-                            </View>
-                        </View>
-                        <TouchableOpacity
-                style={[{},styles.connectBtn]}
-                >
-                    <Text style={{color:'#fff'}}>Connect</Text>
-                </TouchableOpacity>
-                    </View>
-                </View>
-                
+                    }
 
                 </ScrollView>
             </View>
@@ -205,7 +289,7 @@ class Connect extends React.Component {
                             renderItem={({ item, index, separators }) => (
                                 <TouchableHighlight
                                     key={item.key}
-                                    onPress={() => this._onPress(item)}
+                                    // onPress={() => this._onPress(item)}
                                     onShowUnderlay={separators.highlight}
                                     onHideUnderlay={separators.unhighlight}>
                                     <View style={[{}, styles.flatCardView]}>
@@ -261,7 +345,7 @@ class Connect extends React.Component {
                         renderItem={({ item, index, separators }) => (
                             <TouchableHighlight
                                 key={item.key}
-                                onPress={() => this._onPress(item)}
+                                // onPress={() => this._onPress(item)}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
                                 <View style={[{}, styles.flatCardView]}>
@@ -310,7 +394,7 @@ class Connect extends React.Component {
         return (
 
             <View style={[{}, styles.mainView]}>
-                <Header navigation={this.props.navigation}/>
+                <Header navigation={this.props.navigation} />
                 <Spinner
                     visible={this.state.spinner}
                     textContent={'Please Wait...'}
@@ -318,36 +402,36 @@ class Connect extends React.Component {
                     color={'#fff'}
                 />
                 <ScrollView>
-                <View style={[{}, styles.mainRow]}>
-                    <TouchableOpacity
-                    onPress={()=>this.props.navigation.navigate('Home')}
-                    style={[{ flexDirection: 'row', alignItems: 'center',marginLeft:5, marginVertical: 10 }]}>
-                        <Icon name="arrow-left" size={25} color="#929497" />
-                        <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>CONNECT</Text>
-                    </TouchableOpacity>
-                </View>
-                <View style={[{}, styles.tabView]}>
-                    <TouchableOpacity
-                        style={{ flex: 1 }}
-                        onPress={() => { this.setState({ tabViewIndex: 1 }) }}
-                    >
-                        <Text style={{ color: '#B1272C', fontWeight: 'bold', textAlign: 'center' }}>Connect</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={{ flex: 1 }}
-                        onPress={() => { this.setState({ tabViewIndex: 2 }) }}
-                    >
-                        <Text style={{ textAlign: 'center' }}>Recieved</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        style={{ flex: 1 }}
-                        onPress={() => { this.setState({ tabViewIndex: 3 }) }}
-                    >
-                        <Text style={{ textAlign: 'center' }}>Sent</Text>
-                    </TouchableOpacity>
-                </View>
+                    <View style={[{}, styles.mainRow]}>
+                        <TouchableOpacity
+                            onPress={() => this.props.navigation.navigate('Home')}
+                            style={[{ flexDirection: 'row', alignItems: 'center', marginLeft: 5, marginVertical: 10 }]}>
+                            <Icon name="arrow-left" size={25} color="#929497" />
+                            <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>CONNECT</Text>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={[{}, styles.tabView]}>
+                        <TouchableOpacity
+                            style={{ flex: 1 }}
+                            onPress={() => { this.setState({ tabViewIndex: 1 }) }}
+                        >
+                            <Text style={{ color: '#B1272C', fontWeight: 'bold', textAlign: 'center' }}>Connect</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={{ flex: 1 }}
+                            onPress={() => { this.setState({ tabViewIndex: 2 }) }}
+                        >
+                            <Text style={{ textAlign: 'center' }}>Recieved</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            style={{ flex: 1 }}
+                            onPress={() => { this.setState({ tabViewIndex: 3 }) }}
+                        >
+                            <Text style={{ textAlign: 'center' }}>Sent</Text>
+                        </TouchableOpacity>
+                    </View>
 
-                <this.tabView />
+                    <this.tabView />
                 </ScrollView>
             </View>
         )

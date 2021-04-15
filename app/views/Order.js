@@ -23,10 +23,10 @@ class Order extends React.Component {
         this.onDateChange = this.onDateChange.bind(this);
     }
     componentDidMount() {
-        this.orderList();
+        this.orderList(Constants.orderslist);
     }
 
-    orderList() {
+    orderList(url) {
         this.setState({ Spinner: true })
         let postData = {
             method: 'GET',
@@ -37,7 +37,7 @@ class Order extends React.Component {
             },
 
         };
-        fetch(Constants.orderslist, postData)
+        fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 console.log("###############", responseJson)
@@ -55,6 +55,22 @@ class Order extends React.Component {
             })
 
     }
+
+    componentWillReceiveProps() {
+        console.log('this.props.route', this.props.route.params.filters);
+        let filters = this.props.route.params.filters;
+        let filter = '?';
+        for (let i = 0; i < filters.length; i++) {
+            filter = filter + filters[i].key + '=' + filters[i].value;
+            if (i != filters.length - 1) {
+                filter = filter + '&';
+            }
+        }
+        console.log(' will receive props !!!!!!!!!!!!!', Constants.orderslist + filter);
+        return
+        this.orderList(Constants.orderslist + filter);
+    }
+
     onDateChange(date) {
         this.setState({
             selectedStartDate: date,
@@ -70,8 +86,8 @@ class Order extends React.Component {
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
-            <View style={{width: width, position: 'relative', backgroundColor: '##F0F0F0', }}>
-                <Header navigation={this.props.navigation}/>
+            <View style={{ width: width, position: 'relative', backgroundColor: '##F0F0F0', }}>
+                <Header navigation={this.props.navigation} />
                 <View style={{ flexDirection: 'row', alignContent: 'center', alignItems: 'center', width: width - 20, alignSelf: 'center' }}>
                     <View>
                         <Text style={{ color: '#2F2E7C', fontWeight: 'bold' }}>ORDER</Text>
@@ -136,10 +152,10 @@ class Order extends React.Component {
                     height={50}
                     scrollEnabled={true}
                 >
-                    <View style={{ width: width - 20, flexDirection: 'row',marginVertical:10 }}>
-                        
-                    <TouchableOpacity >
-                            <Text style={{ fontWeight:'bold', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>ALL</Text>
+                    <View style={{ width: width - 20, flexDirection: 'row', marginVertical: 10 }}>
+
+                        <TouchableOpacity >
+                            <Text style={{ fontWeight: 'bold', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>ALL</Text>
                         </TouchableOpacity>
                         <TouchableOpacity >
                             <Text style={{ color: '#909090', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PENDING</Text>
@@ -193,9 +209,11 @@ class Order extends React.Component {
                                     </View>
                                     <View style={{ flex: 1, alignItems: 'flex-end', flexDirection: 'column' }}>
                                         <Text style={{ fontWeight: 'bold' }}>N{item.amount}</Text>
-                                        <View style={[{ backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
-                                            <Text style={[{ color: '#26C281' }]}>{item.payment_status}</Text>
-                                        </View>
+                                        {(item.order_status == 'PENDING') ?
+                                            <View style={[{ backgroundColor: '#ffabb5', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                                                <Text style={[{ color: '#f7001d' }]}>{item.payment_status}</Text>
+                                            </View>
+                                            : null}
                                     </View>
                                 </View>
                             </TouchableHighlight>
