@@ -43,6 +43,7 @@ import ProductCategory from './ProductCategory';
 import BuyCreateOrder from './BuyCreateOrder';
 import DiliveryAddress from './DiliveryAddress';
 import PickUpLocation from './PickUpLocation';
+import AddDiliveryAddress from './AddDiliveryAddress';
 const Stack = createStackNavigator();
 
 export default class AppNavigater extends React.Component {
@@ -97,7 +98,8 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="BuyCreateOrder" component={BuyCreateOrder} options={{ headerShown: false }} />
           <Stack.Screen name="DiliveryAddress" component={DiliveryAddress} options={{ headerShown: false }} />
           <Stack.Screen name="PickUpLocation" component={PickUpLocation} options={{ headerShown: false }} />
-          
+          <Stack.Screen name="AddDiliveryAddress" component={AddDiliveryAddress} options={{ headerShown: false }} />
+
 
         </Stack.Navigator>
       </NavigationContainer>
