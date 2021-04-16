@@ -105,11 +105,13 @@ import { Constants } from '../views/Constant';
                     <View>
                         <Text style={{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 20 }}>SUPPLIER</Text>
                     </View>
-                    <View style={{ position: 'absolute', right: 0 }}>
+                    <TouchableOpacity
+                    onPress={()=>this.props.navigation.navigate('AddSuppliers')}
+                    style={{ position: 'absolute', right: 0 }}>
                         <Image
                             source={require('../images/products/circlePlus.png')}
                         />
-                    </View>
+                    </TouchableOpacity>
                 </View>
                 <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, backgroundColor: '#fff', alignSelf: 'center', paddingHorizontal: 10, borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
                     <Image
@@ -131,26 +133,7 @@ import { Constants } from '../views/Constant';
                     </View>
                 </View>
 
-                
-                    <View style={{ width: width - 20, flexDirection: 'row' }}>
-                        <View >
-                            <Text style={{ marginRight: 5, backgroundColor: '#E6E6E6', paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff' }}>All</Text>
-                        </View>
-                        <View >
-                            <Text style={{ color: '#909090', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PENDING</Text>
-                        </View>
-                        <View >
-                            <Text style={{ color: '#909090', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PAID</Text>
-                        </View>
-                        <View >
-                            <Text style={{ color: '#909090', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PART PAYMENT</Text>
-                        </View>
-                        <View >
-                            <Text style={{ color: '#909090', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PAID FROM CREDIT</Text>
-                        </View>
-
-                    </View>
-                
+          
     
 
                 <ScrollView>

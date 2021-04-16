@@ -10,7 +10,7 @@ export default StyleSheet.create({
     //  height:height,
      width:width,
      backgroundColor:'#fff',
-     paddingTop:50,
+
      alignItems:'center',
      flex:1,
      flexDirection:'column'

@@ -36,17 +36,17 @@ class Login extends React.Component {
         }
 
         else {
-            this.props.setUser({
+            // this.props.setUser({
 
-                firstname: "sandbox last", //responseJson.user.firstname,
-                lastname: "sandbox last", //responseJson.user.lastname,
-                email: "cicodsandbox@yopmail.com",//responsejson.user.email,
-                phone: "123314324",//responseJson.user.phone,
-                access_token: "Bearer bUv7I9OEsrcG19NiMBcU",  //+ responseJson.token
-            });
-            this.setState({ Spinner: false })
-            this.props.navigation.navigate('Home')
-            return;
+            //     firstname: "sandbox last", //responseJson.user.firstname,
+            //     lastname: "sandbox last", //responseJson.user.lastname,
+            //     email: "cicodsandbox@yopmail.com",//responsejson.user.email,
+            //     phone: "123314324",//responseJson.user.phone,
+            //     access_token: "Bearer bUv7I9OEsrcG19NiMBcU",  //+ responseJson.token
+            // });
+            // this.setState({ Spinner: false })
+            // this.props.navigation.navigate('Home')
+            // return;
             this.setState({ Spinner: true })
             let postData = {
                 method: 'POST',
@@ -96,19 +96,23 @@ class Login extends React.Component {
     render() {
         return (
             <ScrollView>
-
-                <View style={[{}, styles.mainView]}>
+                <View style={[{position:'relative'}, styles.mainView]}>
                     <Spinner
                         visible={this.state.Spinner}
                         textContent={'Please Wait...'}
                         textStyle={{ color: '#fff' }}
                         color={'#fff'}
                     />
-                    <View>
-                        <Image
+                    <View                   
+                    >
+                       <View
+                       style={{backgroundColor:'#FFE5E5',paddingTop:60,paddingBottom:50, width:width,alignItems:'center',borderBottomLeftRadius:360,borderBottomRightRadius:360}}
+                       >
+                       <Image
                             source={require('../images/loginlogo.png')}
                             style={{ height: width / 3, width: width / 1.4 }}
                         />
+                       </View>
                     </View>
                     <View style={{ paddingTop: height / 25 }}>
                         <Text style={{ color: '#2F2E7C', fontSize: 20 }}>Login</Text>
@@ -129,6 +133,7 @@ class Login extends React.Component {
                     </View>
                     <View style={[{}, styles.textInputView]}>
                         <TextInput
+                        secureTextEntry={true}
                             onChangeText={text => this.setState({ password: text })}
                             placeholder="Password"
                         />
@@ -143,8 +148,6 @@ class Login extends React.Component {
                         </View>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'center', width: width - 50, }}>
-
-
                         <CheckBox
                             style={{ width: width / 2, alignSelf: 'center', alignItems: 'center' }}
                             onClick={() => {
@@ -154,7 +157,6 @@ class Login extends React.Component {
                             }}
                             isChecked={this.state.isChecked}
                             rightText={"Remember details"}
-
                         />
                     </View>
                     <TouchableOpacity
