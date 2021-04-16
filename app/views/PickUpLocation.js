@@ -13,7 +13,8 @@ export default class PickUpLocation extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            spinner: false
+            spinner: false,
+            delivery_type: this.props.route.params.type ?? ''
         }
 
     }
@@ -24,7 +25,7 @@ export default class PickUpLocation extends React.Component {
         ];
         var radio_props_pickup = [
             { label: 'No 8, Left right, Avenue Lekki Phase 1, Lagos Nigeria', value: 1 },
-           
+
         ];
         var radio_props_payment = [
             { label: 'Pay Now', value: 0 },
@@ -53,12 +54,12 @@ export default class PickUpLocation extends React.Component {
                             <View style={[{}, styles.backHeadingView]}>
                                 <Text style={[{}, styles.backHeadingText]}>PICKUP LOCATION</Text>
                             </View>
-                            
+
                         </View>
-                     <View style={[{},styles.addressContainer]}>
-                     <TouchableOpacity
-                     onPress={()=>this.props.navigation.navigate('CreateOrder')}
-                     >
+                        <View style={[{}, styles.addressContainer]}>
+                            <TouchableOpacity
+                                onPress={() => this.props.navigation.navigate('CreateOrder')}
+                            >
                                 <View style={[{}, styles.radioFormView]}>
                                     {/* <RadioForm
                                         isSelected={false}
@@ -87,7 +88,7 @@ export default class PickUpLocation extends React.Component {
                                                 <RadioButtonInput
                                                     obj={obj}
                                                     index={i}
-                                                    
+
                                                     isSelected={this.state.value3Index === i}
                                                     onPress={(value) => { this.setState({ value3Index: value }) }}
                                                     borderWidth={1}
@@ -96,14 +97,14 @@ export default class PickUpLocation extends React.Component {
                                                     buttonSize={10}
                                                     buttonOuterSize={20}
                                                     buttonStyle={{}}
-            
+
 
                                                     buttonWrapStyle={{ marginLeft: 10 }}
                                                 />
                                                 <RadioButtonLabel
                                                     obj={obj}
                                                     index={i}
-                                                    
+
                                                     labelHorizontal={true}
                                                     onPress={(value) => { this.setState({ value3Index: value }) }}
                                                     // labelStyle={{fontSize: 20, color: '#2ecc71'}}
@@ -112,13 +113,13 @@ export default class PickUpLocation extends React.Component {
                                             </RadioButton>
                                         ))
                                     }
-                                  
+
 
                                 </View>
                             </TouchableOpacity>
-                     </View>
-                     <View style={[{},styles.addressContainer]}>
-                     <TouchableOpacity>
+                        </View>
+                        <View style={[{}, styles.addressContainer]}>
+                            <TouchableOpacity>
                                 <View style={[{}, styles.radioFormView]}>
                                     {/* <RadioForm
                                         isSelected={false}
@@ -147,7 +148,7 @@ export default class PickUpLocation extends React.Component {
                                                 <RadioButtonInput
                                                     obj={obj}
                                                     index={i}
-                                                    
+
                                                     isSelected={this.state.value3Index === i}
                                                     onPress={(value) => { this.setState({ value3Index: value }) }}
                                                     borderWidth={1}
@@ -156,14 +157,14 @@ export default class PickUpLocation extends React.Component {
                                                     buttonSize={10}
                                                     buttonOuterSize={20}
                                                     buttonStyle={{}}
-            
+
 
                                                     buttonWrapStyle={{ marginLeft: 10 }}
                                                 />
                                                 <RadioButtonLabel
                                                     obj={obj}
                                                     index={i}
-                                                    
+
                                                     labelHorizontal={true}
                                                     onPress={(value) => { this.setState({ value3Index: value }) }}
                                                     // labelStyle={{fontSize: 20, color: '#2ecc71'}}
@@ -172,16 +173,16 @@ export default class PickUpLocation extends React.Component {
                                             </RadioButton>
                                         ))
                                     }
-                                  
+
 
                                 </View>
                             </TouchableOpacity>
-                     </View>
-             
-                      
-            
-                  
-               
+                        </View>
+
+
+
+
+
                     </View>
                 </ScrollView>
             </View>
