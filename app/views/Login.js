@@ -96,22 +96,17 @@ class Login extends React.Component {
     render() {
         return (
             <ScrollView>
-
                 <View style={[{position:'relative'}, styles.mainView]}>
-              
-
-                   
                     <Spinner
                         visible={this.state.Spinner}
                         textContent={'Please Wait...'}
                         textStyle={{ color: '#fff' }}
                         color={'#fff'}
                     />
-                    <View
-                   
+                    <View                   
                     >
                        <View
-                       style={{backgroundColor:'#f6d9dd',paddingTop:100,paddingBottom:50, width:width,alignItems:'center',borderBottomLeftRadius:360,borderBottomRightRadius:360}}
+                       style={{backgroundColor:'#FFE5E5',paddingTop:60,paddingBottom:50, width:width,alignItems:'center',borderBottomLeftRadius:360,borderBottomRightRadius:360}}
                        >
                        <Image
                             source={require('../images/loginlogo.png')}
@@ -153,8 +148,6 @@ class Login extends React.Component {
                         </View>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'center', width: width - 50, }}>
-
-
                         <CheckBox
                             style={{ width: width / 2, alignSelf: 'center', alignItems: 'center' }}
                             onClick={() => {
