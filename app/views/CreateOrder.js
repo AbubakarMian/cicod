@@ -533,7 +533,7 @@ class CreateOrder extends React.Component {
                                     onPress={() => this.props.navigation.navigate('AddNote')}
                                 >
                                     <View style={{ flexDirection: 'row' }}>
-                                        <Icon name="times-circle" size={20} color="#B1272C" />
+                                        <Image source={require('../images/addNote.png')} />
                                         <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Add Note</Text>
                                     </View>
                                 </TouchableOpacity>

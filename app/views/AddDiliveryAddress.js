@@ -14,6 +14,7 @@ import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'reac
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 class AddDiliveryAddress extends React.Component {
+   
     constructor(props) {
         super(props);
         this.state = {
@@ -267,26 +268,26 @@ class AddDiliveryAddress extends React.Component {
                                             <DropDownPicker
                                                 items={this.state.countries_arr}
                                                 autoScrollToDefaultValue={true}
-                                                containerStyle={{ height: 50, width: width - 28, marginTop: 15 }}
-                                                style={{ backgroundColor: '#fff' }}
+                                                containerStyle={{ height: 50, width: width - 20, marginTop: 15,alignSelf:'center',borderBottomWidth:0.5 }}
+                                                style={{ backgroundColor: '#fff',borderWidth:0 }}
                                                 itemStyle={{
                                                     justifyContent: 'flex-start', zIndex: 0.99
                                                 }}
-                                                placeholder="Country *"
-                                                dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, height: 100 }}
+                                                placeholder="States *"
+                                                dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectCountry(item)}
                                             />
                                         </View>
 
                                     </View>
-                                    <View style={[{ flexDirection: 'row' }, styles.formRow]}>
+                                    <View style={[{ flexDirection: 'row',alignSelf:'center' }, styles.formRow]}>
                                         <View style={[{}, styles.formColumn]}>
 
                                             <DropDownPicker
                                                 items={this.state.states_arr}
-                                                containerStyle={{ height: 50, width: width - 200, marginTop: 15 }}
-                                                style={{ backgroundColor: '#fff' }}
+                                                containerStyle={{ height: 50, width: width /2 -20, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
+                                                style={{ backgroundColor: '#fff', borderWidth: 0,marginRight:10, borderBottomWidth: 0.5, }}
                                                 itemStyle={{
                                                     justifyContent: 'flex-start', zIndex: 0.99
                                                 }}
@@ -296,14 +297,14 @@ class AddDiliveryAddress extends React.Component {
                                                 onChangeItem={item => this.onSelectState(item)}
                                             />
                                         </View>
-                                        <View style={[{}, styles.formColumn]}>
+                                        <View style={[{marginHorizontal:10}, styles.formColumn]}>
 
                                             <DropDownPicker
                                                 items={this.state.lgas_arr}
-                                                containerStyle={{ height: 50, width: width - 200, marginTop: 15 }}
-                                                style={{ backgroundColor: '#fff' }}
+                                                containerStyle={{ height: 50, width: width /2 -20, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
+                                                style={{ backgroundColor: '#fff', borderWidth: 0,alignSelf:'center', borderBottomWidth: 0.5, }}
                                                 itemStyle={{
-                                                    justifyContent: 'flex-start', zIndex: 0.99
+                                                    justifyContent: 'flex-start',marginHorizontal:2, zIndex: 0.99
                                                 }}
                                                 placeholder="LGA *"
                                                 dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
@@ -312,7 +313,7 @@ class AddDiliveryAddress extends React.Component {
                                             />
                                         </View>
                                     </View>
-                                    <View>
+                                    <View style={{zIndex:-0.999}}>
                                         <CheckBox
                                             style={[{ width: width, }, styles.cheBox]}
                                             onClick={() => {

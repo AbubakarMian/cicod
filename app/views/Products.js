@@ -123,9 +123,9 @@ class Products extends React.Component {
                     </View>
                     <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
                         <TouchableOpacity
-                        onPress={()=>this.props.navigation.navigate('ProductCategory')}
+                            onPress={() => this.props.navigation.navigate('ProductCategory')}
                         >
-                        <Text style={{ fontSize: 12, color: '#B1272C', marginRight: 10 }}>View Product Category</Text>
+                            <Text style={{ fontSize: 12, color: '#B1272C', marginRight: 10 }}>View Product Category</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('CreateProduct')}
@@ -165,10 +165,10 @@ class Products extends React.Component {
 
                         <DropDownPicker
                             items={this.state.categoryarr}
-                            containerStyle={{ height: 50, width: width - 20, marginTop: 5, alignSelf: 'center' }}
-                            style={{ backgroundColor: '#fff' }}
+                            containerStyle={{ height: 50, width: width  - 20, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
+                            style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                             itemStyle={{
-                                justifyContent: 'flex-start', zIndex: 0.999
+                                justifyContent: 'flex-start', zIndex: 0.99
                             }}
                             placeholder="Product Category"
                             dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
