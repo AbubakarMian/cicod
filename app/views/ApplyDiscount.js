@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity, Touchable } from 'react-native'
+import { View, ImageBackground, ScrollView, TouchableHighlight, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity, Touchable, Alert } from 'react-native'
 import splashImg from '../images/splash.jpg'
 import styles from '../css/ApplyDiscountCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -7,24 +7,58 @@ import Header from '../views/Header';
 import CheckBox from 'react-native-check-box';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import SearchBar from 'react-native-search-bar';
+import { SET_DISCOUNT } from '../redux/constants';
+import { connect } from 'react-redux';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
-export default class ApplyDiscount extends React.Component {
+class ApplyDiscount extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             value3Index: 0,
-            value: 0,
             isChecked: false,
-            discount_percent: '',
+            // discount_percent: '',
             discount_amount: '',
         }
+    }
+
+    setDiscount() {
+
+        if (this.state.discount_amount == '') {
+            Alert.alert('INFO', 'Discount Amount is Required .');
+
+        }
+        else {
+            let discount_type = '';
+            if (this.state.value3Index == 0) {
+                discount_type = 'percentage';
+                this.props.setDiscount({
+                    discount_amount: this.state.discount_amount,
+                    discount_type: discount_type
+                })
+            }
+            else {
+                discount_type = 'value';
+                this.props.setDiscount({
+                    discount_amount: this.state.discount_amount,
+                    discount_type: discount_type
+                })
+            }
+            this.props.navigation.goBack();
+
+        }
+    }
+
+    radioBtnFun(index, lable) {
+        console.log(' lable @@@@@@@@@@', lable);
+        this.setState({ value3Index: index })
+
     }
     render() {
 
         var radio_props_per = [
-            { label: 'Percentage', value: 1 },
-            { label: 'Value', value: 0 },
+            { label: 'Percentage', value: 0 },
+            { label: 'Value', value: 1 },
 
         ];
 
@@ -51,14 +85,13 @@ export default class ApplyDiscount extends React.Component {
                         <RadioForm
                             formHorizontal={true}
                             animation={true}
-
-                            onPress={(index) => this.setState({ value3Index: index })}
+                            onPress={(index, lable) => this.radioBtnFun(index, lable)}
                         >
 
                             {
                                 radio_props_per.map((obj, i) => (
                                     <RadioButton labelHorizontal={true} key={i}
-                                        style={{justifyContent:'center',alignItems:'center', backgroundColor: this.state.value3Index === i ? '#F6EBEB' : '#fff' }}
+                                        style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: this.state.value3Index === i ? '#F6EBEB' : '#fff' }}
 
                                     >
 
@@ -80,61 +113,27 @@ export default class ApplyDiscount extends React.Component {
                                             obj={obj}
                                             index={i}
                                             labelHorizontal={true}
-                                            onPress={() => console.log('button RadioButtonLabel')}
-                                            labelStyle={{ fontSize: 20, color: '#000',paddingVertical:10 }}
-                                            labelWrapStyle={{ marginRight:10 }}
+                                            onPress={(index) => this.setState({ value3Index: index })}
+                                            labelStyle={{ fontSize: 20, color: '#000', paddingVertical: 10 }}
+                                            labelWrapStyle={{ marginRight: 10 }}
                                         />
                                     </RadioButton>
                                 ))
                             }
                         </RadioForm>
 
-
-
-
-
-
-
-
-                        {/* <View style={[{}, styles.radioButtonView]}>
-                            <RadioForm
-                                initial={0}
-                                isSelected={false}
-                                color={'#000'}
-                                buttonSize={7}
-                                buttonOuterSize={20}
-                                buttonColor={'#aaa'}
-                                radio_props={radio_props_per}
-
-                                // initial={0}
-                                onPress={(value) => { this.setState({ value: value }) }}
-                            />
-
-                        </View>
-                        <View style={[{ backgroundColor: '#F6EBEB' }, styles.radioButtonView]}>
-                            <RadioForm
-                                isSelected={false}
-                                color={'#000'}
-                                buttonSize={7}
-                                buttonOuterSize={20}
-                                buttonColor={'e74c3c'}
-                                radio_props={radio_props_val}
-                                // initial={0}
-                                onPress={(value) => { this.setState({ value: value }) }}
-                            />
-
-                        </View> */}
-
                     </View>
                     <View>
 
                         <TextInput
                             placeholder="Discount"
+                            keyboardType='numeric'
+                            onChangeText={text => this.setState({ discount_amount: text })}
                         />
                     </View>
                 </View>
                 <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate('Sell')}
+                    onPress={() => this.setDiscount()}
                     style={[{}, styles.btnView]}
                 >
                     <Text style={{ color: '#fff' }}>Apply</Text>
@@ -144,3 +143,16 @@ export default class ApplyDiscount extends React.Component {
         )
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        discount: state.orderDiscountReducer,
+
+    }
+};
+function mapDispatchToProps(dispatch) {
+    return {
+        setDiscount: (value) => dispatch({ type: SET_DISCOUNT, value: value }),
+    }
+};
+export default connect(mapStateToProps, mapDispatchToProps)(ApplyDiscount)

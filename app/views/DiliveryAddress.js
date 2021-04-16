@@ -6,6 +6,7 @@ import CheckBox from 'react-native-check-box';
 import Header from '../views/Header';
 import Spinner from 'react-native-loading-spinner-overlay';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
+import { Container, Content, List, ListItem, Radio } from 'native-base';
 
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
@@ -24,7 +25,7 @@ export default class DiliveryAddress extends React.Component {
         ];
         var radio_props_pickup = [
             { label: 'No 8, Left right, Avenue Lekki Phase 1, Lagos Nigeria', value: 1 },
-           
+
         ];
         var radio_props_payment = [
             { label: 'Pay Now', value: 0 },
@@ -32,6 +33,7 @@ export default class DiliveryAddress extends React.Component {
             { label: 'Pay Invoice', value: 2 },
 
         ];
+        var items = ['Simon Mignolet', 'Nathaniel Clyne', 'Dejan Lovren', 'Mama Sakho', 'Emre Can'];
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
@@ -53,12 +55,12 @@ export default class DiliveryAddress extends React.Component {
                             <View style={[{}, styles.backHeadingView]}>
                                 <Text style={[{}, styles.backHeadingText]}>DELIVERY ADDRESS</Text>
                             </View>
-                            
+
                         </View>
-                     <View style={[{},styles.addressContainer]}>
-                     <TouchableOpacity
-                     onPress={()=>this.props.navigation.navigate('CreateOrder')}
-                     >
+                        <View style={[{}, styles.addressContainer]}>
+                            <TouchableOpacity
+                                onPress={() => this.props.navigation.navigate('CreateOrder')}
+                            >
                                 <View style={[{}, styles.radioFormView]}>
                                     {/* <RadioForm
                                         isSelected={false}
@@ -87,7 +89,7 @@ export default class DiliveryAddress extends React.Component {
                                                 <RadioButtonInput
                                                     obj={obj}
                                                     index={i}
-                                                    
+
                                                     isSelected={this.state.value3Index === i}
                                                     onPress={(value) => { this.setState({ value3Index: value }) }}
                                                     borderWidth={1}
@@ -96,14 +98,14 @@ export default class DiliveryAddress extends React.Component {
                                                     buttonSize={10}
                                                     buttonOuterSize={20}
                                                     buttonStyle={{}}
-            
+
 
                                                     buttonWrapStyle={{ marginLeft: 10 }}
                                                 />
                                                 <RadioButtonLabel
                                                     obj={obj}
                                                     index={i}
-                                                    
+
                                                     labelHorizontal={true}
                                                     onPress={(value) => { this.setState({ value3Index: value }) }}
                                                     // labelStyle={{fontSize: 20, color: '#2ecc71'}}
@@ -112,13 +114,13 @@ export default class DiliveryAddress extends React.Component {
                                             </RadioButton>
                                         ))
                                     }
-                                  
+
 
                                 </View>
                             </TouchableOpacity>
-                     </View>
-                     <View style={[{},styles.addressContainer]}>
-                     <TouchableOpacity>
+                        </View>
+                        <View style={[{}, styles.addressContainer]}>
+                            <TouchableOpacity>
                                 <View style={[{}, styles.radioFormView]}>
                                     {/* <RadioForm
                                         isSelected={false}
@@ -147,7 +149,7 @@ export default class DiliveryAddress extends React.Component {
                                                 <RadioButtonInput
                                                     obj={obj}
                                                     index={i}
-                                                    
+
                                                     isSelected={this.state.value3Index === i}
                                                     onPress={(value) => { this.setState({ value3Index: value }) }}
                                                     borderWidth={1}
@@ -156,14 +158,14 @@ export default class DiliveryAddress extends React.Component {
                                                     buttonSize={10}
                                                     buttonOuterSize={20}
                                                     buttonStyle={{}}
-            
+
 
                                                     buttonWrapStyle={{ marginLeft: 10 }}
                                                 />
                                                 <RadioButtonLabel
                                                     obj={obj}
                                                     index={i}
-                                                    
+
                                                     labelHorizontal={true}
                                                     onPress={(value) => { this.setState({ value3Index: value }) }}
                                                     // labelStyle={{fontSize: 20, color: '#2ecc71'}}
@@ -172,11 +174,11 @@ export default class DiliveryAddress extends React.Component {
                                             </RadioButton>
                                         ))
                                     }
-                                  
+
 
                                 </View>
                             </TouchableOpacity>
-                     </View>
+                        </View>
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('AddDiliveryAddress')}
                         >
@@ -188,10 +190,10 @@ export default class DiliveryAddress extends React.Component {
                                 <Text style={[{}, styles.customerContaineraddProductText]}>Add Address</Text>
                             </View>
                         </TouchableOpacity>
-                      
-            
-                  
-               
+
+
+
+
                     </View>
                 </ScrollView>
             </View>
