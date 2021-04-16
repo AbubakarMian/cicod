@@ -297,13 +297,13 @@ class AddSuppliers extends React.Component {
                                         onChangeText={text => this.setState({ landmark: text })}
                                     />
                                     <View style={[{ flexDirection: 'row' }, styles.formRow]}>
-                                        <View style={[{ flex: 1 }, styles.formColumn]}>
+                                        <View style={[{ flex: 1, }, styles.formColumn]}>
 
                                             <DropDownPicker
                                                 items={this.state.countries_arr}
                                                 autoScrollToDefaultValue={true}
-                                                containerStyle={{ height: 50, width: width / 2 - 20,marginRight:10, marginTop: 15,alignSelf:'center',borderBottomWidth:0.5 }}
-                                                style={{ backgroundColor: '#fff',borderWidth:0, }}
+                                                containerStyle={{ height: 50, width: width / 2 - 20, marginRight: 10, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
+                                                style={{ backgroundColor: '#fff', borderWidth: 0, }}
                                                 itemStyle={{
                                                     justifyContent: 'flex-start', zIndex: 0.99
                                                 }}
@@ -316,8 +316,8 @@ class AddSuppliers extends React.Component {
                                         <View style={[{ flex: 1 }, styles.formColumn]}>
                                             <DropDownPicker
                                                 items={this.state.states_arr}
-                                                containerStyle={{ height: 50, width: width / 2 - 10, marginTop: 15,alignSelf:'center',borderBottomWidth:0.5 }}
-                                                style={{ backgroundColor: '#fff',borderWidth:0 }}
+                                                containerStyle={{ height: 50, width: width / 2 - 10, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
+                                                style={{ backgroundColor: '#fff', borderWidth: 0 }}
                                                 itemStyle={{
                                                     justifyContent: 'flex-start', zIndex: 0.99
                                                 }}
@@ -329,14 +329,14 @@ class AddSuppliers extends React.Component {
                                         </View>
 
                                     </View>
-                                    <View style={[{ flexDirection: 'row' }, styles.formRow]}>
+                                    <View style={[{ flexDirection: 'row', zIndex: -0.999, }, styles.formRow]}>
                                         <View style={[{ flex: 1 }, styles.formColumn]}>
 
                                             <DropDownPicker
                                                 items={this.state.countries_arr}
                                                 autoScrollToDefaultValue={true}
-                                                containerStyle={{ height: 50, width: width / 2 - 10, marginTop: 15,alignSelf:'center',borderBottomWidth:0.5 }}
-                                                style={{ backgroundColor: '#fff',borderWidth:0 }}
+                                                containerStyle={{ height: 50, width: width / 2 - 10, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
+                                                style={{ backgroundColor: '#fff', borderWidth: 0 }}
                                                 itemStyle={{
                                                     justifyContent: 'flex-start', zIndex: 0.99
                                                 }}
@@ -351,11 +351,11 @@ class AddSuppliers extends React.Component {
                                         </View>
 
                                     </View>
-                                    <View style={[{ flexDirection: 'row', marginVertical: 10,zIndex:-0.999 }, styles.formRow]}>
+                                    <View style={[{ flexDirection: 'row', zIndex: -0.999, marginVertical: 10, zIndex: -0.999 }, styles.formRow]}>
                                         <Text style={{ color: '#929497', fontWeight: 'bold' }}>Returns to supplier are?</Text>
                                     </View>
-                                    <View style={[{}, styles.mainContentView]}>
-                                        <View style={[{}, styles.formRow]}>
+                                    <View style={[{ zIndex: -0.999, }, styles.mainContentView]}>
+                                        <View style={[{ zIndex: -0.999, }, styles.formRow]}>
 
                                             <RadioForm
                                                 formHorizontal={true}
@@ -366,7 +366,7 @@ class AddSuppliers extends React.Component {
                                                 {
                                                     radio_props_per.map((obj, i) => (
                                                         <RadioButton labelHorizontal={true} key={i}
-                                                            style={{ justifyContent: 'center', alignItems: 'center', backgroundColor: this.state.value3Index === i ? '#F6EBEB' : '#fff' }}
+                                                            style={{ zIndex: -0.999, justifyContent: 'center', alignItems: 'center', backgroundColor: this.state.value3Index === i ? '#F6EBEB' : '#fff' }}
 
                                                         >
 
@@ -381,7 +381,7 @@ class AddSuppliers extends React.Component {
                                                                 // buttonOuterColor={this.state.value3Index === i ? '#2196f3' : '#000'}
                                                                 buttonSize={7}
                                                                 buttonOuterSize={20}
-                                                                buttonStyle={{}}
+                                                                buttonStyle={{ zIndex: -0.999, }}
                                                                 buttonWrapStyle={{ marginLeft: 10 }}
                                                             />
                                                             <RadioButtonLabel
@@ -445,30 +445,31 @@ class AddSuppliers extends React.Component {
 
                                         </View>
                                         <DropDownPicker
-                                                items={this.state.countries_arr}
-                                                autoScrollToDefaultValue={true}
-                                                containerStyle={{ height: 50, width: width - 50, marginTop: 15,alignSelf:'center',borderBottomWidth:0.5 }}
-                                                style={{ backgroundColor: '#fff',borderWidth:0,borderBottomWidth:0.5, }}
-                                                itemStyle={{
-                                                    justifyContent: 'flex-start', zIndex: 0.99
-                                                }}
-                                                placeholder="Country *"
-                                                dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, height: 100 }}
-                                                labelStyle={{ color: '#A9A9A9' }}
-                                                onChangeItem={item => this.onSelectCountry(item)}
-                                            />
+                                            items={this.state.countries_arr}
+                                            autoScrollToDefaultValue={true}
+                                            containerStyle={{ height: 50, width: width - 50, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
+                                            style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
+                                            itemStyle={{
+                                                justifyContent: 'flex-start', zIndex: 0.99
+                                            }}
+                                            placeholder="Country *"
+                                            dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, height: 100 }}
+                                            labelStyle={{ color: '#A9A9A9', }}
+                                            onChangeItem={item => this.onSelectCountry(item)}
+                                        />
+
+                                        <TouchableOpacity
+                                            onPress={() => this.createDeliveryAddress()}
+                                            style={[{ zIndex: -0.999 }, styles.redBtn]}
+                                        >
+                                            <Text style={{ color: '#fff' }}>Save</Text>
+                                        </TouchableOpacity>
                                     </View>
 
 
-                            
                                 </View>
 
-                                <TouchableOpacity
-                                    onPress={() => this.createDeliveryAddress()}
-                                    style={[{zIndex:-0.999}, styles.redBtn]}
-                                >
-                                    <Text style={{ color: '#fff' }}>Save</Text>
-                                </TouchableOpacity>
+
 
                             </View>
                         </View>

@@ -167,12 +167,12 @@ class ProductFilter extends React.Component {
     console.log('this.state.filters', this.state.filters);
     this.props.navigation.navigate('Products', { filters: this.state.filters });
   }
-  
+
   render() {
     console.log('createdby_arr createdby_arr', this.state.createdby_arr)
     return (
       <View style={[{}, styles.mainView]}>
-        <Header navigation={this.props.navigation}/>
+        <Header navigation={this.props.navigation} />
         <Spinner
           visible={this.state.Spinner}
           textContent={'Please Wait...'}
@@ -185,8 +185,8 @@ class ProductFilter extends React.Component {
           /> */}
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('Products')}
-          
-          style={[{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }]}>
+
+            style={[{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }]}>
             <Icon name="arrow-left" size={25} color="#929497" />
             <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>FILTER</Text>
 
@@ -202,13 +202,13 @@ class ProductFilter extends React.Component {
 
             </View>
           </View>
-          
+
           <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 5, flexDirection: 'row', position: 'relative' }}>
-             {this.state.createdby_arr.length < 1 ? null :
+            {this.state.createdby_arr.length < 1 ? null :
               <DropDownPicker
                 items={this.state.createdby_arr}
-                containerStyle={{ height: 50, width: width - 25, marginTop: 15 }}
-                style={{ backgroundColor: '#fff' }}
+                containerStyle={{ height: 50, width: width / 2 - 10, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
+                style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                 itemStyle={{
                   justifyContent: 'flex-start', zIndex: 0.99
                 }}
@@ -218,13 +218,13 @@ class ProductFilter extends React.Component {
                 onChangeItem={item => this.onCreatedByText(item.value)}
               />}
           </View>
-          <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 0, flexDirection: 'row',zIndex:-0.999, position: 'relative' }}>
-         
+          <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 0, flexDirection: 'row', zIndex: -0.999, position: 'relative' }}>
+
             {this.state.categoryarr.length < 1 ? null :
               <DropDownPicker
                 items={this.state.categoryarr}
-                containerStyle={{ height: 50, width: width - 25, marginTop: 15 }}
-                style={{ backgroundColor: '#fff' }}
+                containerStyle={{ height: 50, width: width / 2 - 10, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
+                style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                 itemStyle={{
                   justifyContent: 'flex-start', zIndex: 0.99
                 }}
@@ -237,7 +237,7 @@ class ProductFilter extends React.Component {
           </View>
 
         </View>
-        <View style={[{ flexDirection: 'row',zIndex:-0.999 }]}>
+        <View style={[{ flexDirection: 'row', zIndex: -0.999 }]}>
           <View style={[{ flex: 1, paddingVertical: 10 }]}>
             <Text style={{ color: '#929497', fontWeight: 'bold' }}>Created Date</Text>
             <TouchableOpacity>
