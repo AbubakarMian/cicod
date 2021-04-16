@@ -105,11 +105,13 @@ import { Constants } from '../views/Constant';
                     <View>
                         <Text style={{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 20 }}>SUPPLIER</Text>
                     </View>
-                    <View style={{ position: 'absolute', right: 0 }}>
+                    <TouchableOpacity
+                    onPress={()=>this.props.navigation.navigate('AddSuppliers')}
+                    style={{ position: 'absolute', right: 0 }}>
                         <Image
                             source={require('../images/products/circlePlus.png')}
                         />
-                    </View>
+                    </TouchableOpacity>
                 </View>
                 <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, backgroundColor: '#fff', alignSelf: 'center', paddingHorizontal: 10, borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
                     <Image
