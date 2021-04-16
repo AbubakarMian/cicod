@@ -131,26 +131,7 @@ import { Constants } from '../views/Constant';
                     </View>
                 </View>
 
-                
-                    <View style={{ width: width - 20, flexDirection: 'row' }}>
-                        <View >
-                            <Text style={{ marginRight: 5, backgroundColor: '#E6E6E6', paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff' }}>All</Text>
-                        </View>
-                        <View >
-                            <Text style={{ color: '#909090', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PENDING</Text>
-                        </View>
-                        <View >
-                            <Text style={{ color: '#909090', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PAID</Text>
-                        </View>
-                        <View >
-                            <Text style={{ color: '#909090', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PART PAYMENT</Text>
-                        </View>
-                        <View >
-                            <Text style={{ color: '#909090', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PAID FROM CREDIT</Text>
-                        </View>
-
-                    </View>
-                
+          
     
 
                 <ScrollView>

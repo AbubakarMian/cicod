@@ -33,6 +33,11 @@ class Dashnoard extends React.Component {
             pendingOrder: [],
             canclledOrder: [],
             graph_total_orders: [],
+            total_orders_pending_data: [],
+            graph_data:[],
+            showtotal_orders:true,
+            selected_graph:'all_orders',
+            calenderModal:false
         };
 
     }
@@ -52,8 +57,9 @@ class Dashnoard extends React.Component {
             .then(async responseJson => {
                 this.setState({
                     spinner: false,
+                    graph:responseJson.data.graph
                 });
-                // console.log('response !!!!!!!!!!!!!@@@@@@@@@@@@@@',responseJson);
+                console.log('response !!!!!!!!!!!!!@@@@@@@@@@@@@@',responseJson.data.graph);
                 if (responseJson.status === 'success') {
                     // console.log('**************', this.state.data)
                     var total_orders = responseJson.data.graph.total_orders;
@@ -63,21 +69,34 @@ class Dashnoard extends React.Component {
                     for (var i = 0; i < total_orders.length; i++) {
                         console.log('total_orders[i].amount', total_orders[i].amount);
                         console.log('total_orders[i].year', total_orders[i].year);
-                        graph_total_orders_data.push(total_orders[i].amount);
+                        let amount = parseInt(total_orders[i].amount);
+                        graph_total_orders_data.push(amount);
                         graph_lable.push(total_orders[i].year);
                     }
-                    var graph_total_orders = {
-                        labels: graph_lable,
-                        data: graph_total_orders_data,
-                    };
-                    console.log(' total total graph ', graph_total_orders);
+                    var total_pending_orders = responseJson.data.graph.pending_orders;
+                    var graph_total_pending_orders_data = [];
+                    var graph_total_pending_orders_label = [];
+
+                    for (var i = 0; i < total_pending_orders.length; i++) {
+                        console.log('total_orders[i].amount', total_pending_orders[i].amount);
+                        console.log('total_orders[i].year', total_pending_orders[i].year);
+                        let amount = parseInt(total_pending_orders[i].amount);
+                        graph_total_pending_orders_data.push(amount);
+                        graph_total_pending_orders_label.push(total_pending_orders[i].year);
+                    }
+                    let total_orders_data = this.getGraphData(graph_lable,graph_total_orders_data);
+                    
+                   let total_orders_pending_data = this.getGraphData(graph_total_pending_orders_label,graph_total_pending_orders_data);
+                    console.log(' total total graph ', total_orders_pending_data);
                     this.setState({
                         target: responseJson.data.target,
                         totalOrder: responseJson.data.total,
                         paidOrder: responseJson.data.paid,
                         pendingOrder: responseJson.data.pending,
                         canclledOrder: responseJson.data.cancelled,
-                        // graph_total_orders: graph_total_orders,
+                        graph_total_orders: total_orders_data,
+                        graph_data:total_orders_data,
+                        total_orders_pending_data: total_orders_pending_data,
 
                     })
                     console.log("%%%%%%%%%%%%%%%%", graph_lable)
@@ -90,17 +109,62 @@ class Dashnoard extends React.Component {
             })
     }
 
+    ShowAllOrders(){
+        let allorders = this.state.graph_total_orders;
+        this.setState({
+            selected_graph:'all_orders',
+            graph_data:allorders
+        })
+        console.log('all orders sel ',this.state.selected_graph);   
+    }
+    
+    ShowPendingOrders(){
+        let total_orders_pending_data = this.state.total_orders_pending_data;
+        this.setState({
+            selected_graph:'pending_orders',
+            graph_data:total_orders_pending_data
+        })        
+        console.log('pending_orders orders serl',this.state.selected_graph);   
+
+    }
+
+    getGraphData(graph_lable,orders_data){
+        let graphdata = [];
+        graphdata.push({
+            data:orders_data,
+            // color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
+            strokeWidth: 2 // optional
+        })
+        let data = {
+            labels:graph_lable,
+            datasets:graphdata,
+            legend: ["Rainy Days"]
+        };
+        console.log('getGraphData',data);
+        // data = {
+        //     labels: ["January", "February", "March", "April", "May", "June"],
+        //     datasets: [
+        //       {
+        //         data: [20, 45, 28, 80, 99, 43],
+        //         color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
+        //         strokeWidth: 2 // optional
+        //       }
+        //     ],
+        //     legend: ["Rainy Days"] // optional
+        //   }
+        return data;
+    }
+
     onDateChange(date) {
         this.setState({
             selectedStartDate: date,
         });
     }
     render() {
-        console.log('graph !!!!!!!!!!!!!!!!!!!!!', this.state.graph)
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
-            <View style={{ height: height, width: width, alignItems: 'center', position: 'relative', backgroundColor: '#F0F0F0', }}>
+            <View style={{ paddingBottom:50, width: width, alignItems: 'center', position: 'relative', backgroundColor: '#F0F0F0', }}>
                 <Header navigation={this.props.navigation} />
                 <Spinner
                     visible={this.state.spinner}
@@ -142,7 +206,7 @@ class Dashnoard extends React.Component {
                                     <Image
                                         source={require('../images/dashboard/greenbage.png')}
                                     />
-                                    <Text style={{ color: '#18A757', fontSize: 10 }}>Paid Orders</Text>
+                                    <Text style={{ color: '#B1272C', fontSize: 10 }}>Paid Orders</Text>
                                     <Text style={{ fontWeight: 'bold', color: '#4E4D4D' }}>₦ {this.state.paidOrder.amount}</Text>
                                     <Text style={[{}, styles.greencardtext]}>{this.state.paidOrder.count}</Text>
                                 </View>
@@ -172,35 +236,37 @@ class Dashnoard extends React.Component {
                         </View>
                         <View>
                             <View style={[{}, styles.calenderbtn]}>
-                                <TouchableOpacity>
-                                    <Text style={{ color: '#B1272C', fontWeight: 'bold' }}>Total Orders  </Text>
+                                <TouchableOpacity onPress={()=>this.ShowAllOrders()}>
+                                    <Text style={{ color: this.state.selected_graph==='all_orders'?'#B1272C':'black', fontWeight: 'bold' }}>Total Orders  </Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity>
-                                    <Text>Paid Orders  </Text>
+                                <TouchableOpacity onPress={()=>this.ShowPendingOrders()}>
+                                    <Text style={{ color: this.state.selected_graph==='pending_orders'?'#B1272C':'black', fontWeight: 'bold' }}>Paid Orders  </Text>
                                 </TouchableOpacity>
                             </View>
-                            {this.state.graph_total_orders.length == 0 ? null :
+                            {this.state.graph_data.length == 0 ? null :
                                 <LineChart
-                                    data={this.state.graph_total_orders}
+                                    data={this.state.graph_data}
                                     width={Dimensions.get("window").width - 20} // from react-native
                                     height={height / 3}
                                     yAxisLabel="N25M"
                                     yAxisSuffix=""
+                                    getDotColor={true}
+                                    withInnerLines={true}
                                     yAxisInterval={1} // optional, defaults to 1
                                     chartConfig={{
-                                        backgroundColor: "#e26a00",
-                                        backgroundGradientFrom: "#fb8c00",
-                                        backgroundGradientTo: "#ffa726",
+                                        backgroundColor: "#fff",
+                                        backgroundGradientFrom: "#fff",
+                                        backgroundGradientTo: "#fff",
                                         decimalPlaces: 2, // optional, defaults to 2dp
-                                        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-                                        labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+                                        color: (opacity = 1) => `rgba(177, 39, 44, ${opacity})`,
+                                        labelColor: (opacity = 1) => `rgba(177, 39, 44, ${opacity})`,
                                         style: {
                                             borderRadius: 16
                                         },
                                         propsForDots: {
                                             r: "6",
                                             strokeWidth: "2",
-                                            stroke: "#ffa726"
+                                            stroke: "#000"
                                         }
                                     }}
                                     bezier
@@ -231,7 +297,7 @@ class Dashnoard extends React.Component {
 
                 </ScrollView>
                 <Modal
-                    visible={false}//this.state.calenderModal
+                    visible={this.state.calenderModal}
                     transparent={true}
                 >
                     <TouchableHighlight
