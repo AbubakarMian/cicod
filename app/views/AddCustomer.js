@@ -11,6 +11,7 @@ import SearchBar from 'react-native-search-bar';
 import { Constants } from '../views/Constant';
 import { connect } from 'react-redux';
 import { SET_USER, SET_CUSTOMER } from '../redux/constants/index';
+import { Item } from 'native-base';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 class AddCustomer extends React.Component {
@@ -67,16 +68,19 @@ class AddCustomer extends React.Component {
     }
 
     async userInfo(item) {
-
+        console.log('ITEMS !!!!!!!!!!', item);
         let user_data = {
             customer_id: item.id,
             customer_name: item.first_name + ' ' + item.last_name,
             customer_email: item.email,
-            customer_phone: item.phone
+            customer_phone: item.phone,
+            customer_country: item.country,
+            customer_state: item.state,
+            customer_lga: item.lga,
         }
         await this.props.setCustomer(user_data);
-        console.log('user info !!!!!!!!!!!!!!! @@@@@@@@@@@@@',this.props);
-        this.props.navigation.goBack(); 
+        console.log('user info !!!!!!!!!!!!!!! @@@@@@@@@@@@@', this.props);
+        this.props.navigation.goBack();
     }
 
     render() {

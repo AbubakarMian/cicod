@@ -1,6 +1,11 @@
-import { REMOVE_FROM_CART, ADD_TO_PRODUCT, REMOVE_PRODUCT_FORM_CART } from '../constants';
+import { REMOVE_FROM_CART, ADD_TO_PRODUCT, REMOVE_PRODUCT_FORM_CART,CLEAR_ORDER } from '../constants';
 const initialState = {
-    cart: []
+    cart: [],
+    cart_detail:{
+        total_price:0,
+        tax:0,
+        total_price_with_tax:0,
+    }
 };
 const cartReducer = (state = initialState, action) => {
 
@@ -25,6 +30,7 @@ const cartReducer = (state = initialState, action) => {
             if (!product_found) {
                 cart.push(action.value)
             }
+            updateCart();
             return { ...state, cart };
 
             break;
@@ -41,39 +47,53 @@ const cartReducer = (state = initialState, action) => {
 
                     }
                     if (cart[i].purchased_quantity == 0) {
-                        cart.splice(i);
+                        cart.splice(i,1);
                     }
                 }
-
             }
-
+            updateCart();
             return { ...state, cart };
             break;
 
         case REMOVE_PRODUCT_FORM_CART:
+            console.log('my value value ', action.value);
 
-            // let product_found = false;
             cart = state.cart;
-            // state.cart.map((item, index) => {
-            //     console.log('item item item', item);
-            //     console.log('index index index', index);
-
-            //     if (item.id == action.value.id) {
-            //         item.purchased_quantity = +1
-            //         product_found = true;
-            //     }
-
-            // });
-            // if (!product_found) {
-                cart.splice(action.value)
-            // }
-            console.log('my action.value ', action.value);
-            console.log('my cart ', cart);
+            i = 0;
+            for (; i < cart.length; i++) {
+                if (i == action.value) {                   
+                    cart.splice(i,1);
+                }
+            }
+            updateCart();
+            return { ...state, cart };
+            break;
+        case CLEAR_ORDER:
+            cart = state.cart;
+            cart.splice(0);
+           
+            updateCart();
             return { ...state, cart };
             break;
 
         default:
             return state;
-    }
+    }    
 }
 export default cartReducer;
+
+function updateCart (){
+    let cart= initialState.cart;
+    console.log('update cart ',cart);
+    let total_price = 0;
+    for(let i=0;i<cart.length;i++){
+        console.log('cart.purchased_quantity',cart[i].purchased_quantity);
+        console.log('cart.price',cart[i].price);
+        console.log('cart.purchased_quantity cart.price',(cart[i].purchased_quantity * cart[i].price));
+        total_price = total_price + (cart[i].purchased_quantity * cart[i].price);
+    }
+    console.log('00000000000000000000000',total_price);
+    initialState.cart_detail.total_price = total_price;
+    initialState.cart_detail.tax = (total_price*0.75);
+    initialState.cart_detail.total_price_with_tax = (total_price+(total_price*0.75));
+}

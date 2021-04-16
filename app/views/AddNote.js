@@ -25,7 +25,7 @@ class AddNote extends React.Component {
         this.props.setNotes({
             notes:this.state.notes
         })
-        console.log('notes !!!!!!!!!!!!!', this.props.notes)
+        this.props.navigation.goBack();
     }
     render() {
         return (

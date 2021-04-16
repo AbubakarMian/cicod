@@ -8,6 +8,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { Constants } from './Constant';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import { connect } from 'react-redux';
+import { SET_USER, LOGOUT_USER, SET_DELIVERY_ADDRESS } from '../redux/constants/index';
 import { Container, Content, List, ListItem, Radio } from 'native-base';
 
 const { width, height } = Dimensions.get('window')
@@ -25,7 +26,6 @@ class DiliveryAddress extends React.Component {
     }
 
     componentDidMount() {
-        // console.log(' customer customer customer customer !!!!!!!!!', this.props.customer.id);
         this.getDeliveryAddress();
     }
 
@@ -71,23 +71,12 @@ class DiliveryAddress extends React.Component {
             is_selected_address: !this.state.is_selected_address
         })
         console.log(' value !!!!!!!!!!!!!!', value);
+        this.props.setDeliveryAddress({
+            address: value
+        })
+        this.props.navigation.goBack();
     }
     render() {
-        var radio_props_dilvery = [
-            { label: 'Dilivery', value: 0 },
-
-        ];
-        var radio_props_pickup = [
-            { label: 'No 8, Left right, Avenue Lekki Phase 1, Lagos Nigeria', value: 1 },
-
-        ];
-        var radio_props_payment = [
-            { label: 'Pay Now', value: 0 },
-            { label: 'Pay Acount', value: 1 },
-            { label: 'Pay Invoice', value: 2 },
-
-        ];
-        var items = ['Simon Mignolet', 'Nathaniel Clyne', 'Dejan Lovren', 'Mama Sakho', 'Emre Can'];
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
@@ -196,7 +185,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
-        logoutUser: () => dispatch({ type: LOGOUT_USER })
+        logoutUser: () => dispatch({ type: LOGOUT_USER }),
+        setDeliveryAddress: (value) => dispatch({ type: SET_DELIVERY_ADDRESS, value: value }),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(DiliveryAddress)
