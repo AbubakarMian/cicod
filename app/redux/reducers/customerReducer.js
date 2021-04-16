@@ -4,6 +4,9 @@ const initialState = {
     name: '',
     email: '',
     phone: '',
+    country: '',
+    state: '',
+    lga: '',
 }
 const customerReducer = (state = initialState, action) => {
 
@@ -18,6 +21,9 @@ const customerReducer = (state = initialState, action) => {
                 name: action.value.customer_name,
                 email: action.value.customer_email,
                 phone: action.value.customer_phone,
+                country: action.value.customer_country,
+                state: action.value.customer_state,
+                lga: action.value.customer_lga,
             }
 
             break;

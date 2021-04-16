@@ -42,7 +42,7 @@ class Login extends React.Component {
                 lastname: "sandbox last", //responseJson.user.lastname,
                 email: "cicodsandbox@yopmail.com",//responsejson.user.email,
                 phone: "123314324",//responseJson.user.phone,
-                access_token: "Bearer R8DSbmy3pGNGTL1t0yvL",  //+ responseJson.token
+                access_token: "Bearer bUv7I9OEsrcG19NiMBcU",  //+ responseJson.token
             });
             this.setState({ Spinner: false })
             this.props.navigation.navigate('Home')
