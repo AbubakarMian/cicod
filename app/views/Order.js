@@ -18,14 +18,49 @@ class Order extends React.Component {
         this.state = {
             selectedStartDate: null,
             calenderModal: false,
-            data: []
+            data: [],
+            is_active_list:'all'
         };
         this.onDateChange = this.onDateChange.bind(this);
     }
     componentDidMount() {
         this.orderList(Constants.orderslist);
     }
+    customeList(listType) {
 
+        this.setState({ 
+            Spinner: true,
+            is_active_list:listType
+        })
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            },
+
+        };
+        console.log("%%%%%%%%%%", Constants.orderslist + '?order_status=' + listType)
+        fetch(Constants.orderslist + '?order_status=' + listType, postData)
+
+            .then(response => response.json())
+            .then(async responseJson => {
+
+                console.log("@@@@@@@@@@@@", responseJson)
+                if (responseJson.status === 'success') {
+                    this.setState({ Spinner: false });
+                    this.setState({
+                        data: responseJson.data
+                    });
+                    // this.props.navigation.navigate('DrawerNavigation')
+                } else {
+                    let message = JSON.stringify(responseJson.error.message)
+                    Alert.alert('Error', message)
+                }
+
+            })
+    }
     orderList(url) {
         this.setState({ Spinner: true })
         let postData = {
@@ -148,26 +183,45 @@ class Order extends React.Component {
                 <ScrollView
                     horizontal={true}
                     paddingHorizontal={10}
-                    marginBottom={10}
+                    // marginBottom={10}
                     height={50}
                     scrollEnabled={true}
                 >
-                    <View style={{ width: width - 20, flexDirection: 'row', marginVertical: 10 }}>
-
-                        <TouchableOpacity >
-                            <Text style={{ fontWeight: 'bold', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>ALL</Text>
+                    <View style={{ width: width - 20, flexDirection: 'row', }}>
+                        <TouchableOpacity
+                            onPress={() => this.customeList("")}
+                        >
+                            <Text style={{ 
+                                color:this.state.is_active_list==='all'?'#000':'#e2e2e2',
+                                fontWeight: 'bold', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>ALL</Text>
+                        </TouchableOpacity >
+                        <TouchableOpacity
+                            onPress={() => this.customeList("pending")}
+                        >
+                            <Text style={{ 
+                                color:this.state.is_active_list==='pending'?'#000':'#e2e2e2',
+                                backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PENDING</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity >
-                            <Text style={{ color: '#909090', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PENDING</Text>
+                        <TouchableOpacity
+                            onPress={() => this.customeList("paid")}
+                        >
+                            <Text style={{ 
+                                color:this.state.is_active_list==='paid'?'#000':'#e2e2e2',
+                                backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PAID</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity >
-                            <Text style={{ color: '#909090', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PAID</Text>
+                        <TouchableOpacity
+                            onPress={() => this.customeList("partPayment")}
+                        >
+                            <Text style={{ 
+                                color:this.state.is_active_list==='partPayment'?'#000':'#e2e2e2',
+                                backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PART PAYMENT</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity >
-                            <Text style={{ color: '#909090', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PART PAYMENT</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity >
-                            <Text style={{ color: '#909090', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PAID FROM CREDIT</Text>
+                        <TouchableOpacity
+                            onPress={() => this.customeList("paidFromCredit")}
+                        >
+                            <Text style={{ 
+                                color:this.state.is_active_list==='paidFromCredit'?'#000':'#e2e2e2',
+                                backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 10 }}>PAID FROM CREDIT</Text>
                         </TouchableOpacity>
                     </View>
                 </ScrollView>
@@ -185,14 +239,13 @@ class Order extends React.Component {
                                 />
                             ))
                         }
-
                         renderItem={({ item, index, separators }) => (
                             <TouchableHighlight
                                 key={item.key}
                                 onPress={() => this.itemDetail(item)}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
-                                <View style={{ position: 'relative', alignSelf: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 5 }}>
+                                <View style={{ position: 'relative', alignSelf: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginBottom: 5 }}>
                                     <View style={{ flex: 1 }}>
                                         <View style={{ flexDirection: 'column' }}>
                                             <View style={{ flexDirection: 'row' }}>

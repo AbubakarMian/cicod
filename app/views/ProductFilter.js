@@ -218,7 +218,7 @@ class ProductFilter extends React.Component {
                 onChangeItem={item => this.onCreatedByText(item.value)}
               />}
           </View>
-          <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 0, flexDirection: 'row', position: 'relative' }}>
+          <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 0, flexDirection: 'row',zIndex:-0.999, position: 'relative' }}>
          
             {this.state.categoryarr.length < 1 ? null :
               <DropDownPicker
@@ -229,7 +229,7 @@ class ProductFilter extends React.Component {
                   justifyContent: 'flex-start', zIndex: 0.99
                 }}
                 placeholder="Catagory"
-                dropDownStyle={{ backgroundColor: '#000', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
                 labelStyle={{ color: '#A9A9A9' }}
                 onChangeItem={item => this.onCategoryText(item.value)}
               />}
@@ -237,7 +237,7 @@ class ProductFilter extends React.Component {
           </View>
 
         </View>
-        <View style={[{ flexDirection: 'row' }]}>
+        <View style={[{ flexDirection: 'row',zIndex:-0.999 }]}>
           <View style={[{ flex: 1, paddingVertical: 10 }]}>
             <Text style={{ color: '#929497', fontWeight: 'bold' }}>Created Date</Text>
             <TouchableOpacity>
