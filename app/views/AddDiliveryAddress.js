@@ -201,7 +201,8 @@ class AddDiliveryAddress extends React.Component {
                 if (responseJson.status === "success") {
                     let address = this.state.house_no + ',' + this.state.street + ',' + this.state.landmark + ',' + this.state.state_name + ',' + this.state.country_name;
                     this.props.setDeliveryAddress({
-                        address: address
+                        address: address,
+                        type: 'delivery',
                     })
                     Alert.alert('Message', responseJson.message)
                     this.props.navigation.navigate('CreateOrder', { render: true })
