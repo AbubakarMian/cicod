@@ -1,6 +1,7 @@
 import { SET_DELIVERY_ADDRESS } from '../constants';
 const initialState = {
-    address: '',
+    address: 'PICKUP',
+    type: '',
 }
 const deliveryAddressReducer = (state = initialState, action) => {
 
@@ -12,6 +13,7 @@ const deliveryAddressReducer = (state = initialState, action) => {
             return {
                 ...state,
                 address: action.value.address,
+                type: action.value.type,
             }
 
             break;

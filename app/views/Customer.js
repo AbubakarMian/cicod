@@ -20,6 +20,7 @@ class Customer extends React.Component {
             selectedStartDate: null,
             calenderModal: false,
             page: 1,
+            search_text: '',
             spinner: false
         };
         this.onDateChange = this.onDateChange.bind(this);
@@ -33,11 +34,11 @@ class Customer extends React.Component {
 
     componentDidMount() {
         console.log('this.props.user', this.props.user.access_token);
-        this.getCustomers();
+        this.getCustomers(Constants.customerlist);
 
     }
 
-    getCustomers() {
+    getCustomers(url) {
 
         this.setState({ spinner: true })
         let postData = {
@@ -50,10 +51,10 @@ class Customer extends React.Component {
         };
         //'https://com.cicodsaasstaging.com/com/api/customers?page=1'
         // Constants.customerlist+'?page='+this.state.page
-        fetch(Constants.customerlist + '?page=' + this.state.page, postData)
+        fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log('responseJson !!!! @@@@@@@@@@@@@@@@@@@@@@@@@@ ', responseJson)
+                console.log('responseJson !!!! @@@@@@@@@@@@', responseJson)
                 this.setState({
                     spinner: false,
                 });
@@ -75,13 +76,18 @@ class Customer extends React.Component {
         this.props.navigation.navigate('CustomersDetal', { customer_id: items.id })
     }
 
+    search() {
+        let url = Constants.customerlist + '?first_name=' + this.state.search_text + '&last_name=' + this.state.search_text;
+        this.getCustomers(url)
+    }
+
     render() {
 
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
             <View style={[{}, styles.mainView]}>
-                <Header navigation={this.props.navigation}/>
+                <Header navigation={this.props.navigation} />
                 <Spinner
                     visible={this.state.spinner}
                     textContent={'Please Wait...'}
@@ -89,20 +95,20 @@ class Customer extends React.Component {
                     color={'#fff'}
                 />
                 <View style={[{}, styles.headerRow]}>
-                    <TouchableOpacity 
-                    onPress={()=>this.props.navigation.navigate('Home')}
-                    style={[{}, styles.headerRowBackiconView]}>
+                    <TouchableOpacity
+                        onPress={() => this.props.navigation.navigate('Home')}
+                        style={[{}, styles.headerRowBackiconView]}>
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
                     <View>
                         <Text style={[{}, styles.headerRowText]}>customers</Text>
                     </View>
-                    <TouchableOpacity onPress={(() => this.props.navigation.navigate('AddNewCustomer'))} 
-                    style={[{}, styles.headerRowPlusiconView]}>
+                    <TouchableOpacity onPress={(() => this.props.navigation.navigate('AddNewCustomer'))}
+                        style={[{}, styles.headerRowPlusiconView]}>
                         {/* <View > */}
-                            <Image
-                                source={require('../images/products/circlePlus.png')}
-                            />
+                        <Image
+                            source={require('../images/products/circlePlus.png')}
+                        />
                         {/* </View> */}
                     </TouchableOpacity>
                 </View>
@@ -111,6 +117,8 @@ class Customer extends React.Component {
                         source={require('../images/products/searchicon.png')}
                     />
                     <TextInput
+                        onChangeText={text => this.setState({ search_text: text })}
+                        onSubmitEditing={() => this.search()}
                         placeholder="Johnson James"
                     />
                 </View>
