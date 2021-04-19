@@ -168,7 +168,7 @@ class Products extends React.Component {
                             containerStyle={{ height: 50, width: width  - 20, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
                             style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                             itemStyle={{
-                                justifyContent: 'flex-start', zIndex: 0.99
+                                justifyContent: 'flex-start', zIndex: 999
                             }}
                             placeholder="Product Category"
                             dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
@@ -177,10 +177,12 @@ class Products extends React.Component {
                         />
                     </View>
                 </View>
-
+            
                 <ScrollView>
                     <FlatList
+                    zIndex={-9999}
                         data={this.state.data}
+                    
                         ItemSeparatorComponent={
                             Platform.OS !== 'android' &&
                             (({ highlighted }) => (

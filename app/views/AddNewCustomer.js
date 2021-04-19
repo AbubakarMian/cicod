@@ -374,15 +374,14 @@ class AddNewCustomer extends React.Component {
                                     {this.state.countries_arr.length < 1 ? null :
                                         <DropDownPicker
                                             items={this.state.countries_arr}
-                                            autoScrollToDefaultValue={true}
-                                            containerStyle={{ height: 50, width: width - 200, marginTop: 15 }}
-                                            style={{ backgroundColor: '#fff' }}
+                                            containerStyle={{ height: 50, width: width /2 - 10, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
+                                            style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                                             itemStyle={{
-                                                justifyContent: 'flex-start', zIndex: 0.99
+                                                justifyContent: 'flex-start', 
                                             }}
                                             placeholder="Country *"
-                                            dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20,paddingBottom:20 }}
-                                            labelStyle={{ color: '#A9A9A9', height:30 }}
+                                            dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                                            labelStyle={{ color: '#A9A9A9' }}
                                             onChangeItem={item => this.onSelectCountry(item.value)}
                                         />}
                                 </View>
@@ -394,7 +393,7 @@ class AddNewCustomer extends React.Component {
                                             containerStyle={{ height: 50, width: width - 200, marginTop: 15 }}
                                             style={{ backgroundColor: '#fff' }}
                                             itemStyle={{
-                                                justifyContent: 'flex-start', zIndex: 0.99
+                                                justifyContent: 'flex-start',zIndex:0.999
                                             }}
                                             placeholder="States *"
                                             dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
@@ -403,7 +402,7 @@ class AddNewCustomer extends React.Component {
                                         />}
                                 </View>
                             </View>
-                            <View style={[{ marginTop: 30 }, styles.formRow]}>
+                            <View style={[{ marginTop: 30,zIndex:-0.999 }, styles.formRow]}>
                                 <View style={[{}, styles.formColumn]}>
                                     {/* <TextInput
                                         placeholder="LGA*"
@@ -429,7 +428,7 @@ class AddNewCustomer extends React.Component {
 
                                 </View>
                             </View>
-                            <View style={[{}, styles.formRow]}>
+                            <View style={[{zIndex:-0.999}, styles.formRow]}>
                                 <View style={[{}, styles.formColumn]}>
                                     <CheckBox
                                         style={[{ width: width / 2, }, styles.cheBox]}

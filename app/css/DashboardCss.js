@@ -35,8 +35,8 @@ export default StyleSheet.create({
         borderBottomLeftRadius: 50,
         borderTopRightRadius: 50,
         borderBottomRightRadius: 50,
-        paddingHorizontal: 10,
-        paddingVertical: 5,
+        
+        
         borderColor: '#FFF4F4'
     },
     cardContainer: {

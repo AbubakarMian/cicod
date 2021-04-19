@@ -20,6 +20,8 @@ class ChangePassword extends React.Component {
             new_password: '123456',
             confirm_password: '1234567',
             spinner: false,
+            is_secure:false,
+            
         }
     }
 
@@ -88,19 +90,25 @@ class ChangePassword extends React.Component {
                             </View>
                             <View style={[{}, styles.inputView]}>
                                 <TextInput
+                                secureTextEntry={this.state.is_secure}
                                     placeholder="New password"
                                     onChangeText={text => this.setState({ new_password: text })}
                                 />
-                                <TouchableOpacity style={[{}, styles.eyeIconView]}>
+                                <TouchableOpacity 
+                                onPress={()=>this.setState({is_secure:!this.state.is_secure,})}
+                                style={[{}, styles.eyeIconView]}>
                                     <Icon name="eye-slash" size={20} color={'#929497'} />
                                 </TouchableOpacity>
                             </View>
                             <View style={[{}, styles.inputView]}>
                                 <TextInput
+                                   secureTextEntry={this.state.is_secure}
                                     onChangeText={text => this.setState({ confirm_password: text })}
                                     placeholder="Confirm New password"
                                 />
-                                <TouchableOpacity style={[{}, styles.eyeIconView]}>
+                                <TouchableOpacity 
+                                onPress={()=>this.setState({is_secure:!this.state.is_secure,})}
+                                style={[{}, styles.eyeIconView]}>
                                     <Icon name="eye-slash" size={20} color={'#929497'} />
                                 </TouchableOpacity>
 
