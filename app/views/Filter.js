@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, Text, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import { View, ImageBackground, Text, Alert, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
 import splashImg from '../images/splash.jpg'
 import styles from '../css/Filter.Css'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -8,9 +8,11 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { Constants } from '../views/Constant';
 import SearchBar from 'react-native-search-bar';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { connect } from 'react-redux';
+import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
-export default class Filter extends React.Component {
+class Filter extends React.Component {
 
   constructor(props) {
     super(props);
@@ -22,7 +24,9 @@ export default class Filter extends React.Component {
       spinner: false,
     };
   }
-
+  componentDidMount() {
+    this.getCategoryList();
+  }
   getCategoryList() {
     this.setState({ spinner: true })
     let postData = {
@@ -38,16 +42,15 @@ export default class Filter extends React.Component {
       .then(response => response.json())
       .then(async responseJson => {
         this.setState({ spinner: false });
-        if (responseJson.status === 'success') {
+        if (responseJson.status === "success") {
 
           let res = responseJson.data;
           let categoryarr = res.map((x, key) => { return { label: x.name, value: x.name } });
-          console.log('category !!!!!!', categoryarr);
           this.setState({
             categoryarr: categoryarr,
           });
         } else {
-          let message = JSON.stringify(responseJson.error.message)
+          let message = responseJson.message
           Alert.alert('Error', message)
         }
 
@@ -80,16 +83,23 @@ export default class Filter extends React.Component {
   }
 
   render() {
+    console.log(' categoryarr categoryarr ', this.state.categoryarr)
     return (
       <View style={[{}, styles.mainView]}>
         <Header navigation={this.props.navigation} />
+        <Spinner
+          visible={this.state.spinner}
+          textContent={'Please Wait...'}
+          textStyle={{ color: '#fff' }}
+          color={'#fff'}
+        />
         <View style={[{}, styles.mainRow]}>
-       
+
           <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
             <TouchableOpacity
-            style={{flexDirection:'row',alignItems:'center'}}
+              style={{ flexDirection: 'row', alignItems: 'center' }}
               onPress={() => this.props.navigation.navigate('Product')}
-            >  
+            >
               <Icon name="arrow-left" size={25} color="#929497" />
               <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>FILTER</Text>
 
@@ -99,26 +109,26 @@ export default class Filter extends React.Component {
           </View>
           <Text style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20 }]}>Clear Filter</Text>
         </View>
-  
-        <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 0, flexDirection: 'row', position: 'relative' }}>
+
+        <View style={{ borderBottomWidth: 1, marginTop: 20, borderBottomColor: '#E6E6E6', marginHorizontal: 0, flexDirection: 'row', position: 'relative' }}>
 
           {this.state.categoryarr.length < 1 ? null :
             <DropDownPicker
               items={this.state.categoryarr}
-              containerStyle={{ height: 50}}
+              containerStyle={{ height: 50, width: width - 20 }}
               style={{ backgroundColor: '#fff' }}
               itemStyle={{
                 justifyContent: 'flex-start',
               }}
               placeholder="Catagory"
-              dropDownStyle={{ backgroundColor: '#fff'}}
+              dropDownStyle={{ backgroundColor: '#fff' }}
               labelStyle={{ color: '#A9A9A9' }}
               onChangeItem={item => this.onCategoryText(item.value)}
             />}
 
         </View>
 
- 
+
         <View style={{ paddingVertical: 20 }}>
           <Text style={[{ color: '#929497', fontWeight: 'bold', fontSize: 18 }]}>Status</Text>
         </View>
@@ -136,7 +146,7 @@ export default class Filter extends React.Component {
             </View>
           </View>
         </View>
-  
+
         <TouchableOpacity
           onPress={this.applyFilter}
           style={{ width: width / 1.5, alignSelf: 'center', backgroundColor: '#B1272C', justifyContent: 'center', alignItems: 'center', paddingVertical: 15, borderRadius: 50, marginTop: 30 }}
@@ -147,3 +157,15 @@ export default class Filter extends React.Component {
     )
   }
 }
+function mapStateToProps(state) {
+  return {
+    user: state.userReducer
+  }
+};
+function mapDispatchToProps(dispatch) {
+  return {
+    setUser: (value) => dispatch({ type: SET_USER, value: value }),
+    logoutUser: () => dispatch({ type: LOGOUT_USER }),
+  }
+};
+export default connect(mapStateToProps, mapDispatchToProps)(Filter)
