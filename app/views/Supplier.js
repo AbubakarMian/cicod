@@ -133,7 +133,7 @@ import { Constants } from '../views/Constant';
                     </View>
                 </View>
 
-          
+            <View style={{borderWidth:0.20,borderColor:'#929497',width:width-20,alignSelf:'center',marginVertical:10}}></View>
     
 
                 <ScrollView>
@@ -157,7 +157,7 @@ import { Constants } from '../views/Constant';
                                 onPress={() => this._onPress(item)}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
-                                <View style={{ position: 'relative', alignSelf: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 5 }}>
+                                <View style={{ position: 'relative', alignSelf: 'center',alignItems:'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 5 }}>
                                     <View style={{ flex: 1 }}>
                                         <View style={{ flexDirection: 'column' }}>
                                             <View style={{ flexDirection: 'row' }}>

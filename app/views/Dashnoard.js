@@ -37,7 +37,8 @@ class Dashnoard extends React.Component {
             graph_data:[],
             showtotal_orders:true,
             selected_graph:'all_orders',
-            calenderModal:false
+            calenderModal:false,
+            total_order_background:'#FFE5E5'
         };
 
     }
@@ -192,7 +193,7 @@ class Dashnoard extends React.Component {
                         </View>
                         <View style={[{}, styles.cardContainer]}>
                             <View style={[{}, styles.cardView]}>
-                                <View style={[{}, styles.card]}>
+                                <View style={[{backgroundColor:'#FFE5E5'}, styles.card]}>
                                     <Image
                                         source={require('../images/dashboard/redbage.png')}
                                     />
@@ -214,7 +215,7 @@ class Dashnoard extends React.Component {
                         </View>
                         <View style={[{}, styles.cardContainer]}>
                             <View style={[{}, styles.cardView]}>
-                                <View style={[{}, styles.card]}>
+                                <View style={[{backgroundColor:'#FFE5E5'}, styles.card]}>
                                     <Image
                                         source={require('../images/dashboard/bluebage.png')}
                                     />
@@ -234,13 +235,17 @@ class Dashnoard extends React.Component {
                                 </View>
                             </View>
                         </View>
-                        <View>
+                        <View style={{backgroundColor:'#fff',paddingVertical:20,width:width-30,alignSelf:'center',borderRadius:5}}>
                             <View style={[{}, styles.calenderbtn]}>
-                                <TouchableOpacity onPress={()=>this.ShowAllOrders()}>
-                                    <Text style={{ color: this.state.selected_graph==='all_orders'?'#B1272C':'black', fontWeight: 'bold' }}>Total Orders  </Text>
+                                <TouchableOpacity
+                                style={{backgroundColor:'#FFE5E5',paddingHorizontal:5,borderTopLeftRadius:50,borderBottomLeftRadius:50,paddingVertical:5}}
+                                onPress={()=>this.ShowAllOrders()}>
+                                    <Text style={{ color: this.state.selected_graph==='all_orders'?'#B1272C':'#707070', fontWeight: 'bold' }}>Total Orders  </Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity onPress={()=>this.ShowPendingOrders()}>
-                                    <Text style={{ color: this.state.selected_graph==='pending_orders'?'#B1272C':'black', fontWeight: 'bold' }}>Paid Orders  </Text>
+                                <TouchableOpacity 
+                                style={{backgroundColor:'#FFE5E5',paddingHorizontal:5,borderTopRightRadius:50,borderBottomRightRadius:50,paddingVertical:5}}
+                                onPress={()=>this.ShowPendingOrders()}>
+                                    <Text style={{ color: this.state.selected_graph==='pending_orders'?'#B1272C':'#707070', fontWeight: 'bold' }}>Paid Orders  </Text>
                                 </TouchableOpacity>
                             </View>
                             {this.state.graph_data.length == 0 ? null :
@@ -281,7 +286,7 @@ class Dashnoard extends React.Component {
                             <View style={[{}, styles.bannerContentView]}>
                                 <Text style={[{}, styles.bannerText]}>Monthly Sales</Text>
                                 <Text style={[{}, styles.bannerboldText]}>₦ {this.state.target.sales_made_amount}</Text>
-                                <Text style={[{}, styles.bannerboldText]}>Target: {this.state.target.sales_target_amount}</Text>
+                                <Text style={[{color:'#707070'}]}>Target: {this.state.target.sales_target_amount}</Text>
                                 <Text style={[{}, styles.bannerpercentText]}>
                                     75%
                               </Text>
