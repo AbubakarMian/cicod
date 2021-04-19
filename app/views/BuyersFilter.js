@@ -57,7 +57,6 @@ class BuyersFilter extends React.Component {
 
           let res = responseJson.data;
           let categoryarr = res.map((x, key) => { return { label: x.name, value: x.name } });
-          console.log('category !!!!!!', categoryarr);
           this.setState({
             categoryarr: categoryarr,
           });
@@ -90,7 +89,6 @@ class BuyersFilter extends React.Component {
         if (responseJson.success === true) {
           let res = responseJson.data;
           let approvedby_arr = res.map((x, key) => { return { label: x.approved_by, value: x.approved_by } });
-          console.log('approvedby_arr approvedby_arr !!!!!!', approvedby_arr);
           this.setState({
             approvedby_arr: approvedby_arr,
           });
@@ -124,7 +122,6 @@ class BuyersFilter extends React.Component {
     })
   }
   applyFilter = () => {
-    console.log('this.state.filters', this.state.filters);
     this.props.navigation.navigate('Buyers', { filters: this.state.filters });
   }
 
@@ -135,12 +132,18 @@ class BuyersFilter extends React.Component {
   }
 
   setDate = (date) => {
+    var month = date.getUTCMonth() + 1; //months from 1-12
+    var day = date.getUTCDate();
+    var year = date.getUTCFullYear();
+
+    let newdate = day + "/" + month + "/" + year;
 
     let filters = this.state.filters;
     filters.push({ key: 'create_time', value: date });
     this.setState({
       isDatePickerVisible: !this.state.isDatePickerVisible,
-      filters: filters
+      filters: filters,
+      date: newdate,
     })
 
   }
@@ -181,44 +184,44 @@ class BuyersFilter extends React.Component {
           </TouchableOpacity>
           <Text style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20, top: 20 }]}>Clear Filter</Text>
         </View>
-       
-       
+
+
         <View style={{ width: width - 20, backgroundColor: '#fff', paddingVertical: 10, marginTop: 20 }}>
-        {this.state.categoryarr.length < 1 ? null :
-        
-          //     dropDownStyle={{ backgroundColor: '#fafafa' }}
-          //     onChangeItem={item => this.setState({
-          //         date: item.value
-          //     })}
-          //     style={{ width: width / 2 - 30, alignSelf: 'center', marginTop: 10, marginLeft: 10 }}
-          // />
-              <DropDownPicker
-                items={this.state.categoryarr}
-                containerStyle={{ height: 50}}
-                style={{ backgroundColor: '#fff' }}
-                itemStyle={{
-                  justifyContent: 'flex-start',
-                }}
-                placeholder="Catagory"
-                dropDownStyle={{ backgroundColor: '#fff',maxHeight:50}}
-                labelStyle={{ color: '#A9A9A9' }}
-                onChangeItem={item => this.onCategoryText(item.value)}
-              />}
-           {this.state.approvedby_arr.length < 1 ? null :
-              <DropDownPicker
-                items={this.state.approvedby_arr}
-                containerStyle={{ height: 50}}
-                style={{ backgroundColor: '#fff' }}
-                itemStyle={{
-                  justifyContent: 'flex-start',
-                }}
-                placeholder="Catagory"
-                dropDownStyle={{ backgroundColor: '#fff'}}
-                labelStyle={{ color: '#A9A9A9' }}
-                onChangeItem={item => this.approvedByText(item.value)}
-              />}    
+          {this.state.categoryarr.length < 1 ? null :
+
+            //     dropDownStyle={{ backgroundColor: '#fafafa' }}
+            //     onChangeItem={item => this.setState({
+            //         date: item.value
+            //     })}
+            //     style={{ width: width / 2 - 30, alignSelf: 'center', marginTop: 10, marginLeft: 10 }}
+            // />
+            <DropDownPicker
+              items={this.state.categoryarr}
+              containerStyle={{ height: 50 }}
+              style={{ backgroundColor: '#fff' }}
+              itemStyle={{
+                justifyContent: 'flex-start',
+              }}
+              placeholder="Catagory"
+              dropDownStyle={{ backgroundColor: '#fff', maxHeight: 50 }}
+              labelStyle={{ color: '#A9A9A9' }}
+              onChangeItem={item => this.onCategoryText(item.value)}
+            />}
+          {this.state.approvedby_arr.length < 1 ? null :
+            <DropDownPicker
+              items={this.state.approvedby_arr}
+              containerStyle={{ height: 50 }}
+              style={{ backgroundColor: '#fff' }}
+              itemStyle={{
+                justifyContent: 'flex-start',
+              }}
+              placeholder="Catagory"
+              dropDownStyle={{ backgroundColor: '#fff' }}
+              labelStyle={{ color: '#A9A9A9' }}
+              onChangeItem={item => this.approvedByText(item.value)}
+            />}
         </View>
-        <View style={[{ flexDirection: 'row', width: width / 2,zIndex:-0.999 }]}>
+        <View style={[{ flexDirection: 'row', width: width / 2, zIndex: -0.999 }]}>
           <View style={[{ flex: 1, paddingVertical: 10 }]}>
             <Text style={{ color: '#929497', fontWeight: 'bold' }}>Approved Date</Text>
             <TouchableOpacity
@@ -228,7 +231,7 @@ class BuyersFilter extends React.Component {
                 <Image
                   source={require('../images/calenderIcon.png')}
                 />
-                <Text style={{ marginLeft: 10, color: '#aaa' }}>{(this.state.date) ? this.state.date : 'DD-MM-YY'}</Text>
+                <Text style={{ marginLeft: 10, color: '#aaa' }}>{this.state.date ==''? 'DD-MM-YY':this.state.date}</Text>
               </View>
               <View style={{ position: 'absolute', right: 20, bottom: 10 }}>
                 <Icon
@@ -244,12 +247,12 @@ class BuyersFilter extends React.Component {
         <View>
           <View style={[{ paddingRight: 20 }, styles.mainRow]}>
             <View style={[{ marginRight: 10 }]}>
-            <TouchableOpacity onPress={() => this.activeSet(1)}>
+              <TouchableOpacity onPress={() => this.activeSet(1)}>
                 <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 10 }]}>ACTIVE</Text>
               </TouchableOpacity>
             </View>
             <View style={[{}]}>
-            <TouchableOpacity onPress={() => this.activeSet(0)}>
+              <TouchableOpacity onPress={() => this.activeSet(0)}>
                 <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 10 }]}>INACTIVE</Text>
               </TouchableOpacity>
             </View>
