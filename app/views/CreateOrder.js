@@ -8,7 +8,7 @@ import CheckBox from 'react-native-check-box';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Constants } from '../views/Constant';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART, REMOVE_PRODUCT_FORM_CART, CLEAR_ORDER } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART, REMOVE_PRODUCT_FORM_CART, CLEAR_ORDER, SET_DELIVERY_ADDRESS } from '../redux/constants/index';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import SearchBar from 'react-native-search-bar';
 const { width, height } = Dimensions.get('window')
@@ -27,10 +27,11 @@ class CreateOrder extends React.Component {
             customer_state: this.props.customer.state ?? '',
             customer_lga: this.props.customer.lga ?? '',
             cart_arr: this.props.cart.cart ?? [],
+            limit_cart_arr: [],
             cart_detail: this.props.cart.cart_detail,
             payment_option: 0,
             delivery_type_btn: 0,
-            is_pickup: false,
+            is_pickup: true,
             payment_mode: ''
         }
     }
@@ -38,11 +39,15 @@ class CreateOrder extends React.Component {
         this.props.emptyOrder();
     }
     componentDidMount() {
-        console.log(' componentDidMount componentDidMount', this.props);
+        console.log(' this.props.deliveryAddress.type', this.props.deliveryAddress.type);
+        let res = this.props.cart.cart;
+        let cart_arr = res.map((x, key) => { return { id: x.id, quantity: x.purchased_quantity } });
+        this.setState({
+            limit_cart_arr: cart_arr,
+        });
     }
 
     componentWillReceiveProps() {
-        console.log(' componentWillReceiveProps CreateOrder', this.props);
 
         this.setState({
             customer_name: this.props.customer.name,
@@ -51,64 +56,6 @@ class CreateOrder extends React.Component {
         })
 
     }
-
-    createOrder() {
-        this.setState({ spinner: true })
-
-        if (this.state.name === '' || this.state.price === '') {
-            this.setState({ spinner: false })
-            Alert.alert("Warning", "Product name and Price are required")
-            return;
-        }
-        else {
-
-
-            let postData = {
-                method: 'POST',
-                headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': this.props.user.access_token,
-                },
-                body: JSON.stringify({
-                    customer_name: this.state.customer_name,//required
-                    customer_phone: this.state.customer_phone,//required
-                    customer_email: this.state.customer_email,//sandbox
-                    products: this.state.cart_arr,
-                    delivery_type: this.state.price,// required
-                    delivery_address: this.state.description,
-                    payment_mode: this.state.validity,//required
-                    country_id: this.state.is_qty_limit,
-                    state_id: this.state.state_id,
-                    lga_id: this.state.image,
-                    note: this.state.is_web_shop,
-                    discount_amount: this.state.is_web_shop,
-                    discount_percent: this.state.is_web_shop,
-                })
-            };
-            fetch(Constants.orderslist, postData)
-                .then(response => response.json())
-                .then(async responseJson => {
-                    console.log(" create customer response !!!!!!!!!!!", responseJson)
-
-                    this.setState({ spinner: false })
-                    if (responseJson.status === "success") {
-                        Alert.alert('MESSAGE', responseJson.message)
-                        let customer_id = responseJson.data.id;
-                        // this.createCustomerDelivery(customer_id);
-                    } else {
-                        // this.setState({ spinner: false })
-                        let message = JSON.stringify(responseJson.message)
-                        Alert.alert('Error', message)
-                    }
-                }
-                )
-                .catch((error) => {
-                    console.log("Api call error", error);
-                });
-        }
-    }
-
 
     async counterFun(action, index) {
 
@@ -124,9 +71,11 @@ class CreateOrder extends React.Component {
                 await this.props.cartReducer(data[index]);
                 data[index].purchased_quantity = updated_purchased_quantity;
                 console.log('here in else condition !!!!!!!!! after : ', data[index].purchased_quantity);
-
+                let res = data;
+                let cart_arr = res.map((x, key) => { return { id: x.id, quantity: x.purchased_quantity } });
                 this.setState({
-                    cart_arr: data
+                    cart_arr: data,
+                    limit_cart_arr: cart_arr
                 });
 
                 console.log('cart : ', this.props.cart);
@@ -167,6 +116,10 @@ class CreateOrder extends React.Component {
 
             if (type == 'pickup') {
                 // this.props.navigation.navigate('PickUpLocation', { type })
+                this.props.setDeliveryAddress({
+                    address: '',
+                    type: 'pickup',
+                })
             }
             else {
                 this.props.navigation.navigate('DiliveryAddress', { type })
@@ -193,12 +146,14 @@ class CreateOrder extends React.Component {
         this.props.removeProductFromCart(id);
     }
     createOrderFun() {
+        console.log(' this.props.deliveryAddress.type this.props.deliveryAddress.type', this.props.deliveryAddress.type)
         let dilevery_type = ''
         if (this.state.is_pickup == true) {
             dilevery_type = 'Pickup';
         } else {
             dilevery_type = 'Delivery';
         }
+        console.log('dilevery_type', dilevery_type);
         let discounted_price = 0
         if (this.props.orderDiscountReducer.discount_type == 'percentage') {
             discounted_price = (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01);
@@ -206,7 +161,7 @@ class CreateOrder extends React.Component {
         else {
             discounted_price = this.props.orderDiscountReducer.discount_amount;
         }
-        // let discounted_price = (this.state.cart_detail.total_price_with_tax);
+        console.log('this.props.notes this.props.notes !!!!!!!!!!!!', this.props.notes)
         let postData = {
             method: 'POST',
             headers: {
@@ -215,27 +170,28 @@ class CreateOrder extends React.Component {
                 'Authorization': this.props.user.access_token
             },
             body: JSON.stringify({
-                customer_name: this.state.customer_name,//required
-                customer_phone: this.state.customer_phone,//required
-                customer_email: this.state.customer_email,
-                products: this.state.cart_arr, //required
-                delivery_type: dilevery_type,
+                customer_name: this.state.customer_name,//this.state.customer_name,//required
+                customer_phone: this.state.customer_phone, //this.state.customer_phone,//required
+                customer_email: this.state.customer_email,//this.state.customer_email,
+                products: this.state.limit_cart_arr, //required
+                delivery_type: this.props.deliveryAddress.type ?? 'PICKUP',//dilevery_type,
                 delivery_address: this.props.deliveryAddress.address ?? '',
                 payment_mode: this.state.payment_mode, //required
                 // country_id: this.state.customer_country,
                 // state_id: this.state.customer_state,
                 // lga_id: this.state.customer_lga,
-                note: this.state.tenantId,
-                discount_amount: discounted_price,
+                note: this.props.notes.notes ?? '',
+                discount_amount: discounted_price ?? 0,
             })
         };
         fetch(Constants.orderslist, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 console.log(" response Json responseJson responseJson!!!!!!!!!!!", responseJson)
-                if (responseJson.status === "SUCCESS") {
+                if (responseJson.status === "success") {
 
                     this.setState({ spinner: false })
+                    Alert.alert('Message', responseJson.message)
                 } else {
                     this.setState({ spinner: false })
                     let message = responseJson.message
@@ -486,7 +442,6 @@ class CreateOrder extends React.Component {
                                         buttonColor={'green'}
                                         buttonSize={10}
                                         buttonOuterSize={20}
-                                        initial={0}
                                         onPress={() => this.DeliveryType('pickup')}
 
                                     />
@@ -643,6 +598,7 @@ function mapDispatchToProps(dispatch) {
         cartReducer: (value) => dispatch({ type: ADD_TO_PRODUCT, value: value }),
         removeFromCart: (value) => dispatch({ type: REMOVE_FROM_CART, value: value }),
         removeProductFromCart: (value) => dispatch({ type: REMOVE_PRODUCT_FORM_CART, value: value }),
+        setDeliveryAddress: (value) => dispatch({ type: SET_DELIVERY_ADDRESS, value: value }),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CreateOrder)

@@ -4,11 +4,13 @@ import styles from '../css/MoreCss';
 import Header from '../views/Header'
 import CheckBox from 'react-native-check-box';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { connect } from 'react-redux';
+import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 
 
 var { width, height } = Dimensions.get('window');
 
-export default class More extends React.Component {
+class More extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -20,18 +22,23 @@ export default class More extends React.Component {
 
 
     }
+    logoutFun() {
+
+        this.props.logoutUser()
+        this.props.navigation.navigate('Login')
+    }
     render() {
         return (
             <View style={[{}, styles.mainView]}>
-                <Header navigation={this.props.navigation}/>
+                <Header navigation={this.props.navigation} />
                 <View style={[{}, styles.headingRow]}>
                     <Text style={[{}, styles.moreText]}>MORE</Text>
                 </View>
                 <ScrollView>
                     <View>
                         <TouchableOpacity
-                        onPress={()=>this.props.navigation.navigate('Customer')}
-                        style={[{}, styles.cardView]}>
+                            onPress={() => this.props.navigation.navigate('Customer')}
+                            style={[{}, styles.cardView]}>
                             <View>
                                 <Image
                                     source={require('../images/users.png')}
@@ -43,8 +50,8 @@ export default class More extends React.Component {
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity
-                        onPress={()=>this.props.navigation.navigate('Buy')}
-                        style={[{}, styles.cardView]}>
+                            onPress={() => this.props.navigation.navigate('Buy')}
+                            style={[{}, styles.cardView]}>
                             <View>
                                 <Image
                                     source={require('../images/buy.png')}
@@ -56,8 +63,8 @@ export default class More extends React.Component {
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity
-                        onPress={()=>this.props.navigation.navigate('Supplier')}
-                        style={[{}, styles.cardView]}>
+                            onPress={() => this.props.navigation.navigate('Supplier')}
+                            style={[{}, styles.cardView]}>
                             <View>
                                 <Image
                                     source={require('../images/supplier.png')}
@@ -68,7 +75,9 @@ export default class More extends React.Component {
                                 <Text style={[{}, styles.cardDescText]}>List of all your suppliers</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity style={[{}, styles.cardView]}>
+                        <TouchableOpacity
+                            onPress={() => this.props.navigation.navigate('Buyers')}
+                            style={[{}, styles.cardView]}>
                             <View>
                                 <Image
                                     source={require('../images/buyers.png')}
@@ -80,8 +89,8 @@ export default class More extends React.Component {
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity
-                        onPress={()=>this.props.navigation.navigate('Connect')}
-                        style={[{}, styles.cardView]}>
+                            onPress={() => this.props.navigation.navigate('Connect')}
+                            style={[{}, styles.cardView]}>
                             <View>
                                 <Image
                                     source={require('../images/connect.png')}
@@ -92,9 +101,9 @@ export default class More extends React.Component {
                                 <Text style={[{}, styles.cardDescText]}>Connect with other merchants</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity 
-                        onPress={()=>this.props.navigation.navigate('User')}
-                        style={[{}, styles.cardView]}>
+                        <TouchableOpacity
+                            onPress={() => this.props.navigation.navigate('User')}
+                            style={[{}, styles.cardView]}>
                             <View>
                                 <Image
                                     source={require('../images/user.png')}
@@ -106,12 +115,27 @@ export default class More extends React.Component {
                             </View>
                         </TouchableOpacity>
                     </View>
-                    <TouchableOpacity style={[{},styles.logoutView]}>
-                     <Icon name="sign-out" color={'#929497'} size={30} />
-                     <Text style={[{},styles.logoutText]}>Logout</Text>
+                    <TouchableOpacity
+                        onPress={() => this.logoutFun()}
+                        style={[{}, styles.logoutView]}>
+                        <Icon name="sign-out" color={'#929497'} size={30} />
+                        <Text style={[{}, styles.logoutText]}>Logout</Text>
                     </TouchableOpacity>
                 </ScrollView>
             </View>
         );
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        user: state.userReducer
+    }
+};
+function mapDispatchToProps(dispatch) {
+    return {
+        setUser: (value) => dispatch({ type: SET_USER, value: value }),
+        logoutUser: () => dispatch({ type: LOGOUT_USER })
+    }
+};
+export default connect(mapStateToProps, mapDispatchToProps)(More)
