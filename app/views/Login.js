@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, Touchable, ScrollView, Alert } from 'react-native';
+import {  View,  Image,Dimensions,TouchableOpacity, ScrollView  } from 'react-native';
+// import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, Touchable, ScrollView, Alert } from 'react-native';
 import styles from '../css/LoginCss';
 import CheckBox from 'react-native-check-box';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -7,6 +8,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import { Constants } from '../views/Constant';
+import {   Text, TextInput, Alert} from 'react-native-paper';
 
 
 var { width, height } = Dimensions.get('window');
@@ -121,14 +123,14 @@ class Login extends React.Component {
                         <TextInput
                             style={{ flex: 3 }}
                             onChangeText={text => this.setState({ tenantId: text })}
-                            placeholder="Domain Name"
+                            label="Domain Name"
                         />
                         <Text style={{ flex: 1, backgroundColor: '#CFCFCF', color: '#4E4D4D', paddingVertical: 15, paddingHorizontal: 5 }}>.cicod.com</Text>
                     </View>
                     <View style={[{}, styles.textInputView]}>
                         <TextInput
                             onChangeText={text => this.setState({ username: text })}
-                            placeholder="Email"
+                            label="Email"
                         />
                     </View>
                     <View style={[{}, styles.textInputView]}>
