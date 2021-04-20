@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, Text, Dimensions, Image, Platform, TouchableOpacity, TextInput } from 'react-native';
+import { View, ImageBackground, Dimensions, Image, Platform, TouchableOpacity,  } from 'react-native';
+import {   Text, TextInput, Alert} from 'react-native-paper';
 import CalendarPicker from 'react-native-calendar-picker';
 import styles from '../css/Filter.Css'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';

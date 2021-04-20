@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, Text, Alert, TextInput, Dimensions, Image, Platform, TouchableOpacity, FlatList } from 'react-native'
+import { View, ImageBackground, ScrollView, Dimensions, Image, Platform, TouchableOpacity, FlatList } from 'react-native'
+import { Text, TextInput, Alert } from 'react-native-paper';
 import styles from '../css/AddDiliveryAddressCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import CheckBox from 'react-native-check-box';
@@ -257,43 +258,75 @@ class AddSuppliers extends React.Component {
                             <View style={[{ marginTop: 10 }, styles.mainFormView]}>
                                 <View>
                                     <TextInput
-                                        placeholder="First Name*"
+                                        label="First Name*"
+                                        style={{ backgroundColor: 'transparent', }}
+                                        width={width - 50}
+                                        alignSelf={'center'}
+                                        color={'#000'}
                                         onChangeText={text => this.setState({ house_no: text })}
                                     />
                                     <TextInput
-                                        placeholder="Last Name*"
+                                        label="Last Name*"
+                                        style={{ backgroundColor: 'transparent', }}
+                                        width={width - 50}
+                                        alignSelf={'center'}
+                                        color={'#000'}
                                         onChangeText={text => this.setState({ house_no: text })}
                                     />
                                     <TextInput
-                                        placeholder="Business Name"
+                                        label="Business Name"
+                                        style={{ backgroundColor: 'transparent', }}
+                                        width={width - 50}
+                                        alignSelf={'center'}
+                                        color={'#000'}
                                         onChangeText={text => this.setState({ house_no: text })}
                                     />
                                     <TextInput
-                                        placeholder="Email"
+                                        label="Email"
+                                        style={{ backgroundColor: 'transparent', }}
+                                        width={width - 50}
+                                        alignSelf={'center'}
+                                        color={'#000'}
                                         onChangeText={text => this.setState({ house_no: text })}
                                     />
 
                                     <View style={{ flexDirection: 'row' }}>
                                         <View style={{ flex: 1 }}>
                                             <TextInput
-                                                placeholder="Phone Number"
+                                                label="Phone Number"
+                                                style={{ backgroundColor: 'transparent', }}
+                                                width={width - 50}
+                                                alignSelf={'center'}
+                                                color={'#000'}
                                                 onChangeText={text => this.setState({ house_no: text })}
                                             />
                                         </View>
                                         <View style={{ flex: 1 }}>
                                             <TextInput
-                                                placeholder="House No.*"
+                                                label="House No.*"
+                                                style={{ backgroundColor: 'transparent', }}
+                                                width={width - 50}
+                                                alignSelf={'center'}
+                                                color={'#000'}
                                                 onChangeText={text => this.setState({ house_no: text })}
                                             />
                                         </View>
 
                                     </View>
                                     <TextInput
-                                        placeholder="Street*"
+                                        label="Street*"
+                                        style={{ backgroundColor: 'transparent', }}
+                                        width={width - 50}
+                                        alignSelf={'center'}
+                                        color={'#000'}
                                         onChangeText={text => this.setState({ street: text })}
                                     />
                                     <TextInput
-                                        placeholder="Landmark"
+                                        label="Landmark"
+                                        style={{ backgroundColor: 'transparent', }}
+                                        width={width - 50}
+                                        alignSelf={'center'}
+                                        color={'#000'}
                                         onChangeText={text => this.setState({ landmark: text })}
                                     />
                                     <View style={[{ flexDirection: 'row' }, styles.formRow]}>
@@ -302,7 +335,7 @@ class AddSuppliers extends React.Component {
                                             <DropDownPicker
                                                 items={this.state.countries_arr}
                                                 autoScrollToDefaultValue={true}
-                                                containerStyle={{zIndex:9999, height: 50, width: width / 2 - 20, marginRight: 10, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
+                                                containerStyle={{ zIndex: 9999, height: 50, width: width / 2 - 20, marginRight: 10, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
                                                 style={{ backgroundColor: '#fff', borderWidth: 0, }}
                                                 itemStyle={{
                                                     justifyContent: 'flex-start', zIndex: 999
@@ -328,18 +361,18 @@ class AddSuppliers extends React.Component {
                                             />
                                         </View>
                                     </View>
-                                    <View style={[{ flexDirection: 'row',}, styles.formRow]}>
+                                    <View style={[{ flexDirection: 'row', }, styles.formRow]}>
                                         <View style={[{ flex: 1 }, styles.formColumn]}>
                                             <DropDownPicker
                                                 items={this.state.countries_arr}
                                                 placeholder="Area *"
                                                 autoScrollToDefaultValue={true}
                                                 containerStyle={{ height: 50, width: width / 2 - 20, marginRight: 10, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
-                                                style={{ backgroundColor: '#fff', borderWidth: 0,zIndex:9999 }}
+                                                style={{ backgroundColor: '#fff', borderWidth: 0, zIndex: 9999 }}
                                                 itemStyle={{
-                                                    justifyContent: 'flex-start', 
+                                                    justifyContent: 'flex-start',
                                                 }}
-                                                dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, height: 100,}}
+                                                dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, height: 100, }}
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectCountry(item)}
                                             />
@@ -347,8 +380,8 @@ class AddSuppliers extends React.Component {
                                         <View style={[{ flex: 1 }, styles.formColumn]}>
                                         </View>
                                     </View>
-                                 <View style={[{  }, styles.mainContentView]}>
-                                        <View style={[{  }, styles.formRow]}>
+                                    <View style={[{}, styles.mainContentView]}>
+                                        <View style={[{}, styles.formRow]}>
 
                                             <RadioForm
                                                 formHorizontal={true}
@@ -358,7 +391,7 @@ class AddSuppliers extends React.Component {
                                                 {
                                                     radio_props_per.map((obj, i) => (
                                                         <RadioButton labelHorizontal={true} key={i}
-                                                            style={{ zIndex:-0.999, justifyContent: 'center', alignItems: 'center', backgroundColor: this.state.value3Index === i ? '#F6EBEB' : '#fff' }}
+                                                            style={{ zIndex: -0.999, justifyContent: 'center', alignItems: 'center', backgroundColor: this.state.value3Index === i ? '#F6EBEB' : '#fff' }}
                                                         >
                                                             <RadioButtonInput
                                                                 obj={obj}
@@ -456,13 +489,13 @@ class AddSuppliers extends React.Component {
                                             onChangeItem={item => this.onSelectCountry(item)}
                                         /> */}
 
-                                      <TouchableOpacity
+                                        <TouchableOpacity
                                             onPress={() => this.createDeliveryAddress()}
                                             style={[{ zIndex: -0.999 }, styles.redBtn]}
                                         >
                                             <Text style={{ color: '#fff' }}>Save</Text>
                                         </TouchableOpacity>
-                                    </View> 
+                                    </View>
 
 
                                 </View>

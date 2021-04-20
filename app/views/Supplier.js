@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, Text, Modal, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback, TextInput } from 'react-native'
+import { View,TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView,} from 'react-native'
+import { Text, TextInput, Alert} from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss'
 import Header from '../views/Header';
@@ -119,7 +120,11 @@ import { Constants } from '../views/Constant';
                     />
                     <View>
                         <TextInput
-                            placeholder="Search supplier"
+                            label="Search supplier"
+                            style={{ backgroundColor: 'transparent', }}
+                            width={width - 50}
+                            alignSelf={'center'}
+                            color={'#000'}
                         />
                     </View>
                     <View style={{ position: 'absolute', right: 0, alignSelf: 'center', }}>

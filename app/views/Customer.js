@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, Text, Alert, Modal, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback, TextInput } from 'react-native'
+import { View, ImageBackground, Modal, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback } from 'react-native'
+import { Text, TextInput, Alert } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/CustomerCss'
 import CalendarPicker from 'react-native-calendar-picker';
@@ -119,7 +120,11 @@ class Customer extends React.Component {
                     <TextInput
                         onChangeText={text => this.setState({ search_text: text })}
                         onSubmitEditing={() => this.search()}
-                        placeholder="Johnson James"
+                        label="Johnson James"
+                        style={{ backgroundColor: 'transparent', }}
+                        width={width - 50}
+                        alignSelf={'center'}
+                        color={'#000'}
                     />
                 </View>
                 <View style={[{}, styles.searchBoxDividerView]}></View>

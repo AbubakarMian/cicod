@@ -84,7 +84,7 @@ export default StyleSheet.create({
 
     customerContaineraddProductView:{
         width:width/1.5,
-        borderLeftWidth:1,
+      
         borderLeftColor:'#929497',
         paddingVertical:10,
         alignSelf:'flex-end',
@@ -128,7 +128,9 @@ export default StyleSheet.create({
         // borderBottomWidth:1,
         // borderBottomColor:'#D8D8D8',
         marginTop:10,
-        marginHorizontal:10
+        marginHorizontal:10,
+        
+        borderRadius:2
     },
   
     smailGrayText:{

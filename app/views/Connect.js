@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight, Alert, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity, } from 'react-native'
+import { View, ImageBackground, ScrollView, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, } from 'react-native'
+import { Text, TextInput, Alert } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
@@ -149,7 +150,7 @@ class Connect extends React.Component {
 
                 if (responseJson.success === "true") {
                     let res = responseJson.data.message;
-                    Alert.alert('Message',res);
+                    Alert.alert('Message', res);
                 } else {
                     let message = responseJson.data.message
                     Alert.alert('Error', message)
@@ -179,7 +180,11 @@ class Connect extends React.Component {
                             source={require('../images/connect/redsearch.png')}
                         />
                         <TextInput
-                            placeholder="Merchant Domain Name"
+                            label="Merchant Domain Name"
+                            style={{ backgroundColor: 'transparent', }}
+                            width={width - 50}
+                            alignSelf={'center'}
+                            color={'#000'}
                             onChangeText={text => this.setState({ search_text: text })}
                             onSubmitEditing={() => this.getMerchant()}
                         />
@@ -268,7 +273,11 @@ class Connect extends React.Component {
                             source={require('../images/products/searchicon.png')}
                         />
                         <TextInput
-                            placeholder="Search a products"
+                            label="Search a products"
+                            style={{ backgroundColor: 'transparent', }}
+                            width={width - 50}
+                            alignSelf={'center'}
+                            color={'#000'}
                         />
                     </View>
                     <View style={[{}, styles.recievedList]}>
@@ -324,7 +333,11 @@ class Connect extends React.Component {
                         source={require('../images/products/searchicon.png')}
                     />
                     <TextInput
-                        placeholder="Search a products"
+                        label="Search a products"
+                        style={{ backgroundColor: 'transparent', }}
+                        width={width - 50}
+                        alignSelf={'center'}
+                        color={'#000'}
                     />
                 </View>
                 <View style={[{}, styles.recievedList]}>

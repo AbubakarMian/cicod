@@ -51,7 +51,8 @@ export default StyleSheet.create({
         width: width - 20,
         flexDirection: 'column',
         backgroundColor: '#fff',
-        marginVertical: 10
+        marginVertical: 10,
+        padding:10
     },
     detailRow: {
         marginHorizontal: 10,
@@ -70,10 +71,29 @@ export default StyleSheet.create({
         flex: 1
     },
     detailColumn1text: {
-        color: "#aaa"
+        color: "#aaa",
+        fontSize:13
+    },
+    detailInvoiceGraytext: {
+        color: "#aaa",
+        fontSize:15
+    },
+    detailInvoiceDarkGraytext: {
+        textAlign: 'right',
+        fontSize:15,
+        fontWeight:'bold',
+        color:'#4E4D4D'
+    },
+    detailInvoiceLable:{
+      color:'#4E4D4D',
+      fontSize:15,
+      
     },
     detailColumn2text: {
-        textAlign: 'right'
+        textAlign: 'right',
+        fontSize:13,
+        fontWeight:'bold',
+        color:'#4E4D4D'
     },
     invoiceRow: {
         borderBottomWidth: 2,
@@ -82,8 +102,8 @@ export default StyleSheet.create({
         width:width-50,
         marginHorizontal:50,
         alignSelf:'center',
-        marginVertical:20,
-        paddingVertical:20
+        
+        paddingVertical:10
     },
 
 

@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, TouchableHighlight, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity, Modal, } from 'react-native'
+import { View, ImageBackground, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, Modal, } from 'react-native'
+import { Text, TextInput, Alert } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import styles from '../css/EnableProductCss';
@@ -11,7 +12,7 @@ export default class EnableProduct extends React.Component {
         super(props);
         this.state = {
             confirmModal: false,
-            complainModal:true,
+            complainModal: true,
         }
 
     }
@@ -19,7 +20,7 @@ export default class EnableProduct extends React.Component {
     render() {
         return (
             <View style={[{}, styles.mainView]}>
-                <Header navigation={this.props.navigation}/>
+                <Header navigation={this.props.navigation} />
                 <View style={[{}, styles.backRowView]}>
                     <TouchableOpacity>
                         <Icon name="arrow-left" size={25} color={'#929497'} />
@@ -44,7 +45,11 @@ export default class EnableProduct extends React.Component {
                     />
                     <View>
                         <TextInput
-                            placeholder="Search product or product category"
+                            label="Search product or product category"
+                            style={{ backgroundColor: 'transparent', }}
+                            width={width - 50}
+                            alignSelf={'center'}
+                            color={'#000'}
                         />
                     </View>
                     <View style={{ position: 'absolute', right: 0, alignSelf: 'center', }}>
@@ -156,13 +161,13 @@ export default class EnableProduct extends React.Component {
                             )}
                         />
                     </View>
-                    
+
                 </ScrollView>
                 <TouchableOpacity
-                        onPress={() => this.setState({ confirmModal: true })}
-                        style={[{}, styles.redTouchModal]}>
-                        <Text style={{ color: '#fff' }}>Enable Products</Text>
-                    </TouchableOpacity>
+                    onPress={() => this.setState({ confirmModal: true })}
+                    style={[{}, styles.redTouchModal]}>
+                    <Text style={{ color: '#fff' }}>Enable Products</Text>
+                </TouchableOpacity>
                 <Modal
                     transparent={true}
                     visible={this.state.confirmModal}
@@ -185,13 +190,13 @@ export default class EnableProduct extends React.Component {
                                     <Text>in 3 product category</Text>
                                 </View>
                                 <TouchableHighlight
-                                    style={[{backgroundColor:'#B1272C',}, styles.redTouchModal]}
+                                    style={[{ backgroundColor: '#B1272C', }, styles.redTouchModal]}
                                 >
-                                    <Text style={{color:'#fff'}}>Confirm</Text>
+                                    <Text style={{ color: '#fff' }}>Confirm</Text>
                                 </TouchableHighlight>
-                                <View style={{borderWidth:1,width:width-50,borderColor:'#aaa'}}></View>
+                                <View style={{ borderWidth: 1, width: width - 50, borderColor: '#aaa' }}></View>
                                 <TouchableHighlight
-                                onPress={()=>this.setState({confirmModal:false})}
+                                    onPress={() => this.setState({ confirmModal: false })}
                                     style={[{}, styles.grayTouchModal]}
                                 >
                                     <Text style={{}}>Cancel</Text>
@@ -213,25 +218,29 @@ export default class EnableProduct extends React.Component {
                                 <Image source={require('../images/redSquireCross.png')} />
                                 <Text>You are about to give </Text>
                                 <View style={[{}, styles.modalTextRow]}>
-                                   
+
                                     <Text style={[{}, styles.modalBoldText]}> KNGS CROWN  </Text>
                                     <Text >request</Text>
                                 </View>
-                                <View style={[{},styles.complaintHeadingModalView]}>
-                                 <Text style={[{},styles.complaintHeadingModalText]}>Reason</Text>
-                                 <TextInput 
-                                 placeholder=""
-                                 height={height/5}
-                                 />
+                                <View style={[{}, styles.complaintHeadingModalView]}>
+                                    <Text style={[{}, styles.complaintHeadingModalText]}>Reason</Text>
+                                    <TextInput
+                                        label=""
+                                        height={height / 5}
+                                        style={{ backgroundColor: 'transparent', }}
+                                        width={width - 50}
+                                        alignSelf={'center'}
+                                        color={'#000'}
+                                    />
                                 </View>
                                 <TouchableHighlight
-                                    style={[{backgroundColor:'#B1272C',}, styles.redTouchModal]}
+                                    style={[{ backgroundColor: '#B1272C', }, styles.redTouchModal]}
                                 >
-                                    <Text style={{color:'#fff'}}>Decline</Text>
+                                    <Text style={{ color: '#fff' }}>Decline</Text>
                                 </TouchableHighlight>
-                                <View style={{borderWidth:1,width:width-50,borderColor:'#aaa'}}></View>
+                                <View style={{ borderWidth: 1, width: width - 50, borderColor: '#aaa' }}></View>
                                 <TouchableHighlight
-                                onPress={()=>this.setState({confirmModal:false})}
+                                    onPress={() => this.setState({ confirmModal: false })}
                                     style={[{}, styles.grayTouchModal]}
                                 >
                                     <Text style={{}}>Cancel</Text>

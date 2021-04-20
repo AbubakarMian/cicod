@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, TouchableHighlight, Alert, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity, Modal, } from 'react-native'
+import { View, ImageBackground, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, Modal, } from 'react-native'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import CheckBox from 'react-native-check-box';
@@ -10,6 +10,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import { Constants } from '../views/Constant';
+import { Text, TextInput, Alert } from 'react-native-paper';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 class AddNewCustomer extends React.Component {
@@ -62,7 +63,7 @@ class AddNewCustomer extends React.Component {
             Alert.alert("Warning", "Country and State are required")
             return;
         }
-         else if (this.state.house_no == '' && this.state.delivery_house_no == '') {
+        else if (this.state.house_no == '' && this.state.delivery_house_no == '') {
             Alert.alert("Warning", "House No required")
             return;
         }
@@ -308,7 +309,7 @@ class AddNewCustomer extends React.Component {
         console.log('states_arr', this.state.states_arr)
         return (
             <View style={[{}, styles.mainView]}>
-                <Header navigation={this.props.navigation}/>
+                <Header navigation={this.props.navigation} />
                 <Spinner
                     visible={this.state.spinner}
                     textContent={'Please Wait...'}
@@ -317,7 +318,7 @@ class AddNewCustomer extends React.Component {
                 />
                 <View style={[{}, styles.backRowView]}>
                     <TouchableOpacity
-                    onPress={()=>this.props.navigation.navigate('Customer')}
+                        onPress={() => this.props.navigation.navigate('Customer')}
                     >
                         <Icon name="arrow-left" size={25} color={'#929497'} />
                     </TouchableOpacity>
@@ -329,19 +330,35 @@ class AddNewCustomer extends React.Component {
                     <View>
                         <View style={[{}, styles.mainFormView]}>
                             <TextInput
-                                placeholder="First Name*"
+                                label="First Name*"
+                                style={{ backgroundColor: 'transparent', }}
+                                width={width - 50}
+                                alignSelf={'center'}
+                                color={'#000'}
                                 onChangeText={text => this.setState({ first_name: text })}
                             />
                             <TextInput
-                                placeholder="Last Name*"
+                                label="Last Name*"
+                                style={{ backgroundColor: 'transparent', }}
+                                width={width - 50}
+                                alignSelf={'center'}
+                                color={'#000'}
                                 onChangeText={text => this.setState({ last_name: text })}
                             />
                             <TextInput
-                                placeholder="Customer Code"
+                                label="Customer Code"
+                                style={{ backgroundColor: 'transparent', }}
+                                width={width - 50}
+                                alignSelf={'center'}
+                                color={'#000'}
                                 onChangeText={text => this.setState({ customer_code: text })}
                             />
                             <TextInput
-                                placeholder="Email"
+                                label="Email"
+                                style={{ backgroundColor: 'transparent', }}
+                                width={width - 50}
+                                alignSelf={'center'}
+                                color={'#000'}
                                 onChangeText={text => this.setState({ email: text })}
                             />
                             <View style={{ flexDirection: 'row' }}>
@@ -349,22 +366,38 @@ class AddNewCustomer extends React.Component {
                                     <TextInput
                                         keyboardType='numeric'
                                         onChangeText={text => this.setState({ phone_number: text })}
-                                        placeholder="Phone Number"
+                                        label="Phone Number"
+                                        style={{ backgroundColor: 'transparent', }}
+                                        width={width - 50}
+                                        alignSelf={'center'}
+                                        color={'#000'}
                                     />
                                 </View>
                                 <View style={{ flex: 1 }}>
                                     <TextInput
                                         onChangeText={text => this.setState({ house_no: text })}
-                                        placeholder="House No."
+                                        label="House No."
+                                        style={{ backgroundColor: 'transparent', }}
+                                        width={width - 50}
+                                        alignSelf={'center'}
+                                        color={'#000'}
                                     />
                                 </View>
                             </View>
                             <TextInput
-                                placeholder="Street"
+                                label="Street"
+                                style={{ backgroundColor: 'transparent', }}
+                                width={width - 50}
+                                alignSelf={'center'}
+                                color={'#000'}
                                 onChangeText={text => this.setState({ street: text })}
                             />
                             <TextInput
-                                placeholder="Landmark"
+                                label="Landmark"
+                                style={{ backgroundColor: 'transparent', }}
+                                width={width - 50}
+                                alignSelf={'center'}
+                                color={'#000'}
                                 onChangeText={text => this.setState({ landmark: text })}
                             />
                             <View style={[{}, styles.formRow]}>
@@ -374,10 +407,10 @@ class AddNewCustomer extends React.Component {
                                     {this.state.countries_arr.length < 1 ? null :
                                         <DropDownPicker
                                             items={this.state.countries_arr}
-                                            containerStyle={{ height: 50, width: width /2 - 10, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
+                                            containerStyle={{ height: 50, width: width / 2 - 10, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
                                             style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                                             itemStyle={{
-                                                justifyContent: 'flex-start', 
+                                                justifyContent: 'flex-start',
                                             }}
                                             placeholder="Country *"
                                             dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
@@ -393,7 +426,7 @@ class AddNewCustomer extends React.Component {
                                             containerStyle={{ height: 50, width: width - 200, marginTop: 15 }}
                                             style={{ backgroundColor: '#fff' }}
                                             itemStyle={{
-                                                justifyContent: 'flex-start',zIndex:0.999
+                                                justifyContent: 'flex-start', zIndex: 0.999
                                             }}
                                             placeholder="States *"
                                             dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
@@ -402,7 +435,7 @@ class AddNewCustomer extends React.Component {
                                         />}
                                 </View>
                             </View>
-                            <View style={[{ marginTop: 30,zIndex:-0.999 }, styles.formRow]}>
+                            <View style={[{ marginTop: 30, zIndex: -0.999 }, styles.formRow]}>
                                 <View style={[{}, styles.formColumn]}>
                                     {/* <TextInput
                                         placeholder="LGA*"
@@ -419,7 +452,7 @@ class AddNewCustomer extends React.Component {
                                                 justifyContent: 'flex-start', zIndex: 0.99
                                             }}
                                             placeholder="LGA *"
-                                            dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 ,height:height/5}}
+                                            dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1, height: height / 5 }}
                                             labelStyle={{ color: '#A9A9A9' }}
                                             onChangeItem={item => this.onSelectLgas(item.value)}
                                         />}
@@ -428,7 +461,7 @@ class AddNewCustomer extends React.Component {
 
                                 </View>
                             </View>
-                            <View style={[{zIndex:-0.999}, styles.formRow]}>
+                            <View style={[{ zIndex: -0.999 }, styles.formRow]}>
                                 <View style={[{}, styles.formColumn]}>
                                     <CheckBox
                                         style={[{ width: width / 2, }, styles.cheBox]}
@@ -478,15 +511,27 @@ class AddNewCustomer extends React.Component {
                             {(this.state.is_same_as_customer == false) ?
                                 <View>
                                     <TextInput
-                                        placeholder="House No.*"
+                                        label="House No.*"
+                                        style={{ backgroundColor: 'transparent', }}
+                                        width={width - 50}
+                                        alignSelf={'center'}
+                                        color={'#000'}
                                         onChangeText={text => this.setState({ delivery_house_no: text })}
                                     />
                                     <TextInput
-                                        placeholder="Street*"
+                                        label="Street*"
+                                        style={{ backgroundColor: 'transparent', }}
+                                        width={width - 50}
+                                        alignSelf={'center'}
+                                        color={'#000'}
                                         onChangeText={text => this.setState({ delivery_street: text })}
                                     />
                                     <TextInput
-                                        placeholder="Landmark"
+                                        label="Landmark"
+                                        style={{ backgroundColor: 'transparent', }}
+                                        width={width - 50}
+                                        alignSelf={'center'}
+                                        color={'#000'}
                                         onChangeText={text => this.setState({ delivery_landmark: text })}
                                     />
                                     <View style={[{}, styles.formRow]}>

@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity, Modal, Touchable } from 'react-native'
+import { View, ScrollView, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, Modal,} from 'react-native'
+import {   Text, TextInput, Alert} from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/UpdateProductCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -50,7 +51,11 @@ export default class UpdateProduct extends React.Component {
                     </View>
                     <View>
                         <TextInput
-                            placeholder="Search product or product category"
+                            label="Search product or product category"
+                            style={{ backgroundColor: 'transparent', }}
+                            width={width - 50}
+                            alignSelf={'center'}
+                            color={'#000'}
                         />
                     </View>
                     <TouchableOpacity 

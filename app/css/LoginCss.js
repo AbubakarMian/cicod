@@ -22,11 +22,24 @@ export default StyleSheet.create({
      borderColor:'#CFCFCF',
      width:width-50,
      marginTop:10,
-     paddingLeft:10,
      flexDirection:'row',
      alignItems:'center',
-     position:'relative'
+     position:'relative',
+     justifyContent:'center',
+     alignItems:'center'
  },
+ comtextInputView:{
+    borderWidth:1,
+    borderRadius:5 ,
+    borderColor:'#CFCFCF',
+    width:width-50,
+    marginTop:10,
+    flexDirection:'row',
+    alignItems:'center',
+    position:'relative',
+    
+    
+},
 
 btnContinuueView:{
     backgroundColor:'#B1272C',

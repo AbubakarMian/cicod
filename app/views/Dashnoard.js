@@ -1,11 +1,12 @@
 import React from 'react'
-import { View, ImageBackground, Text, Modal, TouchableHighlight, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback } from 'react-native'
+import { View, ImageBackground, Modal, TouchableHighlight, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback } from 'react-native'
+import {   Text, TextInput, Alert} from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss';
 import Header from '../views/Header';
 import CalendarPicker from 'react-native-calendar-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { TextInput } from 'react-native-gesture-handler';
+
 import * as Progress from 'react-native-progress';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Constants } from '../views/Constant';
@@ -197,8 +198,8 @@ class Dashnoard extends React.Component {
                                     <Image
                                         source={require('../images/dashboard/redbage.png')}
                                     />
-                                    <Text style={{ color: '#B1272C', fontSize: 10 }}>Total Orders</Text>
-                                    <Text style={{ fontWeight: 'bold', color: '#4E4D4D' }}>₦ {this.state.totalOrder.amount}</Text>
+                                    <Text style={{ color: '#B1272C', fontSize: 10,fontFamily:'Open Sans' }}>Total Orders</Text>
+                                    <Text style={{ fontSize: 20,fontFamily:'Open Sans',fontWeight:'bold', color: '#4E4D4D' }}>₦ {this.state.totalOrder.amount}</Text>
                                     <Text style={[{}, styles.recardtext]}>{this.state.totalOrder.count}</Text>
                                 </View>
                             </View>
@@ -207,8 +208,8 @@ class Dashnoard extends React.Component {
                                     <Image
                                         source={require('../images/dashboard/greenbage.png')}
                                     />
-                                    <Text style={{ color: '#B1272C', fontSize: 10 }}>Paid Orders</Text>
-                                    <Text style={{ fontWeight: 'bold', color: '#4E4D4D' }}>₦ {this.state.paidOrder.amount}</Text>
+                                    <Text style={{ color: '#B1272C', fontSize: 10,fontFamily:'Open Sans' }}>Paid Orders</Text>
+                                    <Text style={{ fontSize: 20,fontFamily:'Open Sans',fontWeight:'bold', color: '#4E4D4D' }}>₦ {this.state.paidOrder.amount}</Text>
                                     <Text style={[{}, styles.greencardtext]}>{this.state.paidOrder.count}</Text>
                                 </View>
                             </View>
@@ -219,8 +220,8 @@ class Dashnoard extends React.Component {
                                     <Image
                                         source={require('../images/dashboard/bluebage.png')}
                                     />
-                                    <Text style={{ color: '#2F2E7C', fontSize: 10 }}>Pending Orders</Text>
-                                    <Text style={{ fontWeight: 'bold', color: '#4E4D4D' }}>₦ {this.state.pendingOrder.amount}</Text>
+                                    <Text style={{ color: '#2F2E7C', fontSize: 10,fontFamily:'Open Sans' }}>Pending Orders</Text>
+                                    <Text style={{ fontSize: 20,fontFamily:'Open Sans',fontWeight:'bold', color: '#4E4D4D' }}>₦ {this.state.pendingOrder.amount}</Text>
                                     <Text style={[{}, styles.bluecardtext]}>{this.state.pendingOrder.count}</Text>
                                 </View>
                             </View>
@@ -229,8 +230,8 @@ class Dashnoard extends React.Component {
                                     <Image
                                         source={require('../images/dashboard/yellowbage.png')}
                                     />
-                                    <Text style={{ color: '#FDB72B', fontSize: 10 }}>Cancelled Orders</Text>
-                                    <Text style={{ fontWeight: 'bold', color: '#4E4D4D' }}>₦ {this.state.canclledOrder.amount}</Text>
+                                    <Text style={{ color: '#FDB72B', fontSize: 10,fontFamily:'Open Sans' }}>Cancelled Orders</Text>
+                                    <Text style={{ fontSize: 20,fontFamily:'Open Sans',fontWeight:'bold', color: '#4E4D4D' }}>₦ {this.state.canclledOrder.amount}</Text>
                                     <Text style={[{}, styles.yellowcardtext]}>{this.state.canclledOrder.count}</Text>
                                 </View>
                             </View>
@@ -251,8 +252,10 @@ class Dashnoard extends React.Component {
                             {this.state.graph_data.length == 0 ? null :
                                 <LineChart
                                     data={this.state.graph_data}
-                                    width={Dimensions.get("window").width - 20} // from react-native
+                                    width={Dimensions.get("window").width-100 } // from react-native
                                     height={height / 3}
+                                    style={{paddingHorizontal:10,alignSelf:'center'}}
+                                    alignSelf={'center'}
                                     yAxisLabel="N25M"
                                     yAxisSuffix=""
                                     getDotColor={true}
@@ -260,6 +263,7 @@ class Dashnoard extends React.Component {
                                     yAxisInterval={1} // optional, defaults to 1
                                     chartConfig={{
                                         backgroundColor: "#fff",
+                                        marginLeft:10,
                                         backgroundGradientFrom: "#fff",
                                         backgroundGradientTo: "#fff",
                                         decimalPlaces: 2, // optional, defaults to 2dp
@@ -285,11 +289,13 @@ class Dashnoard extends React.Component {
                         <View style={[{}, styles.bannerView]}>
                             <View style={[{}, styles.bannerContentView]}>
                                 <Text style={[{}, styles.bannerText]}>Monthly Sales</Text>
-                                <Text style={[{}, styles.bannerboldText]}>₦ {this.state.target.sales_made_amount}</Text>
+                                <Text style={[{}, styles.bannerboldText]}>₦{this.state.target.sales_made_amount}</Text>
+                                <View style={{flexDirection:'row',marginBottom:3,marginTop:10, width:width/1.5,position:'relative'}}>
                                 <Text style={[{color:'#707070'}]}>Target: {this.state.target.sales_target_amount}</Text>
-                                <Text style={[{}, styles.bannerpercentText]}>
+                                <Text style={[{position:'absolute',right:0}, styles.bannerpercentText]}>
                                     75%
                               </Text>
+                                </View>
                                 <Progress.Bar color="#B1272C" backgroundColor="#fff" progress={0.75} width={200} />
                             </View>
                             <View style={[{}, styles.bannerImagetView]}>

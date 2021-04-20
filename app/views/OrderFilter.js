@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, Text,ScrollView, Dimensions, Image, Platform, TouchableOpacity, TextInput } from 'react-native'
+import { View, ImageBackground, ScrollView, Dimensions, Image, Platform, TouchableOpacity, } from 'react-native'
+import { Text, TextInput, Alert } from 'react-native-paper';
 import styles from '../css/Filter.Css'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
@@ -136,7 +137,7 @@ class Filter extends React.Component {
 
 
   }
-  hideDatePicker () {
+  hideDatePicker() {
     console.log(' visibility !!!!!!!!!!!!!');
     this.setState({
       isDatePickerVisible: !this.state.isDatePickerVisible
@@ -286,7 +287,11 @@ class Filter extends React.Component {
             <View style={{ width: width - 20, backgroundColor: '#fff', paddingVertical: 10, marginTop: 20 }}>
               <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 5, flexDirection: 'row', position: 'relative' }}>
                 <TextInput
-                  placeholder="Order Channel"
+                  label="Order Channel"
+                  style={{ backgroundColor: 'transparent', }}
+                  width={width - 50}
+                  alignSelf={'center'}
+                  color={'#000'}
                 />
                 <View style={{ position: 'absolute', right: 10, bottom: 10 }}>
                   <Icon
@@ -328,11 +333,11 @@ class Filter extends React.Component {
             </View>
             <TouchableOpacity
               onPress={() => this.props.navigation.navigate('Order')}
-              style={{ width: width / 1.5, alignSelf: 'center',zIndex:-0.9999, backgroundColor: '#B1272C', justifyContent: 'center', alignItems: 'center', paddingVertical: 15, borderRadius: 50, marginTop: 10 }}
+              style={{ width: width / 1.5, alignSelf: 'center', zIndex: -0.9999, backgroundColor: '#B1272C', justifyContent: 'center', alignItems: 'center', paddingVertical: 15, borderRadius: 50, marginTop: 10 }}
             >
               <Text style={{ color: '#fff', fontWeight: 'bold' }}>Apply</Text>
             </TouchableOpacity>
-     
+
           </View>
         </ScrollView>
       </View>

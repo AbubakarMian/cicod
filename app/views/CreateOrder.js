@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, Text, Dimensions, Image, Platform, TouchableOpacity, FlatList, Alert } from 'react-native'
+import { View, ImageBackground, ScrollView, Dimensions, Image, Platform, TouchableOpacity, FlatList} from 'react-native'
+import {Text, TextInput, Alert} from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/CreateOrderCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -384,7 +385,7 @@ class CreateOrder extends React.Component {
                                 onPress={() => this.DeliveryType('delivery')}
 
                             >
-                                <View style={[{}, styles.radioFormView]}>
+                                <View style={[{borderWidth:0.25,}, styles.radioFormView]}>
 
                                     <RadioForm
                                         isSelected={!this.state.is_pickup}
@@ -432,7 +433,7 @@ class CreateOrder extends React.Component {
                                 onPress={() => this.DeliveryType('pickup')}
 
                             >
-                                <View style={[{}, styles.radioFormView]}>
+                                <View style={[{borderWidth:0.25,}, styles.radioFormView]}>
 
                                     <RadioForm
                                         isSelected={this.state.is_pickup}
@@ -488,15 +489,20 @@ class CreateOrder extends React.Component {
                                     buttonSize={10}
                                     buttonOuterSize={20}
                                     initial={0}
+                                    style={{}}
                                     onPress={(value) => { this.setState({ value3Index: value }) }}
                                     onPress={() => this.DeliveryType('delivery')}
                                 />
                                 {
                                     radio_props_payment.map((obj, i) => (
-                                        <RadioButton labelHorizontal={true} key={i} >
+                                        <RadioButton 
+                                        style={{backgroundColor:'#F5F5F5',paddingVertical:10,paddingHorizontal:10}}
+                                        labelHorizontal={true} key={i} >
                                             <RadioButtonInput
                                                 obj={obj}
                                                 index={i}
+                                                
+                                                style={{backgroundColor:'red'}}
                                                 isSelected={this.state.value3Index === i}
                                                 onPress={(value, label) => this.paymentFun(obj)}
                                                 borderWidth={1}
@@ -505,7 +511,6 @@ class CreateOrder extends React.Component {
                                                 buttonSize={10}
                                                 buttonOuterSize={20}
                                                 buttonStyle={{}}
-
                                                 buttonWrapStyle={{ marginLeft: 10 }}
                                             />
                                             <RadioButtonLabel

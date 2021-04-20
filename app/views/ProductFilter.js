@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, Text, Dimensions, Image, Platform, TouchableOpacity, TextInput } from 'react-native'
+import { View, Dimensions, Image, Platform, TouchableOpacity, } from 'react-native'
+import { Text, TextInput, Alert } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/Filter.Css'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -196,7 +197,11 @@ class ProductFilter extends React.Component {
         <View style={{ width: width - 20, backgroundColor: '#fff', paddingVertical: 10, marginTop: 20 }}>
           <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 5, flexDirection: 'row', position: 'relative' }}>
             <TextInput onChangeText={text => this.onQuantityText(text)}
-              placeholder="Quantity"
+              label="Quantity"
+              style={{ backgroundColor: 'transparent', }}
+              width={width - 50}
+              alignSelf={'center'}
+              color={'#000'}
             />
             <View style={{ position: 'absolute', right: 10, bottom: 10 }}>
 

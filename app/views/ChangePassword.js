@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, Touchable, ScrollView, Alert } from 'react-native';
+import { View, Image, TouchableOpacity, Dimensions, Touchable, ScrollView } from 'react-native';
+import { Text, TextInput, Alert } from 'react-native-paper';
 import styles from '../css/ChangePasswordCss';
 import Header from '../views/Header'
 import CheckBox from 'react-native-check-box';
@@ -20,8 +21,8 @@ class ChangePassword extends React.Component {
             new_password: '123456',
             confirm_password: '1234567',
             spinner: false,
-            is_secure:false,
-            
+            is_secure: false,
+
         }
     }
 
@@ -84,31 +85,43 @@ class ChangePassword extends React.Component {
                         <View style={[{}, styles.contentContainer]}>
                             <View style={[{}, styles.inputView]}>
                                 <TextInput
-                                    placeholder="Current password"
+                                    label="Current password"
+                                    style={{ backgroundColor: 'transparent', }}
+                                    width={width - 50}
+                                    alignSelf={'center'}
+                                    color={'#000'}
                                     onChangeText={text => this.setState({ current_password: text })}
                                 />
                             </View>
                             <View style={[{}, styles.inputView]}>
                                 <TextInput
-                                secureTextEntry={this.state.is_secure}
-                                    placeholder="New password"
+                                    secureTextEntry={this.state.is_secure}
+                                    label="New password"
+                                    style={{ backgroundColor: 'transparent', }}
+                                    width={width - 50}
+                                    alignSelf={'center'}
+                                    color={'#000'}
                                     onChangeText={text => this.setState({ new_password: text })}
                                 />
-                                <TouchableOpacity 
-                                onPress={()=>this.setState({is_secure:!this.state.is_secure,})}
-                                style={[{}, styles.eyeIconView]}>
+                                <TouchableOpacity
+                                    onPress={() => this.setState({ is_secure: !this.state.is_secure, })}
+                                    style={[{}, styles.eyeIconView]}>
                                     <Icon name="eye-slash" size={20} color={'#929497'} />
                                 </TouchableOpacity>
                             </View>
                             <View style={[{}, styles.inputView]}>
                                 <TextInput
-                                   secureTextEntry={this.state.is_secure}
+                                    secureTextEntry={this.state.is_secure}
                                     onChangeText={text => this.setState({ confirm_password: text })}
-                                    placeholder="Confirm New password"
+                                    label="Confirm New password"
+                                    style={{ backgroundColor: 'transparent', }}
+                                    width={width - 50}
+                                    alignSelf={'center'}
+                                    color={'#000'}
                                 />
-                                <TouchableOpacity 
-                                onPress={()=>this.setState({is_secure:!this.state.is_secure,})}
-                                style={[{}, styles.eyeIconView]}>
+                                <TouchableOpacity
+                                    onPress={() => this.setState({ is_secure: !this.state.is_secure, })}
+                                    style={[{}, styles.eyeIconView]}>
                                     <Icon name="eye-slash" size={20} color={'#929497'} />
                                 </TouchableOpacity>
 

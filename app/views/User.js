@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, Touchable, ScrollView, Alert } from 'react-native';
+import { View,  TouchableOpacity, Dimensions,  ScrollView,  } from 'react-native';
+import {   Text, TextInput, Alert} from 'react-native-paper';
 import styles from '../css/UserCss';
 import Header from '../views/Header'
 import CheckBox from 'react-native-check-box';
