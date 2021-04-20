@@ -7,7 +7,7 @@ import {
   Text,
   StatusBar,
 } from 'react-native';
-
+import { MenuProvider } from 'react-native-popup-menu';
 import {
   Header,
   LearnMoreLinks,
@@ -50,12 +50,15 @@ export default class App extends Component {
       return (
         <Provider store={configureStore}>
           <PaperProvider theme={theme}>
-            <View style={{ flex: 1 }}>
-              <StatusBar hidden={true} translucent={true} />
-              <AppNavigation />
-            </View>
+            <MenuProvider>
+              <View style={{ flex: 1 }}>
+                <StatusBar hidden={true} translucent={true} />
+                <AppNavigation />
+              </View>
+
+            </MenuProvider>
           </PaperProvider>
-          
+
         </Provider>
       );
     }

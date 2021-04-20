@@ -12,7 +12,7 @@ const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Constants } from '../views/Constant';
- class Supplier extends React.Component {
+class Supplier extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -67,7 +67,7 @@ import { Constants } from '../views/Constant';
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log('responseJson',responseJson);
+                console.log('responseJson', responseJson);
                 this.setState({
                     spinner: false,
                 });
@@ -83,13 +83,17 @@ import { Constants } from '../views/Constant';
             })
 
     }
+
+    supliersDetail() {
+        this.props.navigation.navigate('BuyersView')
+    }
     render() {
 
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
             <View style={{ height: height, width: width, position: 'relative', backgroundColor: '##F0F0F0', }}>
-               <Header navigation={this.props.navigation}/>
+                <Header navigation={this.props.navigation} />
                 <Spinner
                     visible={this.state.spinner}
                     textContent={'Please Wait...'}
@@ -98,7 +102,7 @@ import { Constants } from '../views/Constant';
                 />
                 <View style={{ flexDirection: 'row', marginVertical: 10, alignContent: 'center', alignItems: 'center', width: width - 20, alignSelf: 'center' }}>
                     <TouchableOpacity
-                    onPress={()=>this.props.navigation.navigate('Home')}
+                        onPress={() => this.props.navigation.navigate('Home')}
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
@@ -106,8 +110,8 @@ import { Constants } from '../views/Constant';
                         <Text style={{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 20 }}>SUPPLIER</Text>
                     </View>
                     <TouchableOpacity
-                    onPress={()=>this.props.navigation.navigate('AddSuppliers')}
-                    style={{ position: 'absolute', right: 0 }}>
+                        onPress={() => this.props.navigation.navigate('AddSuppliers')}
+                        style={{ position: 'absolute', right: 0 }}>
                         <Image
                             source={require('../images/products/circlePlus.png')}
                         />
@@ -154,7 +158,7 @@ import { Constants } from '../views/Constant';
                         renderItem={({ item, index, separators }) => (
                             <TouchableHighlight
                                 key={item.key}
-                                onPress={() => this._onPress(item)}
+                                onPress={() => this.supliersDetail(item)}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
                                 <View style={{ position: 'relative', alignSelf: 'center',alignItems:'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 5 }}>
