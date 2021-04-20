@@ -1,29 +1,3 @@
-// import React from 'react';
-// import {View} from 'react-native';
-// import AppNavigater from './app/views/AppNavigater';
-
-// import {
-//   Header,
-//   LearnMoreLinks,
-//   Colors,
-//   DebugInstructions,
-//   ReloadInstructions,
-// } from 'react-native/Libraries/NewAppScreen';
-// export default class App extends React.Component{
-//   render(){
-//     return(
-//       <AppNavigater/>
-//     )
-//   }
-// }
-
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
 import React, { Component } from 'react';
 import {
   SafeAreaView,
@@ -46,6 +20,7 @@ import AppNavigation from './app/views/AppNavigater';
 import CustomSplashScreen from './app/views/Splash';
 import configureStore from './app/redux/store/configureStore';
 import { Provider } from 'react-redux';
+import { DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 
 export default class App extends Component {
   constructor(props) {
@@ -74,12 +49,23 @@ export default class App extends Component {
     } else {
       return (
         <Provider store={configureStore}>
-          <View style={{ flex: 1 }}>
-            <StatusBar hidden={true} translucent={true} />
-            <AppNavigation />
-          </View>
+          <PaperProvider theme={theme}>
+            <View style={{ flex: 1 }}>
+              <StatusBar hidden={true} translucent={true} />
+              <AppNavigation />
+            </View>
+          </PaperProvider>
+          
         </Provider>
       );
     }
   }
 }
+const theme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    primary: 'tomato',
+    accent: 'yellow',
+  },
+};
