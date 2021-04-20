@@ -27,6 +27,7 @@ class OrderDetail extends React.Component {
             ticket_id: '',
             created_by: '',
             payment_date: '',
+            total_amount: 0,
             amount_paid_from_credit_limit: '',
             data: {
 
@@ -38,13 +39,11 @@ class OrderDetail extends React.Component {
                 },
 
             },
-            item: {
-                item_name: '',
-            },
+            item: [],
         };
-
     }
     componentDidMount() {
+        let order_id = this.props.route.params.id;
         this.setState({ Spinner: true })
         let postData = {
             method: 'GET',
@@ -54,30 +53,40 @@ class OrderDetail extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
-        fetch('https://com.cicodsaasstaging.com/com/api/orders/1', postData)
+        fetch(Constants.orderslist + '/' + order_id, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({
                     Spinner: false,
-                    data: responseJson.data,
-                    cicod_order_id: responseJson.data.cicod_order_id,
-                    delivery_type: responseJson.data.delivery_type,
-                    payment_mode: responseJson.data.payment_mode,
-                    order_status: responseJson.data.order_status,
-                    payment_status: responseJson.data.payment_status,
-                    ticket_id: responseJson.data.ticket_id,
-                    created_by: responseJson.data.created_by,
-                    payment_date: responseJson.data.payment_date,
-                    amount_paid_from_credit_limit: responseJson.data.amount_paid_from_credit_limit,
                 });
+                console.log('data data data res res res ', responseJson)
                 if (responseJson.status === 'success') {
-                    console.log('data data data res res res ', this.state.delivery_type)
-                    // this.props.navigation.navigate('DrawerNavigation')
+                    let total_ammount = 0;
+                    let product_items = responseJson.data.items;
+
+                    for (let i = 0; product_items.length > i; i++) {
+                        total_ammount = total_ammount + (product_items[i].price * product_items[i].quantity);
+                    }
+                    this.setState({
+                        data: responseJson.data,
+                        cicod_order_id: responseJson.data.cicod_order_id,
+                        delivery_type: responseJson.data.delivery_type,
+                        payment_mode: responseJson.data.payment_mode,
+                        order_status: responseJson.data.order_status,
+                        payment_status: responseJson.data.payment_status,
+                        ticket_id: responseJson.data.ticket_id,
+                        created_by: responseJson.data.created_by,
+                        payment_date: responseJson.data.payment_date,
+                        item: product_items,
+                        total_amount: total_ammount,
+                        amount_paid_from_credit_limit: responseJson.data.amount_paid_from_credit_limit,
+                    })
+
+
                 } else {
                     let message = JSON.stringify(responseJson.error.message)
                     Alert.alert('Error', message)
                 }
-                console.log("this.state.item.item_name this.state.item.item_name this.state.item.item_name", this.state.item.item_name)
             })
     }
 
@@ -102,7 +111,7 @@ class OrderDetail extends React.Component {
                     Spinner: false
                 });
                 if (responseJson.status === 'success') {
-                    console.log('data data data res res res ', responseJson.message)
+                    console.log('data data data res res res ', responseJson)
                     Alert.alert('Success', responseJson.message)
                     // this.props.navigation.navigate('DrawerNavigation')
                 } else {
@@ -116,20 +125,24 @@ class OrderDetail extends React.Component {
         return (
             <ScrollView>
                 <View style={[{}, styles.mainView]}>
-                    <Header navigation={this.props.navigation}/>
+                    <Header navigation={this.props.navigation} />
                     <Spinner
                         visible={this.state.Spinner}
                         textContent={'Please Wait...'}
                         textStyle={{ color: '#fff' }}
                         color={'#fff'}
                     />
-                    <View style={[{}, styles.headingRow]}>
-                        <Icon name="arrow-left" size={25} color="#929497" />
-                        <Text style={[{}, styles.resetText]}>ORDER DETAIL</Text>
-                    </View>
+                    <TouchableOpacity
+                        onPress={() => this.props.navigation.goBack()}
+                    >
+                        <View style={[{}, styles.headingRow]}>
+                            <Icon name="arrow-left" size={25} color="#929497" />
+                            <Text style={[{}, styles.resetText]}>ORDER DETAIL</Text>
+                        </View>
+                    </TouchableOpacity>
                     <View style={[{}, styles.textInputView]}>
-                        <Text style={{ color: '#aaa' }}>{this.state.data.cicod_order_id}</Text>
-                        <Text style={{ fontWeight: 'bold' }}>103943535</Text>
+                        <Text style={{ color: '#aaa' }}>CICOD Order ID</Text>
+                        <Text style={{ fontWeight: 'bold' }}>{this.state.data.cicod_order_id}</Text>
                         <TouchableOpacity
                             onPress={() => this.ReciptResend()}
                             style={[{}, styles.btnContinuueView]}>
@@ -142,7 +155,7 @@ class OrderDetail extends React.Component {
                                 <Text style={[{}, styles.detailColumn1text]}>Customer Name</Text>
                             </View>
                             <View style={[{}, styles.detailColumn2]}>
-                                <Text style={[{}, styles.detailColumn2text]}>{this.state.data.customer.name}</Text>
+                                <Text style={[{}, styles.detailColumn2text]}>{this.state.data.customer.name ?? ''}</Text>
                             </View>
                         </View>
                         <View style={{}, styles.detailRow}>
@@ -150,7 +163,7 @@ class OrderDetail extends React.Component {
                                 <Text style={[{}, styles.detailColumn1text]}>Phone Number</Text>
                             </View>
                             <View style={[{}, styles.detailColumn2]}>
-                                <Text style={[{}, styles.detailColumn2text]}>{this.state.data.customer.phone}</Text>
+                                <Text style={[{}, styles.detailColumn2text]}>{this.state.data.customer.phone ?? 0}</Text>
                             </View>
                         </View>
                         <View style={{}, styles.detailRow}>
@@ -158,7 +171,7 @@ class OrderDetail extends React.Component {
                                 <Text style={[{}, styles.detailColumn1text]}>Delivery Type</Text>
                             </View>
                             <View style={[{}, styles.detailColumn2]}>
-                                <Text style={[{}, styles.detailColumn2text]}>{this.state.delivery_type}</Text>
+                                <Text style={[{}, styles.detailColumn2text]}>{this.state.delivery_type ?? '--'}</Text>
                             </View>
                         </View>
                         <View style={{}, styles.detailRow}>
@@ -174,7 +187,7 @@ class OrderDetail extends React.Component {
                                 <Text style={[{}, styles.detailColumn1text]}>Customer Address</Text>
                             </View>
                             <View style={[{}, styles.detailColumn2]}>
-                                <Text style={[{}, styles.detailColumn2text]}>{this.state.data.customer.address}</Text>
+                                <Text style={[{}, styles.detailColumn2text]}>{this.state.data.customer.address ?? '--'}</Text>
                             </View>
                         </View>
                         <View style={{}, styles.detailRow}>
@@ -182,7 +195,7 @@ class OrderDetail extends React.Component {
                                 <Text style={[{}, styles.detailColumn1text]}>Email Address</Text>
                             </View>
                             <View style={[{}, styles.detailColumn2]}>
-                                <Text style={[{ fontSize: 12 }, styles.detailColumn2text]}>{this.state.data.customer.email}</Text>
+                                <Text style={[{ fontSize: 12 }, styles.detailColumn2text]}>{this.state.data.customer.email ?? '--'}</Text>
                             </View>
                         </View>
                         <View style={{}, styles.detailRow}>
@@ -190,7 +203,7 @@ class OrderDetail extends React.Component {
                                 <Text style={[{}, styles.detailColumn1text]}>Payment Mode</Text>
                             </View>
                             <View style={[{}, styles.detailColumn2]}>
-                                <Text style={[{}, styles.detailColumn2text]}>{this.state.payment_mode}</Text>
+                                <Text style={[{}, styles.detailColumn2text]}>{this.state.payment_mode ?? '--'}</Text>
                             </View>
                         </View>
                         <View style={{}, styles.detailRow}>
@@ -198,9 +211,20 @@ class OrderDetail extends React.Component {
                                 <Text style={[{}, styles.detailColumn1text]}>Order Status</Text>
                             </View>
                             <View style={[{}, styles.detailColumn2]}>
-                                <Text style={[{ borderRadius: 50, paddingHorizontal: 5, backgroundColor: '#DAF8EC', color: '#26C281', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
-                                    {this.state.order_status}
-                                </Text>
+
+                                {(this.state.order_status == 'PENDING') ?
+                                    <Text style={[{ borderRadius: 50, paddingHorizontal: 5, backgroundColor: '#FFF3DB', color: '#FDB72B', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
+                                        {this.state.order_status}
+                                    </Text>
+                                    : (this.state.order_status == 'PAID') ?
+                                        <Text style={[{ borderRadius: 50, paddingHorizontal: 5, backgroundColor: '#DAF8EC', color: '#26C281', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
+                                            {this.state.order_status}
+                                        </Text>
+                                        : (this.state.order_status == 'PART PAYMENT') ?
+                                            <Text style={[{ borderRadius: 50, paddingHorizontal: 5, backgroundColor: '#E6E6E6', color: '#929497', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
+                                                {this.state.order_status}
+                                            </Text>
+                                            : null}
                             </View>
                         </View>
                         <View style={{}, styles.detailRow}>
@@ -208,7 +232,7 @@ class OrderDetail extends React.Component {
                                 <Text style={[{}, styles.detailColumn1text]}>Payment Status</Text>
                             </View>
                             <View style={[{}, styles.detailColumn2]}>
-                                <Text style={[{}, styles.detailColumn2text]}>{this.state.data.payment_status}</Text>
+                                <Text style={[{}, styles.detailColumn2text]}>{this.state.data.payment_status ?? '--'}</Text>
                             </View>
                         </View>
                         <View style={{}, styles.detailRow}>
@@ -216,7 +240,7 @@ class OrderDetail extends React.Component {
                                 <Text style={[{}, styles.detailColumn1text]}>Ticket Id</Text>
                             </View>
                             <View style={[{}, styles.detailColumn2]}>
-                                <Text style={[{}, styles.detailColumn2text]}>{this.state.data.ticket_id}</Text>
+                                <Text style={[{}, styles.detailColumn2text]}>{this.state.data.ticket_id ?? '--'}</Text>
                             </View>
                         </View>
                         <View style={{}, styles.detailRow}>
@@ -224,7 +248,7 @@ class OrderDetail extends React.Component {
                                 <Text style={[{}, styles.detailColumn1text]}>Created By</Text>
                             </View>
                             <View style={[{}, styles.detailColumn2]}>
-                                <Text style={[{}, styles.detailColumn2text]}>{this.state.data.created_by}</Text>
+                                <Text style={[{}, styles.detailColumn2text]}>{this.state.data.created_by ?? '--'}</Text>
                             </View>
                         </View>
                         <View style={{}, styles.detailRow}>
@@ -232,7 +256,7 @@ class OrderDetail extends React.Component {
                                 <Text style={[{}, styles.detailColumn1text]}>Payment Due Date</Text>
                             </View>
                             <View style={[{}, styles.detailColumn2]}>
-                                <Text style={[{}, styles.detailColumn2text]}>{this.state.data.payment_date}</Text>
+                                <Text style={[{}, styles.detailColumn2text]}>{this.state.data.payment_date ?? '--'}</Text>
                             </View>
                         </View>
                         <View style={{}, styles.detailRow}>
@@ -248,7 +272,7 @@ class OrderDetail extends React.Component {
                                 <Text style={[{ fontSize: 11 }, styles.detailColumn1text]}>Amount Paid From Credit Limit</Text>
                             </View>
                             <View style={[{}, styles.detailColumn2]}>
-                                <Text style={[{}, styles.detailColumn2text]}>{this.state.data.amount_paid_from_credit_limit}</Text>
+                                <Text style={[{}, styles.detailColumn2text]}>{this.state.data.amount_paid_from_credit_limit ?? '--'}</Text>
                             </View>
                         </View>
                     </View>
@@ -262,35 +286,25 @@ class OrderDetail extends React.Component {
                                 <Text style={[{ fontWeight: 'bold' }, styles.detailColumn2text]}>PCIN00000915</Text>
                             </View>
                         </View>
-                        <View style={{}, styles.invoiceRow}>
-                            <View style={{ flexDirection: 'column', width: width - 50 }}>
-                                <Text style={{ color: '#4E4D4D' }}>{this.state.item.name}</Text>
-                                <Text style={{ color: '#929497', fontSize: 12 }}>LAGOS- Palms</Text>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Text style={{ fontSize: 10, fontWeight: 'bold', color: '#929497' }}>Unit Price: </Text>
-                                    <Text style={{ fontSize: 8, color: '#929497', marginRight: 20 }}>N100,000 </Text>
-                                    <Text style={{ fontSize: 10, fontWeight: 'bold', color: '#929497' }}>QTY: </Text>
-                                    <Text style={{ fontSize: 8, color: '#929497', marginRight: width / 4 }}>5 </Text>
-                                    <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end' }}>N500,000 </Text>
+                        {this.state.item.map((x, key) =>
+                            <View style={{}, styles.invoiceRow}>
+                                <View style={{ flexDirection: 'column', width: width - 50 }}>
+                                    <Text style={{ color: '#4E4D4D' }}>{x.name}</Text>
+                                    <Text style={{ color: '#929497', fontSize: 12 }}>LAGOS- Palms</Text>
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={{ fontSize: 10, fontWeight: 'bold', color: '#929497' }}>Unit Price: </Text>
+                                        <Text style={{ fontSize: 8, color: '#929497', marginRight: 20 }}>N{x.price}</Text>
+                                        <Text style={{ fontSize: 10, fontWeight: 'bold', color: '#929497' }}>QTY: </Text>
+                                        <Text style={{ fontSize: 8, color: '#929497', marginRight: width / 4 }}>{x.quantity} </Text>
+                                        <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end' }}>N{x.price * x.quantity} </Text>
+                                    </View>
                                 </View>
                             </View>
-                        </View>
-                        <View style={{}, styles.invoiceRow}>
-                            <View style={{ flexDirection: 'column', width: width - 50 }}>
-                                <Text style={{ color: '#4E4D4D' }}>Pure ORANGE JUICE 12PACK</Text>
-                                <Text style={{ color: '#929497', fontSize: 12 }}>LAGOS- Palms</Text>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Text style={{ fontSize: 10, fontWeight: 'bold', color: '#929497' }}>Unit Price: </Text>
-                                    <Text style={{ fontSize: 8, color: '#929497', marginRight: 20 }}>N100,000 </Text>
-                                    <Text style={{ fontSize: 10, fontWeight: 'bold', color: '#929497' }}>QTY: </Text>
-                                    <Text style={{ fontSize: 8, color: '#929497', marginRight: width / 4 }}>5 </Text>
-                                    <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end' }}>N500,000 </Text>
-                                </View>
-                            </View>
-                        </View>
+
+                        )}
                         <View style={{ alignSelf: 'flex-end', marginRight: 20, marginVertical: 20, flexDirection: 'row' }}>
                             <Text style={{ fontWeight: 'bold' }}>Total:  </Text>
-                            <Text style={{ fontWeight: 'bold' }}>N750,000</Text>
+                            <Text style={{ fontWeight: 'bold' }}>N{this.state.total_amount}</Text>
                         </View>
 
                     </View>
