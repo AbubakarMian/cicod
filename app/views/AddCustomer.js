@@ -2,6 +2,7 @@ import React from 'react'
 import { View, ImageBackground, ScrollView, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
 import splashImg from '../images/splash.jpg'
 import styles from '../css/AddCustomerCss'
+import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -97,7 +98,7 @@ class AddCustomer extends React.Component {
                 />
                 <View style={[{}, styles.backHeaderRowView]}>
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('Sell')}
+                        onPress={() => this.props.navigation.navigate('CreateOrder')}
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>

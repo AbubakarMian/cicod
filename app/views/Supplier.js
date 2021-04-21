@@ -2,7 +2,8 @@ import React from 'react'
 import { View, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, } from 'react-native'
 import { Text, TextInput, Alert } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
-import styles from '../css/DashboardCss'
+import styles from '../css/DashboardCss';
+import fontStyles from '../css/FontCss'
 import Header from '../views/Header';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import CalendarPicker from 'react-native-calendar-picker';
@@ -94,7 +95,7 @@ class Supplier extends React.Component {
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
-            <View style={{ height: height, width: width, position: 'relative', backgroundColor: '##F0F0F0', }}>
+            <View style={{ height: height, width: width, position: 'relative', backgroundColor: '#F0F0F0', }}>
                 <Header navigation={this.props.navigation} />
                 <Spinner
                     visible={this.state.spinner}
@@ -119,7 +120,7 @@ class Supplier extends React.Component {
                         />
                     </TouchableOpacity>
                 </View>
-                <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, backgroundColor: '#fff', alignSelf: 'center', paddingHorizontal: 10, borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
+                <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', paddingHorizontal: 10, borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
                     <Image
                         source={require('../images/products/searchicon.png')}
                     />

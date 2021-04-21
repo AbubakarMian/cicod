@@ -4,6 +4,7 @@ import { Text, TextInput, Alert } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import styles from '../css/EnableProductCss';
+import fontStyles from '../css/FontCss'
 import { ScrollView } from 'react-native-gesture-handler';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'

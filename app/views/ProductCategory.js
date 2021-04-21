@@ -3,6 +3,7 @@ import { View, ScrollView, TouchableHighlight, FlatList, Dimensions, Image, Plat
 import { Text, TextInput, Alert } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/ProductCategoryCss'
+import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 
 import Header from '../views/Header';

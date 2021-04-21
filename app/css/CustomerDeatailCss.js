@@ -45,7 +45,7 @@ export default StyleSheet.create({
  },
  searchBoxDividerView:{
      borderBottomColor:'#E6E6E6',
-     borderBottomWidth:2,
+    
      marginVertical:10,
  },
  mainContentView:{

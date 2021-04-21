@@ -2,7 +2,8 @@ import React from 'react'
 import { View, ImageBackground, Modal, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback } from 'react-native'
 import { Text, TextInput, Alert } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
-import styles from '../css/CustomerCss'
+import styles from '../css/CustomerCss';
+import fontStyles from '../css/FontCss'
 import CalendarPicker from 'react-native-calendar-picker';
 import Icon from 'react-native-vector-icons/FontAwesome';
 const { width, height } = Dimensions.get('window')
@@ -121,7 +122,7 @@ class Customer extends React.Component {
                         onChangeText={text => this.setState({ search_text: text })}
                         onSubmitEditing={() => this.search()}
                         label="Johnson James"
-                        style={{ backgroundColor: 'transparent', }}
+                        style={{ backgroundColor: 'transparent',borderBottomWidth:0,borderColor:'#fff' }}
                         width={width - 50}
                         alignSelf={'center'}
                         color={'#000'}
@@ -143,7 +144,7 @@ class Customer extends React.Component {
                             ))
                         }
                         renderItem={({ item, index, separators }) => (
-                            <TouchableHighlight
+                            <TouchableOpacity
                                 key={item.key}
                                 onPress={(() => this.customerDetails(item))}//=>this.props.navigation.navigate('CustomersDetal')
                                 onShowUnderlay={separators.highlight}
@@ -155,18 +156,21 @@ class Customer extends React.Component {
                                             source={require('../images/customer/usericon.png')}
                                         />
                                     </View>
-                                    <View style={{ position: 'relative', flex: 3 }}>
-                                        <Text>{item.first_name + ' ' + item.last_name}</Text>
+                                    <View style={{ position: 'relative', flex: 3 }}> 
+                                        <Text style={[{color:'#4E4D4D'},fontStyles.bold15]}>{item.first_name + ' ' + item.last_name}</Text>
                                         <View style={{ flexDirection: 'row', }}>
 
-                                            <Text style={{ fontSize: 10, color: '#929497' }}>{item.email + '.' + item.phone}</Text>
+                                            <Text 
+                                            numberOfLines={3}
+                                            
+                                            style={[{color:'#929497',width:width/1.8},fontStyles.normal12]}>{item.email + '.' + item.phone}</Text>
                                             <View style={[{ position: 'absolute', right: 0, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
                                                 <Text style={[{ color: '#26C281' }]}>{(item.is_active) ? 'ACTIVE' : 'IN ACTIVE'}</Text>
                                             </View>
                                         </View>
                                     </View>
                                 </View>
-                            </TouchableHighlight>
+                            </TouchableOpacity>
                         )}
                     />
                 </ScrollView>

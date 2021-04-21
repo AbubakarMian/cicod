@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Image,  TouchableOpacity, Dimensions, Touchable, ScrollView,  } from 'react-native';
 import {   Text, TextInput, Alert} from 'react-native-paper';
 import styles from '../css/OrderDetailCss';
+import fontStyles from '../css/FontCss'
 import Header from '../views/Header'
 import CheckBox from 'react-native-check-box';
 import Icon from 'react-native-vector-icons/FontAwesome';

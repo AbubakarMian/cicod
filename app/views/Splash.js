@@ -2,7 +2,7 @@ import React from 'react'
 import { View, ImageBackground,  Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
 import {   Text, TextInput, Alert} from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
-
+import fontStyles from '../css/FontCss'
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 export default class SplashScreen extends React.Component {

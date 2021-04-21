@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Image, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
 // import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, Touchable, ScrollView, Alert } from 'react-native';
 import styles from '../css/LoginCss';
+import fontStyles from '../css/FontCss'
 import CheckBox from 'react-native-check-box';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Spinner from 'react-native-loading-spinner-overlay';

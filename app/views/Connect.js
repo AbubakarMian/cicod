@@ -5,6 +5,7 @@ import splashImg from '../images/splash.jpg'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import styles from '../css/ConnectCss';
+import fontStyles from '../css/FontCss'
 import { Container, Left, Body, Right, Button, Title, Segment, Content, } from 'native-base';
 import { Constants } from './Constant';
 import { connect } from 'react-redux';

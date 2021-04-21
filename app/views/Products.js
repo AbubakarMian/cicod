@@ -1,7 +1,9 @@
 import React from 'react'
 import { View, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView,  } from 'react-native'
+import { Text, TextInput, Alert } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
-import styles from '../css/DashboardCss'
+import styles from '../css/DashboardCss';
+import fontStyles from '../css/FontCss'
 import CalendarPicker from 'react-native-calendar-picker';
 import SearchBar from 'react-native-search-bar';
 import { Text, TextInput, Alert } from 'react-native-paper';
@@ -146,11 +148,12 @@ class Products extends React.Component {
 
 
 
-                <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, backgroundColor: '#fff', alignSelf: 'center', paddingHorizontal: 10, borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
+                <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center',  borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
+                    
+                    <View style={{flexDirection:'row',backgroundColor:'#fff',alignItems:'center',height:50,paddingHorizontal:10,borderRadius:5, width:width-80}}>
                     <Image
                         source={require('../images/products/searchicon.png')}
                     />
-                    <View>
                         <TextInput
                             label="Search product, Price and code"
                             // selectionColor={'#fff'}
@@ -162,16 +165,17 @@ class Products extends React.Component {
                             onChangeText={text => this.setState({ search_product: text })}
                             onSubmitEditing={() => this.search()}
                         />
-                    </View>
-                    <View style={{ position: 'absolute', right: 0, alignSelf: 'center', }}>
+                    </View> 
+                    
                         <TouchableOpacity
+                        style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
                             onPress={() => this.props.navigation.navigate('ProductFilter')}
                         >
                             <Image
                                 source={require('../images/Order/settingicon.png')}
                             />
                         </TouchableOpacity>
-                    </View>
+                   
                 </View>
                 <View style={[{}, styles.formRowView]}>
                     <View style={[{ position: 'relative' }, styles.formColumn]}>
@@ -193,7 +197,7 @@ class Products extends React.Component {
             
                 <ScrollView>
                     <FlatList
-                    zIndex={-9999}
+                    style={{zIndex:-999}}
                         data={this.state.data}
                     
                         ItemSeparatorComponent={
@@ -218,7 +222,7 @@ class Products extends React.Component {
                                     <View style={[{ flexDirection: 'row' }]}>
                                         {(item.image == null) ?
                                             <Image
-                                                style={[{ height: 50, width: 50 }]}
+                                                style={[{ height: 40, width: 40,marginRight:5 }]}
                                                 source={require('../images/ticket.png')}
                                             />
                                             :
@@ -230,7 +234,8 @@ class Products extends React.Component {
                                     <View style={{ position: 'relative', flex: 3,marginLeft:10 }}>
                                         <Text >{item.name}</Text>
                                         <View style={{ flexDirection: 'row', }}>
-                                            <Text>QTY:  {item.quantity}</Text>
+                                            <Text style={[{color:'#929497'},fontStyles.normal12]}>QTY:  {item.quantity}</Text>
+                                            <Text style={[{color:'#929497'},fontStyles.normal12]}>.  {item.slug}</Text>
                                             {(item.is_active == false) ?
                                                 <View style={[{ position: 'absolute', right: 0, backgroundColor: '#e3b8be', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
                                                     <Text style={[{ color: '#ba071f' }]}>IN ACTIVE</Text>

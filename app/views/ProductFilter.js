@@ -2,7 +2,8 @@ import React from 'react'
 import { View, Dimensions, Image, Platform, TouchableOpacity, } from 'react-native'
 import { Text, TextInput, Alert } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
-import styles from '../css/Filter.Css'
+import styles from '../css/Filter.Css';
+import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import SearchBar from 'react-native-search-bar';
