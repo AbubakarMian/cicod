@@ -1,8 +1,9 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, Dimensions, Image, Platform, TouchableOpacity, FlatList} from 'react-native'
-import {Text, TextInput, Alert} from 'react-native-paper';
+import { View, ImageBackground, ScrollView, Dimensions, Image, Modal, TouchableHighlight, Platform, TouchableOpacity, FlatList } from 'react-native'
+import { Text, TextInput, Alert } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
-import styles from '../css/CreateOrderCss'
+import styles from '../css/CreateOrderCss';
+import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import CheckBox from 'react-native-check-box';
@@ -33,13 +34,15 @@ class CreateOrder extends React.Component {
             payment_option: 0,
             delivery_type_btn: 0,
             is_pickup: true,
-            payment_mode: ''
+            payment_mode: '',
+            suppliereModal: false
         }
     }
     clearOrder() {
         this.props.emptyOrder();
     }
     componentDidMount() {
+        console.log('props@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@', this.props.route.params.screen_name)
         console.log(' this.props.deliveryAddress.type', this.props.deliveryAddress.type);
         let res = this.props.cart.cart;
         let cart_arr = res.map((x, key) => { return { id: x.id, quantity: x.purchased_quantity } });
@@ -210,7 +213,7 @@ class CreateOrder extends React.Component {
 
     render() {
         var radio_props_dilvery = [
-            { label: 'Dilivery', value: 0 },
+            { label: 'Delivery', value: 0 },
 
         ];
         var radio_props_pickup = [
@@ -252,9 +255,15 @@ class CreateOrder extends React.Component {
                                     <Text style={[{}, styles.backHeadingCloseText]}>Close</Text>
                                 </TouchableOpacity>
                             </View>
-                        </View>
 
+                        </View>
+                        {/* {(this.props.route.params.screen_name == 'buy') ?
+                            <Text>
+                                adsas hdahjskdhajhsd
+                            </Text>
+                            : null} */}
                         <View style={[{}, styles.customerContainerView]}>
+
                             <Text style={[{}, styles.customerContainerhead]}>Custommer Detail</Text>
                             <TouchableOpacity style={[{}, styles.customerContaineraddBtnView]}
                                 onPress={() => this.props.navigation.navigate('AddCustomer')}
@@ -262,6 +271,7 @@ class CreateOrder extends React.Component {
                                 <Icon name="plus-circle" size={20} color={'#fff'} />
                                 <Text style={[{}, styles.customerContaineraddBtnText]}>Add</Text>
                             </TouchableOpacity>
+
                             {(this.state.customer_name == '') ?
                                 <View style={[{}, styles.customerContainerView]}>
                                     <Icon name="user-circle" size={50} color="#D8D8D8" />
@@ -311,9 +321,14 @@ class CreateOrder extends React.Component {
                             <TouchableOpacity
                                 onPress={() => this.clearOrder()}
                                 style={[{}, styles.OrderDetailClearTouc]}>
-                                <Text style={[{}, styles.OrderDetailHeadingRowText]}>Clear Order</Text>
+                                <Text style={[{}, styles.OrderDetailNormalgRowText]}>Clear Order</Text>
                             </TouchableOpacity>
 
+                            <View style={[{}, styles.cartSlashView]}>
+                                <Image source={require('../images/cartSlash.png')} />
+                                <Text style={[{}, styles.cartSlashheadingText]}>No product added</Text>
+                                <Text style={[{}, styles.cartSlashNormalText]}>Add a product</Text>
+                            </View>
 
                             <FlatList
                                 data={this.state.cart_arr}
@@ -385,7 +400,7 @@ class CreateOrder extends React.Component {
                                 onPress={() => this.DeliveryType('delivery')}
 
                             >
-                                <View style={[{borderWidth:0.25,}, styles.radioFormView]}>
+                                <View style={[{ borderWidth: 0.25, }, styles.radioFormView]}>
 
                                     <RadioForm
                                         isSelected={!this.state.is_pickup}
@@ -425,15 +440,15 @@ class CreateOrder extends React.Component {
                                             </RadioButton>
                                         ))
                                     }
-                                    <Text style={[{}, styles.smailGrayText]}>{this.props.deliveryAddress.address ?? 'Dilivery to customer address'}</Text>
-
+                                    {/* <Text style={[{}, styles.smailGrayText]}>{this.props.deliveryAddress.address ?? 'Dilivery to customer address'}</Text> */}
+                                    <Text style={[{}, styles.smailGrayText]}>Pickup from our location</Text>
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={() => this.DeliveryType('pickup')}
 
                             >
-                                <View style={[{borderWidth:0.25,}, styles.radioFormView]}>
+                                <View style={[{ borderWidth: 0.25, }, styles.radioFormView]}>
 
                                     <RadioForm
                                         isSelected={this.state.is_pickup}
@@ -479,7 +494,8 @@ class CreateOrder extends React.Component {
                             </TouchableOpacity>
                         </View>
                         <View style={[{}, styles.paymentContainerView]}>
-                            <Text style={[{}, styles.paymentHeadingText]}>Payment Options</Text>
+                            <Text style={[{}, styles.OrderDetailHeadingRowText]}>Payment Options</Text>
+                            <View style={{ borderWidth: 0.25, borderColor: '#E6E6E6', width: width - 20, alignSelf: 'center', marginTop: 10 }}></View>
                             <View style={[{}, styles.radioFormView]}>
                                 <RadioForm
                                     isSelected={false}
@@ -495,14 +511,14 @@ class CreateOrder extends React.Component {
                                 />
                                 {
                                     radio_props_payment.map((obj, i) => (
-                                        <RadioButton 
-                                        style={{backgroundColor:'#F5F5F5',paddingVertical:10,paddingHorizontal:10}}
-                                        labelHorizontal={true} key={i} >
+                                        <RadioButton
+                                            style={{ backgroundColor: '#F5F5F5', paddingVertical: 10, paddingHorizontal: 10 }}
+                                            labelHorizontal={true} key={i} >
                                             <RadioButtonInput
                                                 obj={obj}
                                                 index={i}
-                                                
-                                                style={{backgroundColor:'red'}}
+
+                                                style={{ backgroundColor: 'red' }}
                                                 isSelected={this.state.value3Index === i}
                                                 onPress={(value, label) => this.paymentFun(obj)}
                                                 borderWidth={1}
@@ -542,44 +558,131 @@ class CreateOrder extends React.Component {
                         </View>
 
 
-                        <View style={[{}, styles.subTotleRowView]}>
+                        <View style={{ backgroundColor: '#fff', width: width - 20, alignSelf: 'center', marginTop: 10, borderRadius: 10, paddingBottom: 10 }}>
+                            <View style={[{ borderBottomWidth: 0.25 }, styles.subTotleRowView]}>
 
-                            <View style={[{}, styles.subTotleColumn1View]}>
-                                <Text style={[{}, styles.subTotleColumn1Text]}>subtotal:</Text>
-                                <Text style={[{}, styles.subTotleColumn1Text]}>Tax(7.5%)</Text>
-                                <Text style={[{}, styles.subTotleColumn1Text]}>TOTAL:</Text>
-                                <TouchableOpacity
-                                    onPress={() => this.props.navigation.navigate('ApplyDiscount')}
-                                >
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <Icon name="times-circle" size={20} color="#B1272C" />
-                                        <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Apply for Discount</Text>
-                                    </View>
-                                </TouchableOpacity>
+                                <View style={[{}, styles.subTotleColumn1View]}>
+                                    <Text style={[{}, styles.subTotleColumn1Text]}>subtotal:</Text>
+                                    <Text style={[{}, styles.subTotleColumn1Text]}>Tax(7.5%)</Text>
+                                    <Text style={[{}, styles.subTotleColumn1Text]}>TOTAL:</Text>
+                                    <TouchableOpacity
+                                        onPress={() => this.props.navigation.navigate('ApplyDiscount')}
+                                    >
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Icon name="times-circle" size={20} color="#B1272C" />
+                                            <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Apply for Discount</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
+                                <View style={[{}, styles.subTotleColumn2View]}>
+                                    <Text style={[{}, styles.subTotleColumn2Text]}>{this.state.cart_detail.total_price ?? 0}</Text>
+                                    <Text style={[{}, styles.subTotleColumn2Text]}>{this.state.cart_detail.tax ?? 0}</Text>
+                                    <Text style={[{}, styles.subTotleColumn2Text]}>{this.state.cart_detail.total_price_with_tax ?? 0}</Text>
+                                    <TouchableOpacity
+                                        onPress={() => this.props.navigation.navigate('AddNote')}
+                                    >
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Image source={require('../images/addNote.png')} />
+                                            <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Add Note</Text>
+                                        </View>
+                                    </TouchableOpacity>
+                                </View>
                             </View>
-                            <View style={[{}, styles.subTotleColumn2View]}>
-                                <Text style={[{}, styles.subTotleColumn2Text]}>{this.state.cart_detail.total_price ?? 0}</Text>
-                                <Text style={[{}, styles.subTotleColumn2Text]}>{this.state.cart_detail.tax ?? 0}</Text>
-                                <Text style={[{}, styles.subTotleColumn2Text]}>{this.state.cart_detail.total_price_with_tax ?? 0}</Text>
-                                <TouchableOpacity
-                                    onPress={() => this.props.navigation.navigate('AddNote')}
-                                >
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <Image source={require('../images/addNote.png')} />
-                                        <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Add Note</Text>
-                                    </View>
-                                </TouchableOpacity>
-                            </View>
+                            <TouchableOpacity
+                                onPress={() => this.createOrderFun()}
+                                style={[{}, styles.btnContinuueView]}>
+                                <Text style={{ color: '#FFFFFF' }}>Pay</Text>
+                            </TouchableOpacity>
+
                         </View>
-                        <TouchableOpacity
-                            onPress={() => this.createOrderFun()}
-                            style={[{}, styles.btnContinuueView]}>
-                            <Text style={{ color: '#FFFFFF' }}>Pay</Text>
-                        </TouchableOpacity>
-
 
                     </View>
                 </ScrollView>
+                <Modal
+                    visible={this.state.suppliereModal}
+                    transparent={true}
+                >
+                    <View style={[{}, styles.mainContainer]}>
+                        <TouchableOpacity
+                            style={[{}, styles.backgroundTouch]}
+                        >
+
+                        </TouchableOpacity>
+                        <View style={[{}, styles.contentView]}>
+                            <View style={[{}, styles.modalCancleRow]}>
+                                <Text style={[{}, styles.modalCancleText]}>SELECT SUPPLIERS</Text>
+                                <TouchableOpacity
+                                    onPress={() => this.setState({ suppliereModal: false })}
+                                    style={[{}, styles.modalCancleTouch]}
+                                >
+                                    <Icon name="times" size={20} color="#929497" />
+                                </TouchableOpacity>
+                            </View>
+                            <View style={[{}, styles.searchRow]}>
+                                <Icon name="search" size={20} color="#929497" />
+                                <TextInput
+                                    label="Search supplier"
+                                    style={{ backgroundColor: 'transparent', }}
+                                    width={width - 50}
+                                    alignSelf={'center'}
+                                    color={'#000'}
+                                />
+                            </View>
+                            <ScrollView
+
+                            >
+                                <FlatList
+
+                                    ItemSeparatorComponent={
+                                        Platform.OS !== 'android' &&
+                                        (({ highlighted }) => (
+                                            <View
+                                                style={[
+                                                    style.separator,
+                                                    highlighted && { marginLeft: 0 }
+                                                ]}
+                                            />
+                                        ))
+                                    }
+                                    data={[
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item1' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item2' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item3' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item4' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item5' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item6' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item7' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item8' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item9' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item10' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item11' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item12' },
+                                    ]}
+                                    renderItem={({ item, index, separators }) => (
+                                        <TouchableHighlight
+                                            key={item.key}
+                                            onPress={() => this.props.navigation.navigate('Supplier')}
+                                            onShowUnderlay={separators.highlight}
+                                            onHideUnderlay={separators.unhighlight}>
+                                            <View style={[{}, styles.modalListContainer]}>
+                                                <Image source={require('../images/bage.png')} />
+                                                <View style={[{}, styles.modalListContentView]}>
+                                                    <Text style={[{}, styles.modalBoldeText]}>{item.title}</Text>
+                                                    <Text style={[{}, styles.modalNumberText]}>{item.num}</Text>
+                                                </View>
+                                                <Icon
+                                                    style={[{}, styles.modalListContentRightIcon]}
+                                                    name="angle-right" size={20} color="#aaa" />
+                                            </View>
+                                        </TouchableHighlight>
+                                    )}
+                                />
+                            </ScrollView>
+
+                        </View>
+                    </View>
+
+                </Modal>
             </View>
 
         );

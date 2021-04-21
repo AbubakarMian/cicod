@@ -26,7 +26,9 @@ export default StyleSheet.create({
     },
     backHeadingText:{
         color:'#2F2E7C',
-        fontWeight:'bold'
+        fontWeight:'bold',
+        fontSize:15,
+        fontFamily:'Open Sans',
     },
 
     backHeadingCloseView:{
@@ -46,17 +48,23 @@ export default StyleSheet.create({
         marginTop:20,
         justifyContent:'center',
         alignItems:'center',
+        borderRadius:10
         
     },
     customerContainerheading:{
         color:'#D8D8D8',
-        fontWeight:'bold'
+        fontWeight:'bold',
+        fontFamily:'Open Sans',
+        fontSize:15,
     },
     customerContainerhead:{
         position:'absolute',
         top:10,
-        left:5,
-        color:'#D8D8D8'
+        left:10,
+        fontSize:15,
+        color:'#929497',
+        fontWeight:'bold',
+        fontFamily:'Open Sans',
     },
     customerContainerheadText:{
         color:'#D8D8D8',
@@ -75,11 +83,15 @@ export default StyleSheet.create({
     },
     customerContaineraddBtnText:{
         color:'#fff',
-        marginHorizontal:5
+        marginHorizontal:5,
+        fontSize:13,
+        fontFamily:'Open Sans'
 
     },
     customerContainerText:{
-        color:'#aaa',
+        color:'#D8D8D8',
+        fontFamily:'Open Sans',
+        fontSize:15,
     },
 
     customerContaineraddProductView:{
@@ -95,7 +107,9 @@ export default StyleSheet.create({
     customerContaineraddProductText:{
         marginHorizontal:10,
         color:'#4E4D4D',
-        fontWeight:'bold'
+        fontWeight:'bold',
+        fontFamily:'Open Sans',
+        fontSize:15,
     },
     OrderDetailContainer:{
         backgroundColor:'#fff',
@@ -103,7 +117,8 @@ export default StyleSheet.create({
         width:width-20,
         alignSelf:'center',
         justifyContent:'center',
-        alignItems:'center'
+        alignItems:'center',
+        borderRadius:10
     },
     OrderDetailContainerHeadingText:{
      color:'#D8D8D8',
@@ -120,6 +135,7 @@ export default StyleSheet.create({
         width:width-20,
         marginTop:10,
         alignSelf:'center',
+        borderRadius:10
     },
     radioFormView:{
         paddingVertical:10,
@@ -143,7 +159,8 @@ export default StyleSheet.create({
       marginTop:10,
       width:width-20,
       alignSelf:'center',
-      paddingHorizontal:10
+      paddingHorizontal:10,
+      borderRadius:10
     },
     paymentHeadingText:{
         color:'#D8D8D8',
@@ -162,7 +179,7 @@ export default StyleSheet.create({
     },
     subTotleRowView:{
         flexDirection:'row',
-        width:width-20,
+        width:width-40,
         alignSelf:'center',
         marginTop:10,
         backgroundColor:'#fff',
@@ -174,8 +191,9 @@ export default StyleSheet.create({
 
     },
     subTotleColumn1Text:{
-        color:'#929497',
-        fontWeight:'bold'  
+        color:'#4E4D4D',
+        fontFamily:'Open Sans',
+        fontSize:15
     },
     subTotleColumn2Text:{
         color:'#929497',  
@@ -203,7 +221,16 @@ export default StyleSheet.create({
         flexDirection:'row'
     },
     OrderDetailHeadingRowText:{
-        color:'#D8D8D8'
+        color:'#929497',
+        fontSize:15,
+        fontFamily:'Open Sans',
+        fontWeight:'bold'
+    },
+    OrderDetailNormalgRowText:{
+        color:'#E6E6E6',
+        fontSize:13,
+        fontFamily:'Open Sans',
+       
     },
     OrderDetailClearTouc:{
         right:10,
@@ -291,8 +318,84 @@ usetDetailLableText:{
 },
 downIconView:{
     alignSelf:'center'
-}
+},
+cartSlashView:{
+    justifyContent:'center',
+    alignItems:'center',
+    borderTopWidth:0.25,
+    width:width-20,
+    marginTop:10,
+    borderTopColor:'#E6E6E6',
+    paddingVertical:20
+},
+cartSlashheadingText:{
+    fontWeight:'bold',
+    fontFamily:'Open Sans',
+    fontSize:15,
+    color:'#929497'
+},
+cartSlashNormalText:{
+    fontFamily:'Open Sans',
+    fontSize:15,
+    color:'#D8D8D8'
+},
     
+modalCancleRow: {
+    flexDirection: 'row',
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    alignItems: 'center',
+    position: 'relative',
+},
+modalCancleText: {
+    color: '#2F2E7C',
+    fontWeight: 'bold'
+},
+modalCancleTouch: {
+    padding: 10,
+    position: 'absolute',
+    top: 0,
+    right: 0,
+},
+searchRow: {
+    marginTop: 10,
+    flexDirection: 'row',
+    width: width - 20,
+    alignSelf: 'center',
+    borderBottomWidth: 0.25,
+    alignItems: 'center',
+    borderBottomColor: '#929497',
+},
+modalListContainer:{
+    flexDirection:'row',
+    paddingHorizontal:10,
+    paddingVertical:5,
+    alignItems:'center',
+    backgroundColor:'#fff',
+    marginBottom:2,
+    borderTopWidth:0.25,
+    borderBottomWidth:0.25,
+    width:width-20,
+    alignSelf:'center',
+    borderTopColor:'#aaaa',
+    borderBottomColor:'#aaaa'
+},
+modalListContentView:{
+    paddingHorizontal:10,
+    flexDirection:'column'
+},
+modalListContentRightIcon:{
+    position:'absolute',
+    right:5
+},
+modalBoldeText:{
+    fontWeight:'bold',
+    color:'#4E4D4D',
+},
+modalNumberText:{
+    color:'#929497',
+    fontSize:10,
+}
 
 
    

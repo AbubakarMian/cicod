@@ -2,7 +2,8 @@ import React from 'react'
 import { View, Dimensions, Image, Platform, TouchableOpacity, Modal } from 'react-native'
 import { Text, TextInput, Alert} from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
-import styles from '../css/ProductViewCss'
+import styles from '../css/ProductViewCss';
+import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import CheckBox from 'react-native-check-box';

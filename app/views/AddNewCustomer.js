@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import CheckBox from 'react-native-check-box';
 import styles from '../css/AddNewCustomerCss';
+import fontStyles from '../css/FontCss'
 import { ScrollView } from 'react-native-gesture-handler';
 import Spinner from 'react-native-loading-spinner-overlay';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -362,7 +363,7 @@ class AddNewCustomer extends React.Component {
                                 onChangeText={text => this.setState({ email: text })}
                             />
                             <View style={{ flexDirection: 'row' }}>
-                                <View style={{ flex: 1 }}>
+                                <View style={{ flex: 1, }}>
                                     <TextInput
                                         keyboardType='numeric'
                                         onChangeText={text => this.setState({ phone_number: text })}
@@ -373,7 +374,7 @@ class AddNewCustomer extends React.Component {
                                         color={'#000'}
                                     />
                                 </View>
-                                <View style={{ flex: 1 }}>
+                                <View style={{ flex: 1,marginHorizontal:5 }}>
                                     <TextInput
                                         onChangeText={text => this.setState({ house_no: text })}
                                         label="House No."

@@ -2,6 +2,7 @@ import React from 'react';
 import {  View,  Image,Dimensions,TouchableOpacity, ScrollView  } from 'react-native';
 // import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, Touchable, ScrollView, Alert } from 'react-native';
 import styles from '../css/LoginCss';
+import fontStyles from '../css/FontCss'
 import CheckBox from 'react-native-check-box';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -45,7 +46,7 @@ class Login extends React.Component {
                 lastname: "sandbox last", //responseJson.user.lastname,
                 email: "cicodsandbox@yopmail.com",//responsejson.user.email,
                 phone: "123314324",//responseJson.user.phone,
-                access_token: "Bearer rR1CiIz9iuRHh8WNrsEk ",  //+ responseJson.token
+                access_token: "Bearer yfuK5hA9TgZA0BOY06xs",  //+ responseJson.token
             });
             this.setState({ Spinner: false })
             this.props.navigation.navigate('Home')

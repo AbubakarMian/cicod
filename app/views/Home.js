@@ -1,7 +1,9 @@
 import React from 'react'
 import { View, ImageBackground,  Dimensions, Image, Platform, TouchableOpacity, ScrollView } from 'react-native'
 import {   Text, TextInput, Alert} from 'react-native-paper';
-import splashImg from '../images/splash.jpg'
+import splashImg from '../images/splash.jpg';
+import styles from '../css/HomeCss';
+import fontStyles from '../css/FontCss'
 import Header from '../views/Header';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
@@ -16,7 +18,7 @@ class Home extends React.Component {
         <View style={[{ flexDirection: 'row',paddingVertical:10 }]}>
           <View style={{ flex: 1, paddingHorizontal: 10 }}>
             <Text style={[{ color: '#B1272C', fontWeight: 'bold', fontSize: 25,fontFamily:'Open Sans' }]}>Welcome,</Text>
-            <Text style={{fontWeight:'500'}}>{this.props.user.firstname}</Text>
+            <Text style={{color:'#4E4D4D',fontSize: 25,fontFamily:'Open Sans'}}>{this.props.user.firstname}</Text>
           </View>
           <View style={{ flex: 1, alignItems: 'flex-end', padding: 10 }}>
            <Image 
@@ -40,7 +42,7 @@ class Home extends React.Component {
                   style={{ height: width / 4, width: width / 4 }}
                   source={require('../images/home/dashboard.png')}
                 />
-                <Text style={[{ fontWeight: 'bold' }]}>Dashboard</Text>
+                <Text style={[{},styles.cardLableText]}>Dashboard</Text>
               </View>
               </TouchableOpacity>
               <TouchableOpacity
@@ -55,7 +57,7 @@ class Home extends React.Component {
                   style={{ height: width / 4, width: width / 4 }}
                   source={require('../images/home/sell.png')}
                 />
-                <Text style={[{ fontWeight: 'bold' }]}>Sell</Text>
+                <Text style={[{},styles.cardLableText]}>Sell</Text>
               </View>
               </TouchableOpacity>
             </View>
@@ -73,7 +75,7 @@ class Home extends React.Component {
                   style={{ height: width / 4, width: width / 4 }}
                   source={require('../images/home/order.png')}
                 />
-                <Text style={[{ fontWeight: 'bold' }]}>Orders</Text>
+                <Text style={[{},styles.cardLableText]}>Orders</Text>
               </View>
               </TouchableOpacity>
               <TouchableOpacity
@@ -88,7 +90,7 @@ class Home extends React.Component {
                   style={{ height: width / 4, width: width / 4 }}
                   source={require('../images/home/customers.png')}
                 />
-                <Text style={[{ fontWeight: 'bold' }]}>Customers</Text>
+                <Text style={[{},styles.cardLableText]}>Customers</Text>
               </View>
               </TouchableOpacity>
             </View>
@@ -105,11 +107,11 @@ class Home extends React.Component {
                   style={{ height: width / 4, width: width / 4 }}
                   source={require('../images/home/products.png')}
                 />
-                <Text style={[{ fontWeight: 'bold' }]}>Products</Text>
+                <Text style={[{},styles.cardLableText]}>Products</Text>
               </View>
               </TouchableOpacity>
               <TouchableOpacity
-              onPress={()=>this.props.navigation.navigate('BuyCreateOrder')}
+              onPress={()=>this.props.navigation.navigate('CreateOrder', {screen_name:'buy'})}
               >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: height / 4,
@@ -120,7 +122,7 @@ class Home extends React.Component {
                   style={{ height: width / 4, width: width / 4 }}
                   source={require('../images/home/tag.png')}
                 />
-                <Text style={[{ fontWeight: 'bold' }]}>Buy</Text>
+                <Text style={[{},styles.cardLableText]}>Buy</Text>
               </View>
               </TouchableOpacity>
             </View>
@@ -137,7 +139,7 @@ class Home extends React.Component {
                   style={{ height: width / 4, width: width / 4 }}
                   source={require('../images/home/suppliers.png')}
                 />
-                <Text style={[{ fontWeight: 'bold' }]}>Suppliers</Text>
+                <Text style={[{},styles.cardLableText]}>Suppliers</Text>
               </View>
               </TouchableOpacity>
               <TouchableOpacity
@@ -152,7 +154,7 @@ class Home extends React.Component {
                   style={{ height: width / 4, width: width / 4 }}
                   source={require('../images/home/buyers.png')}
                 />
-                <Text style={[{ fontWeight: 'bold' }]}>Buyers</Text>
+                <Text style={[{},styles.cardLableText]}>Buyers</Text>
               </View>
               </TouchableOpacity>
 
@@ -170,7 +172,7 @@ class Home extends React.Component {
                   style={{ height: width / 4, width: width / 4 }}
                   source={require('../images/home/connect.png')}
                 />
-                <Text style={[{ fontWeight: 'bold' }]}>Connect</Text>
+                <Text style={[{},styles.cardLableText]}>Connect</Text>
               </View>
               </TouchableOpacity>
             </View>

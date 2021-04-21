@@ -2,7 +2,8 @@ import React from 'react'
 import { View, ScrollView,  Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
 import {   Text, TextInput, Alert} from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
-import styles from '../css/SellCss'
+import styles from '../css/SellCss';
+import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import CheckBox from 'react-native-check-box';
@@ -44,7 +45,7 @@ export default class Sell extends React.Component {
                                 <Icon name="arrow-left" size={25} color="#929497" />
                             </TouchableOpacity>
                             <View style={[{}, styles.backHeadingView]}>
-                                <Text style={[{}, styles.backHeadingText]}>CREATE ORDER</Text>
+                                <Text style={[{}, styles.backHeadingText]}>CREATE ORDER dddddddddddddddddddd</Text>
                             </View>
                             <View style={[{}, styles.backHeadingCloseView]}>
                                 <Icon name="times" size={20} color="#929497" />

@@ -3,6 +3,7 @@ import { View, ImageBackground, Modal, TouchableHighlight, Dimensions, Image, Pl
 import {   Text, TextInput, Alert} from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss';
+import fontStyles from '../css/FontCss'
 import Header from '../views/Header';
 import CalendarPicker from 'react-native-calendar-picker';
 import Icon from 'react-native-vector-icons/Ionicons';

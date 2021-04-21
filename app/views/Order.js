@@ -4,6 +4,7 @@ import { Text, TextInput, Alert } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 // import styles from '../css/DashboardCss';
 import styles from '../css/OrderCss';
+import fontStyles from '../css/FontCss'
 import Header from '../views/Header';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CalendarPicker from 'react-native-calendar-picker';
@@ -13,6 +14,7 @@ import { Constants } from '../views/Constant';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 import DropDownPicker from 'react-native-dropdown-picker';
+import FontCss from '../css/FontCss';
 
 class Order extends React.Component {
     constructor(props) {
@@ -273,15 +275,15 @@ class Order extends React.Component {
                                                     source={require('../images/Order/bage.png')}
                                                 />
                                                 <View style={{ flexDirection: 'column' }}>
-                                                    <Text style={{ fontWeight: 'bold' }}>{item.cicod_order_id}</Text>
-                                                    <Text style={[{ color: '#aaa' }]}>{item.customer.name}</Text>
+                                                    <Text style={[{color:'#4E4D4D'},fontStyles.bold15]}>{item.cicod_order_id}</Text>
+                                                    <Text style={[{color:'#929497'},fontStyles.normal12]}>{item.customer.name}</Text>
                                                 </View>
                                             </View>
-                                            <Text style={[{ color: '#aaa' }]}>{item.order_date}</Text>
+                                            <Text style={[{color:'#929497',marginTop:5},fontStyles.normal12]}>{item.order_date}</Text>
                                         </View>
                                     </View>
                                     <View style={{ flex: 1, alignItems: 'flex-end', flexDirection: 'column' }}>
-                                        <Text style={{ fontWeight: 'bold' }}>N{item.amount}</Text>
+                                        <Text style={[{color:'#4E4D4D'},fontStyles.bold15]}>N{item.amount}</Text>
                                         {/* {(item.order_status == 'PENDING') ?
                                             <View style={[{ backgroundColor: '#ffabb5', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
                                                 <Text style={[{ color: '#f7001d' }]}>{item.payment_status}</Text>

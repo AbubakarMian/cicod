@@ -37,10 +37,10 @@ export default StyleSheet.create({
      width:width-20,
      justifyContent:'flex-start',
      backgroundColor:'#fff',
-     paddingHorizontal:10,
-    
      flexDirection:'row',
-     alignItems:'center'
+     alignItems:'center',
+     borderRadius:5,
+     paddingHorizontal:10
  },
  searchBoxDividerView:{
      borderBottomColor:'#aaa',

@@ -2,6 +2,7 @@ import React from 'react';
 import { Container, Input, InputGroup, List, ListItem } from 'native-base';
 import { View, TouchableOpacity, Image, Dimensions, TouchableHighlight, Touchable, FlatList, ScrollView, Modal } from 'react-native';
 import { Text, TextInput, Alert } from 'react-native-paper';
+import fontStyles from '../css/FontCss'
 import styles from '../css/BuyersViewCss';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';

@@ -1,7 +1,8 @@
 import React from 'react'
 import { View, ImageBackground, ScrollView, TouchableHighlight, Dimensions, Modal, Image, Platform, TouchableOpacity, FlatList } from 'react-native'
 import { Text, TextInput, Alert } from 'react-native-paper';
-import styles from '../css/BuyCreateOrderCss'
+import styles from '../css/BuyCreateOrderCss';
+import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import CheckBox from 'react-native-check-box';
 import Header from '../views/Header';
@@ -15,7 +16,7 @@ export default class BuyCreateOrder extends React.Component {
         super(props);
         this.state = {
             spinner: false,
-            suppliereModal: false
+            suppliereModal: true
         }
 
     }
@@ -52,7 +53,7 @@ export default class BuyCreateOrder extends React.Component {
                                 <Icon name="arrow-left" size={25} color="#929497" />
                             </TouchableOpacity>
                             <View style={[{}, styles.backHeadingView]}>
-                                <Text style={[{}, styles.backHeadingText]}>CREATE ORDER</Text>
+                                <Text style={[{}, styles.backHeadingText]}>CREATE sdfs fsdfsdfORDER</Text>
                             </View>
                             <View style={[{}, styles.backHeadingCloseView]}>
                                 <Icon name="times" size={20} color="#929497" />

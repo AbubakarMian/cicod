@@ -2,6 +2,7 @@ import React from 'react'
 import { View, ImageBackground,  FlatList,  TouchableHighlight, Dimensions, Image, Platform, TouchableOpacity,  } from 'react-native'
 import splashImg from '../images/splash.jpg'
 import {   Text, TextInput, Alert} from 'react-native-paper';
+import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import { connect } from 'react-redux';

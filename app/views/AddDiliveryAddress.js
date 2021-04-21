@@ -1,6 +1,7 @@
 import React from 'react'
 import { View, ImageBackground, ScrollView, Dimensions, Image, Platform, TouchableOpacity, FlatList } from 'react-native'
 import styles from '../css/AddDiliveryAddressCss'
+import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import CheckBox from 'react-native-check-box';
 import Header from '../views/Header';
