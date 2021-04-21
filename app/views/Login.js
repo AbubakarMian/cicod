@@ -1,5 +1,5 @@
 import React from 'react';
-import {  View,  Image,Dimensions,TouchableOpacity, ScrollView  } from 'react-native';
+import { View, Image, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
 // import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, Touchable, ScrollView, Alert } from 'react-native';
 import styles from '../css/LoginCss';
 import CheckBox from 'react-native-check-box';
@@ -8,7 +8,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import { Constants } from '../views/Constant';
-import {   Text, TextInput, Alert} from 'react-native-paper';
+import { Text, TextInput, Alert } from 'react-native-paper';
 
 
 var { width, height } = Dimensions.get('window');
@@ -44,7 +44,7 @@ class Login extends React.Component {
                 lastname: "sandbox last", //responseJson.user.lastname,
                 email: "cicodsandbox@yopmail.com",//responsejson.user.email,
                 phone: "123314324",//responseJson.user.phone,
-                access_token: "Bearer rR1CiIz9iuRHh8WNrsEk ",  //+ responseJson.token
+                access_token: "Bearer yfuK5hA9TgZA0BOY06xs ",  //+ responseJson.token
             });
             this.setState({ Spinner: false })
             this.props.navigation.navigate('Home')
@@ -121,28 +121,28 @@ class Login extends React.Component {
                     </View>
                     <View style={[{}, styles.comtextInputView]}>
                         <TextInput
-                            style={{ height:height/15,width:width-20,opacity:0 }}
+                            style={{ height: height / 15, width: width - 20, opacity: 0 }}
                             onChangeText={text => this.setState({ tenantId: text })}
                             label="Domain Name"
                             placeholder="Domain Name"
-                            style={{backgroundColor:'transparent',}}
+                            style={{ backgroundColor: 'transparent', }}
                             alignSelf={'center'}
                             color={'#000'}
-                            height={height/12}
-                            width={width/4*3}
+                            height={height / 12}
+                            width={width / 4 * 3}
                             alignSelf={'flex-start'}
 
-                           
-                            
+
+
                         />
-                        <Text style={{paddingVertical:50,height:height/12,width:'25%',textAlignVertical:'center', backgroundColor: '#CFCFCF', color: '#4E4D4D',position:'absolute',right:0, paddingVertical: 15, paddingHorizontal: 5 }}>.cicod.com</Text>
+                        <Text style={{ paddingVertical: 50, height: height / 12, width: '25%', textAlignVertical: 'center', backgroundColor: '#CFCFCF', color: '#4E4D4D', position: 'absolute', right: 0, paddingVertical: 15, paddingHorizontal: 5 }}>.cicod.com</Text>
                     </View>
                     <View style={[{}, styles.textInputView]}>
                         <TextInput
                             onChangeText={text => this.setState({ username: text })}
                             label="Email"
-                            style={{backgroundColor:'transparent',}}
-                            width={width-50}
+                            style={{ backgroundColor: 'transparent', }}
+                            width={width - 50}
                             alignSelf={'center'}
                             color={'#000'}
                         />
@@ -152,8 +152,8 @@ class Login extends React.Component {
                             secureTextEntry={true}
                             onChangeText={text => this.setState({ password: text })}
                             placeholder="Password"
-                            width={width-50}
-                            style={{backgroundColor:'transparent',}}
+                            width={width - 50}
+                            style={{ backgroundColor: 'transparent', }}
                             alignSelf={'center'}
                             color={'#000'}
 
@@ -168,7 +168,7 @@ class Login extends React.Component {
                             />
                         </View>
                     </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'center', width: width - 50,marginTop:20,marginBottom:10 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', width: width - 50, marginTop: 20, marginBottom: 10 }}>
                         <CheckBox
                             style={{ width: width / 2, alignSelf: 'center', alignItems: 'center' }}
                             onClick={() => {

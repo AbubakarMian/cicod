@@ -5,26 +5,84 @@ import { Text, TextInput, Alert } from 'react-native-paper';
 import styles from '../css/BuyersViewCss';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { Constants } from './Constant';
+import { connect } from 'react-redux';
+import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 
 
 var { width, height } = Dimensions.get('window');
-export default class BuyersView extends React.Component {
+class BuyersView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            spinner: true,
             supendModal: false,
             moreDeatailMOdal: false,
+            items: {}
         }
+    }
+
+    componentDidMount() {
+        console.log('suppliers Props @@@@@@@@@!!!!!!!!!!!', this.props.route.params.items);
+        this.setState({
+            items: this.props.route.params.items,
+            spinner: false,
+            orderList: []
+        })
+        this.getSellerOrderHistory();
+    }
+
+    getSellerOrderHistory() {
+        // console.log(' this.state.items.seller_id ', this.props.route.params.items.seller_id)
+        // return
+        this.setState({ Spinner: true })
+        console.log("rrrrrrrrrrrrr", this.props.route.params.id)
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            },
+        };
+        let orderListUrl = Constants.orderslist + '?id=' + this.props.route.params.items.seller_id + '&sort=-id';
+
+        fetch(orderListUrl, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                this.setState({
+                    Spinner: false
+                });
+                if (responseJson.status === 'success') {
+                    console.log('data data data res res res ', responseJson)
+                    this.setState({
+                        orderList: responseJson.data
+                    });
+                } else {
+                    // let message = JSON.stringify(responseJson.error.message)
+                    Alert.alert('Error', responseJson.message)
+                }
+            })
+    }
+    viewProducts() {
+        this.props.navigation.navigate('Products',{seller_id:this.state.items.seller_id})
     }
     render() {
         return (
 
             <View>
                 <Header navigation={this.props.navigation} />
+                <Spinner
+                    visible={this.state.spinner}
+                    textContent={'Please Wait...'}
+                    textStyle={{ color: '#fff' }}
+                    color={'#fff'}
+                />
                 <ScrollView>
                     <View style={[{}, styles.backRowView]}>
                         <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate('Buyers')}
+                            onPress={() => this.props.navigation.goBack()}
                         >
                             <Icon name="arrow-left" size={25} color={'#929497'} />
                         </TouchableOpacity>
@@ -58,21 +116,21 @@ export default class BuyersView extends React.Component {
                         <View style={[{}, styles.productDetailROwView]}>
                             <View style={[{}, styles.columnView]}>
                                 <Text style={[{}, styles.lightGrayText]}>No of Products</Text>
-                                <Text style={[{}, styles.darkGrayBoldText]}>25</Text>
+                                <Text style={[{}, styles.darkGrayBoldText]}>{this.state.items.no_of_products}</Text>
                             </View>
                             <View style={[{}, styles.columnView]}>
-                                <Text style={[{}, styles.lightGrayText]}>Orders Created</Text>
-                                <Text style={[{}, styles.darkGrayBoldText]}>13</Text>
+                                <Text style={[{}, styles.lightGrayText]}>Order Created</Text>
+                                <Text style={[{}, styles.darkGrayBoldText]}>{this.state.items.no_of_orders}</Text>
                             </View>
                             <View style={[{}, styles.columnView]}>
                                 <Text style={[{}, styles.lightGrayText]}>Values of orders</Text>
-                                <Text style={[{}, styles.darkGrayBoldText]}>N10,500,000</Text>
+                                <Text style={[{}, styles.darkGrayBoldText]}>N{this.state.items.value_of_orders}</Text>
                             </View>
                         </View>
                         <View style={[{}, styles.productDetailROwView]}>
                             <View style={[{}, styles.columnView]}>
                                 <Text style={[{}, styles.lightGrayText]}>Min. Spend</Text>
-                                <Text style={[{}, styles.darkGrayBoldText]}>N2,000,000</Text>
+                                <Text style={[{}, styles.darkGrayBoldText]}>N{this.state.items.minimum_spend}</Text>
                             </View>
                             <View style={[{}, styles.columnView]}>
                             </View>
@@ -84,11 +142,12 @@ export default class BuyersView extends React.Component {
                                 <TouchableOpacity
                                     style={[{}, styles.redTouch]}
                                 >
-                                    <Text style={{ color: '#fff' }}>Update Products</Text>
+                                    <Text style={{ color: '#fff' }}>Create Products</Text>
                                 </TouchableOpacity>
                             </View>
                             <View style={[{}, styles.columnView]}>
                                 <TouchableOpacity
+                                    onPress={() => this.viewProducts()}
                                     style={[{}, styles.whiteTOuch]}
                                 >
                                     <Text style={{ color: '#B1272C' }}>View Products</Text>
@@ -140,17 +199,11 @@ export default class BuyersView extends React.Component {
                                     />
                                 ))
                             }
-                            data={[
-                                { title: 'Title Text', key: 'item1' },
-                                { title: 'Title Text', key: 'item2' },
-                                { title: 'Title Text', key: 'item3' },
-                                { title: 'Title Text', key: 'item4' },
-                                { title: 'Title Text', key: 'item5' },
-                            ]}
+                            data={this.state.orderList}
                             renderItem={({ item, index, separators }) => (
                                 <TouchableHighlight
                                     key={item.key}
-                                    onPress={() => this._onPress(item)}
+                                    // onPress={() => this._onPress(item)}
                                     onShowUnderlay={separators.highlight}
                                     onHideUnderlay={separators.unhighlight}>
                                     <View style={[{}, styles.flatlistMainContianer]}>
@@ -245,3 +298,15 @@ export default class BuyersView extends React.Component {
 
     }
 }
+function mapStateToProps(state) {
+    return {
+        user: state.userReducer
+    }
+};
+function mapDispatchToProps(dispatch) {
+    return {
+        setUser: (value) => dispatch({ type: SET_USER, value: value }),
+        logoutUser: () => dispatch({ type: LOGOUT_USER })
+    }
+};
+export default connect(mapStateToProps, mapDispatchToProps)(BuyersView)

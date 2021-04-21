@@ -12,6 +12,8 @@ export const Constants = {
   customerdelivery: `${base_url}/customer-delivery-address`,
   productslist: `${base_url}/products`,
   orderslist: `${base_url}/orders`,
+  sellerOrderHistory: `${base_url}/seller-order-history`,
+  sellerProductList: `${base_url}/value-chain/seller-products`,
   productcategorylist: `${base_url}/categories`,
   supplierlist: `${base_url}/value-chain/suppliers`,
   buyerlist: `${base_url}/value-chain/buyers`,
@@ -24,6 +26,7 @@ export const Constants = {
   connectreceivedrequest: `${base_url}/value-chain/recieved-requests`,
   searchMerchant: `${base_url}/value-chain/search-merchant`,
   connectRequest: `${base_url}/value-chain/request`,
+  
 };
 
 

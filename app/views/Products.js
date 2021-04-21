@@ -4,6 +4,7 @@ import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss'
 import CalendarPicker from 'react-native-calendar-picker';
 import SearchBar from 'react-native-search-bar';
+import { Text, TextInput, Alert } from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Header from '../views/Header';
 import { connect } from 'react-redux';
@@ -20,7 +21,8 @@ class Products extends React.Component {
             selectedStartDate: null,
             calenderModal: false,
             data: [],
-            search_product: ''
+            search_product: '',
+            spinner: false
         };
         this.onDateChange = this.onDateChange.bind(this);
     }
@@ -30,8 +32,16 @@ class Products extends React.Component {
         });
     }
     componentDidMount() {
-        console.log('this.props.user.access_token !!!!!!!!!!!!!!!!!!!!!!!', this.props.user.access_token)
+        // console.log('this.props.user.access_token !!!!!!!!!!!!!!!!!!!!!!!', this.props.route.params)
+        // if(this.props.route.params.hasOwnProperty('seller_id')){
+        //     let url = Constants.sellerProductList+'?id='+this.props.route.params.seller_id+'&sort=-id';
+        //     console.log('URL @@@@@@@@@@@@@@@@@@@', url)
+        //     this.getData(url);
+        // }else{
+            
         this.getData(Constants.productslist);
+        // }
+       
         return;
         console.log('this.props.params', this.props.route);
         if (this.props.params != undefined) {
@@ -66,7 +76,7 @@ class Products extends React.Component {
     getData(url) {
 
         let token = this.props.user.access_token;
-        this.setState({ Spinner: true })
+        this.setState({ spinner: true })
         let postData = {
             method: 'GET',
             headers: {
@@ -81,16 +91,13 @@ class Products extends React.Component {
                 console.log('responseJson.message', responseJson);
                 console.log('responseJson.postData', postData);
                 this.setState({
-                    Spinner: false,
+                    spinner: false,
 
                 });
-                if (responseJson.status === "success") {
-
+                if (responseJson.status === "success" || responseJson.success === true ) {
                     this.setState({
                         data: responseJson.data
                     })
-
-                    // this.props.navigation.navigate('DrawerNavigation')
                 } else {
                     let message = responseJson.message;
                     Alert.alert('Error', message)
@@ -111,7 +118,7 @@ class Products extends React.Component {
         return (
             <View style={{ height: height, width: width, position: 'relative', backgroundColor: '#F0F0F0' }}>
                 <Spinner
-                    visible={this.state.Spinner}
+                    visible={this.state.spinner}
                     textContent={'Please Wait...'}
                     textStyle={{ color: '#fff' }}
                     color={'#fff'}
@@ -146,6 +153,8 @@ class Products extends React.Component {
                     <View>
                         <TextInput
                             label="Search product, Price and code"
+                            // selectionColor={'#fff'}
+                            
                             style={{ backgroundColor: 'transparent', }}
                             width={width - 50}
                             alignSelf={'center'}
@@ -202,6 +211,7 @@ class Products extends React.Component {
                         renderItem={({ item, index, separators }) => (
                             <TouchableHighlight
                                 key={item.key}
+                                onPress={()=>this.props.navigation.navigate('ProductView', {prod_id:item.id})}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
                                 <View style={{ position: 'relative', alignSelf: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 5 }}>
@@ -214,11 +224,11 @@ class Products extends React.Component {
                                             :
                                             <Image
                                                 style={[{ height: 50, width: 50 }]}
-                                                source={{ uri: item.image }}
+                                                source={{ uri: item.image_url }}
                                             />}
                                     </View>
-                                    <View style={{ position: 'relative', flex: 3 }}>
-                                        <Text>{item.name}</Text>
+                                    <View style={{ position: 'relative', flex: 3,marginLeft:10 }}>
+                                        <Text >{item.name}</Text>
                                         <View style={{ flexDirection: 'row', }}>
                                             <Text>QTY:  {item.quantity}</Text>
                                             {(item.is_active == false) ?
