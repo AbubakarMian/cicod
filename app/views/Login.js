@@ -21,7 +21,8 @@ class Login extends React.Component {
             tenantId: 'sandbox',//sandbox
             username: 'cicodsandbox@yopmail.com',//cicodsandbox@yopmail.com
             password: 'Sandbox@123',//Sandbox@123
-            isChecked: false
+            isChecked: false,
+            domain_text_color:'black'
         }
     }
     login() {
@@ -119,32 +120,33 @@ class Login extends React.Component {
                     <View style={{ paddingTop: height / 25 }}>
                         <Text style={{ color: '#2F2E7C', fontSize: 20 }}>Login</Text>
                     </View>
-                    <View style={[{}, styles.comtextInputView]}>
+                    <View style={[{position:'relative'}, styles.comtextInputView]}>
                         <TextInput
-                            style={{ height: height / 15, width: width - 20, opacity: 0 }}
+                            
                             onChangeText={text => this.setState({ tenantId: text })}
                             label="Domain Name"
                             placeholder="Domain Name"
-                            style={{ backgroundColor: 'transparent', }}
+                            style={{backgroundColor:'transparent',borderWidth:1,borderBottomWidth:0,borderColor:'#CFCFCF'}}
                             alignSelf={'center'}
                             color={'#000'}
-                            height={height / 12}
-                            width={width / 4 * 3}
+                            onFocus={()=>{this.setState({domain_text_color:'red'})}}
+                            onBlur={()=>{this.setState({domain_text_color:'black'})}}
+                            width={width-50}
+                            height={height/12}
                             alignSelf={'flex-start'}
-
-
-
                         />
-                        <Text style={{ paddingVertical: 50, height: height / 12, width: '25%', textAlignVertical: 'center', backgroundColor: '#CFCFCF', color: '#4E4D4D', position: 'absolute', right: 0, paddingVertical: 15, paddingHorizontal: 5 }}>.cicod.com</Text>
+                       {/* <Text style={{paddingVertical:50,borderBottomWidth:1,borderBottomColor:this.state.domain_text_color, height:height/12,textAlignVertical:'center', backgroundColor: '#CFCFCF', color: '#4E4D4D',position:'absolute',right:0, paddingVertical: 15, paddingHorizontal: 5 }}>.cicod.com</Text> */}
+                       <Text style={{  height:height/12-3,textAlignVertical:'center', backgroundColor: '#CFCFCF', color: '#4E4D4D',position:'absolute',right:0, paddingHorizontal: 5 }}>.cicod.com</Text>
                     </View>
                     <View style={[{}, styles.textInputView]}>
                         <TextInput
                             onChangeText={text => this.setState({ username: text })}
                             label="Email"
-                            style={{ backgroundColor: 'transparent', }}
-                            width={width - 50}
+                            style={{backgroundColor:'transparent',borderWidth:1,borderBottomWidth:0,borderColor:'#CFCFCF'}}
+                            width={width-50}
                             alignSelf={'center'}
                             color={'#000'}
+                            
                         />
                     </View>
                     <View style={[{}, styles.textInputView]}>
@@ -152,8 +154,9 @@ class Login extends React.Component {
                             secureTextEntry={true}
                             onChangeText={text => this.setState({ password: text })}
                             placeholder="Password"
-                            width={width - 50}
-                            style={{ backgroundColor: 'transparent', }}
+                            width={width-50}
+                            style={{backgroundColor:'transparent',borderWidth:1,borderBottomWidth:0,borderColor:'#CFCFCF'}}
+
                             alignSelf={'center'}
                             color={'#000'}
 
