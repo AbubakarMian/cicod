@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight, Text, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import { View, ImageBackground, ScrollView, TouchableHighlight,  FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import {   Text, TextInput, Alert} from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/MakePaymentCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, Text, Modal, Alert, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback, TextInput } from 'react-native'
+import { View, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView,  } from 'react-native'
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss'
 import CalendarPicker from 'react-native-calendar-picker';
@@ -20,7 +20,6 @@ class Products extends React.Component {
             selectedStartDate: null,
             calenderModal: false,
             data: [],
-            categoryarr: [],
             search_product: ''
         };
         this.onDateChange = this.onDateChange.bind(this);
@@ -33,7 +32,6 @@ class Products extends React.Component {
     componentDidMount() {
         console.log('this.props.user.access_token !!!!!!!!!!!!!!!!!!!!!!!', this.props.user.access_token)
         this.getData(Constants.productslist);
-        this.getCategoryList();
         return;
         console.log('this.props.params', this.props.route);
         if (this.props.params != undefined) {
@@ -107,38 +105,7 @@ class Products extends React.Component {
 
     }
 
-    getCategoryList() {
-        this.setState({ spinner: true })
-        let postData = {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: this.props.user.access_token,
-            },
-        };
-        fetch(Constants.productcategorylist, postData)
-            .then(response => response.json())
-            .then(async responseJson => {
-                this.setState({ spinner: false });
-                if (responseJson.status === 'success') {
-
-                    let res = responseJson.data;
-                    let categoryarr = res.map((x, key) => { return { label: x.name, value: x.id } });
-                    this.setState({
-                        categoryarr: categoryarr,
-                    });
-                } else {
-                    let message = JSON.stringify(responseJson.error.message)
-                    Alert.alert('Error', message)
-                }
-
-            })
-
-    }
-
     render() {
-        console.log(' categoryarr categoryarr ', this.state.categoryarr)
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
@@ -178,7 +145,11 @@ class Products extends React.Component {
                     />
                     <View>
                         <TextInput
-                            placeholder="Search product, Price and code"
+                            label="Search product, Price and code"
+                            style={{ backgroundColor: 'transparent', }}
+                            width={width - 50}
+                            alignSelf={'center'}
+                            color={'#000'}
                             onChangeText={text => this.setState({ search_product: text })}
                             onSubmitEditing={() => this.search()}
                         />
@@ -198,7 +169,7 @@ class Products extends React.Component {
 
                         <DropDownPicker
                             items={this.state.categoryarr}
-                            containerStyle={{ height: 50, width: width - 20, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
+                            containerStyle={{ height: 50, width: width  - 20, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
                             style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                             itemStyle={{
                                 justifyContent: 'flex-start', zIndex: 999
@@ -245,7 +216,6 @@ class Products extends React.Component {
                                                 style={[{ height: 50, width: 50 }]}
                                                 source={{ uri: item.image }}
                                             />}
-
                                     </View>
                                     <View style={{ position: 'relative', flex: 3 }}>
                                         <Text>{item.name}</Text>

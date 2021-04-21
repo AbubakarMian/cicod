@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, Touchable, ScrollView, Alert } from 'react-native';
+import { View, Image, TouchableOpacity, Dimensions, } from 'react-native';
+import { Text, TextInput, Alert } from 'react-native-paper';
 import styles from '../css/ResetpasswordCss';
 import Header from '../views/Header'
 import CheckBox from 'react-native-check-box';
@@ -113,7 +114,11 @@ export default class ResetPassword extends React.Component {
                 </View>
                 <View style={[{}, styles.textInputView]}>
                     <TextInput
-                        placeholder="Email Address"
+                        label="Email Address"
+                        style={{ backgroundColor: 'transparent', }}
+                        width={width - 50}
+                        alignSelf={'center'}
+                        color={'#000'}
                         color="#929497"
                     />
                 </View>

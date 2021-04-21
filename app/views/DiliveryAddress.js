@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, Alert, Text, Dimensions, Image, Platform, TouchableOpacity, FlatList } from 'react-native'
+import { View, ImageBackground, ScrollView,  Dimensions, Image, Platform, TouchableOpacity, FlatList } from 'react-native'
+import {   Text, TextInput, Alert} from 'react-native-paper';
 import styles from '../css/DiliveryAddressCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import CheckBox from 'react-native-check-box';

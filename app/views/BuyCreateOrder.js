@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView,TouchableHighlight, Text, Dimensions, Modal, Image, Platform, TouchableOpacity, FlatList, TextInput } from 'react-native'
+import { View, ImageBackground, ScrollView, TouchableHighlight, Dimensions, Modal, Image, Platform, TouchableOpacity, FlatList } from 'react-native'
+import { Text, TextInput, Alert } from 'react-native-paper';
 import styles from '../css/BuyCreateOrderCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import CheckBox from 'react-native-check-box';
@@ -65,7 +66,7 @@ export default class BuyCreateOrder extends React.Component {
                         <View style={[{}, styles.customerTitleRowView]}>
                             <Text style={[{}, styles.customerTitleRowHeadingText]}>TestKing Nigeria</Text>
                             <TouchableOpacity
-                            onPress={()=>this.setState({suppliereModal:true})}
+                                onPress={() => this.setState({ suppliereModal: true })}
                             >
                                 <Text style={[{}, styles.customerTitleRowchangesupplierText]}>Change Supplier</Text>
                             </TouchableOpacity>
@@ -338,7 +339,7 @@ export default class BuyCreateOrder extends React.Component {
                             <View style={[{}, styles.modalCancleRow]}>
                                 <Text style={[{}, styles.modalCancleText]}>SELECT SUPPLIERS</Text>
                                 <TouchableOpacity
-                                onPress={()=>this.setState({suppliereModal:false})}
+                                    onPress={() => this.setState({ suppliereModal: false })}
                                     style={[{}, styles.modalCancleTouch]}
                                 >
                                     <Icon name="times" size={20} color="#929497" />
@@ -347,14 +348,18 @@ export default class BuyCreateOrder extends React.Component {
                             <View style={[{}, styles.searchRow]}>
                                 <Icon name="search" size={20} color="#929497" />
                                 <TextInput
-                                    placeholder="Search supplier"
+                                    label="Search supplier"
+                                    style={{ backgroundColor: 'transparent', }}
+                                    width={width - 50}
+                                    alignSelf={'center'}
+                                    color={'#000'}
                                 />
                             </View>
                             <ScrollView
-                        
+
                             >
                                 <FlatList
-                                
+
                                     ItemSeparatorComponent={
                                         Platform.OS !== 'android' &&
                                         (({ highlighted }) => (
@@ -367,18 +372,18 @@ export default class BuyCreateOrder extends React.Component {
                                         ))
                                     }
                                     data={[
-                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item1' }, 
-                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item2' },
-                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item3' }, 
-                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item4' },
-                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item5' }, 
-                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item6' },
-                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item7' }, 
-                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item8' },
-                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item9' }, 
-                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item10' },
-                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item11' }, 
-                                        { title: 'TestKing Nigeria',num:'836439034', key: 'item12' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item1' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item2' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item3' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item4' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item5' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item6' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item7' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item8' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item9' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item10' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item11' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item12' },
                                     ]}
                                     renderItem={({ item, index, separators }) => (
                                         <TouchableHighlight
@@ -386,15 +391,15 @@ export default class BuyCreateOrder extends React.Component {
                                             onPress={() => this.props.navigation.navigate('Supplier')}
                                             onShowUnderlay={separators.highlight}
                                             onHideUnderlay={separators.unhighlight}>
-                                            <View style={[{},styles.modalListContainer]}>
-                                                <Image source={require('../images/bage.png')}/>
-                                                <View style={[{},styles.modalListContentView]}>
-                                                   <Text style={[{},styles.modalBoldeText]}>{item.title}</Text>
-                                                   <Text style={[{},styles.modalNumberText]}>{item.num}</Text>
+                                            <View style={[{}, styles.modalListContainer]}>
+                                                <Image source={require('../images/bage.png')} />
+                                                <View style={[{}, styles.modalListContentView]}>
+                                                    <Text style={[{}, styles.modalBoldeText]}>{item.title}</Text>
+                                                    <Text style={[{}, styles.modalNumberText]}>{item.num}</Text>
                                                 </View>
-                                                <Icon 
-                                                style={[{},styles.modalListContentRightIcon]}
-                                                name="angle-right" size={20} color="#aaa"/>
+                                                <Icon
+                                                    style={[{}, styles.modalListContentRightIcon]}
+                                                    name="angle-right" size={20} color="#aaa" />
                                             </View>
                                         </TouchableHighlight>
                                     )}

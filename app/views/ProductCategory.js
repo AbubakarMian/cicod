@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity, Modal, Touchable } from 'react-native'
+import { View, ScrollView, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, } from 'react-native'
+import { Text, TextInput, Alert } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/ProductCategoryCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -26,7 +27,7 @@ export default class ProductCategory extends React.Component {
 
         return (
             <View style={[{}, styles.mainView]}>
-                <Header navigation={this.props.navigation}/>
+                <Header navigation={this.props.navigation} />
                 <View style={[{}, styles.backHeaderRowView]}>
                     <TouchableOpacity>
                         <Icon name="arrow-left" size={25} color="#929497" />
@@ -43,11 +44,15 @@ export default class ProductCategory extends React.Component {
                 <View style={[{}, styles.searchRow]}>
                     <Image source={require('../images/products/searchicon.png')} />
                     <TextInput
-                        placeholder="Search a category"
+                        label="Search a category"
+                        style={{ backgroundColor: 'transparent', }}
+                        width={width - 50}
+                        alignSelf={'center'}
+                        color={'#000'}
                     />
                     <TouchableOpacity
-                        onPress={()=>this.props.navigation.navigate('Filter')}
-                    
+                        onPress={() => this.props.navigation.navigate('Filter')}
+
                         style={[{}, styles.settingTouch]}
                     >
                         <Image source={require('../images/Order/settingicon.png')} />
@@ -83,25 +88,25 @@ export default class ProductCategory extends React.Component {
                                 <View style={[{}, styles.listImageView]}>
                                     <Image source={require('../images/bage.png')} />
                                 </View>
-                                <View style={[{},styles.listDescView]}>
-                                  <Text style={[{},styles.listDescBoldText]}>Pure Juice</Text>
-                                  <Text style={[{},styles.listDescNormalText]}>This is a description of that hold all pure juice.</Text>
+                                <View style={[{}, styles.listDescView]}>
+                                    <Text style={[{}, styles.listDescBoldText]}>Pure Juice</Text>
+                                    <Text style={[{}, styles.listDescNormalText]}>This is a description of that hold all pure juice.</Text>
                                 </View>
-                                <View style={[{},styles.listActionView]}>
-                                   <TouchableOpacity
-                                   style={[{},styles.dotsTouch]}
-                                   >
-                                       <Icon name="ellipsis-h"
-                                       color="#929497"
-                                       />
-                                   </TouchableOpacity>
-                                   <Text style={[{},styles.actionText]}>ACTIVE</Text>
+                                <View style={[{}, styles.listActionView]}>
+                                    <TouchableOpacity
+                                        style={[{}, styles.dotsTouch]}
+                                    >
+                                        <Icon name="ellipsis-h"
+                                            color="#929497"
+                                        />
+                                    </TouchableOpacity>
+                                    <Text style={[{}, styles.actionText]}>ACTIVE</Text>
                                 </View>
                             </View>
                         </TouchableHighlight>
                     )}
                 />
             </View>
-                    )
-                    }
+        )
+    }
 }

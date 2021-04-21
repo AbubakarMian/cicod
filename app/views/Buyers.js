@@ -1,6 +1,7 @@
 import React from 'react'
-import { View, ImageBackground, Text, FlatList, Alert, TouchableHighlight, Dimensions, Image, Platform, TouchableOpacity, TextInput } from 'react-native'
+import { View, ImageBackground,  FlatList,  TouchableHighlight, Dimensions, Image, Platform, TouchableOpacity,  } from 'react-native'
 import splashImg from '../images/splash.jpg'
+import {   Text, TextInput, Alert} from 'react-native-paper';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import { connect } from 'react-redux';
@@ -121,7 +122,11 @@ class Buyers extends React.Component {
                         />
                         <View>
                             <TextInput
-                                placeholder="Search buyers"
+                                label="Search buyers"
+                                style={{ backgroundColor: 'transparent', }}
+                                width={width - 50}
+                                alignSelf={'center'}
+                                color={'#000'}
                                 onChangeText={text => this.setState({ search_buyers: text })}
                                 onSubmitEditing={() => this.search()}
 

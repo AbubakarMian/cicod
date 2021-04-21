@@ -1,6 +1,7 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity, Touchable, Alert } from 'react-native'
+import { View, ImageBackground, ScrollView, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, Touchable, } from 'react-native'
 import splashImg from '../images/splash.jpg'
+import { Text, TextInput, Alert } from 'react-native-paper';
 import styles from '../css/ApplyDiscountCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
@@ -126,7 +127,11 @@ class ApplyDiscount extends React.Component {
                     <View>
 
                         <TextInput
-                            placeholder="Discount"
+                            label="Discount"
+                            style={{ backgroundColor: 'transparent', }}
+                            width={width - 50}
+                            alignSelf={'center'}
+                            color={'#000'}
                             keyboardType='numeric'
                             onChangeText={text => this.setState({ discount_amount: text })}
                         />

@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import { View, ImageBackground, ScrollView, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import { Text, TextInput, Alert } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/PayByCashCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -33,11 +34,11 @@ export default class PayByCash extends React.Component {
         ];
         return (
             <View style={[{}, styles.mainView]}>
-                <Header navigation={this.props.navigation}/>
+                <Header navigation={this.props.navigation} />
                 <View style={[{}, styles.backHeaderRowView]}>
                     <TouchableOpacity
-                    onPress={()=>this.props.navigation.navigate('MakePayment')}
-                    
+                        onPress={() => this.props.navigation.navigate('MakePayment')}
+
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
@@ -54,18 +55,26 @@ export default class PayByCash extends React.Component {
                             <Text style={[{}, styles.cashText]}>in cash</Text>
                         </View>
                         <View style={[{}, styles.inputContainer]}>
-                            <View style={[{},styles.inputView]}>
+                            <View style={[{}, styles.inputView]}>
                                 <TextInput
-                                    placeholder="Cash Collected (N)"
+                                    label="Cash Collected (N)"
+                                    style={{ backgroundColor: 'transparent', }}
+                                    width={width - 50}
+                                    alignSelf={'center'}
+                                    color={'#000'}
                                 />
                             </View>
-                            <View style={[{},styles.inputView]}>
+                            <View style={[{}, styles.inputView]}>
                                 <TextInput
-                                    placeholder="Change (N)"
+                                    label="Change (N)"
+                                    style={{ backgroundColor: 'transparent', }}
+                                    width={width - 50}
+                                    alignSelf={'center'}
+                                    color={'#000'}
                                 />
                             </View>
-                            <TouchableOpacity style={[{},styles.touchView]}>
-                                <Text style={[{},styles.touchText]}>Done</Text>
+                            <TouchableOpacity style={[{}, styles.touchView]}>
+                                <Text style={[{}, styles.touchText]}>Done</Text>
                             </TouchableOpacity>
                         </View>
                     </ScrollView>

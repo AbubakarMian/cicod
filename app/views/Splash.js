@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, Text, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import { View, ImageBackground,  Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import {   Text, TextInput, Alert} from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 
 const { width, height } = Dimensions.get('window')

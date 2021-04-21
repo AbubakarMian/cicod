@@ -1,5 +1,6 @@
 import React from 'react';
-import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, Touchable, ScrollView, Alert } from 'react-native';
+import { View, Image,  TouchableOpacity, Dimensions, Touchable, ScrollView,  } from 'react-native';
+import {   Text, TextInput, Alert} from 'react-native-paper';
 import styles from '../css/OrderDetailCss';
 import Header from '../views/Header'
 import CheckBox from 'react-native-check-box';
@@ -277,34 +278,44 @@ class OrderDetail extends React.Component {
                         </View>
                     </View>
                     <View style={[{}, styles.detailMainView]}>
-                        <View style={[{ alignSelf: 'flex-start', width: width - 20, paddingHorizontal: 10, marginVertical: 10, flexDirection: 'row' }]}>
+                        <View style={[{ alignSelf: 'flex-start',borderBottomWidth:0.25,paddingBottom:10, width: width - 20, paddingHorizontal: 10, marginVertical: 10, flexDirection: 'row' }]}>
                             <Image
                                 source={require('../images/Order/invoice.png')}
                             />
-                            <View style={{ marginLeft: 10, flexDirection: 'column' }}>
-                                <Text style={[{}, styles.detailColumn1text]}>Invoice Number:</Text>
-                                <Text style={[{ fontWeight: 'bold' }, styles.detailColumn2text]}>PCIN00000915</Text>
+                            <View style={{ marginLeft: 15, flexDirection: 'column' }}>
+                                <Text style={[{}, styles.detailInvoiceGraytext]}>Invoice Number:</Text>
+                                <Text style={[{ fontWeight: 'bold' }, styles.detailInvoiceDarkGraytext]}>PCIN00000915</Text>
                             </View>
                         </View>
-                        {this.state.item.map((x, key) =>
-                            <View style={{}, styles.invoiceRow}>
-                                <View style={{ flexDirection: 'column', width: width - 50 }}>
-                                    <Text style={{ color: '#4E4D4D' }}>{x.name}</Text>
-                                    <Text style={{ color: '#929497', fontSize: 12 }}>LAGOS- Palms</Text>
-                                    <View style={{ flexDirection: 'row' }}>
-                                        <Text style={{ fontSize: 10, fontWeight: 'bold', color: '#929497' }}>Unit Price: </Text>
-                                        <Text style={{ fontSize: 8, color: '#929497', marginRight: 20 }}>N{x.price}</Text>
-                                        <Text style={{ fontSize: 10, fontWeight: 'bold', color: '#929497' }}>QTY: </Text>
-                                        <Text style={{ fontSize: 8, color: '#929497', marginRight: width / 4 }}>{x.quantity} </Text>
-                                        <Text style={{ fontSize: 15, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end' }}>N{x.price * x.quantity} </Text>
-                                    </View>
+                        <View style={{}, styles.invoiceRow}>
+                            <View style={{ flexDirection: 'column', width: width - 50 }}>
+                                <Text style={[{},styles.detailInvoiceLable]}>Pure ORANGE JUICE 12PACK</Text>
+                                <Text style={{ color: '#929497', fontSize: 12 }}>LAGOS- Palms</Text>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>Unit Price: </Text>
+                                    <Text style={{ fontSize: 13, color: '#929497', marginRight: 20 }}>N100,000 </Text>
+                                    <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>QTY: </Text>
+                                    <Text style={{ fontSize: 13, color: '#929497', marginRight: width / 4 }}>5 </Text>
+                                    <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end' }}>N500,000 </Text>
                                 </View>
                             </View>
-
-                        )}
+                        </View>
+                        <View style={{}, styles.invoiceRow}>
+                            <View style={{ flexDirection: 'column', width: width - 50 }}>
+                                <Text style={[{},styles.detailInvoiceLable]}>APPLE BUST FRUTTA 250ML</Text>
+                                <Text style={{ color: '#929497', fontSize: 12 }}>LAGOS- Palms</Text>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>Unit Price: </Text>
+                                    <Text style={{ fontSize: 13, color: '#929497', marginRight: 20 }}>N50,000 </Text>
+                                    <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>QTY: </Text>
+                                    <Text style={{ fontSize: 13, color: '#929497', marginRight: width / 4 }}>5 </Text>
+                                    <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end' }}>N250,000 </Text>
+                                </View>
+                            </View>
+                        </View>
                         <View style={{ alignSelf: 'flex-end', marginRight: 20, marginVertical: 20, flexDirection: 'row' }}>
-                            <Text style={{ fontWeight: 'bold' }}>Total:  </Text>
-                            <Text style={{ fontWeight: 'bold' }}>N{this.state.total_amount}</Text>
+                            <Text style={{ fontWeight: 'bold',color:'#4E4D4D',fontSize:17,fontFamily:'Open Sans' }}>Total:  </Text>
+                            <Text style={{ fontWeight: 'bold',color:'#4E4D4D',fontSize:17,fontFamily:'Open Sans'  }}>N750,000</Text>
                         </View>
 
                     </View>

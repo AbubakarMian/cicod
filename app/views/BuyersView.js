@@ -1,6 +1,7 @@
 import React from 'react';
 import { Container, Input, InputGroup, List, ListItem } from 'native-base';
-import { View, Text, TouchableOpacity, Image, Dimensions, TouchableHighlight, TextInput, Touchable, FlatList, ScrollView, Modal } from 'react-native';
+import { View, TouchableOpacity, Image, Dimensions, TouchableHighlight, Touchable, FlatList, ScrollView, Modal } from 'react-native';
+import { Text, TextInput, Alert } from 'react-native-paper';
 import styles from '../css/BuyersViewCss';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
@@ -8,22 +9,22 @@ import Header from '../views/Header';
 
 var { width, height } = Dimensions.get('window');
 export default class BuyersView extends React.Component {
-    constructor(props){
+    constructor(props) {
         super(props);
-        this.state={
-            supendModal:false,
-            moreDeatailMOdal:false,
+        this.state = {
+            supendModal: false,
+            moreDeatailMOdal: false,
         }
     }
     render() {
         return (
 
             <View>
-                <Header navigation={this.props.navigation}/>
+                <Header navigation={this.props.navigation} />
                 <ScrollView>
                     <View style={[{}, styles.backRowView]}>
                         <TouchableOpacity
-                        onPress={()=>this.props.navigation.navigate('Buyers')}
+                            onPress={() => this.props.navigation.navigate('Buyers')}
                         >
                             <Icon name="arrow-left" size={25} color={'#929497'} />
                         </TouchableOpacity>
@@ -34,10 +35,10 @@ export default class BuyersView extends React.Component {
                     <View style={{ backgroundColor: '#fff' }}>
                         <View style={[{}, styles.productDetailContainerView]}>
                             <Image source={require('../images/bage.png')} />
-                            <Text style={[{},styles.darkGrayBoldText]}>WellFoods NG</Text>
-                            <Text style={[{},styles.lightGrayText]}>836439034</Text>
+                            <Text style={[{}, styles.darkGrayBoldText]}>WellFoods NG</Text>
+                            <Text style={[{}, styles.lightGrayText]}>836439034</Text>
                             <TouchableOpacity
-                            onPress={()=>this.setState({supendModal:true})}
+                                onPress={() => this.setState({ supendModal: true })}
                                 style={[{}, styles.iconRight]}
                             >
                                 <Icon
@@ -95,9 +96,9 @@ export default class BuyersView extends React.Component {
                             </View>
 
                         </View>
-                        <TouchableOpacity 
-                        onPress={()=>this.setState({moreDeatailMOdal:true})}
-                        style={[{}, styles.moreTOuct]}>
+                        <TouchableOpacity
+                            onPress={() => this.setState({ moreDeatailMOdal: true })}
+                            style={[{}, styles.moreTOuct]}>
                             <Text style={[{ marginRight: 10 }, styles.lightGrayText]}>More Details</Text>
                             <Icon
                                 name="arrow-right"
@@ -110,7 +111,11 @@ export default class BuyersView extends React.Component {
                     <View style={[{}, styles.searRowView]}>
                         <Icon name="search" color={'#B1272C'} size={20} />
                         <TextInput
-                            placeholder="Search order ID, amount, ticket Id"
+                            label="Search order ID, amount, ticket Id"
+                            style={{ backgroundColor: 'transparent', }}
+                            width={width - 50}
+                            alignSelf={'center'}
+                            color={'#000'}
                         />
                         <TouchableOpacity
                             style={[{}, styles.settingIconView]}
@@ -122,7 +127,7 @@ export default class BuyersView extends React.Component {
 
                     </View>
                     <Text style={[{}, styles.historyHeadingText]}>ORDER HISTORY</Text>
-                    <ScrollView style={{paddingBottom:50,marginBottom:20}}>
+                    <ScrollView style={{ paddingBottom: 50, marginBottom: 20 }}>
                         <FlatList
                             ItemSeparatorComponent={
                                 Platform.OS !== 'android' &&
@@ -149,18 +154,18 @@ export default class BuyersView extends React.Component {
                                     onShowUnderlay={separators.highlight}
                                     onHideUnderlay={separators.unhighlight}>
                                     <View style={[{}, styles.flatlistMainContianer]}>
-                                        <View style={[{},styles.flatlistMainRow]}>
-                                            <Image 
-                                            source={[{},styles.listImage]}
-                                            source={require('../images/bage.png')} />
-                                            <View style={{flexDirection:'column'}}>
-                                              <Text style={[{},styles.darkGrayBoldText]}>103943535</Text>
-                                              <Text style={[{}, styles.lightGrayText]}>Order contains 4 products</Text>
+                                        <View style={[{}, styles.flatlistMainRow]}>
+                                            <Image
+                                                source={[{}, styles.listImage]}
+                                                source={require('../images/bage.png')} />
+                                            <View style={{ flexDirection: 'column' }}>
+                                                <Text style={[{}, styles.darkGrayBoldText]}>103943535</Text>
+                                                <Text style={[{}, styles.lightGrayText]}>Order contains 4 products</Text>
                                             </View>
-                                            <View style={[{},styles.actionContainer]}>
-                                                <Text style={[{},styles.darkGrayBoldText]}>N1,500,000</Text>
-                                                <View style={[{},styles.greenView]}>
-                                                    <Text style={[{},styles.greenText]}>PAID</Text>
+                                            <View style={[{}, styles.actionContainer]}>
+                                                <Text style={[{}, styles.darkGrayBoldText]}>N1,500,000</Text>
+                                                <View style={[{}, styles.greenView]}>
+                                                    <Text style={[{}, styles.greenText]}>PAID</Text>
                                                 </View>
                                             </View>
                                         </View>
@@ -172,68 +177,68 @@ export default class BuyersView extends React.Component {
                     </ScrollView>
                 </ScrollView>
                 <Modal
-                visible={this.state.supendModal}
+                    visible={this.state.supendModal}
 
-                transparent={true}
+                    transparent={true}
                 >
                     <TouchableHighlight
-                    onPress={()=>this.setState({supendModal:false})}
+                        onPress={() => this.setState({ supendModal: false })}
                     >
-                    <View style={[{},styles.modalBackGround]}>
-                      <TouchableOpacity 
-                      onPress={()=>this.setState({supendModal:false})}
-                      style={[{},styles.suspendTouch]}>
-                          <Image source={require('../images/ban.png')} style={[{},styles.banImage]} />
-                          <Text style={{}}>Suspend</Text>
-                      </TouchableOpacity>
-                    </View>
+                        <View style={[{}, styles.modalBackGround]}>
+                            <TouchableOpacity
+                                onPress={() => this.setState({ supendModal: false })}
+                                style={[{}, styles.suspendTouch]}>
+                                <Image source={require('../images/ban.png')} style={[{}, styles.banImage]} />
+                                <Text style={{}}>Suspend</Text>
+                            </TouchableOpacity>
+                        </View>
                     </TouchableHighlight>
-                    
+
                 </Modal>
                 {/* MoreDetail Modal */}
                 <Modal
-                  visible={this.state.moreDeatailMOdal}
-                  transparent={true}
+                    visible={this.state.moreDeatailMOdal}
+                    transparent={true}
                 >
-                 <View style={[{},styles.modalBackGround]}>
-                   <View style={[{},styles.moreDetailModalContentContainer]}>
-                      <View style={[{},styles.moreDeatialModalHeadingRow]}>
-                          <Text style={[{},styles.moreDetailHeadingText]}>MORE DETAIL</Text>
-                          <TouchableOpacity
-                          onPress={()=>this.setState({moreDeatailMOdal:false})}
-                          style={[{},styles.moreDetailModalCloseTouch]}
-                          >
-                          <Icon name="close" size={20}/>
-                          </TouchableOpacity>
-                      </View>
-                      <View style={[{},styles.moreDetailModalContentView]}>
-                          <View style={[{},styles.moreDetailModalContentRow]}>
-                              <Text style={[{},styles.moreDetailModalContentRowLable]}>Email: </Text>
-                              <Text style={[{},styles.moreDetailModalContentRowInfo]}>j.joghnson@gmail.com</Text>
-                          </View>
-                          <View style={[{},styles.moreDetailModalContentRow]}>
-                              <Text style={[{},styles.moreDetailModalContentRowLable]}>Phone: </Text>
-                              <Text style={[{},styles.moreDetailModalContentRowInfo]}>08123456789</Text>
-                          </View>
-                          <View style={[{},styles.moreDetailModalContentRow]}>
-                              <Text style={[{},styles.moreDetailModalContentRowLable]}>Address: </Text>
-                              <Text style={[{},styles.moreDetailModalContentRowInfo]}>45b,45b Admiralty way, Lekki Phase 1,</Text>
-                          </View>
-                          <View style={[{},styles.moreDetailModalContentRow]}>
-                              <Text style={[{},styles.moreDetailModalContentRowLable]}>Area: </Text>
-                              <Text style={[{},styles.moreDetailModalContentRowInfo]}>Eti Osa</Text>
-                          </View>
-                          <View style={[{},styles.moreDetailModalContentRow]}>
-                              <Text style={[{},styles.moreDetailModalContentRowLable]}>State: </Text>
-                              <Text style={[{},styles.moreDetailModalContentRowInfo]}>Lagos</Text>
-                          </View>
-                          <View style={[{},styles.moreDetailModalContentRow]}>
-                              <Text style={[{},styles.moreDetailModalContentRowLable]}>Country: </Text>
-                              <Text style={[{},styles.moreDetailModalContentRowInfo]}>Nigeria</Text>
-                          </View>
-                      </View>
-                   </View>
-                 </View>
+                    <View style={[{}, styles.modalBackGround]}>
+                        <View style={[{}, styles.moreDetailModalContentContainer]}>
+                            <View style={[{}, styles.moreDeatialModalHeadingRow]}>
+                                <Text style={[{}, styles.moreDetailHeadingText]}>MORE DETAIL</Text>
+                                <TouchableOpacity
+                                    onPress={() => this.setState({ moreDeatailMOdal: false })}
+                                    style={[{}, styles.moreDetailModalCloseTouch]}
+                                >
+                                    <Icon name="close" size={20} />
+                                </TouchableOpacity>
+                            </View>
+                            <View style={[{}, styles.moreDetailModalContentView]}>
+                                <View style={[{}, styles.moreDetailModalContentRow]}>
+                                    <Text style={[{}, styles.moreDetailModalContentRowLable]}>Email: </Text>
+                                    <Text style={[{}, styles.moreDetailModalContentRowInfo]}>j.joghnson@gmail.com</Text>
+                                </View>
+                                <View style={[{}, styles.moreDetailModalContentRow]}>
+                                    <Text style={[{}, styles.moreDetailModalContentRowLable]}>Phone: </Text>
+                                    <Text style={[{}, styles.moreDetailModalContentRowInfo]}>08123456789</Text>
+                                </View>
+                                <View style={[{}, styles.moreDetailModalContentRow]}>
+                                    <Text style={[{}, styles.moreDetailModalContentRowLable]}>Address: </Text>
+                                    <Text style={[{}, styles.moreDetailModalContentRowInfo]}>45b,45b Admiralty way, Lekki Phase 1,</Text>
+                                </View>
+                                <View style={[{}, styles.moreDetailModalContentRow]}>
+                                    <Text style={[{}, styles.moreDetailModalContentRowLable]}>Area: </Text>
+                                    <Text style={[{}, styles.moreDetailModalContentRowInfo]}>Eti Osa</Text>
+                                </View>
+                                <View style={[{}, styles.moreDetailModalContentRow]}>
+                                    <Text style={[{}, styles.moreDetailModalContentRowLable]}>State: </Text>
+                                    <Text style={[{}, styles.moreDetailModalContentRowInfo]}>Lagos</Text>
+                                </View>
+                                <View style={[{}, styles.moreDetailModalContentRow]}>
+                                    <Text style={[{}, styles.moreDetailModalContentRowLable]}>Country: </Text>
+                                    <Text style={[{}, styles.moreDetailModalContentRowInfo]}>Nigeria</Text>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
                 </Modal>
             </View>
         );

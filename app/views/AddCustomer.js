@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import { View, ImageBackground, ScrollView, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
 import splashImg from '../images/splash.jpg'
 import styles from '../css/AddCustomerCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -12,6 +12,7 @@ import { Constants } from '../views/Constant';
 import { connect } from 'react-redux';
 import { SET_USER, SET_CUSTOMER } from '../redux/constants/index';
 import { Item } from 'native-base';
+import { Text, TextInput, Alert } from 'react-native-paper';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 class AddCustomer extends React.Component {
@@ -111,7 +112,12 @@ class AddCustomer extends React.Component {
                                 source={require('../images/products/searchicon.png')}
                             />
                             <TextInput
-                                placeholder="Search Customer"
+                                label="Search Customer"
+                                style={{ backgroundColor: 'transparent', }}
+                                width={width - 50}
+                                alignSelf={'center'}
+                                color={'#000'}
+
                                 // onPressIn={() => this.seacrhClick()}
                                 onChangeText={(text) => this.searchText(text)}
                             />

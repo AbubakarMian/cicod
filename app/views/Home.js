@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, Text, Dimensions, Image, Platform, TouchableOpacity, ScrollView } from 'react-native'
+import { View, ImageBackground,  Dimensions, Image, Platform, TouchableOpacity, ScrollView } from 'react-native'
+import {   Text, TextInput, Alert} from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import Header from '../views/Header';
 import { connect } from 'react-redux';
@@ -14,7 +15,7 @@ class Home extends React.Component {
        <Header navigation={this.props.navigation}/>
         <View style={[{ flexDirection: 'row',paddingVertical:10 }]}>
           <View style={{ flex: 1, paddingHorizontal: 10 }}>
-            <Text style={[{ color: '#B1272C', fontWeight: 'bold', fontSize: 20 }]}>Welcome,</Text>
+            <Text style={[{ color: '#B1272C', fontWeight: 'bold', fontSize: 25,fontFamily:'Open Sans' }]}>Welcome,</Text>
             <Text style={{fontWeight:'500'}}>{this.props.user.firstname}</Text>
           </View>
           <View style={{ flex: 1, alignItems: 'flex-end', padding: 10 }}>

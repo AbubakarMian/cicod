@@ -1,6 +1,7 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity, Touchable } from 'react-native'
+import { View, ImageBackground, ScrollView, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, Touchable } from 'react-native'
 import splashImg from '../images/splash.jpg'
+import { Text, TextInput, Alert } from 'react-native-paper';
 import styles from '../css/AddNoteCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
@@ -20,10 +21,10 @@ class AddNote extends React.Component {
             notestext: '',
         }
     }
-    setNotes(){
+    setNotes() {
         console.log('notes props !!!!!!!!', this.state.notestext);
         this.props.setNotes({
-            notes:this.state.notes
+            notes: this.state.notes
         })
         this.props.navigation.goBack();
     }
@@ -49,8 +50,12 @@ class AddNote extends React.Component {
 
                         <TextInput
                             onChangeText={text => this.setState({ notestext: text })} //this.setState({ notestext: text })
-                            placeholder="Add note to this order"
-                        /> 
+                            label="Add note to this order"
+                            style={{ backgroundColor: 'transparent', }}
+                            width={width - 50}
+                            alignSelf={'center'}
+                            color={'#000'}
+                        />
                     </View>
                 </View>
                 <TouchableOpacity

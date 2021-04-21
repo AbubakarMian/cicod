@@ -1,6 +1,7 @@
 import React from 'react'
-import { View, Alert, ImageBackground, ScrollView, TouchableHighlight, Text, TextInput, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import { View, ImageBackground, ScrollView, TouchableHighlight,  FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
 import splashImg from '../images/splash.jpg'
+import {   Text, TextInput, Alert} from 'react-native-paper';
 import styles from '../css/AddProductCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
@@ -214,7 +215,11 @@ class AddProduct extends React.Component {
                             />
                             <TextInput
                                 onChangeText={text => this.setState({ search_product: text })}
-                                placeholder="Search Product"
+                                label="Search Product"
+                                style={{ backgroundColor: 'transparent', }}
+                                width={width - 50}
+                                alignSelf={'center'}
+                                color={'#000'}
                                 onSubmitEditing={() => this.getProductList()}
                             />
 

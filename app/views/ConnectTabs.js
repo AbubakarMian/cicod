@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
+import {   Text, TextInput, Alert} from 'react-native-paper';
 import { TabView, SceneMap,TabBar } from 'react-native-tab-view';
 import MyViews from "../View/MyVues";
 import GridTab from "../View/Tabs/EditProfile/GridTab";

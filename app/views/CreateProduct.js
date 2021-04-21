@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, ImageBackground,TouchableHighlight, ScrollView, Alert, Text, Dimensions, Image, Platform, TouchableOpacity, TextInput } from 'react-native'
+import { View, ImageBackground,TouchableHighlight, ScrollView,  Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import {   Text, TextInput, Alert} from 'react-native-paper';
 import splashImg from '../images/splash.jpg';
 import styles from '../css/CreateProductCss';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -208,7 +209,11 @@ class CreateProduct extends React.Component {
                             <View style={[{}, styles.formRowView]}>
                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                     <TextInput
-                                        placeholder="ProName*"
+                                        label="ProName*"
+                                        style={{ backgroundColor: 'transparent', }}
+                                        width={width - 50}
+                                        alignSelf={'center'}
+                                        color={'#000'}
                                         onChangeText={text => this.setState({ name: text })}
                                     />
 
@@ -218,7 +223,11 @@ class CreateProduct extends React.Component {
                             <View style={[{}, styles.formRowView]}>
                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                     <TextInput
-                                        placeholder="Description"
+                                        label="Description"
+                                        style={{ backgroundColor: 'transparent', }}
+                                width={width - 50}
+                                alignSelf={'center'}
+                                color={'#000'}
                                         onChangeText={text => this.setState({ description: text })}
                                     />
 
@@ -227,14 +236,22 @@ class CreateProduct extends React.Component {
                             <View style={[{}, styles.formRowView]}>
                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                     <TextInput
-                                        placeholder="Product Code"
+                                        label="Product Code"
+                                        style={{ backgroundColor: 'transparent', }}
+                                width={width - 50}
+                                alignSelf={'center'}
+                                color={'#000'}
                                         onChangeText={text => this.setState({ code: text })}
                                     />
 
                                 </View>
                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                     <TextInput
-                                        placeholder="Price (.00)"
+                                        label="Price (.00)"
+                                        style={{ backgroundColor: 'transparent', }}
+                                width={width - 50}
+                                alignSelf={'center'}
+                                color={'#000'}
                                         onChangeText={text => this.setState({ price: text })}
                                         keyboardType='numeric'
                                     />
@@ -244,7 +261,11 @@ class CreateProduct extends React.Component {
                             <View style={[{}, styles.formRowView]}>
                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                     <TextInput
-                                        placeholder="Reservation (Days)"
+                                        label="Reservation (Days)"
+                                        style={{ backgroundColor: 'transparent', }}
+                                width={width - 50}
+                                alignSelf={'center'}
+                                color={'#000'}
                                         onChangeText={text => this.setState({ reservation_day: text })}
                                         keyboardType='numeric'
                                     />
@@ -252,7 +273,11 @@ class CreateProduct extends React.Component {
                                 </View>
                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                     <TextInput
-                                        placeholder="Quantity"
+                                        label="Quantity"
+                                        style={{ backgroundColor: 'transparent', }}
+                                width={width - 50}
+                                alignSelf={'center'}
+                                color={'#000'}
                                         onChangeText={text => this.setState({ quantity: text })}
                                     />
 
@@ -287,7 +312,11 @@ class CreateProduct extends React.Component {
                             <View style={[{}, styles.formRowView]}>
                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                     <TextInput
-                                        placeholder="VAT"
+                                        label="VAT"
+                                        style={{ backgroundColor: 'transparent', }}
+                                width={width - 50}
+                                alignSelf={'center'}
+                                color={'#000'}
                                     />
                                     <Icon
                                         style={[{ position: 'absolute', right: width / 2 + 20 }]}
@@ -323,7 +352,11 @@ class CreateProduct extends React.Component {
                                     <View style={[{}, styles.formRowView]}>
                                         <View style={[{ position: 'relative' }, styles.formColumn]}>
                                             <TextInput
-                                                placeholder="Attribute"
+                                                label="Attribute"
+                                                style={{ backgroundColor: 'transparent', }}
+                                width={width - 50}
+                                alignSelf={'center'}
+                                color={'#000'}
                                             />
                                             <Icon
                                                 style={[{}, styles.rightIcon]}
@@ -331,7 +364,11 @@ class CreateProduct extends React.Component {
                                         </View>
                                         <View style={[{ position: 'relative' }, styles.formColumn]}>
                                             <TextInput
-                                                placeholder="Price (.00)"
+                                                label="Price (.00)"
+                                                style={{ backgroundColor: 'transparent', }}
+                                width={width - 50}
+                                alignSelf={'center'}
+                                color={'#000'}
                                             />
                                         </View>
                                     </View>
@@ -351,10 +388,18 @@ class CreateProduct extends React.Component {
                                         style={[{},styles.toolTipMainView]}
                                         >
                                             <TextInput
-                                            placeholder="Attribute Name"
+                                            label="Attribute Name"
+                                            style={{ backgroundColor: 'transparent', }}
+                                width={width - 50}
+                                alignSelf={'center'}
+                                color={'#000'}
                                             />
                                             <TextInput
-                                            placeholder="Attribute Value"
+                                            label="Attribute Value"
+                                            style={{ backgroundColor: 'transparent', }}
+                                width={width - 50}
+                                alignSelf={'center'}
+                                color={'#000'}
                                             />
                                             <TouchableOpacity
                                             style={[{},styles.toolTipSaveBtn]}
@@ -385,7 +430,11 @@ class CreateProduct extends React.Component {
                                     <View style={[{}, styles.formRowView]}>
                                         <View style={[{ position: 'relative' }, styles.formColumn]}>
                                             <TextInput
-                                                placeholder="Quantity"
+                                                label="Quantity"
+                                                style={{ backgroundColor: 'transparent', }}
+                                width={width - 50}
+                                alignSelf={'center'}
+                                color={'#000'}
                                             />
                                         </View>
                                         <View style={[{ position: 'relative' }, styles.formColumn]}>
