@@ -10,8 +10,8 @@ import {
     MenuOptions,
     MenuOption,
     MenuTrigger,
-  } from 'react-native-popup-menu';
-  
+} from 'react-native-popup-menu';
+
 import { SET_USER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART } from '../redux/constants/index';
 import SearchBar from 'react-native-search-bar';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -89,6 +89,11 @@ class Buyers extends React.Component {
         console.log('search_url search_url', search_url);
     }
 
+    buyersDetail() {
+
+        this.props.navigation.navigate('BuyersView')
+    }
+
 
     render() {
         console.log('data data !!!!!!!!!!!!', this.state.data);
@@ -139,6 +144,7 @@ class Buyers extends React.Component {
                     </View>
 
                 </View>
+
                 <ScrollView
                     scrollEnabled={true}
                     horizontal={true}
@@ -161,7 +167,7 @@ class Buyers extends React.Component {
                         renderItem={({ item, index, separators }) => (
                             <TouchableHighlight
                                 key={item.key}
-                                onPress={() => this.props.navigation.navigate('BuyersView')}
+                                onPress={() => this.buyersDetail()}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
                                 <View style={[{}, styles.flatCardView]}>
@@ -180,17 +186,32 @@ class Buyers extends React.Component {
                                                     // onPress={() => this.setState({ toolTipVisible: true })}
                                                     style={[{}, styles.cardActionTouch]}
                                                 >
-                                                    <Icon name="ellipsis-h" color={'#929497'} size={20} />
-                                                    {/* <Menu>
-                                                        <MenuTrigger text='Select action' />
+                                                    <Menu>
+                                                        {/* <MenuTrigger text='. . .' customStyles={{}} /> */}
+                                                        <MenuTrigger style={styles.trigger}>
+                                                            {/* <Text style={styles.triggerText}>Slide-in menu...</Text> */}
+                                                            <Icon name="ellipsis-h" color={'#929497'} size={20} />
+                                                        </MenuTrigger>
                                                         <MenuOptions>
-                                                            <MenuOption onSelect={() => alert(`Save`)} text='Save' />
-                                                            <MenuOption onSelect={() => alert(`Delete`)} >
-                                                                <Text style={{ color: 'red' }}>Delete</Text>
+                                                            <MenuOption onSelect={() => alert(`Save`)} >
+                                                                <View style={{ flexDirection: 'row' }}>
+                                                                    <Image
+                                                                        source={require('../images/update.png')}
+                                                                    />
+                                                                    <Text style={{ marginLeft: 10 }}>Update</Text>
+                                                                </View>
                                                             </MenuOption>
-                                                            <MenuOption onSelect={() => alert(`Not called`)} disabled={true} text='Disabled' />
+                                                            <MenuOption onSelect={() => alert(`Save`)} >
+                                                                <View style={{ flexDirection: 'row' }}>
+                                                                    <Image
+                                                                        source={require('../images/suspend.png')}
+                                                                    />
+                                                                    <Text style={{ marginLeft: 10 }}>Suspend</Text>
+                                                                </View>
+                                                            </MenuOption>
+
                                                         </MenuOptions>
-                                                    </Menu>  */}
+                                                    </Menu>
                                                 </TouchableOpacity>
                                                 {(item.is_active == 1) ?
                                                     <Text style={[{}, styles.statusText]}>Active</Text>

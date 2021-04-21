@@ -5,6 +5,7 @@ import splashImg from '../images/splash.jpg'
 // import styles from '../css/DashboardCss';
 import styles from '../css/OrderCss';
 import Header from '../views/Header';
+import Spinner from 'react-native-loading-spinner-overlay';
 import CalendarPicker from 'react-native-calendar-picker';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
@@ -20,7 +21,8 @@ class Order extends React.Component {
             selectedStartDate: null,
             calenderModal: false,
             data: [],
-            is_active_list: 'all'
+            is_active_list: 'all',
+            spinner: false
         };
         this.onDateChange = this.onDateChange.bind(this);
     }
@@ -30,7 +32,7 @@ class Order extends React.Component {
     customeList(listType) {
 
         this.setState({
-            Spinner: true,
+            spinner: true,
             is_active_list: listType
         })
         let postData = {
@@ -50,7 +52,7 @@ class Order extends React.Component {
 
                 console.log("@@@@@@@@@@@@", responseJson)
                 if (responseJson.status === 'success') {
-                    this.setState({ Spinner: false });
+                    this.setState({ spinner: false });
                     this.setState({
                         data: responseJson.data
                     });
@@ -63,7 +65,7 @@ class Order extends React.Component {
             })
     }
     orderList(url) {
-        this.setState({ Spinner: true })
+        this.setState({ spinner: true })
         let postData = {
             method: 'GET',
             headers: {
@@ -78,7 +80,7 @@ class Order extends React.Component {
             .then(async responseJson => {
                 console.log("###############", responseJson)
                 if (responseJson.status === 'success') {
-                    this.setState({ Spinner: false });
+                    this.setState({ spinner: false });
                     this.setState({
                         data: responseJson.data
                     });
@@ -124,6 +126,12 @@ class Order extends React.Component {
         return (
             <View style={{ width: width, position: 'relative', backgroundColor: '##F0F0F0', }}>
                 <Header navigation={this.props.navigation} />
+                <Spinner
+                    visible={this.state.spinner}
+                    textContent={'Please Wait...'}
+                    textStyle={{ color: '#fff' }}
+                    color={'#fff'}
+                />
                 <View style={{ flexDirection: 'row', alignContent: 'center', alignItems: 'center', width: width - 20, alignSelf: 'center' }}>
                     <View>
                         <Text style={{ color: '#2F2E7C', fontWeight: 'bold' }}>ORDER</Text>
@@ -237,7 +245,7 @@ class Order extends React.Component {
                         </TouchableOpacity>
                     
                 </ScrollView>
-                <ScrollView>
+                <ScrollView style={{marginBottom:200}}>
                     <FlatList
                         data={this.state.data}
                         ItemSeparatorComponent={
@@ -274,11 +282,25 @@ class Order extends React.Component {
                                     </View>
                                     <View style={{ flex: 1, alignItems: 'flex-end', flexDirection: 'column' }}>
                                         <Text style={{ fontWeight: 'bold' }}>N{item.amount}</Text>
-                                        {(item.order_status == 'PENDING') ?
+                                        {/* {(item.order_status == 'PENDING') ?
                                             <View style={[{ backgroundColor: '#ffabb5', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
                                                 <Text style={[{ color: '#f7001d' }]}>{item.payment_status}</Text>
                                             </View>
-                                            : null}
+                                            : null} */}
+
+                                        {(item.order_status == 'PENDING') ?
+                                            <Text style={[{ borderRadius: 50, paddingHorizontal: 5, backgroundColor: '#FFF3DB', color: '#FDB72B', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
+                                                {item.order_status}
+                                            </Text>
+                                            : (item.order_status == 'PAID') ?
+                                                <Text style={[{ borderRadius: 50, paddingHorizontal: 5, backgroundColor: '#DAF8EC', color: '#26C281', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
+                                                    {item.order_status}
+                                                </Text>
+                                                : (item.order_status == 'PART PAYMENT') ?
+                                                    <Text style={[{ borderRadius: 50, paddingHorizontal: 5, backgroundColor: '#E6E6E6', color: '#929497', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
+                                                        {item.order_status}
+                                                    </Text>
+                                                    : null}
                                     </View>
                                 </View>
                             </TouchableOpacity>
