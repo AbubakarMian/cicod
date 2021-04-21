@@ -17,7 +17,7 @@ export default StyleSheet.create({
  },
 
  textInputView:{
-     borderWidth:1,
+    //  borderWidth:1,
      borderRadius:5 ,
      borderColor:'#CFCFCF',
      width:width-50,
@@ -29,7 +29,7 @@ export default StyleSheet.create({
      alignItems:'center'
  },
  comtextInputView:{
-    borderWidth:1,
+    // borderWidth:1,
     borderRadius:5 ,
     borderColor:'#CFCFCF',
     width:width-50,
@@ -37,6 +37,8 @@ export default StyleSheet.create({
     flexDirection:'row',
     alignItems:'center',
     position:'relative',
+    borderBottomWidth:0,
+    
     
     
 },
