@@ -1,5 +1,5 @@
 import React from 'react';
-import {  View,  Image,Dimensions,TouchableOpacity, ScrollView  } from 'react-native';
+import { View, Image, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
 // import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, Touchable, ScrollView, Alert } from 'react-native';
 import styles from '../css/LoginCss';
 import fontStyles from '../css/FontCss'
@@ -9,7 +9,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import { Constants } from '../views/Constant';
-import {   Text, TextInput, Alert} from 'react-native-paper';
+import { Text, TextInput, Alert } from 'react-native-paper';
 
 
 var { width, height } = Dimensions.get('window');
@@ -46,7 +46,7 @@ class Login extends React.Component {
                 lastname: "sandbox last", //responseJson.user.lastname,
                 email: "cicodsandbox@yopmail.com",//responsejson.user.email,
                 phone: "123314324",//responseJson.user.phone,
-                access_token: "Bearer yfuK5hA9TgZA0BOY06xs",  //+ responseJson.token
+                access_token: "Bearer yfuK5hA9TgZA0BOY06xs ",  //+ responseJson.token
             });
             this.setState({ Spinner: false })
             this.props.navigation.navigate('Home')
@@ -172,7 +172,7 @@ class Login extends React.Component {
                             />
                         </View>
                     </View>
-                    <View style={{ flexDirection: 'row', justifyContent: 'center', width: width - 50,marginTop:20,marginBottom:10 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'center', width: width - 50, marginTop: 20, marginBottom: 10 }}>
                         <CheckBox
                             style={{ width: width / 2, alignSelf: 'center', alignItems: 'center' }}
                             onClick={() => {

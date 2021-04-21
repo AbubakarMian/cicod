@@ -1,6 +1,6 @@
 import React from 'react'
-import { View,TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView,} from 'react-native'
-import { Text, TextInput, Alert} from 'react-native-paper';
+import { View, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, } from 'react-native'
+import { Text, TextInput, Alert } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss';
 import fontStyles from '../css/FontCss'
@@ -86,8 +86,9 @@ class Supplier extends React.Component {
 
     }
 
-    supliersDetail() {
-        this.props.navigation.navigate('BuyersView')
+    supliersDetail(items) {
+        console.log('items !!!!!!!!!!!!', items);
+        this.props.navigation.navigate('BuyersView', { items: items })
     }
     render() {
 
@@ -104,7 +105,7 @@ class Supplier extends React.Component {
                 />
                 <View style={{ flexDirection: 'row', marginVertical: 10, alignContent: 'center', alignItems: 'center', width: width - 20, alignSelf: 'center' }}>
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('Home')}
+                        onPress={() => this.props.navigation.goBack()}
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
@@ -143,8 +144,8 @@ class Supplier extends React.Component {
                     </View>
                 </View>
 
-            <View style={{borderWidth:0.20,borderColor:'#929497',width:width-20,alignSelf:'center',marginVertical:10}}></View>
-    
+                <View style={{ borderWidth: 0.20, borderColor: '#929497', width: width - 20, alignSelf: 'center', marginVertical: 10 }}></View>
+
 
                 <ScrollView>
                     <FlatList
@@ -167,7 +168,7 @@ class Supplier extends React.Component {
                                 onPress={() => this.supliersDetail(item)}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
-                                <View style={{ position: 'relative', alignSelf: 'center',alignItems:'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 5 }}>
+                                <View style={{ position: 'relative', alignSelf: 'center', alignItems: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 5 }}>
                                     <View style={{ flex: 1 }}>
                                         <View style={{ flexDirection: 'column' }}>
                                             <View style={{ flexDirection: 'row' }}>
