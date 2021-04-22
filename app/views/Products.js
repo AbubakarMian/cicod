@@ -100,7 +100,8 @@ class Products extends React.Component {
                     })
                 } else {
                     let message = responseJson.message;
-                    Alert.alert('Error', message)
+                    console.log('message !!!!!!!!!!!!!!!!', message);
+                    Alert.alert('Error !!!!!!!!!!', message)
                 }
             })
     }
@@ -138,7 +139,7 @@ class Products extends React.Component {
                         categoryarr: categoryarr,
                     });
                 } else {
-                    let message = JSON.stringify(responseJson.error.message)
+                    let message = JSON.stringify(responseJson.message)
                     Alert.alert('Error', message)
                 }
 

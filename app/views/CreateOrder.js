@@ -35,7 +35,8 @@ class CreateOrder extends React.Component {
             delivery_type_btn: 0,
             is_pickup: true,
             payment_mode: '',
-            suppliereModal: false
+            suppliereModal: false,
+            supplierlist: []
         }
     }
     clearOrder() {
@@ -50,6 +51,7 @@ class CreateOrder extends React.Component {
         this.setState({
             limit_cart_arr: cart_arr,
         });
+        this.getSuppliersList();
     }
 
     componentWillReceiveProps() {
@@ -212,7 +214,40 @@ class CreateOrder extends React.Component {
 
     }
 
+    getSuppliersList() {
+
+        console.log('get Suppliers List');
+        this.setState({ spinner: true })
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            },
+        };
+        fetch(Constants.supplierlist, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                console.log('responseJson', responseJson);
+                this.setState({
+                    spinner: false,
+                });
+                if (responseJson.success === true) {
+
+                    this.setState({
+                        supplierlist: responseJson.data
+                    })
+                } else {
+                    let message = JSON.stringify(responseJson.error.message)
+                    Alert.alert('Error', message)
+                }
+            })
+
+    }
+
     render() {
+        console.log(' supplier list  !!!!!!!!!!!!!!', this.state.supplierlist)
         var radio_props_dilvery = [
             { label: 'Delivery', value: 0 },
 
@@ -648,20 +683,7 @@ class CreateOrder extends React.Component {
                                             />
                                         ))
                                     }
-                                    data={[
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item1' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item2' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item3' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item4' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item5' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item6' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item7' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item8' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item9' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item10' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item11' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item12' },
-                                    ]}
+                                    data={this.state.supplierlist}
                                     renderItem={({ item, index, separators }) => (
                                         <TouchableHighlight
                                             key={item.key}
