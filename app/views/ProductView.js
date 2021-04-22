@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, Dimensions, Image, Platform, TouchableOpacity, Modal } from 'react-native'
-import { Text, TextInput, Alert } from 'react-native-paper';
+import { View, Dimensions, Image, Platform, TouchableOpacity} from 'react-native'
+import { Text, TextInput, Alert, Modal  } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/ProductViewCss';
 import fontStyles from '../css/FontCss'
@@ -141,8 +141,8 @@ class ProductView extends React.Component {
                             name="ellipsis-h" />
 
                     </View>
-                    <Text style={[{}, styles.productDeatailHeadingText]}>{this.state.prodDetail.name + ' ' + this.state.prodDetail.quantity}</Text>
-                    <Text style={[{}, styles.lightGrayTex]}>{this.state.prodDetail.code}</Text>
+                    <Text style={[{color:'#4E4D4D',textAlign:'center'},fontStyles.bold18]}>{this.state.prodDetail.name + ' ' + this.state.prodDetail.quantity}</Text>
+                    <Text style={[{color:'#929497',textAlign:'center'}, fontStyles.normal12]}>{this.state.prodDetail.code}</Text>
                     <View style={{ borderBottomWidth: 1, borderColor: '#E6E6E6', marginVertical: 10 }}></View>
                     <View style={[{}, styles.descRow]}>
                         <View style={[{}, styles.descColumn]}>
@@ -172,6 +172,20 @@ class ProductView extends React.Component {
                             <Text style={[{}, styles.lightGrayTex]}>Created Date</Text>
                             <Text style={[{}, styles.darkGarayText]}>{this.state.prodDetail.date_created}</Text>
                             {/* <Text style={[{}, styles.darkGarayText]}>10:30 AM</Text> */}
+
+                        </View>
+
+                    </View>
+                    <View style={[{}, styles.descRow]}>
+                        <View style={[{}, styles.descColumn]}>
+                            <Text style={[{}, styles.lightGrayTex]}>Updated Date</Text>
+                            <Text style={[{}, styles.darkGarayText]}>2020-11-23 11:26 AM</Text>
+                        </View>
+                        <View style={[{}, styles.descColumn]}>
+                           
+                        </View>
+                        <View style={[{}, styles.descColumn]}>
+                            
 
                         </View>
 

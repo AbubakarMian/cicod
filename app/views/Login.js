@@ -9,7 +9,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import { Constants } from '../views/Constant';
-import { Text, TextInput, Alert } from 'react-native-paper';
+import { Text, TextInput, Alert,Modal } from 'react-native-paper';
 
 
 var { width, height } = Dimensions.get('window');
@@ -40,17 +40,17 @@ class Login extends React.Component {
         }
 
         else {
-            // this.props.setUser({
+            this.props.setUser({
 
-            //     firstname: "sandbox last", //responseJson.user.firstname,
-            //     lastname: "sandbox last", //responseJson.user.lastname,
-            //     email: "cicodsandbox@yopmail.com",//responsejson.user.email,
-            //     phone: "123314324",//responseJson.user.phone,
-            //     access_token: "Bearer yfuK5hA9TgZA0BOY06xs ",  //+ responseJson.token
-            // });
-            // this.setState({ Spinner: false })
-            // this.props.navigation.navigate('Home')
-            // return;
+                firstname: "sandbox last", //responseJson.user.firstname,
+                lastname: "sandbox last", //responseJson.user.lastname,
+                email: "cicodsandbox@yopmail.com",//responsejson.user.email,
+                phone: "123314324",//responseJson.user.phone,
+                access_token: "Bearer ",  //+ responseJson.token
+            });
+            this.setState({ Spinner: false })
+            this.props.navigation.navigate('Home')
+            return;
             this.setState({ Spinner: true })
             let postData = {
                 method: 'POST',
@@ -127,7 +127,7 @@ class Login extends React.Component {
                             onChangeText={text => this.setState({ tenantId: text })}
                             label="Domain Name"
                             placeholder="Domain Name"
-                            style={{backgroundColor:'transparent',borderWidth:1,borderBottomWidth:0,borderColor:'#CFCFCF'}}
+                            style={{backgroundColor:'transparent',borderBottomWidth:0,borderTopWidth:0.5,borderLeftWidth:0.5, borderColor:'#CFCFCF'}}
                             alignSelf={'center'}
                             color={'#000'}
                             onFocus={()=>{this.setState({domain_text_color:'red'})}}
@@ -137,7 +137,7 @@ class Login extends React.Component {
                             alignSelf={'flex-start'}
                         />
                        {/* <Text style={{paddingVertical:50,borderBottomWidth:1,borderBottomColor:this.state.domain_text_color, height:height/12,textAlignVertical:'center', backgroundColor: '#CFCFCF', color: '#4E4D4D',position:'absolute',right:0, paddingVertical: 15, paddingHorizontal: 5 }}>.cicod.com</Text> */}
-                       <Text style={{  height:height/12-3,textAlignVertical:'center', backgroundColor: '#CFCFCF', color: '#4E4D4D',position:'absolute',right:0, paddingHorizontal: 5 }}>.cicod.com</Text>
+                       <Text style={{  paddingVertical:22,borderTopRightRadius:5,borderBottomRightRadius:5, textAlignVertical:'center', backgroundColor: '#CFCFCF', color: '#4E4D4D',position:'absolute',right:0, paddingHorizontal: 5 }}>.cicod.com</Text>
                     </View>
                     <View style={[{}, styles.textInputView]}>
                         <TextInput
@@ -193,7 +193,7 @@ class Login extends React.Component {
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('ResetPassword')}
                             style={{ marginTop: 10, }}>
-                            <Text style={{ color: '#487AE0', fontSize: 12, textAlign: 'left', fontWeight: 'bold' }}>Forgot Password</Text>
+                            <Text style={{ color: '#487AE0', fontSize: 12, textAlign: 'left', fontWeight: 'bold' }}>Reset Password</Text>
                         </TouchableOpacity>
                     </View>
                     <View
@@ -203,6 +203,7 @@ class Login extends React.Component {
                             source={require('../images/splashbottomlogo.png')}
                         />
                     </View>
+               
                 </View>
 
             </ScrollView>

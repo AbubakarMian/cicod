@@ -123,7 +123,9 @@ export default StyleSheet.create({
     flatCardView:{
        width:width,
        justifyContent:'center',
-       alignItems:'center'
+       alignItems:'center',
+       borderRadius:5,
+
     },
     cardRow:{
         flexDirection:'row',
@@ -136,6 +138,7 @@ export default StyleSheet.create({
         paddingVertical:5,
         borderRadius:5,
         position:'relative',
+      
     },
     cardContentView:{
         flexDirection:'column',

@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, TouchableHighlight, FlatList, Alert, Dimensions, Image, Platform, TouchableOpacity, ScrollView, } from 'react-native'
-import { Text, TextInput } from 'react-native-paper';
+import { View, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, } from 'react-native'
+import { Text, TextInput, Alert, Searchbar } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss';
 import fontStyles from '../css/FontCss'
@@ -185,15 +185,31 @@ class Products extends React.Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-
-
-
-                <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
+                {/* <View style={{flexDirection:'row',marginTop:10, alignItems:'center',width:width-20,alignSelf:'center'}}>
+             
+                <Searchbar
+                         placeholder="Search product, Price and code"
+                         texts
+                         style={{width:width-80,alignSelf:'center'}}
+                         
+                />
+                <TouchableOpacity
+                        style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
+                        onPress={() => this.props.navigation.navigate('ProductFilter')}
+                    >
+                        <Image
+                            source={require('../images/Order/settingicon.png')}
+                        />
+                    </TouchableOpacity>
+                </View> */}
+               
+                {/* */}<View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
 
                     <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
                         <Image
                             source={require('../images/products/searchicon.png')}
                         />
+                        
                         <TextInput
                             label="Search product, Price and code"
                             // selectionColor={'#fff'}
@@ -216,7 +232,7 @@ class Products extends React.Component {
                         />
                     </TouchableOpacity>
 
-                </View>
+                </View> 
                 <View style={[{}, styles.formRowView]}>
                     <View style={[{ position: 'relative' }, styles.formColumn]}>
 
@@ -235,9 +251,11 @@ class Products extends React.Component {
                     </View>
                 </View>
 
-                <ScrollView>
+                <ScrollView
+                zIndex={-0.999}
+                >
                     <FlatList
-                        style={{ zIndex: -999 }}
+                        style={{  }}
                         data={this.state.data}
 
                         ItemSeparatorComponent={
@@ -253,13 +271,14 @@ class Products extends React.Component {
                         }
 
                         renderItem={({ item, index, separators }) => (
-                            <TouchableHighlight
+                            <TouchableOpacity
+
                                 key={item.key}
                                 onPress={() => this.props.navigation.navigate('ProductView', { prod_id: item.id })}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
-                                <View style={{ position: 'relative', alignSelf: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 5 }}>
-                                    <View style={[{ flexDirection: 'row' }]}>
+                                <View style={{ zIndex: -0.999, position: 'relative', alignSelf: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 5 }}>
+                                    <View style={[{ zIndex: -0.999,flexDirection: 'row' }]}>
                                         {(item.image == null) ?
                                             <Image
                                                 style={[{ height: 40, width: 40, marginRight: 5 }]}
@@ -272,7 +291,7 @@ class Products extends React.Component {
                                             />}
                                     </View>
                                     <View style={{ position: 'relative', flex: 3, marginLeft: 10 }}>
-                                        <Text >{item.name}</Text>
+                                        <Text style={[{color:'#4E4D4D'},fontStyles.bold15]}>{item.name}</Text>
                                         <View style={{ flexDirection: 'row', }}>
                                             <Text style={[{ color: '#929497' }, fontStyles.normal12]}>QTY:  {item.quantity}</Text>
                                             <Text style={[{ color: '#929497' }, fontStyles.normal12]}>.  {item.slug}</Text>
@@ -289,7 +308,7 @@ class Products extends React.Component {
 
 
                                 </View>
-                            </TouchableHighlight>
+                            </TouchableOpacity>
                         )}
                     />
                 </ScrollView>

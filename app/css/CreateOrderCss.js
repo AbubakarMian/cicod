@@ -397,7 +397,8 @@ export default StyleSheet.create({
     },
     modalListContentView: {
         paddingHorizontal: 10,
-        flexDirection: 'column'
+        flexDirection: 'column',
+        backgroundColor:'#fff'
     },
     modalListContentRightIcon: {
         position: 'absolute',
