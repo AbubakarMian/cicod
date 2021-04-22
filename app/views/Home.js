@@ -29,7 +29,7 @@ class Home extends React.Component {
         </View>
         <ScrollView>
           <View style={{ marginBottom: 10 }}>
-            <View style={[{ flexDirection: 'row', width: width, paddingHorizontal: 10, marginTop: 10 }]}>
+            <View style={[{ flexDirection: 'row',alignSelf:'center', width: width, paddingHorizontal: 10, marginTop: 10 }]}>
               <TouchableOpacity
               onPress={()=>this.props.navigation.navigate('Dashnoard')}
               >
@@ -50,7 +50,7 @@ class Home extends React.Component {
               >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 20,
-                justifyContent: 'center', alignItems: 'center', marginLeft: 10,
+                justifyContent: 'center', alignItems: 'center', marginLeft: 15,
                 borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
               }]}>
                 <Image
@@ -83,7 +83,7 @@ class Home extends React.Component {
               >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: height / 4,
-                justifyContent: 'center', alignItems: 'center', marginLeft: 10,
+                justifyContent: 'center', alignItems: 'center', marginLeft: 15,
                 borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
               }]}>
                 <Image
@@ -115,7 +115,7 @@ class Home extends React.Component {
               >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: height / 4,
-                justifyContent: 'center', alignItems: 'center', marginLeft: 10,
+                justifyContent: 'center', alignItems: 'center', marginLeft: 15,
                 borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
               }]}>
                 <Image
@@ -147,7 +147,7 @@ class Home extends React.Component {
               >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: height / 4,
-                justifyContent: 'center', alignItems: 'center', marginLeft: 10,
+                justifyContent: 'center', alignItems: 'center', marginLeft: 15,
                 borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
               }]}>
                 <Image

@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, Modal, } from 'react-native'
-import { Text, TextInput, Alert } from 'react-native-paper';
+import { View, ImageBackground, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import { Text, TextInput, Alert, Modal, } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import styles from '../css/EnableProductCss';

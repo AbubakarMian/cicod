@@ -117,7 +117,7 @@ class Buyers extends React.Component {
 
                     </TouchableOpacity>
                 </View>
-                <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', paddingHorizontal: 10, borderRadius: 5, marginTop: 10, alignItems: 'center', borderBottomColor: '#E6E6E6', borderBottomWidth: 2, paddingBottom: 10 }}>
+                {/* <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', paddingHorizontal: 10, borderRadius: 5, marginTop: 10, alignItems: 'center', borderBottomColor: '#E6E6E6', borderBottomWidth: 2, paddingBottom: 10 }}>
                     <View style={{ backgroundColor: '#fff', flexDirection: 'row', alignItems: 'center', paddingHorizontal: 10, width: width - 30, alignSelf: 'center' }}>
                         <Image
                             source={require('../images/products/searchicon.png')}
@@ -145,6 +145,36 @@ class Buyers extends React.Component {
                         </View>
                     </View>
 
+                </View> */}
+                 <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center',  borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
+                    
+                    <View style={{flexDirection:'row',backgroundColor:'#fff',alignItems:'center',height:50,paddingHorizontal:10,borderRadius:5, width:width-80}}>
+                    <Image
+                        source={require('../images/products/searchicon.png')}
+                    />
+                        <TextInput
+                            label="Search product, Price and code"
+                            // selectionColor={'#fff'}
+                            
+                            style={{ backgroundColor: 'transparent', }}
+                            width={width / 1.4}
+                            alignSelf={'center'}
+                            color={'#000'}
+                            onChangeText={text => this.setState({ search_product: text })}
+                            onSubmitEditing={() => this.search()}
+                        />
+                    </View> 
+                    
+                        <TouchableOpacity
+                        style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
+                            // onPress={() => this.props.navigation.navigate('ProductFilter')}
+                            onPress={() => this.props.navigation.navigate('BuyersFilter')}
+                        >
+                            <Image
+                                source={require('../images/Order/settingicon.png')}
+                            />
+                        </TouchableOpacity>
+                   
                 </View>
 
                 <ScrollView
@@ -167,14 +197,15 @@ class Buyers extends React.Component {
                         }
 
                         renderItem={({ item, index, separators }) => (
-                            <TouchableHighlight
+                            <TouchableOpacity
                                 key={item.key}
                                 onPress={() => this.buyersDetail(item)}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
                                 <View style={[{}, styles.flatCardView]}>
-                                    <View style={[{}, styles.cardRow]}>
+                                    <View style={[{paddingLeft:10,}, styles.cardRow]}>
                                         <Image
+                                            style={{marginTop:10}}
                                             source={require('../images/bage.png')}
                                         />
                                         <View style={[{}, styles.cardContentView]}>
@@ -224,7 +255,7 @@ class Buyers extends React.Component {
                                     </View>
 
                                 </View>
-                            </TouchableHighlight>
+                            </TouchableOpacity>
                         )}
                     />
                 </ScrollView>

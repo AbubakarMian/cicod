@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Input, InputGroup, List, ListItem } from 'native-base';
-import { View, TouchableOpacity, Image, Dimensions, TouchableHighlight, Touchable, FlatList, ScrollView, Modal } from 'react-native';
-import { Text, TextInput, Alert } from 'react-native-paper';
+import { View, TouchableOpacity, Image, Dimensions, TouchableHighlight, Touchable, FlatList, ScrollView } from 'react-native';
+import { Text, TextInput, Alert, Modal } from 'react-native-paper';
 import fontStyles from '../css/FontCss'
 import styles from '../css/BuyersViewCss';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -186,7 +186,7 @@ class BuyersView extends React.Component {
                         </TouchableOpacity>
 
                     </View>
-                    <View style={[{}, styles.searRowView]}>
+                    {/* <View style={[{}, styles.searRowView]}>
                         <Icon name="search" color={'#B1272C'} size={20} />
                         <TextInput
                             label="Search order ID, amount, ticket Id"
@@ -203,7 +203,35 @@ class BuyersView extends React.Component {
                                 source={require('../images/Order/settingicon.png')} />
                         </TouchableOpacity>
 
-                    </View>
+                    </View> */}
+                     <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center',  borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
+                    
+                    <View style={{flexDirection:'row',backgroundColor:'#fff',alignItems:'center',height:50,paddingHorizontal:10,borderRadius:5, width:width-80}}>
+                    <Image
+                        source={require('../images/products/searchicon.png')}
+                    />
+                        <TextInput
+                            label="Search order ID, amount, ticket Id"
+                            // selectionColor={'#fff'}
+                            style={{ backgroundColor: 'transparent', }}
+                            width={width - 50}
+                            alignSelf={'center'}
+                            color={'#000'}
+                            onChangeText={text => this.setState({ search_product: text })}
+                            onSubmitEditing={() => this.search()}
+                        />
+                    </View> 
+                    
+                        <TouchableOpacity
+                        style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
+                            // onPress={() => this.props.navigation.navigate('ProductFilter')}
+                        >
+                            <Image
+                                source={require('../images/Order/settingicon.png')}
+                            />
+                        </TouchableOpacity>
+                   
+                </View>
                     <Text style={[{}, styles.historyHeadingText]}>ORDER HISTORY</Text>
                     <ScrollView style={{ paddingBottom: 50, marginBottom: 20 }}>
                         <FlatList

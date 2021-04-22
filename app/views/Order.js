@@ -163,7 +163,7 @@ class Order extends React.Component {
                     */}
                     <View style={{ position: 'absolute', right: 0 }}>
                         <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate('CreateOrder',{heading:'order'})}
+                            onPress={() => this.props.navigation.navigate('CreateOrder', { heading: 'order' })}
                         >
                             <Image
                                 source={require('../images/products/circlePlus.png')}
@@ -171,15 +171,46 @@ class Order extends React.Component {
                         </TouchableOpacity>
                     </View>
                 </View>
-                <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, backgroundColor: '#fff', alignSelf: 'center', paddingHorizontal: 10, borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
+                <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
+
+                    <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
+                        <Image
+                            source={require('../images/products/searchicon.png')}
+                        />
+
+                        <TextInput
+                            label="Search product, Price and code"
+                            // selectionColor={'#fff'}
+
+                            style={{ backgroundColor: 'transparent', }}
+                            width={width - 110}
+                            alignSelf={'center'}
+                            color={'#000'}
+                            onChangeText={text => this.setState({ search_product: text })}
+                            onSubmitEditing={() => this.search()}
+                        />
+                    </View>
+
+                    <TouchableOpacity
+                        style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
+                        onPress={() => this.props.navigation.navigate('ProductFilter')}
+                    >
+                        <Image
+                            source={require('../images/Order/settingicon.png')}
+                        />
+                    </TouchableOpacity>
+
+                </View>
+                {/* <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20,  alignSelf: 'center', paddingHorizontal: 10, borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
+                    
+                    <View style={{backgroundColor: '#fff',flexDirection:'row',alignItems:'center',justifyContent:'center',}}>
                     <Image
                         source={require('../images/products/searchicon.png')}
                     />
-                    <View>
                         <TextInput
                             label="Search order ID, customer, amount, tic"
                             style={{ backgroundColor: 'transparent', }}
-                            width={width - 50}
+                            width={width - 100}
                             alignSelf={'center'}
                             color={'#000'}
                         />
@@ -193,7 +224,7 @@ class Order extends React.Component {
                             />
                         </TouchableOpacity>
                     </View>
-                </View>
+                </View> */}
 
                 <ScrollView
                     horizontal={true}
@@ -204,50 +235,50 @@ class Order extends React.Component {
                     marginBottom={5}
                     scrollEnabled={true}
                 >
-                 
-                        <TouchableOpacity
-                            onPress={() => this.customeList("")}
-                        >
-                            <Text style={{
-                                color: this.state.is_active_list === 'all' ? '#000' : '#e2e2e2',
-                                fontWeight: 'bold', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
-                            }}>ALL</Text>
-                        </TouchableOpacity >
-                        <TouchableOpacity
-                            onPress={() => this.customeList("pending")}
-                        >
-                            <Text style={{
-                                color: this.state.is_active_list === 'pending' ? '#000' : '#e2e2e2',
-                                backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
-                            }}>PENDING</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={() => this.customeList("paid")}
-                        >
-                            <Text style={{
-                                color: this.state.is_active_list === 'paid' ? '#000' : '#e2e2e2',
-                                backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
-                            }}>PAID</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={() => this.customeList("partPayment")}
-                        >
-                            <Text style={{
-                                color: this.state.is_active_list === 'partPayment' ? '#000' : '#e2e2e2',
-                                backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
-                            }}>PART PAYMENT</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={() => this.customeList("paidFromCredit")}
-                        >
-                            <Text style={{
-                                color: this.state.is_active_list === 'paidFromCredit' ? '#000' : '#e2e2e2',
-                                backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
-                            }}>PAID FROM CREDIT</Text>
-                        </TouchableOpacity>
-                    
+
+                    <TouchableOpacity
+                        onPress={() => this.customeList("")}
+                    >
+                        <Text style={{
+                            color: this.state.is_active_list === 'all' ? '#000' : '#e2e2e2',
+                            fontWeight: 'bold', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
+                        }}>ALL</Text>
+                    </TouchableOpacity >
+                    <TouchableOpacity
+                        onPress={() => this.customeList("pending")}
+                    >
+                        <Text style={{
+                            color: this.state.is_active_list === 'pending' ? '#000' : '#e2e2e2',
+                            backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
+                        }}>PENDING</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => this.customeList("paid")}
+                    >
+                        <Text style={{
+                            color: this.state.is_active_list === 'paid' ? '#000' : '#e2e2e2',
+                            backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
+                        }}>PAID</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => this.customeList("partPayment")}
+                    >
+                        <Text style={{
+                            color: this.state.is_active_list === 'partPayment' ? '#000' : '#e2e2e2',
+                            backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
+                        }}>PART PAYMENT</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => this.customeList("paidFromCredit")}
+                    >
+                        <Text style={{
+                            color: this.state.is_active_list === 'paidFromCredit' ? '#000' : '#e2e2e2',
+                            backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
+                        }}>PAID FROM CREDIT</Text>
+                    </TouchableOpacity>
+
                 </ScrollView>
-                <ScrollView style={{marginBottom:200}}>
+                <ScrollView style={{ marginBottom: 200 }}>
                     <FlatList
                         data={this.state.data}
                         ItemSeparatorComponent={
@@ -275,15 +306,15 @@ class Order extends React.Component {
                                                     source={require('../images/Order/bage.png')}
                                                 />
                                                 <View style={{ flexDirection: 'column' }}>
-                                                    <Text style={[{color:'#4E4D4D'},fontStyles.bold15]}>{item.cicod_order_id}</Text>
-                                                    <Text style={[{color:'#929497'},fontStyles.normal12]}>{item.customer.name}</Text>
+                                                    <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.cicod_order_id}</Text>
+                                                    <Text style={[{ color: '#929497' }, fontStyles.normal12]}>{item.customer.name}</Text>
                                                 </View>
                                             </View>
-                                            <Text style={[{color:'#929497',marginTop:5},fontStyles.normal12]}>{item.order_date}</Text>
+                                            <Text style={[{ color: '#929497', marginTop: 5 }, fontStyles.normal12]}>{item.order_date}</Text>
                                         </View>
                                     </View>
                                     <View style={{ flex: 1, alignItems: 'flex-end', flexDirection: 'column' }}>
-                                        <Text style={[{color:'#4E4D4D'},fontStyles.bold15]}>N{item.amount}</Text>
+                                        <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>N{item.amount}</Text>
                                         {/* {(item.order_status == 'PENDING') ?
                                             <View style={[{ backgroundColor: '#ffabb5', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
                                                 <Text style={[{ color: '#f7001d' }]}>{item.payment_status}</Text>

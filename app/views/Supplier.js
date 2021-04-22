@@ -152,7 +152,7 @@ class Supplier extends React.Component {
                         <TextInput
                             label="Search supplier"
                             // selectionColor={'#fff'}
-                            
+                           disabled={true}
                             style={{ backgroundColor: 'transparent', }}
                             width={width - 50}
                             alignSelf={'center'}
@@ -161,7 +161,6 @@ class Supplier extends React.Component {
                             onSubmitEditing={() => this.search()}
                         />
                     </View> 
-                    
                         <TouchableOpacity
                         style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
                         onPress={() => this.props.navigation.navigate('Filter')}
@@ -172,9 +171,8 @@ class Supplier extends React.Component {
                         </TouchableOpacity>
                    
                 </View>
-            <View style={{borderWidth:0.20,borderColor:'#929497',width:width-20,alignSelf:'center',marginVertical:10}}></View>
-                   
-
+            <View style={{borderWidth:0.25,borderColor:'#929497',width:width-20,alignSelf:'center',marginVertical:5}}></View>
+                 
                 <ScrollView>
                     <FlatList
                         data={this.state.data}
@@ -191,19 +189,19 @@ class Supplier extends React.Component {
                         }
 
                         renderItem={({ item, index, separators }) => (
-                            <TouchableHighlight
+                            <TouchableOpacity
                                 key={item.key}
                                 onPress={() => this.supliersDetail(item)}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
-                                <View style={{ position: 'relative', alignSelf: 'center',alignItems:'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 5 }}>
+                                <View style={{ position: 'relative', alignSelf: 'center',alignItems:'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 10 }}>
                                     <View style={{ flex: 1 }}>
                                         <View style={{ flexDirection: 'column' }}>
                                             <View style={{ flexDirection: 'row' }}>
                                                 <Image
                                                     source={require('../images/supplier/bage.png')}
                                                 />
-                                                <View style={{ flexDirection: 'column' }}>
+                                                <View style={{ flexDirection: 'column',marginLeft:5 }}>
                                                     <Text style={[{color:'#4E4D4D'},fontStyles.bold15]}>{item.buyer_name}</Text>
                                                     <Text style={[{color:'#929497'},fontStyles.normal12]}>{item.seller_name}</Text>
                                                 </View>
@@ -223,7 +221,7 @@ class Supplier extends React.Component {
                                         }
                                     </View>
                                 </View>
-                            </TouchableHighlight>
+                            </TouchableOpacity>
                         )}
                     />
                 </ScrollView>

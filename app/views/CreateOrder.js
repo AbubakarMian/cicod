@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, Dimensions, Image, Modal, TouchableHighlight, Platform, TouchableOpacity, FlatList } from 'react-native'
-import { Text, TextInput, Alert } from 'react-native-paper';
+import { View, ImageBackground, ScrollView, Dimensions, Image,  TouchableHighlight, Platform, TouchableOpacity, FlatList } from 'react-native'
+import { Text, TextInput, Alert, Modal } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/CreateOrderCss';
 import fontStyles from '../css/FontCss'
@@ -573,7 +573,7 @@ class CreateOrder extends React.Component {
                                         onPress={() => this.props.navigation.navigate('ApplyDiscount')}
                                     >
                                         <View style={{ flexDirection: 'row' }}>
-                                            <Icon name="times-circle" size={20} color="#B1272C" />
+                                            <Image source={require('../images/icon15.png')} />
                                             <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Apply for Discount</Text>
                                         </View>
                                     </TouchableOpacity>
@@ -606,7 +606,7 @@ class CreateOrder extends React.Component {
                     visible={this.state.suppliereModal}
                     transparent={true}
                 >
-                    <View style={[{}, styles.mainContainer]}>
+                    <View style={[{backgroundColor:'#fff'}, styles.mainContainer]}>
                         <TouchableOpacity
                             style={[{}, styles.backgroundTouch]}
                         >

@@ -29,7 +29,7 @@ export default StyleSheet.create({
      alignItems:'center'
  },
  comtextInputView:{
-    // borderWidth:1,
+    
     borderRadius:5 ,
     borderColor:'#CFCFCF',
     width:width-50,

@@ -36,15 +36,20 @@ export default StyleSheet.create({
     productDeatailContainer:{
         padding:5,
         backgroundColor:'#fff',
-        width:width-20,
+        width:width-10,
         alignSelf:'center',
+        borderRadius:10,
+        paddingVertical:10,
+        marginHorizontal:10,
+        paddingHorizontal:10
     },
     productDeatailHeaderRow:{
         flexDirection:'row',
         position:'relative',
         alignItems:'center',
         width:width-20,
-        justifyContent:'center'
+        justifyContent:'center',
+      
     },
     aciveView:{
         position:'absolute',
