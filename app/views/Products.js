@@ -6,7 +6,6 @@ import styles from '../css/DashboardCss';
 import fontStyles from '../css/FontCss'
 import CalendarPicker from 'react-native-calendar-picker';
 import SearchBar from 'react-native-search-bar';
-import { Text, TextInput, Alert } from 'react-native-paper';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Header from '../views/Header';
 import { connect } from 'react-redux';
