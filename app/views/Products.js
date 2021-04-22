@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, } from 'react-native'
-import { Text, TextInput, Alert } from 'react-native-paper';
+import { View, TouchableHighlight, FlatList, Alert, Dimensions, Image, Platform, TouchableOpacity, ScrollView, } from 'react-native'
+import { Text, TextInput } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss';
 import fontStyles from '../css/FontCss'
@@ -100,7 +100,8 @@ class Products extends React.Component {
                     })
                 } else {
                     let message = responseJson.message;
-                    Alert.alert('Error', message)
+                    console.log('message !!!!!!!!!!!!!!!!', message);
+                    Alert.alert('Error !!!!!!!!!!', message)
                 }
             })
     }
@@ -138,7 +139,7 @@ class Products extends React.Component {
                         categoryarr: categoryarr,
                     });
                 } else {
-                    let message = JSON.stringify(responseJson.error.message)
+                    let message = JSON.stringify(responseJson.message)
                     Alert.alert('Error', message)
                 }
 
