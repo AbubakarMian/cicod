@@ -131,90 +131,102 @@ class AddCustomer extends React.Component {
                           <Text style={[{},styles.contentViewHeadingText]}>No customer selected</Text>
                           <Text style={[{},styles.contentViewDescText]}>Search for a customer</Text>
                         </View> */}
-                        <FlatList
-                            data={this.state.customerData}
-                            ItemSeparatorComponent={
-                                Platform.OS !== 'android' &&
-                                (({ highlighted }) => (
-                                    <View
-                                        style={[
-                                            style.separator,
-                                            highlighted && { marginLeft: 0 }
-                                        ]}
-                                    />
-                                ))
-                            }
-                            renderItem={({ item, index, separators }) => (
-                                <View
-                                    style={[{ paddingVertical: 10 }, styles.custommerDeatailContainerView]}
-                                >
-                                    <TouchableOpacity
-                                        onPress={() => { this.userInfo(item) }}
-                                    >
-                                        <View style={[{}, styles.custommerDtailCarView]}>
-                                            <View style={[{}, styles.custommerNameRow]}>
-                                                <Icon name="user-circle" size={15} />
-                                                <Text style={[{}, styles.custommerNameText]}>{item.first_name + ' ' + item.last_name}</Text>
-                                                <Icon
-                                                    style={[{}, styles.custommerNameRightAngle]}
-                                                    name="angle-right"
-                                                    size={20} />
-                                            </View>
-                                            <View style={[{}, styles.custommerDtailCardRowView]}>
-                                                <Text style={[{}, styles.custommerDtailCardBoldText]}>Email: </Text>
-                                                <Text style={[{}, styles.custommerDtailCardNormalText]}>{item.email}</Text>
-                                            </View>
-                                            <View style={[{}, styles.custommerDtailCardRowView]}>
-                                                <Text style={[{}, styles.custommerDtailCardBoldText]}>Phone: </Text>
-                                                <Text style={[{}, styles.custommerDtailCardNormalText]}>{item.phone}</Text>
-                                            </View>
-                                            <View style={[{}, styles.custommerDtailCardRowView]}>
-                                                <Text style={[{}, styles.custommerDtailCardBoldText]}>Customer Address: </Text>
-                                                <Text
-                                                    numberOfLines={2}
 
-                                                    style={[{}, styles.custommerDtailCardNormalText]}>{item.address}</Text>
-                                            </View>
+                        {(this.state.customerData.length != 0) ?
+                            <View>
+                                <FlatList
+                                    data={this.state.customerData}
+                                    ItemSeparatorComponent={
+                                        Platform.OS !== 'android' &&
+                                        (({ highlighted }) => (
+                                            <View
+                                                style={[
+                                                    style.separator,
+                                                    highlighted && { marginLeft: 0 }
+                                                ]}
+                                            />
+                                        ))
+                                    }
+                                    renderItem={({ item, index, separators }) => (
+                                        <View
+                                            style={[{ paddingVertical: 10 }, styles.custommerDeatailContainerView]}
+                                        >
+                                            <TouchableOpacity
+                                                onPress={() => { this.userInfo(item) }}
+                                            >
+                                                <View style={[{}, styles.custommerDtailCarView]}>
+                                                    <View style={[{}, styles.custommerNameRow]}>
+                                                        <Icon name="user-circle" size={15} />
+                                                        <Text style={[{}, styles.custommerNameText]}>{item.first_name + ' ' + item.last_name}</Text>
+                                                        <Icon
+                                                            style={[{}, styles.custommerNameRightAngle]}
+                                                            name="angle-right"
+                                                            size={20} />
+                                                    </View>
+                                                    <View style={[{}, styles.custommerDtailCardRowView]}>
+                                                        <Text style={[{}, styles.custommerDtailCardBoldText]}>Email: </Text>
+                                                        <Text style={[{}, styles.custommerDtailCardNormalText]}>{item.email}</Text>
+                                                    </View>
+                                                    <View style={[{}, styles.custommerDtailCardRowView]}>
+                                                        <Text style={[{}, styles.custommerDtailCardBoldText]}>Phone: </Text>
+                                                        <Text style={[{}, styles.custommerDtailCardNormalText]}>{item.phone}</Text>
+                                                    </View>
+                                                    <View style={[{}, styles.custommerDtailCardRowView]}>
+                                                        <Text style={[{}, styles.custommerDtailCardBoldText]}>Customer Address: </Text>
+                                                        <Text
+                                                            numberOfLines={2}
+
+                                                            style={[{}, styles.custommerDtailCardNormalText]}>{item.address}</Text>
+                                                    </View>
+                                                </View>
+                                                <View style={[{}, styles.countingContainer]}>
+                                                    <View style={[{}, styles.countingRowView]}>
+                                                        <Text style={[{}, styles.custommerDtailCardBoldText]}>Avail. Balance</Text>
+                                                        <Text style={[{}, styles.custommerDtailCardNormalText]}>₦ {item.available_balance}</Text>
+                                                    </View>
+                                                    <View style={[{}, styles.countingRowView]}>
+                                                        <Text style={[{}, styles.custommerDtailCardBoldText]}>Acct. Balance</Text>
+                                                        <Text style={[{}, styles.custommerDtailCardNormalText]}>₦ {item.account_balance}</Text>
+                                                    </View>
+                                                    <View style={[{}, styles.countingRowView]}>
+                                                        <Text style={[{}, styles.custommerDtailCardBoldText]}>Credit Balance</Text>
+                                                        <Text style={[{}, styles.custommerDtailCardNormalText]}>₦ {item.credit_note_balance}</Text>
+                                                    </View>
+
+                                                </View>
+                                                <View style={[{}, styles.countingContainer]}>
+                                                    <View style={[{}, styles.countingRowView]}>
+                                                        <Text style={[{}, styles.custommerDtailCardBoldText]}>Loyalty Points</Text>
+                                                        <Text style={[{}, styles.custommerDtailCardNormalText]}>{item.loyalty_points}</Text>
+                                                    </View>
+                                                    <View style={[{}, styles.countingRowView]}>
+                                                        <Text style={[{}, styles.custommerDtailCardBoldText]}>Credit Note</Text>
+                                                        <Text style={[{}, styles.custommerDtailCardNormalText]}>₦ {item.credit_note_balance}</Text>
+                                                    </View>
+                                                    <View style={[{}, styles.countingRowView]}>
+
+                                                    </View>
+
+                                                </View>
+                                            </TouchableOpacity>
                                         </View>
-                                        <View style={[{}, styles.countingContainer]}>
-                                            <View style={[{}, styles.countingRowView]}>
-                                                <Text style={[{}, styles.custommerDtailCardBoldText]}>Avail. Balance</Text>
-                                                <Text style={[{}, styles.custommerDtailCardNormalText]}>₦ {item.available_balance}</Text>
-                                            </View>
-                                            <View style={[{}, styles.countingRowView]}>
-                                                <Text style={[{}, styles.custommerDtailCardBoldText]}>Acct. Balance</Text>
-                                                <Text style={[{}, styles.custommerDtailCardNormalText]}>₦ {item.account_balance}</Text>
-                                            </View>
-                                            <View style={[{}, styles.countingRowView]}>
-                                                <Text style={[{}, styles.custommerDtailCardBoldText]}>Credit Balance</Text>
-                                                <Text style={[{}, styles.custommerDtailCardNormalText]}>₦ {item.credit_note_balance}</Text>
-                                            </View>
+                                    )}
+                                />
+                                <TouchableOpacity
+                                    onPress={() => this.props.navigation.navigate('AddNewCustomer')}
+                                    style={[{ marginBottom: 100 }, styles.addCustommerRowView]}>
+                                    <Image source={require('../images/circlePlus.png')} />
+                                    <Text style={[{}, styles.addCustommerText]}>Add new customer</Text>
+                                </TouchableOpacity>
+                            </View>
+                            : <View style={[{}, styles.contentView]}>
+                                <Image
+                                    source={require('../images/user-circle.png')}
+                                />
+                                <Text style={[{}, styles.contentViewHeadingText]}>No customer selected</Text>
+                                <Text style={[{}, styles.contentViewDescText]}>Search for a customer</Text>
+                            </View>}
 
-                                        </View>
-                                        <View style={[{}, styles.countingContainer]}>
-                                            <View style={[{}, styles.countingRowView]}>
-                                                <Text style={[{}, styles.custommerDtailCardBoldText]}>Loyalty Points</Text>
-                                                <Text style={[{}, styles.custommerDtailCardNormalText]}>{item.loyalty_points}</Text>
-                                            </View>
-                                            <View style={[{}, styles.countingRowView]}>
-                                                <Text style={[{}, styles.custommerDtailCardBoldText]}>Credit Note</Text>
-                                                <Text style={[{}, styles.custommerDtailCardNormalText]}>₦ {item.credit_note_balance}</Text>
-                                            </View>
-                                            <View style={[{}, styles.countingRowView]}>
-
-                                            </View>
-
-                                        </View>
-                                    </TouchableOpacity>
-                                </View>
-                            )}
-                        />
-                        <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate('AddNewCustomer')}
-                            style={[{ marginBottom: 100 }, styles.addCustommerRowView]}>
-                            <Image source={require('../images/circlePlus.png')} />
-                            <Text style={[{}, styles.addCustommerText]}>Add new customer</Text>
-                        </TouchableOpacity>
 
 
 
