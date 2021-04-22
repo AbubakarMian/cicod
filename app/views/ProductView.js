@@ -21,6 +21,7 @@ class ProductView extends React.Component {
             searchPress: 1,
             productImageModal: false,
             spinner: false,
+            prodDetail: {}
         }
 
     }
@@ -56,8 +57,41 @@ class ProductView extends React.Component {
                 console.log('response json in products !!!!!!!!!!!!!!!!!!', responseJson);
                 if (responseJson.status === "success" || responseJson.success === true) {
                     this.setState({
-                        data: responseJson.data
+                        prodDetail: responseJson.data
                     })
+                } else {
+                    let message = responseJson.message;
+                    Alert.alert('Error', message)
+                }
+            })
+    }
+
+    suspendProductFun() {
+        // https://com.cicodsaasstaging.com/com/api/products/23?action=suspend
+        let url = Constants.products + '/' + this.state.prodDetail.id + '?action=suspend';
+        console.log(' suspend product url !!!!!!!!!!!!', url);
+        let token = this.props.user.access_token;
+        this.setState({ spinner: true })
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: token,
+            },
+        };
+        fetch(url, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                console.log('responseJson.message', responseJson);
+                this.setState({
+                    spinner: false,
+
+                });
+                console.log('response json suspend product  !!!!!!!!!!!!!!!!!!', responseJson);
+                if (responseJson.status === "success" || responseJson.success === true) {
+                    Alert.alert('Message', message);
+                    this.props.navigation.goBack();
                 } else {
                     let message = responseJson.message;
                     Alert.alert('Error', message)
@@ -89,8 +123,12 @@ class ProductView extends React.Component {
                 <View style={[{}, styles.productDeatailContainer]}>
                     <View style={[{}, styles.productDeatailHeaderRow]}>
                         <View style={[{}, styles.aciveView]}>
-                            <Text style={{ color: '#26C281' }}>ACTIVE</Text>
 
+                            {(this.state.prodDetail.is_active == true) ?
+                                <Text style={{ color: '#26C281' }}>ACTIVE</Text>
+                                :
+                                <Text style={{ color: '#26C281' }}>IN ACTIVE</Text>
+                            }
 
                         </View>
                         <Image
@@ -103,21 +141,21 @@ class ProductView extends React.Component {
                             name="ellipsis-h" />
 
                     </View>
-                    <Text style={[{}, styles.productDeatailHeadingText]}>Pure ORANGE JUICE 12PACK</Text>
-                    <Text style={[{}, styles.lightGrayTex]}>PJ836439</Text>
+                    <Text style={[{}, styles.productDeatailHeadingText]}>{this.state.prodDetail.name + ' ' + this.state.prodDetail.quantity}</Text>
+                    <Text style={[{}, styles.lightGrayTex]}>{this.state.prodDetail.code}</Text>
                     <View style={{ borderBottomWidth: 1, borderColor: '#E6E6E6', marginVertical: 10 }}></View>
                     <View style={[{}, styles.descRow]}>
                         <View style={[{}, styles.descColumn]}>
                             <Text style={[{}, styles.lightGrayTex]}>Quantity</Text>
-                            <Text style={[{}, styles.darkGarayText]}>100</Text>
+                            <Text style={[{}, styles.darkGarayText]}>{this.state.prodDetail.quantity}</Text>
                         </View>
                         <View style={[{}, styles.descColumn]}>
                             <Text style={[{}, styles.lightGrayTex]}>Category</Text>
-                            <Text style={[{}, styles.darkGarayText]}>Pure Juice</Text>
+                            <Text style={[{}, styles.darkGarayText]}>{this.state.prodDetail.category}</Text>
                         </View>
                         <View style={[{}, styles.descColumn]}>
                             <Text style={[{}, styles.lightGrayTex]}>Price</Text>
-                            <Text style={[{}, styles.darkGarayText]}>N40,500</Text>
+                            <Text style={[{}, styles.darkGarayText]}>N{this.state.prodDetail.price}</Text>
 
                         </View>
                     </View>
@@ -127,14 +165,13 @@ class ProductView extends React.Component {
                             <Text style={[{}, styles.darkGarayText]}>0</Text>
                         </View>
                         <View style={[{}, styles.descColumn]}>
-                            <Text style={[{}, styles.lightGrayTex]}>Category</Text>
-                            <Text style={[{}, styles.darkGarayText]}>Andrew </Text>
-                            <Text style={[{}, styles.darkGarayText]}> Blakes</Text>
+                            <Text style={[{}, styles.lightGrayTex]}>Created By</Text>
+                            <Text style={[{}, styles.darkGarayText]}>{this.state.prodDetail.created_by} </Text>
                         </View>
                         <View style={[{}, styles.descColumn]}>
                             <Text style={[{}, styles.lightGrayTex]}>Created Date</Text>
-                            <Text style={[{}, styles.darkGarayText]}>2020-11-18</Text>
-                            <Text style={[{}, styles.darkGarayText]}>10:30 AM</Text>
+                            <Text style={[{}, styles.darkGarayText]}>{this.state.prodDetail.date_created}</Text>
+                            {/* <Text style={[{}, styles.darkGarayText]}>10:30 AM</Text> */}
 
                         </View>
 
@@ -147,7 +184,8 @@ class ProductView extends React.Component {
                 >
                     <Image
                         style={[{}, styles.productImage]}
-                        source={require('../images/juice.png')} />
+                        // source={require('../images/juice.png')} />
+                        source={{ uri: this.state.prodDetail.image }} />
                 </TouchableOpacity>
                 <Modal
                     visible={this.state.productImageModal}
@@ -167,7 +205,8 @@ class ProductView extends React.Component {
 
                         <Image
                             style={{ height: height / 2, width: width / 1.3 }}
-                            source={require('../images/juice.png')}
+                            // source={require('../images/juice.png')}
+                            source={{ uri: this.state.prodDetail.image }}
                         />
                     </View>
 

@@ -88,7 +88,7 @@ class Supplier extends React.Component {
 
     supliersDetail(items) {
         console.log('items !!!!!!!!!!!!', items);
-        this.props.navigation.navigate('BuyersView', { items: items })
+        this.props.navigation.navigate('BuyersView', { items: items , heading:'SUPPLIERS' })
     }
     render() {
 

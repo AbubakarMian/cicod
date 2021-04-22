@@ -163,7 +163,7 @@ class Order extends React.Component {
                     */}
                     <View style={{ position: 'absolute', right: 0 }}>
                         <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate('CreateOrder')}
+                            onPress={() => this.props.navigation.navigate('CreateOrder',{heading:'order'})}
                         >
                             <Image
                                 source={require('../images/products/circlePlus.png')}

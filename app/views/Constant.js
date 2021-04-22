@@ -26,6 +26,8 @@ export const Constants = {
   connectreceivedrequest: `${base_url}/value-chain/recieved-requests`,
   searchMerchant: `${base_url}/value-chain/search-merchant`,
   connectRequest: `${base_url}/value-chain/request`,
+  suspendBuyer: `${base_url}/value-chain/suspend-buyer`,
+  unsuspendBuyer: `${base_url}/value-chain/unsuspend-buyer`,
   
 };
 
