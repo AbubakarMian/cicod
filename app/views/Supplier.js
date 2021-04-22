@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, } from 'react-native'
-import { Text, TextInput, Alert } from 'react-native-paper';
+import { View,TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView,} from 'react-native'
+import { Text, TextInput, Alert} from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss';
 import fontStyles from '../css/FontCss'
@@ -105,7 +105,7 @@ class Supplier extends React.Component {
                 />
                 <View style={{ flexDirection: 'row', marginVertical: 10, alignContent: 'center', alignItems: 'center', width: width - 20, alignSelf: 'center' }}>
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.goBack()}
+                        onPress={() => this.props.navigation.navigate('Home')}
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
@@ -120,7 +120,7 @@ class Supplier extends React.Component {
                         />
                     </TouchableOpacity>
                 </View>
-                <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', paddingHorizontal: 10, borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
+                {/* <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', paddingHorizontal: 10, borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
                     <Image
                         source={require('../images/products/searchicon.png')}
                     />
@@ -142,10 +142,38 @@ class Supplier extends React.Component {
                             />
                         </TouchableOpacity>
                     </View>
+                </View> */}
+             <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center',  borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
+                    
+                    <View style={{flexDirection:'row',backgroundColor:'#fff',alignItems:'center',height:50,paddingHorizontal:10,borderRadius:5, width:width-80}}>
+                    <Image
+                        source={require('../images/products/searchicon.png')}
+                    />
+                        <TextInput
+                            label="Search supplier"
+                            // selectionColor={'#fff'}
+                            
+                            style={{ backgroundColor: 'transparent', }}
+                            width={width - 50}
+                            alignSelf={'center'}
+                            color={'#000'}
+                            onChangeText={text => this.setState({ search_product: text })}
+                            onSubmitEditing={() => this.search()}
+                        />
+                    </View> 
+                    
+                        <TouchableOpacity
+                        style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
+                        onPress={() => this.props.navigation.navigate('Filter')}
+                        >
+                            <Image
+                                source={require('../images/Order/settingicon.png')}
+                            />
+                        </TouchableOpacity>
+                   
                 </View>
-
-                <View style={{ borderWidth: 0.20, borderColor: '#929497', width: width - 20, alignSelf: 'center', marginVertical: 10 }}></View>
-
+            <View style={{borderWidth:0.20,borderColor:'#929497',width:width-20,alignSelf:'center',marginVertical:10}}></View>
+                   
 
                 <ScrollView>
                     <FlatList
@@ -168,7 +196,7 @@ class Supplier extends React.Component {
                                 onPress={() => this.supliersDetail(item)}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
-                                <View style={{ position: 'relative', alignSelf: 'center', alignItems: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 5 }}>
+                                <View style={{ position: 'relative', alignSelf: 'center',alignItems:'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 5 }}>
                                     <View style={{ flex: 1 }}>
                                         <View style={{ flexDirection: 'column' }}>
                                             <View style={{ flexDirection: 'row' }}>
@@ -176,8 +204,8 @@ class Supplier extends React.Component {
                                                     source={require('../images/supplier/bage.png')}
                                                 />
                                                 <View style={{ flexDirection: 'column' }}>
-                                                    <Text style={{ fontWeight: 'bold' }}>{item.buyer_name}</Text>
-                                                    <Text style={[{ color: '#aaa' }]}>{item.seller_name}</Text>
+                                                    <Text style={[{color:'#4E4D4D'},fontStyles.bold15]}>{item.buyer_name}</Text>
+                                                    <Text style={[{color:'#929497'},fontStyles.normal12]}>{item.seller_name}</Text>
                                                 </View>
                                             </View>
 

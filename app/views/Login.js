@@ -40,17 +40,17 @@ class Login extends React.Component {
         }
 
         else {
-            this.props.setUser({
+            // this.props.setUser({
 
-                firstname: "sandbox last", //responseJson.user.firstname,
-                lastname: "sandbox last", //responseJson.user.lastname,
-                email: "cicodsandbox@yopmail.com",//responsejson.user.email,
-                phone: "123314324",//responseJson.user.phone,
-                access_token: "Bearer YqaZQM8XN90QLCa4LVz1 ",  //+ responseJson.token
-            });
-            this.setState({ Spinner: false })
-            this.props.navigation.navigate('Home')
-            return;
+            //     firstname: "sandbox last", //responseJson.user.firstname,
+            //     lastname: "sandbox last", //responseJson.user.lastname,
+            //     email: "cicodsandbox@yopmail.com",//responsejson.user.email,
+            //     phone: "123314324",//responseJson.user.phone,
+            //     access_token: "Bearer yfuK5hA9TgZA0BOY06xs ",  //+ responseJson.token
+            // });
+            // this.setState({ Spinner: false })
+            // this.props.navigation.navigate('Home')
+            // return;
             this.setState({ Spinner: true })
             let postData = {
                 method: 'POST',
