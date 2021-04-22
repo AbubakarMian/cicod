@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, Modal, } from 'react-native'
+import { View, ImageBackground, TouchableHighlight, FlatList,Alert, Dimensions, Image, Platform, TouchableOpacity, Modal, } from 'react-native'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import CheckBox from 'react-native-check-box';
@@ -11,7 +11,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import { Constants } from '../views/Constant';
-import { Text, TextInput, Alert } from 'react-native-paper';
+import { Text, TextInput } from 'react-native-paper';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 class AddNewCustomer extends React.Component {
@@ -37,14 +37,14 @@ class AddNewCustomer extends React.Component {
             isFreeDelivery: false,
             isFreeVAT: false,
             is_same_as_customer: true,
-            first_name: 'Joe',
-            last_name: 'Cross',
+            first_name: '',
+            last_name: '',
             customer_code: '',
-            phone_number: '09011223344',
-            house_no: '3',
-            street: 'Gold Street',
-            landmark: 'Century',
-            email: 'jofedfscsdfvbds@yopmail.com'
+            phone_number: '',
+            house_no: '',
+            street: '',
+            landmark: '',
+            email: ''
         }
 
     }
@@ -54,7 +54,7 @@ class AddNewCustomer extends React.Component {
     }
 
     ceateCustomer() {
-        this.setState({ spinner: true })
+       
 
         if (this.state.first_name === '' && this.state.last_name === '') {
             Alert.alert("Warning", "First name and Last Name are required")
@@ -68,7 +68,7 @@ class AddNewCustomer extends React.Component {
             Alert.alert("Warning", "House No required")
             return;
         }
-
+        this.setState({ spinner: true })
         let postData = {
             method: 'POST',
             headers: {

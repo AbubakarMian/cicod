@@ -183,7 +183,7 @@ class Connect extends React.Component {
                         <TextInput
                             label="Merchant Domain Name"
                             style={{ backgroundColor: 'transparent', }}
-                            width={width - 50}
+                            width={width /1.3}
                             alignSelf={'center'}
                             color={'#000'}
                             onChangeText={text => this.setState({ search_text: text })}
@@ -330,9 +330,10 @@ class Connect extends React.Component {
         return (
             <View>
                 <View style={[{}, styles.searchContainer]}>
-                    <Image
-                        source={require('../images/products/searchicon.png')}
-                    />
+                  
+                     <Image
+                            source={require('../images/connect/redsearch.png')}
+                        />
                     <TextInput
                         label="Search a products"
                         style={{ backgroundColor: 'transparent', }}

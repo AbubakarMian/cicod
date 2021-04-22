@@ -96,7 +96,7 @@ class Home extends React.Component {
             </View>
             <View style={[{ flexDirection: 'row', width: width, paddingHorizontal: 10, marginTop: 10 }]}>
               <TouchableOpacity
-              onPress={()=>this.props.navigation.navigate('Products')}
+              onPress={()=>this.props.navigation.navigate('Products',{seller_id:0})}
               >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: height / 4,

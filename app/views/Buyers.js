@@ -90,9 +90,10 @@ class Buyers extends React.Component {
         console.log('search_url search_url', search_url);
     }
 
-    buyersDetail() {
+    buyersDetail(item) {
 
-        this.props.navigation.navigate('BuyersView')
+        this.props.navigation.navigate('BuyersView',{items:item,heading:'BUYERS'})
+        // Alert.alert('Message','UI Update Inprogress !')
     }
 
 
@@ -168,7 +169,7 @@ class Buyers extends React.Component {
                         renderItem={({ item, index, separators }) => (
                             <TouchableHighlight
                                 key={item.key}
-                                onPress={() => this.buyersDetail()}
+                                onPress={() => this.buyersDetail(item)}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
                                 <View style={[{}, styles.flatCardView]}>
