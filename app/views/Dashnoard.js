@@ -60,9 +60,9 @@ class Dashnoard extends React.Component {
             .then(async responseJson => {
                 this.setState({
                     spinner: false,
-                    graph:responseJson.data.graph
+                   
                 });
-                console.log('response !!!!!!!!!!!!!@@@@@@@@@@@@@@',responseJson.data.graph);
+                console.log('response !!!!!!!!!!!!!@@@@@@@@@@@@@@',responseJson);
                 if (responseJson.status === 'success') {
                     // console.log('**************', this.state.data)
                     var total_orders = responseJson.data.graph.total_orders;
@@ -93,6 +93,7 @@ class Dashnoard extends React.Component {
                     console.log(' total total graph ', total_orders_pending_data);
                     this.setState({
                         target: responseJson.data.target,
+                        graph:responseJson.data.graph,
                         totalOrder: responseJson.data.total,
                         paidOrder: responseJson.data.paid,
                         pendingOrder: responseJson.data.pending,
@@ -141,7 +142,7 @@ class Dashnoard extends React.Component {
         let data = {
             labels:graph_lable,
             datasets:graphdata,
-            legend: ["Rainy Days"]
+            // legend: ["Rainy Days"]
         };
         console.log('getGraphData',data);
         // data = {

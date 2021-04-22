@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView,  } from 'react-native'
+import { View, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, } from 'react-native'
 import { Text, TextInput, Alert } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss';
@@ -22,6 +22,7 @@ class Products extends React.Component {
             selectedStartDate: null,
             calenderModal: false,
             data: [],
+            categoryarr: [],
             search_product: '',
             spinner: false
         };
@@ -33,16 +34,14 @@ class Products extends React.Component {
         });
     }
     componentDidMount() {
-        // console.log('this.props.user.access_token !!!!!!!!!!!!!!!!!!!!!!!', this.props.route.params)
-        // if(this.props.route.params.hasOwnProperty('seller_id')){
-        //     let url = Constants.sellerProductList+'?id='+this.props.route.params.seller_id+'&sort=-id';
-        //     console.log('URL @@@@@@@@@@@@@@@@@@@', url)
-        //     this.getData(url);
-        // }else{
-            
-        this.getData(Constants.productslist);
-        // }
-       
+        if (this.props.route.params.seller_id != 0) {
+            let url = Constants.sellerProductList + '?id=' + this.props.route.params.seller_id + '&sort=-id';
+            console.log('URL @@@@@@@@@@@@@@@@@@@', url)
+            this.getData(url);
+        } else {
+            this.getData(Constants.productslist);
+        }
+        this.getCategoryList()
         return;
         console.log('this.props.params', this.props.route);
         if (this.props.params != undefined) {
@@ -95,7 +94,7 @@ class Products extends React.Component {
                     spinner: false,
 
                 });
-                if (responseJson.status === "success" || responseJson.success === true ) {
+                if (responseJson.status === "success" || responseJson.success === true) {
                     this.setState({
                         data: responseJson.data
                     })
@@ -113,7 +112,48 @@ class Products extends React.Component {
 
     }
 
+
+    getCategoryList() {
+        this.setState({ spinner: true })
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            },
+        };
+        fetch(Constants.productcategorylist, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                this.setState({ spinner: false });
+                console.log('responseJson responseJson', responseJson);
+                if (responseJson.status === 'success') {
+
+                    let res = responseJson.data;
+                    let categoryarr = res.map((x, key) => {
+                        return { label: x.name, value: x.id }
+                    });
+                    this.setState({
+                        categoryarr: categoryarr,
+                    });
+                } else {
+                    let message = JSON.stringify(responseJson.error.message)
+                    Alert.alert('Error', message)
+                }
+
+            })
+
+    }
+
+    onCategoryText(text){
+
+        this.setState({
+            search_product:text
+        })
+    }
     render() {
+        console.log('categoryarr categoryarr categoryarr', this.state.categoryarr);
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
@@ -147,16 +187,16 @@ class Products extends React.Component {
 
 
 
-                <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center',  borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
-                    
-                    <View style={{flexDirection:'row',backgroundColor:'#fff',alignItems:'center',height:50,paddingHorizontal:10,borderRadius:5, width:width-80}}>
-                    <Image
-                        source={require('../images/products/searchicon.png')}
-                    />
+                <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
+
+                    <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
+                        <Image
+                            source={require('../images/products/searchicon.png')}
+                        />
                         <TextInput
                             label="Search product, Price and code"
                             // selectionColor={'#fff'}
-                            
+
                             style={{ backgroundColor: 'transparent', }}
                             width={width - 50}
                             alignSelf={'center'}
@@ -164,24 +204,24 @@ class Products extends React.Component {
                             onChangeText={text => this.setState({ search_product: text })}
                             onSubmitEditing={() => this.search()}
                         />
-                    </View> 
-                    
-                        <TouchableOpacity
+                    </View>
+
+                    <TouchableOpacity
                         style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
-                            onPress={() => this.props.navigation.navigate('ProductFilter')}
-                        >
-                            <Image
-                                source={require('../images/Order/settingicon.png')}
-                            />
-                        </TouchableOpacity>
-                   
+                        onPress={() => this.props.navigation.navigate('ProductFilter')}
+                    >
+                        <Image
+                            source={require('../images/Order/settingicon.png')}
+                        />
+                    </TouchableOpacity>
+
                 </View>
                 <View style={[{}, styles.formRowView]}>
                     <View style={[{ position: 'relative' }, styles.formColumn]}>
 
                         <DropDownPicker
                             items={this.state.categoryarr}
-                            containerStyle={{ height: 50, width: width  - 20, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
+                            containerStyle={{ height: 50, width: width - 20, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
                             style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                             itemStyle={{
                                 justifyContent: 'flex-start', zIndex: 999
@@ -189,16 +229,16 @@ class Products extends React.Component {
                             placeholder="Product Category"
                             dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
                             labelStyle={{ color: '#A9A9A9' }}
-                        // onChangeItem={item => this.onCategoryText(item.value)}
+                            onChangeItem={item => this.onCategoryText(item.value)}
                         />
                     </View>
                 </View>
-            
+
                 <ScrollView>
                     <FlatList
-                    style={{zIndex:-999}}
+                        style={{ zIndex: -999 }}
                         data={this.state.data}
-                    
+
                         ItemSeparatorComponent={
                             Platform.OS !== 'android' &&
                             (({ highlighted }) => (
@@ -214,14 +254,14 @@ class Products extends React.Component {
                         renderItem={({ item, index, separators }) => (
                             <TouchableHighlight
                                 key={item.key}
-                                onPress={()=>this.props.navigation.navigate('ProductView', {prod_id:item.id})}
+                                onPress={() => this.props.navigation.navigate('ProductView', { prod_id: item.id })}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
                                 <View style={{ position: 'relative', alignSelf: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 5 }}>
                                     <View style={[{ flexDirection: 'row' }]}>
                                         {(item.image == null) ?
                                             <Image
-                                                style={[{ height: 40, width: 40,marginRight:5 }]}
+                                                style={[{ height: 40, width: 40, marginRight: 5 }]}
                                                 source={require('../images/ticket.png')}
                                             />
                                             :
@@ -230,11 +270,11 @@ class Products extends React.Component {
                                                 source={{ uri: item.image_url }}
                                             />}
                                     </View>
-                                    <View style={{ position: 'relative', flex: 3,marginLeft:10 }}>
+                                    <View style={{ position: 'relative', flex: 3, marginLeft: 10 }}>
                                         <Text >{item.name}</Text>
                                         <View style={{ flexDirection: 'row', }}>
-                                            <Text style={[{color:'#929497'},fontStyles.normal12]}>QTY:  {item.quantity}</Text>
-                                            <Text style={[{color:'#929497'},fontStyles.normal12]}>.  {item.slug}</Text>
+                                            <Text style={[{ color: '#929497' }, fontStyles.normal12]}>QTY:  {item.quantity}</Text>
+                                            <Text style={[{ color: '#929497' }, fontStyles.normal12]}>.  {item.slug}</Text>
                                             {(item.is_active == false) ?
                                                 <View style={[{ position: 'absolute', right: 0, backgroundColor: '#e3b8be', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
                                                     <Text style={[{ color: '#ba071f' }]}>IN ACTIVE</Text>

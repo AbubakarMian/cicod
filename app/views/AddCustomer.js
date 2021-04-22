@@ -24,7 +24,8 @@ class AddCustomer extends React.Component {
             isChecked: false,
             searchPress: 1,
             spinner: false,
-            customerData: []
+            customerData: [],
+            search_text: ''
         }
 
     }
@@ -38,8 +39,8 @@ class AddCustomer extends React.Component {
             this.setState({ searchPress: 2 })
         }
     }
-    searchText(text) {
-        this.getCustomers(text);
+    searchText() {
+        this.getCustomers(this.state.search_text);
     }
     getCustomers(search_text) {
 
@@ -118,9 +119,9 @@ class AddCustomer extends React.Component {
                                 width={width - 50}
                                 alignSelf={'center'}
                                 color={'#000'}
-
+                                onSubmitEditing={() => this.searchText()}
                                 // onPressIn={() => this.seacrhClick()}
-                                onChangeText={(text) => this.searchText(text)}
+                                onChangeText={(text) => this.setState({ search_text: text })}
                             />
                         </View>
                         {/* <View style={[{},styles.contentView]}>

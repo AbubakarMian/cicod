@@ -20,7 +20,8 @@ class BuyersView extends React.Component {
             spinner: true,
             supendModal: false,
             moreDeatailMOdal: false,
-            items: {}
+            items: {},
+            orderList: []
         }
     }
 
@@ -29,16 +30,16 @@ class BuyersView extends React.Component {
         this.setState({
             items: this.props.route.params.items,
             spinner: false,
-            orderList: []
         })
-        this.getSellerOrderHistory();
+        if (this.props.route.params.heading == "SUPPLIER") {
+            this.getSellerOrderHistory();
+        } else {
+            this.getBuyerOrderHistory()
+        }
     }
 
     getSellerOrderHistory() {
-        // console.log(' this.state.items.seller_id ', this.props.route.params.items.seller_id)
-        // return
-        this.setState({ Spinner: true })
-        console.log("rrrrrrrrrrrrr", this.props.route.params.id)
+        this.setState({ spinner: true })
         let postData = {
             method: 'GET',
             headers: {
@@ -53,7 +54,7 @@ class BuyersView extends React.Component {
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({
-                    Spinner: false
+                    spinner: false
                 });
                 if (responseJson.status === 'success') {
                     console.log('data data data res res res ', responseJson)
@@ -66,8 +67,12 @@ class BuyersView extends React.Component {
                 }
             })
     }
+
+    getBuyerOrderHistory() {
+
+    }
     viewProducts() {
-        this.props.navigation.navigate('Products',{seller_id:this.state.items.seller_id})
+        this.props.navigation.navigate('Products', { seller_id: this.state.items.seller_id })
     }
     render() {
         return (
@@ -88,7 +93,7 @@ class BuyersView extends React.Component {
                             <Icon name="arrow-left" size={25} color={'#929497'} />
                         </TouchableOpacity>
                         <View style={[{}, styles.backRowHeadingView]}>
-                            <Text style={[{}, styles.backRowHeadingText]}>SUPPLIERS</Text>
+                            <Text style={[{}, styles.backRowHeadingText]}>{this.props.route.params.heading}</Text>
                         </View>
                     </View>
                     <View style={{ backgroundColor: '#fff' }}>
@@ -140,11 +145,24 @@ class BuyersView extends React.Component {
                         </View>
                         <View style={[{}, styles.productDetailROwView]}>
                             <View style={[{}, styles.columnView]}>
-                                <TouchableOpacity
-                                    style={[{}, styles.redTouch]}
-                                >
-                                    <Text style={{ color: '#fff' }}>Create Products</Text>
-                                </TouchableOpacity>
+                                {(this.props.route.params.heading == 'BUYERS') ?
+                                    <TouchableOpacity
+                                    onPress={()=>this.props.navigation.navigate('UpdateProduct')}
+                                        style={[{}, styles.redTouch]}
+                                    >
+
+                                        <Text style={{ color: '#fff' }}>Update Products</Text>
+                                    </TouchableOpacity>
+                                    :
+                                    <TouchableOpacity
+                                    onPress={()=>this.props.navigation.navigate('CreateOrder',{heading:'supplier'})}
+                                        style={[{}, styles.redTouch]}
+                                    >
+
+                                        <Text style={{ color: '#fff' }}>Create Order</Text>
+                                    </TouchableOpacity>
+                                }
+
                             </View>
                             <View style={[{}, styles.columnView]}>
                                 <TouchableOpacity
