@@ -20,12 +20,12 @@ export default class TabNavigater extends React.Component {
       active_screen:''
     }
   }
-  componentWillUpdate(){
-    console.log('TabNavigater componentWillReceiveProps',this.props.extraData.name);
-    this.setState({
-      active_screen:this.props.extraData.name
-    })
-  }
+  // componentWillUpdate(){
+  //   console.log('TabNavigater componentWillReceiveProps',this.props.extraData.name);
+  //   this.setState({
+  //     active_screen:this.props.extraData.name
+  //   })
+  // }
 
   render() {
     return (
