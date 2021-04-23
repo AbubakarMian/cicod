@@ -61,14 +61,19 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
           {/* <Stack.Screen name="Dashnoard" component={TabNavigater}  options={{ headerShown: false }} /> */}
           <Stack.Screen name="Dashnoard">
-            {props => <TabNavigater extraData={{name:'dashboard'}} />}
+            {props => <TabNavigater extraData={{name:'dashboard',initialRouteName:'Dashnoard'}}  />}
           </Stack.Screen>
 
-
-          <Stack.Screen name="Products" component={Products} options={{ headerShown: false }} />
+          <Stack.Screen name="Products">
+            {props => <TabNavigater extraData={{name:'products',initialRouteName:'Products'}}  />}
+          </Stack.Screen>
+          {/* <Stack.Screen name="Products" component={Products} options={{ headerShown: false }} /> */}
           <Stack.Screen name="ProductFilter" component={ProductFilter} options={{ headerShown: false }} />
 
-          <Stack.Screen name="Order" component={Order} options={{ headerShown: false }} />
+          <Stack.Screen name="Order">
+            {props => <TabNavigater extraData={{name:'order',initialRouteName:'Order'}}  />}
+          </Stack.Screen>
+          {/* <Stack.Screen name="Order" component={Order} options={{ headerShown: false }} /> */}
           <Stack.Screen name="OrderDetail" component={OrderDetail} options={{ headerShown: false }} />
           <Stack.Screen name="OrderFilter" component={OrderFilter} options={{ headerShown: false }} />
           <Stack.Screen name="CreateOrder" component={CreateOrder} options={{ headerShown: false }} />

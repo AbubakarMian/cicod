@@ -34,12 +34,9 @@ class Products extends React.Component {
         });
     }
     componentDidMount() {
-        this.props.setTabBar({tab_name :'products'})
-
-        console.log('tab bar produxts -------------------',this.props.tabBar);
         console.log('this.props.route',this.props.route);
-        if(this.props.route!=undefined ){
-            // return;
+        if(this.props.route==undefined || this.props.route.params==undefined || this.props.route.params.seller_id==undefined){
+            return;
         }
         if (this.props.route.params.seller_id != 0) {
             let url = Constants.sellerProductList + '?id=' + this.props.route.params.seller_id + '&sort=-id';
