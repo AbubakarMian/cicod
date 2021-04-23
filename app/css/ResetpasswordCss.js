@@ -12,14 +12,16 @@ export default StyleSheet.create({
      backgroundColor:'#F0F0F0',
      alignItems:'center',
      flex:1,
-     flexDirection:'column'
+     flexDirection:'column',
+     
  },
 headingRow:{
 flexDirection:'row',
 width:width-20,
 marginTop:10,
 paddingHorizontal:5,
-paddingVertical:10
+paddingVertical:10,
+alignItems:'center'
 },
 resetText:{
     color:'#2F2E7C',
@@ -31,8 +33,9 @@ resetText:{
      backgroundColor:'#fff',
      width:width-20,
      marginTop:10,
-     paddingVertical:20,
-     paddingHorizontal:20
+   
+     paddingHorizontal:20,
+     paddingBottom:40
  },
 
 btnContinuueView:{

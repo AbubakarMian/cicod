@@ -1,6 +1,6 @@
 import React from 'react';
-import { View,  TouchableOpacity, Dimensions,  ScrollView,  } from 'react-native';
-import {   Text, TextInput, Alert} from 'react-native-paper';
+import { View, TouchableOpacity, Dimensions, ScrollView, } from 'react-native';
+import { Text, TextInput, Alert } from 'react-native-paper';
 import styles from '../css/UserCss';
 import fontStyles from '../css/FontCss'
 import Header from '../views/Header'
@@ -25,7 +25,7 @@ class User extends React.Component {
             email: '',
             phone: '',
             role: '',
-           
+
         }
     }
     ressetPassword() {
@@ -72,10 +72,10 @@ class User extends React.Component {
             })
     }
 
-    logout_user(){
+    logout_user() {
 
         this.props.logoutUser();
-         this.props.navigation.navigate('Login');
+        this.props.navigation.navigate('Login');
     }
 
     render() {
@@ -89,7 +89,12 @@ class User extends React.Component {
                     color={'#fff'}
                 />
                 <View style={[{}, styles.headingRow]}>
-                    <Icon name="arrow-left" size={20} color={'#929497'} />
+                    <TouchableOpacity 
+                    // onPress={()=>this.props.navigation.navigate('More')}
+                    onPress={() => this.props.navigation.goBack()}
+                    >
+                        <Icon name="arrow-left" size={20} color={'#929497'} />
+                    </TouchableOpacity>
                     <Text style={[{}, styles.moreText]}>USER</Text>
                 </View>
                 <ScrollView>
@@ -113,9 +118,9 @@ class User extends React.Component {
                             </TouchableOpacity>
                         </View>
 
-                        <TouchableOpacity 
-                        onPress={()=> this.logout_user()}
-                        style={[{}, styles.logoutView]}>
+                        <TouchableOpacity
+                            onPress={() => this.logout_user()}
+                            style={[{}, styles.logoutView]}>
                             <Icon name="sign-out" color={'#929497'} size={30} />
                             <Text style={[{}, styles.logoutText]}>Logout</Text>
                         </TouchableOpacity>

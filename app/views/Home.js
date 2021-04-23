@@ -29,8 +29,9 @@ class Home extends React.Component {
         </View>
         <ScrollView>
           <View style={{ marginBottom: 10 }}>
-            <View style={[{ flexDirection: 'row',alignSelf:'center', width: width, paddingHorizontal: 10, marginTop: 10 }]}>
+            <View style={[{ flexDirection: 'row',alignSelf:'center', width: width-20,alignSelf:'center', marginTop: 10,alignItems:'center',justifyContent:'center',paddingRight:10 }]}>
               <TouchableOpacity
+              style={{flex:1}}
               onPress={()=>this.props.navigation.navigate('Dashnoard')}
               >
               <View style={[{
@@ -46,6 +47,7 @@ class Home extends React.Component {
               </View>
               </TouchableOpacity>
               <TouchableOpacity
+              style={{flex:1}}
               onPress={()=>this.props.navigation.navigate('CreateOrder')}
               >
               <View style={[{
@@ -62,8 +64,9 @@ class Home extends React.Component {
               </TouchableOpacity>
             </View>
             
-            <View style={[{ flexDirection: 'row', width: width, paddingHorizontal: 10, marginTop: 10 }]}>
+            <View style={[{ flexDirection: 'row',alignSelf:'center', width: width-20,alignSelf:'center', marginTop: 10,alignItems:'center',justifyContent:'center',paddingRight:10 }]}>
             <TouchableOpacity
+            style={{flex:1}}
             onPress={()=>this.props.navigation.navigate('Order')}
             >
               <View style={[{
@@ -79,6 +82,7 @@ class Home extends React.Component {
               </View>
               </TouchableOpacity>
               <TouchableOpacity
+              style={{flex:1}}
               onPress={()=>this.props.navigation.navigate('Customer')}
               >
               <View style={[{
@@ -94,8 +98,9 @@ class Home extends React.Component {
               </View>
               </TouchableOpacity>
             </View>
-            <View style={[{ flexDirection: 'row', width: width, paddingHorizontal: 10, marginTop: 10 }]}>
+            <View style={[{ flexDirection: 'row',alignSelf:'center', width: width-20,alignSelf:'center', marginTop: 10,alignItems:'center',justifyContent:'center',paddingRight:10 }]}>
               <TouchableOpacity
+              style={{flex:1}}
               onPress={()=>this.props.navigation.navigate('Products',{seller_id:0})}
               >
               <View style={[{
@@ -111,6 +116,7 @@ class Home extends React.Component {
               </View>
               </TouchableOpacity>
               <TouchableOpacity
+              style={{flex:1}}
               onPress={()=>this.props.navigation.navigate('CreateOrder', {screen_name:'buy'})}
               >
               <View style={[{
@@ -126,8 +132,9 @@ class Home extends React.Component {
               </View>
               </TouchableOpacity>
             </View>
-            <View style={[{ flexDirection: 'row', width: width, paddingHorizontal: 10, marginTop: 10 }]}>
+            <View style={[{ flexDirection: 'row',alignSelf:'center', width: width-20,alignSelf:'center', marginTop: 10,alignItems:'center',justifyContent:'center',paddingRight:10 }]}>
               <TouchableOpacity
+              style={{flex:1}}
               onPress={()=>this.props.navigation.navigate('Supplier')}
               >
               <View style={[{
@@ -143,6 +150,7 @@ class Home extends React.Component {
               </View>
               </TouchableOpacity>
               <TouchableOpacity
+              style={{flex:1}}
               onPress={()=>this.props.navigation.navigate('Buyers')}
               >
               <View style={[{
@@ -159,8 +167,10 @@ class Home extends React.Component {
               </TouchableOpacity>
 
             </View>
-            <View style={[{ flexDirection: 'row', width: width, paddingHorizontal: 10, marginTop: 10 }]}>
+            <View style={[{ flexDirection: 'row',alignSelf:'center', width: width-20,alignSelf:'center', marginTop: 10,alignItems:'center',justifyContent:'center',paddingRight:10 }]}>
               <TouchableOpacity
+              style={{flex:1}}
+              
               onPress={()=>this.props.navigation.navigate('Connect')}
               >
               <View style={[{

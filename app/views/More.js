@@ -41,79 +41,79 @@ class More extends React.Component {
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('Customer')}
                             style={[{}, styles.cardView]}>
-                            <View>
+                             <View style={{width:30}}>
                                 <Image
                                     source={require('../images/users.png')}
                                 />
                             </View>
                             <View style={[{}, styles.cardTextView]}>
-                                <Text style={[{}, styles.cardHeadingText]}>CUSTOMERS</Text>
-                                <Text style={[{}, styles.cardDescText]}>List of all your customers</Text>
+                                <Text style={[{color:'#4E4D4D'},fontStyles.bold15]}>Customers</Text>
+                                <Text style={[{color:'#929497'}, fontStyles.normal12]}>List of all your customers</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('Buy')}
                             style={[{}, styles.cardView]}>
-                            <View>
+                             <View style={{width:30}}>
                                 <Image
                                     source={require('../images/buy.png')}
                                 />
                             </View>
                             <View style={[{}, styles.cardTextView]}>
-                                <Text style={[{}, styles.cardHeadingText]}>Buy</Text>
-                                <Text style={[{}, styles.cardDescText]}>Purchase Product from your suppliers</Text>
+                                <Text style={[{color:'#4E4D4D'},fontStyles.bold15]}>Buy</Text>
+                                <Text style={[{color:'#929497'}, fontStyles.normal12]}>Purchase Product from your suppliers</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('Supplier')}
                             style={[{}, styles.cardView]}>
-                            <View>
+                             <View style={{width:30}}>
                                 <Image
                                     source={require('../images/supplier.png')}
                                 />
                             </View>
                             <View style={[{}, styles.cardTextView]}>
-                                <Text style={[{}, styles.cardHeadingText]}>Suppliers</Text>
-                                <Text style={[{}, styles.cardDescText]}>List of all your suppliers</Text>
+                                <Text style={[{color:'#4E4D4D'},fontStyles.bold15]}>Suppliers</Text>
+                                <Text style={[{color:'#929497'}, fontStyles.normal12]}>List of all your suppliers</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('Buyers')}
                             style={[{}, styles.cardView]}>
-                            <View>
+                             <View style={{width:30}}>
                                 <Image
                                     source={require('../images/buyers.png')}
                                 />
                             </View>
                             <View style={[{}, styles.cardTextView]}>
-                                <Text style={[{}, styles.cardHeadingText]}>Buyers</Text>
-                                <Text style={[{}, styles.cardDescText]}>List of all your buyers</Text>
+                                <Text style={[{color:'#4E4D4D'},fontStyles.bold15]}>Buyers</Text>
+                                <Text style={[{color:'#929497'}, fontStyles.normal12]}>List of all your buyers</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('Connect')}
                             style={[{}, styles.cardView]}>
-                            <View>
+                             <View style={{width:30}}>
                                 <Image
                                     source={require('../images/connect.png')}
                                 />
                             </View>
                             <View style={[{}, styles.cardTextView]}>
-                                <Text style={[{}, styles.cardHeadingText]}>Connect</Text>
-                                <Text style={[{}, styles.cardDescText]}>Connect with other merchants</Text>
+                                <Text style={[{color:'#4E4D4D'},fontStyles.bold15]}>Connect</Text>
+                                <Text style={[{color:'#929497'}, fontStyles.normal12]}>Connect with other merchants</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('User')}
                             style={[{}, styles.cardView]}>
-                            <View>
+                            <View style={{width:30,alignItems:'center',justifyContent:'center'}}>
                                 <Image
                                     source={require('../images/user.png')}
                                 />
                             </View>
                             <View style={[{}, styles.cardTextView]}>
-                                <Text style={[{}, styles.cardHeadingText]}>User</Text>
-                                <Text style={[{}, styles.cardDescText]}>Details of user account</Text>
+                                <Text style={[{color:'#4E4D4D'},fontStyles.bold15]}>User</Text>
+                                <Text style={[{color:'#929497'}, fontStyles.normal12]}>Details of user account</Text>
                             </View>
                         </TouchableOpacity>
                     </View>

@@ -178,7 +178,8 @@ class BuyersFilter extends React.Component {
           source={require('../images')}
           /> */}
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Buyers')}
+            // onPress={() => this.props.navigation.navigate('Buyers')}
+            onPress={() => this.props.navigation.goBack()}
             style={[{ flexDirection: 'row', alignItems: 'center', marginVertical: 10, marginLeft: 5 }]}>
             <Icon name="arrow-left" size={25} color="#929497" />
             <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>FILTER</Text>

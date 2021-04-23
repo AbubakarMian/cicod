@@ -100,7 +100,8 @@ class Filter extends React.Component {
           <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
             <TouchableOpacity
               style={{ flexDirection: 'row', alignItems: 'center' }}
-              onPress={() => this.props.navigation.navigate('Product')}
+              // onPress={() => this.props.navigation.navigate('Product')}
+              onPress={() => this.props.navigation.goBack()}
             >
               <Icon name="arrow-left" size={25} color="#929497" />
               <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>FILTER</Text>

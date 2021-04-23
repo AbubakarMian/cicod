@@ -419,7 +419,8 @@ class Connect extends React.Component {
                 <ScrollView>
                     <View style={[{}, styles.mainRow]}>
                         <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate('Home')}
+                            // onPress={() => this.props.navigation.navigate('Home')}
+                            onPress={() => this.props.navigation.goBack()}
                             style={[{ flexDirection: 'row', alignItems: 'center', marginLeft: 5, marginVertical: 10 }]}>
                             <Icon name="arrow-left" size={25} color="#929497" />
                             <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>CONNECT</Text>
