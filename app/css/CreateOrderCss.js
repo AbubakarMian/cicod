@@ -398,7 +398,6 @@ export default StyleSheet.create({
     modalListContentView: {
         paddingHorizontal: 10,
         flexDirection: 'column',
-        backgroundColor:'#fff'
     },
     modalListContentRightIcon: {
         position: 'absolute',
@@ -411,7 +410,84 @@ export default StyleSheet.create({
     modalNumberText: {
         color: '#929497',
         fontSize: 10,
+    },
+
+
+    mainContainer: {
+        height: height,
+        width: width,
+        flexDirection: 'column',
+    },
+    backgroundTouch: {
+        flex: 0.25
+    },
+    contentView: {
+        flex: 9,
+        backgroundColor: '#fff',
+        opacity: 1,
+        borderTopLeftRadius: 20,
+        borderTopRightRadius: 20,
+        zIndex: 0.999
+    },
+    modalCancleRow: {
+        flexDirection: 'row',
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        alignItems: 'center',
+        position: 'relative',
+    },
+    modalCancleText: {
+        color: '#2F2E7C',
+        fontWeight: 'bold'
+    },
+    modalCancleTouch: {
+        padding: 10,
+        position: 'absolute',
+        top: 0,
+        right: 0,
+    },
+    searchRow: {
+        marginTop: 10,
+        flexDirection: 'row',
+        width: width - 20,
+        alignSelf: 'center',
+        borderBottomWidth: 0.25,
+        alignItems: 'center',
+        borderBottomColor: '#929497',
+    },
+    modalListContainer:{
+        flexDirection:'row',
+        paddingHorizontal:10,
+        paddingVertical:5,
+        alignItems:'center',
+        backgroundColor:'#fff',
+        marginBottom:2,
+        borderTopWidth:0.25,
+        borderWidth:0.25,
+        width:width-20,
+        alignSelf:'center',
+        borderTopColor:'#aaaa',
+        borderColor:'#aaaa',
+        borderRadius:5,
+        paddingVertical:10,
+    },
+    modalListContentView:{
+        paddingHorizontal:10,
+        flexDirection:'column'
+    },
+    modalListContentRightIcon:{
+        position:'absolute',
+        right:5
+    },
+    modalBoldeText:{
+        fontWeight:'bold',
+        color:'#4E4D4D',
+    },
+    modalNumberText:{
+        color:'#929497',
+        fontSize:10,
     }
+
 
 
 
