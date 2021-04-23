@@ -34,6 +34,10 @@ class Products extends React.Component {
         });
     }
     componentDidMount() {
+        console.log('this.props.route',this.props.route);
+        if(this.props.route!=undefined ){
+            return;
+        }
         if (this.props.route.params.seller_id != 0) {
             let url = Constants.sellerProductList + '?id=' + this.props.route.params.seller_id + '&sort=-id';
             console.log('URL @@@@@@@@@@@@@@@@@@@', url)

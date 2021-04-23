@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import { Constants } from '../views/Constant';
 import { Text, TextInput, Alert,Modal } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 var { width, height } = Dimensions.get('window');
@@ -23,30 +24,67 @@ class Login extends React.Component {
             username: 'cicodsandbox@yopmail.com',//cicodsandbox@yopmail.com
             password: 'Sandbox@123',//Sandbox@123
             isChecked: false,
-            domain_text_color:'black'
+            hide_password: true,
+            domain_text_color:'black',
+            rememberIsChecked:false
         }
+    }
+    async componentDidMount(){
+        let remember_credentials = await AsyncStorage.getItem('remember_credentials');
+        console.log('remember_credentials',remember_credentials);
+        if (remember_credentials === 'true') {
+            let user_credentials = await AsyncStorage.getItem('user_credentials');
+            user_credentials = JSON.parse(user_credentials);
+            console.log('user_credentials',user_credentials);
+            console.log('username',user_credentials.username);
+            
+            this.setState({
+                    username: user_credentials.username,
+                    password: user_credentials.password,
+                    tenantId: user_credentials.tenantId,
+                    rememberIsChecked:true
+                })
+          }
     }
     login() {
         console.log("Login Login Login ")
 
         // ()=>this.props.navigation.navigate('DrawerNavigation')
         if (this.state.tenantId === '') {
-            alert("tenantId required")
+            alert("Domain required")
         }
         else if (this.state.username === '') {
-            alert("email required")
+            alert("Email required")
         } else if (this.state.password === '') {
-            alert("password required")
+            alert("Password required")
         }
 
         else {
+            if(this.state.rememberIsChecked){
+                let user_credentials = {
+                    username: this.state.username,//cicodsandbox@yopmail.com
+                    password: this.state.password,//Sandbox@123
+                    tenantId: this.state.tenantId//sandbox
+                }
+                AsyncStorage.setItem('user_credentials',JSON.stringify(user_credentials));
+                AsyncStorage.setItem('remember_credentials','true');
+            }
+            else{
+                this.setState({
+                    username: '',
+                    password: '',
+                    tenantId: ''
+                })
+                AsyncStorage.setItem('remember_credentials','false');
+                AsyncStorage.removeItem('user_credentials');
+            }
             this.props.setUser({
 
                 firstname: "sandbox last", //responseJson.user.firstname,
                 lastname: "sandbox last", //responseJson.user.lastname,
                 email: "cicodsandbox@yopmail.com",//responsejson.user.email,
                 phone: "123314324",//responseJson.user.phone,
-                access_token: "Bearer zhZVNNBmbmyafOSyszg0",  //+ responseJson.token
+                access_token: "Bearer 7daIXoCplSUt50mLrx86",  //+ responseJson.token
             });
             this.setState({ Spinner: false })
             this.props.navigation.navigate('Home')
@@ -119,7 +157,7 @@ class Login extends React.Component {
                         </View>
                     </View>
                     <View style={{ paddingTop: height / 25 }}>
-                        <Text style={{ color: '#2F2E7C', fontSize: 20 }}>Login</Text>
+                        <Text style={{ color: '#2F2E7C', fontSize: 22,fontWeight:'700',fontFamily:'Open Sans' }}>Login</Text>
                     </View>
                     <View style={[{position:'relative'}, styles.comtextInputView]}>
                         <TextInput
@@ -127,14 +165,16 @@ class Login extends React.Component {
                             onChangeText={text => this.setState({ tenantId: text })}
                             label="Domain Name"
                             placeholder="Domain Name"
-                            style={{backgroundColor:'transparent',borderBottomWidth:0,borderTopWidth:0.5,borderLeftWidth:0.5, borderColor:'#CFCFCF'}}
+                            style={{height:60, backgroundColor:'transparent',borderBottomWidth:0,borderTopWidth:0.5,borderLeftWidth:0.5, borderColor:'#CFCFCF'}}
                             alignSelf={'center'}
                             color={'#000'}
+                            
                             onFocus={()=>{this.setState({domain_text_color:'red'})}}
                             onBlur={()=>{this.setState({domain_text_color:'black'})}}
                             width={width-50}
                             height={height/12}
                             alignSelf={'flex-start'}
+                            value={this.state.tenantId}
                         />
                        {/* <Text style={{paddingVertical:50,borderBottomWidth:1,borderBottomColor:this.state.domain_text_color, height:height/12,textAlignVertical:'center', backgroundColor: '#CFCFCF', color: '#4E4D4D',position:'absolute',right:0, paddingVertical: 15, paddingHorizontal: 5 }}>.cicod.com</Text> */}
                        <Text style={{  paddingVertical:22,borderTopRightRadius:5,borderBottomRightRadius:5, textAlignVertical:'center', backgroundColor: '#CFCFCF', color: '#4E4D4D',position:'absolute',right:0, paddingHorizontal: 5 }}>.cicod.com</Text>
@@ -147,12 +187,12 @@ class Login extends React.Component {
                             width={width-50}
                             alignSelf={'center'}
                             color={'#000'}
-                            
+                            value={this.state.username}                            
                         />
                     </View>
                     <View style={[{}, styles.textInputView]}>
                         <TextInput
-                            secureTextEntry={true}
+                            secureTextEntry={this.state.hide_password}
                             onChangeText={text => this.setState({ password: text })}
                             placeholder="Password"
                             width={width-50}
@@ -160,40 +200,43 @@ class Login extends React.Component {
 
                             alignSelf={'center'}
                             color={'#000'}
-
+                            value={this.state.password}
                         />
-                        <View
+                        <TouchableOpacity
                             style={{ position: 'absolute', right: 10 }}
+                            onPress={()=>{this.setState({hide_password:!this.state.hide_password})}}
                         >
                             <Icon
-                                name="eye-slash"
+                                name={this.state.hide_password ? 'eye-slash' : 'eye'}
                                 size={20}
                                 color={'#929497'}
                             />
-                        </View>
+                        </TouchableOpacity>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'center', width: width - 50, marginTop: 20, marginBottom: 10 }}>
                         <CheckBox
                             style={{ width: width / 2, alignSelf: 'center', alignItems: 'center' }}
                             onClick={() => {
                                 this.setState({
-                                    isChecked: !this.state.isChecked
+                                    rememberIsChecked: !this.state.rememberIsChecked
                                 })
                             }}
-                            isChecked={this.state.isChecked}
+                            isChecked={this.state.rememberIsChecked}
                             rightText={"Remember details"}
+                            
+                            
                         />
                     </View>
                     <TouchableOpacity
                         onPress={() => this.login()}
                         style={[{}, styles.btnContinuueView]}>
-                        <Text style={{ color: '#FFFFFF' }}>Continuue</Text>
+                        <Text style={{ color: '#FFFFFF',fontSize:16,fontFamily:'Open Sans' }}>Continue</Text>
                     </TouchableOpacity>
                     <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'flex-start' }}>
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('ResetPassword')}
                             style={{ marginTop: 10, }}>
-                            <Text style={{ color: '#487AE0', fontSize: 12, textAlign: 'left', fontWeight: 'bold' }}>Reset Password</Text>
+                            <Text style={{ color: '#487AE0', fontSize: 14, textAlign: 'left', fontFamily:'Open Sans' }}>Reset Password</Text>
                         </TouchableOpacity>
                     </View>
                     <View

@@ -201,6 +201,7 @@ class Order extends React.Component {
                     </TouchableOpacity>
 
                 </View>
+      \
                 {/* <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20,  alignSelf: 'center', paddingHorizontal: 10, borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
                     
                     <View style={{backgroundColor: '#fff',flexDirection:'row',alignItems:'center',justifyContent:'center',}}>

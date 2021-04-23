@@ -105,7 +105,8 @@ class Supplier extends React.Component {
                 />
                 <View style={{ flexDirection: 'row', marginVertical: 10, alignContent: 'center', alignItems: 'center', width: width - 20, alignSelf: 'center' }}>
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('Home')}
+                        // onPress={() => this.props.navigation.navigate('Home')}
+                        onPress={() => this.props.navigation.goBack()}
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>

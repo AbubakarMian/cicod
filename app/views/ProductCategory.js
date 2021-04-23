@@ -125,7 +125,9 @@ class ProductCategory extends React.Component {
                     color={'#fff'}
                 />
                 <View style={[{}, styles.backHeaderRowView]}>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                    onPress={() => this.props.navigation.goBack()}
+                    >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
                     <View style={[{}, styles.backHeadingView]}>

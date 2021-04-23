@@ -16,9 +16,17 @@ export default class TabNavigater extends React.Component {
   constructor(props){
     super(props);
     this.state={
-      orderActive:''
+      orderActive:'',
+      active_screen:''
     }
   }
+  componentWillUpdate(){
+    console.log('TabNavigater componentWillReceiveProps',this.props.extraData.name);
+    this.setState({
+      active_screen:this.props.extraData.name
+    })
+  }
+
   render() {
     return (
       <Tab.Navigator
@@ -26,12 +34,13 @@ export default class TabNavigater extends React.Component {
           activeBackgroundColor: '#fff',
           inactiveBackgroundColor: '#fff',
           activeTintColor:'#B1272C',
-          inactiveTintColor:'#929497'
+          inactiveTintColor:'#929497',          
         }}
       >
         <Tab.Screen
           name="Dashnoard"
           component={Dashnoard} 
+          extraData={{name:'dashboard'}}
           options={{
             tabBarIcon: ({ color }) => (
               <View
@@ -50,7 +59,7 @@ export default class TabNavigater extends React.Component {
                   elevation: 0,
                 }}>
                 <Image
-                  source={require('../images/chart.png')}
+                  source={this.state.active_screen == 'dashboard'?require('../images/chart.png'):require('../images/orders.png')}
                   style={{
                     width: 25,
                     height: 25,
@@ -100,6 +109,7 @@ export default class TabNavigater extends React.Component {
 
 <Tab.Screen
           name="Products"
+          // children={()=><Products seller_id={0}/>}
           component={Products}
           options={{
             tabBarIcon: ({ color }) => (
