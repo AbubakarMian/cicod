@@ -78,7 +78,13 @@ class ChangePassword extends React.Component {
                     color={'#fff'}
                 />
                 <View style={[{}, styles.headingRow]}>
-                    <Icon name="arrow-left" size={20} color={'#929497'} />
+                    <TouchableOpacity
+                    // onPress={()=>this.props.navigation.navigate('User')}
+                    onPress={() => this.props.navigation.goBack()}
+                    
+                    >
+                      <Icon name="arrow-left" size={20} color={'#929497'} />
+                    </TouchableOpacity>
                     <Text style={[{}, styles.moreText]}>CHANGE PASSWORD</Text>
                 </View>
                 <ScrollView>
@@ -114,7 +120,7 @@ class ChangePassword extends React.Component {
                                 <TextInput
                                     secureTextEntry={this.state.is_secure}
                                     onChangeText={text => this.setState({ confirm_password: text })}
-                                    label="Confirm New password"
+                                    label="Confirm new password"
                                     style={{ backgroundColor: 'transparent', }}
                                     width={width - 50}
                                     alignSelf={'center'}

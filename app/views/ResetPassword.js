@@ -106,12 +106,13 @@ export default class ResetPassword extends React.Component {
                 </View>
                 <View style={[{}, styles.headingRow]}>
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('Login')}
+                        // onPress={() => this.props.navigation.navigate('Login')}
+                        onPress={() => this.props.navigation.goBack()}
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
 
-                    <Text style={[{}, styles.resetText]}>Reset Password</Text>
+                    <Text style={[{fontSize:15,fontWeight:'700',fontFamily:'Open Sans',color:'#2F2E7C',marginLeft:10}]}>Reset Password</Text>
                 </View>
                 <View style={[{}, styles.textInputView]}>
                     <TextInput

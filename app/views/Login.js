@@ -46,7 +46,7 @@ class Login extends React.Component {
                 lastname: "sandbox last", //responseJson.user.lastname,
                 email: "cicodsandbox@yopmail.com",//responsejson.user.email,
                 phone: "123314324",//responseJson.user.phone,
-                access_token: "Bearer N1iv0gKueo36X5VEGigb",  //+ responseJson.token
+                access_token: "Bearer xfE20TOnDN6uhpzMScBj",  //+ responseJson.token
             });
             this.setState({ Spinner: false })
             this.props.navigation.navigate('Home')
@@ -119,7 +119,7 @@ class Login extends React.Component {
                         </View>
                     </View>
                     <View style={{ paddingTop: height / 25 }}>
-                        <Text style={{ color: '#2F2E7C', fontSize: 20 }}>Login</Text>
+                        <Text style={{ color: '#2F2E7C', fontSize: 22,fontWeight:'700',fontFamily:'Open Sans' }}>Login</Text>
                     </View>
                     <View style={[{position:'relative'}, styles.comtextInputView]}>
                         <TextInput
@@ -183,18 +183,20 @@ class Login extends React.Component {
                             }}
                             isChecked={this.state.isChecked}
                             rightText={"Remember details"}
+                            
+                            
                         />
                     </View>
                     <TouchableOpacity
                         onPress={() => this.login()}
                         style={[{}, styles.btnContinuueView]}>
-                        <Text style={{ color: '#FFFFFF' }}>Continuue</Text>
+                        <Text style={{ color: '#FFFFFF',fontSize:16,fontFamily:'Open Sans' }}>Continue</Text>
                     </TouchableOpacity>
                     <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'flex-start' }}>
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('ResetPassword')}
                             style={{ marginTop: 10, }}>
-                            <Text style={{ color: '#487AE0', fontSize: 12, textAlign: 'left', fontWeight: 'bold' }}>Reset Password</Text>
+                            <Text style={{ color: '#487AE0', fontSize: 14, textAlign: 'left', fontFamily:'Open Sans' }}>Reset Password</Text>
                         </TouchableOpacity>
                     </View>
                     <View

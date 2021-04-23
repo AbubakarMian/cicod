@@ -186,7 +186,8 @@ class ProductFilter extends React.Component {
           source={require('../images')}
           /> */}
           <TouchableOpacity
-            onPress={() => this.props.navigation.navigate('Products')}
+            // onPress={() => this.props.navigation.navigate('Products')}
+            onPress={() => this.props.navigation.goBack()}
 
             style={[{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }]}>
             <Icon name="arrow-left" size={25} color="#929497" />

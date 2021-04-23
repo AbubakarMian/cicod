@@ -71,7 +71,8 @@ class ApplyDiscount extends React.Component {
                 <Header navigation={this.props.navigation} />
                 <View style={[{}, styles.backHeaderRowView]}>
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('CreateOrder')}
+                        // onPress={() => this.props.navigation.navigate('CreateOrder')}
+                        onPress={() => this.props.navigation.goBack()}
 
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
