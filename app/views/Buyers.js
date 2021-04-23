@@ -68,43 +68,7 @@ class Buyers extends React.Component {
             })
     }
 
-    // static getDerivedStateFromProps(props, state) {
-    //     // console.log('this.props.route 1', this.props.route);
-    //     console.log('this.props.props 2', props.route.params);
-    //     if (props.route.params === undefined) {
-    //         console.log('IN If Condition !!!!!!!!!!!!!!!!!!!!!!!!')
-
-    //     } else {
-    //         console.log('IN Else Condition !!!!!!!!!!!!!!!!!!!!!!!!')
-
-    //         let filters = props.route.params.filters;
-    //         let filter = '?';
-    //         for (let i = 0; i < filters.length; i++) {
-    //             filter = filter + filters[i].key + '=' + filters[i].value;
-    //             if (i != filters.length - 1) {
-    //                 filter = filter + '&';
-    //             }
-    //         }
-    //         buyerList(Constants.buyerlist + filter);
-    //     }
-    //     // console.log('this.props.state 3', state);
-    // }
-
-    // componentWillReceiveProps() {
-
-    //     console.log('this.props.route 1', this.props.route);
-    //     return;
-    //     let filters = this.props.route.params.filters;
-    //     let filter = '?';
-    //     for (let i = 0; i < filters.length; i++) {
-    //         filter = filter + filters[i].key + '=' + filters[i].value;
-    //         if (i != filters.length - 1) {
-    //             filter = filter + '&';
-    //         }
-    //     }
-    //     console.log(' will receive props Filters !!!!!!!!!!!!!!!!!!!!!!', filter);
-    //     this.getData(Constants.buyerlist + filter);
-    // }
+    
 
     componentDidUpdate() {
 
