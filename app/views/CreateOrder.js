@@ -482,7 +482,7 @@ class CreateOrder extends React.Component {
                                         ))
                                     }
                                     {/* <Text style={[{}, styles.smailGrayText]}>{this.props.deliveryAddress.address ?? 'Dilivery to customer address'}</Text> */}
-                                    <Text style={[{}, styles.smailGrayText]}>Pickup from our location</Text>
+                                    <Text style={[{}, styles.smailGrayText]}>Delivery to customer address</Text>
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity
@@ -553,7 +553,7 @@ class CreateOrder extends React.Component {
                                 {
                                     radio_props_payment.map((obj, i) => (
                                         <RadioButton
-                                            style={{ backgroundColor: '#F5F5F5', paddingVertical: 10, paddingHorizontal: 10 }}
+                                            style={{ backgroundColor: '#F5F5F5', paddingVertical: 10,marginBottom:20, paddingHorizontal: 10 }}
                                             labelHorizontal={true} key={i} >
                                             <RadioButtonInput
                                                 obj={obj}
