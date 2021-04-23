@@ -11,6 +11,7 @@ import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import CheckBox from 'react-native-check-box';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import { Constants } from './Constant';
+import Spinner from 'react-native-loading-spinner-overlay';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 class UpdateProduct extends React.Component {
@@ -18,15 +19,21 @@ class UpdateProduct extends React.Component {
         super(props);
         this.state = {
             value: 0,
+            spinner: false,
             isChecked: false,
             searchPress: 1,
             updateProductModal: false,
-            prod_list: []
+            prod_list: [],
+            buyer_detail: {},
         }
 
     }
 
     componentDidMount() {
+        // console.log('this.props this.props this.props',this.props.route.params.buyer_detail);
+        this.setState({
+            buyer_detail: this.props.route.params.buyer_detail
+        })
         this.getData();
     }
 
@@ -132,15 +139,10 @@ class UpdateProduct extends React.Component {
             .then(response => response.json())
             .then(async responseJson => {
                 console.log("response Json responseJson responseJson!!!!!!!!!!!", responseJson)
+                this.setState({ spinner: false })
                 if (responseJson.status === "SUCCESS") {
-                    this.props.setUser({
-                        firstname: responseJson.user.firstname,
-                        lastname: responseJson.user.lastname,
-                        email: responseJson.user.email,
-                        phone: responseJson.user.phone,
-                        access_token: 'Bearer ' + responseJson.token
-                    });
-                    this.setState({ spinner: false })
+                  
+                  
 
 
                     console.log('get user !!!!!!!!!!!!!!!!', this.props.user)
@@ -171,7 +173,7 @@ render() {
                     <Icon name="arrow-left" size={25} color="#929497" />
                 </TouchableOpacity>
                 <View style={[{}, styles.backHeadingView]}>
-                    <Text style={[{}, styles.backHeadingText]}>UPDATE PRODUCTS - WELLFOODS NG</Text>
+                    <Text style={[{}, styles.backHeadingText]}>UPDATE PRODUCTS - {this.state.buyer_detail.buyer_name}</Text>
                 </View>
             </View>
             <View style={[{}, styles.headingDescView]}>
@@ -179,7 +181,7 @@ render() {
             </View>
             <View style={[{}, styles.headingBoxView]}>
                 <Image source={require('../images/bage.png')} />
-                <Text style={[{}, styles.headingBoxText]}>WellFoods NG</Text>
+                <Text style={[{}, styles.headingBoxText]}>{this.state.buyer_detail.buyer_name}</Text>
             </View>
             <View style={{ borderWidth: 0.5, borderColor: '#E6E6E6', marginVertical: 10, width: width - 20, alignSelf: 'center' }}></View>
             <View style={[{}, styles.searchRowView]}>

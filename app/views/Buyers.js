@@ -1,7 +1,7 @@
 import React from 'react'
-import { View, ImageBackground,  FlatList,  TouchableHighlight, Dimensions, Image, Platform, TouchableOpacity,  } from 'react-native'
+import { View, ImageBackground, FlatList, Alert,TouchableHighlight, Dimensions, Image, Platform, TouchableOpacity, } from 'react-native'
 import splashImg from '../images/splash.jpg'
-import {   Text, TextInput, Alert} from 'react-native-paper';
+import { Text, TextInput } from 'react-native-paper';
 import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
@@ -18,7 +18,6 @@ import SearchBar from 'react-native-search-bar';
 import { ScrollView } from 'react-native-gesture-handler';
 import styles from '../css/BuyersCss';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { Container, Left, Body, Right, Button, Title, Segment, Content, } from 'native-base';
 import { Constants } from './Constant';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
@@ -69,7 +68,9 @@ class Buyers extends React.Component {
     }
 
     componentWillReceiveProps() {
-        console.log('this.props.route', this.props.route.params.filters);
+
+        console.log('this.props.route 1', this.props.route);
+        return ;
         let filters = this.props.route.params.filters;
         let filter = '?';
         for (let i = 0; i < filters.length; i++) {
@@ -78,9 +79,8 @@ class Buyers extends React.Component {
                 filter = filter + '&';
             }
         }
-        console.log(' will receive props !!!!!!!!!!!!!', filter);
-        return
-        this.getData(Constants.productslist + filter);
+        console.log(' will receive props Filters !!!!!!!!!!!!!!!!!!!!!!', filter);
+        this.getData(Constants.buyerlist + filter);
     }
 
     search() {
@@ -92,13 +92,86 @@ class Buyers extends React.Component {
 
     buyersDetail(item) {
 
-        this.props.navigation.navigate('BuyersView',{items:item,heading:'BUYERS'})
+        this.props.navigation.navigate('BuyersView', { items: item, heading: 'BUYERS' })
         // Alert.alert('Message','UI Update Inprogress !')
     }
 
+    suspendBuyer(buyer_id) {
+        this.setState({ spinner: true })
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            },
+        };
+        fetch(Constants.suspendBuyer + '?id=' + buyer_id, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                console.log('buyer un suspend Request !!!!!!!!!!', responseJson)
+                this.setState({
+                    spinner: false,
+                });
+                if (responseJson.success === true) {
+                    // this.setState({
+                    //     data: responseJson.data
+                    // })
+                    Alert.alert('Message', responseJson.data.message);
+
+                } else {
+                    let message = responseJson.message;
+                    // Alert.alert('Error', message)
+                }
+            })
+    }
+
+    unsuspendBuyer(buyer_id) {
+        this.setState({ spinner: true })
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            },
+        };
+        fetch(Constants.unsuspendBuyer + '?id=' + buyer_id, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                console.log('buyer un suspend Request !!!!!!!!!!', responseJson)
+                this.setState({
+                    spinner: false,
+                });
+                if (responseJson.success === true) {
+                    // this.setState({
+                    //     data: responseJson.data
+                    // })
+                    Alert.alert('Message', responseJson.data.message);
+                    this.props.navigation.navigate('Buyers')
+
+                } else {
+                    let message = responseJson.message;
+                    Alert.alert('Error', message)
+                }
+            })
+    }
+
+    suspendAction(item) {
+
+        if (item.is_active) {
+            // suspend
+            this.suspendBuyer(item.buyer_id);
+            this.buyerList(Constants.buyerlist);
+
+        } else {
+            // unsuspend
+            this.unsuspendBuyer(item.buyer_id);
+            this.buyerList(Constants.buyerlist);
+        }
+    }
 
     render() {
-        console.log('data data !!!!!!!!!!!!', this.state.data);
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
@@ -146,35 +219,35 @@ class Buyers extends React.Component {
                     </View>
 
                 </View> */}
-                 <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center',  borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
-                    
-                    <View style={{flexDirection:'row',backgroundColor:'#fff',alignItems:'center',height:50,paddingHorizontal:10,borderRadius:5, width:width-80}}>
-                    <Image
-                        source={require('../images/products/searchicon.png')}
-                    />
+                <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
+
+                    <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
+                        <Image
+                            source={require('../images/products/searchicon.png')}
+                        />
                         <TextInput
-                            label="Search product, Price and code"
+                            label="Search Buyers"
                             // selectionColor={'#fff'}
-                            
+
                             style={{ backgroundColor: 'transparent', }}
                             width={width / 1.4}
                             alignSelf={'center'}
                             color={'#000'}
-                            onChangeText={text => this.setState({ search_product: text })}
+                            onChangeText={text => this.setState({ search_buyers: text })}
                             onSubmitEditing={() => this.search()}
                         />
-                    </View> 
-                    
-                        <TouchableOpacity
+                    </View>
+
+                    <TouchableOpacity
                         style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
-                            // onPress={() => this.props.navigation.navigate('ProductFilter')}
-                            onPress={() => this.props.navigation.navigate('BuyersFilter')}
-                        >
-                            <Image
-                                source={require('../images/Order/settingicon.png')}
-                            />
-                        </TouchableOpacity>
-                   
+                        // onPress={() => this.props.navigation.navigate('ProductFilter')}
+                        onPress={() => this.props.navigation.navigate('BuyersFilter')}
+                    >
+                        <Image
+                            source={require('../images/Order/settingicon.png')}
+                        />
+                    </TouchableOpacity>
+
                 </View>
 
                 <ScrollView
@@ -203,9 +276,9 @@ class Buyers extends React.Component {
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
                                 <View style={[{}, styles.flatCardView]}>
-                                    <View style={[{paddingLeft:10,}, styles.cardRow]}>
+                                    <View style={[{ paddingLeft: 10, }, styles.cardRow]}>
                                         <Image
-                                            style={{marginTop:10}}
+                                            style={{ marginTop: 10 }}
                                             source={require('../images/bage.png')}
                                         />
                                         <View style={[{}, styles.cardContentView]}>
@@ -226,7 +299,7 @@ class Buyers extends React.Component {
                                                             <Icon name="ellipsis-h" color={'#929497'} size={20} />
                                                         </MenuTrigger>
                                                         <MenuOptions>
-                                                            <MenuOption onSelect={() => alert(`Save`)} >
+                                                            <MenuOption onSelect={() => this.props.navigation.navigate('UpdateProduct',{buyer_detail:item})} >
                                                                 <View style={{ flexDirection: 'row' }}>
                                                                     <Image
                                                                         source={require('../images/update.png')}
@@ -234,12 +307,14 @@ class Buyers extends React.Component {
                                                                     <Text style={{ marginLeft: 10 }}>Update</Text>
                                                                 </View>
                                                             </MenuOption>
-                                                            <MenuOption onSelect={() => alert(`Save`)} >
+                                                            <MenuOption onSelect={() => this.suspendAction(item)} >
                                                                 <View style={{ flexDirection: 'row' }}>
                                                                     <Image
                                                                         source={require('../images/suspend.png')}
                                                                     />
-                                                                    <Text style={{ marginLeft: 10 }}>Suspend</Text>
+                                                                    {(item.is_active == 1) ?
+                                                     <Text style={{ marginLeft: 10 }}>Suspend</Text>
+                                                    :  <Text style={{ marginLeft: 10 }}>Unsuspend</Text>}
                                                                 </View>
                                                             </MenuOption>
 
