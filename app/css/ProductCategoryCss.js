@@ -59,7 +59,12 @@ export default StyleSheet.create({
     listContainer:{
         flexDirection:'row',
         paddingHorizontal:5,
-        marginBottom:5
+        marginBottom:5,
+        backgroundColor:'#fff',
+        width:width-20,
+        alignSelf:'center',
+        paddingVertical:10,
+        borderRadius:5
     },
     listImageView:{
         flex:1
