@@ -114,7 +114,7 @@ export default StyleSheet.create({
     },
     recievedList:{
         
-        width:width-20,
+        width:width-10,
         alignSelf:'center',
         paddingHorizontal:5,
         paddingVertical:10
@@ -126,7 +126,9 @@ export default StyleSheet.create({
         marginTop:2,
         borderBottomWidth:1,
         backgroundColor:'#fff',
+        borderRadius:5,
         flexDirection:'row',
+        paddingHorizontal:10,
     },
     detailContentView:{
         backgroundColor:'#fff',

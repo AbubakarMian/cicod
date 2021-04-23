@@ -29,6 +29,7 @@ class Connect extends React.Component {
             merchant_id: 0,
             merchant_name: '',
             date_joined: '',
+            is_active_tab: 'connect'
         }
     }
     componentDidMount() {
@@ -183,7 +184,7 @@ class Connect extends React.Component {
                         <TextInput
                             label="Merchant Domain Name"
                             style={{ backgroundColor: 'transparent', }}
-                            width={width /1.3}
+                            width={width / 1.3}
                             alignSelf={'center'}
                             color={'#000'}
                             onChangeText={text => this.setState({ search_text: text })}
@@ -269,14 +270,14 @@ class Connect extends React.Component {
         return (
             <ScrollView>
                 <View>
-                    <View style={[{}, styles.searchContainer]}>
+                    <View style={[{ paddingHorizontal: 10 }, styles.searchContainer]}>
                         <Image
                             source={require('../images/products/searchicon.png')}
                         />
                         <TextInput
                             label="Search a products"
                             style={{ backgroundColor: 'transparent', }}
-                            width={width - 50}
+                            width={width - 60}
                             alignSelf={'center'}
                             color={'#000'}
                         />
@@ -297,28 +298,62 @@ class Connect extends React.Component {
                             }
                             data={this.state.received_arr}
                             renderItem={({ item, index, separators }) => (
-                                <TouchableHighlight
-                                    key={item.key}
-                                    // onPress={() => this._onPress(item)}
-                                    onShowUnderlay={separators.highlight}
-                                    onHideUnderlay={separators.unhighlight}>
-                                    <View style={[{}, styles.flatCardView]}>
-                                        <View style={{ flex: 1 }}>
-                                            <Image source={require('../images/Order/bage.png')} />
-                                        </View>
-                                        <View style={{ flex: 3, flexDirection: 'column' }}>
-                                            <Text>KNGS CROWN</Text>
-                                            <View style={{ flexDirection: 'row' }}>
-                                                <Text style={{ fontWeight: 'bold', fontSize: 12 }}>342345 .  </Text>
-                                                <Text style={{ color: '#aaa', fontSize: 10 }}>2017-01-30 / 10:45 AM</Text>
-                                            </View>
-                                        </View>
+                                // <TouchableOpacity
+                                //     key={item.key}
+                                //     // onPress={() => this._onPress(item)}
+                                //     onShowUnderlay={separators.highlight}
+                                //     onHideUnderlay={separators.unhighlight}>
+                                //     <View style={[{}, styles.flatCardView]}>
+                                //         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                                //             <Image source={require('../images/bage.png')} />
+                                //         </View>
+                                //         <View style={{ flex: 5, flexDirection: 'column' }}>
+                                //             <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>KNGS CROWN</Text>
+                                //             <View style={{ flexDirection: 'row' }}>
+                                //                 <Text style={[{ color: '#929497' }, fontStyles.bold13]}>342345 .  </Text>
+                                //                 <Text style={[{ color: '#929497' }, fontStyles.normal12]}>2017-01-30 / 10:45 AM</Text>
+                                //             </View>
+                                //         </View>
 
-                                        <View style={[{ position: 'absolute', right: 0, marginTop: 5, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
-                                            <Text style={[{ color: '#26C281' }]}>ACTIVE</Text>
+                                //         <View style={[{ flex: 2, position: 'absolute', right: 10, bottom: 10, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                                //             <Text style={[{ color: '#26C281' }]}>ACTIVE</Text>
+                                //         </View>
+                                //     </View>
+                                // </TouchableOpacity>
+                                <TouchableOpacity
+                                key={item.key}
+                                // onPress={() => this._onPress(item)}
+                                onShowUnderlay={separators.highlight}
+                                onHideUnderlay={separators.unhighlight}>
+                                <View style={[{}, styles.flatCardView]}>
+                                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                                        <Image source={require('../images/bage.png')} />
+                                    </View>
+                                    <View style={{ flex: 5, flexDirection: 'column' }}>
+                                        <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.buyer_name}</Text>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Text style={[{ color: '#929497' }, fontStyles.bold13]}>{item.buyer_id}  </Text>
+                                            <Text style={[{ color: '#929497' }, fontStyles.normal12]}>{item.time_requested}</Text>
                                         </View>
                                     </View>
-                                </TouchableHighlight>
+
+                                    {/* <View style={[{flex:2, position: 'absolute', right: 10, bottom:10, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                                    <Text style={[{ color: '#26C281' }]}>ACTIVE</Text>
+                                </View> */}
+
+                                    {(item.status == 'PENDING') ?
+                                        <View style={[{ position: 'absolute', right: 10, bottom:10, backgroundColor: '#E6E6E6', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                                            <Text style={[{ color: '#929497' }]}>PENDING</Text>
+                                        </View>
+                                        :
+                                        (item.status == 'APPROVED') ?
+                                            <View style={[{ position: 'absolute', right: 10, bottom:10, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                                                <Text style={[{ color: '#26C281' }]}>APPROVED</Text>
+                                            </View>
+                                            : null
+                                    }
+                                </View>
+                            </TouchableOpacity>
                             )}
                         />
                     </View>
@@ -329,15 +364,16 @@ class Connect extends React.Component {
     sentView() {
         return (
             <View>
-                <View style={[{}, styles.searchContainer]}>
-                  
-                     <Image
-                            source={require('../images/connect/redsearch.png')}
-                        />
+                <View style={[{ paddingHorizontal: 10 }, styles.searchContainer]}>
+
+                    <Image
+
+                        source={require('../images/connect/redsearch.png')}
+                    />
                     <TextInput
                         label="Search a products"
                         style={{ backgroundColor: 'transparent', }}
-                        width={width - 50}
+                        width={width - 60}
                         alignSelf={'center'}
                         color={'#000'}
                     />
@@ -358,35 +394,69 @@ class Connect extends React.Component {
                         }
                         data={this.state.send_arr}
                         renderItem={({ item, index, separators }) => (
-                            <TouchableHighlight
+                            // <TouchableHighlight
+                            //     key={item.key}
+                            //     // onPress={() => this._onPress(item)}
+                            //     onShowUnderlay={separators.highlight}
+                            //     onHideUnderlay={separators.unhighlight}>
+                            //     <View style={[{}, styles.flatCardView]}>
+                            //         <View style={{ flex: 1 }}>
+                            //             <Image source={require('../images/Order/bage.png')} />
+                            //         </View>
+                            //         <View style={{ flex: 3, flexDirection: 'column' }}>
+                            //             <Text>{item.buyer_name}</Text>
+                            //             <View style={{ flexDirection: 'row' }}>
+                            //                 <Text style={{ fontWeight: 'bold', fontSize: 12 }}>{item.buyer_id}  </Text>
+                            //                 <Text style={{ color: '#aaa', fontSize: 10 }}>{item.time_requested}</Text>
+                            //             </View>
+                            //         </View>
+                            //         {(item.status == 'PENDING') ?
+                            //             <View style={[{ position: 'absolute', right: 0, marginTop: 5, backgroundColor: '#FFFF99', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                            //                 <Text style={[{ color: '#CCCC00' }]}>PENDING</Text>
+                            //             </View>
+                            //             :
+                            //             (item.status == 'APPROVED') ?
+                            //                 <View style={[{ position: 'absolute', right: 0, marginTop: 5, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                            //                     <Text style={[{ color: '#26C281' }]}>APPROVED</Text>
+                            //                 </View>
+                            //                 : null
+                            //         }
+                            //     </View>
+                            // </TouchableHighlight>
+                            <TouchableOpacity
                                 key={item.key}
                                 // onPress={() => this._onPress(item)}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
                                 <View style={[{}, styles.flatCardView]}>
-                                    <View style={{ flex: 1 }}>
-                                        <Image source={require('../images/Order/bage.png')} />
+                                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                                        <Image source={require('../images/bage.png')} />
                                     </View>
-                                    <View style={{ flex: 3, flexDirection: 'column' }}>
-                                        <Text>{item.buyer_name}</Text>
+                                    <View style={{ flex: 5, flexDirection: 'column' }}>
+                                        <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.buyer_name}</Text>
                                         <View style={{ flexDirection: 'row' }}>
-                                            <Text style={{ fontWeight: 'bold', fontSize: 12 }}>{item.buyer_id}  </Text>
-                                            <Text style={{ color: '#aaa', fontSize: 10 }}>{item.time_requested}</Text>
+                                            <Text style={[{ color: '#929497' }, fontStyles.bold13]}>{item.buyer_id}  </Text>
+                                            <Text style={[{ color: '#929497' }, fontStyles.normal12]}>{item.time_requested}</Text>
                                         </View>
                                     </View>
+
+                                    {/* <View style={[{flex:2, position: 'absolute', right: 10, bottom:10, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                                    <Text style={[{ color: '#26C281' }]}>ACTIVE</Text>
+                                </View> */}
+
                                     {(item.status == 'PENDING') ?
-                                        <View style={[{ position: 'absolute', right: 0, marginTop: 5, backgroundColor: '#FFFF99', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
-                                            <Text style={[{ color: '#CCCC00' }]}>PENDING</Text>
+                                        <View style={[{ position: 'absolute', right: 10, bottom:10, backgroundColor: '#E6E6E6', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                                            <Text style={[{ color: '#929497' }]}>PENDING</Text>
                                         </View>
                                         :
                                         (item.status == 'APPROVED') ?
-                                            <View style={[{ position: 'absolute', right: 0, marginTop: 5, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                                            <View style={[{ position: 'absolute', right: 10, bottom:10, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
                                                 <Text style={[{ color: '#26C281' }]}>APPROVED</Text>
                                             </View>
                                             : null
                                     }
                                 </View>
-                            </TouchableHighlight>
+                            </TouchableOpacity>
                         )}
                     />
                 </View>
@@ -431,19 +501,19 @@ class Connect extends React.Component {
                             style={{ flex: 1 }}
                             onPress={() => { this.setState({ tabViewIndex: 1 }) }}
                         >
-                            <Text style={{ color: '#B1272C', fontWeight: 'bold', textAlign: 'center' }}>Connect</Text>
+                            <Text style={{ color: this.state.tabViewIndex === 1 ? '#B1272C' : '#4E4D4D', fontWeight: 'bold', textAlign: 'center' }}>Connect</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={{ flex: 1 }}
                             onPress={() => { this.setState({ tabViewIndex: 2 }) }}
                         >
-                            <Text style={{ textAlign: 'center' }}>Recieved</Text>
+                            <Text style={{ color: this.state.tabViewIndex === 2 ? '#B1272C' : '#4E4D4D', fontWeight: 'bold', textAlign: 'center' }}>Recieved</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={{ flex: 1 }}
                             onPress={() => { this.setState({ tabViewIndex: 3 }) }}
                         >
-                            <Text style={{ textAlign: 'center' }}>Sent</Text>
+                            <Text style={{ color: this.state.tabViewIndex === 3 ? '#B1272C' : '#4E4D4D', textAlign: 'center' }}>Sent</Text>
                         </TouchableOpacity>
                     </View>
 
