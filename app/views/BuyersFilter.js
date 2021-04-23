@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, Dimensions, Image, Platform, TouchableOpacity,  } from 'react-native';
-import {   Text, TextInput, Alert} from 'react-native-paper';
+import { View, ImageBackground, Dimensions, Image, Platform, TouchableOpacity, } from 'react-native';
+import { Text, TextInput, Alert } from 'react-native-paper';
 import CalendarPicker from 'react-native-calendar-picker';
 import styles from '../css/Filter.Css'
 import fontStyles from '../css/FontCss'
@@ -104,14 +104,14 @@ class BuyersFilter extends React.Component {
 
   onCategoryText(text) {
     let filters = this.state.filters;
-    filters.push({ key: 'category', value: text });
+    filters.push({ key: 'product_categories', value: text });
     this.setState({
       filters: filters
     })
   }
   approvedByText(text) {
     let filters = this.state.filters; //this.state.filters;
-    filters.push({ key: 'approvedBy', value: text });
+    filters.push({ key: 'approved_by', value: text });
     this.setState({
       filters: filters
     })
@@ -123,8 +123,11 @@ class BuyersFilter extends React.Component {
       filters: filters
     })
   }
-  applyFilter = () => {
-    this.props.navigation.navigate('Buyers', { filters: this.state.filters });
+  applyFilter = async () => {
+    let filter_param = await this.state.filters
+    console.log('buyers !!! this.state.filters', filter_param)
+
+    this.props.navigation.navigate('Buyers', { filters: filter_param });
   }
 
   datePickerFun = () => {
@@ -185,11 +188,11 @@ class BuyersFilter extends React.Component {
             <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>FILTER</Text>
 
           </TouchableOpacity>
-          <Text style={[{ color:'#D8D8D8', position: 'absolute', right: 20, top: 20 },fontStyles.normal15]}>Clear Filter</Text>
+          <Text style={[{ color: '#D8D8D8', position: 'absolute', right: 20, top: 20 }, fontStyles.normal15]}>Clear Filter</Text>
         </View>
 
 
-        <View style={{ width: width - 20,alignSelf:'center',borderRadius:10, backgroundColor: '#fff', paddingVertical: 10, marginTop: 20 }}>
+        <View style={{ width: width - 20, alignSelf: 'center', borderRadius: 10, backgroundColor: '#fff', paddingVertical: 10, marginTop: 20 }}>
           {this.state.categoryarr.length < 1 ? null :
 
             //     dropDownStyle={{ backgroundColor: '#fafafa' }}
@@ -200,8 +203,8 @@ class BuyersFilter extends React.Component {
             // />
             <DropDownPicker
               items={this.state.categoryarr}
-              containerStyle={{ height: 50,width:width-30,alignSelf:'center' }}
-              style={{ backgroundColor: '#fff',borderWidth:0,borderBottomWidth:0.5 }}
+              containerStyle={{ height: 50, width: width - 30, alignSelf: 'center' }}
+              style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5 }}
               itemStyle={{
                 justifyContent: 'flex-start',
               }}
@@ -213,12 +216,12 @@ class BuyersFilter extends React.Component {
           {this.state.approvedby_arr.length < 1 ? null :
             <DropDownPicker
               items={this.state.approvedby_arr}
-              containerStyle={{ height: 50,width:width-30,alignSelf:'center' }}
-              style={{ backgroundColor: '#fff',marginTop:10,borderWidth:0,borderBottomWidth:0.5 }}
+              containerStyle={{ height: 50, width: width - 30, alignSelf: 'center' }}
+              style={{ backgroundColor: '#fff', marginTop: 10, borderWidth: 0, borderBottomWidth: 0.5 }}
               itemStyle={{
                 justifyContent: 'flex-start',
               }}
-              placeholder="Catagory"
+              placeholder="Approved By"
               dropDownStyle={{ backgroundColor: '#fff' }}
               labelStyle={{ color: '#A9A9A9' }}
               onChangeItem={item => this.approvedByText(item.value)}
@@ -226,7 +229,7 @@ class BuyersFilter extends React.Component {
         </View>
         <View style={[{ flexDirection: 'row', width: width / 2, zIndex: -0.999 }]}>
           <View style={[{ flex: 1, paddingVertical: 10 }]}>
-            <Text style={[{color:'#929497'},fontStyles.bold15]}>Approved Date</Text>
+            <Text style={[{ color: '#929497' }, fontStyles.bold15]}>Approved Date</Text>
             <TouchableOpacity
               onPress={() => this.datePickerFun()}
             >
@@ -234,7 +237,7 @@ class BuyersFilter extends React.Component {
                 <Image
                   source={require('../images/calenderIcon.png')}
                 />
-                <Text style={[{color:'#909090',marginLeft:5},fontStyles.normal12]}>{this.state.date ==''? 'DD-MM-YY':this.state.date}</Text>
+                <Text style={[{ color: '#909090', marginLeft: 5 }, fontStyles.normal12]}>{this.state.date == '' ? 'DD-MM-YY' : this.state.date}</Text>
               </View>
               <View style={{ position: 'absolute', right: 20, bottom: 15 }}>
                 <Icon
@@ -246,17 +249,17 @@ class BuyersFilter extends React.Component {
             </TouchableOpacity>
           </View>
         </View>
-        <Text style={[{color:'#929497'},fontStyles.bold15]}>Status</Text>
+        <Text style={[{ color: '#929497' }, fontStyles.bold15]}>Status</Text>
         <View>
           <View style={[{ paddingRight: 20 }, styles.mainRow]}>
             <View style={[{ marginRight: 10 }]}>
               <TouchableOpacity onPress={() => this.activeSet(1)}>
-                <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 10 },fontStyles.normal15]}>ACTIVE</Text>
+                <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 10 }, fontStyles.normal15]}>ACTIVE</Text>
               </TouchableOpacity>
             </View>
             <View style={[{}]}>
               <TouchableOpacity onPress={() => this.activeSet(0)}>
-                <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 10 },fontStyles.normal15]}>INACTIVE</Text>
+                <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 10 }, fontStyles.normal15]}>INACTIVE</Text>
               </TouchableOpacity>
             </View>
           </View>

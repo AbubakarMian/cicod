@@ -21,10 +21,13 @@ class Home extends React.Component {
             <Text style={{color:'#4E4D4D',fontSize: 25,fontFamily:'Open Sans'}}>{this.props.user.firstname}</Text>
           </View>
           <View style={{ flex: 1, alignItems: 'flex-end', padding: 10 }}>
+          <TouchableOpacity
+          onPress={()=>this.props.navigation.navigate('User')}>
            <Image 
            style={{height:50,width:50}}
            source={require('../images/profilepic.png')}
            />
+           </TouchableOpacity>
           </View>
         </View>
         <ScrollView>

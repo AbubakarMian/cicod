@@ -15,6 +15,7 @@ import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Tooltip from 'react-native-walkthrough-tooltip';
+import ImagePicker from 'react-native-image-crop-picker';
 import {
     Menu,
     MenuOptions,
@@ -44,7 +45,8 @@ class CreateProduct extends React.Component {
             add_variation: false,
             validity: 0,
             image: '',
-            toolTipVisible:false
+            toolTipVisible:false,
+            c:''
         }
     }
 
@@ -152,8 +154,22 @@ class CreateProduct extends React.Component {
 
     }
 
+    imageUpload(){
+        ImagePicker.openPicker({
+            width: 300,
+            height: 400,
+            cropping: true,
+            size:1000000
+          }).then(image => {
+            console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@',image);
+            this.setState({
+                prod_image:image.path
+            })
+          });
+    }
 
     render() {
+        
         var radio_props_dilvery = [
             { label: 'Dilivery', value: 0 },
 
@@ -327,9 +343,18 @@ class CreateProduct extends React.Component {
                             </View>
                             <View style={[{}, styles.addImageView]}>
                                 <Text style={[{}, styles.addImageLableText]}>Image</Text>
+                               <TouchableOpacity
+                               onPress={()=> this.imageUpload()}
+                               >
+                                   {(this.state.prod_image != '') ?
                                 <Image
                                     source={require('../images/redPlus.png')}
                                 />
+                            : <Image
+                            source={require('../images/redPlus.png')}
+                        />
+                            }
+                                </TouchableOpacity>
                             </View>
                         </View>
                         <View style={[{ marginTop: 10 }, styles.productDetailContainerView]}>

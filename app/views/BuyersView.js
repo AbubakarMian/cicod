@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Input, InputGroup, List, ListItem } from 'native-base';
-import { View, TouchableOpacity, Image, Dimensions, TouchableHighlight, Touchable, FlatList, ScrollView } from 'react-native';
-import { Text, TextInput, Alert, Modal } from 'react-native-paper';
+import { View, TouchableOpacity, Image, Dimensions, TouchableHighlight, Alert,Touchable, FlatList, ScrollView } from 'react-native';
+import { Text, TextInput, Modal } from 'react-native-paper';
 import fontStyles from '../css/FontCss'
 import styles from '../css/BuyersViewCss';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -21,7 +21,8 @@ class BuyersView extends React.Component {
             supendModal: false,
             moreDeatailMOdal: false,
             items: {},
-            orderList: []
+            orderList: [],
+            search_order: ''
         }
     }
 
@@ -69,12 +70,153 @@ class BuyersView extends React.Component {
     }
 
     getBuyerOrderHistory() {
-
+        this.setState({ spinner: true })
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            },
+        };
+        let orderListUrl = Constants.orderslist + '?merchant_id=' + this.props.route.params.items.buyer_id;
+        console.log('order list url !!!!!!!!!!', orderListUrl);
+        fetch(orderListUrl, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                this.setState({
+                    spinner: false
+                });
+                if (responseJson.status === 'success') {
+                    console.log('data data data res res res ', responseJson)
+                    this.setState({
+                        orderList: responseJson.data
+                    });
+                } else {
+                    // let message = JSON.stringify(responseJson.error.message)
+                    Alert.alert('Error', responseJson.message)
+                }
+            })
     }
     viewProducts() {
         this.props.navigation.navigate('Products', { seller_id: this.state.items.seller_id })
     }
+
+    suspendBuyer(buyer_id) {
+        this.setState({ spinner: true })
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            },
+        };
+        fetch(Constants.suspendBuyer + '?id=' + buyer_id, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                console.log('buyer un suspend Request !!!!!!!!!!', responseJson)
+                this.setState({
+                    spinner: false,
+                });
+                if (responseJson.success === true) {
+                    // this.setState({
+                    //     data: responseJson.data
+                    // })
+                    Alert.alert('message', responseJson.data.message);
+
+                } else {
+                    let message = responseJson.message;
+                    // Alert.alert('Error', message)
+                }
+            })
+    }
+
+    unsuspendBuyer(buyer_id) {
+        this.setState({ spinner: true })
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            },
+        };
+        fetch(Constants.unsuspendBuyer + '?id=' + buyer_id, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                console.log('buyer un suspend Request !!!!!!!!!!', responseJson)
+                this.setState({
+                    spinner: false,
+                });
+                if (responseJson.success === true) {
+                    // this.setState({
+                    //     data: responseJson.data
+                    // })
+                    Alert.alert('message', responseJson.data.message);
+                    this.props.navigation.navigate('Buyers')
+
+                } else {
+                    let message = responseJson.message;
+                    // Alert.alert('Error', message)
+                }
+            })
+    }
+
+    suspendSeller(seller_id) {
+
+    }
+    unsuspendSeller(seller_id) {
+
+    }
+
+    suspendAction(item) {
+
+        this.setState({ supendModal: false })
+
+        if (this.props.route.params.heading == "SUPPLIER") {
+            if (item.is_active) {
+                // suspend
+                this.suspendSeller(item.seller_id);
+
+            } else {
+                // unsuspend
+                this.unsuspendSeller(item.seller_id);
+            }
+        } else {
+            if (item.is_active) {
+                // suspend
+                this.suspendBuyer(item.buyer_id);
+
+            } else {
+                // unsuspend
+                this.unsuspendBuyer(item.buyer_id);
+            }
+        }
+
+    }
+
+    search() {
+
+        if (this.props.route.params.heading == "SUPPLIER") {
+            let search_url = Constants.buyerlist + '?filter[buyer_name]=' + this.state.search_buyers;
+            this.getSellerOrderHistory();
+            //merchant_id
+        } else {
+            this.getBuyerOrderHistory()
+        }
+
+        // let search_url = Constants.buyerlist + '?filter[buyer_name]=' + this.state.search_buyers;
+        // this.buyerList(search_url);
+        // console.log('search_url search_url', search_url);
+    }
+    itemDetail(item) {
+        const id = item.id
+        console.log("item_id item_id item_id item_id ", id)
+        this.props.navigation.navigate('OrderDetail', { id })
+    }
     render() {
+        console.log(' this.state.orderList this.state.orderList', this.state.orderList)
         return (
 
             <View>
@@ -147,7 +289,7 @@ class BuyersView extends React.Component {
                             <View style={[{}, styles.columnView]}>
                                 {(this.props.route.params.heading == 'BUYERS') ?
                                     <TouchableOpacity
-                                    onPress={()=>this.props.navigation.navigate('UpdateProduct')}
+                                        onPress={() => this.props.navigation.navigate('UpdateProduct', { buyer_detail: this.state.items })}
                                         style={[{}, styles.redTouch]}
                                     >
 
@@ -155,7 +297,7 @@ class BuyersView extends React.Component {
                                     </TouchableOpacity>
                                     :
                                     <TouchableOpacity
-                                    onPress={()=>this.props.navigation.navigate('CreateOrder',{heading:'supplier'})}
+                                        onPress={() => this.props.navigation.navigate('CreateOrder', { heading: 'supplier' })}
                                         style={[{}, styles.redTouch]}
                                     >
 
@@ -204,34 +346,34 @@ class BuyersView extends React.Component {
                         </TouchableOpacity>
 
                     </View> */}
-                     <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center',  borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
-                    
-                    <View style={{flexDirection:'row',backgroundColor:'#fff',alignItems:'center',height:50,paddingHorizontal:10,borderRadius:5, width:width-80}}>
-                    <Image
-                        source={require('../images/products/searchicon.png')}
-                    />
-                        <TextInput
-                            label="Search order ID, amount, ticket Id"
-                            // selectionColor={'#fff'}
-                            style={{ backgroundColor: 'transparent', }}
-                            width={width - 50}
-                            alignSelf={'center'}
-                            color={'#000'}
-                            onChangeText={text => this.setState({ search_product: text })}
-                            onSubmitEditing={() => this.search()}
-                        />
-                    </View> 
-                    
+                    <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
+
+                        <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
+                            <Image
+                                source={require('../images/products/searchicon.png')}
+                            />
+                            <TextInput
+                                label="Search order ID, amount, ticket Id"
+                                // selectionColor={'#fff'}
+                                style={{ backgroundColor: 'transparent', }}
+                                width={width - 50}
+                                alignSelf={'center'}
+                                color={'#000'}
+                                onChangeText={text => this.setState({ search_order: text })}
+                                onSubmitEditing={() => this.search()}
+                            />
+                        </View>
+
                         <TouchableOpacity
-                        style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
-                            // onPress={() => this.props.navigation.navigate('ProductFilter')}
+                            style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
+                        // onPress={() => this.props.navigation.navigate('ProductFilter')}
                         >
                             <Image
                                 source={require('../images/Order/settingicon.png')}
                             />
                         </TouchableOpacity>
-                   
-                </View>
+
+                    </View>
                     <Text style={[{}, styles.historyHeadingText]}>ORDER HISTORY</Text>
                     <ScrollView style={{ paddingBottom: 50, marginBottom: 20 }}>
                         <FlatList
@@ -250,7 +392,7 @@ class BuyersView extends React.Component {
                             renderItem={({ item, index, separators }) => (
                                 <TouchableHighlight
                                     key={item.key}
-                                    // onPress={() => this._onPress(item)}
+                                    onPress={() => this.itemDetail(item)}
                                     onShowUnderlay={separators.highlight}
                                     onHideUnderlay={separators.unhighlight}>
                                     <View style={[{}, styles.flatlistMainContianer]}>
@@ -259,17 +401,25 @@ class BuyersView extends React.Component {
                                                 source={[{}, styles.listImage]}
                                                 source={require('../images/bage.png')} />
                                             <View style={{ flexDirection: 'column' }}>
-                                                <Text style={[{}, styles.darkGrayBoldText]}>103943535</Text>
-                                                <Text style={[{}, styles.lightGrayText]}>Order contains 4 products</Text>
+                                                <Text style={[{}, styles.darkGrayBoldText]}>{item.cicod_order_id}</Text>
+                                                <Text style={[{}, styles.lightGrayText]}>{item.description}</Text>
                                             </View>
                                             <View style={[{}, styles.actionContainer]}>
-                                                <Text style={[{}, styles.darkGrayBoldText]}>N1,500,000</Text>
-                                                <View style={[{}, styles.greenView]}>
-                                                    <Text style={[{}, styles.greenText]}>PAID</Text>
-                                                </View>
+                                                <Text style={[{}, styles.darkGrayBoldText]}>N{item.amount}</Text>
+                                                {(item.order_status == "PAID") ?
+                                                    <View style={[{}, styles.greenView]}>
+                                                        <Text style={[{}, styles.greenText]}>{item.order_status}</Text>
+                                                    </View>
+                                                    : (item.order_status == "PENDING") ?
+                                                        <View style={[{}, styles.yellowView]}>
+                                                            <Text style={[{}, styles.yellowText]}>{item.order_status}</Text>
+                                                        </View>
+                                                        : <View style={[{}, styles.greyView]}>
+                                                            <Text style={[{}, styles.greyText]}>{item.order_status}</Text>
+                                                        </View>}
                                             </View>
                                         </View>
-                                        <Text style={[{}, styles.lightGrayText]}>2017-01-30 / 10:45 AM</Text>
+                                        <Text style={[{}, styles.lightGrayText]}>{item.date_created}</Text>
                                     </View>
                                 </TouchableHighlight>
                             )}
@@ -286,7 +436,7 @@ class BuyersView extends React.Component {
                     >
                         <View style={[{}, styles.modalBackGround]}>
                             <TouchableOpacity
-                                onPress={() => this.setState({ supendModal: false })}
+                                onPress={() => this.suspendAction(this.state.items)}
                                 style={[{}, styles.suspendTouch]}>
                                 <Image source={require('../images/ban.png')} style={[{}, styles.banImage]} />
                                 <Text style={{}}>Suspend</Text>

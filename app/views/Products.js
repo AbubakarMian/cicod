@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, } from 'react-native'
-import { Text, TextInput, Alert, Searchbar } from 'react-native-paper';
+import { View, TouchableHighlight, FlatList, Dimensions, Alert,Image, Platform, TouchableOpacity, ScrollView, } from 'react-native'
+import { Text, TextInput, Searchbar } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss';
 import fontStyles from '../css/FontCss'
@@ -39,13 +39,14 @@ class Products extends React.Component {
         console.log('tab bar produxts -------------------',this.props.tabBar);
         console.log('this.props.route',this.props.route);
         if(this.props.route!=undefined ){
-            return;
+            // return;
         }
         if (this.props.route.params.seller_id != 0) {
             let url = Constants.sellerProductList + '?id=' + this.props.route.params.seller_id + '&sort=-id';
             console.log('URL @@@@@@@@@@@@@@@@@@@', url)
             this.getData(url);
         } else {
+            console.log('URL  els e @@@@@@@@@@@@@@@@@@@', Constants.productslist)
             this.getData(Constants.productslist);
         }
         this.getCategoryList()
@@ -111,10 +112,12 @@ class Products extends React.Component {
                     this.setState({
                         data: responseJson.data
                     })
-                } else {
-                    let message = responseJson.message;
-                    console.log('message !!!!!!!!!!!!!!!!', message);
-                    Alert.alert('Error !!!!!!!!!!', message)
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
+                    Alert.alert('Error', message)
                 }
             })
     }
@@ -151,9 +154,12 @@ class Products extends React.Component {
                     this.setState({
                         categoryarr: categoryarr,
                     });
-                } else {
-                    let message = JSON.stringify(responseJson.message)
-                    Alert.alert('Error', message)
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
+                    Alert.alert('Error 1234', message)
                 }
 
             })
@@ -166,6 +172,13 @@ class Products extends React.Component {
             search_product:text
         })
     }
+
+    unauthorizedLogout() {
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
+    }
+
     render() {
         console.log('categoryarr categoryarr categoryarr', this.state.categoryarr);
         const { selectedStartDate } = this.state;

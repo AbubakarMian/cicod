@@ -639,11 +639,11 @@ class CreateOrder extends React.Component {
 
                     </View>
                 </ScrollView>
-                <Modal
+                {/* <Modal
                     visible={this.state.suppliereModal}
                     transparent={true}
                 >
-                    <View style={[{backgroundColor:'#fff'}, styles.mainContainer]}>
+                    <View style={[{backgroundColor:'#fff',alignSelf:'baseline',width:width,minHeight:height/2,alignItems:'baseline'}, ]}>
                         <TouchableOpacity
                             style={[{}, styles.backgroundTouch]}
                         >
@@ -703,6 +703,96 @@ class CreateOrder extends React.Component {
                                                     name="angle-right" size={20} color="#aaa" />
                                             </View>
                                         </TouchableHighlight>
+                                    )}
+                                />
+                            </ScrollView>
+
+                        </View>
+                    </View>
+
+                </Modal> */}
+                 <Modal
+                    visible={this.state.suppliereModal}
+                    transparent={true}
+                >
+                    <View style={[{}, styles.mainContainer]}>
+                        <TouchableOpacity
+                            style={[{}, styles.backgroundTouch]}
+                        >
+
+                        </TouchableOpacity>
+                        <View style={[{}, styles.contentView]}>
+                            <View style={[{}, styles.modalCancleRow]}>
+                                <Text style={[{}, styles.modalCancleText]}>SELECT SUPPLIERS</Text>
+                                <TouchableOpacity
+                                    onPress={() => this.setState({ suppliereModal: false })}
+                                    style={[{}, styles.modalCancleTouch]}
+                                >
+                                    <Icon name="times" size={20} color="#929497" />
+                                </TouchableOpacity>
+                            </View>
+                            <View style={[{}, styles.searchRow]}>
+                                <Icon name="search" size={20} color="#929497" />
+                                <TextInput
+                                    label="Search supplier"
+                                    style={{ backgroundColor: 'transparent', }}
+                                    width={width - 50}
+                                    alignSelf={'center'}
+                                    color={'#000'}
+                                />
+                            </View>
+                            <ScrollView
+
+                            >
+                                <FlatList
+
+                                    ItemSeparatorComponent={
+                                        Platform.OS !== 'android' &&
+                                        (({ highlighted }) => (
+                                            <View
+                                                style={[
+                                                    style.separator,
+                                                    highlighted && { marginLeft: 0 }
+                                                ]}
+                                            />
+                                        ))
+                                    }
+                                    data={[
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item1' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item2' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item3' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item4' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item5' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item6' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item7' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item8' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item9' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item10' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item11' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item12' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item13' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item14' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item15' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item16' },
+                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item17' },
+                                    ]}
+                                    renderItem={({ item, index, separators }) => (
+                                        <TouchableOpacity
+                                            key={item.key}
+                                            onPress={() => this.props.navigation.navigate('Supplier')}
+                                            onShowUnderlay={separators.highlight}
+                                            onHideUnderlay={separators.unhighlight}>
+                                            <View style={[{marginTop:10}, styles.modalListContainer]}>
+                                                <Image source={require('../images/bage.png')} />
+                                                <View style={[{}, styles.modalListContentView]}>
+                                                    <Text style={[{color:'#4E4D4D'},fontStyles.bold15]}>{item.title}</Text>
+                                                    <Text style={[{color:'#929497'},fontStyles.normal12]}>{item.num}</Text>
+                                                </View>
+                                                <Icon
+                                                    style={[{}, styles.modalListContentRightIcon]}
+                                                    name="angle-right" size={20} color="#aaa" />
+                                            </View>
+                                        </TouchableOpacity>
                                     )}
                                 />
                             </ScrollView>

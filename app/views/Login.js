@@ -162,7 +162,30 @@ class Login extends React.Component {
                     <View style={{ paddingTop: height / 25 }}>
                         <Text style={{ color: '#2F2E7C', fontSize: 22,fontWeight:'700',fontFamily:'Open Sans' }}>Login</Text>
                     </View>
-                    <View style={[{position:'relative'}, styles.comtextInputView]}>
+                    <View style={{height:50,flexDirection:'row',width:width-50,alignSelf:'center',}}>
+                        <View style={{height:50,borderWidth:0.25,borderTopLeftRadius:5,borderRightWidth:0, borderBottomLeftRadius:5,flex:4,justifyContent:'center',paddingLeft:10}}>
+                        <TextInput
+                            
+                            onChangeText={text => this.setState({ tenantId: text })}
+                            label="Domain Name"
+                            placeholder="Domain Name"
+                            style={{height:50, backgroundColor:'transparent',borderBottomWidth:0,borderTopWidth:0,borderLeftWidth:0, borderColor:'#CFCFCF'}}
+                            alignSelf={'center'}
+                            color={'#000'}
+                            
+                            onFocus={()=>{this.setState({domain_text_color:'red'})}}
+                            onBlur={()=>{this.setState({domain_text_color:'black'})}}
+                            width={width-50}
+                            height={height/12}
+                            alignSelf={'flex-start'}
+                            value={this.state.tenantId}
+                        />
+                        </View>
+                        <View style={{backgroundColor:'#E6E6E6',height:50,borderWidth:0.25,borderColor:'#E6E6E6', flex:1.5,alignItems:'center',justifyContent:'center',borderTopRightRadius:5,borderBottomRightRadius:5}}>
+                           <Text>.cicod.com</Text>
+                        </View>
+                    </View>
+                    {/* <View style={[{position:'relative'}, styles.comtextInputView]}>
                         <TextInput
                             
                             onChangeText={text => this.setState({ tenantId: text })}
@@ -178,10 +201,10 @@ class Login extends React.Component {
                             height={height/12}
                             alignSelf={'flex-start'}
                             value={this.state.tenantId}
-                        />
+                        /> */}
                        {/* <Text style={{paddingVertical:50,borderBottomWidth:1,borderBottomColor:this.state.domain_text_color, height:height/12,textAlignVertical:'center', backgroundColor: '#CFCFCF', color: '#4E4D4D',position:'absolute',right:0, paddingVertical: 15, paddingHorizontal: 5 }}>.cicod.com</Text> */}
-                       <Text style={{  paddingVertical:22,borderTopRightRadius:5,borderBottomRightRadius:5, textAlignVertical:'center', backgroundColor: '#CFCFCF', color: '#4E4D4D',position:'absolute',right:0, paddingHorizontal: 5 }}>.cicod.com</Text>
-                    </View>
+                       {/* <Text style={{  paddingVertical:22,borderTopRightRadius:5,borderBottomRightRadius:5, textAlignVertical:'center', backgroundColor: '#CFCFCF', color: '#4E4D4D',position:'absolute',right:0, paddingHorizontal: 5 }}>.cicod.com</Text>
+                    </View> */}
                     <View style={[{}, styles.textInputView]}>
                         <TextInput
                             onChangeText={text => this.setState({ username: text })}

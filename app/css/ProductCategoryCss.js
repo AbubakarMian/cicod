@@ -59,7 +59,12 @@ export default StyleSheet.create({
     listContainer:{
         flexDirection:'row',
         paddingHorizontal:5,
-        marginBottom:5
+        marginBottom:5,
+        backgroundColor:'#fff',
+        width:width-20,
+        alignSelf:'center',
+        paddingVertical:10,
+        borderRadius:5
     },
     listImageView:{
         flex:1
@@ -86,6 +91,13 @@ export default StyleSheet.create({
     actionText:{
         backgroundColor:'#DAF8EC',
         color:'#26C281',
+        paddingHorizontal:15,
+        paddingVertical:3,
+        borderRadius:100,
+    },
+    inactiveActionText:{
+        backgroundColor:'#E6E6E6',
+        color:'#FFFFFF',
         paddingHorizontal:15,
         paddingVertical:3,
         borderRadius:100,
