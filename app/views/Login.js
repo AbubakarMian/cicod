@@ -46,7 +46,7 @@ class Login extends React.Component {
                 lastname: "sandbox last", //responseJson.user.lastname,
                 email: "cicodsandbox@yopmail.com",//responsejson.user.email,
                 phone: "123314324",//responseJson.user.phone,
-                access_token: "Bearer ",  //+ responseJson.token
+                access_token: "Bearer N1iv0gKueo36X5VEGigb",  //+ responseJson.token
             });
             this.setState({ Spinner: false })
             this.props.navigation.navigate('Home')
@@ -127,9 +127,10 @@ class Login extends React.Component {
                             onChangeText={text => this.setState({ tenantId: text })}
                             label="Domain Name"
                             placeholder="Domain Name"
-                            style={{backgroundColor:'transparent',borderBottomWidth:0,borderTopWidth:0.5,borderLeftWidth:0.5, borderColor:'#CFCFCF'}}
+                            style={{height:60, backgroundColor:'transparent',borderBottomWidth:0,borderTopWidth:0.5,borderLeftWidth:0.5, borderColor:'#CFCFCF'}}
                             alignSelf={'center'}
                             color={'#000'}
+                            
                             onFocus={()=>{this.setState({domain_text_color:'red'})}}
                             onBlur={()=>{this.setState({domain_text_color:'black'})}}
                             width={width-50}
