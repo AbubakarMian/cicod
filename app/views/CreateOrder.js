@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, Dimensions, Image,  TouchableHighlight, Platform, TouchableOpacity, FlatList } from 'react-native'
+import { View, ImageBackground, ScrollView, Dimensions, Image, TouchableHighlight, Platform, TouchableOpacity, FlatList } from 'react-native'
 import { Text, TextInput, Alert, Modal } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/CreateOrderCss';
@@ -245,7 +245,11 @@ class CreateOrder extends React.Component {
             })
 
     }
-
+    unauthorizedLogout() {
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
+    }
     render() {
         console.log(' supplier list  !!!!!!!!!!!!!!', this.state.supplierlist)
         var radio_props_dilvery = [
@@ -303,14 +307,14 @@ class CreateOrder extends React.Component {
                         </View>
                         <View style={[{}, styles.customerContainerView]}>
 
-                            <Text style={[{color:'#929497',textAlign:'left',alignSelf:'flex-start',marginLeft:10}, fontStyles.bold15]}>Customer Details</Text>
+                            <Text style={[{ color: '#929497', textAlign: 'left', alignSelf: 'flex-start', marginLeft: 10 }, fontStyles.bold15]}>Customer Details</Text>
                             <TouchableOpacity style={[{}, styles.customerContaineraddBtnView]}
                                 onPress={() => this.props.navigation.navigate('AddCustomer')}
                             >
                                 <Icon name="plus-circle" size={20} color={'#fff'} />
                                 <Text style={[{}, styles.customerContaineraddBtnText]}>Add</Text>
                             </TouchableOpacity>
-                           <View style={{borderBottomWidth:0.5,width:width-20,alignSelf:'center',marginVertical:5,borderColor:'#E6E6E6'}}></View>
+                            <View style={{ borderBottomWidth: 0.5, width: width - 20, alignSelf: 'center', marginVertical: 5, borderColor: '#E6E6E6' }}></View>
                             {(this.state.customer_name == '') ?
                                 <View style={[{}, styles.customerContainerView]}>
                                     <Icon name="user-circle" size={50} color="#D8D8D8" />
@@ -356,8 +360,8 @@ class CreateOrder extends React.Component {
                             <View style={[{}, styles.OrderDetailHeadingRow]}>
                                 <Text style={[{}, styles.OrderDetailHeadingRowText]}>Order Detail</Text>
                                 {(this.state.cart_arr.length != 0) ?
-                                <Text style={[{}, styles.OrderDetailNotificationText]}>{this.state.cart_arr.length ?? 0}</Text>
-                                :null}
+                                    <Text style={[{}, styles.OrderDetailNotificationText]}>{this.state.cart_arr.length ?? 0}</Text>
+                                    : null}
                             </View>
                             <TouchableOpacity
                                 onPress={() => this.clearOrder()}
@@ -553,7 +557,7 @@ class CreateOrder extends React.Component {
                                 {
                                     radio_props_payment.map((obj, i) => (
                                         <RadioButton
-                                            style={{ backgroundColor: '#F5F5F5', paddingVertical: 10,marginBottom:20, paddingHorizontal: 10 }}
+                                            style={{ backgroundColor: '#F5F5F5', paddingVertical: 10, marginBottom: 20, paddingHorizontal: 10 }}
                                             labelHorizontal={true} key={i} >
                                             <RadioButtonInput
                                                 obj={obj}
@@ -711,7 +715,7 @@ class CreateOrder extends React.Component {
                     </View>
 
                 </Modal> */}
-                 <Modal
+                <Modal
                     visible={this.state.suppliereModal}
                     transparent={true}
                 >
@@ -782,11 +786,11 @@ class CreateOrder extends React.Component {
                                             onPress={() => this.props.navigation.navigate('Supplier')}
                                             onShowUnderlay={separators.highlight}
                                             onHideUnderlay={separators.unhighlight}>
-                                            <View style={[{marginTop:10}, styles.modalListContainer]}>
+                                            <View style={[{ marginTop: 10 }, styles.modalListContainer]}>
                                                 <Image source={require('../images/bage.png')} />
                                                 <View style={[{}, styles.modalListContentView]}>
-                                                    <Text style={[{color:'#4E4D4D'},fontStyles.bold15]}>{item.title}</Text>
-                                                    <Text style={[{color:'#929497'},fontStyles.normal12]}>{item.num}</Text>
+                                                    <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.title}</Text>
+                                                    <Text style={[{ color: '#929497' }, fontStyles.normal12]}>{item.num}</Text>
                                                 </View>
                                                 <Icon
                                                     style={[{}, styles.modalListContentRightIcon]}
