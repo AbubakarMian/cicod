@@ -11,6 +11,7 @@ export default StyleSheet.create({
      backgroundColor:'#F0F0F0',
      alignItems:'center',
      flex:1,
+     borderRadius:10,
      flexDirection:'column'
  },
 headingRow:{
@@ -32,7 +33,8 @@ cardView:{
     padding:10,
     marginTop:10,
     flexDirection:'row',
-    alignItems:'center'
+    alignItems:'center',
+    borderRadius:5
 },
 cardTextView:{
     marginHorizontal:10,

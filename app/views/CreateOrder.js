@@ -303,14 +303,14 @@ class CreateOrder extends React.Component {
                         </View>
                         <View style={[{}, styles.customerContainerView]}>
 
-                            <Text style={[{}, styles.customerContainerhead]}>Custommer Detail</Text>
+                            <Text style={[{color:'#929497',textAlign:'left',alignSelf:'flex-start',marginLeft:10}, fontStyles.bold15]}>Customer Details</Text>
                             <TouchableOpacity style={[{}, styles.customerContaineraddBtnView]}
                                 onPress={() => this.props.navigation.navigate('AddCustomer')}
                             >
                                 <Icon name="plus-circle" size={20} color={'#fff'} />
                                 <Text style={[{}, styles.customerContaineraddBtnText]}>Add</Text>
                             </TouchableOpacity>
-
+                           <View style={{borderBottomWidth:0.5,width:width-20,alignSelf:'center',marginVertical:5,borderColor:'#E6E6E6'}}></View>
                             {(this.state.customer_name == '') ?
                                 <View style={[{}, styles.customerContainerView]}>
                                     <Icon name="user-circle" size={50} color="#D8D8D8" />
@@ -355,7 +355,9 @@ class CreateOrder extends React.Component {
                         <View style={[{}, styles.OrderDetailContainer]}>
                             <View style={[{}, styles.OrderDetailHeadingRow]}>
                                 <Text style={[{}, styles.OrderDetailHeadingRowText]}>Order Detail</Text>
+                                {(this.state.cart_arr.length != 0) ?
                                 <Text style={[{}, styles.OrderDetailNotificationText]}>{this.state.cart_arr.length ?? 0}</Text>
+                                :null}
                             </View>
                             <TouchableOpacity
                                 onPress={() => this.clearOrder()}
@@ -480,7 +482,7 @@ class CreateOrder extends React.Component {
                                         ))
                                     }
                                     {/* <Text style={[{}, styles.smailGrayText]}>{this.props.deliveryAddress.address ?? 'Dilivery to customer address'}</Text> */}
-                                    <Text style={[{}, styles.smailGrayText]}>Pickup from our location</Text>
+                                    <Text style={[{}, styles.smailGrayText]}>Delivery to customer address</Text>
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity
@@ -551,7 +553,7 @@ class CreateOrder extends React.Component {
                                 {
                                     radio_props_payment.map((obj, i) => (
                                         <RadioButton
-                                            style={{ backgroundColor: '#F5F5F5', paddingVertical: 10, paddingHorizontal: 10 }}
+                                            style={{ backgroundColor: '#F5F5F5', paddingVertical: 10,marginBottom:20, paddingHorizontal: 10 }}
                                             labelHorizontal={true} key={i} >
                                             <RadioButtonInput
                                                 obj={obj}

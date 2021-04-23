@@ -22,7 +22,8 @@ paddingVertical:10
 },
 moreText:{
     color:'#2F2E7C',
-    fontWeight:'bold',
+    fontWeight:'700',
+    fontFamily:'Open Sans',
     fontSize:15,
     marginLeft:10
 },

@@ -23,7 +23,9 @@ export default class EnableProduct extends React.Component {
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
                 <View style={[{}, styles.backRowView]}>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                    onPress={() => this.props.navigation.goBack()}
+                    >
                         <Icon name="arrow-left" size={25} color={'#929497'} />
                     </TouchableOpacity>
                     <View style={[{}, styles.backRowHeadingView]}>

@@ -245,7 +245,8 @@ class AddSuppliers extends React.Component {
                     <View>
                         <View style={[{}, styles.backHeaderRowView]}>
                             <TouchableOpacity
-                                onPress={() => this.props.navigation.navigate('BuyCreateOrder')}
+                                // onPress={() => this.props.navigation.navigate('BuyCreateOrder')}
+                                onPress={() => this.props.navigation.goBack()}
 
                             >
                                 <Icon name="arrow-left" size={25} color="#929497" />
