@@ -14,8 +14,6 @@ const userReducer = (state = initialState, action) =>  {
 
         case SET_USER:
             AsyncStorage.setItem('User',JSON.stringify(state));
-           
-           
             return {
                 ...state,
                 id: action.value.id,
