@@ -126,7 +126,7 @@ class ProductCategory extends React.Component {
                 />
                 <View style={[{}, styles.backHeaderRowView]}>
                     <TouchableOpacity
-                    onPress={() => this.props.navigation.goBack()}
+                        onPress={() => this.props.navigation.goBack()}
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
@@ -139,7 +139,37 @@ class ProductCategory extends React.Component {
                         <Image source={require('../images/circlePlus.png')} />
                     </TouchableOpacity>
                 </View>
-                <View style={[{}, styles.searchRow]}>
+                <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
+
+                    <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
+                        <Image
+                            source={require('../images/products/searchicon.png')}
+                        />
+
+                        <TextInput
+                            label="Search a category"
+                            // selectionColor={'#fff'}
+
+                            style={{ backgroundColor: 'transparent', }}
+                            width={width - 50}
+                            alignSelf={'center'}
+                            color={'#000'}
+                            // onChangeText={text => this.setState({ search_product: text })}
+                            // onSubmitEditing={() => this.search()}
+                        />
+                    </View>
+
+                    <TouchableOpacity
+                        style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
+                        onPress={() => this.props.navigation.navigate('Filter')}
+                    >
+                        <Image
+                            source={require('../images/Order/settingicon.png')}
+                        />
+                    </TouchableOpacity>
+
+                </View>
+                {/* <View style={[{}, styles.searchRow]}>
                     <Image source={require('../images/products/searchicon.png')} />
                     <TextInput
                         label="Search a category"
@@ -155,7 +185,8 @@ class ProductCategory extends React.Component {
                     >
                         <Image source={require('../images/Order/settingicon.png')} />
                     </TouchableOpacity>
-                </View>
+                </View> */}
+                <View style={{borderBottomWidth:1,width:width-20,alignSelf:'center',borderBottomColor:'#E6E6E6',marginVertical:10}}></View>
                 <FlatList
                     ItemSeparatorComponent={
                         Platform.OS !== 'android' &&
@@ -168,66 +199,53 @@ class ProductCategory extends React.Component {
                             />
                         ))
                     }
-                    data={this.state.categoryarr}
+                    data={[
+                        { title: 'Title Text', key: 'item1' },
+                        { title: 'Title Text', key: 'item2' },
+                        { title: 'Title Text', key: 'item3' },
+                        { title: 'Title Text', key: 'item4' },
+                        { title: 'Title Text', key: 'item1' },
+                        { title: 'Title Text', key: 'item2' },
+                        { title: 'Title Text', key: 'item3' },
+                        { title: 'Title Text', key: 'item4' },
+                        { title: 'Title Text', key: 'item1' },
+                        { title: 'Title Text', key: 'item2' },
+                        { title: 'Title Text', key: 'item3' },
+                        { title: 'Title Text', key: 'item4' },
+                        { title: 'Title Text', key: 'item1' },
+                        { title: 'Title Text', key: 'item2' },
+                        { title: 'Title Text', key: 'item3' },
+                        { title: 'Title Text', key: 'item4' },
+
+
+                    ]}
                     renderItem={({ item, index, separators }) => (
-                        <TouchableOpacity
-                            key={item.key}
-                            // onPress={() => this._onPress(item)}
-                            onShowUnderlay={separators.highlight}
-                            onHideUnderlay={separators.unhighlight}>
+                        // <TouchableOpacity
+                        //     key={item.key}
+                        //     // onPress={() => this._onPress(item)}
+                        //     onShowUnderlay={separators.highlight}
+                        //     onHideUnderlay={separators.unhighlight}>
                             <View style={[{}, styles.listContainer]}>
-                                <View style={[{}, styles.listImageView]}>
+                                <View style={[{flex:1,justifyContent:'center',alignItems:'center'}, styles.listImageView]}>
                                     <Image source={require('../images/product_cat_icon.png')} />
                                 </View>
-                                <View style={[{}, styles.listDescView]}>
-                                    <Text style={[{}, styles.listDescBoldText]}>{item.name}</Text>
-                                    <Text style={[{}, styles.listDescNormalText]}>{item.description}</Text>
+                                <View style={[{flex:6}, styles.listDescView]}>
+                                    <Text style={[{}, styles.listDescBoldText]}>Pure Juice</Text>
+                                    <Text style={[{}, styles.listDescNormalText]}>This is a description of that hold all pure juice.</Text>
                                 </View>
-                                <View style={[{}, styles.listActionView]}>
-                                    {/* <TouchableOpacity
-                                        style={[{}, styles.dotsTouch]}
+                                <View style={[{flex:2,justifyContent:'flex-end',alignItems:'flex-end'}, styles.listActionView]}>
+                                    <TouchableOpacity
+                                        style={[{alignSelf:'flex-end',marginHorizontal:5}, styles.dotsTouch]}
                                     >
                                         <Icon name="ellipsis-h"
                                             color="#929497"
+                                            size={30}
                                         />
-                                    </TouchableOpacity> */}
-                                    <Menu>
-                                        {/* <MenuTrigger text='. . .' customStyles={{}} /> */}
-                                        <MenuTrigger style={styles.trigger}>
-                                            {/* <Text style={styles.triggerText}>Slide-in menu...</Text> */}
-                                            <Icon name="ellipsis-h" color={'#929497'} size={20} />
-                                        </MenuTrigger>
-                                        <MenuOptions>
-                                            <MenuOption
-                                                onSelect={() => Alert.alert('Message', 'Work In Progress .')}
-                                            // onSelect={() => this.props.navigation.navigate('UpdateProduct', { buyer_detail: item })}
-                                            >
-                                                <View style={{ flexDirection: 'row' }}>
-                                                    <Image
-                                                        source={require('../images/update.png')}
-                                                    />
-                                                    <Text style={{ marginLeft: 10 }}>Update</Text>
-                                                </View>
-                                            </MenuOption>
-                                            <MenuOption onSelect={() => this.suspendAction(item)} >
-                                                <View style={{ flexDirection: 'row' }}>
-                                                    <Image
-                                                        source={require('../images/suspend.png')}
-                                                    />
-                                                    {(item.is_active == 1) ?
-                                                        <Text style={{ marginLeft: 10 }}>Suspend</Text>
-                                                        : <Text style={{ marginLeft: 10 }}>Unsuspend</Text>}
-                                                </View>
-                                            </MenuOption>
-
-                                        </MenuOptions>
-                                    </Menu>
-                                    {(item.is_active == true) ?
-                                        <Text style={[{}, styles.actionText]}>ACTIVE</Text> :
-                                        <Text style={[{}, styles.inactiveActionText]}>INACTIVE</Text>}
+                                    </TouchableOpacity>
+                                    <Text style={[{alignSelf:'flex-end'}, styles.actionText]}>ACTIVE</Text>
                                 </View>
                             </View>
-                        </TouchableOpacity>
+                        // </TouchableOpacity>
                     )}
                 />
             </View>
