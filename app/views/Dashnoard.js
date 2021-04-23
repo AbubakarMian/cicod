@@ -121,7 +121,7 @@ class Dashnoard extends React.Component {
     unauthorizedLogout(){
         Alert.alert('Error', Constants.UnauthorizedErrorMsg)
         this.props.logoutUser();
-        // this.props.navigation.navigate('Login');
+        this.props.navigation.navigate('Login');
     }
 
     ShowAllOrders(){

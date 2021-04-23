@@ -17,12 +17,11 @@ class TabNavigater extends React.Component {
     super(props);
     this.state={
       orderActive:'',
-      active_screen:''
+      active_screen:this.props.extraData.name
     }
   }
-  componentWillUpdate(){
-    console.log('my props ',this.props);
-    console.log('my props ',this.props.route);
+  componentWillReceiveProps(){
+    console.log('my props extraData',this.props.extraData);
     if(this.state.active_screen == ''){
       this.setState({
         active_screen:this.props.extraData.name
@@ -32,7 +31,6 @@ class TabNavigater extends React.Component {
 
   render() {
     let selected_tabBar = this.props.tabBar;
-    console.log('selected_tabBar',selected_tabBar);
     return (
       <Tab.Navigator
         tabBarOptions={{
@@ -41,20 +39,18 @@ class TabNavigater extends React.Component {
           activeTintColor:'#B1272C',
           inactiveTintColor:'#929497',          
         }}
+        initialRouteName={this.props.extraData.initialRouteName}
       >
         <Tab.Screen
           name="Dashnoard"
           component={Dashnoard} 
           listeners={{
             tabPress: e => {
-              // e.preventDefault(); // Use this to navigate somewhere else
-              console.log('dashboardclicked');
               this.setState({active_screen:'dashboard'})
             },
           }}
           options={{
             tabBarIcon: ({ color }) => (
-              // <Icon name="Bookmarks" color={color} size={25}/>  
               <View
                 style={{
                   alignSelf: 'center',
@@ -90,8 +86,6 @@ class TabNavigater extends React.Component {
           component={Order}
           listeners={{
             tabPress: e => {
-              // e.preventDefault(); // Use this to navigate somewhere else
-              console.log('orderdclicked');
               this.setState({active_screen:'order'})
             },
           }}
@@ -133,16 +127,12 @@ class TabNavigater extends React.Component {
           name="Products"
           listeners={{
             tabPress: e => {
-              console.log('productsclicked');
-
               this.setState({active_screen:'products'})
             },
           }}
           component={Products}          
           listeners={{
             tabPress: e => {
-              // e.preventDefault(); // Use this to navigate somewhere else
-              console.log('productsclicked');
               this.setState({active_screen:'products'})
             },
           }}
@@ -184,8 +174,6 @@ class TabNavigater extends React.Component {
           component={More}
           listeners={{
             tabPress: e => {
-              // e.preventDefault(); // Use this to navigate somewhere else
-              console.log('moreclicked');
               this.setState({active_screen:'more'})
             },
           }}
