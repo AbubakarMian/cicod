@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, ImageBackground,  Modal, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback } from 'react-native'
-import {   Text, TextInput, Alert} from 'react-native-paper';
+import { View, ImageBackground, Modal, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback } from 'react-native'
+import { Text, TextInput, Alert } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/CustomerDeatailCss';
 import fontStyles from '../css/FontCss'
@@ -22,7 +22,7 @@ class CustomersDetal extends React.Component {
       selectedStartDate: null,
       calenderModal: false,
       spinner: false,
-      data:{}
+      data: {}
     };
     this.onDateChange = this.onDateChange.bind(this);
   }
@@ -59,11 +59,22 @@ class CustomersDetal extends React.Component {
             data: responseJson.data
           })
           // this.props.navigation.navigate('DrawerNavigation')
+        } else if (responseJson.status == 401) {
+          this.unauthorizedLogout();
+        }
+        else {
+          let message = responseJson.message
+          Alert.alert('Error', message)
         }
       })
       .catch(error => {
         console.log('Error !!!', error)
       });
+  }
+  unauthorizedLogout() {
+    Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+    this.props.logoutUser();
+    this.props.navigation.navigate('Login');
   }
   render() {
 
@@ -71,7 +82,7 @@ class CustomersDetal extends React.Component {
     const startDate = selectedStartDate ? selectedStartDate.toString() : '';
     return (
       <View style={[{}, styles.mainView]}>
-        <Header navigation={this.props.navigation}/>
+        <Header navigation={this.props.navigation} />
         <Spinner
           visible={this.state.spinner}
           textContent={'Please Wait...'}
@@ -80,8 +91,8 @@ class CustomersDetal extends React.Component {
         />
         <View style={[{}, styles.headerRow]}>
           <TouchableOpacity
-          // onPress={()=>this.props.navigation.navigate('Customer')}
-          onPress={() => this.props.navigation.goBack()}
+            // onPress={()=>this.props.navigation.navigate('Customer')}
+            onPress={() => this.props.navigation.goBack()}
           >
             <Icon name="arrow-left" size={25} color="#929497" />
           </TouchableOpacity>
@@ -90,71 +101,71 @@ class CustomersDetal extends React.Component {
           </View>
 
         </View>
-       <View style={{backgroundColor:'#fff',width:width-10,alignSelf:'center',justifyContent:'center',alignItems:'center',borderRadius:10}}>
-       <View style={[{borderRadius:10}, styles.mainContentView]}>
-          <View style={[{}, styles.mainContentUserImageView]}>
-            <Image
-              source={require('../images/customer/usericon.png')}
-            />
-          </View>
-          <View>
-            <Text style={[{textAlign: 'center',color:'#4E4D4D'},fontStyles.bold18]}>{this.state.data.first_name}</Text>
-            <View style={[{}, styles.mainContentUserInfoView]}>
-              <Text style={[{color:'#929497'}, fontStyles.bold13]}>Email: </Text>
-              <Text style={[{color:'#929497'}, fontStyles.normal13]}>{this.state.data.email}</Text>
+        <View style={{ backgroundColor: '#fff', width: width - 10, alignSelf: 'center', justifyContent: 'center', alignItems: 'center', borderRadius: 10 }}>
+          <View style={[{ borderRadius: 10 }, styles.mainContentView]}>
+            <View style={[{}, styles.mainContentUserImageView]}>
+              <Image
+                source={require('../images/customer/usericon.png')}
+              />
+            </View>
+            <View>
+              <Text style={[{ textAlign: 'center', color: '#4E4D4D' }, fontStyles.bold18]}>{this.state.data.first_name}</Text>
+              <View style={[{}, styles.mainContentUserInfoView]}>
+                <Text style={[{ color: '#929497' }, fontStyles.bold13]}>Email: </Text>
+                <Text style={[{ color: '#929497' }, fontStyles.normal13]}>{this.state.data.email}</Text>
+              </View>
+            </View>
+            <View>
+              <View style={[{}, styles.mainContentUserInfoView]}>
+                <Text style={[{ color: '#929497' }, fontStyles.bold13]}>Phone: </Text>
+                <Text style={[{}, styles.mainContentUserInfo]}>{this.state.data.phone}</Text>
+              </View>
+            </View>
+            <View>
+              <View style={[{}, styles.mainContentUserInfoView]}>
+                <Text style={[{ color: '#929497' }, fontStyles.bold13]}>Customer Address: </Text>
+                <Text
+                  numberOfLines={3}
+                  style={[{ width: width / 2 }, styles.mainContentUserInfo]}>{this.state.data.address}</Text>
+              </View>
             </View>
           </View>
-          <View>
-            <View style={[{}, styles.mainContentUserInfoView]}>
-              <Text style={[{color:'#929497'}, fontStyles.bold13]}>Phone: </Text>
-              <Text style={[{}, styles.mainContentUserInfo]}>{this.state.data.phone}</Text>
+          <View style={[{}, styles.balanceView]}>
+            <View style={[{}, styles.balanceRowView]}>
+              <View style={[{}, styles.balanceColumn1View]}>
+                <Text style={[{ color: '#929497' }, fontStyles.normal13]}>Avail. Balance</Text>
+              </View>
+              <View style={[{}, styles.balanceColumn2View]}>
+                <Text style={[{ color: '#4E4D4D' }, fontStyles.bold13]}>₦ {this.state.data.available_balance}</Text>
+              </View>
             </View>
-          </View>
-          <View>
-            <View style={[{}, styles.mainContentUserInfoView]}>
-              <Text style={[{color:'#929497'}, fontStyles.bold13]}>Customer Address: </Text>
-              <Text
-                numberOfLines={3}
-                style={[{ width: width / 2 }, styles.mainContentUserInfo]}>{this.state.data.address}</Text>
+            <View style={[{}, styles.balanceRowView]}>
+              <View style={[{}, styles.balanceColumn1View]}>
+                <Text style={[{ color: '#929497' }, fontStyles.normal13]}>Acct. Balance</Text>
+              </View>
+              <View style={[{}, styles.balanceColumn2View]}>
+                <Text style={[{ color: '#4E4D4D' }, fontStyles.bold13]}>₦ {this.state.data.account_balance}</Text>
+              </View>
             </View>
-          </View>
-        </View>
-        <View style={[{}, styles.balanceView]}>
-          <View style={[{}, styles.balanceRowView]}>
-            <View style={[{}, styles.balanceColumn1View]}>
-              <Text style={[{color:'#929497'}, fontStyles.normal13]}>Avail. Balance</Text>
+            <View style={[{}, styles.balanceRowView]}>
+              <View style={[{}, styles.balanceColumn1View]}>
+                <Text style={[{ color: '#929497' }, fontStyles.normal13]}>Loyalty Points</Text>
+              </View>
+              <View style={[{}, styles.balanceColumn2View]}>
+                <Text style={[{ color: '#4E4D4D' }, fontStyles.bold13]}>{this.state.data.loyalty_points}</Text>
+              </View>
             </View>
-            <View style={[{}, styles.balanceColumn2View]}>
-              <Text style={[{color:'#4E4D4D'}, fontStyles.bold13]}>₦ {this.state.data.available_balance}</Text>
+            <View style={[{ paddingBottom: 10 }, styles.balanceRowView]}>
+              <View style={[{}, styles.balanceColumn1View]}>
+                <Text style={[{ color: '#929497' }, fontStyles.normal13]}>Credit Note</Text>
+              </View>
+              <View style={[{}, styles.balanceColumn2View]}>
+                <Text style={[{ color: '#4E4D4D' }, fontStyles.bold13]}>₦ {this.state.data.credit_note_balance}</Text>
+              </View>
             </View>
-          </View>
-          <View style={[{}, styles.balanceRowView]}>
-            <View style={[{}, styles.balanceColumn1View]}>
-              <Text style={[{color:'#929497'}, fontStyles.normal13]}>Acct. Balance</Text>
-            </View>
-            <View style={[{}, styles.balanceColumn2View]}>
-              <Text style={[{color:'#4E4D4D'}, fontStyles.bold13]}>₦ {this.state.data.account_balance}</Text>
-            </View>
-          </View>
-          <View style={[{}, styles.balanceRowView]}>
-            <View style={[{}, styles.balanceColumn1View]}>
-              <Text style={[{color:'#929497'}, fontStyles.normal13]}>Loyalty Points</Text>
-            </View>
-            <View style={[{}, styles.balanceColumn2View]}>
-              <Text style={[{color:'#4E4D4D'}, fontStyles.bold13]}>{this.state.data.loyalty_points}</Text>
-            </View>
-          </View>
-          <View style={[{ paddingBottom: 10 }, styles.balanceRowView]}>
-            <View style={[{}, styles.balanceColumn1View]}>
-              <Text style={[{color:'#929497'}, fontStyles.normal13]}>Credit Note</Text>
-            </View>
-            <View style={[{}, styles.balanceColumn2View]}>
-              <Text style={[{color:'#4E4D4D'}, fontStyles.bold13]}>₦ {this.state.data.credit_note_balance}</Text>
-            </View>
-          </View>
 
+          </View>
         </View>
-       </View>
       </View>
     )
   }

@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Image,  TouchableOpacity, Dimensions, Touchable, ScrollView,  } from 'react-native';
-import {   Text, TextInput, Alert} from 'react-native-paper';
+import { View, Image, TouchableOpacity, Dimensions, Touchable, ScrollView, } from 'react-native';
+import { Text, TextInput, Alert } from 'react-native-paper';
 import styles from '../css/OrderDetailCss';
 import fontStyles from '../css/FontCss'
 import Header from '../views/Header'
@@ -63,9 +63,9 @@ class OrderDetail extends React.Component {
                 });
                 console.log('data data data res res res ', responseJson.message)
                 if (responseJson.status === 'success') {
-                    if(responseJson.message == "Order not found"){
+                    if (responseJson.message == "Order not found") {
                         this.props.navigation.goBack();
-                        Alert.alert('Message',responseJson.message)
+                        Alert.alert('Message', responseJson.message)
                         return
                     }
                     let total_ammount = 0;
@@ -90,13 +90,20 @@ class OrderDetail extends React.Component {
                     })
 
 
-                } else {
-                    let message = responseJson.message;
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
                     Alert.alert('Error', message)
                 }
             })
     }
-
+    unauthorizedLogout(){
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
+    }
     ReciptResend() {
         //https://com.cicodsaasstaging.com/com/api/orders/957?action=send_receipt
         this.setState({ Spinner: true })
@@ -284,7 +291,7 @@ class OrderDetail extends React.Component {
                         </View>
                     </View>
                     <View style={[{}, styles.detailMainView]}>
-                        <View style={[{ alignSelf: 'flex-start',borderBottomWidth:0.25,paddingBottom:10, width: width - 20, paddingHorizontal: 10, marginVertical: 10, flexDirection: 'row' }]}>
+                        <View style={[{ alignSelf: 'flex-start', borderBottomWidth: 0.25, paddingBottom: 10, width: width - 20, paddingHorizontal: 10, marginVertical: 10, flexDirection: 'row' }]}>
                             <Image
                                 source={require('../images/Order/invoice.png')}
                             />
@@ -295,7 +302,7 @@ class OrderDetail extends React.Component {
                         </View>
                         <View style={{}, styles.invoiceRow}>
                             <View style={{ flexDirection: 'column', width: width - 50 }}>
-                                <Text style={[{},styles.detailInvoiceLable]}>Pure ORANGE JUICE 12PACK</Text>
+                                <Text style={[{}, styles.detailInvoiceLable]}>Pure ORANGE JUICE 12PACK</Text>
                                 <Text style={{ color: '#929497', fontSize: 12 }}>LAGOS- Palms</Text>
                                 <View style={{ flexDirection: 'row' }}>
                                     <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>Unit Price: </Text>
@@ -308,7 +315,7 @@ class OrderDetail extends React.Component {
                         </View>
                         <View style={{}, styles.invoiceRow}>
                             <View style={{ flexDirection: 'column', width: width - 50 }}>
-                                <Text style={[{},styles.detailInvoiceLable]}>APPLE BUST FRUTTA 250ML</Text>
+                                <Text style={[{}, styles.detailInvoiceLable]}>APPLE BUST FRUTTA 250ML</Text>
                                 <Text style={{ color: '#929497', fontSize: 12 }}>LAGOS- Palms</Text>
                                 <View style={{ flexDirection: 'row' }}>
                                     <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>Unit Price: </Text>
@@ -320,8 +327,8 @@ class OrderDetail extends React.Component {
                             </View>
                         </View>
                         <View style={{ alignSelf: 'flex-end', marginRight: 20, marginVertical: 20, flexDirection: 'row' }}>
-                            <Text style={{ fontWeight: 'bold',color:'#4E4D4D',fontSize:17,fontFamily:'Open Sans' }}>Total:  </Text>
-                            <Text style={{ fontWeight: 'bold',color:'#4E4D4D',fontSize:17,fontFamily:'Open Sans'  }}>N750,000</Text>
+                            <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>Total:  </Text>
+                            <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>N750,000</Text>
                         </View>
 
                     </View>

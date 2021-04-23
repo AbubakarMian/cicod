@@ -66,12 +66,23 @@ class Customer extends React.Component {
                     })
                     // this.props.navigation.navigate('DrawerNavigation')
                 }
+                else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
+                    Alert.alert('Error', message)
+                }
             })
             .catch(error => {
                 console.log('Error !!!', error)
             });
     }
-
+    unauthorizedLogout() {
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
+    }
     customerDetails(items) {
 
         console.log('items !!!!!!!!!!!!', items.id)
@@ -122,7 +133,7 @@ class Customer extends React.Component {
                         onChangeText={text => this.setState({ search_text: text })}
                         onSubmitEditing={() => this.search()}
                         label="Johnson James"
-                        style={{ backgroundColor: 'transparent',borderBottomWidth:0,borderColor:'#fff' }}
+                        style={{ backgroundColor: 'transparent', borderBottomWidth: 0, borderColor: '#fff' }}
                         width={width - 50}
                         alignSelf={'center'}
                         color={'#000'}
@@ -156,14 +167,14 @@ class Customer extends React.Component {
                                             source={require('../images/customer/usericon.png')}
                                         />
                                     </View>
-                                    <View style={{ position: 'relative', flex: 3 }}> 
-                                        <Text style={[{color:'#4E4D4D'},fontStyles.bold15]}>{item.first_name + ' ' + item.last_name}</Text>
+                                    <View style={{ position: 'relative', flex: 3 }}>
+                                        <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.first_name + ' ' + item.last_name}</Text>
                                         <View style={{ flexDirection: 'row', }}>
 
-                                            <Text 
-                                            numberOfLines={3}
-                                            
-                                            style={[{color:'#929497',width:width/1.8},fontStyles.normal12]}>{item.email + '.' + item.phone}</Text>
+                                            <Text
+                                                numberOfLines={3}
+
+                                                style={[{ color: '#929497', width: width / 1.8 }, fontStyles.normal12]}>{item.email + '.' + item.phone}</Text>
                                             <View style={[{ position: 'absolute', right: 0, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
                                                 <Text style={[{ color: '#26C281' }]}>{(item.is_active) ? 'ACTIVE' : 'IN ACTIVE'}</Text>
                                             </View>
