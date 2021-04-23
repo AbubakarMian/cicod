@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container, Input, InputGroup, List, ListItem } from 'native-base';
-import { View, TouchableOpacity, Image, Dimensions, TouchableHighlight, Touchable, FlatList, ScrollView } from 'react-native';
-import { Text, TextInput, Alert, Modal } from 'react-native-paper';
+import { View, TouchableOpacity, Image, Dimensions, TouchableHighlight, Alert,Touchable, FlatList, ScrollView } from 'react-native';
+import { Text, TextInput, Modal } from 'react-native-paper';
 import fontStyles from '../css/FontCss'
 import styles from '../css/BuyersViewCss';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -21,7 +21,8 @@ class BuyersView extends React.Component {
             supendModal: false,
             moreDeatailMOdal: false,
             items: {},
-            orderList: []
+            orderList: [],
+            search_order: ''
         }
     }
 
@@ -162,10 +163,10 @@ class BuyersView extends React.Component {
             })
     }
 
-    suspendSeller(seller_id){
-        
+    suspendSeller(seller_id) {
+
     }
-    unsuspendSeller(seller_id){
+    unsuspendSeller(seller_id) {
 
     }
 
@@ -194,7 +195,28 @@ class BuyersView extends React.Component {
         }
 
     }
+
+    search() {
+
+        if (this.props.route.params.heading == "SUPPLIER") {
+            let search_url = Constants.buyerlist + '?filter[buyer_name]=' + this.state.search_buyers;
+            this.getSellerOrderHistory();
+            //merchant_id
+        } else {
+            this.getBuyerOrderHistory()
+        }
+
+        // let search_url = Constants.buyerlist + '?filter[buyer_name]=' + this.state.search_buyers;
+        // this.buyerList(search_url);
+        // console.log('search_url search_url', search_url);
+    }
+    itemDetail(item) {
+        const id = item.id
+        console.log("item_id item_id item_id item_id ", id)
+        this.props.navigation.navigate('OrderDetail', { id })
+    }
     render() {
+        console.log(' this.state.orderList this.state.orderList', this.state.orderList)
         return (
 
             <View>
@@ -337,7 +359,7 @@ class BuyersView extends React.Component {
                                 width={width - 50}
                                 alignSelf={'center'}
                                 color={'#000'}
-                                onChangeText={text => this.setState({ search_product: text })}
+                                onChangeText={text => this.setState({ search_order: text })}
                                 onSubmitEditing={() => this.search()}
                             />
                         </View>
@@ -370,7 +392,7 @@ class BuyersView extends React.Component {
                             renderItem={({ item, index, separators }) => (
                                 <TouchableHighlight
                                     key={item.key}
-                                    // onPress={() => this._onPress(item)}
+                                    onPress={() => this.itemDetail(item)}
                                     onShowUnderlay={separators.highlight}
                                     onHideUnderlay={separators.unhighlight}>
                                     <View style={[{}, styles.flatlistMainContianer]}>
@@ -379,17 +401,25 @@ class BuyersView extends React.Component {
                                                 source={[{}, styles.listImage]}
                                                 source={require('../images/bage.png')} />
                                             <View style={{ flexDirection: 'column' }}>
-                                                <Text style={[{}, styles.darkGrayBoldText]}>103943535</Text>
-                                                <Text style={[{}, styles.lightGrayText]}>Order contains 4 products</Text>
+                                                <Text style={[{}, styles.darkGrayBoldText]}>{item.cicod_order_id}</Text>
+                                                <Text style={[{}, styles.lightGrayText]}>{item.description}</Text>
                                             </View>
                                             <View style={[{}, styles.actionContainer]}>
-                                                <Text style={[{}, styles.darkGrayBoldText]}>N1,500,000</Text>
-                                                <View style={[{}, styles.greenView]}>
-                                                    <Text style={[{}, styles.greenText]}>PAID</Text>
-                                                </View>
+                                                <Text style={[{}, styles.darkGrayBoldText]}>N{item.amount}</Text>
+                                                {(item.order_status == "PAID") ?
+                                                    <View style={[{}, styles.greenView]}>
+                                                        <Text style={[{}, styles.greenText]}>{item.order_status}</Text>
+                                                    </View>
+                                                    : (item.order_status == "PENDING") ?
+                                                        <View style={[{}, styles.yellowView]}>
+                                                            <Text style={[{}, styles.yellowText]}>{item.order_status}</Text>
+                                                        </View>
+                                                        : <View style={[{}, styles.greyView]}>
+                                                            <Text style={[{}, styles.greyText]}>{item.order_status}</Text>
+                                                        </View>}
                                             </View>
                                         </View>
-                                        <Text style={[{}, styles.lightGrayText]}>2017-01-30 / 10:45 AM</Text>
+                                        <Text style={[{}, styles.lightGrayText]}>{item.date_created}</Text>
                                     </View>
                                 </TouchableHighlight>
                             )}

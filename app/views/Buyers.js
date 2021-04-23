@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, FlatList, Alert,TouchableHighlight, Dimensions, Image, Platform, TouchableOpacity, } from 'react-native'
+import { View, ImageBackground, FlatList, Alert, TouchableHighlight, Dimensions, Image, Platform, TouchableOpacity, } from 'react-native'
 import splashImg from '../images/splash.jpg'
 import { Text, TextInput } from 'react-native-paper';
 import fontStyles from '../css/FontCss'
@@ -28,7 +28,8 @@ class Buyers extends React.Component {
             toolTipVisible: false,
             spinner: false,
             data: [],
-            search_buyers: ''
+            search_buyers: '',
+            reload: true
 
         }
     }
@@ -67,20 +68,74 @@ class Buyers extends React.Component {
             })
     }
 
-    componentWillReceiveProps() {
+    // static getDerivedStateFromProps(props, state) {
+    //     // console.log('this.props.route 1', this.props.route);
+    //     console.log('this.props.props 2', props.route.params);
+    //     if (props.route.params === undefined) {
+    //         console.log('IN If Condition !!!!!!!!!!!!!!!!!!!!!!!!')
 
-        console.log('this.props.route 1', this.props.route);
-        return ;
-        let filters = this.props.route.params.filters;
-        let filter = '?';
-        for (let i = 0; i < filters.length; i++) {
-            filter = filter + filters[i].key + '=' + filters[i].value;
-            if (i != filters.length - 1) {
-                filter = filter + '&';
+    //     } else {
+    //         console.log('IN Else Condition !!!!!!!!!!!!!!!!!!!!!!!!')
+
+    //         let filters = props.route.params.filters;
+    //         let filter = '?';
+    //         for (let i = 0; i < filters.length; i++) {
+    //             filter = filter + filters[i].key + '=' + filters[i].value;
+    //             if (i != filters.length - 1) {
+    //                 filter = filter + '&';
+    //             }
+    //         }
+    //         buyerList(Constants.buyerlist + filter);
+    //     }
+    //     // console.log('this.props.state 3', state);
+    // }
+
+    // componentWillReceiveProps() {
+
+    //     console.log('this.props.route 1', this.props.route);
+    //     return;
+    //     let filters = this.props.route.params.filters;
+    //     let filter = '?';
+    //     for (let i = 0; i < filters.length; i++) {
+    //         filter = filter + filters[i].key + '=' + filters[i].value;
+    //         if (i != filters.length - 1) {
+    //             filter = filter + '&';
+    //         }
+    //     }
+    //     console.log(' will receive props Filters !!!!!!!!!!!!!!!!!!!!!!', filter);
+    //     this.getData(Constants.buyerlist + filter);
+    // }
+
+    componentDidUpdate() {
+
+        console.log('componentDidUpdate  !!!!!!!!!!!!!!!!', this.props.route.params)
+        console.log('this.state.reload this.state.reload  !!!!!!!!!!!!!!!!', this.state.reload)
+
+        if (this.state.reload == true) {
+            if (this.props.route.params === undefined) {
+                console.log('IN If Condition !!!!!!!!!!!!!!!!!!!!!!!!')
+
+            } else {
+                console.log('IN Else Condition !!!!!!!!!!!!!!!!!!!!!!!!')
+
+                let filters = this.props.route.params.filters;
+                let filter = '?';
+                for (let i = 0; i < filters.length; i++) {
+                    filter = filter + filters[i].key + '=' + filters[i].value;
+                    if (i != filters.length - 1) {
+                        filter = filter + '&';
+                    }
+                }
+                console.log(' Constants.buyerlist + filter Constants.buyerlist + filter', Constants.buyerlist + filter)
+               this.setState({
+                reload:false
+               })
+                this.buyerList(Constants.buyerlist + filter);
             }
         }
-        console.log(' will receive props Filters !!!!!!!!!!!!!!!!!!!!!!', filter);
-        this.getData(Constants.buyerlist + filter);
+        else{
+            console.log('IN reload  else Condition !!!!!!!!!!!!!!!!!!!!!!!!')
+        }
     }
 
     search() {
@@ -299,7 +354,7 @@ class Buyers extends React.Component {
                                                             <Icon name="ellipsis-h" color={'#929497'} size={20} />
                                                         </MenuTrigger>
                                                         <MenuOptions>
-                                                            <MenuOption onSelect={() => this.props.navigation.navigate('UpdateProduct',{buyer_detail:item})} >
+                                                            <MenuOption onSelect={() => this.props.navigation.navigate('UpdateProduct', { buyer_detail: item })} >
                                                                 <View style={{ flexDirection: 'row' }}>
                                                                     <Image
                                                                         source={require('../images/update.png')}
@@ -313,8 +368,8 @@ class Buyers extends React.Component {
                                                                         source={require('../images/suspend.png')}
                                                                     />
                                                                     {(item.is_active == 1) ?
-                                                     <Text style={{ marginLeft: 10 }}>Suspend</Text>
-                                                    :  <Text style={{ marginLeft: 10 }}>Unsuspend</Text>}
+                                                                        <Text style={{ marginLeft: 10 }}>Suspend</Text>
+                                                                        : <Text style={{ marginLeft: 10 }}>Unsuspend</Text>}
                                                                 </View>
                                                             </MenuOption>
 

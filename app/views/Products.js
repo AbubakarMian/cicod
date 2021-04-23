@@ -39,6 +39,7 @@ class Products extends React.Component {
             console.log('URL @@@@@@@@@@@@@@@@@@@', url)
             this.getData(url);
         } else {
+            console.log('URL @@@@@@@@@@@@@@@@@@@', Constants.productslist)
             this.getData(Constants.productslist);
         }
         this.getCategoryList()
@@ -98,10 +99,12 @@ class Products extends React.Component {
                     this.setState({
                         data: responseJson.data
                     })
-                } else {
-                    let message = responseJson.message;
-                    console.log('message !!!!!!!!!!!!!!!!', message);
-                    Alert.alert('Error !!!!!!!!!!', message)
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
+                    Alert.alert('Error', message)
                 }
             })
     }
@@ -138,8 +141,11 @@ class Products extends React.Component {
                     this.setState({
                         categoryarr: categoryarr,
                     });
-                } else {
-                    let message = JSON.stringify(responseJson.message)
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
                     Alert.alert('Error', message)
                 }
 
@@ -153,6 +159,13 @@ class Products extends React.Component {
             search_product:text
         })
     }
+
+    unauthorizedLogout() {
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
+    }
+
     render() {
         console.log('categoryarr categoryarr categoryarr', this.state.categoryarr);
         const { selectedStartDate } = this.state;
