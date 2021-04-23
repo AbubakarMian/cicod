@@ -58,10 +58,14 @@ class Connect extends React.Component {
                     this.setState({
                         received_arr: responseJson.data
                     })
-                } else {
-                    let message = responseJson.message
-                    Alert.alert('Message', message)
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
                 }
+                else {
+                    let message = responseJson.message
+                    Alert.alert('Error 1234', message)
+                }
+
             })
     }
     getSendConnect() {
@@ -86,10 +90,14 @@ class Connect extends React.Component {
                     this.setState({
                         send_arr: responseJson.data
                     })
-                } else {
-                    let message = JSON.stringify(responseJson.message)
-                    Alert.alert('Error', message)
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
                 }
+                else {
+                    let message = responseJson.message
+                    Alert.alert('Error 1234', message)
+                }
+
             })
     }
 
@@ -122,10 +130,14 @@ class Connect extends React.Component {
                         merchant_name: merchatnt_detail.merchant_name,
                         date_joined: merchatnt_detail.date_joined,
                     })
-                } else {
-                    let message = responseJson.message
-                    Alert.alert('Message', 'Merchant Not Found');
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
                 }
+                else {
+                    let message = responseJson.message
+                    Alert.alert('Error 1234', message)
+                }
+
             })
 
     }
@@ -153,10 +165,14 @@ class Connect extends React.Component {
                 if (responseJson.success === "true") {
                     let res = responseJson.data.message;
                     Alert.alert('Message', res);
-                } else {
-                    let message = responseJson.data.message
-                    Alert.alert('Error', message)
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
                 }
+                else {
+                    let message = responseJson.message
+                    Alert.alert('Error 1234', message)
+                }
+
             }
             )
             .catch((error) => {
@@ -165,7 +181,11 @@ class Connect extends React.Component {
             });
 
     }
-
+    unauthorizedLogout() {
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
+    }
     connectView() {
         return (
             // <View>
@@ -321,39 +341,39 @@ class Connect extends React.Component {
                                 //     </View>
                                 // </TouchableOpacity>
                                 <TouchableOpacity
-                                key={item.key}
-                                // onPress={() => this._onPress(item)}
-                                onShowUnderlay={separators.highlight}
-                                onHideUnderlay={separators.unhighlight}>
-                                <View style={[{}, styles.flatCardView]}>
-                                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Image source={require('../images/bage.png')} />
-                                    </View>
-                                    <View style={{ flex: 5, flexDirection: 'column' }}>
-                                        <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.buyer_name}</Text>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <Text style={[{ color: '#929497' }, fontStyles.bold13]}>{item.buyer_id}  </Text>
-                                            <Text style={[{ color: '#929497' }, fontStyles.normal12]}>{item.time_requested}</Text>
+                                    key={item.key}
+                                    // onPress={() => this._onPress(item)}
+                                    onShowUnderlay={separators.highlight}
+                                    onHideUnderlay={separators.unhighlight}>
+                                    <View style={[{}, styles.flatCardView]}>
+                                        <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                                            <Image source={require('../images/bage.png')} />
                                         </View>
-                                    </View>
+                                        <View style={{ flex: 5, flexDirection: 'column' }}>
+                                            <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.buyer_name}</Text>
+                                            <View style={{ flexDirection: 'row' }}>
+                                                <Text style={[{ color: '#929497' }, fontStyles.bold13]}>{item.buyer_id}  </Text>
+                                                <Text style={[{ color: '#929497' }, fontStyles.normal12]}>{item.time_requested}</Text>
+                                            </View>
+                                        </View>
 
-                                    {/* <View style={[{flex:2, position: 'absolute', right: 10, bottom:10, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                                        {/* <View style={[{flex:2, position: 'absolute', right: 10, bottom:10, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
                                     <Text style={[{ color: '#26C281' }]}>ACTIVE</Text>
                                 </View> */}
 
-                                    {(item.status == 'PENDING') ?
-                                        <View style={[{ position: 'absolute', right: 10, bottom:10, backgroundColor: '#E6E6E6', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
-                                            <Text style={[{ color: '#929497' }]}>PENDING</Text>
-                                        </View>
-                                        :
-                                        (item.status == 'APPROVED') ?
-                                            <View style={[{ position: 'absolute', right: 10, bottom:10, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
-                                                <Text style={[{ color: '#26C281' }]}>APPROVED</Text>
+                                        {(item.status == 'PENDING') ?
+                                            <View style={[{ position: 'absolute', right: 10, bottom: 10, backgroundColor: '#E6E6E6', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                                                <Text style={[{ color: '#929497' }]}>PENDING</Text>
                                             </View>
-                                            : null
-                                    }
-                                </View>
-                            </TouchableOpacity>
+                                            :
+                                            (item.status == 'APPROVED') ?
+                                                <View style={[{ position: 'absolute', right: 10, bottom: 10, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                                                    <Text style={[{ color: '#26C281' }]}>APPROVED</Text>
+                                                </View>
+                                                : null
+                                        }
+                                    </View>
+                                </TouchableOpacity>
                             )}
                         />
                     </View>
@@ -445,12 +465,12 @@ class Connect extends React.Component {
                                 </View> */}
 
                                     {(item.status == 'PENDING') ?
-                                        <View style={[{ position: 'absolute', right: 10, bottom:10, backgroundColor: '#E6E6E6', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                                        <View style={[{ position: 'absolute', right: 10, bottom: 10, backgroundColor: '#E6E6E6', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
                                             <Text style={[{ color: '#929497' }]}>PENDING</Text>
                                         </View>
                                         :
                                         (item.status == 'APPROVED') ?
-                                            <View style={[{ position: 'absolute', right: 10, bottom:10, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                                            <View style={[{ position: 'absolute', right: 10, bottom: 10, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
                                                 <Text style={[{ color: '#26C281' }]}>APPROVED</Text>
                                             </View>
                                             : null

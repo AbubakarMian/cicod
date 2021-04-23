@@ -46,7 +46,7 @@ class Products extends React.Component {
             console.log('URL  els e @@@@@@@@@@@@@@@@@@@', Constants.productslist)
             this.getData(Constants.productslist);
         }
-        this.getCategoryList()
+         this.getCategoryList()
         return;
         console.log('this.props.params', this.props.route);
         if (this.props.params != undefined) {
@@ -156,7 +156,7 @@ class Products extends React.Component {
                 }
                 else {
                     let message = responseJson.message
-                    Alert.alert('Error 1234', message)
+                    Alert.alert('Error', message)
                 }
 
             })

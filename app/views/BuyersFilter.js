@@ -62,10 +62,14 @@ class BuyersFilter extends React.Component {
           this.setState({
             categoryarr: categoryarr,
           });
-        } else {
-          let message = JSON.stringify(responseJson.error.message)
-          Alert.alert('Error', message)
+        } else if (responseJson.status == 401) {
+          this.unauthorizedLogout();
         }
+        else {
+          let message = responseJson.message
+          Alert.alert('Error 1234', message)
+        }
+
 
       })
 
@@ -95,10 +99,14 @@ class BuyersFilter extends React.Component {
             approvedby_arr: approvedby_arr,
           });
 
-        } else {
-          let message = responseJson.message;
-          Alert.alert('Error', message)
+        } else if (responseJson.status == 401) {
+          this.unauthorizedLogout();
         }
+        else {
+          let message = responseJson.message
+          Alert.alert('Error 1234', message)
+        }
+
       })
   }
 
@@ -108,6 +116,11 @@ class BuyersFilter extends React.Component {
     this.setState({
       filters: filters
     })
+  }
+  unauthorizedLogout() {
+    Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+    this.props.logoutUser();
+    this.props.navigation.navigate('Login');
   }
   approvedByText(text) {
     let filters = this.state.filters; //this.state.filters;
