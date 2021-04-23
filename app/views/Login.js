@@ -124,7 +124,10 @@ class Login extends React.Component {
                     } else {
                         this.setState({ Spinner: false })
                         // this.setState({ Spinner: false })
-                        let message = responseJson.messa
+                        let message = responseJson.message
+                        if(message == ''){
+                            message = 'Server responded with error contact admin'
+                        }
                         Alert.alert('Error', message)
                     }
                 }
