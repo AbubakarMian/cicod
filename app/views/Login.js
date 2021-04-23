@@ -10,6 +10,7 @@ import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import { Constants } from '../views/Constant';
 import { Text, TextInput, Alert,Modal } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 var { width, height } = Dimensions.get('window');
@@ -23,8 +24,27 @@ class Login extends React.Component {
             username: 'cicodsandbox@yopmail.com',//cicodsandbox@yopmail.com
             password: 'Sandbox@123',//Sandbox@123
             isChecked: false,
-            domain_text_color:'black'
+            hide_password: true,
+            domain_text_color:'black',
+            rememberIsChecked:false
         }
+    }
+    async componentDidMount(){
+        let remember_credentials = await AsyncStorage.getItem('remember_credentials');
+        console.log('remember_credentials',remember_credentials);
+        if (remember_credentials === 'true') {
+            let user_credentials = await AsyncStorage.getItem('user_credentials');
+            user_credentials = JSON.parse(user_credentials);
+            console.log('user_credentials',user_credentials);
+            console.log('username',user_credentials.username);
+            
+            this.setState({
+                    username: user_credentials.username,
+                    password: user_credentials.password,
+                    tenantId: user_credentials.tenantId,
+                    rememberIsChecked:true
+                })
+          }
     }
     login() {
         console.log("Login Login Login ")
@@ -40,6 +60,24 @@ class Login extends React.Component {
         }
 
         else {
+            if(this.state.rememberIsChecked){
+                let user_credentials = {
+                    username: this.state.username,//cicodsandbox@yopmail.com
+                    password: this.state.password,//Sandbox@123
+                    tenantId: this.state.tenantId//sandbox
+                }
+                AsyncStorage.setItem('user_credentials',JSON.stringify(user_credentials));
+                AsyncStorage.setItem('remember_credentials','true');
+            }
+            else{
+                this.setState({
+                    username: '',
+                    password: '',
+                    tenantId: ''
+                })
+                AsyncStorage.setItem('remember_credentials','false');
+                AsyncStorage.removeItem('user_credentials');
+            }
             this.props.setUser({
 
                 firstname: "sandbox last", //responseJson.user.firstname,
@@ -135,6 +173,7 @@ class Login extends React.Component {
                             width={width-50}
                             height={height/12}
                             alignSelf={'flex-start'}
+                            value={this.state.tenantId}
                         />
                        {/* <Text style={{paddingVertical:50,borderBottomWidth:1,borderBottomColor:this.state.domain_text_color, height:height/12,textAlignVertical:'center', backgroundColor: '#CFCFCF', color: '#4E4D4D',position:'absolute',right:0, paddingVertical: 15, paddingHorizontal: 5 }}>.cicod.com</Text> */}
                        <Text style={{  paddingVertical:22,borderTopRightRadius:5,borderBottomRightRadius:5, textAlignVertical:'center', backgroundColor: '#CFCFCF', color: '#4E4D4D',position:'absolute',right:0, paddingHorizontal: 5 }}>.cicod.com</Text>
@@ -147,12 +186,12 @@ class Login extends React.Component {
                             width={width-50}
                             alignSelf={'center'}
                             color={'#000'}
-                            
+                            value={this.state.username}                            
                         />
                     </View>
                     <View style={[{}, styles.textInputView]}>
                         <TextInput
-                            secureTextEntry={true}
+                            secureTextEntry={this.state.hide_password}
                             onChangeText={text => this.setState({ password: text })}
                             placeholder="Password"
                             width={width-50}
@@ -160,27 +199,28 @@ class Login extends React.Component {
 
                             alignSelf={'center'}
                             color={'#000'}
-
+                            value={this.state.password}
                         />
-                        <View
+                        <TouchableOpacity
                             style={{ position: 'absolute', right: 10 }}
+                            onPress={()=>{this.setState({hide_password:!this.state.hide_password})}}
                         >
                             <Icon
-                                name="eye-slash"
+                                name={this.state.hide_password ? 'eye-slash' : 'eye'}
                                 size={20}
                                 color={'#929497'}
                             />
-                        </View>
+                        </TouchableOpacity>
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'center', width: width - 50, marginTop: 20, marginBottom: 10 }}>
                         <CheckBox
                             style={{ width: width / 2, alignSelf: 'center', alignItems: 'center' }}
                             onClick={() => {
                                 this.setState({
-                                    isChecked: !this.state.isChecked
+                                    rememberIsChecked: !this.state.rememberIsChecked
                                 })
                             }}
-                            isChecked={this.state.isChecked}
+                            isChecked={this.state.rememberIsChecked}
                             rightText={"Remember details"}
                         />
                     </View>
