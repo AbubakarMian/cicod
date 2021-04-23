@@ -61,8 +61,13 @@ class OrderDetail extends React.Component {
                 this.setState({
                     Spinner: false,
                 });
-                console.log('data data data res res res ', responseJson)
+                console.log('data data data res res res ', responseJson.message)
                 if (responseJson.status === 'success') {
+                    if(responseJson.message == "Order not found"){
+                        this.props.navigation.goBack();
+                        Alert.alert('Message',responseJson.message)
+                        return
+                    }
                     let total_ammount = 0;
                     let product_items = responseJson.data.items;
 
@@ -86,7 +91,7 @@ class OrderDetail extends React.Component {
 
 
                 } else {
-                    let message = JSON.stringify(responseJson.error.message)
+                    let message = responseJson.message;
                     Alert.alert('Error', message)
                 }
             })

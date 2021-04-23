@@ -90,6 +90,13 @@ export default StyleSheet.create({
         paddingVertical:3,
         borderRadius:100,
     },
+    inactiveActionText:{
+        backgroundColor:'#E6E6E6',
+        color:'#FFFFFF',
+        paddingHorizontal:15,
+        paddingVertical:3,
+        borderRadius:100,
+    },
    dotsTouch:{
        
        
