@@ -170,14 +170,14 @@ class ProductCategory extends React.Component {
                     }
                     data={this.state.categoryarr}
                     renderItem={({ item, index, separators }) => (
-                        <TouchableHighlight
+                        <TouchableOpacity
                             key={item.key}
                             // onPress={() => this._onPress(item)}
                             onShowUnderlay={separators.highlight}
                             onHideUnderlay={separators.unhighlight}>
                             <View style={[{}, styles.listContainer]}>
                                 <View style={[{}, styles.listImageView]}>
-                                    <Image source={require('../images/bage.png')} />
+                                    <Image source={require('../images/product_cat_icon.png')} />
                                 </View>
                                 <View style={[{}, styles.listDescView]}>
                                     <Text style={[{}, styles.listDescBoldText]}>{item.name}</Text>
@@ -227,7 +227,7 @@ class ProductCategory extends React.Component {
                                         <Text style={[{}, styles.inactiveActionText]}>INACTIVE</Text>}
                                 </View>
                             </View>
-                        </TouchableHighlight>
+                        </TouchableOpacity>
                     )}
                 />
             </View>
