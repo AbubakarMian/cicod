@@ -82,14 +82,14 @@ export default class ProductCategory extends React.Component {
 
                     ]}
                     renderItem={({ item, index, separators }) => (
-                        <TouchableHighlight
+                        <TouchableOpacity
                             key={item.key}
                             // onPress={() => this._onPress(item)}
                             onShowUnderlay={separators.highlight}
                             onHideUnderlay={separators.unhighlight}>
                             <View style={[{}, styles.listContainer]}>
                                 <View style={[{}, styles.listImageView]}>
-                                    <Image source={require('../images/bage.png')} />
+                                    <Image source={require('../images/product_cat_icon.png')} />
                                 </View>
                                 <View style={[{}, styles.listDescView]}>
                                     <Text style={[{}, styles.listDescBoldText]}>Pure Juice</Text>
@@ -106,7 +106,7 @@ export default class ProductCategory extends React.Component {
                                     <Text style={[{}, styles.actionText]}>ACTIVE</Text>
                                 </View>
                             </View>
-                        </TouchableHighlight>
+                        </TouchableOpacity>
                     )}
                 />
             </View>
