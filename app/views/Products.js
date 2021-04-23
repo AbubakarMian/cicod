@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, } from 'react-native'
-import { Text, TextInput, Alert, Searchbar } from 'react-native-paper';
+import { View, TouchableHighlight, FlatList, Dimensions, Alert,Image, Platform, TouchableOpacity, ScrollView, } from 'react-native'
+import { Text, TextInput, Searchbar } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss';
 import fontStyles from '../css/FontCss'
@@ -36,14 +36,14 @@ class Products extends React.Component {
     componentDidMount() {
         console.log('this.props.route',this.props.route);
         if(this.props.route!=undefined ){
-            return;
+            // return;
         }
         if (this.props.route.params.seller_id != 0) {
             let url = Constants.sellerProductList + '?id=' + this.props.route.params.seller_id + '&sort=-id';
             console.log('URL @@@@@@@@@@@@@@@@@@@', url)
             this.getData(url);
         } else {
-            console.log('URL @@@@@@@@@@@@@@@@@@@', Constants.productslist)
+            console.log('URL  els e @@@@@@@@@@@@@@@@@@@', Constants.productslist)
             this.getData(Constants.productslist);
         }
         this.getCategoryList()
