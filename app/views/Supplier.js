@@ -1,6 +1,6 @@
 import React from 'react'
-import { View,TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView,} from 'react-native'
-import { Text, TextInput, Alert} from 'react-native-paper';
+import { View, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, } from 'react-native'
+import { Text, TextInput, Alert } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss';
 import fontStyles from '../css/FontCss'
@@ -36,7 +36,11 @@ class Supplier extends React.Component {
         this.getSuppliersList(Constants.supplierlist);
     }
 
-
+    unauthorizedLogout() {
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
+    }
     componentWillReceiveProps() {
         console.log('this.props.route', this.props.route.params.filters);
         // console.log('this.props.route',this.props.route.params);
@@ -78,8 +82,11 @@ class Supplier extends React.Component {
                     this.setState({
                         data: responseJson.data
                     })
-                } else {
-                    let message = JSON.stringify(responseJson.error.message)
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
                     Alert.alert('Error', message)
                 }
             })
@@ -88,7 +95,7 @@ class Supplier extends React.Component {
 
     supliersDetail(items) {
         console.log('items !!!!!!!!!!!!', items);
-        this.props.navigation.navigate('BuyersView', { items: items , heading:'SUPPLIERS' })
+        this.props.navigation.navigate('BuyersView', { items: items, heading: 'SUPPLIERS' })
     }
     render() {
 
@@ -144,16 +151,16 @@ class Supplier extends React.Component {
                         </TouchableOpacity>
                     </View>
                 </View> */}
-             <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center',  borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
-                    
-                    <View style={{flexDirection:'row',backgroundColor:'#fff',alignItems:'center',height:50,paddingHorizontal:10,borderRadius:5, width:width-80}}>
-                    <Image
-                        source={require('../images/products/searchicon.png')}
-                    />
+                <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
+
+                    <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
+                        <Image
+                            source={require('../images/products/searchicon.png')}
+                        />
                         <TextInput
                             label="Search supplier"
                             // selectionColor={'#fff'}
-                           disabled={true}
+                            disabled={true}
                             style={{ backgroundColor: 'transparent', }}
                             width={width - 50}
                             alignSelf={'center'}
@@ -161,19 +168,19 @@ class Supplier extends React.Component {
                             onChangeText={text => this.setState({ search_product: text })}
                             onSubmitEditing={() => this.search()}
                         />
-                    </View> 
-                        <TouchableOpacity
+                    </View>
+                    <TouchableOpacity
                         style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
                         onPress={() => this.props.navigation.navigate('Filter')}
-                        >
-                            <Image
-                                source={require('../images/Order/settingicon.png')}
-                            />
-                        </TouchableOpacity>
-                   
+                    >
+                        <Image
+                            source={require('../images/Order/settingicon.png')}
+                        />
+                    </TouchableOpacity>
+
                 </View>
-            <View style={{borderWidth:0.25,borderColor:'#929497',width:width-20,alignSelf:'center',marginVertical:5}}></View>
-                 
+                <View style={{ borderWidth: 0.25, borderColor: '#929497', width: width - 20, alignSelf: 'center', marginVertical: 5 }}></View>
+
                 <ScrollView>
                     <FlatList
                         data={this.state.data}
@@ -195,16 +202,16 @@ class Supplier extends React.Component {
                                 onPress={() => this.supliersDetail(item)}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
-                                <View style={{ position: 'relative', alignSelf: 'center',alignItems:'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 10 }}>
+                                <View style={{ position: 'relative', alignSelf: 'center', alignItems: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 10 }}>
                                     <View style={{ flex: 1 }}>
                                         <View style={{ flexDirection: 'column' }}>
                                             <View style={{ flexDirection: 'row' }}>
                                                 <Image
                                                     source={require('../images/supplier/bage.png')}
                                                 />
-                                                <View style={{ flexDirection: 'column',marginLeft:5 }}>
-                                                    <Text style={[{color:'#4E4D4D'},fontStyles.bold15]}>{item.buyer_name}</Text>
-                                                    <Text style={[{color:'#929497'},fontStyles.normal12]}>{item.seller_name}</Text>
+                                                <View style={{ flexDirection: 'column', marginLeft: 5 }}>
+                                                    <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.buyer_name}</Text>
+                                                    <Text style={[{ color: '#929497' }, fontStyles.normal12]}>{item.seller_name}</Text>
                                                 </View>
                                             </View>
 

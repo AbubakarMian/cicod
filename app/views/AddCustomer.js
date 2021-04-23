@@ -42,6 +42,11 @@ class AddCustomer extends React.Component {
     searchText() {
         this.getCustomers(this.state.search_text);
     }
+    unauthorizedLogout(){
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
+    }
     getCustomers(search_text) {
 
         this.setState({ spinner: true })
@@ -63,6 +68,12 @@ class AddCustomer extends React.Component {
                     this.setState({
                         customerData: responseJson.data
                     })
+                } else if(responseJson.status == 401){
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
+                    Alert.alert('Error', message)
                 }
             })
             .catch(error => {

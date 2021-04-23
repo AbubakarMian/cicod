@@ -66,8 +66,11 @@ class AddSuppliers extends React.Component {
                         countries_arr: countries_arr,
                     });
 
-                } else {
-                    let message = JSON.stringify(responseJson.error.message)
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
                     Alert.alert('Error', message)
                 }
             })
@@ -98,8 +101,11 @@ class AddSuppliers extends React.Component {
                     this.setState({
                         states_arr: states_arr,
                     });
-                } else {
-                    let message = JSON.stringify(responseJson.error.message)
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
                     Alert.alert('Error', message)
                 }
             })
@@ -130,8 +136,11 @@ class AddSuppliers extends React.Component {
                     this.setState({
                         lgas_arr: lgas_arr,
                     });
-                } else {
-                    let message = JSON.stringify(responseJson.error.message)
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
                     Alert.alert('Error', message)
                 }
             })
@@ -207,9 +216,11 @@ class AddSuppliers extends React.Component {
                     })
                     Alert.alert('Message', responseJson.message)
                     this.props.navigation.navigate('CreateOrder', { render: true })
-                } else {
-                    this.setState({ spinner: false })
-                    let message = responseJson.status
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
                     Alert.alert('Error', message)
                 }
             }
@@ -220,6 +231,11 @@ class AddSuppliers extends React.Component {
             });
     }
 
+    unauthorizedLogout() {
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
+    }
     render() {
         var radio_props_per = [
             { label: 'Picked up by the supplier', value: 0 },

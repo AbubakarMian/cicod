@@ -38,6 +38,11 @@ class Buyers extends React.Component {
         this.buyerList(Constants.buyerlist);
     }
 
+    unauthorizedLogout() {
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
+    }
     buyerList(url) {
 
         this.setState({ spinner: true })
@@ -61,9 +66,12 @@ class Buyers extends React.Component {
                         data: responseJson.data
                     })
 
-                } else {
-                    let message = responseJson.message;
-                    // Alert.alert('Error', message)
+                }    else if(responseJson.status == 401){
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
+                    Alert.alert('Error', message)
                 }
             })
     }
@@ -138,9 +146,12 @@ class Buyers extends React.Component {
                     // })
                     Alert.alert('Message', responseJson.data.message);
 
-                } else {
-                    let message = responseJson.message;
-                    // Alert.alert('Error', message)
+                }     else if(responseJson.status == 401){
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
+                    Alert.alert('Error', message)
                 }
             })
     }
@@ -169,8 +180,11 @@ class Buyers extends React.Component {
                     Alert.alert('Message', responseJson.data.message);
                     this.props.navigation.navigate('Buyers')
 
-                } else {
-                    let message = responseJson.message;
+                }     else if(responseJson.status == 401){
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
                     Alert.alert('Error', message)
                 }
             })

@@ -51,16 +51,23 @@ class Filter extends React.Component {
           this.setState({
             categoryarr: categoryarr,
           });
-        } else {
+        } else if(responseJson.status == 401){
+          this.unauthorizedLogout();
+      }
+      else {
           let message = responseJson.message
           Alert.alert('Error', message)
-        }
+      }
 
       })
 
   }
 
-
+  unauthorizedLogout(){
+    Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+    this.props.logoutUser();
+    this.props.navigation.navigate('Login');
+}
   activeSet(value) {
     let filters = this.state.filters;
     filters.push({ key: 'is_active', value: value })

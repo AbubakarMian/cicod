@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, TouchableHighlight, FlatList,Alert, Dimensions, Image, Platform, TouchableOpacity, Modal, } from 'react-native'
+import { View, ImageBackground, TouchableHighlight, FlatList, Alert, Dimensions, Image, Platform, TouchableOpacity, Modal, } from 'react-native'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import CheckBox from 'react-native-check-box';
@@ -53,8 +53,13 @@ class AddNewCustomer extends React.Component {
         this.getCountryList()
     }
 
+    unauthorizedLogout() {
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
+    }
     ceateCustomer() {
-       
+
 
         if (this.state.first_name === '' && this.state.last_name === '') {
             Alert.alert("Warning", "First name and Last Name are required")
@@ -104,9 +109,11 @@ class AddNewCustomer extends React.Component {
                     Alert.alert('MESSAGE', responseJson.message)
                     let customer_id = responseJson.data.id;
                     this.createCustomerDelivery(customer_id);
-                } else {
-                    // this.setState({ spinner: false })
-                    let message = JSON.stringify(responseJson.message)
+                }  else if(responseJson.status == 401){
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
                     Alert.alert('Error', message)
                 }
             }
@@ -184,8 +191,11 @@ class AddNewCustomer extends React.Component {
                         countries_arr: countries_arr,
                     });
 
-                } else {
-                    let message = JSON.stringify(responseJson.error.message)
+                } else if(responseJson.status == 401){
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
                     Alert.alert('Error', message)
                 }
             })
@@ -216,8 +226,11 @@ class AddNewCustomer extends React.Component {
                     this.setState({
                         states_arr: states_arr,
                     });
-                } else {
-                    let message = JSON.stringify(responseJson.error.message)
+                }  else if(responseJson.status == 401){
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
                     Alert.alert('Error', message)
                 }
             })
@@ -248,8 +261,11 @@ class AddNewCustomer extends React.Component {
                     this.setState({
                         lgas_arr: lgas_arr,
                     });
-                } else {
-                    let message = JSON.stringify(responseJson.error.message)
+                }  else if(responseJson.status == 401){
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
                     Alert.alert('Error', message)
                 }
             })
@@ -375,7 +391,7 @@ class AddNewCustomer extends React.Component {
                                         color={'#000'}
                                     />
                                 </View>
-                                <View style={{ flex: 1,marginHorizontal:5 }}>
+                                <View style={{ flex: 1, marginHorizontal: 5 }}>
                                     <TextInput
                                         onChangeText={text => this.setState({ house_no: text })}
                                         label="House No."
