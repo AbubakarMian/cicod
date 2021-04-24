@@ -84,7 +84,7 @@ class Login extends React.Component {
                 lastname: "sandbox last", //responseJson.user.lastname,
                 email: "cicodsandbox@yopmail.com",//responsejson.user.email,
                 phone: "123314324",//responseJson.user.phone,
-                access_token: "Bearer j3fnry1r4iV4vTjCg8xM",  //+ responseJson.token
+                access_token: "Bearer ADVBsMIkpyUwLI2uD7h6",  //+ responseJson.token
             });
             this.setState({ Spinner: false })
             this.props.navigation.navigate('Home')
@@ -124,7 +124,10 @@ class Login extends React.Component {
                     } else {
                         this.setState({ Spinner: false })
                         // this.setState({ Spinner: false })
-                        let message = responseJson.messa
+                        let message = responseJson.message
+                        if(message == ''){
+                            message = 'Server responded with error contact admin'
+                        }
                         Alert.alert('Error', message)
                     }
                 }

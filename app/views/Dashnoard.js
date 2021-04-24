@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, TouchableHighlight, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback } from 'react-native'
-import {   Text, TextInput, Alert,Modal} from 'react-native-paper';
+import { View, ImageBackground, TouchableHighlight, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback,Alert } from 'react-native'
+import {   Text, TextInput, Modal} from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss';
 import fontStyles from '../css/FontCss'
@@ -12,7 +12,7 @@ import * as Progress from 'react-native-progress';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Constants } from '../views/Constant';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER, UpdateTabbar } from '../redux/constants/index';
 import {
     LineChart,
     BarChart,
@@ -46,6 +46,7 @@ class Dashnoard extends React.Component {
     }
     componentDidMount() {
         console.log('fsd fsdf sdf sfdsdf sfdfds');
+        this.props.setTabBar({tab_name:'dashboard'})
         this.setState({ spinner: true })
         let postData = {
             method: 'GET',
@@ -105,12 +106,22 @@ class Dashnoard extends React.Component {
                     })
                     console.log("%%%%%%%%%%%%%%%%", graph_lable)
                     // this.props.navigation.navigate('DrawerNavigation')
-                } else {
-                    let message = JSON.stringify(responseJson.error.message)
+                } 
+                else if(responseJson.status == 401){
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
                     Alert.alert('Error', message)
                 }
                 console.log("this.state.item.item_name this.state.item.item_name this.state.item.item_name", this.state.item.item_name)
             })
+    }
+
+    unauthorizedLogout(){
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
     }
 
     ShowAllOrders(){
@@ -165,7 +176,7 @@ class Dashnoard extends React.Component {
         });
     }
     render() {
-        const { selectedStartDate } = this.state;
+        const { selectedStartDate } = this.state;        
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
             <View style={{ paddingBottom:50, width: width, alignItems: 'center', position: 'relative', backgroundColor: '#F0F0F0', }}>
@@ -331,13 +342,15 @@ class Dashnoard extends React.Component {
 }
 function mapStateToProps(state) {
     return {
-        user: state.userReducer
+        user: state.userReducer,
+        tabBar: state.tabBarReducer
     }
 };
 function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
-        logoutUser: () => dispatch({ type: LOGOUT_USER })
+        logoutUser: () => dispatch({ type: LOGOUT_USER }),
+        setTabBar: (value) => dispatch({ type: UpdateTabbar, value: value }),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Dashnoard)

@@ -130,7 +130,11 @@ class UpdateProduct extends React.Component {
         }
         return -1;
     }
-
+    unauthorizedLogout() {
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
+    }
     updateProductAccess() {
         // https://com.cicodsaasstaging.com/com/api/value-chain/update-buyer-products?id=123435
         // Constants.updateBuyerProduct
@@ -157,9 +161,11 @@ class UpdateProduct extends React.Component {
                 if (responseJson.status === "SUCCESS") {
                     console.log('get user !!!!!!!!!!!!!!!!', this.props.user)
                     this.props.navigation.navigate('Home')
-                } else {
-                    this.setState({ spinner: false })
-                    let message = responseJson.messa
+                }  else if(responseJson.status == 401){
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
                     Alert.alert('Error', message)
                 }
             }

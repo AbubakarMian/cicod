@@ -53,9 +53,11 @@ class ChangePassword extends React.Component {
                     this.setState({ spinner: false })
 
                     this.props.navigation.navigate('Home')
-                } else {
-                    this.setState({ spinner: false })
-                    let message = responseJson.messa
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
                     Alert.alert('Error', message)
                 }
             }
@@ -66,6 +68,11 @@ class ChangePassword extends React.Component {
             });
 
 
+    }
+    unauthorizedLogout() {
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
     }
     render() {
         return (
@@ -79,11 +86,11 @@ class ChangePassword extends React.Component {
                 />
                 <View style={[{}, styles.headingRow]}>
                     <TouchableOpacity
-                    // onPress={()=>this.props.navigation.navigate('User')}
-                    onPress={() => this.props.navigation.goBack()}
-                    
+                        // onPress={()=>this.props.navigation.navigate('User')}
+                        onPress={() => this.props.navigation.goBack()}
+
                     >
-                      <Icon name="arrow-left" size={20} color={'#929497'} />
+                        <Icon name="arrow-left" size={20} color={'#929497'} />
                     </TouchableOpacity>
                     <Text style={[{}, styles.moreText]}>CHANGE PASSWORD</Text>
                 </View>

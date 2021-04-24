@@ -1,7 +1,7 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight,  FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import { View, ImageBackground, ScrollView, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
 import splashImg from '../images/splash.jpg'
-import {   Text, TextInput, Alert} from 'react-native-paper';
+import { Text, TextInput, Alert } from 'react-native-paper';
 import styles from '../css/AddProductCss';
 import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -50,7 +50,7 @@ class AddProduct extends React.Component {
             },
         };
         //+ '?is_active=1&search=' + this.state.search_product + '&category_id=' + this.state.category_id
-        fetch(Constants.productslist + '?is_active=1&search=' + this.state.search_product , postData)
+        fetch(Constants.productslist + '?is_active=1&search=' + this.state.search_product, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({
@@ -81,13 +81,21 @@ class AddProduct extends React.Component {
                     this.setState({
                         data: data
                     })
-                } else {
-                    let message = JSON.stringify(responseJson.message)
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
                     Alert.alert('Error', message)
                 }
             })
     }
 
+    unauthorizedLogout() {
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
+    }
 
     getCategoryList() {
         this.setState({ spinner: true })
@@ -110,8 +118,11 @@ class AddProduct extends React.Component {
                     this.setState({
                         categoryarr: categoryarr,
                     });
-                } else {
-                    let message = JSON.stringify(responseJson.error.message)
+                }   else if(responseJson.status == 401){
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
                     Alert.alert('Error', message)
                 }
 
@@ -231,7 +242,7 @@ class AddProduct extends React.Component {
                             {this.state.categoryarr.length < 1 ? null :
                                 <DropDownPicker
                                     items={this.state.categoryarr}
-                                    containerStyle={{ height: 50, width: width  - 20, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
+                                    containerStyle={{ height: 50, width: width - 20, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
                                     style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                                     itemStyle={{
                                         justifyContent: 'flex-start', zIndex: 0.99

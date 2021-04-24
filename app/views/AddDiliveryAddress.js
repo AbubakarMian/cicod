@@ -40,6 +40,11 @@ class AddDiliveryAddress extends React.Component {
     componentDidMount() {
         this.getCountryList()
     }
+    unauthorizedLogout() {
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
+    }
 
     getCountryList() {
         this.setState({ spinner: true })
@@ -66,8 +71,11 @@ class AddDiliveryAddress extends React.Component {
                         countries_arr: countries_arr,
                     });
 
-                } else {
-                    let message = JSON.stringify(responseJson.error.message)
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
                     Alert.alert('Error', message)
                 }
             })
@@ -98,8 +106,11 @@ class AddDiliveryAddress extends React.Component {
                     this.setState({
                         states_arr: states_arr,
                     });
-                } else {
-                    let message = JSON.stringify(responseJson.error.message)
+                }     else if(responseJson.status == 401){
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
                     Alert.alert('Error', message)
                 }
             })
@@ -130,8 +141,11 @@ class AddDiliveryAddress extends React.Component {
                     this.setState({
                         lgas_arr: lgas_arr,
                     });
-                } else {
-                    let message = JSON.stringify(responseJson.error.message)
+                }     else if(responseJson.status == 401){
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
                     Alert.alert('Error', message)
                 }
             })

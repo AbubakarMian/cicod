@@ -73,6 +73,11 @@ class Filter extends React.Component {
 
   }
 
+  unauthorizedLogout() {
+    Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+    this.props.logoutUser();
+    this.props.navigation.navigate('Login');
+  }
   onQuantityText(text) {
     let filters = this.state.filters;
     filters.push({ key: 'quantity', value: text });

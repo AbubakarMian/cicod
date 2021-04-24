@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Input, InputGroup, List, ListItem } from 'native-base';
-import { View, TouchableOpacity, Image, Dimensions, TouchableHighlight, Alert,Touchable, FlatList, ScrollView } from 'react-native';
+import { View, TouchableOpacity, Image, Dimensions, TouchableHighlight, Alert, Touchable, FlatList, ScrollView } from 'react-native';
 import { Text, TextInput, Modal } from 'react-native-paper';
 import fontStyles from '../css/FontCss'
 import styles from '../css/BuyersViewCss';
@@ -62,13 +62,20 @@ class BuyersView extends React.Component {
                     this.setState({
                         orderList: responseJson.data
                     });
-                } else {
-                    // let message = JSON.stringify(responseJson.error.message)
-                    Alert.alert('Error', responseJson.message)
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
+                    Alert.alert('Error', message)
                 }
             })
     }
-
+    unauthorizedLogout() {
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
+    }
     getBuyerOrderHistory() {
         this.setState({ spinner: true })
         let postData = {
@@ -92,9 +99,12 @@ class BuyersView extends React.Component {
                     this.setState({
                         orderList: responseJson.data
                     });
-                } else {
-                    // let message = JSON.stringify(responseJson.error.message)
-                    Alert.alert('Error', responseJson.message)
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
+                    Alert.alert('Error', message)
                 }
             })
     }
@@ -125,9 +135,12 @@ class BuyersView extends React.Component {
                     // })
                     Alert.alert('message', responseJson.data.message);
 
-                } else {
-                    let message = responseJson.message;
-                    // Alert.alert('Error', message)
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
+                    Alert.alert('Error', message)
                 }
             })
     }
@@ -156,9 +169,12 @@ class BuyersView extends React.Component {
                     Alert.alert('message', responseJson.data.message);
                     this.props.navigation.navigate('Buyers')
 
-                } else {
-                    let message = responseJson.message;
-                    // Alert.alert('Error', message)
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
+                    Alert.alert('Error', message)
                 }
             })
     }

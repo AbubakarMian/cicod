@@ -65,13 +65,21 @@ class User extends React.Component {
                         role: merchant_contact.customerCategory,
                     })
 
-                } else {
-                    let message = responseJson.message;
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
                     Alert.alert('Error', message)
                 }
             })
     }
 
+    unauthorizedLogout() {
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
+    }
     logout_user() {
 
         this.props.logoutUser();
@@ -89,9 +97,9 @@ class User extends React.Component {
                     color={'#fff'}
                 />
                 <View style={[{}, styles.headingRow]}>
-                    <TouchableOpacity 
-                    // onPress={()=>this.props.navigation.navigate('More')}
-                    onPress={() => this.props.navigation.goBack()}
+                    <TouchableOpacity
+                        // onPress={()=>this.props.navigation.navigate('More')}
+                        onPress={() => this.props.navigation.goBack()}
                     >
                         <Icon name="arrow-left" size={20} color={'#929497'} />
                     </TouchableOpacity>

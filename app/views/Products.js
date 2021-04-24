@@ -8,8 +8,8 @@ import CalendarPicker from 'react-native-calendar-picker';
 import SearchBar from 'react-native-search-bar';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Header from '../views/Header';
-import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { connect } from 'react-redux';;
+import { SET_USER, LOGOUT_USER,UpdateTabbar } from '../redux/constants/index';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -35,8 +35,8 @@ class Products extends React.Component {
     }
     componentDidMount() {
         console.log('this.props.route',this.props.route);
-        if(this.props.route!=undefined ){
-            // return;
+        if(this.props.route==undefined || this.props.route.params==undefined || this.props.route.params.seller_id==undefined){
+            return;
         }
         if (this.props.route.params.seller_id != 0) {
             let url = Constants.sellerProductList + '?id=' + this.props.route.params.seller_id + '&sort=-id';
@@ -46,7 +46,7 @@ class Products extends React.Component {
             console.log('URL  els e @@@@@@@@@@@@@@@@@@@', Constants.productslist)
             this.getData(Constants.productslist);
         }
-        this.getCategoryList()
+         this.getCategoryList()
         return;
         console.log('this.props.params', this.props.route);
         if (this.props.params != undefined) {
@@ -63,6 +63,12 @@ class Products extends React.Component {
 
     }
     componentWillReceiveProps() {
+
+        if( this.props.route == null ||  this.props.route.params == null){
+            return;
+        }
+        
+       
         console.log('this.props.route', this.props.route.params.filters);
         // console.log('this.props.route',this.props.route.params);
         // this.getData(Constants.productslist);
@@ -174,6 +180,7 @@ class Products extends React.Component {
         console.log('categoryarr categoryarr categoryarr', this.state.categoryarr);
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
+        
         return (
             <View style={{ height: height, width: width, position: 'relative', backgroundColor: '#F0F0F0' }}>
                 <Spinner
@@ -336,13 +343,15 @@ class Products extends React.Component {
 }
 function mapStateToProps(state) {
     return {
-        user: state.userReducer
+        user: state.userReducer,
+        tabBar: state.tabBarReducer
     }
 };
 function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
-        logoutUser: () => dispatch({ type: LOGOUT_USER })
+        logoutUser: () => dispatch({ type: LOGOUT_USER }),
+        setTabBar: (value) => dispatch({ type: UpdateTabbar, value: value }),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Products)
