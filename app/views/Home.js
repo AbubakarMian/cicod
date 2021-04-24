@@ -15,6 +15,8 @@ class Home extends React.Component {
     return (
       <View style={{ height: height, width: width, alignItems: 'center', position: 'relative', backgroundColor: '#F0F0F0' }}>
        <Header navigation={this.props.navigation}/>
+       <ScrollView>
+          <View style={{ marginBottom: 10 }}>
         <View style={[{ flexDirection: 'row',paddingVertical:10 }]}>
           <View style={{ flex: 1, paddingHorizontal: 10 }}>
             <Text style={[{ color: '#B1272C', fontWeight: 'bold', fontSize: 25,fontFamily:'Open Sans' }]}>Welcome,</Text>
@@ -30,8 +32,7 @@ class Home extends React.Component {
            </TouchableOpacity>
           </View>
         </View>
-        <ScrollView>
-          <View style={{ marginBottom: 10 }}>
+       
             <View style={[{ flexDirection: 'row',alignSelf:'center', width: width-20,alignSelf:'center', marginTop: 10,alignItems:'center',justifyContent:'center',paddingRight:10 }]}>
               <TouchableOpacity
               style={{flex:1}}
