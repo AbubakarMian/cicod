@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ScrollView, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity,  SectionList, StatusBar, Alert } from 'react-native'
+import { View, ScrollView, FlatList, Dimensions, Image, Platform, TouchableOpacity, SectionList, StatusBar, Alert } from 'react-native'
 import { Text, TextInput, Modal } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/UpdateProductCss'
@@ -28,6 +28,8 @@ class UpdateProduct extends React.Component {
             prod_selected: [],
             buyer_detail: {},
             is_default: false,
+            categories: [],
+            products: [],
         }
 
     }
@@ -35,16 +37,35 @@ class UpdateProduct extends React.Component {
         this.setState({
             buyer_detail: this.props.route.params.buyer_detail
         })
-        this.getData();
+        console.log('buyer_detail', this.props.route.params.buyer_detail);
+        this.getData(Constants.products);
     }
-    componentWillReceiveProps(){
+    componentWillReceiveProps() {
+        console.log('here in receive props !!!!!!!!!!!!!!!', this.props)
+        if (this.props.route == null || this.props.route.params == null) {
+            return;
+        }
+       
         this.setState({
             buyer_detail: this.props.route.params.buyer_detail
-        })
-        this.getData();
+        });
+
+        console.log('this.props.route', this.props.route.params.filters);
+        // console.log('this.props.route',this.props.route.params);
+        // this.getData(Constants.productslist);
+        let filters = this.props.route.params.filters;
+        let filter = '?';
+        for (let i = 0; i < filters.length; i++) {
+            filter = filter + filters[i].key + '=' + filters[i].value;
+            if (i != filters.length - 1) {
+                filter = filter + '&';
+            }
+        }
+
+        this.getData(Constants.productslist + filter);
     }
 
-    getData() {
+    getData(url) {
         let token = this.props.user.access_token;
         this.setState({ spinner: true })
         let postData = {
@@ -55,7 +76,7 @@ class UpdateProduct extends React.Component {
                 Authorization: token,
             },
         };
-        fetch(Constants.products, postData)
+        fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({
@@ -65,7 +86,7 @@ class UpdateProduct extends React.Component {
                 if (responseJson.status === "success" || responseJson.success === true) {
 
                     let datares_arr = responseJson.data;
-                    console.log('all data  ', datares_arr);
+                    // console.log('all data  ', datares_arr);
                     let categories = [];
                     let data_arr = [];
                     for (let i = 0; i < datares_arr.length; i++) {
@@ -83,17 +104,16 @@ class UpdateProduct extends React.Component {
                             for (let j = 0; j < datares_arr.length; j++) {
                                 if (datares_arr[j].category == cat_name) {
                                     datares_arr[j].isChecked = false;
-                                    data_arr[(data_arr.length - 1)].data.push(datares_arr[j]);                                    
+                                    data_arr[(data_arr.length - 1)].data.push(datares_arr[j]);
                                 }
                             }
                         }
                     }
-                    console.log('categoriesdata_arrdata_arrdata_arr hi list 2', data_arr[0].data[0].category);
                     this.setState({
                         data: responseJson.data,
                         prod_list: data_arr
                     })
-                } else if(responseJson.status == 401){
+                } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 }
                 else {
@@ -117,30 +137,37 @@ class UpdateProduct extends React.Component {
         this.props.navigation.navigate('Login');
     }
     updateProductAccess() {
-        // https://com.cicodsaasstaging.com/com/api/value-chain/update-buyer-products?id=123435
-        // Constants.updateBuyerProduct
+        let products = this.state.products;
+
         let postData = {
-            method: 'POST',
+            method: 'PUT',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
                 'Authorization': this.props.user.access_token,
             },
             body: JSON.stringify({
-                products: [
-                    "100",
-                    "101",
-                    "102"
-                ]
+                products: products
+                // products: [
+                //     "100",
+                //     "101",
+                //     "102"
+                // ]
             })
         };
-        fetch(Constants.login, postData)
+        let buyer_id = this.state.buyer_detail.buyer_id;
+        console.log('buyer_id ', buyer_id);
+        fetch(Constants.updateBuyerProduct + '?id=' + buyer_id, postData)
             .then(response => response.json())
             .then(async responseJson => {
+                console.log('update products access data ', postData)
+                console.log('update products access respones ', responseJson)
                 this.setState({ spinner: false })
-                if (responseJson.status === "SUCCESS") {
-                    this.props.navigation.navigate('Home')
-                }  else if(responseJson.status == 401){
+                if (responseJson.success) {
+                    Alert.alert('Message',responseJson.data.message)
+                    // this.props.navigation.navigate('Home')
+                    this.props.navigation.goBack();
+                } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 }
                 else {
@@ -151,62 +178,83 @@ class UpdateProduct extends React.Component {
             )
             .catch((error) => {
                 console.log("Api call error", error);
-                // Alert.alert(error.message);
             });
     }
-     onItemPress (item){
+    onItemPress(item) {
         let list = this.state.prod_list;
-
-        list = this.updateList (list,item);
+        list = this.updateList(list, item);
         this.setState({
-            prod_list:list
+            prod_list: list
         })
     }
 
-    updateList (list,item){
-        for(let i=0; i<list.length; i++){            
-            for(let j=0; j<list[i].data.length; j++){
+    updateList(list, item) {
+        for (let i = 0; i < list.length; i++) {
+            for (let j = 0; j < list[i].data.length; j++) {
                 let search_id = list[i].data[j].id;
-                if(item.id == search_id){
+                if (item.id == search_id) {
                     list[i].data[j].isChecked = !list[i].data[j].isChecked;
                 }
             }
-        }        
+        }
         return list;
     }
-    category_pressed(category){
+    category_pressed(category) {
         let list = this.state.prod_list;
-        for(let i=0; i<list.length; i++){
-            if(list[i].category == category){
+        for (let i = 0; i < list.length; i++) {
+            if (list[i].category == category) {
                 list[i].isChecked = !list[i].isChecked;
-                for(let j=0; j<list[i].data.length; j++){
-                    list[i].data[j].isChecked = list[i].isChecked;                    
+                for (let j = 0; j < list[i].data.length; j++) {
+                    list[i].data[j].isChecked = list[i].isChecked;
                 }
             }
         }
         this.setState({
-            prod_list:list
+            prod_list: list
         })
     }
 
-    Item = ({item}) => {
-        return(
-            <TouchableHighlight
-            key={item.id}
-            onPress={() => this.onItemPress(item)}
+    Item = ({ item }) => {
+        return (
+            <TouchableOpacity
+                key={item.id}
+                onPress={() => this.onItemPress(item)}
             >
-            <View style={[{}, styles.flatListRowView]}>
-                <Image source={require('../images/ticket.png')} />
-                <Text style={[{}, styles.flatListRowText]}> {item.name}</Text>
-                <Icon
-                    style={[{ right: 10 }, styles.flatelistHeadingIcon]}
-                    name="check-circle"
-                    color={item.isChecked ? '#26C281' : '#aaa'}
-                    size={20}
-                />
+                <View style={[{}, styles.flatListRowView]}>
+                    <Image source={require('../images/ticket.png')} />
+                    <Text style={[{}, styles.flatListRowText]}> {item.name}</Text>
+                    <Icon
+                        style={[{ right: 10 }, styles.flatelistHeadingIcon]}
+                        name="check-circle"
+                        color={item.isChecked ? '#26C281' : '#aaa'}
+                        size={20}
+                    />
 
-            </View>
-        </TouchableHighlight>)
+                </View>
+            </TouchableOpacity>)
+    }
+
+    showUpdateProductAccessPopup() {
+        let list = this.state.prod_list;
+        let products = this.state.products;
+        let categories = [];
+        for (let i = 0; i < list.length; i++) {
+            let cat_marked = false;
+            for (let j = 0; j < list[i].data.length; j++) {
+                if (list[i].data[j].isChecked) {
+                    products.push(list[i].data[j].id);
+                    cat_marked = true;
+                }
+            }
+            if (cat_marked) {
+                categories.push(list[i].category);
+            }
+        }
+        this.setState({
+            products: products,
+            categories: categories,
+            updateProductModal: true
+        })
     }
 
     render() {
@@ -247,7 +295,7 @@ class UpdateProduct extends React.Component {
                         />
                     </View>
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('Filter')}
+                        onPress={() => this.props.navigation.navigate('Filter', { screen: 'UpdateProduct' })}
                         style={[{}, styles.searchRowSettingIconView]}>
                         <Image
                             source={require('../images/Order/settingicon.png')}
@@ -255,33 +303,33 @@ class UpdateProduct extends React.Component {
                     </TouchableOpacity>
                 </View>
                 {/* <ScrollView> */}
-                        <View style={[{}, styles.selectedProductRowView]}>
-                            <Text style={[{}, styles.darkGrayBoldText]}>10 </Text>
-                            <Text style={[{}, styles.darkGrayNormalText]}>product selected</Text>
-                        </View>
-                        {this.state.prod_list.length ==0 ?null :
-                        <SectionList
+                <View style={[{}, styles.selectedProductRowView]}>
+                    <Text style={[{}, styles.darkGrayBoldText]}>10 </Text>
+                    <Text style={[{}, styles.darkGrayNormalText]}>product selected</Text>
+                </View>
+                {this.state.prod_list.length == 0 ? null :
+                    <SectionList
                         refreshing={true}
-                            sections={this.state.prod_list}
-                            keyExtractor={(item, index) => item + index}
-                            renderItem={({ item }) => <this.Item item={item} />}
-                            renderSectionHeader={({ section: { category,isChecked } }) => (
-                                <TouchableOpacity onPress={() => this.category_pressed(category)}>
-                                        <Text style={[{}, styles.flatelistHeadingText]}>{category}</Text>
-                                        <Icon
-                                            style={[{ right: 20 }, styles.flatelistHeadingIcon]}
-                                            name="check-circle"
-                                            // color={'#E6E6E6'}
-                                            color={isChecked ? '#26C281' : '#aaa'}
-                                            size={20}
-                                        />
-                                    </TouchableOpacity>
-                            )}
-                            />}
-                        
+                        sections={this.state.prod_list}
+                        keyExtractor={(item, index) => item + index}
+                        renderItem={({ item }) => <this.Item item={item} />}
+                        renderSectionHeader={({ section: { category, isChecked } }) => (
+                            <TouchableOpacity onPress={() => this.category_pressed(category)}>
+                                <Text style={[{}, styles.flatelistHeadingText]}>{category}</Text>
+                                <Icon
+                                    style={[{ right: 20 }, styles.flatelistHeadingIcon]}
+                                    name="check-circle"
+                                    // color={'#E6E6E6'}
+                                    color={isChecked ? '#26C281' : '#aaa'}
+                                    size={20}
+                                />
+                            </TouchableOpacity>
+                        )}
+                    />}
+
                 {/* </ScrollView> */}
                 <TouchableOpacity
-                    onPress={() => this.setState({ updateProductModal: true })}
+                    onPress={() => this.showUpdateProductAccessPopup()}
                     style={[{}, styles.redTouchView]}
                 >
                     <Text style={{ color: '#fff' }}>Update Product Access</Text>
@@ -291,22 +339,22 @@ class UpdateProduct extends React.Component {
                     visible={this.state.updateProductModal}
                     transparent={true}
                 >
-                    <TouchableHighlight
+                    <TouchableOpacity
                         onPress={() => this.setState({ updateProductModal: false })}
                         style={[{}, styles.modalMainContainer]}>
                         <View style={[{}, styles.modalCOntainer]}>
                             <Image source={require('../images/bluequesmark.png')} />
                             <Text style={[{}, styles.modalNormalText]}>You are about to give</Text>
                             <View style={[{}, styles.modalTextRowView]}>
-                                <Text style={[{}, styles.modalNormalText]}>WellFoods NG access to</Text>
-                                <Text style={[{}, styles.modalBOldText]}> 15 </Text>
+                                <Text style={[{}, styles.modalNormalText]}>{this.state.buyer_detail.buyer_name} access to</Text>
+                                <Text style={[{}, styles.modalBOldText]}> {this.state.products.length} </Text>
                             </View>
                             <View style={[{}, styles.modalTextRowView]}>
                                 <Text style={[{}, styles.modalBOldText]}>products </Text>
-                                <Text style={[{}, styles.modalNormalText]}>in 4 product category</Text>
+                                <Text style={[{}, styles.modalNormalText]}>in {this.state.categories.length} product category</Text>
                             </View>
                             <TouchableOpacity
-
+                                onPress={() => this.updateProductAccess()}
                                 style={[{ backgroundColor: '#B1272C', }, styles.modalTouchView]}
                             >
                                 <Text style={{ color: '#fff' }}>Confirm</Text>
@@ -318,7 +366,7 @@ class UpdateProduct extends React.Component {
                                 <Text style={{ color: '#929497' }}>Cancel</Text>
                             </TouchableOpacity>
                         </View>
-                    </TouchableHighlight>
+                    </TouchableOpacity>
                 </Modal>
             </View>
         )

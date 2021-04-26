@@ -45,6 +45,7 @@ import DiliveryAddress from './DiliveryAddress';
 import PickUpLocation from './PickUpLocation';
 import AddDiliveryAddress from './AddDiliveryAddress';
 import AddSuppliers from './AddSuppliers';
+import PaymentWeb from './PaymentWeb';
 const Stack = createStackNavigator();
 
 export default class AppNavigater extends React.Component {
@@ -56,22 +57,23 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
 
           <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
+          <Stack.Screen name="PaymentWeb" component={PaymentWeb} options={{ headerShown: false }} />
 
 
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
           {/* <Stack.Screen name="Dashnoard" component={TabNavigater}  options={{ headerShown: false }} /> */}
           <Stack.Screen name="Dashnoard">
-            {props => <TabNavigater extraData={{name:'dashboard',initialRouteName:'Dashnoard'}}  />}
+            {props => <TabNavigater extraData={{ name: 'dashboard', initialRouteName: 'Dashnoard' }} />}
           </Stack.Screen>
 
           <Stack.Screen name="Products">
-            {props => <TabNavigater extraData={{name:'products',initialRouteName:'Products'}}  />}
+            {props => <TabNavigater props={this.props} extraData={{ name: 'products', initialRouteName: 'Products' }} />}
           </Stack.Screen>
           {/* <Stack.Screen name="Products" component={Products} options={{ headerShown: false }} /> */}
           <Stack.Screen name="ProductFilter" component={ProductFilter} options={{ headerShown: false }} />
 
           <Stack.Screen name="Order">
-            {props => <TabNavigater extraData={{name:'order',initialRouteName:'Order'}}  />}
+            {props => <TabNavigater extraData={{ name: 'order', initialRouteName: 'Order' }} />}
           </Stack.Screen>
           {/* <Stack.Screen name="Order" component={Order} options={{ headerShown: false }} /> */}
           <Stack.Screen name="OrderDetail" component={OrderDetail} options={{ headerShown: false }} />
@@ -111,7 +113,7 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="PickUpLocation" component={PickUpLocation} options={{ headerShown: false }} />
           <Stack.Screen name="AddDiliveryAddress" component={AddDiliveryAddress} options={{ headerShown: false }} />
           <Stack.Screen name="AddSuppliers" component={AddSuppliers} options={{ headerShown: false }} />
-          
+
 
         </Stack.Navigator>
       </NavigationContainer>

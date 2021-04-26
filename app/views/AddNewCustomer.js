@@ -425,15 +425,16 @@ class AddNewCustomer extends React.Component {
                                     {this.state.countries_arr.length < 1 ? null :
                                         <DropDownPicker
                                             items={this.state.countries_arr}
-                                            containerStyle={{ height: 50, width: width / 2 - 10, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
+                                            containerStyle={{ height: 50, width: width / 2 - 10, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 , marginBottom:30}}
                                             style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                                             itemStyle={{
                                                 justifyContent: 'flex-start',
                                             }}
                                             placeholder="Country *"
-                                            dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                                            dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1,  }}
                                             labelStyle={{ color: '#A9A9A9' }}
-                                            onChangeItem={item => this.onSelectCountry(item.value)}
+                                            onChangeItem={item =>this.onSelectCountry(item.value)}  //this.onSelectCountry(item.value)}
+                                            
                                         />}
                                 </View>
                                 <View style={[{}, styles.formColumn]}>
