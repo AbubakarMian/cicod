@@ -326,7 +326,7 @@ class Order extends React.Component {
                                         </View>
                                     </View>
                                     <View style={{ flex: 1, alignItems: 'flex-end', flexDirection: 'column' }}>
-                                        <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>N{item.amount}</Text>
+                                        <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>N {item.amount}</Text>
                                         {/* {(item.order_status == 'PENDING') ?
                                             <View style={[{ backgroundColor: '#ffabb5', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
                                                 <Text style={[{ color: '#f7001d' }]}>{item.payment_status}</Text>
@@ -334,15 +334,15 @@ class Order extends React.Component {
                                             : null} */}
 
                                         {(item.order_status == 'PENDING') ?
-                                            <Text style={[{ borderRadius: 50, paddingHorizontal: 5, backgroundColor: '#FFF3DB', color: '#FDB72B', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
+                                            <Text style={[{ borderRadius: 50, paddingHorizontal: 5,textAlign:'center', backgroundColor: '#FFF3DB', color: '#FDB72B', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
                                                 {item.order_status}
                                             </Text>
                                             : (item.order_status == 'PAID') ?
-                                                <Text style={[{ borderRadius: 50, paddingHorizontal: 5, backgroundColor: '#DAF8EC', color: '#26C281', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
+                                                <Text style={[{ borderRadius: 50, paddingHorizontal: 5,textAlign:'center', backgroundColor: '#DAF8EC', color: '#26C281', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
                                                     {item.order_status}
                                                 </Text>
                                                 : (item.order_status == 'PART PAYMENT') ?
-                                                    <Text style={[{ borderRadius: 50, paddingHorizontal: 5, backgroundColor: '#E6E6E6', color: '#929497', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
+                                                    <Text style={[{ borderRadius: 50, paddingHorizontal: 5,textAlign:'center', backgroundColor: '#E6E6E6', color: '#929497', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
                                                         {item.order_status}
                                                     </Text>
                                                     : null}

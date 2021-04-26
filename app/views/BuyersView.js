@@ -34,7 +34,9 @@ class BuyersView extends React.Component {
         })
         if (this.props.route.params.heading == "SUPPLIER") {
             this.getSellerOrderHistory();
+
         } else {
+
             this.getBuyerOrderHistory()
         }
     }
@@ -109,7 +111,9 @@ class BuyersView extends React.Component {
             })
     }
     viewProducts() {
-        this.props.navigation.navigate('Products', { seller_id: this.state.items.seller_id })
+        console.log('seller_id seller_id seller_id !!!!!!!!!!!', this.state.items.seller_id)
+        let buyer_id = this.state.items.seller_id
+        this.props.navigation.navigate('Products', { seller_id: buyer_id })
     }
 
     suspendBuyer(buyer_id) {
@@ -211,7 +215,6 @@ class BuyersView extends React.Component {
         }
 
     }
-
     search() {
 
         if (this.props.route.params.heading == "SUPPLIER") {
@@ -232,7 +235,7 @@ class BuyersView extends React.Component {
         this.props.navigation.navigate('OrderDetail', { id })
     }
     render() {
-        console.log(' this.state.orderList this.state.orderList', this.state.orderList)
+        console.log(' this state  this state items', this.state.items)
         return (
 
             <View>
@@ -257,8 +260,15 @@ class BuyersView extends React.Component {
                     <View style={{ backgroundColor: '#fff' }}>
                         <View style={[{}, styles.productDetailContainerView]}>
                             <Image source={require('../images/bage.png')} />
-                            <Text style={[{}, styles.darkGrayBoldText]}>WellFoods NG</Text>
-                            <Text style={[{}, styles.lightGrayText]}>836439034</Text>
+                            {(this.props.route.params.heading == 'BUYERS') ?
+                                <View>
+                                    <Text style={[{}, styles.darkGrayBoldText]}>{this.state.items.buyer_name}</Text>
+                                    <Text style={[{}, styles.lightGrayText]}>{this.state.items.buyer_id}</Text>
+                                </View>
+                                : <View>
+                                    <Text style={[{}, styles.darkGrayBoldText]}>{this.state.items.seller_name}</Text>
+                                    <Text style={[{}, styles.lightGrayText]}>{this.state.items.seller_id}</Text>
+                                </View>}
                             <TouchableOpacity
                                 onPress={() => this.setState({ supendModal: true })}
                                 style={[{}, styles.iconRight]}
@@ -288,19 +298,20 @@ class BuyersView extends React.Component {
                             </View>
                             <View style={[{}, styles.columnView]}>
                                 <Text style={[{}, styles.lightGrayText]}>Values of orders</Text>
-                                <Text style={[{}, styles.darkGrayBoldText]}>N{this.state.items.value_of_orders}</Text>
+                                <Text style={[{}, styles.darkGrayBoldText]}>N {this.state.items.value_of_orders}</Text>
                             </View>
                         </View>
-                        <View style={[{}, styles.productDetailROwView]}>
-                            <View style={[{}, styles.columnView]}>
-                                <Text style={[{}, styles.lightGrayText]}>Min. Spend</Text>
-                                <Text style={[{}, styles.darkGrayBoldText]}>N{this.state.items.minimum_spend}</Text>
-                            </View>
-                            <View style={[{}, styles.columnView]}>
-                            </View>
-                            <View style={[{}, styles.columnView]}>
-                            </View>
-                        </View>
+                        {(this.props.route.params.heading == 'BUYERS') ?
+                            <View style={[{}, styles.productDetailROwView]}>
+                                <View style={[{}, styles.columnView]}>
+                                    <Text style={[{}, styles.lightGrayText]}>Min. Spend</Text>
+                                    <Text style={[{}, styles.darkGrayBoldText]}>N {this.state.items.minimum_spend}</Text>
+                                </View>
+                                <View style={[{}, styles.columnView]}>
+                                </View>
+                                <View style={[{}, styles.columnView]}>
+                                </View>
+                            </View> : null}
                         <View style={[{}, styles.productDetailROwView]}>
                             <View style={[{}, styles.columnView]}>
                                 {(this.props.route.params.heading == 'BUYERS') ?
@@ -391,59 +402,59 @@ class BuyersView extends React.Component {
 
                     </View>
                     <Text style={[{}, styles.historyHeadingText]}>ORDER HISTORY</Text>
-                    
-                <ScrollView
-                    horizontal={true}
-                    paddingHorizontal={10}
-                    // marginBottom={10}
-                    height={30}
-                    marginTop={5}
-                    marginBottom={5}
-                    scrollEnabled={true}
-                >
 
-                    <TouchableOpacity
-                        onPress={() => this.customeList("")}
+                    <ScrollView
+                        horizontal={true}
+                        paddingHorizontal={10}
+                        // marginBottom={10}
+                        height={30}
+                        marginTop={5}
+                        marginBottom={5}
+                        scrollEnabled={true}
                     >
-                        <Text style={{
-                            color: this.state.is_active_list === 'all' ? '#000' : '#e2e2e2',
-                            fontWeight: 'bold', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
-                        }}>ALL</Text>
-                    </TouchableOpacity >
-                    <TouchableOpacity
-                        onPress={() => this.customeList("pending")}
-                    >
-                        <Text style={{
-                            color: this.state.is_active_list === 'pending' ? '#000' : '#e2e2e2',
-                            backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
-                        }}>PENDING</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => this.customeList("paid")}
-                    >
-                        <Text style={{
-                            color: this.state.is_active_list === 'paid' ? '#000' : '#e2e2e2',
-                            backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
-                        }}>PAID</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => this.customeList("partPayment")}
-                    >
-                        <Text style={{
-                            color: this.state.is_active_list === 'partPayment' ? '#000' : '#e2e2e2',
-                            backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
-                        }}>PART PAYMENT</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => this.customeList("paidFromCredit")}
-                    >
-                        <Text style={{
-                            color: this.state.is_active_list === 'paidFromCredit' ? '#000' : '#e2e2e2',
-                            backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
-                        }}>PAID FROM CREDIT</Text>
-                    </TouchableOpacity>
 
-                </ScrollView>
+                        <TouchableOpacity
+                            onPress={() => this.customeList("")}
+                        >
+                            <Text style={{
+                                color: this.state.is_active_list === 'all' ? '#000' : '#e2e2e2',
+                                fontWeight: 'bold', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
+                            }}>ALL</Text>
+                        </TouchableOpacity >
+                        <TouchableOpacity
+                            onPress={() => this.customeList("pending")}
+                        >
+                            <Text style={{
+                                color: this.state.is_active_list === 'pending' ? '#000' : '#e2e2e2',
+                                backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
+                            }}>PENDING</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => this.customeList("paid")}
+                        >
+                            <Text style={{
+                                color: this.state.is_active_list === 'paid' ? '#000' : '#e2e2e2',
+                                backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
+                            }}>PAID</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => this.customeList("partPayment")}
+                        >
+                            <Text style={{
+                                color: this.state.is_active_list === 'partPayment' ? '#000' : '#e2e2e2',
+                                backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
+                            }}>PART PAYMENT</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => this.customeList("paidFromCredit")}
+                        >
+                            <Text style={{
+                                color: this.state.is_active_list === 'paidFromCredit' ? '#000' : '#e2e2e2',
+                                backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
+                            }}>PAID FROM CREDIT</Text>
+                        </TouchableOpacity>
+
+                    </ScrollView>
                     <ScrollView style={{ paddingBottom: 50, marginBottom: 20 }}>
                         <FlatList
                             ItemSeparatorComponent={

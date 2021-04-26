@@ -44,7 +44,7 @@ class Home extends React.Component {
                 borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
               }]}>
                 <Image
-                  style={{ height: width / 4, width: width / 4 }}
+                  style={{ height: width / 5, width: width / 5 }}
                   source={require('../images/home/dashboard.png')}
                 />
                 <Text style={[{},styles.cardLableText]}>Dashboard</Text>
@@ -60,7 +60,7 @@ class Home extends React.Component {
                 borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
               }]}>
                 <Image
-                  style={{ height: width / 4, width: width / 4 }}
+                  style={{ height: width / 5, width: width / 5 }}
                   source={require('../images/home/sell.png')}
                 />
                 <Text style={[{},styles.cardLableText]}>Sell</Text>
@@ -79,7 +79,7 @@ class Home extends React.Component {
                 borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
               }]}>
                 <Image
-                  style={{ height: width / 4, width: width / 4 }}
+                  style={{ height: width / 5, width: width / 5 }}
                   source={require('../images/home/order.png')}
                 />
                 <Text style={[{},styles.cardLableText]}>Orders</Text>
@@ -95,7 +95,7 @@ class Home extends React.Component {
                 borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
               }]}>
                 <Image
-                  style={{ height: width / 4, width: width / 4 }}
+                  style={{ height: width / 5, width: width / 5 }}
                   source={require('../images/home/customers.png')}
                 />
                 <Text style={[{},styles.cardLableText]}>Customers</Text>
@@ -113,7 +113,7 @@ class Home extends React.Component {
                 borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
               }]}>
                 <Image
-                  style={{ height: width / 4, width: width / 4 }}
+                  style={{ height: width / 5, width: width / 5 }}
                   source={require('../images/home/products.png')}
                 />
                 <Text style={[{},styles.cardLableText]}>Products</Text>
@@ -129,7 +129,7 @@ class Home extends React.Component {
                 borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
               }]}>
                 <Image
-                  style={{ height: width / 4, width: width / 4 }}
+                  style={{ height: width / 5, width: width / 5 }}
                   source={require('../images/home/tag.png')}
                 />
                 <Text style={[{},styles.cardLableText]}>Buy</Text>
@@ -147,7 +147,7 @@ class Home extends React.Component {
                 borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
               }]}>
                 <Image
-                  style={{ height: width / 4, width: width / 4 }}
+                  style={{ height: width / 5, width: width / 5 }}
                   source={require('../images/home/suppliers.png')}
                 />
                 <Text style={[{},styles.cardLableText]}>Suppliers</Text>
@@ -163,7 +163,7 @@ class Home extends React.Component {
                 borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
               }]}>
                 <Image
-                  style={{ height: width / 4, width: width / 4 }}
+                  style={{ height: width / 5, width: width / 5 }}
                   source={require('../images/home/buyers.png')}
                 />
                 <Text style={[{},styles.cardLableText]}>Buyers</Text>
@@ -183,7 +183,7 @@ class Home extends React.Component {
                 borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
               }]}>
                 <Image
-                  style={{ height: width / 4, width: width / 4 }}
+                  style={{ height: width / 5, width: width / 5 }}
                   source={require('../images/home/connect.png')}
                 />
                 <Text style={[{},styles.cardLableText]}>Connect</Text>

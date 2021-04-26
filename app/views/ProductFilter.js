@@ -167,7 +167,7 @@ class ProductFilter extends React.Component {
   }
   applyFilter = () => {
     console.log('this.state.filters', this.state.filters);
-    this.props.navigation.navigate('Products', { filters: this.state.filters });
+    this.props.navigation.navigate('Products', { filters: this.state.filters, seller_id:0 });
   }
 
   render() {

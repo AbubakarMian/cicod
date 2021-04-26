@@ -33,20 +33,25 @@ class Products extends React.Component {
             selectedStartDate: date,
         });
     }
-    componentDidMount() {
+    async componentDidMount() {
+        
+        await this.getCategoryList() 
+
         console.log('this.props.route',this.props.route);
-        if(this.props.route==undefined || this.props.route.params==undefined || this.props.route.params.seller_id==undefined){
-            return;
+        if(this.props.route==undefined || this.props.route.params==undefined || this.props.route.params.seller_id==undefined
+            || this.props.route.params.seller_id == 0){
+           await this.getData(Constants.productslist);
         }
-        if (this.props.route.params.seller_id != 0) {
+        else {// (this.props.route.params.seller_id != 0)
             let url = Constants.sellerProductList + '?id=' + this.props.route.params.seller_id + '&sort=-id';
             console.log('URL @@@@@@@@@@@@@@@@@@@', url)
-            this.getData(url);
-        } else {
-            console.log('URL  els e @@@@@@@@@@@@@@@@@@@', Constants.productslist)
-            this.getData(Constants.productslist);
-        }
-         this.getCategoryList()
+            await this.getData(url);
+        } 
+        // else {
+        //     console.log('URL  els e @@@@@@@@@@@@@@@@@@@', Constants.productslist)
+        //     this.getData(Constants.productslist);
+        // }
+        
         return;
         console.log('this.props.params', this.props.route);
         if (this.props.params != undefined) {
@@ -62,9 +67,9 @@ class Products extends React.Component {
         }
 
     }
-    componentWillReceiveProps() {
+   async componentWillReceiveProps() {
 
-        if( this.props.route == null ||  this.props.route.params == null){
+        if( this.props.route == null ||  this.props.route.params == null ||  this.props.route.params.filters == null){
             return;
         }
         
@@ -81,11 +86,11 @@ class Products extends React.Component {
             }
         }
 
-        this.getData(Constants.productslist + filter);
+       await this.getData(Constants.productslist + filter);
     }
 
-    getData(url) {
-
+   async getData(url) {
+    console.log()
         let token = this.props.user.access_token;
         this.setState({ spinner: true })
         let postData = {
@@ -106,7 +111,7 @@ class Products extends React.Component {
 
                 });
                 if (responseJson.status === "success" || responseJson.success === true) {
-                    this.setState({
+                  await  this.setState({
                         data: responseJson.data
                     })
                 } else if (responseJson.status == 401) {
