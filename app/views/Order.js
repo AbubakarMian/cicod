@@ -325,7 +325,7 @@ class Order extends React.Component {
                                         </View>
                                     </View>
                                     <View style={{ flex: 1, alignItems: 'flex-end', flexDirection: 'column' }}>
-                                        <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>N {item.amount}</Text>
+                                        <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>N {parseFloat(item.amount).toFixed(2)}</Text>
                                         {/* {(item.order_status == 'PENDING') ?
                                             <View style={[{ backgroundColor: '#ffabb5', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
                                                 <Text style={[{ color: '#f7001d' }]}>{item.payment_status}</Text>
