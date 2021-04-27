@@ -4,7 +4,6 @@ import {   Text, TextInput, Alert} from 'react-native-paper';
 import fontStyles from '../css/FontCss'
 import splashImg from '../images/splash.jpg'
 import styles from '../css/BuyCss'
-import CalendarPicker from 'react-native-calendar-picker';
 import SearchBar from 'react-native-search-bar';
 import Header from '../views/Header';
 const { width, height } = Dimensions.get('window')

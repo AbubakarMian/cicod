@@ -3,7 +3,6 @@ import { View, ImageBackground, Text, Modal, TouchableHighlight, FlatList, Dimen
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss'
 import fontStyles from '../css/FontCss'
-import CalendarPicker from 'react-native-calendar-picker';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 import DropDownPicker from 'react-native-dropdown-picker';

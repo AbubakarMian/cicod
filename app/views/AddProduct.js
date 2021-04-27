@@ -40,6 +40,10 @@ class AddProduct extends React.Component {
     }
 
     getProductList() {
+
+        if(this.state.search_product == '' ){
+            return;
+        }
         this.setState({ spinner: true })
         let postData = {
             method: 'GET',
@@ -115,6 +119,7 @@ class AddProduct extends React.Component {
 
                     let res = responseJson.data;
                     let categoryarr = res.map((x, key) => { return { label: x.name, value: x.id } });
+                   console.log('categoryarr !!!!!!!!!!!!!!!!!!', categoryarr);
                     this.setState({
                         categoryarr: categoryarr,
                     });

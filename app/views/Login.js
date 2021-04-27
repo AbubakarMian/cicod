@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Image, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
-// import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, Touchable, ScrollView, Alert } from 'react-native';
+import { View, Image, Dimensions, TouchableOpacity, ScrollView,Alert } from 'react-native';
+// import { View, Image, TouchableOpacity, Dimensions, Touchable, ScrollView, Alert } from 'react-native';
 import styles from '../css/LoginCss';
 import fontStyles from '../css/FontCss'
 import CheckBox from 'react-native-check-box';
@@ -9,7 +9,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import { Constants } from '../views/Constant';
-import { Text, TextInput, Alert,Modal } from 'react-native-paper';
+import { Text, TextInput,Modal } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -20,9 +20,9 @@ class Login extends React.Component {
         super(props);
         this.state = {
             Spinner: false,
-            tenantId: '',//sandbox
-            username: '',//cicodsandbox@yopmail.com
-            password: '',//Sandbox@123
+            tenantId: 'sandbox',//sandbox
+            username: 'cicodsandbox@yopmail.com',//cicodsandbox@yopmail.com
+            password: 'Sandbox@123',//Sandbox@123
             isChecked: false,
             hide_password: true,
             domain_text_color:'black',
@@ -78,17 +78,17 @@ class Login extends React.Component {
                 AsyncStorage.setItem('remember_credentials','false');
                 AsyncStorage.removeItem('user_credentials');
             }
-            // this.props.setUser({
+            this.props.setUser({
 
-            //     firstname: "sandbox last", //responseJson.user.firstname,
-            //     lastname: "sandbox last", //responseJson.user.lastname,
-            //     email: "cicodsandbox@yopmail.com",//responsejson.user.email,
-            //     phone: "123314324",//responseJson.user.phone,
-            //     access_token: "Bearer 3foZb03JsqspLDNedw7K",  //+ responseJson.token
-            // });
-            // this.setState({ Spinner: false })
-            // this.props.navigation.navigate('Home')
-            // return;
+                firstname: "sandbox last", //responseJson.user.firstname,
+                lastname: "sandbox last", //responseJson.user.lastname,
+                email: "cicodsandbox@yopmail.com",//responsejson.user.email,
+                phone: "123314324",//responseJson.user.phone,
+                access_token: "Bearer cxRRGSK46zl39vcSSdVA",  //+ responseJson.token
+            });
+            this.setState({ Spinner: false })
+            this.props.navigation.navigate('Home')
+            return;
             this.setState({ Spinner: true })
             let postData = {
                 method: 'POST',
@@ -124,11 +124,11 @@ class Login extends React.Component {
                     } else {
                         this.setState({ Spinner: false })
                         // this.setState({ Spinner: false })
-                        let message = responseJson.message
+                        let message = responseJson.status
                         if(message == ''){
                             message = 'Server responded with error contact admin'
                         }
-                        Alert.alert('Error', message)
+                        Alert.alert('Error', responseJson.status)
                     }
                 }
                 )

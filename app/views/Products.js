@@ -4,7 +4,6 @@ import { Text, TextInput, Searchbar } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss';
 import fontStyles from '../css/FontCss'
-import CalendarPicker from 'react-native-calendar-picker';
 import SearchBar from 'react-native-search-bar';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Header from '../views/Header';
