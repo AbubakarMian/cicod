@@ -183,32 +183,32 @@ class UpdateProduct extends React.Component {
         })
         
         console.log('step 1');
-        for(let i=0; i<list.length; i++){
-        console.log('step 2');
+        // for(let i=0; i<list.length; i++){
+        // console.log('step 2');
             
-            for(let j=0; j<list[i].data.length; j++){
-                console.log('incoming item ',item.id);
-                console.log('list item ',list[i].data[j].id);
+        //     for(let j=0; j<list[i].data.length; j++){
+        //         console.log('incoming item ',item.id);
+        //         console.log('list item ',list[i].data[j].id);
 
-                if(item.id == list[i].data[j].id){
-                    // list[i].isChecked = !list[i].isChecked;
-                    console.log('list[i].data[j].isChecked 1 ',list[i].data[j].isChecked);
-                    if(list[i].data[j].isChecked){
-                        list[i].data[j].isChecked = false;
-                        console.log('true set to false' ,list[i].data[j].isChecked );
+        //         if(item.id == list[i].data[j].id){
+        //             // list[i].isChecked = !list[i].isChecked;
+        //             console.log('list[i].data[j].isChecked 1 ',list[i].data[j].isChecked);
+        //             if(list[i].data[j].isChecked){
+        //                 list[i].data[j].isChecked = false;
+        //                 console.log('true set to false' ,list[i].data[j].isChecked );
                         
-                    }
-                    else{
-                        list[i].data[j].isChecked = true;
-                        console.log('false set to true' ,list[i].data[j].isChecked );
+        //             }
+        //             else{
+        //                 list[i].data[j].isChecked = true;
+        //                 console.log('false set to true' ,list[i].data[j].isChecked );
 
                         
-                    }
-                    console.log('list[i].data[j].isChecked 2 ',list[i].data[j].isChecked);
+        //             }
+        //             console.log('list[i].data[j].isChecked 2 ',list[i].data[j].isChecked);
 
-                }
-            }
-        }
+        //         }
+        //     }
+        // }
         await console.log('updated item list',list);
         list = await this.updateList (list,item);
         this.setState({
