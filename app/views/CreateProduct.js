@@ -44,6 +44,7 @@ class CreateProduct extends React.Component {
             is_qty_limit: false,
             add_variation: false,
             validity: 0,
+            has_vat: 0,
             image: '',
             toolTipVisible:false,
             c:''
@@ -338,16 +339,22 @@ class CreateProduct extends React.Component {
                             </View>
                             <View style={[{}, styles.formRowView]}>
                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
-                                    <TextInput
-                                        label="VAT"
-                                        style={{ backgroundColor: 'transparent', }}
-                                width={width - 50}
-                                alignSelf={'center'}
-                                color={'#000'}
-                                    />
-                                    <Icon
-                                        style={[{ position: 'absolute', right: width / 2 + 20 }]}
-                                        name="caret-down" />
+                                  
+                                        <DropDownPicker
+                                    items={[
+                                        {label: 'Yes', value: 1},
+                                        {label: 'No', value: 0}
+                                    ]}
+                                    containerStyle={{ height: 50, width: width - 230, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
+                                    style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
+                                    itemStyle={{
+                                        justifyContent: 'flex-start', zIndex: 0.99
+                                    }}
+                                    placeholder="VAT"
+                                    dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                                    labelStyle={{ color: '#A9A9A9' }}
+                                    onChangeItem={item => this.setState({has_vat:item.value})}
+                                />
                                 </View>
                             </View>
                             <View style={[{}, styles.addImageView]}>
