@@ -13,94 +13,33 @@ import { Constants } from '../views/Constant';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import Spinner from 'react-native-loading-spinner-overlay';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { color } from 'react-native-reanimated';
 
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 
-class ProductFilter extends React.Component {
+class CategoryFilter extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       data: [],
       filters: [],
-      categoryarr: [],
       createdby_arr: [],
+      categoryarr: [],
       category_name: '',
       spinner: false,
+      date:'' ,
     };
   }
   componentDidMount() {
 
     this.getCategoryList()
-    this.getProductList(Constants.productslist);
     this.setState({ spinner: true })
-    let postData = {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: this.props.user.access_token,
-      },
-
-    };
-    fetch('https://com.cicodsaasstaging.com/com/api/orders', postData)
-      .then(response => response.json())
-      .then(async responseJson => {
-        console.log('response !!!!!!!!', responseJson)
-        this.setState({ Spinner: false });
-        this.setState({
-          list: responseJson,
-          data: responseJson.data
-        });
-        if (responseJson.status === true) {
-          console.log("dataset", data)
-          // this.props.navigation.navigate('DrawerNavigation')
-        } else {
-          let message = JSON.stringify(responseJson.error.message)
-          Alert.alert('Error', message)
-        }
-
-      })
+    
 
   }
 
-  getProductList(url) {
-
-    console.log('products');
-    let postData = {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: this.props.user.access_token,
-      },
-    };
-    fetch(url, postData)
-      .then(response => response.json())
-      .then(async responseJson => {
-        // this.setState({
-        //   spinner: false,
-        // });
-
-        console.log('product list', responseJson.data);
-        if (responseJson.status === 'success') {
-
-          let res = responseJson.data;
-          let createdby_arr = res.map((x, key) => { return { label: x.created_by, value: x.created_by } });
-          console.log('createdby_arr createdby_arr !!!!!!', createdby_arr);
-          this.setState({
-            createdby_arr: createdby_arr,
-          });
-
-
-          this.props.navigation.navigate('DrawerNavigation')
-        } else {
-          let message = JSON.stringify(responseJson.error.message)
-          Alert.alert('Error', message)
-        }
-      })
-  }
 
   getCategoryList() {
     this.setState({ spinner: true })
@@ -121,8 +60,11 @@ class ProductFilter extends React.Component {
 
           let res = responseJson.data;
           let categoryarr = res.map((x, key) => { return { label: x.name, value: x.name } });
+          let createdby_arr = res.map((x, key) => { return { label: x.created_by, value: x.created_by } });
           console.log('category !!!!!!', categoryarr);
+          console.log('createdby_arr  !!!!!!', createdby_arr);
           this.setState({
+            createdby_arr: createdby_arr,
             categoryarr: categoryarr,
           });
         } else {
@@ -134,13 +76,13 @@ class ProductFilter extends React.Component {
 
   }
 
-  onQuantityText(text) {
-    let filters = this.state.filters;
-    filters.push({ key: 'quantity', value: text });
-    this.setState({
-      filters: filters
-    })
-  }
+  // onQuantityText(text) {
+  //   let filters = this.state.filters;
+  //   filters.push({ key: 'quantity', value: text });
+  //   this.setState({
+  //     filters: filters
+  //   })
+  // }
 
   onCategoryText(text) {
     let filters = 'Freezer'; //this.state.filters;
@@ -170,6 +112,35 @@ class ProductFilter extends React.Component {
     this.props.navigation.navigate('Products', { filters: this.state.filters, seller_id: 0 });
   }
 
+  datePickerFun = () => {
+    this.setState({
+      isDatePickerVisible: !this.state.isDatePickerVisible
+    })
+  }
+
+  setDate = (date) => {
+    var month = date.getUTCMonth() + 1; //months from 1-12
+    var day = date.getUTCDate();
+    var year = date.getUTCFullYear();
+
+    let newdate = day + "/" + month + "/" + year;
+
+    let filters = this.state.filters;
+    filters.push({ key: 'date_created', value: date });
+    this.setState({
+      isDatePickerVisible: !this.state.isDatePickerVisible,
+      filters: filters,
+      date: newdate,
+    })
+
+  }
+  hideDatePicker = () => {
+    this.setState({
+      // setDatePickerVisibility: !this.state.setDatePickerVisibility,
+      isDatePickerVisible: !this.state.isDatePickerVisible
+    })
+  }
+
   render() {
     return (
       <View style={[{}, styles.mainView]}>
@@ -179,6 +150,13 @@ class ProductFilter extends React.Component {
           textContent={'Please Wait...'}
           textStyle={{ color: '#fff' }}
           color={'#fff'}
+        />
+        <DateTimePickerModal
+          isVisible={this.state.isDatePickerVisible}
+          mode="date"
+          date={new Date()}
+          onConfirm={this.setDate}
+          onCancel={this.hideDatePicker}
         />
         <View style={[{}, styles.mainRow]}>
           {/* <Image
@@ -196,7 +174,7 @@ class ProductFilter extends React.Component {
           <Text onPress={() => { this.setState({ filters: [] }) }} style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20, top: 20 }]}>Clear Filter</Text>
         </View>
         <View style={{ width: width - 20, backgroundColor: '#fff', paddingVertical: 10, marginTop: 20 }}>
-          <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 5, flexDirection: 'row', position: 'relative' }}>
+          {/* <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 5, flexDirection: 'row', position: 'relative' }}>
             <TextInput onChangeText={text => this.onQuantityText(text)}
               label="Quantity"
               style={{ backgroundColor: 'transparent', }}
@@ -207,7 +185,7 @@ class ProductFilter extends React.Component {
             <View style={{ position: 'absolute', right: 10, bottom: 10 }}>
 
             </View>
-          </View>
+          </View> */}
 
           <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 5, flexDirection: 'row', position: 'relative' }}>
             {this.state.createdby_arr.length < 1 ? null :
@@ -219,7 +197,7 @@ class ProductFilter extends React.Component {
                   justifyContent: 'flex-start', zIndex: 0.99
                 }}
                 placeholder="Created By"
-                dropDownStyle={{ backgroundColor: '#000', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                dropDownStyle={{  borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
                 labelStyle={{ color: '#A9A9A9' }}
                 onChangeItem={item => this.onCreatedByText(item.value)}
               />}
@@ -246,12 +224,13 @@ class ProductFilter extends React.Component {
         <View style={[{ flexDirection: 'row', zIndex: -0.999 }]}>
           <View style={[{ flex: 1, paddingVertical: 10 }]}>
             <Text style={{ color: '#929497', fontWeight: 'bold' }}>Created Date</Text>
-            <TouchableOpacity>
+            <TouchableOpacity
+             onPress={() => this.datePickerFun()}>
               <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginRight: 10, padding: 10, marginVertical: 10 }}>
                 <Image
                   source={require('../images/calenderIcon.png')}
                 />
-                <Text style={{ marginLeft: 10, color: '#aaa' }}>DD-MM-YY</Text>
+                <Text style={{ marginLeft: 10, color: '#aaa' }}>{this.state.date == '' ? 'DD-MM-YY' : this.state.date}</Text>
               </View>
               <View style={{ position: 'absolute', right: 20, bottom: 10 }}>
                 <Icon
@@ -265,7 +244,9 @@ class ProductFilter extends React.Component {
           </View>
           <View style={[{ flex: 1, paddingVertical: 10 }]}>
             <Text style={{ color: '#929497', fontWeight: 'bold', marginLeft: 10 }}>Updated Date</Text>
-            <TouchableOpacity>
+            <TouchableOpacity
+            
+            >
 
               <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginLeft: 10, padding: 10, marginVertical: 10 }}>
                 <Image
@@ -330,4 +311,4 @@ function mapDispatchToProps(dispatch) {
     logoutUser: () => dispatch({ type: LOGOUT_USER })
   }
 };
-export default connect(mapStateToProps, mapDispatchToProps)(ProductFilter)
+export default connect(mapStateToProps, mapDispatchToProps)(CategoryFilter)

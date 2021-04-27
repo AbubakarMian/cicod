@@ -6,7 +6,6 @@ import styles from '../css/DashboardCss';
 import fontStyles from '../css/FontCss'
 import Header from '../views/Header';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import CalendarPicker from 'react-native-calendar-picker';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import Spinner from 'react-native-loading-spinner-overlay';

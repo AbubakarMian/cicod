@@ -30,6 +30,7 @@ class ProductCategory extends React.Component {
             updateProductModal: false,
             categoryarr: [],
             spinner: false,
+            search_text: '',
         }
 
     }
@@ -37,7 +38,7 @@ class ProductCategory extends React.Component {
 
         this.getCategoryList(Constants.productcategorylist);
     }
-   async getCategoryList(url) {
+    async getCategoryList(url) {
         this.setState({ spinner: true })
         let postData = {
             method: 'GET',
@@ -47,7 +48,7 @@ class ProductCategory extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
-       await fetch(url, postData)
+        await fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({ spinner: false });
@@ -99,13 +100,13 @@ class ProductCategory extends React.Component {
         this.props.logoutUser();
         this.props.navigation.navigate('Login');
     }
-   async suspendAction(item) {
+    async suspendAction(item) {
         let url = '';
         if (item.is_active) {
             // suspend
             url = Constants.productcategorylist + '/' + item.id + '?action=suspend'
             await this.categoryStatusUpdate(url);
-           await this.getCategoryList(Constants.productcategorylist);
+            await this.getCategoryList(Constants.productcategorylist);
 
         } else {
             // unsuspend
@@ -114,6 +115,11 @@ class ProductCategory extends React.Component {
             await this.getCategoryList(Constants.productcategorylist);
         }
     }
+    search() {
+        let search_url = Constants.productcategorylist + '?search=' + this.state.search_text;
+        this.getCategoryList(search_url);
+    }
+
     render() {
         return (
             <View style={[{}, styles.mainView]}>
@@ -154,14 +160,14 @@ class ProductCategory extends React.Component {
                             width={width - 50}
                             alignSelf={'center'}
                             color={'#000'}
-                        // onChangeText={text => this.setState({ search_product: text })}
-                        // onSubmitEditing={() => this.search()}
+                            onChangeText={text => this.setState({ search_text: text })}
+                            onSubmitEditing={() => this.search()}
                         />
                     </View>
 
                     <TouchableOpacity
                         style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
-                        onPress={() => this.props.navigation.navigate('Filter',{screen:'ProductCategory'})}
+                        onPress={() => this.props.navigation.navigate('CategoryFilter', { screen: 'ProductCategory' })}
                     >
                         <Image
                             source={require('../images/Order/settingicon.png')}
