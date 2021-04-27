@@ -8,7 +8,7 @@ const initialState = {
     state: '',
     lga: '',
 }
-const customerReducer = (state = initialState, action) => {
+ const customerReducer = (state = initialState, action) => {
 
 
     switch (action.type) {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, ImageBackground, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
-import {Text, TextInput, Alert} from 'react-native-paper';
+import { Text, TextInput, Alert } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/Filter.Css';
 import fontStyles from '../css/FontCss'
@@ -28,6 +28,7 @@ class Filter extends React.Component {
   }
   componentDidMount() {
     this.getCategoryList();
+    console.log('screen Props !!!!!!!!!!!!', this.props.route.params.screen)
   }
   getCategoryList() {
     this.setState({ spinner: true })
@@ -51,23 +52,23 @@ class Filter extends React.Component {
           this.setState({
             categoryarr: categoryarr,
           });
-        } else if(responseJson.status == 401){
+        } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
-      }
-      else {
+        }
+        else {
           let message = responseJson.message
           Alert.alert('Error', message)
-      }
+        }
 
       })
 
   }
 
-  unauthorizedLogout(){
+  unauthorizedLogout() {
     Alert.alert('Error', Constants.UnauthorizedErrorMsg)
     this.props.logoutUser();
     this.props.navigation.navigate('Login');
-}
+  }
   activeSet(value) {
     let filters = this.state.filters;
     filters.push({ key: 'is_active', value: value })
@@ -88,7 +89,7 @@ class Filter extends React.Component {
 
   applyFilter = () => {
     console.log('this.state.filters', this.state.filters);
-    this.props.navigation.navigate('Supplier', { filters: this.state.filters });
+    this.props.navigation.navigate(this.props.route.params.screen, { filters: this.state.filters });
   }
 
   render() {
@@ -126,7 +127,7 @@ class Filter extends React.Component {
             <DropDownPicker
               items={this.state.categoryarr}
               containerStyle={{ height: 50, width: width - 20 }}
-              style={{ backgroundColor: '#fff' }}
+              style={{ backgroundColor: '#fff',}}
               itemStyle={{
                 justifyContent: 'flex-start',
               }}
@@ -138,25 +139,25 @@ class Filter extends React.Component {
 
         </View>
 
-
-        <View style={{ paddingVertical: 20 }}>
-          <Text style={[{ color: '#929497', fontWeight: 'bold', fontSize: 18 }]}>Status</Text>
-        </View>
-        <View>
-          <View style={[{ paddingRight: 30, marginTop: 5 }, styles.mainRow]}>
-            <View style={[{ marginRight: 10 }]}>
-              <TouchableOpacity onPress={() => this.activeSet(1)}>
-                <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>ACTIVE </Text>
-              </TouchableOpacity>
-            </View>
-            <View style={[{}]}>
-              <TouchableOpacity onPress={() => this.activeSet(0)}>
-                <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>IN ACTIVE </Text>
-              </TouchableOpacity>
+        <View style={{ zIndex: -0.999 }}>
+          <View style={{ paddingVertical: 20, }}>
+            <Text style={[{ color: '#929497', fontWeight: 'bold', fontSize: 18 }]}>Status</Text>
+          </View>
+          <View>
+            <View style={[{ paddingRight: 30, marginTop: 5 }, styles.mainRow]}>
+              <View style={[{ marginRight: 10 }]}>
+                <TouchableOpacity onPress={() => this.activeSet(1)}>
+                  <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>ACTIVE </Text>
+                </TouchableOpacity>
+              </View>
+              <View style={[{}]}>
+                <TouchableOpacity onPress={() => this.activeSet(0)}>
+                  <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>IN ACTIVE </Text>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
         </View>
-
         <TouchableOpacity
           onPress={this.applyFilter}
           style={{ width: width / 1.5, alignSelf: 'center', backgroundColor: '#B1272C', justifyContent: 'center', alignItems: 'center', paddingVertical: 15, borderRadius: 50, marginTop: 30 }}

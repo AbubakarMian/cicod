@@ -20,9 +20,9 @@ class Login extends React.Component {
         super(props);
         this.state = {
             Spinner: false,
-            tenantId: 'sandbox',//sandbox
-            username: 'cicodsandbox@yopmail.com',//cicodsandbox@yopmail.com
-            password: 'Sandbox@123',//Sandbox@123
+            tenantId: '',//sandbox
+            username: '',//cicodsandbox@yopmail.com
+            password: '',//Sandbox@123
             isChecked: false,
             hide_password: true,
             domain_text_color:'black',
@@ -84,7 +84,7 @@ class Login extends React.Component {
                 lastname: "sandbox last", //responseJson.user.lastname,
                 email: "cicodsandbox@yopmail.com",//responsejson.user.email,
                 phone: "123314324",//responseJson.user.phone,
-                access_token: "Bearer cxRRGSK46zl39vcSSdVA",  //+ responseJson.token
+                access_token: "Bearer 3foZb03JsqspLDNedw7K",  //+ responseJson.token
             });
             this.setState({ Spinner: false })
             this.props.navigation.navigate('Home')
@@ -151,11 +151,11 @@ class Login extends React.Component {
                     <View
                     >
                         <View
-                            style={{ backgroundColor: '#FFE5E5', paddingTop: 60, paddingBottom: 50, width: width, alignItems: 'center', borderBottomLeftRadius: 360, borderBottomRightRadius: 360 }}
+                            style={{ backgroundColor: '#fff4f4', paddingTop: 60, paddingBottom: 50, width: width*1.3, alignItems: 'center', borderBottomLeftRadius: 360, borderBottomRightRadius: 360 }}
                         >
                             <Image
                                 source={require('../images/loginlogo.png')}
-                                style={{ height: width / 3, width: width / 1.4 }}
+                                style={{ height: width / 3, width: width / 3.6 }}
                             />
                         </View>
                     </View>
@@ -263,13 +263,13 @@ class Login extends React.Component {
                             <Text style={{ color: '#487AE0', fontSize: 14, textAlign: 'left', fontFamily:'Open Sans' }}>Reset Password</Text>
                         </TouchableOpacity>
                     </View>
-                    <View
+                    {/* <View
                         style={{ marginBottom: 10 }}
                     >
                         <Image
                             source={require('../images/splashbottomlogo.png')}
                         />
-                    </View>
+                    </View> */}
                
                 </View>
 

@@ -161,7 +161,7 @@ class ProductCategory extends React.Component {
 
                     <TouchableOpacity
                         style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
-                        onPress={() => this.props.navigation.navigate('Filter')}
+                        onPress={() => this.props.navigation.navigate('Filter',{screen:'ProductCategory'})}
                     >
                         <Image
                             source={require('../images/Order/settingicon.png')}

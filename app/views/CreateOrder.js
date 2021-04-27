@@ -22,12 +22,12 @@ class CreateOrder extends React.Component {
             value: 0,
             isChecked: false,
             spinner: false,
-            customer_name: this.props.customer.name ?? '',
-            customer_email: this.props.customer.email ?? '',
-            customer_phone: this.props.customer.phone ?? '',
-            customer_country: this.props.customer.country ?? '',
-            customer_state: this.props.customer.state ?? '',
-            customer_lga: this.props.customer.lga ?? '',
+            customer_name: this.props.customer.name,
+            customer_email: this.props.customer.email ,
+            customer_phone: this.props.customer.phone ,
+            customer_country: this.props.customer.country ,
+            customer_state: this.props.customer.state ,
+            customer_lga: this.props.customer.lga,
             cart_arr: this.props.cart.cart ?? [],
             limit_cart_arr: [],
             cart_detail: this.props.cart.cart_detail,
@@ -153,7 +153,6 @@ class CreateOrder extends React.Component {
         this.props.removeProductFromCart(id);
     }
     createOrderFun() {
-        console.log(' this.props.deliveryAddress.type this.limit_cart_arr.limit_cart_arr.limit_cart_arr', this.state.limit_cart_arr)
         let dilevery_type = ''
         if (this.state.is_pickup == true) {
             dilevery_type = 'Pickup';
@@ -199,6 +198,8 @@ class CreateOrder extends React.Component {
 
                     this.setState({ spinner: false })
                     alert(responseJson.message)
+                    let payment_link = responseJson.data.payment_link
+                    this.props.navigation.navigate('PaymentWeb', {payment_link:payment_link});
                 } else {
                     this.setState({ spinner: false })
                     let message = responseJson.message
