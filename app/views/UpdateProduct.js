@@ -216,7 +216,7 @@ class UpdateProduct extends React.Component {
         })
     }
 
-    async updateList (list,item){
+    async   updateList (list,item){
         
         console.log('step 1');
         for(let i=0; i<list.length; i++){

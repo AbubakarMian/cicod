@@ -109,15 +109,15 @@ class User extends React.Component {
                     <View>
                         <View style={[{}, styles.contentContainer]}>
                             <Text style={[{}, styles.userInfoLable]}>First Name</Text>
-                            <Text style={[{}, styles.userInfo]}>{this.state.first_name}</Text>
+                            <Text style={[{color:'#4E4D4D',marginBottom:10}, fontStyles.normal15]}>{this.state.first_name}</Text>
                             <Text style={[{}, styles.userInfoLable]}>Last Name</Text>
-                            <Text style={[{}, styles.userInfo]}>{this.state.last_name ?? this.state.first_name}</Text>
+                            <Text style={[{color:'#4E4D4D',marginBottom:10}, fontStyles.normal15]}>{this.state.last_name ?? this.state.first_name}</Text>
                             <Text style={[{}, styles.userInfoLable]}>Email</Text>
-                            <Text style={[{}, styles.userInfo]}>{this.state.email}</Text>
+                            <Text style={[{color:'#4E4D4D',marginBottom:10}, fontStyles.normal15]}>{this.state.email}</Text>
                             <Text style={[{}, styles.userInfoLable]}>Phone Number</Text>
-                            <Text style={[{}, styles.userInfo]}>{this.state.phone}</Text>
+                            <Text style={[{color:'#4E4D4D',marginBottom:10}, fontStyles.normal15]}>{this.state.phone}</Text>
                             <Text style={[{}, styles.userInfoLable]}>Role</Text>
-                            <Text style={[{}, styles.userInfo]}>{this.state.role}</Text>
+                            <Text style={[{color:'#4E4D4D',marginBottom:10}, fontStyles.normal15]}>{this.state.role}</Text>
                             <TouchableOpacity
                                 onPress={() => this.props.navigation.navigate('ChangePassword')}
                                 style={[{}, styles.changePasswordView]}>
@@ -133,10 +133,10 @@ class User extends React.Component {
                             <Text style={[{}, styles.logoutText]}>Logout</Text>
                         </TouchableOpacity>
                         <Text
-                            style={[{}, styles.bottomDescText]}
+                            style={[{alignSelf:'center'}, styles.bottomDescText]}
                             numberOfLines={2}
                         >CICOD Customer Order Management Mobile App Is a product of Crown Interactive</Text>
-                        <Text style={[{}, styles.bottomVersioncText]}>Version 1.0</Text>
+                        <Text style={[{alignSelf:'center'}, styles.bottomVersioncText]}>Version 1.0</Text>
                     </View>
                 </ScrollView>
             </View>

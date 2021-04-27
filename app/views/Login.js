@@ -84,7 +84,7 @@ class Login extends React.Component {
                 lastname: "sandbox last", //responseJson.user.lastname,
                 email: "cicodsandbox@yopmail.com",//responsejson.user.email,
                 phone: "123314324",//responseJson.user.phone,
-                access_token: "Bearer LFrVr1Av0CIs0QZfNKhb",  //+ responseJson.token
+                access_token: "Bearer cxRRGSK46zl39vcSSdVA",  //+ responseJson.token
             });
             this.setState({ Spinner: false })
             this.props.navigation.navigate('Home')
@@ -165,10 +165,8 @@ class Login extends React.Component {
                     <View style={{height:50,flexDirection:'row',width:width-50,alignSelf:'center',}}>
                         <View style={{height:50,borderWidth:0.25,borderTopLeftRadius:5,borderRightWidth:0, borderBottomLeftRadius:5,flex:4,justifyContent:'center',paddingLeft:10}}>
                         <TextInput
-                            
                             onChangeText={text => this.setState({ tenantId: text })}
                             label="Domain Name"
-                            placeholder="Domain Name"
                             style={{height:50, backgroundColor:'transparent',borderBottomWidth:0,borderTopWidth:0,borderLeftWidth:0, borderColor:'#CFCFCF'}}
                             alignSelf={'center'}
                             color={'#000'}
