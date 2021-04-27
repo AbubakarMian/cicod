@@ -7,7 +7,6 @@ import styles from '../css/OrderCss';
 import fontStyles from '../css/FontCss'
 import Header from '../views/Header';
 import Spinner from 'react-native-loading-spinner-overlay';
-import CalendarPicker from 'react-native-calendar-picker';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import { Constants } from '../views/Constant';

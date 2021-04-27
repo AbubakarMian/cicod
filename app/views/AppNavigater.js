@@ -9,6 +9,7 @@ import Filter from './Filter';
 import Home from './Home';
 import Dashnoard from './Dashnoard';
 import Products from './Products';
+import CategoryFilter from './CategoryFilter';
 import ProductFilter from './ProductFilter';
 import Order from './Order';
 import OrderDetail from './OrderDetail';
@@ -71,6 +72,7 @@ export default class AppNavigater extends React.Component {
           </Stack.Screen>
           {/* <Stack.Screen name="Products" component={Products} options={{ headerShown: false }} /> */}
           <Stack.Screen name="ProductFilter" component={ProductFilter} options={{ headerShown: false }} />
+          <Stack.Screen name="CategoryFilter" component={CategoryFilter} options={{ headerShown: false }} />
 
           <Stack.Screen name="Order">
             {props => <TabNavigater extraData={{ name: 'order', initialRouteName: 'Order' }} />}

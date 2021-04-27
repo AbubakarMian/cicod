@@ -303,7 +303,7 @@ class AddDiliveryAddress extends React.Component {
                                                 itemStyle={{
                                                     justifyContent: 'flex-start', zIndex: 0.99
                                                 }}
-                                                placeholder="States *"
+                                                placeholder="Country *"
                                                 dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectCountry(item)}
