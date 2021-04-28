@@ -276,6 +276,17 @@ class Products extends React.Component {
                             labelStyle={{ color: '#A9A9A9' }}
                             onChangeItem={item => this.onCategoryText(item.value)}
                         />
+                        
+                                            containerStyle={{ height: 50, width: width / 2 - 10,}}
+                                            style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
+                                            itemStyle={{
+                                                 justifyContent: 'flex-start',
+                                            }}
+                                            placeholder="Country *"
+                                            dropDownStyle={{height:80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1,  }}
+                                            labelStyle={{ color: '#A9A9A9' }}
+                                       
+                
                     </View>
                 </View>
 
