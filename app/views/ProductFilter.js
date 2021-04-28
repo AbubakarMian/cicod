@@ -209,8 +209,6 @@ class ProductFilter extends React.Component {
 
             </View>
           </View>
-
-      
             {this.state.createdby_arr.length < 1 ? null :
               <DropDownPicker
                 items={this.state.createdby_arr}

@@ -39,12 +39,12 @@ class Home extends React.Component {
               onPress={()=>this.props.navigation.navigate('Dashnoard')}
               >
               <View style={[{
-                flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 20,
+                flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
                 justifyContent: 'center', alignItems: 'center',
                 borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
               }]}>
                 <Image
-                  style={{ height: width / 5, width: width / 5 }}
+                  style={{ height: width / 6, width: width / 6 }}
                   source={require('../images/home/dashboard.png')}
                 />
                 <Text style={[{},styles.cardLableText]}>Dashboard</Text>
@@ -55,12 +55,12 @@ class Home extends React.Component {
               onPress={()=>this.props.navigation.navigate('CreateOrder')}
               >
               <View style={[{
-                flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 20,
+                flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
                 justifyContent: 'center', alignItems: 'center', marginLeft: 15,
                 borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
               }]}>
                 <Image
-                  style={{ height: width / 5, width: width / 5 }}
+                  style={{ height: width / 6, width: width / 6 }}
                   source={require('../images/home/sell.png')}
                 />
                 <Text style={[{},styles.cardLableText]}>Sell</Text>
@@ -74,12 +74,12 @@ class Home extends React.Component {
             onPress={()=>this.props.navigation.navigate('Order')}
             >
               <View style={[{
-                flexDirection: 'column', width: width / 2 - 20, height: height / 4,
+                flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
                 justifyContent: 'center', alignItems: 'center',
                 borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
               }]}>
                 <Image
-                  style={{ height: width / 5, width: width / 5 }}
+                  style={{ height: width / 6, width: width / 6 }}
                   source={require('../images/home/order.png')}
                 />
                 <Text style={[{},styles.cardLableText]}>Orders</Text>
@@ -90,12 +90,12 @@ class Home extends React.Component {
               onPress={()=>this.props.navigation.navigate('Customer')}
               >
               <View style={[{
-                flexDirection: 'column', width: width / 2 - 20, height: height / 4,
+                flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
                 justifyContent: 'center', alignItems: 'center', marginLeft: 15,
                 borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
               }]}>
                 <Image
-                  style={{ height: width / 5, width: width / 5 }}
+                  style={{ height: width / 6, width: width / 6 }}
                   source={require('../images/home/customers.png')}
                 />
                 <Text style={[{},styles.cardLableText]}>Customers</Text>
@@ -108,12 +108,12 @@ class Home extends React.Component {
               onPress={()=>this.props.navigation.navigate('Products',{seller_id:0})}
               >
               <View style={[{
-                flexDirection: 'column', width: width / 2 - 20, height: height / 4,
+                flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
                 justifyContent: 'center', alignItems: 'center',
                 borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
               }]}>
                 <Image
-                  style={{ height: width / 5, width: width / 5 }}
+                  style={{ height: width / 6, width: width / 6 }}
                   source={require('../images/home/products.png')}
                 />
                 <Text style={[{},styles.cardLableText]}>Products</Text>
@@ -124,12 +124,12 @@ class Home extends React.Component {
               onPress={()=>this.props.navigation.navigate('CreateOrder', {screen_name:'buy'})}
               >
               <View style={[{
-                flexDirection: 'column', width: width / 2 - 20, height: height / 4,
+                flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
                 justifyContent: 'center', alignItems: 'center', marginLeft: 15,
                 borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
               }]}>
                 <Image
-                  style={{ height: width / 5, width: width / 5 }}
+                  style={{ height: width / 6, width: width / 6 }}
                   source={require('../images/home/tag.png')}
                 />
                 <Text style={[{},styles.cardLableText]}>Buy</Text>
@@ -142,12 +142,12 @@ class Home extends React.Component {
               onPress={()=>this.props.navigation.navigate('Supplier')}
               >
               <View style={[{
-                flexDirection: 'column', width: width / 2 - 20, height: height / 4,
+                flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
                 justifyContent: 'center', alignItems: 'center',
                 borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
               }]}>
                 <Image
-                  style={{ height: width / 5, width: width / 5 }}
+                  style={{ height: width / 6, width: width / 6 }}
                   source={require('../images/home/suppliers.png')}
                 />
                 <Text style={[{},styles.cardLableText]}>Suppliers</Text>
@@ -158,12 +158,12 @@ class Home extends React.Component {
               onPress={()=>this.props.navigation.navigate('Buyers')}
               >
               <View style={[{
-                flexDirection: 'column', width: width / 2 - 20, height: height / 4,
+                flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
                 justifyContent: 'center', alignItems: 'center', marginLeft: 15,
                 borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
               }]}>
                 <Image
-                  style={{ height: width / 5, width: width / 5 }}
+                  style={{ height: width / 6, width: width / 6 }}
                   source={require('../images/home/buyers.png')}
                 />
                 <Text style={[{},styles.cardLableText]}>Buyers</Text>
@@ -178,12 +178,12 @@ class Home extends React.Component {
               onPress={()=>this.props.navigation.navigate('Connect')}
               >
               <View style={[{
-                flexDirection: 'column', width: width / 2 - 20, height: height / 4,
+                flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
                 justifyContent: 'center', alignItems: 'center',
                 borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
               }]}>
                 <Image
-                  style={{ height: width / 5, width: width / 5 }}
+                  style={{ height: width / 6, width: width / 6 }}
                   source={require('../images/home/connect.png')}
                 />
                 <Text style={[{},styles.cardLableText]}>Connect</Text>
