@@ -56,7 +56,7 @@ class Dashnoard extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
-        fetch('https://com.cicodsaasstaging.com/com/api/dashboard', postData)
+        fetch(Constants.dashboard, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({
@@ -265,14 +265,14 @@ class Dashnoard extends React.Component {
                             {this.state.graph_data.length == 0 ? null :
                                 <LineChart
                                     data={this.state.graph_data}
-                                    width={Dimensions.get("window").width-100 } // from react-native
+                                    width={Dimensions.get("window").width } // from react-native
                                     height={height / 3}
-                                    style={{paddingHorizontal:10,alignSelf:'center'}}
+                                    style={{paddingHorizontal:20,alignSelf:'center'}}
                                     alignSelf={'center'}
                                     yAxisLabel="N25M"
                                     yAxisSuffix=""
                                     getDotColor={true}
-                                    withInnerLines={true}
+                                    withInnerLines={false}
                                     yAxisInterval={1} // optional, defaults to 1
                                     chartConfig={{
                                         backgroundColor: "#fff",
@@ -288,10 +288,11 @@ class Dashnoard extends React.Component {
                                         propsForDots: {
                                             r: "6",
                                             strokeWidth: "2",
-                                            stroke: "#000"
+                                            stroke: "#000",
+                                            // fill:'red',//transparent
+                                            // fillOpacity:0.7
                                         }
                                     }}
-                                    bezier
                                     style={{
                                         marginVertical: 8,
                                         borderRadius: 16
