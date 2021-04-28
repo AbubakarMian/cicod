@@ -67,8 +67,8 @@ export default class AppNavigater extends React.Component {
             {props => <TabNavigater extraData={{ name: 'dashboard', initialRouteName: 'Dashnoard' }} />}
           </Stack.Screen>
 
-          <Stack.Screen name="Products">
-            {props => <TabNavigater props={this.props} extraData={{ name: 'products', initialRouteName: 'Products' }} />}
+          <Stack.Screen name="Products" options={{ headerShown: false }}>
+            {props => <TabNavigater props={this.props} extraData={{ name: 'products', initialRouteName: 'Products' }}   />}
           </Stack.Screen>
           {/* <Stack.Screen name="Products" component={Products} options={{ headerShown: false }} /> */}
           <Stack.Screen name="ProductFilter" component={ProductFilter} options={{ headerShown: false }} />

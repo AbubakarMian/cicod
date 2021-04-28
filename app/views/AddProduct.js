@@ -259,12 +259,14 @@ class AddProduct extends React.Component {
                                 />}
                         </View>
 
-
-                        <View style={[{}, styles.OrderDetailContainer]}>
+                        <View style={{borderBottomWidth:0.5,borderBottomColor:'#E6E6E6',width:width-20,alignSelf:'center',marginVertical:10}}></View>
+                        <View style={[{zIndex:-0.9999}, styles.OrderDetailContainer]}>
+                           
                             <View style={[{}, styles.OrderDetailHeadingRow]}>
                                 <Text style={[{}, styles.OrderDetailHeadingRowText]}>Order Detail</Text>
                                 <Text style={[{}, styles.OrderDetailNotificationText]}>{this.state.total_add_order}</Text>
                             </View>
+                          
                             {(this.state.data.length != 0) ?
                                 <FlatList
                                     data={this.state.data}
