@@ -36,6 +36,7 @@ class CreateOrder extends React.Component {
             is_pickup: true,
             payment_mode: '',
             suppliereModal: false,
+            search_supplier: '',
             supplierlist: []
         }
     }
@@ -51,7 +52,7 @@ class CreateOrder extends React.Component {
         this.setState({
             limit_cart_arr: cart_arr,
         });
-        this.getSuppliersList();
+        this.getSuppliersList(Constants.supplierlist);
     }
 
     componentWillReceiveProps() {
@@ -64,6 +65,10 @@ class CreateOrder extends React.Component {
 
     }
 
+    searchSupplier() {
+        let url = Constants.supplierlist + 'filter[seller_name]=' + this.state.search_supplier;
+        this.getSuppliersList(url);
+    }
     async counterFun(action, index) {
 
         let data = this.state.cart_arr;
@@ -215,7 +220,7 @@ class CreateOrder extends React.Component {
 
     }
 
-    getSuppliersList() {
+    getSuppliersList(url) {
 
         console.log('get Suppliers List');
         this.setState({ spinner: true })
@@ -227,10 +232,10 @@ class CreateOrder extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
-        fetch(Constants.supplierlist, postData)
+        fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log('responseJson', responseJson);
+                console.log('suppliers responseJson @@@@@@@@@@@@@@@@@@@', responseJson);
                 this.setState({
                     spinner: false,
                 });
@@ -252,7 +257,7 @@ class CreateOrder extends React.Component {
         this.props.navigation.navigate('Login');
     }
     render() {
-        console.log(' supplier list  !!!!!!!!!!!!!!', this.state.supplierlist)
+        console.log(' supplierlist @@@@@@@@@@@@@@@ supplierlist  !!!!!!!!!!!!!!', this.state.supplierlist);
         var radio_props_dilvery = [
             { label: 'Delivery', value: 0 },
 
@@ -298,14 +303,16 @@ class CreateOrder extends React.Component {
                             </View>
 
                         </View>
-                        <View style={[{}, styles.customerTitleRowView]}>
-                            <Text style={[{}, styles.customerTitleRowHeadingText]}>TestKing Nigeria</Text>
-                            <TouchableOpacity
-                                onPress={() => this.setState({ suppliereModal: true })}
-                            >
-                                <Text style={[{}, styles.customerTitleRowchangesupplierText]}>Change Supplier</Text>
-                            </TouchableOpacity>
-                        </View>
+                        {(this.props.route.params.screen_name == 'buy') ?
+                            <View style={[{}, styles.customerTitleRowView]}>
+                                <Text style={[{}, styles.customerTitleRowHeadingText]}>TestKing Nigeria</Text>
+                                <TouchableOpacity
+                                    onPress={() => this.setState({ suppliereModal: true })}
+                                >
+                                    <Text style={[{}, styles.customerTitleRowchangesupplierText]}>Change Supplier</Text>
+                                </TouchableOpacity>
+                            </View>
+                            : null}
                         <View style={[{}, styles.customerContainerView]}>
 
                             <Text style={[{ color: '#929497', textAlign: 'left', alignSelf: 'flex-start', marginLeft: 10 }, fontStyles.bold15]}>Customer Details</Text>
@@ -644,78 +651,6 @@ class CreateOrder extends React.Component {
 
                     </View>
                 </ScrollView>
-                {/* <Modal
-                    visible={this.state.suppliereModal}
-                    transparent={true}
-                >
-                    <View style={[{backgroundColor:'#fff',alignSelf:'baseline',width:width,minHeight:height/2,alignItems:'baseline'}, ]}>
-                        <TouchableOpacity
-                            style={[{}, styles.backgroundTouch]}
-                        >
-
-                        </TouchableOpacity>
-                        <View style={[{}, styles.contentView]}>
-                            <View style={[{}, styles.modalCancleRow]}>
-                                <Text style={[{}, styles.modalCancleText]}>SELECT SUPPLIERS</Text>
-                                <TouchableOpacity
-                                    onPress={() => this.setState({ suppliereModal: false })}
-                                    style={[{}, styles.modalCancleTouch]}
-                                >
-                                    <Icon name="times" size={20} color="#929497" />
-                                </TouchableOpacity>
-                            </View>
-                            <View style={[{}, styles.searchRow]}>
-                                <Icon name="search" size={20} color="#929497" />
-                                <TextInput
-                                    label="Search supplier"
-                                    style={{ backgroundColor: 'transparent', }}
-                                    width={width - 50}
-                                    alignSelf={'center'}
-                                    color={'#000'}
-                                />
-                            </View>
-                            <ScrollView
-
-                            >
-                                <FlatList
-
-                                    ItemSeparatorComponent={
-                                        Platform.OS !== 'android' &&
-                                        (({ highlighted }) => (
-                                            <View
-                                                style={[
-                                                    style.separator,
-                                                    highlighted && { marginLeft: 0 }
-                                                ]}
-                                            />
-                                        ))
-                                    }
-                                    data={this.state.supplierlist}
-                                    renderItem={({ item, index, separators }) => (
-                                        <TouchableHighlight
-                                            key={item.key}
-                                            onPress={() => this.props.navigation.navigate('Supplier')}
-                                            onShowUnderlay={separators.highlight}
-                                            onHideUnderlay={separators.unhighlight}>
-                                            <View style={[{}, styles.modalListContainer]}>
-                                                <Image source={require('../images/bage.png')} />
-                                                <View style={[{}, styles.modalListContentView]}>
-                                                    <Text style={[{}, styles.modalBoldeText]}>{item.title}</Text>
-                                                    <Text style={[{}, styles.modalNumberText]}>{item.num}</Text>
-                                                </View>
-                                                <Icon
-                                                    style={[{}, styles.modalListContentRightIcon]}
-                                                    name="angle-right" size={20} color="#aaa" />
-                                            </View>
-                                        </TouchableHighlight>
-                                    )}
-                                />
-                            </ScrollView>
-
-                        </View>
-                    </View>
-
-                </Modal> */}
                 <Modal
                     visible={this.state.suppliereModal}
                     transparent={true}
@@ -744,6 +679,8 @@ class CreateOrder extends React.Component {
                                     width={width - 50}
                                     alignSelf={'center'}
                                     color={'#000'}
+                                    onChangeText={text => this.setState({ search_supplier: text })}
+                                    onSubmitEditing={() => this.searchSupplier()}
                                 />
                             </View>
                             <ScrollView
@@ -762,36 +699,18 @@ class CreateOrder extends React.Component {
                                             />
                                         ))
                                     }
-                                    data={[
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item1' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item2' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item3' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item4' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item5' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item6' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item7' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item8' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item9' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item10' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item11' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item12' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item13' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item14' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item15' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item16' },
-                                        { title: 'TestKing Nigeria', num: '836439034', key: 'item17' },
-                                    ]}
+                                    data={this.state.supplierlist}
                                     renderItem={({ item, index, separators }) => (
                                         <TouchableOpacity
                                             key={item.key}
-                                            onPress={() => this.props.navigation.navigate('Supplier')}
-                                            onShowUnderlay={separators.highlight}
+                                            onPress={() => this.props.navigation.navigate('BuyersView', { items: items, heading: 'SUPPLIERS' })}
+                                             onShowUnderlay={separators.highlight}
                                             onHideUnderlay={separators.unhighlight}>
                                             <View style={[{ marginTop: 10 }, styles.modalListContainer]}>
                                                 <Image source={require('../images/bage.png')} />
                                                 <View style={[{}, styles.modalListContentView]}>
-                                                    <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.title}</Text>
-                                                    <Text style={[{ color: '#929497' }, fontStyles.normal12]}>{item.num}</Text>
+                                                    <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.seller_name}</Text>
+                                                    <Text style={[{ color: '#929497' }, fontStyles.normal12]}>{item.seller_id}</Text>
                                                 </View>
                                                 <Icon
                                                     style={[{}, styles.modalListContentRightIcon]}
