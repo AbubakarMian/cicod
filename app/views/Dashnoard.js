@@ -310,7 +310,7 @@ class Dashnoard extends React.Component {
                                 <Text style={[{}, styles.bannerText]}>Monthly Sales</Text>
                                 <Text style={[{}, styles.bannerboldText]}>₦{this.state.target.sales_made_amount}</Text>
                                 <View style={{ flexDirection: 'row', marginBottom: 3, marginTop: 10, width: width / 1.5, position: 'relative' }}>
-                                    <Text style={[{ color: '#707070' }]}>Target: {this.state.target.sales_target_amount}</Text>
+                                    <Text style={[{ color: '#707070' }]}>Target: ₦ {this.state.target.sales_target_amount}</Text>
                                     <Text style={[{ position: 'absolute', right: 0 }, styles.bannerpercentText]}>
                                         75%
                               </Text>
