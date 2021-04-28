@@ -53,7 +53,8 @@ class DiliveryAddress extends React.Component {
                 if (responseJson.status === 'success') {
                     let res = responseJson.data;
                     let addressarr = res.map((x, key) => { return { 
-                        id:5,
+                        country_id:x.country.id,
+                        state_id:x.state.id,
                         label: x.house_no + ',' + x.street + ',' + x.state.name + ',' + x.country.name, 
                         value: x.house_no + ',' + x.street + ',' + x.state.name + ',' + x.country.name } });
                     console.log('addressarr  !!!!!!', addressarr);
@@ -71,15 +72,19 @@ class DiliveryAddress extends React.Component {
         this.getDeliveryAddress();
     }
 
-    selectAddress(value) {
+    selectAddress(object) {
+
+     
         
         this.setState({
             is_selected_address: !this.state.is_selected_address
         })
         console.log(' value !!!!!!!!!!!!!!', value);
         this.props.setDeliveryAddress({
-            id:5,
-            address: value,
+
+            address: object.value,
+            country_id: object.country_id,
+            state_id: object.state_id,
             type:'Delivery'
         })
         this.props.navigation.goBack();
@@ -124,7 +129,7 @@ class DiliveryAddress extends React.Component {
                                         buttonSize={10}
                                         buttonOuterSize={20}
                                         initial={0}
-                                        onPress={(value) => this.selectAddress(value)} //{ this.setState({ value3Index: value }) }
+                                        onPress={(value) => this.selectAddress(obj)} //{ this.setState({ value3Index: value }) }
                                     />
                                     {
                                         this.state.addressarr.map((obj, i) => (
@@ -134,7 +139,7 @@ class DiliveryAddress extends React.Component {
                                                     obj={obj}
                                                     index={i}
                                                     isSelected={this.state.is_selected_address}
-                                                    onPress={(value) => this.selectAddress(value)}
+                                                    onPress={(value) => this.selectAddress(obj)}
                                                     borderWidth={1}
                                                     buttonInnerColor={'#e74c3c'}
                                                     buttonOuterColor={this.state.value3Index === i ? '#2196f3' : '#000'}
@@ -149,7 +154,7 @@ class DiliveryAddress extends React.Component {
                                                     obj={obj}
                                                     index={i}
                                                     labelHorizontal={true}
-                                                    onPress={(value) => this.selectAddress(value)}
+                                                    onPress={(value) => this.selectAddress(obj)}
                                                     // labelStyle={{fontSize: 20, color: '#2ecc71'}}
                                                     labelWrapStyle={{}}
                                                 />
