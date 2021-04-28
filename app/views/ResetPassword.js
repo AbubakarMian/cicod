@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Image, TouchableOpacity, Dimensions, } from 'react-native';
-import { Text, TextInput, Alert } from 'react-native-paper';
+import { View, Image, TouchableOpacity, Dimensions, Alert  } from 'react-native';
+import { Text, TextInput} from 'react-native-paper';
 import styles from '../css/ResetpasswordCss';
 import fontStyles from '../css/FontCss'
 import Header from '../views/Header'

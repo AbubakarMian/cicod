@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, Dimensions, Image, Platform, TouchableOpacity} from 'react-native'
-import { Text, TextInput, Alert, Modal  } from 'react-native-paper';
+import { View, Dimensions, Image, Platform, Alert,TouchableOpacity} from 'react-native'
+import { Text, TextInput, Modal  } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/ProductViewCss';
 import fontStyles from '../css/FontCss'
