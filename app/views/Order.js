@@ -1,10 +1,11 @@
 import React from 'react'
-import { View, ImageBackground, Modal, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback, } from 'react-native'
-import { Text, TextInput, Alert } from 'react-native-paper';
+import { View, ImageBackground, Modal,Alert, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback, } from 'react-native'
+import { Text, TextInput } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 // import styles from '../css/DashboardCss';
 import styles from '../css/OrderCss';
 import fontStyles from '../css/FontCss'
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
@@ -12,7 +13,8 @@ import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import { Constants } from '../views/Constant';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
-import DropDownPicker from 'react-native-dropdown-picker';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
+// import DropDownPicker from 'react-native-dropdown-picker';
 import FontCss from '../css/FontCss';
 
 class Order extends React.Component {
@@ -23,7 +25,11 @@ class Order extends React.Component {
             calenderModal: false,
             data: [],
             is_active_list: 'all',
-            spinner: false
+            spinner: false,
+            date: '',
+            search_order: '',
+            isDatePickerVisible: false,
+            setDatePickerVisibility: false
         };
         this.onDateChange = this.onDateChange.bind(this);
     }
@@ -117,7 +123,6 @@ class Order extends React.Component {
             }
         }
         console.log(' will receive props !!!!!!!!!!!!!', Constants.orderslist + filter);
-        return
         this.orderList(Constants.orderslist + filter);
     }
 
@@ -130,6 +135,39 @@ class Order extends React.Component {
         const id = item.id
         console.log("item_id item_id item_id item_id ", id)
         this.props.navigation.navigate('OrderDetail', { id })
+    }
+
+    datePickerFun = () => {
+        this.setState({
+            isDatePickerVisible: !this.state.isDatePickerVisible
+        })
+    }
+
+    setDate = (date) => {
+        var month = date.getUTCMonth() + 1; //months from 1-12
+        var day = date.getUTCDate();
+        var year = date.getUTCFullYear();
+
+        let newdate = day + "/" + month + "/" + year;
+
+        let order_url = Constants.orderslist + '?date_created=' + date;
+        
+        this.setState({
+            isDatePickerVisible: !this.state.isDatePickerVisible,
+            date: newdate,
+        })
+        this.orderList(order_url);
+
+    }
+    hideDatePicker = () => {
+        this.setState({
+            // setDatePickerVisibility: !this.state.setDatePickerVisibility,
+            isDatePickerVisible: !this.state.isDatePickerVisible
+        })
+    }
+    search(){
+        let url = Constants.orderslist+'?order_id='+this.state.search_order ;
+        this.orderList(url);
     }
     render() {
 
@@ -144,12 +182,36 @@ class Order extends React.Component {
                     textStyle={{ color: '#fff' }}
                     color={'#fff'}
                 />
+                <DateTimePickerModal
+                    isVisible={this.state.isDatePickerVisible}
+                    mode="date"
+                    date={new Date()}
+                    onConfirm={this.setDate}
+                    onCancel={this.hideDatePicker}
+                />
                 <View style={{ flexDirection: 'row', alignContent: 'center', alignItems: 'center', width: width - 20, alignSelf: 'center' }}>
                     <View>
                         <Text style={{ color: '#2F2E7C', fontWeight: 'bold' }}>ORDER</Text>
                     </View>
-                    <View>
-                        <DropDownPicker
+                    <View style={{ flex: 1 }}>
+                        <TouchableOpacity
+                            onPress={() => this.datePickerFun()}
+                        >
+                            <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginRight: 10, padding: 10, marginVertical: 10 }}>
+                                <Image
+                                    source={require('../images/calenderIcon.png')}
+                                />
+                                <Text style={[{ color: '#909090', marginLeft: 5 }, fontStyles.normal12]}>{this.state.date == '' ? 'Today' : this.state.date}</Text>
+                            </View>
+                            <View style={{ position: 'absolute', right: 20, bottom: 15 }}>
+                                <Icon
+                                    size={25}
+                                    name="caret-down"
+                                    color={'#707070'}
+                                />
+                            </View>
+                        </TouchableOpacity>
+                        {/* <DropDownPicker
                             items={[
                                 { label: 'USA', value: 'usa', hidden: true },
                                 { label: 'UK', value: 'uk', },
@@ -166,7 +228,7 @@ class Order extends React.Component {
                                 date: item.value
                             })}
                             style={{ width: width / 2 - 30, alignSelf: 'center', marginTop: 10, marginLeft: 10 }}
-                        />
+                        /> */}
                     </View>
                     {/* style={{ width: width / 2 - 30, alignSelf: 'center', marginTop: 10, marginLeft: 10 }} 
                     containerStyle={{ height: 50 }}
@@ -189,14 +251,14 @@ class Order extends React.Component {
                         />
 
                         <TextInput
-                            label="Search product, Price and code"
+                            label="Search order ID, customer, amount, etc"
                             // selectionColor={'#fff'}
 
                             style={{ backgroundColor: 'transparent', }}
                             width={width - 110}
                             alignSelf={'center'}
                             color={'#000'}
-                            onChangeText={text => this.setState({ search_product: text })}
+                            onChangeText={text => this.setState({ search_order: text })}
                             onSubmitEditing={() => this.search()}
                         />
                     </View>
@@ -326,22 +388,17 @@ class Order extends React.Component {
                                     </View>
                                     <View style={{ flex: 1, alignItems: 'flex-end', flexDirection: 'column' }}>
                                         <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>N {item.amount}</Text>
-                                        {/* {(item.order_status == 'PENDING') ?
-                                            <View style={[{ backgroundColor: '#ffabb5', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
-                                                <Text style={[{ color: '#f7001d' }]}>{item.payment_status}</Text>
-                                            </View>
-                                            : null} */}
 
                                         {(item.order_status == 'PENDING') ?
-                                            <Text style={[{ borderRadius: 50, paddingHorizontal: 5,textAlign:'center', backgroundColor: '#FFF3DB', color: '#FDB72B', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
+                                            <Text style={[{ borderRadius: 50, paddingHorizontal: 5, textAlign: 'center', backgroundColor: '#FFF3DB', color: '#FDB72B', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
                                                 {item.order_status}
                                             </Text>
                                             : (item.order_status == 'PAID') ?
-                                                <Text style={[{ borderRadius: 50, paddingHorizontal: 5,textAlign:'center', backgroundColor: '#DAF8EC', color: '#26C281', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
+                                                <Text style={[{ borderRadius: 50, paddingHorizontal: 5, textAlign: 'center', backgroundColor: '#DAF8EC', color: '#26C281', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
                                                     {item.order_status}
                                                 </Text>
                                                 : (item.order_status == 'PART PAYMENT') ?
-                                                    <Text style={[{ borderRadius: 50, paddingHorizontal: 5,textAlign:'center', backgroundColor: '#E6E6E6', color: '#929497', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
+                                                    <Text style={[{ borderRadius: 50, paddingHorizontal: 5, textAlign: 'center', backgroundColor: '#E6E6E6', color: '#929497', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
                                                         {item.order_status}
                                                     </Text>
                                                     : null}
