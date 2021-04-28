@@ -111,7 +111,7 @@ class TabNavigater extends React.Component {
                   source={this.state.active_screen == 'order'?require('../images/tabnav/red_order.png'):require('../images/tabnav/order.png')}
 
                   style={{
-                    width: 25,
+                    width: 20,
                     height: 25,
                     borderColor: 'red',
                     //tintColor: '#f1f6f9',

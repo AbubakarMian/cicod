@@ -1,6 +1,6 @@
 import React from 'react';
-import { View, Image, Dimensions, TouchableOpacity, ScrollView,Alert } from 'react-native';
-// import { View, Image, TouchableOpacity, Dimensions, Touchable, ScrollView, Alert } from 'react-native';
+import { View, Image, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
+// import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, Touchable, ScrollView, Alert } from 'react-native';
 import styles from '../css/LoginCss';
 import fontStyles from '../css/FontCss'
 import CheckBox from 'react-native-check-box';
@@ -9,7 +9,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import { Constants } from '../views/Constant';
-import { Text, TextInput,Modal } from 'react-native-paper';
+import { Text, TextInput, Alert,Modal } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -84,7 +84,7 @@ class Login extends React.Component {
                 lastname: "sandbox last", //responseJson.user.lastname,
                 email: "cicodsandbox@yopmail.com",//responsejson.user.email,
                 phone: "123314324",//responseJson.user.phone,
-                access_token: "Bearer 6j5YNuADjlKN0MwOPpwy",  //+ responseJson.token
+                access_token: "Bearer vJhp0wwJE8QDOjgVghIu",  //+ responseJson.token
             });
             this.setState({ Spinner: false })
             this.props.navigation.navigate('Home')
@@ -124,11 +124,11 @@ class Login extends React.Component {
                     } else {
                         this.setState({ Spinner: false })
                         // this.setState({ Spinner: false })
-                        let message = responseJson.status
+                        let message = responseJson.message
                         if(message == ''){
                             message = 'Server responded with error contact admin'
                         }
-                        Alert.alert('Error', responseJson.status)
+                        Alert.alert('Error', message)
                     }
                 }
                 )
@@ -165,10 +165,8 @@ class Login extends React.Component {
                     <View style={{height:50,flexDirection:'row',width:width-50,alignSelf:'center',}}>
                         <View style={{height:50,borderWidth:0.25,borderTopLeftRadius:5,borderRightWidth:0, borderBottomLeftRadius:5,flex:4,justifyContent:'center',paddingLeft:10}}>
                         <TextInput
-                            
                             onChangeText={text => this.setState({ tenantId: text })}
                             label="Domain Name"
-                            placeholder="Domain Name"
                             style={{height:50, backgroundColor:'transparent',borderBottomWidth:0,borderTopWidth:0,borderLeftWidth:0, borderColor:'#CFCFCF'}}
                             alignSelf={'center'}
                             color={'#000'}

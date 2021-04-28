@@ -149,9 +149,10 @@ class OrderDetail extends React.Component {
                     <TouchableOpacity
                         onPress={() => this.props.navigation.goBack()}
                     >
-                        <View style={[{}, styles.headingRow]}>
+                        <View style={[{alignItems:'center'}, styles.headingRow]}>
                             <Icon name="arrow-left" size={25} color="#929497" />
-                            <Text style={[{}, styles.resetText]}>ORDER DETAIL</Text>
+                            {/* <Text style={[{color:'#2F2E7C',fontWeight:'700',marginLeft:10,}fontStyles.normal15]}>ORDER DETAIL</Text> */}
+                            <Text style={[{color:'#2F2E7C',fontWeight:'700',marginLeft:10,},fontStyles.normal15]}>ORDER DETAIL</Text>
                         </View>
                     </TouchableOpacity>
                     <View style={[{}, styles.textInputView]}>

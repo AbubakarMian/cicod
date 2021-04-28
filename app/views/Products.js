@@ -263,16 +263,12 @@ class Products extends React.Component {
                 </View> 
                 <View style={[{}, styles.formRowView]}>
                     <View style={[{ position: 'relative' }, styles.formColumn]}>
-
                         <DropDownPicker
                             items={this.state.categoryarr}
-                            containerStyle={{ height: 50, width: width - 20, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
-                            style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
-                            itemStyle={{
-                                justifyContent: 'flex-start', zIndex: 999
-                            }}
                             placeholder="Product Category"
-                            dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                            containerStyle={{ height: 50,marginTop:5, width: width-20,alignSelf:'center'}}
+                            style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
+                            dropDownStyle={{height:80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1,  }}
                             labelStyle={{ color: '#A9A9A9' }}
                             onChangeItem={item => this.onCategoryText(item.value)}
                         />

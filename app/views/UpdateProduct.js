@@ -25,7 +25,6 @@ class UpdateProduct extends React.Component {
             searchPress: 1,
             updateProductModal: false,
             prod_list: [],
-            prod_selected: [],
             buyer_detail: {},
             is_default: false,
             categories: [],
@@ -33,6 +32,8 @@ class UpdateProduct extends React.Component {
         }
 
     }
+
+
     componentDidMount() {
         this.setState({
             buyer_detail: this.props.route.params.buyer_detail
@@ -79,6 +80,8 @@ class UpdateProduct extends React.Component {
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
+                console.log('responseJson.message', responseJson);
+                console.log('responseJson.postData', postData);
                 this.setState({
                     spinner: false,
 
@@ -90,23 +93,38 @@ class UpdateProduct extends React.Component {
                     let categories = [];
                     let data_arr = [];
                     for (let i = 0; i < datares_arr.length; i++) {
+                        // console.log('index ', i);
+                        // console.log('data_arrdata_arrdata_arr ', datares_arr[i]);
+                        // console.log('data_arrdata_arrdata_arr 2', datares_arr[i].category);
                         let cat_name = '';
                         if (!datares_arr[i].category || datares_arr[i].category == null) {
                             continue;
+                            // cat_name = datares_arr[i].category;
                         }
                         cat_name = datares_arr[i].category;
                         if (this.in_array(categories, cat_name) === -1) {
+                            // console.log('categoriescategoriescategories categories', categories)
                             categories.push(datares_arr[i].category);
                             data_arr.push({
                                 category: cat_name,
                                 data: []
                             });
+                            data_arr.push({
+                                category: 'null cat here',
+                                data: [],
+                                isChecked:false
+                            });
                             for (let j = 0; j < datares_arr.length; j++) {
+                                // console.log('datares_arr[j].category 1', datares_arr[j].category);
+                                // console.log('cat_name 1', cat_name);
                                 if (datares_arr[j].category == cat_name) {
                                     datares_arr[j].isChecked = false;
                                     data_arr[(data_arr.length - 1)].data.push(datares_arr[j]);
                                 }
                             }
+                               
+
+                            break;
                         }
                     }
                     this.setState({
@@ -124,6 +142,8 @@ class UpdateProduct extends React.Component {
     }
 
     in_array(arr, value) {
+        console.log('arr', arr)
+        console.log('value', value)
         for (let i = 0; i < arr.length; i++) {
             if (arr[i] == value) {
                 return i;

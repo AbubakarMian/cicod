@@ -195,9 +195,10 @@ class Order extends React.Component {
                     </View>
                     <View style={{ flex: 1 }}>
                         <TouchableOpacity
+                            style={[{flexDirection:'row',maxWidth:width/2,height:40,borderRadius:5, marginTop:5,marginLeft:10, backgroundColor:'#fff',alignItems:'center'}]}
                             onPress={() => this.datePickerFun()}
                         >
-                            <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginRight: 10, padding: 10, marginVertical: 10 }}>
+                            <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginLeft: 10,   }}>
                                 <Image
                                     source={require('../images/calenderIcon.png')}
                                 />
@@ -205,9 +206,10 @@ class Order extends React.Component {
                             </View>
                             <View style={{ position: 'absolute', right: 20, bottom: 15 }}>
                                 <Icon
-                                    size={25}
+                                    size={20}
                                     name="caret-down"
                                     color={'#707070'}
+                                    style={{alignSelf:'center'}}
                                 />
                             </View>
                         </TouchableOpacity>

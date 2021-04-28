@@ -114,7 +114,7 @@ class Customer extends React.Component {
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
                     <View>
-                        <Text style={[{}, styles.headerRowText]}>customers</Text>
+                        <Text style={[{}, styles.headerRowText]}>CUSTOMERS</Text>
                     </View>
                     <TouchableOpacity onPress={(() => this.props.navigation.navigate('AddNewCustomer'))}
                         style={[{}, styles.headerRowPlusiconView]}>
@@ -132,14 +132,14 @@ class Customer extends React.Component {
                     <TextInput
                         onChangeText={text => this.setState({ search_text: text })}
                         onSubmitEditing={() => this.search()}
-                        label="Johnson James"
+                        label="Search Customer"
                         style={{ backgroundColor: 'transparent', borderBottomWidth: 0, borderColor: '#fff' }}
                         width={width - 50}
                         alignSelf={'center'}
                         color={'#000'}
                     />
                 </View>
-                <View style={[{}, styles.searchBoxDividerView]}></View>
+                <View style={[{borderBottomColor:'#E6E6E6',borderBottomWidth:0.5,width:width-20,alignSelf:'center',marginTop:20,marginBottom:10}]}></View>
                 <ScrollView>
                     <FlatList
                         data={this.state.data}

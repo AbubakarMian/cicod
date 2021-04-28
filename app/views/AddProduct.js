@@ -247,24 +247,27 @@ class AddProduct extends React.Component {
                             {this.state.categoryarr.length < 1 ? null :
                                 <DropDownPicker
                                     items={this.state.categoryarr}
-                                    containerStyle={{ height: 50, width: width - 20, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
-                                    style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
+                                    placeholder="Catagory"
+                                    style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, zIndex: 9999999 }}
                                     itemStyle={{
                                         justifyContent: 'flex-start', zIndex: 0.99
                                     }}
-                                    placeholder="Catagory"
-                                    dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                                    labelStyle={{ color: '#A9A9A9' }}
+                                    containerStyle={{ height: 50, width: width - 20 ,alignSelf:'center' }}
+                                    dropDownStyle={{ zIndex: 99999999, height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                                     labelStyle={{ color: '#A9A9A9' }}
                                     onChangeItem={item => this.onCategoryText(item.value)}
                                 />}
                         </View>
 
-
-                        <View style={[{}, styles.OrderDetailContainer]}>
+                        <View style={{borderBottomWidth:0.5,borderBottomColor:'#E6E6E6',width:width-20,alignSelf:'center',marginVertical:10}}></View>
+                        <View style={[{zIndex:-0.9999}, styles.OrderDetailContainer]}>
+                           
                             <View style={[{}, styles.OrderDetailHeadingRow]}>
                                 <Text style={[{}, styles.OrderDetailHeadingRowText]}>Order Detail</Text>
                                 <Text style={[{}, styles.OrderDetailNotificationText]}>{this.state.total_add_order}</Text>
                             </View>
+                          
                             {(this.state.data.length != 0) ?
                                 <FlatList
                                     data={this.state.data}
