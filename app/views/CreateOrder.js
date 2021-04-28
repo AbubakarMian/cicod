@@ -194,8 +194,8 @@ class CreateOrder extends React.Component {
                 delivery_type: this.props.deliveryAddress.type,//dilevery_type,?? 'PICKUP'
                 delivery_address: this.props.deliveryAddress.address ?? '',
                 payment_mode: this.state.payment_mode, //required
-                // country_id: this.state.customer_country,
-                // state_id: this.state.customer_state,
+                country_id: this.props.deliveryAddress.country_id,
+                state_id: this.props.deliveryAddress.state_id,
                 // lga_id: this.state.customer_lga,
                 note: this.props.notes.notes ?? '',
                 discount_amount: discounted_price ?? 0,

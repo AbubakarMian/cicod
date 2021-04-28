@@ -41,11 +41,11 @@ class DiliveryAddress extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
-        console.log('url !!!!!!!!!!!', Constants.customerdelivery + '?customer_id=' + this.props.customer.id)
-        fetch(Constants.customerdelivery + '?customer_id=7', postData) //+ this.props.customer.id
+        console.log('url !!!!!!!!!!!', Constants.customerdelivery + '?customer_id=' + this.props.customer.id) // id 7
+        fetch(Constants.customerdelivery + '?customer_id='+this.props.customer.id, postData) //+ this.props.customer.id
             .then(response => response.json())
             .then(async responseJson => {
-                console.log('***************@@@@@@@@########### addrez apoi ', responseJson)
+                console.log('***************@@@@@@@@########### addrez apoi ', responseJson.data.country)
 
                 this.setState({
                     spinner: false,
@@ -53,6 +53,7 @@ class DiliveryAddress extends React.Component {
                 if (responseJson.status === 'success') {
                     let res = responseJson.data;
                     let addressarr = res.map((x, key) => { return { 
+                        
                         country_id:x.country.id,
                         state_id:x.state.id,
                         label: x.house_no + ',' + x.street + ',' + x.state.name + ',' + x.country.name, 
@@ -79,7 +80,7 @@ class DiliveryAddress extends React.Component {
         this.setState({
             is_selected_address: !this.state.is_selected_address
         })
-        console.log(' value !!!!!!!!!!!!!!', value);
+        console.log(' value !!!!!!!!!!!!!!', object);
         this.props.setDeliveryAddress({
 
             address: object.value,
