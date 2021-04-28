@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import { View, ImageBackground, ScrollView, TouchableHighlight, Alert,FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
 import splashImg from '../images/splash.jpg'
 import styles from '../css/AddCustomerCss'
 import fontStyles from '../css/FontCss'
@@ -13,7 +13,7 @@ import { Constants } from '../views/Constant';
 import { connect } from 'react-redux';
 import { SET_USER, SET_CUSTOMER } from '../redux/constants/index';
 import { Item } from 'native-base';
-import { Text, TextInput, Alert } from 'react-native-paper';
+import { Text, TextInput } from 'react-native-paper';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 class AddCustomer extends React.Component {
