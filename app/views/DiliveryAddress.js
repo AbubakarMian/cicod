@@ -52,7 +52,10 @@ class DiliveryAddress extends React.Component {
                 });
                 if (responseJson.status === 'success') {
                     let res = responseJson.data;
-                    let addressarr = res.map((x, key) => { return { label: x.house_no + ',' + x.street + ',' + x.state.name + ',' + x.country.name, value: x.house_no + ',' + x.street + ',' + x.state.name + ',' + x.country.name } });
+                    let addressarr = res.map((x, key) => { return { 
+                        id:5,
+                        label: x.house_no + ',' + x.street + ',' + x.state.name + ',' + x.country.name, 
+                        value: x.house_no + ',' + x.street + ',' + x.state.name + ',' + x.country.name } });
                     console.log('addressarr  !!!!!!', addressarr);
                     this.setState({
                         addressarr: addressarr,
@@ -69,12 +72,15 @@ class DiliveryAddress extends React.Component {
     }
 
     selectAddress(value) {
+        
         this.setState({
             is_selected_address: !this.state.is_selected_address
         })
         console.log(' value !!!!!!!!!!!!!!', value);
         this.props.setDeliveryAddress({
-            address: value
+            id:5,
+            address: value,
+            type:'Delivery'
         })
         this.props.navigation.goBack();
     }

@@ -1,7 +1,8 @@
 import { SET_DELIVERY_ADDRESS } from '../constants';
 const initialState = {
-    address: 'PICKUP',
-    type: '',
+    id:0,
+    address: '',
+    type: 'PICKUP',
 }
 const deliveryAddressReducer = (state = initialState, action) => {
 

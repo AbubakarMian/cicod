@@ -52,7 +52,7 @@ class Home extends React.Component {
               </TouchableOpacity>
               <TouchableOpacity
               style={{flex:1}}
-              onPress={()=>this.props.navigation.navigate('CreateOrder')}
+              onPress={()=>this.props.navigation.navigate('CreateOrder',{screen_name:'sell'})}
               >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 20,

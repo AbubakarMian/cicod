@@ -94,7 +94,7 @@ class AddCustomer extends React.Component {
         }
         await this.props.setCustomer(user_data);
         console.log('user info !!!!!!!!!!!!!!! @@@@@@@@@@@@@', this.props);
-        this.props.navigation.goBack();
+        this.props.navigation.navigate('CreateOrder');
     }
 
     render() {

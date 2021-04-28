@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, Dimensions,Alert, Image, TouchableHighlight, Platform, TouchableOpacity, FlatList } from 'react-native'
+import { View, ImageBackground, ScrollView, Dimensions, Alert, Image, TouchableHighlight, Platform, TouchableOpacity, FlatList } from 'react-native'
 import { Text, TextInput, Modal } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/CreateOrderCss';
@@ -10,7 +10,7 @@ import CheckBox from 'react-native-check-box';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Constants } from '../views/Constant';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART, REMOVE_PRODUCT_FORM_CART, CLEAR_ORDER, SET_DELIVERY_ADDRESS } from '../redux/constants/index';
+import { SET_USER, SET_CUSTOMER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART, REMOVE_PRODUCT_FORM_CART, CLEAR_ORDER, SET_DELIVERY_ADDRESS } from '../redux/constants/index';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import SearchBar from 'react-native-search-bar';
 const { width, height } = Dimensions.get('window')
@@ -119,7 +119,7 @@ class CreateOrder extends React.Component {
         console.log(' type !!!!!!!', type);
         this.setState({ is_pickup: !this.state.is_pickup })
 
-        if (this.state.customer_name == '') {
+        if (this.props.customer.name == '') {
 
             alert('ADD CUSTOMER FIRST');
             return
@@ -158,6 +158,10 @@ class CreateOrder extends React.Component {
         this.props.removeProductFromCart(id);
     }
     createOrderFun() {
+
+        
+        // return;
+
         let dilevery_type = ''
         if (this.state.is_pickup == true) {
             dilevery_type = 'Pickup';
@@ -165,6 +169,7 @@ class CreateOrder extends React.Component {
             dilevery_type = 'Delivery';
         }
         console.log('dilevery_type', dilevery_type);
+        console.log('this.props.deliveryAddress.type this.props.deliveryAddress.type', this.props.deliveryAddress);
         let discounted_price = 0
         if (this.props.orderDiscountReducer.discount_type == 'percentage') {
             discounted_price = (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01);
@@ -195,6 +200,7 @@ class CreateOrder extends React.Component {
                 discount_amount: discounted_price ?? 0,
             })
         };
+        console.log('body params list @@@@@@!!!!!!!!!!!!!!',postData );
         fetch(Constants.orderslist, postData)
             .then(response => response.json())
             .then(async responseJson => {
@@ -256,8 +262,14 @@ class CreateOrder extends React.Component {
         this.props.logoutUser();
         this.props.navigation.navigate('Login');
     }
+
+    closeOrder() {
+        let user_data = {}
+        this.props.setCustomer(user_data);
+        this.props.navigation.goBack()
+    }
     render() {
-        console.log(' supplierlist @@@@@@@@@@@@@@@ supplierlist  !!!!!!!!!!!!!!', this.state.supplierlist);
+        console.log(' supplierlist @@@@@@@@@@@@@@@ supplierlist  !!!!!!!!!!!!!!', this.props.customer);
         var radio_props_dilvery = [
             { label: 'Delivery', value: 0 },
 
@@ -296,7 +308,7 @@ class CreateOrder extends React.Component {
                                 <Icon name="times" size={20} color="#929497" />
                                 <TouchableOpacity
                                     // onPress={() => this.props.navigation.navigate('Order')}
-                                    onPress={() => this.props.navigation.goBack()}
+                                    onPress={() => this.closeOrder()}
                                 >
                                     <Text style={[{}, styles.backHeadingCloseText]}>Close</Text>
                                 </TouchableOpacity>
@@ -323,7 +335,7 @@ class CreateOrder extends React.Component {
                                 <Text style={[{}, styles.customerContaineraddBtnText]}>Add</Text>
                             </TouchableOpacity>
                             <View style={{ borderBottomWidth: 0.5, width: width - 20, alignSelf: 'center', marginVertical: 5, borderColor: '#E6E6E6' }}></View>
-                            {(this.state.customer_name == '') ?
+                            {(this.props.customer.name == '' || this.props.customer.name == undefined) ?
                                 <View style={[{}, styles.customerContainerView]}>
                                     <Icon name="user-circle" size={50} color="#D8D8D8" />
                                     <Text style={[{}, styles.customerContainerheading]}>No Customer added</Text>
@@ -336,15 +348,15 @@ class CreateOrder extends React.Component {
                                             color="#D8D8D8"
                                             size={20}
                                         />
-                                        <Text style={[{}, styles.userDEtailCOntainerText]}>{this.state.customer_name}</Text>
+                                        <Text style={[{}, styles.userDEtailCOntainerText]}>{this.props.customer.name}</Text>
                                     </View>
                                     <View style={[{}, styles.userDEtailCOntainerIconView]}>
                                         <Text style={[{}, styles.usetDetailLableText]}>Email: </Text>
-                                        <Text style={[{}, styles.usetDetailInfoText]}>{this.state.customer_email}</Text>
+                                        <Text style={[{}, styles.usetDetailInfoText]}>{this.props.customer.email}</Text>
                                     </View>
                                     <View style={[{}, styles.userDEtailCOntainerIconView]}>
                                         <Text style={[{}, styles.usetDetailLableText]}>Phone: </Text>
-                                        <Text style={[{}, styles.usetDetailInfoText]}>{this.state.customer_phone}</Text>
+                                        <Text style={[{}, styles.usetDetailInfoText]}>{this.props.customer.phone}</Text>
                                     </View>
                                     <View style={[{}, styles.downIconView]}>
                                         <Icon name="angle-down"
@@ -704,7 +716,7 @@ class CreateOrder extends React.Component {
                                         <TouchableOpacity
                                             key={item.key}
                                             onPress={() => this.props.navigation.navigate('BuyersView', { items: items, heading: 'SUPPLIERS' })}
-                                             onShowUnderlay={separators.highlight}
+                                            onShowUnderlay={separators.highlight}
                                             onHideUnderlay={separators.unhighlight}>
                                             <View style={[{ marginTop: 10 }, styles.modalListContainer]}>
                                                 <Image source={require('../images/bage.png')} />
@@ -749,6 +761,7 @@ function mapDispatchToProps(dispatch) {
         removeFromCart: (value) => dispatch({ type: REMOVE_FROM_CART, value: value }),
         removeProductFromCart: (value) => dispatch({ type: REMOVE_PRODUCT_FORM_CART, value: value }),
         setDeliveryAddress: (value) => dispatch({ type: SET_DELIVERY_ADDRESS, value: value }),
+        setCustomer: (value) => dispatch({ type: SET_CUSTOMER, value: value }),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CreateOrder)
