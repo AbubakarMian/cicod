@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, TouchableHighlight, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback,Alert } from 'react-native'
-import {   Text, TextInput, Modal} from 'react-native-paper';
+import { View, ImageBackground, TouchableHighlight, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback, Alert } from 'react-native'
+import { Text, TextInput, Modal } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss';
 import fontStyles from '../css/FontCss'
@@ -36,17 +36,17 @@ class Dashnoard extends React.Component {
             canclledOrder: [],
             graph_total_orders: [],
             total_orders_pending_data: [],
-            graph_data:[],
-            showtotal_orders:true,
-            selected_graph:'all_orders',
-            calenderModal:false,
-            total_order_background:'#FFE5E5'
+            graph_data: [],
+            showtotal_orders: true,
+            selected_graph: 'all_orders',
+            calenderModal: false,
+            total_order_background: '#FFE5E5'
         };
 
     }
     componentDidMount() {
         console.log('fsd fsdf sdf sfdsdf sfdfds');
-        this.props.setTabBar({tab_name:'dashboard'})
+        this.props.setTabBar({ tab_name: 'dashboard' })
         this.setState({ spinner: true })
         let postData = {
             method: 'GET',
@@ -61,9 +61,9 @@ class Dashnoard extends React.Component {
             .then(async responseJson => {
                 this.setState({
                     spinner: false,
-                   
+
                 });
-                console.log('response !!!!!!!!!!!!!@@@@@@@@@@@@@@',responseJson);
+                console.log('response !!!!!!!!!!!!!@@@@@@@@@@@@@@', responseJson);
                 if (responseJson.status === 'success') {
                     // console.log('**************', this.state.data)
                     var total_orders = responseJson.data.graph.total_orders;
@@ -88,26 +88,26 @@ class Dashnoard extends React.Component {
                         graph_total_pending_orders_data.push(amount);
                         graph_total_pending_orders_label.push(total_pending_orders[i].year);
                     }
-                    let total_orders_data = this.getGraphData(graph_lable,graph_total_orders_data);
-                    
-                   let total_orders_pending_data = this.getGraphData(graph_total_pending_orders_label,graph_total_pending_orders_data);
+                    let total_orders_data = this.getGraphData(graph_lable, graph_total_orders_data);
+
+                    let total_orders_pending_data = this.getGraphData(graph_total_pending_orders_label, graph_total_pending_orders_data);
                     console.log(' total total graph ', total_orders_pending_data);
                     this.setState({
                         target: responseJson.data.target,
-                        graph:responseJson.data.graph,
+                        graph: responseJson.data.graph,
                         totalOrder: responseJson.data.total,
                         paidOrder: responseJson.data.paid,
                         pendingOrder: responseJson.data.pending,
                         canclledOrder: responseJson.data.cancelled,
                         graph_total_orders: total_orders_data,
-                        graph_data:total_orders_data,
+                        graph_data: total_orders_data,
                         total_orders_pending_data: total_orders_pending_data,
 
                     })
                     console.log("%%%%%%%%%%%%%%%%", graph_lable)
                     // this.props.navigation.navigate('DrawerNavigation')
-                } 
-                else if(responseJson.status == 401){
+                }
+                else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 }
                 else {
@@ -118,44 +118,44 @@ class Dashnoard extends React.Component {
             })
     }
 
-    unauthorizedLogout(){
+    unauthorizedLogout() {
         Alert.alert('Error', Constants.UnauthorizedErrorMsg)
         this.props.logoutUser();
         this.props.navigation.navigate('Login');
     }
 
-    ShowAllOrders(){
+    ShowAllOrders() {
         let allorders = this.state.graph_total_orders;
         this.setState({
-            selected_graph:'all_orders',
-            graph_data:allorders
+            selected_graph: 'all_orders',
+            graph_data: allorders
         })
-        console.log('all orders sel ',this.state.selected_graph);   
+        console.log('all orders sel ', this.state.selected_graph);
     }
-    
-    ShowPendingOrders(){
+
+    ShowPendingOrders() {
         let total_orders_pending_data = this.state.total_orders_pending_data;
         this.setState({
-            selected_graph:'pending_orders',
-            graph_data:total_orders_pending_data
-        })        
-        console.log('pending_orders orders serl',this.state.selected_graph);   
+            selected_graph: 'pending_orders',
+            graph_data: total_orders_pending_data
+        })
+        console.log('pending_orders orders serl', this.state.selected_graph);
 
     }
 
-    getGraphData(graph_lable,orders_data){
+    getGraphData(graph_lable, orders_data) {
         let graphdata = [];
         graphdata.push({
-            data:orders_data,
+            data: orders_data,
             // color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
             strokeWidth: 2 // optional
         })
         let data = {
-            labels:graph_lable,
-            datasets:graphdata,
+            labels: graph_lable,
+            datasets: graphdata,
             // legend: ["Rainy Days"]
         };
-        console.log('getGraphData',data);
+        console.log('getGraphData', data);
         // data = {
         //     labels: ["January", "February", "March", "April", "May", "June"],
         //     datasets: [
@@ -171,15 +171,15 @@ class Dashnoard extends React.Component {
     }
 
     onDateChange(date) {
-        this.setState({
+        () => this.setState({
             selectedStartDate: date,
         });
     }
     render() {
-        const { selectedStartDate } = this.state;        
+        const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
-            <View style={{ paddingBottom:50, width: width, alignItems: 'center', position: 'relative', backgroundColor: '#F0F0F0', }}>
+            <View style={{ paddingBottom: 50, width: width, alignItems: 'center', position: 'relative', backgroundColor: '#F0F0F0', }}>
                 <Header navigation={this.props.navigation} />
                 <Spinner
                     visible={this.state.spinner}
@@ -198,21 +198,26 @@ class Dashnoard extends React.Component {
                                     style={{ flexDirection: 'row', justifyContent: 'center' }}
                                     onPress={() => this.setState({ calenderModal: true })}
                                 >
-                                    <Image
-                                        source={require('../images/dashboard/calenderIcon.png')}
-                                    />
-                                    <Text style={[{}, styles.calenderText]}>Today</Text>
+                                    <View style={{ backgroundColor: '#fff', flexDirection: 'row',justifyContent:'center',alignItems:'center',alignSelf:'flex-end', paddingVertical: 5, paddingHorizontal: 10, borderRadius: 5 }}>
+                                        <Image
+                                            source={require('../images/dashboard/calenderIcon.png')}
+                                        />
+                                        <Text style={[{marginHorizontal:50}, styles.calenderText]}>Today</Text>
+                                        <Icon 
+                                        name="caret-down"
+                                        />
+                                    </View>
                                 </TouchableOpacity>
                             </View>
                         </View>
                         <View style={[{}, styles.cardContainer]}>
                             <View style={[{}, styles.cardView]}>
-                                <View style={[{backgroundColor:'#FFE5E5'}, styles.card]}>
+                                <View style={[{ backgroundColor: '#FFE5E5' }, styles.card]}>
                                     <Image
                                         source={require('../images/dashboard/redbage.png')}
                                     />
-                                    <Text style={{ color: '#B1272C', fontSize: 10,fontFamily:'Open Sans' }}>Total Orders</Text>
-                                    <Text style={{ fontSize: 20,fontFamily:'Open Sans',fontWeight:'bold', color: '#4E4D4D' }}>₦ {this.state.totalOrder.amount}</Text>
+                                    <Text style={{ color: '#B1272C', fontSize: 10, fontFamily: 'Open Sans' }}>Total Orders</Text>
+                                    <Text style={{ fontSize: 20, fontFamily: 'Open Sans', fontWeight: 'bold', color: '#4E4D4D' }}>₦ {this.state.totalOrder.amount}</Text>
                                     <Text style={[{}, styles.recardtext]}>{this.state.totalOrder.count}</Text>
                                 </View>
                             </View>
@@ -221,20 +226,20 @@ class Dashnoard extends React.Component {
                                     <Image
                                         source={require('../images/dashboard/greenbage.png')}
                                     />
-                                    <Text style={{ color: '#B1272C', fontSize: 10,fontFamily:'Open Sans' }}>Paid Orders</Text>
-                                    <Text style={{ fontSize: 20,fontFamily:'Open Sans',fontWeight:'bold', color: '#4E4D4D' }}>₦ {this.state.paidOrder.amount}</Text>
+                                    <Text style={{ color: '#B1272C', fontSize: 10, fontFamily: 'Open Sans' }}>Paid Orders</Text>
+                                    <Text style={{ fontSize: 20, fontFamily: 'Open Sans', fontWeight: 'bold', color: '#4E4D4D' }}>₦ {this.state.paidOrder.amount}</Text>
                                     <Text style={[{}, styles.greencardtext]}>{this.state.paidOrder.count}</Text>
                                 </View>
                             </View>
                         </View>
                         <View style={[{}, styles.cardContainer]}>
                             <View style={[{}, styles.cardView]}>
-                                <View style={[{backgroundColor:'#FFE5E5'}, styles.card]}>
+                                <View style={[{ backgroundColor: '#FFE5E5' }, styles.card]}>
                                     <Image
                                         source={require('../images/dashboard/bluebage.png')}
                                     />
-                                    <Text style={{ color: '#2F2E7C', fontSize: 10,fontFamily:'Open Sans' }}>Pending Orders</Text>
-                                    <Text style={{ fontSize: 20,fontFamily:'Open Sans',fontWeight:'bold', color: '#4E4D4D' }}>₦ {this.state.pendingOrder.amount}</Text>
+                                    <Text style={{ color: '#2F2E7C', fontSize: 10, fontFamily: 'Open Sans' }}>Pending Orders</Text>
+                                    <Text style={{ fontSize: 20, fontFamily: 'Open Sans', fontWeight: 'bold', color: '#4E4D4D' }}>₦ {this.state.pendingOrder.amount}</Text>
                                     <Text style={[{}, styles.bluecardtext]}>{this.state.pendingOrder.count}</Text>
                                 </View>
                             </View>
@@ -243,31 +248,31 @@ class Dashnoard extends React.Component {
                                     <Image
                                         source={require('../images/dashboard/yellowbage.png')}
                                     />
-                                    <Text style={{ color: '#FDB72B', fontSize: 10,fontFamily:'Open Sans' }}>Cancelled Orders</Text>
-                                    <Text style={{ fontSize: 20,fontFamily:'Open Sans',fontWeight:'bold', color: '#4E4D4D' }}>₦ {this.state.canclledOrder.amount}</Text>
+                                    <Text style={{ color: '#FDB72B', fontSize: 10, fontFamily: 'Open Sans' }}>Cancelled Orders</Text>
+                                    <Text style={{ fontSize: 20, fontFamily: 'Open Sans', fontWeight: 'bold', color: '#4E4D4D' }}>₦ {this.state.canclledOrder.amount}</Text>
                                     <Text style={[{}, styles.yellowcardtext]}>{this.state.canclledOrder.count}</Text>
                                 </View>
                             </View>
                         </View>
-                        <View style={{backgroundColor:'#fff',paddingVertical:20,width:width-30,alignSelf:'center',borderRadius:5}}>
+                        <View style={{ backgroundColor: '#fff', paddingVertical: 20, width: width - 30, alignSelf: 'center', borderRadius: 5 }}>
                             <View style={[{}, styles.calenderbtn]}>
                                 <TouchableOpacity
-                                style={{backgroundColor:'#FFE5E5',paddingHorizontal:5,borderTopLeftRadius:50,borderBottomLeftRadius:50,paddingVertical:5}}
-                                onPress={()=>this.ShowAllOrders()}>
-                                    <Text style={{ color: this.state.selected_graph==='all_orders'?'#B1272C':'#707070', fontWeight: 'bold' }}>Total Orders  </Text>
+                                    style={{ backgroundColor: '#FFE5E5', paddingHorizontal: 5, borderTopLeftRadius: 50, borderBottomLeftRadius: 50, paddingVertical: 5 }}
+                                    onPress={() => this.ShowAllOrders()}>
+                                    <Text style={{ color: this.state.selected_graph === 'all_orders' ? '#B1272C' : '#707070', fontWeight: 'bold' }}>Total Orders  </Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity 
-                                style={{backgroundColor:'#FFE5E5',paddingHorizontal:5,borderTopRightRadius:50,borderBottomRightRadius:50,paddingVertical:5}}
-                                onPress={()=>this.ShowPendingOrders()}>
-                                    <Text style={{ color: this.state.selected_graph==='pending_orders'?'#B1272C':'#707070', fontWeight: 'bold' }}>Paid Orders  </Text>
+                                <TouchableOpacity
+                                    style={{ backgroundColor: '#FFE5E5', paddingHorizontal: 5, borderTopRightRadius: 50, borderBottomRightRadius: 50, paddingVertical: 5 }}
+                                    onPress={() => this.ShowPendingOrders()}>
+                                    <Text style={{ color: this.state.selected_graph === 'pending_orders' ? '#B1272C' : '#707070', fontWeight: 'bold' }}>Paid Orders  </Text>
                                 </TouchableOpacity>
                             </View>
                             {this.state.graph_data.length == 0 ? null :
                                 <LineChart
                                     data={this.state.graph_data}
-                                    width={Dimensions.get("window").width } // from react-native
+                                    width={Dimensions.get("window").width} // from react-native
                                     height={height / 3}
-                                    style={{paddingHorizontal:20,alignSelf:'center'}}
+                                    style={{ paddingHorizontal: 20, alignSelf: 'center' }}
                                     alignSelf={'center'}
                                     yAxisLabel="N25M"
                                     yAxisSuffix=""
@@ -276,7 +281,7 @@ class Dashnoard extends React.Component {
                                     yAxisInterval={1} // optional, defaults to 1
                                     chartConfig={{
                                         backgroundColor: "#fff",
-                                        marginLeft:10,
+                                        marginLeft: 10,
                                         backgroundGradientFrom: "#fff",
                                         backgroundGradientTo: "#fff",
                                         decimalPlaces: 2, // optional, defaults to 2dp
@@ -304,10 +309,10 @@ class Dashnoard extends React.Component {
                             <View style={[{}, styles.bannerContentView]}>
                                 <Text style={[{}, styles.bannerText]}>Monthly Sales</Text>
                                 <Text style={[{}, styles.bannerboldText]}>₦{this.state.target.sales_made_amount}</Text>
-                                <View style={{flexDirection:'row',marginBottom:3,marginTop:10, width:width/1.5,position:'relative'}}>
-                                <Text style={[{color:'#707070'}]}>Target: {this.state.target.sales_target_amount}</Text>
-                                <Text style={[{position:'absolute',right:0}, styles.bannerpercentText]}>
-                                    75%
+                                <View style={{ flexDirection: 'row', marginBottom: 3, marginTop: 10, width: width / 1.5, position: 'relative' }}>
+                                    <Text style={[{ color: '#707070' }]}>Target: {this.state.target.sales_target_amount}</Text>
+                                    <Text style={[{ position: 'absolute', right: 0 }, styles.bannerpercentText]}>
+                                        75%
                               </Text>
                                 </View>
                                 <Progress.Bar color="#B1272C" backgroundColor="#fff" progress={0.75} width={200} />
@@ -325,17 +330,18 @@ class Dashnoard extends React.Component {
                     visible={this.state.calenderModal}
                     transparent={true}
                 >
-                    <TouchableHighlight
+                    <TouchableOpacity
                         onPress={() => this.setState({ calenderModal: false })}
                     >
                         <View style={{ height: height, justifyContent: 'center', alignItems: 'center' }}>
                             <View style={{ width: width, height: height / 2, justifyContent: 'center', alignItems: 'center', transparent: false, backgroundColor: '#fff' }}>
                                 <CalendarPicker
                                     onDateChange={this.onDateChange}
+                                    startDate={''}
                                 />
                             </View>
                         </View>
-                    </TouchableHighlight>
+                    </TouchableOpacity>
                 </Modal>
             </View>
         )

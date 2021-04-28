@@ -139,7 +139,7 @@ class Customer extends React.Component {
                         color={'#000'}
                     />
                 </View>
-                <View style={[{}, styles.searchBoxDividerView]}></View>
+                <View style={[{borderBottomColor:'#E6E6E6',borderBottomWidth:0.5,width:width-20,alignSelf:'center',marginTop:20,marginBottom:10}]}></View>
                 <ScrollView>
                     <FlatList
                         data={this.state.data}
