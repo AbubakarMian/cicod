@@ -19,23 +19,23 @@ export default class SplashScreen extends React.Component {
                 source={require('../images/loginlogo.png')}
               />
             </View>
-            <View style={{ alignItems: 'center', position: 'absolute', bottom: 0, alignSelf: 'center' }}>
+            <View style={{ alignItems: 'center', position: 'absolute', bottom: 0, alignSelf: 'center', marginBottom:80 }}>
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('Login')}
               >
-                <View style={{ width: width / 2, alignItems: 'center', borderWidth: 1, borderColor: '#B1272C', borderRadius: 50, paddingVertical: 10 }}>
+                <View style={{ width: width / 2, alignItems: 'center', borderWidth: 1, borderColor: '#B1272C', backgroundColor:'#FFF4F4', borderRadius: 50, paddingVertical: 10 }}>
                   <Text style={{ color: '#B1272C' }}>Login</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity style={{ marginTop: 10 }}>
                 <Text style={{ color: '#487AE0' }}>Register</Text>
               </TouchableOpacity>
-              <View>
+              {/* <View>
                 <Image
                   style={{}}
                   source={require('../images/splashbottomlogo.png')}
                 />
-              </View>
+              </View> */}
             </View>
             <View>
 

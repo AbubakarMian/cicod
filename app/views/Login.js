@@ -20,9 +20,9 @@ class Login extends React.Component {
         super(props);
         this.state = {
             Spinner: false,
-            tenantId: 'sandbox',//sandbox
-            username: 'cicodsandbox@yopmail.com',//cicodsandbox@yopmail.com
-            password: 'Sandbox@123',//Sandbox@123
+            tenantId: 'ndanitv',//sandbox
+            username: 'ndanitv@sharklasers.com',//cicodsandbox@yopmail.com
+            password: 'Ndanitv@123',//Sandbox@123
             isChecked: false,
             hide_password: true,
             domain_text_color:'black',
@@ -84,7 +84,7 @@ class Login extends React.Component {
                 lastname: "sandbox last", //responseJson.user.lastname,
                 email: "cicodsandbox@yopmail.com",//responsejson.user.email,
                 phone: "123314324",//responseJson.user.phone,
-                access_token: "Bearer p1KqcUMf1NPxL0ucBFs7",  //+ responseJson.token
+                access_token: "Bearer vJhp0wwJE8QDOjgVghIu",  //+ responseJson.token
             });
             this.setState({ Spinner: false })
             this.props.navigation.navigate('Home')

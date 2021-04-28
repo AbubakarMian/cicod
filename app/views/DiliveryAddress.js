@@ -41,18 +41,23 @@ class DiliveryAddress extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
-        console.log('url !!!!!!!!!!!', Constants.customerdelivery + '?customer_id=' + this.props.customer.id)
-        fetch(Constants.customerdelivery + '?customer_id=7', postData) //+ this.props.customer.id
+        console.log('url !!!!!!!!!!!', Constants.customerdelivery + '?customer_id=' + this.props.customer.id) // id 7
+        fetch(Constants.customerdelivery + '?customer_id='+this.props.customer.id, postData) //+ this.props.customer.id
             .then(response => response.json())
             .then(async responseJson => {
-                console.log('***************@@@@@@@@########### addrez apoi ', responseJson)
+                console.log('***************@@@@@@@@########### addrez apoi ', responseJson.data.country)
 
                 this.setState({
                     spinner: false,
                 });
                 if (responseJson.status === 'success') {
                     let res = responseJson.data;
-                    let addressarr = res.map((x, key) => { return { label: x.house_no + ',' + x.street + ',' + x.state.name + ',' + x.country.name, value: x.house_no + ',' + x.street + ',' + x.state.name + ',' + x.country.name } });
+                    let addressarr = res.map((x, key) => { return { 
+                        
+                        country_id:x.country.id,
+                        state_id:x.state.id,
+                        label: x.house_no + ',' + x.street + ',' + x.state.name + ',' + x.country.name, 
+                        value: x.house_no + ',' + x.street + ',' + x.state.name + ',' + x.country.name } });
                     console.log('addressarr  !!!!!!', addressarr);
                     this.setState({
                         addressarr: addressarr,
@@ -68,13 +73,20 @@ class DiliveryAddress extends React.Component {
         this.getDeliveryAddress();
     }
 
-    selectAddress(value) {
+    selectAddress(object) {
+
+     
+        
         this.setState({
             is_selected_address: !this.state.is_selected_address
         })
-        console.log(' value !!!!!!!!!!!!!!', value);
+        console.log(' value !!!!!!!!!!!!!!', object);
         this.props.setDeliveryAddress({
-            address: value
+
+            address: object.value,
+            country_id: object.country_id,
+            state_id: object.state_id,
+            type:'Delivery'
         })
         this.props.navigation.goBack();
     }
@@ -118,7 +130,7 @@ class DiliveryAddress extends React.Component {
                                         buttonSize={10}
                                         buttonOuterSize={20}
                                         initial={0}
-                                        onPress={(value) => this.selectAddress(value)} //{ this.setState({ value3Index: value }) }
+                                        onPress={(value) => this.selectAddress(obj)} //{ this.setState({ value3Index: value }) }
                                     />
                                     {
                                         this.state.addressarr.map((obj, i) => (
@@ -128,7 +140,7 @@ class DiliveryAddress extends React.Component {
                                                     obj={obj}
                                                     index={i}
                                                     isSelected={this.state.is_selected_address}
-                                                    onPress={(value) => this.selectAddress(value)}
+                                                    onPress={(value) => this.selectAddress(obj)}
                                                     borderWidth={1}
                                                     buttonInnerColor={'#e74c3c'}
                                                     buttonOuterColor={this.state.value3Index === i ? '#2196f3' : '#000'}
@@ -143,7 +155,7 @@ class DiliveryAddress extends React.Component {
                                                     obj={obj}
                                                     index={i}
                                                     labelHorizontal={true}
-                                                    onPress={(value) => this.selectAddress(value)}
+                                                    onPress={(value) => this.selectAddress(obj)}
                                                     // labelStyle={{fontSize: 20, color: '#2ecc71'}}
                                                     labelWrapStyle={{}}
                                                 />
