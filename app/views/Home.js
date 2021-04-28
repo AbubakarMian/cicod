@@ -38,68 +38,68 @@ class Home extends React.Component {
                 style={{ flex: 1 }}
                 onPress={() => this.props.navigation.navigate('Dashnoard')}
               >
-                <View style={[{
-                  flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 20,
-                  justifyContent: 'center', alignItems: 'center',
-                  borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
-                }]}>
-                  <Image
-                    style={{ height: width / 5, width: width / 5 }}
-                    source={require('../images/home/dashboard.png')}
-                  />
-                  <Text style={[{}, styles.cardLableText]}>Dashboard</Text>
-                </View>
+              <View style={[{
+                flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
+                justifyContent: 'center', alignItems: 'center',
+                borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
+              }]}>
+                <Image
+                  style={{ height: width / 6, width: width / 6 }}
+                  source={require('../images/home/dashboard.png')}
+                />
+                <Text style={[{},styles.cardLableText]}>Dashboard</Text>
+              </View>
               </TouchableOpacity>
               <TouchableOpacity
-                style={{ flex: 1 }}
-                onPress={() => this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })}
+              style={{flex:1}}
+              onPress={()=>this.props.navigation.navigate('CreateOrder', {screen_name:'sell'})}
               >
-                <View style={[{
-                  flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 20,
-                  justifyContent: 'center', alignItems: 'center', marginLeft: 15,
-                  borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
-                }]}>
-                  <Image
-                    style={{ height: width / 5, width: width / 5 }}
-                    source={require('../images/home/sell.png')}
-                  />
-                  <Text style={[{}, styles.cardLableText]}>Sell</Text>
-                </View>
+              <View style={[{
+                flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
+                justifyContent: 'center', alignItems: 'center', marginLeft: 15,
+                borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
+              }]}>
+                <Image
+                  style={{ height: width / 6, width: width / 6 }}
+                  source={require('../images/home/sell.png')}
+                />
+                <Text style={[{},styles.cardLableText]}>Sell</Text>
+              </View>
               </TouchableOpacity>
             </View>
-
-            <View style={[{ flexDirection: 'row', alignSelf: 'center', width: width - 20, alignSelf: 'center', marginTop: 10, alignItems: 'center', justifyContent: 'center', paddingRight: 10 }]}>
-              <TouchableOpacity
-                style={{ flex: 1 }}
-                onPress={() => this.props.navigation.navigate('Order')}
-              >
-                <View style={[{
-                  flexDirection: 'column', width: width / 2 - 20, height: height / 4,
-                  justifyContent: 'center', alignItems: 'center',
-                  borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
-                }]}>
-                  <Image
-                    style={{ height: width / 5, width: width / 5 }}
-                    source={require('../images/home/order.png')}
-                  />
-                  <Text style={[{}, styles.cardLableText]}>Orders</Text>
-                </View>
+            
+            <View style={[{ flexDirection: 'row',alignSelf:'center', width: width-20,alignSelf:'center', marginTop: 10,alignItems:'center',justifyContent:'center',paddingRight:10 }]}>
+            <TouchableOpacity
+            style={{flex:1}}
+            onPress={()=>this.props.navigation.navigate('Order')}
+            >
+              <View style={[{
+                flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
+                justifyContent: 'center', alignItems: 'center',
+                borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
+              }]}>
+                <Image
+                  style={{ height: width / 6, width: width / 6 }}
+                  source={require('../images/home/order.png')}
+                />
+                <Text style={[{},styles.cardLableText]}>Orders</Text>
+              </View>
               </TouchableOpacity>
               <TouchableOpacity
                 style={{ flex: 1 }}
                 onPress={() => this.props.navigation.navigate('Customer')}
               >
-                <View style={[{
-                  flexDirection: 'column', width: width / 2 - 20, height: height / 4,
-                  justifyContent: 'center', alignItems: 'center', marginLeft: 15,
-                  borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
-                }]}>
-                  <Image
-                    style={{ height: width / 5, width: width / 5 }}
-                    source={require('../images/home/customers.png')}
-                  />
-                  <Text style={[{}, styles.cardLableText]}>Customers</Text>
-                </View>
+              <View style={[{
+                flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
+                justifyContent: 'center', alignItems: 'center', marginLeft: 15,
+                borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
+              }]}>
+                <Image
+                  style={{ height: width / 6, width: width / 6 }}
+                  source={require('../images/home/customers.png')}
+                />
+                <Text style={[{},styles.cardLableText]}>Customers</Text>
+              </View>
               </TouchableOpacity>
             </View>
             <View style={[{ flexDirection: 'row', alignSelf: 'center', width: width - 20, alignSelf: 'center', marginTop: 10, alignItems: 'center', justifyContent: 'center', paddingRight: 10 }]}>
@@ -107,33 +107,34 @@ class Home extends React.Component {
                 style={{ flex: 1 }}
                 onPress={() => this.props.navigation.navigate('Products', { seller_id: 0 })}
               >
-                <View style={[{
-                  flexDirection: 'column', width: width / 2 - 20, height: height / 4,
-                  justifyContent: 'center', alignItems: 'center',
-                  borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
-                }]}>
-                  <Image
-                    style={{ height: width / 5, width: width / 5 }}
-                    source={require('../images/home/products.png')}
-                  />
-                  <Text style={[{}, styles.cardLableText]}>Products</Text>
-                </View>
+              <View style={[{
+                flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
+                justifyContent: 'center', alignItems: 'center',
+                borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
+              }]}>
+                <Image
+                  style={{ height: width / 6, width: width / 6 }}
+                  source={require('../images/home/products.png')}
+                />
+                <Text style={[{},styles.cardLableText]}>Products</Text>
+              </View>
               </TouchableOpacity>
               <TouchableOpacity
-                style={{ flex: 1 }}
-                onPress={() => this.props.navigation.navigate('CreateOrder', { screen_name: 'buy' })}
+              style={{flex:1}}
+              onPress={()=>this.props.navigation.navigate('CreateOrder', {screen_name:'buy'})}
+            
               >
-                <View style={[{
-                  flexDirection: 'column', width: width / 2 - 20, height: height / 4,
-                  justifyContent: 'center', alignItems: 'center', marginLeft: 15,
-                  borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
-                }]}>
-                  <Image
-                    style={{ height: width / 5, width: width / 5 }}
-                    source={require('../images/home/tag.png')}
-                  />
-                  <Text style={[{}, styles.cardLableText]}>Buy</Text>
-                </View>
+              <View style={[{
+                flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
+                justifyContent: 'center', alignItems: 'center', marginLeft: 15,
+                borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
+              }]}>
+                <Image
+                  style={{ height: width / 6, width: width / 6 }}
+                  source={require('../images/home/tag.png')}
+                />
+                <Text style={[{},styles.cardLableText]}>Buy</Text>
+              </View>
               </TouchableOpacity>
             </View>
             <View style={[{ flexDirection: 'row', alignSelf: 'center', width: width - 20, alignSelf: 'center', marginTop: 10, alignItems: 'center', justifyContent: 'center', paddingRight: 10 }]}>
@@ -141,33 +142,33 @@ class Home extends React.Component {
                 style={{ flex: 1 }}
                 onPress={() => this.props.navigation.navigate('Supplier')}
               >
-                <View style={[{
-                  flexDirection: 'column', width: width / 2 - 20, height: height / 4,
-                  justifyContent: 'center', alignItems: 'center',
-                  borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
-                }]}>
-                  <Image
-                    style={{ height: width / 5, width: width / 5 }}
-                    source={require('../images/home/suppliers.png')}
-                  />
-                  <Text style={[{}, styles.cardLableText]}>Suppliers</Text>
-                </View>
+              <View style={[{
+                flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
+                justifyContent: 'center', alignItems: 'center',
+                borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
+              }]}>
+                <Image
+                  style={{ height: width / 6, width: width / 6 }}
+                  source={require('../images/home/suppliers.png')}
+                />
+                <Text style={[{},styles.cardLableText]}>Suppliers</Text>
+              </View>
               </TouchableOpacity>
               <TouchableOpacity
                 style={{ flex: 1 }}
                 onPress={() => this.props.navigation.navigate('Buyers')}
               >
-                <View style={[{
-                  flexDirection: 'column', width: width / 2 - 20, height: height / 4,
-                  justifyContent: 'center', alignItems: 'center', marginLeft: 15,
-                  borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
-                }]}>
-                  <Image
-                    style={{ height: width / 5, width: width / 5 }}
-                    source={require('../images/home/buyers.png')}
-                  />
-                  <Text style={[{}, styles.cardLableText]}>Buyers</Text>
-                </View>
+              <View style={[{
+                flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
+                justifyContent: 'center', alignItems: 'center', marginLeft: 15,
+                borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
+              }]}>
+                <Image
+                  style={{ height: width / 6, width: width / 6 }}
+                  source={require('../images/home/buyers.png')}
+                />
+                <Text style={[{},styles.cardLableText]}>Buyers</Text>
+              </View>
               </TouchableOpacity>
 
             </View>
@@ -177,17 +178,17 @@ class Home extends React.Component {
 
                 onPress={() => this.props.navigation.navigate('Connect')}
               >
-                <View style={[{
-                  flexDirection: 'column', width: width / 2 - 20, height: height / 4,
-                  justifyContent: 'center', alignItems: 'center',
-                  borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
-                }]}>
-                  <Image
-                    style={{ height: width / 5, width: width / 5 }}
-                    source={require('../images/home/connect.png')}
-                  />
-                  <Text style={[{}, styles.cardLableText]}>Connect</Text>
-                </View>
+              <View style={[{
+                flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
+                justifyContent: 'center', alignItems: 'center',
+                borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
+              }]}>
+                <Image
+                  style={{ height: width / 6, width: width / 6 }}
+                  source={require('../images/home/connect.png')}
+                />
+                <Text style={[{},styles.cardLableText]}>Connect</Text>
+              </View>
               </TouchableOpacity>
             </View>
           </View>

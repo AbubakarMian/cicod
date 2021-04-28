@@ -37,7 +37,8 @@ class CreateOrder extends React.Component {
             payment_mode: '',
             suppliereModal: false,
             search_supplier: '',
-            supplierlist: []
+            supplierlist: [],
+            address_backgound:''
         }
     }
     clearOrder() {
@@ -511,10 +512,8 @@ class CreateOrder extends React.Component {
                             </TouchableOpacity>
                             <TouchableOpacity
                                 onPress={() => this.DeliveryType('pickup')}
-
                             >
                                 <View style={[{ borderWidth: 0.25, }, styles.radioFormView]}>
-
                                     <RadioForm
                                         isSelected={this.state.is_pickup}
                                         color={'yellow'}
@@ -523,6 +522,7 @@ class CreateOrder extends React.Component {
                                         buttonColor={'green'}
                                         buttonSize={10}
                                         buttonOuterSize={20}
+                                        backgroundColor={this.state.address_backgound === 'delivery' ? '#2196f3' : '#fff'}
                                         onPress={() => this.DeliveryType('pickup')}
 
                                     />
@@ -537,6 +537,7 @@ class CreateOrder extends React.Component {
                                                     borderWidth={1}
                                                     buttonInnerColor={'#e74c3c'}
                                                     buttonOuterColor={this.state.value3Index === i ? '#2196f3' : '#000'}
+                                                    backgroundColor={this.state.address_backgound === 'pickup' ? '#2196f3' : '#fff'}
                                                     buttonSize={10}
                                                     buttonOuterSize={20}
                                                     buttonStyle={{}}
@@ -616,6 +617,8 @@ class CreateOrder extends React.Component {
                                     }}
                                     isChecked={this.state.isChecked}
                                     rightText={"Accept multiple part payment"}
+                                    rightTextStyle={{color:'#4E4D4D',fontSize:13,fontFamily:'Open Sans'}}
+                                    checkBoxColor={'#929497'}
 
 
                                 />
@@ -640,9 +643,9 @@ class CreateOrder extends React.Component {
                                     </TouchableOpacity>
                                 </View>
                                 <View style={[{}, styles.subTotleColumn2View]}>
-                                    <Text style={[{}, styles.subTotleColumn2Text]}>{this.state.cart_detail.total_price ?? 0}</Text>
-                                    <Text style={[{}, styles.subTotleColumn2Text]}>{this.state.cart_detail.tax ?? 0}</Text>
-                                    <Text style={[{}, styles.subTotleColumn2Text]}>{this.state.cart_detail.total_price_with_tax ?? 0}</Text>
+                                    <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.total_price ?? 0}</Text>
+                                    <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.tax ?? 0}</Text>
+                                    <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.total_price_with_tax ?? 0}</Text>
                                     <TouchableOpacity
                                         onPress={() => this.props.navigation.navigate('AddNote')}
                                     >
