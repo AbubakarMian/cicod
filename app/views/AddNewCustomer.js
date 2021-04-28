@@ -44,7 +44,8 @@ class AddNewCustomer extends React.Component {
             house_no: '',
             street: '',
             landmark: '',
-            email: ''
+            email: '',
+
         }
 
     }
@@ -109,7 +110,7 @@ class AddNewCustomer extends React.Component {
                     Alert.alert('MESSAGE', responseJson.message)
                     let customer_id = responseJson.data.id;
                     this.createCustomerDelivery(customer_id);
-                }  else if(responseJson.status == 401){
+                } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 }
                 else {
@@ -191,7 +192,7 @@ class AddNewCustomer extends React.Component {
                         countries_arr: countries_arr,
                     });
 
-                } else if(responseJson.status == 401){
+                } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 }
                 else {
@@ -226,7 +227,7 @@ class AddNewCustomer extends React.Component {
                     this.setState({
                         states_arr: states_arr,
                     });
-                }  else if(responseJson.status == 401){
+                } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 }
                 else {
@@ -261,7 +262,7 @@ class AddNewCustomer extends React.Component {
                     this.setState({
                         lgas_arr: lgas_arr,
                     });
-                }  else if(responseJson.status == 401){
+                } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 }
                 else {
@@ -323,7 +324,7 @@ class AddNewCustomer extends React.Component {
     }
     // customerlist
     render() {
-        console.log('states_arr', this.state.states_arr)
+        console.log('countries_arr countries_arr countries_arr', this.state.countries_arr)
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
@@ -386,7 +387,7 @@ class AddNewCustomer extends React.Component {
                                         onChangeText={text => this.setState({ phone_number: text })}
                                         label="Phone Number"
                                         style={{ backgroundColor: 'transparent', }}
-                                        width={width - 50}
+                                        width={width / 2 - 20}
                                         alignSelf={'center'}
                                         color={'#000'}
                                     />
@@ -396,7 +397,7 @@ class AddNewCustomer extends React.Component {
                                         onChangeText={text => this.setState({ house_no: text })}
                                         label="House No."
                                         style={{ backgroundColor: 'transparent', }}
-                                        width={width - 50}
+                                        width={width / 2 - 20}
                                         alignSelf={'center'}
                                         color={'#000'}
                                     />
@@ -419,43 +420,44 @@ class AddNewCustomer extends React.Component {
                                 onChangeText={text => this.setState({ landmark: text })}
                             />
                             <View style={[{}, styles.formRow]}>
-                                <View style={[{}, styles.formColumn]}>
+                                <View style={[{ justifyContent: 'center', alignItems: 'center', paddingTop: 10 }, styles.formColumn]}>
 
 
                                     {this.state.countries_arr.length < 1 ? null :
                                         <DropDownPicker
                                             items={this.state.countries_arr}
-                                            containerStyle={{ height: 50, width: width / 2 - 10, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 , marginBottom:30}}
+                                            containerStyle={{ height: 50, width: width / 2 - 10, }}
                                             style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                                             itemStyle={{
                                                 justifyContent: 'flex-start',
                                             }}
                                             placeholder="Country *"
-                                            dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1,  }}
+                                            dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                                             labelStyle={{ color: '#A9A9A9' }}
-                                            onChangeItem={item =>this.onSelectCountry(item.value)}  //this.onSelectCountry(item.value)}
-                                            
+                                            onChangeItem={item => this.onSelectCountry(item.value)}  //this.onSelectCountry(item.value)}
+
+
                                         />}
                                 </View>
-                                <View style={[{}, styles.formColumn]}>
+                                <View style={[{ justifyContent: 'center', alignItems: 'center', paddingTop: 10 }, styles.formColumn]}>
 
                                     {this.state.states_arr.length < 1 ? null :
                                         <DropDownPicker
                                             items={this.state.states_arr}
-                                            containerStyle={{ height: 50, width: width - 200, marginTop: 15 }}
-                                            style={{ backgroundColor: '#fff' }}
                                             itemStyle={{
                                                 justifyContent: 'flex-start', zIndex: 0.999
                                             }}
                                             placeholder="States *"
-                                            dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                                            containerStyle={{ height: 50, width: width / 2 - 10, }}
+                                            style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
+                                            dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                                             labelStyle={{ color: '#A9A9A9' }}
-                                            onChangeItem={item => this.onSelectState(item.value)}
+                                            onChangeItem={item => this.onDeliverySelectState(item.value)}
                                         />}
                                 </View>
                             </View>
-                            <View style={[{ marginTop: 30, zIndex: -0.999 }, styles.formRow]}>
-                                <View style={[{}, styles.formColumn]}>
+                            <View style={[{ marginTop: 10, }, styles.formRow]}>
+                                <View style={[{ justifyContent: 'center', alignItems: 'center', paddingTop: 10 }, styles.formColumn]}>
                                     {/* <TextInput
                                         placeholder="LGA*"
                                     />
@@ -465,13 +467,15 @@ class AddNewCustomer extends React.Component {
                                     {this.state.lgas_arr.length < 1 ? null :
                                         <DropDownPicker
                                             items={this.state.lgas_arr}
-                                            containerStyle={{ height: 50, width: width - 200, marginTop: 15 }}
-                                            style={{ backgroundColor: '#fff' }}
+                                            placeholder="LGA *"
+                                            style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, zIndex: 9999999 }}
                                             itemStyle={{
                                                 justifyContent: 'flex-start', zIndex: 0.99
                                             }}
-                                            placeholder="LGA *"
-                                            dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1, height: height / 5 }}
+                                            
+                                            labelStyle={{ color: '#A9A9A9' }}
+                                            containerStyle={{ height: 50, width: width / 2 - 10, }}
+                                            dropDownStyle={{ zIndex: 99999999, height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                                             labelStyle={{ color: '#A9A9A9' }}
                                             onChangeItem={item => this.onSelectLgas(item.value)}
                                         />}
@@ -480,8 +484,8 @@ class AddNewCustomer extends React.Component {
 
                                 </View>
                             </View>
-                            <View style={[{ zIndex: -0.999 }, styles.formRow]}>
-                                <View style={[{}, styles.formColumn]}>
+                            <View style={[{ zIndex: -0.99999 }, styles.formRow]}>
+                                <View style={[{ zIndex: -0.99999 }, styles.formColumn]}>
                                     <CheckBox
                                         style={[{ width: width / 2, }, styles.cheBox]}
                                         onClick={() => {
@@ -496,7 +500,7 @@ class AddNewCustomer extends React.Component {
                                 </View>
                                 <View style={[{}, styles.formColumn]}>
                                     <CheckBox
-                                        style={[{ width: width / 2, }, styles.cheBox]}
+                                        style={[{ width: width / 2, zIndex: -99999 }, styles.cheBox]}
                                         onClick={() => {
                                             this.setState({
                                                 isFreeVAT: !this.state.isFreeVAT
@@ -559,13 +563,14 @@ class AddNewCustomer extends React.Component {
                                                 <DropDownPicker
                                                     items={this.state.countries_arr}
                                                     autoScrollToDefaultValue={true}
-                                                    containerStyle={{ height: 50, width: width - 28, marginTop: 15 }}
-                                                    style={{ backgroundColor: '#fff' }}
+                                                    style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, zIndex: 9999999 }}
                                                     itemStyle={{
                                                         justifyContent: 'flex-start', zIndex: 0.99
                                                     }}
                                                     placeholder="Country *"
-                                                    dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, height: 100 }}
+                                                    labelStyle={{ color: '#A9A9A9' }}
+                                                    containerStyle={{ height: 50, width: width - 20,alignSelf:'center' }}
+                                                    dropDownStyle={{ zIndex: 99999999, height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                                                     labelStyle={{ color: '#A9A9A9' }}
                                                     onChangeItem={item => this.onDeliverySelectCountry(item.value)}
                                                 />}
@@ -577,13 +582,15 @@ class AddNewCustomer extends React.Component {
                                             {this.state.states_arr.length < 1 ? null :
                                                 <DropDownPicker
                                                     items={this.state.states_arr}
-                                                    containerStyle={{ height: 50, width: width - 200, marginTop: 15 }}
-                                                    style={{ backgroundColor: '#fff' }}
+                                                    placeholder="State*"
+                                                    style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, zIndex: 9999999 }}
                                                     itemStyle={{
                                                         justifyContent: 'flex-start', zIndex: 0.99
                                                     }}
-                                                    placeholder="States *"
-                                                    dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                                                    
+                                                    labelStyle={{ color: '#A9A9A9' }}
+                                                    containerStyle={{ height: 50, width: width / 2 - 10, }}
+                                                    dropDownStyle={{ zIndex: 99999999, height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                                                     labelStyle={{ color: '#A9A9A9' }}
                                                     onChangeItem={item => this.onDeliverySelectState(item.value)}
                                                 />}
@@ -592,13 +599,14 @@ class AddNewCustomer extends React.Component {
                                             {this.state.lgas_arr.length < 1 ? null :
                                                 <DropDownPicker
                                                     items={this.state.lgas_arr}
-                                                    containerStyle={{ height: 50, width: width - 200, marginTop: 15 }}
-                                                    style={{ backgroundColor: '#fff' }}
+                                                    placeholder="LGA *"
+                                                    style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, zIndex: 9999999 }}
                                                     itemStyle={{
                                                         justifyContent: 'flex-start', zIndex: 0.99
                                                     }}
-                                                    placeholder="LGA *"
-                                                    dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                                                    labelStyle={{ color: '#A9A9A9' }}
+                                                    containerStyle={{ height: 50, width: width / 2 - 10, }}
+                                                    dropDownStyle={{ zIndex: 99999999, height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                                                     labelStyle={{ color: '#A9A9A9' }}
                                                     onChangeItem={item => this.onDeliverySelectLgas(item.value)}
                                                 />}

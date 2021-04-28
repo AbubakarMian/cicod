@@ -8,17 +8,26 @@ var {width,height} = Dimensions.get('window');
 export default StyleSheet.create({
  mainView:{
      height:height,
-     width:width,
+     width:width-20,
+     alignSelf:'center',
      backgroundColor:'#F0F0F0',
-     
-     paddingHorizontal:10,
      flex:1,
      flexDirection:'column'
  },
  mainRow:{
      flexDirection:'row',
      position:'relative',
-     width:width
+     width:width-20,
+     alignSelf:'center'
+ },
+ contentView:{
+     backgroundColor:'#fff',
+     borderRadius:10,
+     width:width-20,
+     padding:10,
+     alignSelf:'center',
+     marginTop:10
+
  }
  
 })

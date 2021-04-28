@@ -29,14 +29,14 @@ class CategoryFilter extends React.Component {
       categoryarr: [],
       category_name: '',
       spinner: false,
-      date:'' ,
+      date: '',
     };
   }
   componentDidMount() {
 
     this.getCategoryList()
     this.setState({ spinner: true })
-    
+
 
   }
 
@@ -173,99 +173,127 @@ class CategoryFilter extends React.Component {
           </TouchableOpacity>
           <Text onPress={() => { this.setState({ filters: [] }) }} style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20, top: 20 }]}>Clear Filter</Text>
         </View>
-        <View style={{ width: width - 20, backgroundColor: '#fff', paddingVertical: 10, marginTop: 20 }}>
-          {/* <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 5, flexDirection: 'row', position: 'relative' }}>
-            <TextInput onChangeText={text => this.onQuantityText(text)}
-              label="Quantity"
-              style={{ backgroundColor: 'transparent', }}
-              width={width - 50}
-              alignSelf={'center'}
-              color={'#000'}
-            />
-            <View style={{ position: 'absolute', right: 10, bottom: 10 }}>
+       <View style={{backgroundColor:'#fff'}}>
+       <View style={{ width: width - 20, backgroundColor: '#fff', paddingVertical: 10, marginTop: 20, zIndex: 9999 }}>
 
-            </View>
-          </View> */}
+<View style={{ marginHorizontal: 5, flexDirection: 'row', position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
+  {this.state.createdby_arr.length < 1 ? null :
+    // <DropDownPicker
+    //   zIndex={4000} zIndexInverse={6000} 
+    //   items={this.state.createdby_arr}
+    //   containerStyle={{ height: 50, width: width  - 50, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5,zIndex:99999999 }}
+    //   style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
+    //   itemStyle={{
+    //     justifyContent: 'flex-start', 
+    //   }}
+    //   placeholder="Created By"
+    //   dropDownStyle={{  borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1,zIndex:9999999999 }}
+    //   labelStyle={{ color: '#A9A9A9' }}
+    //   onChangeItem={item => this.onCreatedByText(item.value)}
+    // />
+    
+<DropDownPicker
+    items={this.state.createdby_arr}
+    controller={instance => this.controller = instance}
+    onChangeList={(items, callback) => {
+        this.setState({
+            items // items: items
+        }, callback);
+    }}
+    containerStyle={{ height: 50, width: width  - 50, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5,zIndex:99999999 }}
+    placeholder="Created By"
+    defaultValue={this.state.value}
+    onChangeItem={item => this.setState({
+        value: item.value
+    })}
+/>
+   
+  }
+</View>
+<View style={{ marginHorizontal: 5, flexDirection: 'row', position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
 
-          <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 5, flexDirection: 'row', position: 'relative' }}>
-            {this.state.createdby_arr.length < 1 ? null :
-              <DropDownPicker
-                items={this.state.createdby_arr}
-                containerStyle={{ height: 50, width: width / 2 - 10, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
-                style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
-                itemStyle={{
-                  justifyContent: 'flex-start', zIndex: 0.99
-                }}
-                placeholder="Created By"
-                dropDownStyle={{  borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
-                labelStyle={{ color: '#A9A9A9' }}
-                onChangeItem={item => this.onCreatedByText(item.value)}
-              />}
-          </View>
-          <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 0, flexDirection: 'row', zIndex: -0.999, position: 'relative' }}>
+  {this.state.categoryarr.length < 1 ? null :
+    // <DropDownPicker
+    //   zIndex={4000} zIndexInverse={6000}
+    //   items={this.state.categoryarr}
+    //   containerStyle={{ height: 50, width: width - 50, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
+    //   style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
+    //   itemStyle={{
+    //     justifyContent: 'flex-start',
+    //   }}
+    //   placeholder="Catagory"
+    //   dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+    //   labelStyle={{ color: '#A9A9A9' }}
+    //   onChangeItem={item => this.onCategoryText(item.value)}
+    // />
+    
+<DropDownPicker
+    items={this.state.categoryarr}
+    placeholder="Catagory"
+    height={50}
+    containerStyle={{ height: 50, width: width - 50, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
+    controller={instance => this.controller = instance}
+    onChangeList={(items, callback) => {
+        this.setState({
+            items // items: items
+        }, callback);
+    }}
 
-            {this.state.categoryarr.length < 1 ? null :
-              <DropDownPicker
-                items={this.state.categoryarr}
-                containerStyle={{ height: 50, width: width / 2 - 10, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
-                style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
-                itemStyle={{
-                  justifyContent: 'flex-start', zIndex: 0.99
-                }}
-                placeholder="Catagory"
-                dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
-                labelStyle={{ color: '#A9A9A9' }}
-                onChangeItem={item => this.onCategoryText(item.value)}
-              />}
+    defaultValue={this.state.value}
+    onChangeItem={item => this.setState({
+        value: item.value
+    })}
+/>
+  }
 
-          </View>
+</View>
 
-        </View>
-        <View style={[{ flexDirection: 'row', zIndex: -0.999 }]}>
-          <View style={[{ flex: 1, paddingVertical: 10 }]}>
-            <Text style={{ color: '#929497', fontWeight: 'bold' }}>Created Date</Text>
-            <TouchableOpacity
-             onPress={() => this.datePickerFun()}>
-              <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginRight: 10, padding: 10, marginVertical: 10 }}>
-                <Image
-                  source={require('../images/calenderIcon.png')}
-                />
-                <Text style={{ marginLeft: 10, color: '#aaa' }}>{this.state.date == '' ? 'DD-MM-YY' : this.state.date}</Text>
-              </View>
-              <View style={{ position: 'absolute', right: 20, bottom: 10 }}>
-                <Icon
-                  size={30}
+</View>
+<View style={[{ flexDirection: 'row',width:width-20,alignSelf:'center',  zIndex: -0.999 }]}>
+<View style={[{ flex: 1, paddingVertical: 10 }]}>
+  <Text style={{ color: '#929497', fontWeight: 'bold' }}>Created Date</Text>
+  <TouchableOpacity
+    onPress={() => this.datePickerFun()}>
+    <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginRight: 10, padding: 10, marginVertical: 10, zIndex: -99999999 }}>
+      <Image
+        source={require('../images/calenderIcon.png')}
+      />
+      <Text style={{ marginLeft: 10, color: '#aaa' }}>{this.state.date == '' ? 'DD-MM-YY' : this.state.date}</Text>
+    </View>
+    <View style={{ position: 'absolute', right: 20, bottom: 10 }}>
+      <Icon
+        size={30}
+        name="caret-down"
+        color={'#707070'}
+      />
+    </View>
+  </TouchableOpacity>
+</View>
+<View style={[{ flex: 1, paddingVertical: 10 }]}>
+  <Text style={{ color: '#929497', fontWeight: 'bold', marginLeft: 10 }}>Updated Date</Text>
+  <TouchableOpacity
 
-                  name="caret-down"
-                  color={'#707070'}
-                />
-              </View>
-            </TouchableOpacity>
-          </View>
-          <View style={[{ flex: 1, paddingVertical: 10 }]}>
-            <Text style={{ color: '#929497', fontWeight: 'bold', marginLeft: 10 }}>Updated Date</Text>
-            <TouchableOpacity
-            
-            >
+  >
 
-              <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginLeft: 10, padding: 10, marginVertical: 10 }}>
-                <Image
-                  source={require('../images/calenderIcon.png')}
-                />
-                <Text style={{ marginLeft: 10, color: '#aaa' }}>DD-MM-YY</Text>
-              </View>
-              <View style={{ position: 'absolute', right: 20, bottom: 10 }}>
-                <Icon
-                  size={30}
+    <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginLeft: 10, padding: 10, marginVertical: 10 }}>
+      <Image
+        source={require('../images/calenderIcon.png')}
+      />
+      <Text style={{ marginLeft: 10, color: '#aaa' }}>DD-MM-YY</Text>
+    </View>
+    <View style={{ position: 'absolute', right: 20, bottom: 10 }}>
+      <Icon
+        size={30}
 
-                  name="caret-down"
-                  color={'#707070'}
-                />
-              </View>
-            </TouchableOpacity>
-          </View>
-        </View>
-        <Text style={[{ color: '#929497', fontWeight: 'bold', fontSize: 20, marginVertical: 10 }]}>Status</Text>
+        name="caret-down"
+        color={'#707070'}
+      />
+    </View>
+  </TouchableOpacity>
+</View>
+</View>
+       </View>
+        {/* <Text style={[{ color: '#929497', fontWeight: 'bold', fontSize: 20, marginVertical: 10 }]}>Status</Text>
         <View>
           <ScrollView
             horizontal={true}
@@ -287,7 +315,7 @@ class CategoryFilter extends React.Component {
 
             </View>
           </ScrollView>
-        </View>
+        </View> */}
 
         <TouchableOpacity
           onPress={this.applyFilter}
