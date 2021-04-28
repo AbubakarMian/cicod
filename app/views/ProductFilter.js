@@ -195,6 +195,7 @@ class ProductFilter extends React.Component {
           </TouchableOpacity>
           <Text onPress={() => { this.setState({ filters: [] }) }} style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20, top: 20 }]}>Clear Filter</Text>
         </View>
+        <View style={{width: width - 20,alignSelf:'center',backgroundColor:'#fff',borderRadius:10,padding:10}}>
         <View style={{ width: width - 20, backgroundColor: '#fff', paddingVertical: 10, marginTop: 20 }}>
           <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 5, flexDirection: 'row', position: 'relative' }}>
             <TextInput onChangeText={text => this.onQuantityText(text)}
@@ -209,38 +210,36 @@ class ProductFilter extends React.Component {
             </View>
           </View>
 
-          <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 5, flexDirection: 'row', position: 'relative' }}>
+      
             {this.state.createdby_arr.length < 1 ? null :
               <DropDownPicker
                 items={this.state.createdby_arr}
-                containerStyle={{ height: 50, width: width / 2 - 10, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
-                style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
-                itemStyle={{
-                  justifyContent: 'flex-start', zIndex: 0.99
-                }}
                 placeholder="Created By"
-                dropDownStyle={{ backgroundColor: '#000', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                containerStyle={{ height: 50, width: width-50,}}
+                style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5,marginBottom:10,alignSelf:'center' }}
+                itemStyle={{
+                  justifyContent: 'flex-start',
+             }}
+                dropDownStyle={{height:80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1,  }}
                 labelStyle={{ color: '#A9A9A9' }}
                 onChangeItem={item => this.onCreatedByText(item.value)}
-              />}
-          </View>
-          <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 0, flexDirection: 'row', zIndex: -0.999, position: 'relative' }}>
-
-            {this.state.categoryarr.length < 1 ? null :
+              /> 
+              }
+              {this.state.categoryarr.length < 1 ? null :
               <DropDownPicker
                 items={this.state.categoryarr}
-                containerStyle={{ height: 50, width: width / 2 - 10, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
-                style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
-                itemStyle={{
-                  justifyContent: 'flex-start', zIndex: 0.99
-                }}
                 placeholder="Catagory"
-                dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                containerStyle={{ height: 50, width: width-50,}}
+                style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5,alignSelf:'center' }}
+                itemStyle={{
+                  justifyContent: 'flex-start',
+             }}
+                dropDownStyle={{height:80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1,  }}
                 labelStyle={{ color: '#A9A9A9' }}
                 onChangeItem={item => this.onCategoryText(item.value)}
               />}
 
-          </View>
+   
 
         </View>
         <View style={[{ flexDirection: 'row', zIndex: -0.999 }]}>
@@ -283,6 +282,7 @@ class ProductFilter extends React.Component {
               </View>
             </TouchableOpacity>
           </View>
+        </View>
         </View>
         <Text style={[{ color: '#929497', fontWeight: 'bold', fontSize: 20, marginVertical: 10 }]}>Status</Text>
         <View>
