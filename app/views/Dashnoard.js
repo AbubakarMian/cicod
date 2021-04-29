@@ -257,12 +257,12 @@ class Dashnoard extends React.Component {
                         <View style={{ backgroundColor: '#fff', paddingVertical: 20,marginBottom:10, width: width - 30, alignSelf: 'center', borderRadius: 5,paddingHorizontal:10 }}>
                             <View style={[{}, styles.calenderbtn]}>
                                 <TouchableOpacity
-                                    style={{ backgroundColor: '#FFE5E5', paddingHorizontal: 5, borderTopLeftRadius: 50, borderBottomLeftRadius: 50, paddingVertical: 5 }}
+                                    style={{ backgroundColor: this.state.selected_graph === 'all_orders' ? '#FFE5E5' : '#fff', paddingHorizontal: 5, borderTopLeftRadius: 50, borderBottomLeftRadius: 50, paddingVertical: 5 }}
                                     onPress={() => this.ShowAllOrders()}>
                                     <Text style={{ color: this.state.selected_graph === 'all_orders' ? '#B1272C' : '#707070', fontWeight: 'bold' }}>Total Orders  </Text>
                                 </TouchableOpacity>
                                 <TouchableOpacity
-                                    style={{ backgroundColor: '#FFE5E5', paddingHorizontal: 5, borderTopRightRadius: 50, borderBottomRightRadius: 50, paddingVertical: 5 }}
+                                    style={{ backgroundColor: this.state.selected_graph === 'pending_orders' ? '#FFE5E5' : '#fff', paddingHorizontal: 5, borderTopRightRadius: 50, borderBottomRightRadius: 50, paddingVertical: 5 }}
                                     onPress={() => this.ShowPendingOrders()}>
                                     <Text style={{ color: this.state.selected_graph === 'pending_orders' ? '#B1272C' : '#707070', fontWeight: 'bold' }}>Paid Orders  </Text>
                                 </TouchableOpacity>
@@ -282,6 +282,7 @@ class Dashnoard extends React.Component {
                                     yAxisSuffix=""
                                     getDotColor={true}
                                     withInnerLines={false}
+
                                     yAxisInterval={1} // optional, defaults to 1
                                     chartConfig={{
                                         backgroundColor: "#fff",
