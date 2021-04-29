@@ -9,7 +9,7 @@ import Header from '../views/Header';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Constants } from './Constant';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER,SET_SUPPLIER } from '../redux/constants/index';
 
 
 var { width, height } = Dimensions.get('window');
@@ -234,6 +234,14 @@ class BuyersView extends React.Component {
         console.log("item_id item_id item_id item_id ", id)
         this.props.navigation.navigate('OrderDetail', { id })
     }
+
+    createOrderFun(){
+            this.props.setSupplier({
+                id:this.state.items.seller_id,
+                name:this.state.items.seller_name
+            })
+        this.props.navigation.navigate('CreateOrder', { heading: 'supplier' })
+    }
     render() {
         console.log(' this state  this state items', this.state.items)
         return (
@@ -324,7 +332,7 @@ class BuyersView extends React.Component {
                                     </TouchableOpacity>
                                     :
                                     <TouchableOpacity
-                                        onPress={() => this.props.navigation.navigate('CreateOrder', { heading: 'supplier' })}
+                                        onPress={() => this.createOrderFun()}
                                         style={[{}, styles.redTouch]}
                                     >
 
@@ -577,13 +585,15 @@ class BuyersView extends React.Component {
 }
 function mapStateToProps(state) {
     return {
-        user: state.userReducer
+        user: state.userReducer,
+        supplier: state.supplierReducer,
     }
 };
 function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
-        logoutUser: () => dispatch({ type: LOGOUT_USER })
+        logoutUser: () => dispatch({ type: LOGOUT_USER }),
+        setSupplier: (value) => dispatch({ type: SET_SUPPLIER, value: value }),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(BuyersView)
