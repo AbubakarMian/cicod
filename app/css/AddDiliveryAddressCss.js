@@ -44,6 +44,7 @@ export default StyleSheet.create({
         alignSelf:'center',
         padding:5,
         marginTop:5,
+        borderRadius:5
 
     },
     customerContaineraddProductView:{
@@ -68,7 +69,7 @@ export default StyleSheet.create({
         justifyContent:'center',
         alignItems:'center',
         marginTop:20,
-        paddingVertical:10,
+        paddingVertical:15,
         marginBottom:20,
     }
    
