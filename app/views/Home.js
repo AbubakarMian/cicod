@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, ImageBackground,  Dimensions, Image, Platform,Alert, TouchableOpacity, ScrollView } from 'react-native'
-import {   Text, TextInput} from 'react-native-paper';
+import { View, ImageBackground, Dimensions, Image, Platform, Alert, TouchableOpacity, ScrollView } from 'react-native'
+import { Text, TextInput } from 'react-native-paper';
 import splashImg from '../images/splash.jpg';
 import styles from '../css/HomeCss';
 import fontStyles from '../css/FontCss'
@@ -14,29 +14,29 @@ class Home extends React.Component {
   render() {
     return (
       <View style={{ height: height, width: width, alignItems: 'center', position: 'relative', backgroundColor: '#F0F0F0' }}>
-       <Header navigation={this.props.navigation}/>
-       <ScrollView>
+        <Header navigation={this.props.navigation} />
+        <ScrollView>
           <View style={{ marginBottom: 10 }}>
-        <View style={[{ flexDirection: 'row',paddingVertical:10 }]}>
-          <View style={{ flex: 1, paddingHorizontal: 10 }}>
-            <Text style={[{ color: '#B1272C', fontWeight: 'bold', fontSize: 25,fontFamily:'Open Sans' }]}>Welcome,</Text>
-            <Text style={{color:'#4E4D4D',fontSize: 25,fontFamily:'Open Sans'}}>{this.props.user.firstname}</Text>
-          </View>
-          <View style={{ flex: 1, alignItems: 'flex-end', padding: 10 }}>
-          <TouchableOpacity
-          onPress={()=>this.props.navigation.navigate('User')}>
-           <Image 
-           style={{height:50,width:50}}
-           source={require('../images/profilepic.png')}
-           />
-           </TouchableOpacity>
-          </View>
-        </View>
-       
-            <View style={[{ flexDirection: 'row',alignSelf:'center', width: width-20,alignSelf:'center', marginTop: 10,alignItems:'center',justifyContent:'center',paddingRight:10 }]}>
+            <View style={[{ flexDirection: 'row', paddingVertical: 10 }]}>
+              <View style={{ flex: 1, paddingHorizontal: 10 }}>
+                <Text style={[{ color: '#B1272C', fontWeight: 'bold', fontSize: 25, fontFamily: 'Open Sans' }]}>Welcome,</Text>
+                <Text style={{ color: '#4E4D4D', fontSize: 25, fontFamily: 'Open Sans' }}>{this.props.user.firstname}</Text>
+              </View>
+              <View style={{ flex: 1, alignItems: 'flex-end', padding: 10 }}>
+                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('User')}>
+                  <Image
+                    style={{ height: 50, width: 50 }}
+                    source={require('../images/profilepic.png')}
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
+
+            <View style={[{ flexDirection: 'row', alignSelf: 'center', width: width - 20, alignSelf: 'center', marginTop: 10, alignItems: 'center', justifyContent: 'center', paddingRight: 10 }]}>
               <TouchableOpacity
-              style={{flex:1}}
-              onPress={()=>this.props.navigation.navigate('Dashnoard')}
+                style={{ flex: 1 }}
+                onPress={() => this.props.navigation.navigate('Dashnoard')}
               >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
@@ -86,8 +86,8 @@ class Home extends React.Component {
               </View>
               </TouchableOpacity>
               <TouchableOpacity
-              style={{flex:1}}
-              onPress={()=>this.props.navigation.navigate('Customer')}
+                style={{ flex: 1 }}
+                onPress={() => this.props.navigation.navigate('Customer')}
               >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
@@ -102,10 +102,10 @@ class Home extends React.Component {
               </View>
               </TouchableOpacity>
             </View>
-            <View style={[{ flexDirection: 'row',alignSelf:'center', width: width-20,alignSelf:'center', marginTop: 10,alignItems:'center',justifyContent:'center',paddingRight:10 }]}>
+            <View style={[{ flexDirection: 'row', alignSelf: 'center', width: width - 20, alignSelf: 'center', marginTop: 10, alignItems: 'center', justifyContent: 'center', paddingRight: 10 }]}>
               <TouchableOpacity
-              style={{flex:1}}
-              onPress={()=>this.props.navigation.navigate('Products',{seller_id:0})}
+                style={{ flex: 1 }}
+                onPress={() => this.props.navigation.navigate('Products', { seller_id: 0 })}
               >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
@@ -137,10 +137,10 @@ class Home extends React.Component {
               </View>
               </TouchableOpacity>
             </View>
-            <View style={[{ flexDirection: 'row',alignSelf:'center', width: width-20,alignSelf:'center', marginTop: 10,alignItems:'center',justifyContent:'center',paddingRight:10 }]}>
+            <View style={[{ flexDirection: 'row', alignSelf: 'center', width: width - 20, alignSelf: 'center', marginTop: 10, alignItems: 'center', justifyContent: 'center', paddingRight: 10 }]}>
               <TouchableOpacity
-              style={{flex:1}}
-              onPress={()=>this.props.navigation.navigate('Supplier')}
+                style={{ flex: 1 }}
+                onPress={() => this.props.navigation.navigate('Supplier')}
               >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
@@ -155,8 +155,8 @@ class Home extends React.Component {
               </View>
               </TouchableOpacity>
               <TouchableOpacity
-              style={{flex:1}}
-              onPress={()=>this.props.navigation.navigate('Buyers')}
+                style={{ flex: 1 }}
+                onPress={() => this.props.navigation.navigate('Buyers')}
               >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
@@ -172,11 +172,11 @@ class Home extends React.Component {
               </TouchableOpacity>
 
             </View>
-            <View style={[{ flexDirection: 'row',alignSelf:'center', width: width-20,alignSelf:'center', marginTop: 10,alignItems:'center',justifyContent:'center',paddingRight:10 }]}>
+            <View style={[{ flexDirection: 'row', alignSelf: 'center', width: width - 20, alignSelf: 'center', marginTop: 10, alignItems: 'center', justifyContent: 'center', paddingRight: 10 }]}>
               <TouchableOpacity
-              style={{flex:1}}
-              
-              onPress={()=>this.props.navigation.navigate('Connect')}
+                style={{ flex: 1 }}
+
+                onPress={() => this.props.navigation.navigate('Connect')}
               >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
@@ -199,13 +199,13 @@ class Home extends React.Component {
 }
 function mapStateToProps(state) {
   return {
-      user: state.userReducer
+    user: state.userReducer
   }
 };
 function mapDispatchToProps(dispatch) {
   return {
-      setUser: (value) => dispatch({ type: SET_USER, value: value }),
-      logoutUser: () => dispatch({ type: LOGOUT_USER })
+    setUser: (value) => dispatch({ type: SET_USER, value: value }),
+    logoutUser: () => dispatch({ type: LOGOUT_USER })
   }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Home)

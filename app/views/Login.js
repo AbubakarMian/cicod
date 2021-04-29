@@ -20,9 +20,9 @@ class Login extends React.Component {
         super(props);
         this.state = {
             Spinner: false,
-            tenantId: 'sandbox',//sandbox
-            username: 'cicodsandbox@yopmail.com',//cicodsandbox@yopmail.com
-            password: 'Sandbox@123',//Sandbox@123
+            tenantId: 'ndanitv',//sandbox
+            username: 'ndanitv@sharklasers.com',//cicodsandbox@yopmail.com
+            password: 'Ndanitv@123',//Sandbox@123
             isChecked: false,
             hide_password: true,
             domain_text_color:'black',
