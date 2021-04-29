@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, Dimensions, Image,Alert, Platform, TouchableOpacity, FlatList } from 'react-native'
+import { View, ImageBackground, ScrollView, Dimensions, Image, Alert, Platform, TouchableOpacity, FlatList } from 'react-native'
 import styles from '../css/AddDiliveryAddressCss'
 import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -106,7 +106,7 @@ class AddDiliveryAddress extends React.Component {
                     this.setState({
                         states_arr: states_arr,
                     });
-                }     else if(responseJson.status == 401){
+                } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 }
                 else {
@@ -141,7 +141,7 @@ class AddDiliveryAddress extends React.Component {
                     this.setState({
                         lgas_arr: lgas_arr,
                     });
-                }     else if(responseJson.status == 401){
+                } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 }
                 else {
@@ -296,15 +296,15 @@ class AddDiliveryAddress extends React.Component {
                                         <View style={[{}, styles.formColumn]}>
 
                                             <DropDownPicker
+                                                placeholder="Country *"
                                                 items={this.state.countries_arr}
                                                 autoScrollToDefaultValue={true}
-                                                containerStyle={{ height: 50, width: width - 20, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
-                                                style={{ backgroundColor: '#fff', borderWidth: 0 }}
+                                                containerStyle={{ height: 50, width: width - 20, alignSelf: 'center' }}
+                                                style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                                                 itemStyle={{
-                                                    justifyContent: 'flex-start', zIndex: 0.99
+                                                    justifyContent: 'flex-start',
                                                 }}
-                                                placeholder="Country *"
-                                                dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                                                dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectCountry(item)}
                                             />
@@ -315,14 +315,16 @@ class AddDiliveryAddress extends React.Component {
                                         <View style={[{}, styles.formColumn]}>
 
                                             <DropDownPicker
-                                                items={this.state.states_arr}
-                                                containerStyle={{ height: 50, width: width / 2 - 20, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
-                                                style={{ backgroundColor: '#fff', borderWidth: 0, marginRight: 10, borderBottomWidth: 0.5, }}
-                                                itemStyle={{
-                                                    justifyContent: 'flex-start', zIndex: 0.99
-                                                }}
                                                 placeholder="States *"
-                                                dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                                                items={this.state.states_arr}
+                                                items={this.state.states_arr}
+
+                                                containerStyle={{ height: 50, width: width / 2 - 20, alignSelf: 'center' }}
+                                                style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
+                                                itemStyle={{
+                                                    justifyContent: 'flex-start',
+                                                }}
+                                                dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectState(item)}
                                             />
@@ -330,20 +332,20 @@ class AddDiliveryAddress extends React.Component {
                                         <View style={[{ marginHorizontal: 10 }, styles.formColumn]}>
 
                                             <DropDownPicker
-                                                items={this.state.lgas_arr}
-                                                containerStyle={{ height: 50, width: width / 2 - 20, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
-                                                style={{ backgroundColor: '#fff', borderWidth: 0, alignSelf: 'center', borderBottomWidth: 0.5, }}
-                                                itemStyle={{
-                                                    justifyContent: 'flex-start', marginHorizontal: 2, zIndex: 0.99
-                                                }}
                                                 placeholder="LGA *"
-                                                dropDownStyle={{ backgroundColor: '#f0f0f5', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                                                items={this.state.lgas_arr}
+                                                containerStyle={{ height: 50, width: width / 2 - 20, alignSelf: 'center' }}
+                                                style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
+                                                itemStyle={{
+                                                    justifyContent: 'flex-start',
+                                                }}
+                                                dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectLgas(item)}
                                             />
                                         </View>
                                     </View>
-                                    <View style={{ zIndex: -0.999 }}>
+                                    <View style={{ zIndex: -0.999, marginVertical:20 }}>
                                         <CheckBox
                                             style={[{ width: width, }, styles.cheBox]}
                                             onClick={() => {
@@ -351,23 +353,27 @@ class AddDiliveryAddress extends React.Component {
                                                     is_default: !this.state.is_default
                                                 })
                                             }}
-                                            size={2}
+                            
                                             isChecked={this.state.is_default}
                                             rightText={"Set as default"}
+                                            rightTextStyle={{ color: '#4E4D4D', fontSize: 13, fontFamily: 'Open Sans' }}
+                                            checkBoxColor={'#4E4D4D'}
 
                                         />
                                     </View>
                                 </View>
 
-                                <TouchableOpacity
-                                    onPress={() => this.createDeliveryAddress()}
-                                    style={[{}, styles.redBtn]}
-                                >
-                                    <Text style={{ color: '#fff' }}>Save</Text>
-                                </TouchableOpacity>
+
 
                             </View>
+                           
                         </View>
+                         <TouchableOpacity
+                                onPress={() => this.createDeliveryAddress()}
+                                style={[{}, styles.redBtn]}
+                            >
+                                <Text style={{ color: '#fff' }}>Save</Text>
+                            </TouchableOpacity>
                     </View>
                 </ScrollView>
             </View>

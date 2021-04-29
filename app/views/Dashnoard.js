@@ -254,7 +254,7 @@ class Dashnoard extends React.Component {
                                 </View>
                             </View>
                         </View>
-                        <View style={{ backgroundColor: '#fff', paddingVertical: 20, width: width - 30, alignSelf: 'center', borderRadius: 5 }}>
+                        <View style={{ backgroundColor: '#fff', paddingVertical: 20,marginBottom:10, width: width - 30, alignSelf: 'center', borderRadius: 5,paddingHorizontal:10 }}>
                             <View style={[{}, styles.calenderbtn]}>
                                 <TouchableOpacity
                                     style={{ backgroundColor: '#FFE5E5', paddingHorizontal: 5, borderTopLeftRadius: 50, borderBottomLeftRadius: 50, paddingVertical: 5 }}
@@ -267,13 +267,17 @@ class Dashnoard extends React.Component {
                                     <Text style={{ color: this.state.selected_graph === 'pending_orders' ? '#B1272C' : '#707070', fontWeight: 'bold' }}>Paid Orders  </Text>
                                 </TouchableOpacity>
                             </View>
+                            
                             {this.state.graph_data.length == 0 ? null :
                                 <LineChart
                                     data={this.state.graph_data}
-                                    width={Dimensions.get("window").width} // from react-native
+                                    width={Dimensions.get("window").width-40} // from react-native
                                     height={height / 3}
-                                    style={{ paddingHorizontal: 20, alignSelf: 'center' }}
+                                    paddingLeft={10}
+                                    style={{ paddingHorizontal: 20, alignSelf: 'center',justifyContent:'center',borderWidth:20,borderColor:'#fff' }}
                                     alignSelf={'center'}
+                                    alignItems={'center'}
+                                    justifyContent={'center'}
                                     yAxisLabel="N25M"
                                     yAxisSuffix=""
                                     getDotColor={true}
@@ -282,13 +286,18 @@ class Dashnoard extends React.Component {
                                     chartConfig={{
                                         backgroundColor: "#fff",
                                         marginLeft: 10,
+
                                         backgroundGradientFrom: "#fff",
                                         backgroundGradientTo: "#fff",
                                         decimalPlaces: 2, // optional, defaults to 2dp
                                         color: (opacity = 1) => `rgba(177, 39, 44, ${opacity})`,
-                                        labelColor: (opacity = 1) => `rgba(177, 39, 44, ${opacity})`,
+                                        // color: (opacity = 1) => `rgba(225, 225, 225, 1)`,
+                                        // labelColor: (opacity = 1) => `rgba(177, 39, 44, ${opacity})`,
+                                        labelColor: (opacity = 1) => `rgba(78, 77, 77, 1)`,
+                                        
                                         style: {
-                                            borderRadius: 16
+                                            borderRadius: 16,
+                                        
                                         },
                                         propsForDots: {
                                             r: "6",
