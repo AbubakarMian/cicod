@@ -6,6 +6,7 @@ const initialState = {
     lastname: 'Guest',
     email: 'guest@mail.com',
     phone: '080000000',
+    avatar: '',
     access_token: 'EvcGFyZWl0LWFwcC1hZG1pbjo4NmRmMjZkMi01NjE1LTRiOTAtYTBjYy1jMDM5OWJiasdYAnHYzYNCg=='
 }
 const userReducer = (state = initialState, action) =>  {

@@ -7,7 +7,7 @@ import fontStyles from '../css/FontCss'
 import Header from '../views/Header';
 import CalendarPicker from 'react-native-calendar-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
-
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as Progress from 'react-native-progress';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Constants } from '../views/Constant';
@@ -40,12 +40,17 @@ class Dashnoard extends React.Component {
             showtotal_orders: true,
             selected_graph: 'all_orders',
             calenderModal: false,
-            total_order_background: '#FFE5E5'
+            total_order_background: '#FFE5E5',
+            date: '',
+            isDatePickerVisible: false,
+            setDatePickerVisibility: false
         };
 
     }
     componentDidMount() {
-        console.log('fsd fsdf sdf sfdsdf sfdfds');
+        this.getDashboardData(Constants.dashboard);
+    }
+    getDashboardData(url){
         this.props.setTabBar({ tab_name: 'dashboard' })
         this.setState({ spinner: true })
         let postData = {
@@ -56,7 +61,7 @@ class Dashnoard extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
-        fetch(Constants.dashboard, postData)
+        fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({
@@ -117,7 +122,6 @@ class Dashnoard extends React.Component {
                 console.log("this.state.item.item_name this.state.item.item_name this.state.item.item_name", this.state.item.item_name)
             })
     }
-
     unauthorizedLogout() {
         Alert.alert('Error', Constants.UnauthorizedErrorMsg)
         this.props.logoutUser();
@@ -175,6 +179,39 @@ class Dashnoard extends React.Component {
             selectedStartDate: date,
         });
     }
+
+
+    
+  datePickerFun = () => {
+    this.setState({
+      isDatePickerVisible: !this.state.isDatePickerVisible
+    })
+  }
+
+  setDate = (date) => {
+    var month = date.getUTCMonth() + 1; //months from 1-12
+    var day = date.getUTCDate();
+    var year = date.getUTCFullYear();
+
+    let newdate = day + "/" + month + "/" + year;
+
+    // filters.push({ key: 'create_time', value: date });
+    this.setState({
+      isDatePickerVisible: !this.state.isDatePickerVisible,
+      date: newdate,
+    })
+
+    // start_date
+    let url = Constants.dashboard+'?start_date='+date ;
+    // this.getDashboardData(url);
+
+  }
+  hideDatePicker = () => {
+    this.setState({
+      // setDatePickerVisibility: !this.state.setDatePickerVisibility,
+      isDatePickerVisible: !this.state.isDatePickerVisible
+    })
+  }
     render() {
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
@@ -187,6 +224,13 @@ class Dashnoard extends React.Component {
                     textStyle={{ color: '#fff' }}
                     color={'#fff'}
                 />
+                <DateTimePickerModal
+          isVisible={this.state.isDatePickerVisible}
+          mode="date"
+          date={new Date()}
+          onConfirm={this.setDate}
+          onCancel={this.hideDatePicker}
+        />
                 <ScrollView>
                     <View style={{ marginBottom: 10 }}>
                         <View style={[{}, styles.headerRowView]}>
@@ -196,13 +240,13 @@ class Dashnoard extends React.Component {
                             <View style={{ flex: 1, }}>
                                 <TouchableOpacity
                                     style={{ flexDirection: 'row', justifyContent: 'center' }}
-                                    onPress={() => this.setState({ calenderModal: true })}
+                                    onPress={() => this.datePickerFun()}
                                 >
                                     <View style={{ backgroundColor: '#fff', flexDirection: 'row',justifyContent:'center',alignItems:'center',alignSelf:'flex-end', paddingVertical: 5, paddingHorizontal: 10, borderRadius: 5 }}>
                                         <Image
                                             source={require('../images/dashboard/calenderIcon.png')}
                                         />
-                                        <Text style={[{marginHorizontal:50}, styles.calenderText]}>Today</Text>
+                                        <Text style={[{marginHorizontal:50}, styles.calenderText]}>{this.state.date == '' ? 'Today' : this.state.date}</Text>
                                         <Icon 
                                         name="caret-down"
                                         />

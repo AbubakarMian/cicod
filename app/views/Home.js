@@ -4,6 +4,7 @@ import { Text, TextInput } from 'react-native-paper';
 import splashImg from '../images/splash.jpg';
 import styles from '../css/HomeCss';
 import fontStyles from '../css/FontCss'
+import Spinner from 'react-native-loading-spinner-overlay';
 import Header from '../views/Header';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
@@ -11,10 +12,73 @@ import { Constants } from '../views/Constant';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 class Home extends React.Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+        spinner: false,
+        avatar:''
+    }
+}
+
+    componentDidMount(){
+      if(this.props.user.avatar == ''){
+        this.getUserDetail();
+      }
+    }
+
+    getUserDetail() {
+      this.setState({ spinner: true })
+      let postData = {
+          method: 'GET',
+          headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              Authorization: this.props.user.access_token,
+          },
+      };
+      fetch(Constants.marchantDetail, postData)
+          .then(response => response.json())
+          .then(async responseJson => {
+              console.log('responseJson @@@@@@@@###########', responseJson)
+              this.setState({
+                  spinner: false,
+              });
+              if (responseJson.status === 'SUCCESS') {
+                  let merchant_contact = responseJson.merchant
+                  this.setState({
+                      avatar: merchant_contact.logo,
+                  })
+
+                  
+
+              } else if (responseJson.status == 401) {
+                  this.unauthorizedLogout();
+              }
+              else {
+                  let message = responseJson.message
+                  Alert.alert('Error', message)
+              }
+          })
+  }
+
+  unauthorizedLogout() {
+    Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+    this.props.logoutUser();
+    this.props.navigation.navigate('Login');
+}
+
+
   render() {
     return (
       <View style={{ height: height, width: width, alignItems: 'center', position: 'relative', backgroundColor: '#F0F0F0' }}>
         <Header navigation={this.props.navigation} />
+            <Spinner
+                visible={this.state.spinner}
+                textContent={'Please Wait...'}
+                textStyle={{ color: '#fff' }}
+                color={'#fff'}
+              />
         <ScrollView>
           <View style={{ marginBottom: 10 }}>
             <View style={[{ flexDirection: 'row', paddingVertical: 10 }]}>
