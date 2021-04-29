@@ -38,7 +38,8 @@ class CreateOrder extends React.Component {
             suppliereModal: false,
             search_supplier: '',
             supplierlist: [],
-            address_backgound:''
+            address_backgound:'',
+            deliveryType:'',
         }
     }
     clearOrder() {
@@ -118,7 +119,15 @@ class CreateOrder extends React.Component {
 
     DeliveryType(type) {
         console.log(' type !!!!!!!', type);
-        this.setState({ is_pickup: !this.state.is_pickup })
+        this.setState({ is_pickup: !this.state.is_pickup, })
+        if(type==='delivery'){
+          this.setState({deliveryType:'delivery'})
+
+        }else if(type==='pickup'){
+          this.setState({deliveryType:'pickup'})
+            
+        }
+        
 
         if (this.props.customer.name == '') {
 
@@ -473,9 +482,9 @@ class CreateOrder extends React.Component {
                             <TouchableOpacity
                                 // onPress={() => this.props.navigation.navigate('DiliveryAddress')}
                                 onPress={() => this.DeliveryType('delivery')}
-
+                                
                             >
-                                <View style={[{ borderWidth: 0.25, }, styles.radioFormView]}>
+                                <View style={[{ borderWidth: 0.25,backgroundColor:this.state.deliveryType === 'delivery' ? '#FFF4F4' : '#fff', }, styles.radioFormView]}>
 
                                     <RadioForm
                                         isSelected={!this.state.is_pickup}
@@ -522,7 +531,7 @@ class CreateOrder extends React.Component {
                             <TouchableOpacity
                                 onPress={() => this.DeliveryType('pickup')}
                             >
-                                <View style={[{ borderWidth: 0.25, }, styles.radioFormView]}>
+                                <View style={[{ borderWidth: 0.25,backgroundColor:this.state.deliveryType === 'pickup' ? '#FFF4F4' : '#fff', }, styles.radioFormView]}>
                                     <RadioForm
                                         isSelected={this.state.is_pickup}
                                         color={'yellow'}
