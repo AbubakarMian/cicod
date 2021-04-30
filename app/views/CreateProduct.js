@@ -429,17 +429,17 @@ class CreateProduct extends React.Component {
                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                   
                                         <DropDownPicker
+                                        placeholder="VAT"
                                     items={[
                                         {label: 'Yes', value: 1},
                                         {label: 'No', value: 0}
                                     ]}
-                                    containerStyle={{ height: 50, width: width - 230, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
+                                    containerStyle={{ height: 50, width: width / 2 - 10,}}
                                     style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                                     itemStyle={{
-                                        justifyContent: 'flex-start', zIndex: 0.99
+                                         justifyContent: 'flex-start',
                                     }}
-                                    placeholder="VAT"
-                                    dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
+                                    dropDownStyle={{height:80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1,  }}
                                     labelStyle={{ color: '#A9A9A9' }}
                                     onChangeItem={item => this.setState({has_vat:item.value})}
                                 />
