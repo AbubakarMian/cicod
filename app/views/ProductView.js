@@ -23,11 +23,13 @@ class ProductView extends React.Component {
             spinner: false,
             prodDetail: {},
             supendModal:false,
+            action:'suspend',
         }
 
     }
 
     componentDidMount() {
+       
         let pro_url = Constants.products + '/' + this.props.route.params.prod_id
         this.getProductDetail(pro_url)
     }
@@ -53,9 +55,19 @@ class ProductView extends React.Component {
                 });
                 console.log('response json in products detail !!!!!!!!!!!!!!!!!!', responseJson);
                 if (responseJson.status === "success" || responseJson.success === true) {
-                    this.setState({
-                        prodDetail: responseJson.data
-                    })
+                    if(responseJson.data.is_active == true){
+                        this.setState({
+                            prodDetail: responseJson.data,
+                            action:'suspend'
+                        })
+                    }
+                    else{
+                        this.setState({
+                            prodDetail: responseJson.data,
+                            action:'unsuspend'
+                        })
+                    }
+                    
                 } else {
                     let message = responseJson.message;
                     Alert.alert('Error', message)
@@ -63,9 +75,12 @@ class ProductView extends React.Component {
             })
     }
 
-    suspendProductFun() {
+    actionFun(){
+
+    }
+    suspendUnsuspendFun() {
         // https://com.cicodsaasstaging.com/com/api/products/23?action=suspend
-        let url = Constants.products + '/' + this.state.prodDetail.id + '?action=suspend';
+        let url = Constants.products + '/' + this.state.prodDetail.id + '?action='+this.state.action;
         console.log(' suspend product url !!!!!!!!!!!!', url);
         let token = this.props.user.access_token;
         this.setState({ spinner: true })
@@ -87,7 +102,7 @@ class ProductView extends React.Component {
                 });
                 console.log('response json suspend product  !!!!!!!!!!!!!!!!!!', responseJson);
                 if (responseJson.status === "success" || responseJson.success === true) {
-                    Alert.alert('Message', message);
+                    Alert.alert('Message', responseJson.message);
                     this.props.navigation.goBack();
                 } else {
                     let message = responseJson.message;
@@ -96,6 +111,10 @@ class ProductView extends React.Component {
             })
     }
 
+    updateProductFun(){
+
+        this.props.navigation.navigate('CreateProduct',{action:'update',prodDetail:this.state.prodDetail});
+    }
     render() {
 
         return (
@@ -119,15 +138,16 @@ class ProductView extends React.Component {
                 </View>
                 <View style={[{}, styles.productDeatailContainer]}>
                     <View style={[{}, styles.productDeatailHeaderRow]}>
-                        <View style={[{}, styles.aciveView]}>
 
                             {(this.state.prodDetail.is_active == true) ?
+                            <View style={[{}, styles.aciveView]}>
                                 <Text style={{ color: '#26C281' }}>ACTIVE</Text>
+                                </View>
                                 :
-                                <Text style={{ color: '#26C281' }}>IN ACTIVE</Text>
+                                <View style={[{}, styles.inaciveView]}>
+                                <Text style={{ color: '#B1272C' }}>IN ACTIVE</Text>
+                                </View>
                             }
-
-                        </View>
                         <Image
                             style={[{ alignSelf: 'baseline' }]}
                             source={require('../images/ticket.png')} />
@@ -236,19 +256,25 @@ class ProductView extends React.Component {
                         onPress={() => this.setState({ supendModal: false })}
                     >
                         <View style={[{}, styles.suspendmodalBackGround]}>
-                           <View style={[{flexDirection:'column',alignSelf:'baseline'},styles.suspendTouch]}></View>
+                           <View style={[{flexDirection:'column',alignSelf:'baseline'},styles.suspendTouch]}>
                            <TouchableOpacity
-                                onPress={() => this.suspendAction(this.state.items)}
-                                style={[{ }, ]}>
-                                <Image source={require('../images/ban.png')} style={[{}, styles.banImage]} />
-                                <Text style={{}}>Suspendffffffffff</Text>
-                            </TouchableOpacity>
-                            <TouchableOpacity
-                                onPress={() => this.suspendAction(this.state.items)}
-                                style={[{ }, ]}>
-                                <Image source={require('../images/ban.png')} style={[{}, styles.banImage]} />
+                                onPress={()=>this.updateProductFun()}
+                                style={[{flexDirection:'row'}, ]}>
+                                {/* <Image source={require('../images/ban.png')} style={[{}, styles.banImage]} /> */}
+                                <Icon name="edit" color={'gray'} size={20} style={[{}, styles.banImage]} />
                                 <Text style={{}}>Update</Text>
                             </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => this.suspendUnsuspendFun()}
+                                style={[{flexDirection:'row',marginVertical:10}, ]}>
+                                <Image source={require('../images/ban.png')} style={[{}, styles.banImage]} />
+                               {(this.state.action == "suspend") ?
+                                <Text style={{}}>Suspend</Text> :
+                                <Text style={{}}>Unsuspend</Text>
+                                }
+                                
+                            </TouchableOpacity>
+                            </View>
                            </View>
                       
                     </TouchableOpacity>

@@ -29,13 +29,14 @@ class CreateProduct extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            prod_id: 0,
             value: 0,
             isChecked: false,
             categoryarr: [],
             spinner: false,
             category_id: 0,
             name: '',
-            quantity: 0,
+            quantity: 120,
             code: '',
             price: 0,
             reservation_day: 0,
@@ -54,6 +55,23 @@ class CreateProduct extends React.Component {
     componentDidMount() {
 
         this.getCategoryList()
+        // console.log('product detail peops @@@@@@@@!!!!!!!!!!!!!!', this.props);
+        if(this.props.route.params.action == "update"){
+            console.log('sdkf hsjkdhfjkshgkfdgs djgjsgdfjgsdf',this.props.route.params.prodDetail);
+            this.setState({
+                prod_id: this.props.route.params.prodDetail.id,
+                category_id: this.props.route.params.prodDetail.category,
+                name: this.props.route.params.prodDetail.name,
+                quantity: this.props.route.params.prodDetail.quantity+'',
+                code: this.props.route.params.prodDetail.code,
+                price: this.props.route.params.prodDetail.price+'',
+                description: this.props.route.params.prodDetail.description,
+                is_qty_limit: (this.props.route.params.prodDetail.no_qty_limit == false) ? 0:1,
+                validity: this.props.route.params.prodDetail.validity,
+                has_vat: this.props.route.params.prodDetail.has_vat,
+            })
+
+        }
     }
 
     getCategoryList() {
@@ -100,6 +118,65 @@ class CreateProduct extends React.Component {
         Alert.alert('Error', Constants.UnauthorizedErrorMsg)
         this.props.logoutUser();
         this.props.navigation.navigate('Login');
+    }
+    updateProduct() {
+
+
+        this.setState({ spinner: true })
+
+        if (this.state.name === '' || this.state.price === '') {
+            this.setState({ spinner: false })
+            Alert.alert("Warning", "Product name and Price are required")
+            return;
+        }
+        else {
+
+
+            let postData = {
+                method: 'PUT',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': this.props.user.access_token,
+                },
+                body: JSON.stringify({
+                    category_id: this.state.category_id,
+                    name: this.state.name,//required
+                    quantity: this.state.quantity,//sandbox
+                    code: this.state.code,
+                    price: this.state.price,// required
+                    description: this.state.description,
+                    validity: this.state.validity,
+                    no_qty_limit: this.state.is_qty_limit, //Boolean 
+                    has_vat: this.state.state_id, //Boolean 
+                    image: this.state.image,
+                    on_webshop: this.state.is_web_shop, //Boolean 
+                })
+            };
+            fetch(Constants.productslist+"/"+this.state.prod_id, postData)
+                .then(response => response.json())
+                .then(async responseJson => {
+                    console.log(" create customer response !!!!!!!!!!!", responseJson)
+
+                    this.setState({ spinner: false })
+                    if (responseJson.status === "success") {
+                        Alert.alert('MESSAGE', responseJson.message)
+                        this.props.navigation.navigate('Products', { seller_id: 0 })
+                    }   else if(responseJson.status == 401){
+                        this.unauthorizedLogout();
+                    }
+                    else {
+                        let message = responseJson.message
+                        Alert.alert('Error', message)
+                    }
+                }
+                )
+                .catch((error) => {
+                    console.log("Api call error", error);
+                    // Alert.alert(error.message);
+                });
+        }
+
     }
     createProduct() {
 
@@ -177,9 +254,15 @@ class CreateProduct extends React.Component {
             })
           });
     }
-
+    onSaveFun(){
+        if(this.props.route.params.action == "update"){
+            this.updateProduct();
+        }else{
+            this.createProduct();
+        }
+    }
     render() {
-        
+        console.log('this.state.price',this.state.price)
         var radio_props_dilvery = [
             { label: 'Dilivery', value: 0 },
 
@@ -237,11 +320,12 @@ class CreateProduct extends React.Component {
                             <View style={[{}, styles.formRowView]}>
                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                     <TextInput
-                                        label="ProName*"
+                                        label="Name*"
                                         style={{ backgroundColor: 'transparent', }}
                                         width={width - 50}
                                         alignSelf={'center'}
                                         color={'#000'}
+                                        value={this.state.name}
                                         onChangeText={text => this.setState({ name: text })}
                                     />
 
@@ -253,9 +337,10 @@ class CreateProduct extends React.Component {
                                     <TextInput
                                         label="Description"
                                         style={{ backgroundColor: 'transparent', }}
-                                width={width - 50}
-                                alignSelf={'center'}
-                                color={'#000'}
+                                        width={width - 50}
+                                        alignSelf={'center'}
+                                        color={'#000'}
+                                        value={this.state.description}
                                         onChangeText={text => this.setState({ description: text })}
                                     />
 
@@ -266,9 +351,10 @@ class CreateProduct extends React.Component {
                                     <TextInput
                                         label="Product Code"
                                         style={{ backgroundColor: 'transparent', }}
-                                width={width - 50}
-                                alignSelf={'center'}
-                                color={'#000'}
+                                        width={width - 50}
+                                        alignSelf={'center'}
+                                        color={'#000'}
+                                        value={this.state.code}
                                         onChangeText={text => this.setState({ code: text })}
                                     />
 
@@ -277,9 +363,10 @@ class CreateProduct extends React.Component {
                                     <TextInput
                                         label="Price (.00)"
                                         style={{ backgroundColor: 'transparent', }}
-                                width={width - 50}
-                                alignSelf={'center'}
-                                color={'#000'}
+                                        width={width - 50}
+                                        alignSelf={'center'}
+                                        color={'#000'}
+                                        value={this.state.price}
                                         onChangeText={text => this.setState({ price: text })}
                                         keyboardType='numeric'
                                     />
@@ -291,9 +378,9 @@ class CreateProduct extends React.Component {
                                     <TextInput
                                         label="Reservation (Days)"
                                         style={{ backgroundColor: 'transparent', }}
-                                width={width - 50}
-                                alignSelf={'center'}
-                                color={'#000'}
+                                        width={width - 50}
+                                        alignSelf={'center'}
+                                        color={'#000'}
                                         onChangeText={text => this.setState({ reservation_day: text })}
                                         keyboardType='numeric'
                                     />
@@ -303,9 +390,10 @@ class CreateProduct extends React.Component {
                                     <TextInput
                                         label="Quantity"
                                         style={{ backgroundColor: 'transparent', }}
-                                width={width - 50}
-                                alignSelf={'center'}
-                                color={'#000'}
+                                        width={width - 50}
+                                        alignSelf={'center'}
+                                        color={'#000'}
+                                        value={this.state.quantity}
                                         onChangeText={text => this.setState({ quantity: text })}
                                     />
 
@@ -515,7 +603,7 @@ class CreateProduct extends React.Component {
 
                         </View>
                         <TouchableOpacity
-                            onPress={() => this.createProduct()}
+                            onPress={() => this.onSaveFun()}
                             style={[{}, styles.redTouch]}>
                             <Text style={{ color: '#fff' }}>Save</Text>
                         </TouchableOpacity>
