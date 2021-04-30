@@ -241,6 +241,7 @@ class Filter extends React.Component {
                 >
                   <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginRight: 10, padding: 10, marginVertical: 10 }}>
                     <Image
+                      style={{height:15,width:15}}
                       source={require('../images/calenderIcon.png')}
                     />
                     <Text style={{ marginLeft: 10, color: '#aaa' }}>DD-MM-YY</Text>

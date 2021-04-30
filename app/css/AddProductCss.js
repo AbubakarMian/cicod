@@ -76,7 +76,9 @@ export default StyleSheet.create({
         right:10
     },
     OrderDetailContainer:{
-        backgroundColor:'#F0F0F0',
+        backgroundColor:'#fff',
+        borderRadius:10,
+        paddingHorizontal:10,
         paddingVertical:30,
         width:width-20,
         alignSelf:'center',
@@ -112,7 +114,7 @@ export default StyleSheet.create({
     },
     OrderDetailDataCOntainerRow:{
         flexDirection:'row',
-        width:width-20,
+        width:width-30,
         alignSelf:'center',
         paddingHorizontal:5,
         position:'relative',

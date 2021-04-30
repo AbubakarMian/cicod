@@ -120,6 +120,7 @@ class Customer extends React.Component {
                         style={[{}, styles.headerRowPlusiconView]}>
                         {/* <View > */}
                         <Image
+                            style={{height:30,width:30}}
                             source={require('../images/products/circlePlus.png')}
                         />
                         {/* </View> */}
@@ -127,6 +128,7 @@ class Customer extends React.Component {
                 </View>
                 <View style={[{}, styles.searchBoxView]}>
                     <Image
+                        style={{height:25,width:25}}
                         source={require('../images/products/searchicon.png')}
                     />
                     <TextInput

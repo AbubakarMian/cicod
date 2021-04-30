@@ -390,6 +390,7 @@ class CreateOrder extends React.Component {
                             <View style={[{}, styles.customerContaineraddProductView]}>
 
                                 <Image
+                                     style={{height:40,width:40}}
                                     source={require('../images/products/circlePlus.png')}
                                 />
                                 <Text style={[{}, styles.customerContaineraddProductText]}>Add Product</Text>
@@ -409,7 +410,10 @@ class CreateOrder extends React.Component {
                             </TouchableOpacity>
                             {(this.state.cart_arr.length == 0) ?
                                 <View style={[{}, styles.cartSlashView]}>
-                                    <Image source={require('../images/cartSlash.png')} />
+                                    <Image 
+                                      style={{height:width/3,width:width/3}}
+                                      source={require('../images/cartSlash.png')} 
+                                    />
                                     <Text style={[{}, styles.cartSlashheadingText]}>No product added</Text>
                                     <Text style={[{}, styles.cartSlashNormalText]}>Add a product</Text>
                                 </View>
@@ -655,7 +659,8 @@ class CreateOrder extends React.Component {
                                         onPress={() => this.props.navigation.navigate('ApplyDiscount')}
                                     >
                                         <View style={{ flexDirection: 'row' }}>
-                                            <Image source={require('../images/icon15.png')} />
+                                            <Image source={require('../images/icon15.png')}
+                                            style={{height:20,width:20}} />
                                             <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Apply for Discount</Text>
                                         </View>
                                     </TouchableOpacity>
@@ -668,7 +673,8 @@ class CreateOrder extends React.Component {
                                         onPress={() => this.props.navigation.navigate('AddNote')}
                                     >
                                         <View style={{ flexDirection: 'row' }}>
-                                            <Image source={require('../images/addNote.png')} />
+                                            <Image source={require('../images/addNote.png')}
+                                            style={{height:20,width:15}} />
                                             <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Add Note</Text>
                                         </View>
                                     </TouchableOpacity>
