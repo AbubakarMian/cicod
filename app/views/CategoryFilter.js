@@ -202,6 +202,14 @@ class CategoryFilter extends React.Component {
     }}
     containerStyle={{ height: 50, width: width  - 50, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5,zIndex:99999999 }}
     placeholder="Created By"
+    containerStyle={{ height: 50, width: width - 50,}}
+    style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5,zIndex:9999 }}
+    itemStyle={{
+         justifyContent: 'flex-start',
+    }}
+    dropDownStyle={{height:80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1,  }}
+    labelStyle={{ color: '#A9A9A9' }}
+  
     defaultValue={this.state.value}
     onChangeItem={item => this.setState({
         value: item.value
@@ -230,8 +238,16 @@ class CategoryFilter extends React.Component {
 <DropDownPicker
     items={this.state.categoryarr}
     placeholder="Catagory"
-    height={50}
-    containerStyle={{ height: 50, width: width - 50, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
+
+ 
+    containerStyle={{ height: 50, width: width - 50,}}
+    style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
+    itemStyle={{
+         justifyContent: 'flex-start',
+    }}
+    dropDownStyle={{height:80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1,  }}
+    labelStyle={{ color: '#A9A9A9' }}
+  
     controller={instance => this.controller = instance}
     onChangeList={(items, callback) => {
         this.setState({
@@ -256,13 +272,14 @@ class CategoryFilter extends React.Component {
     onPress={() => this.datePickerFun()}>
     <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginRight: 10, padding: 10, marginVertical: 10, zIndex: -99999999 }}>
       <Image
+        style={{height:20,width:20}}
         source={require('../images/calenderIcon.png')}
       />
       <Text style={{ marginLeft: 10, color: '#aaa' }}>{this.state.date == '' ? 'DD-MM-YY' : this.state.date}</Text>
     </View>
-    <View style={{ position: 'absolute', right: 20, bottom: 10 }}>
+    <View style={{ position: 'absolute', right: 20, bottom: 30 }}>
       <Icon
-        size={30}
+        size={25}
         name="caret-down"
         color={'#707070'}
       />
@@ -277,13 +294,14 @@ class CategoryFilter extends React.Component {
 
     <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginLeft: 10, padding: 10, marginVertical: 10 }}>
       <Image
+        style={{height:20,width:20}}
         source={require('../images/calenderIcon.png')}
       />
       <Text style={{ marginLeft: 10, color: '#aaa' }}>DD-MM-YY</Text>
     </View>
-    <View style={{ position: 'absolute', right: 20, bottom: 10 }}>
+    <View style={{ position: 'absolute', right: 20, bottom: 30,alignSelf:'center' }}>
       <Icon
-        size={30}
+        size={25}
 
         name="caret-down"
         color={'#707070'}

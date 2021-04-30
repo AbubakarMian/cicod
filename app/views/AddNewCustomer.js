@@ -342,7 +342,7 @@ class AddNewCustomer extends React.Component {
                         <Icon name="arrow-left" size={25} color={'#929497'} />
                     </TouchableOpacity>
                     <View style={[{}, styles.backRowHeadingView]}>
-                        <Text style={[{}, styles.backRowHeadingText]}>ADD NEW CUSTOMER</Text>
+                        <Text style={[{color:'#2F2E7C',fontWeight:'700'}, fontStyles.normal15]}>ADD NEW CUSTOMER</Text>
                     </View>
                 </View>
                 <ScrollView>

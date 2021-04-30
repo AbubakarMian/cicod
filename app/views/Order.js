@@ -191,7 +191,7 @@ class Order extends React.Component {
                 />
                 <View style={{ flexDirection: 'row', alignContent: 'center', alignItems: 'center', width: width - 20, alignSelf: 'center' }}>
                     <View>
-                        <Text style={{ color: '#2F2E7C', fontWeight: 'bold' }}>ORDER</Text>
+                        <Text style={[{color:'#2F2E7C',fontWeight:'700'},fontStyles.normal15]}>ORDER</Text>
                     </View>
                     <View style={{ flex: 1 }}>
                         <TouchableOpacity
@@ -200,6 +200,7 @@ class Order extends React.Component {
                         >
                             <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginLeft: 10,   }}>
                                 <Image
+                                    style={{height:20,width:20}}
                                     source={require('../images/calenderIcon.png')}
                                 />
                                 <Text style={[{ color: '#909090', marginLeft: 5 }, fontStyles.normal12]}>{this.state.date == '' ? 'Today' : this.state.date}</Text>
@@ -240,6 +241,7 @@ class Order extends React.Component {
                             onPress={() => this.props.navigation.navigate('CreateOrder', { heading: 'order' })}
                         >
                             <Image
+                                style={{height:30,width:30}}
                                 source={require('../images/products/circlePlus.png')}
                             />
                         </TouchableOpacity>
@@ -249,6 +251,7 @@ class Order extends React.Component {
 
                     <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
                         <Image
+                            style={{height:30,width:30}}
                             source={require('../images/products/searchicon.png')}
                         />
 
@@ -270,6 +273,7 @@ class Order extends React.Component {
                         onPress={() => this.props.navigation.navigate('ProductFilter')}
                     >
                         <Image
+                            style={{height:50,width:50}}
                             source={require('../images/Order/settingicon.png')}
                         />
                     </TouchableOpacity>
@@ -378,6 +382,7 @@ class Order extends React.Component {
                                         <View style={{ flexDirection: 'column' }}>
                                             <View style={{ flexDirection: 'row' }}>
                                                 <Image
+                                                    style={{height:30,width:30,marginRight:5}}
                                                     source={require('../images/Order/bage.png')}
                                                 />
                                                 <View style={{ flexDirection: 'column' }}>

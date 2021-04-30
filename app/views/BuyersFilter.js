@@ -247,6 +247,7 @@ class BuyersFilter extends React.Component {
             >
               <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginRight: 10, padding: 10, marginVertical: 10 }}>
                 <Image
+                 style={{height:20,width:20}}
                   source={require('../images/calenderIcon.png')}
                 />
                 <Text style={[{ color: '#909090', marginLeft: 5 }, fontStyles.normal12]}>{this.state.date == '' ? 'DD-MM-YY' : this.state.date}</Text>

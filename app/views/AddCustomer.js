@@ -116,7 +116,7 @@ class AddCustomer extends React.Component {
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
                     <View style={[{}, styles.backHeadingView]}>
-                        <Text style={[{}, styles.backHeadingText]}>ADD CUSTOMER</Text>
+                        <Text style={[{color:'#2F2E7C',fontWeight:'700'}, fontStyles.normal15]}>ADD CUSTOMER</Text>
                     </View>
                 </View>
                 <View>
