@@ -278,8 +278,15 @@ class CreateOrder extends React.Component {
         this.props.setCustomer(user_data);
         this.props.navigation.goBack()
     }
+
+    supplierModalFun(item){
+        this.setState({
+            suppliereModal:false
+        })
+        this.props.navigation.navigate('BuyersView', { items: item, heading: 'SUPPLIERS' })
+    }
     render() {
-        console.log(' supplierlist @@@@@@@@@@@@@@@ supplierlist  !!!!!!!!!!!!!!', this.props.customer);
+        console.log(' supplierlist @@@@@@@@@@@@@@@ supplierlist  !!!!!!!!!!!!!!', this.props.supplier);
         var radio_props_dilvery = [
             { label: 'Delivery', value: 0 },
 
@@ -327,7 +334,9 @@ class CreateOrder extends React.Component {
                         </View>
                         {(this.props.route.params.screen_name == 'buy') ?
                             <View style={[{}, styles.customerTitleRowView]}>
-                                <Text style={[{}, styles.customerTitleRowHeadingText]}>TestKing Nigeria</Text>
+                                {(this.props.supplier.name != '') ? 
+                                <Text style={[{}, styles.customerTitleRowHeadingText]}>{this.props.supplier.name}</Text>
+                                : null}
                                 <TouchableOpacity
                                     onPress={() => this.setState({ suppliereModal: true })}
                                 >
@@ -727,7 +736,7 @@ class CreateOrder extends React.Component {
                                     renderItem={({ item, index, separators }) => (
                                         <TouchableOpacity
                                             key={item.key}
-                                            onPress={() => this.props.navigation.navigate('BuyersView', { items: items, heading: 'SUPPLIERS' })}
+                                            onPress={() => this.supplierModalFun(item)}
                                             onShowUnderlay={separators.highlight}
                                             onHideUnderlay={separators.unhighlight}>
                                             <View style={[{ marginTop: 10 }, styles.modalListContainer]}>
@@ -762,6 +771,7 @@ function mapStateToProps(state) {
         notes: state.orderNotesReducer,
         deliveryAddress: state.deliveryAddressReducer,
         orderDiscountReducer: state.orderDiscountReducer,
+        supplier: state.supplierReducer,
     }
 };
 function mapDispatchToProps(dispatch) {
@@ -774,6 +784,7 @@ function mapDispatchToProps(dispatch) {
         removeProductFromCart: (value) => dispatch({ type: REMOVE_PRODUCT_FORM_CART, value: value }),
         setDeliveryAddress: (value) => dispatch({ type: SET_DELIVERY_ADDRESS, value: value }),
         setCustomer: (value) => dispatch({ type: SET_CUSTOMER, value: value }),
+        setSupplier: (value) => dispatch({ type: SET_SUPPLIER, value: value }),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CreateOrder)
