@@ -265,7 +265,7 @@ class AddProduct extends React.Component {
                         <View style={[{zIndex:-0.9999}, styles.OrderDetailContainer]}>
                            
                             <View style={[{}, styles.OrderDetailHeadingRow]}>
-                                <Text style={[{}, styles.OrderDetailHeadingRowText]}>Order Detail</Text>
+                                <Text style={[{}, styles.OrderDetailHeadingRowText]}>Product Catalog</Text>
                                 <Text style={[{}, styles.OrderDetailNotificationText]}>{this.state.total_add_order}</Text>
                             </View>
                           

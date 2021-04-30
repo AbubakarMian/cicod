@@ -53,6 +53,8 @@ class User extends React.Component {
             .then(response => response.json())
             .then(async responseJson => {
                 console.log('responseJson @@@@@@@@###########', responseJson)
+                console.log('Constants.marchantDetail @@@@@@@@###########', Constants.marchantDetail)
+                console.log('this.props.user.access_token@@@@@@@@###########', this.props.user.access_token)
                 this.setState({
                     spinner: false,
                 });
@@ -60,7 +62,7 @@ class User extends React.Component {
                     let merchant_contact = responseJson.merchant
                     this.setState({
                         email: merchant_contact.email,
-                        first_name: merchant_contact.contactPerson,
+                        first_name: merchant_contact.companyName, //contactPerson
                         phone: merchant_contact.phone,
                         role: merchant_contact.customerCategory,
                     })

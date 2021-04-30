@@ -34,6 +34,13 @@ class Order extends React.Component {
         this.onDateChange = this.onDateChange.bind(this);
     }
     componentDidMount() {
+        var dt = new Date();
+        var hours = dt.getHours(); // gives the value in 24 hours format
+        var minutes = dt.getMinutes() ; 
+        var finalTime = "Time  - > " + hours + ":" + minutes; 
+
+        console.log('final time !!!!!!!!!!!!!!!!!', finalTime)
+
         this.orderList(Constants.orderslist);
     }
     customeList(listType) {
@@ -168,6 +175,28 @@ class Order extends React.Component {
     search(){
         let url = Constants.orderslist+'?order_id='+this.state.search_order ;
         this.orderList(url);
+    }
+
+    timeConvertion(date){ //return 'some time';
+        console.log('dddd date',date);   
+        var datetime = date.split(" "); 
+        var date = datetime[0];
+        var time = datetime[1];
+        var time_arr = time.split(":");
+        var hr = parseInt(time_arr[0]);
+        var am_pm = 'AM';
+        if(hr > 12){
+            am_pm = 'PM';
+            hr = hr - 12;
+        }
+        if(hr == 12){
+            am_pm = 'PM';
+        }
+
+        var timestr = hr+":"+time_arr[1]+":"+time_arr[1];
+        var date_time = date+" "+timestr+" "+am_pm;
+        console.log('date_time converted ',date_time);
+        return date_time;
     }
     render() {
 
@@ -390,11 +419,14 @@ class Order extends React.Component {
                                                     <Text style={[{ color: '#929497' }, fontStyles.normal12]}>{item.customer.name}</Text>
                                                 </View>
                                             </View>
-                                            <Text style={[{ color: '#929497', marginTop: 5 }, fontStyles.normal12]}>{item.order_date}</Text>
+                                            {
+                                                    
+                                            }
+                                            <Text style={[{ color: '#929497', marginTop: 5 }, fontStyles.normal12]}>  {this.timeConvertion(item.order_date)}</Text>
                                         </View>
                                     </View>
                                     <View style={{ flex: 1, alignItems: 'flex-end', flexDirection: 'column' }}>
-                                        <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>N {item.amount}</Text>
+                                        <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>N{item.amount}</Text>
 
                                         {(item.order_status == 'PENDING') ?
                                             <Text style={[{ borderRadius: 50, paddingHorizontal: 5, textAlign: 'center', backgroundColor: '#FFF3DB', color: '#FDB72B', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>

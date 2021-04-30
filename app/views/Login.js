@@ -20,9 +20,11 @@ class Login extends React.Component {
         super(props);
         this.state = {
             Spinner: false,
-            tenantId: 'sandbox',// ndanitv
-            username: 'cicodsandbox@yopmail.com',//ndanitv@sharklasers.com
-            password: 'Sandbox@123',//Ndanitv@123
+
+            tenantId: 'ndanitv',//sandbox , ndanitv
+            username: 'ndanitv@sharklasers.com',//cicodsandbox@yopmail.com ,ndanitv@sharklasers.com
+            password: 'Ndanitv@123',//Sandbox@123 ,Ndanitv@123
+
             isChecked: false,
             hide_password: true,
             domain_text_color:'black',
@@ -133,6 +135,7 @@ class Login extends React.Component {
                 }
                 )
                 .catch((error) => {
+                    this.setState({ Spinner: false })
                     console.log("Api call error", error);
                     // Alert.alert(error.message);
                 });

@@ -48,6 +48,9 @@ class Dashnoard extends React.Component {
 
     }
     componentDidMount() {
+        console.log('this.props.user.access_token',this.props.user.access_token);
+      
+
         this.getDashboardData(Constants.dashboard);
     }
     getDashboardData(url){
@@ -68,10 +71,12 @@ class Dashnoard extends React.Component {
                     spinner: false,
 
                 });
+                console.log('postData postDatapostData !!!!!!!!!!!!!@@@@@@@@@@@@@@', postData);
                 console.log('response !!!!!!!!!!!!!@@@@@@@@@@@@@@', responseJson);
+                console.log('url url url !!!!!!!!!!!!!@@@@@@@@@@@@@@', url);
                 if (responseJson.status === 'success') {
                     // console.log('**************', this.state.data)
-                    var total_orders = responseJson.data.graph.total_orders;
+                    var total_orders = responseJson.data.graph.total_orders ?? [];
                     var graph_total_orders_data = [];
                     var graph_lable = [];
                     console.log('total_orders 66666666666666666666666', total_orders);
@@ -96,7 +101,7 @@ class Dashnoard extends React.Component {
                     let total_orders_data = this.getGraphData(graph_lable, graph_total_orders_data);
 
                     let total_orders_pending_data = this.getGraphData(graph_total_pending_orders_label, graph_total_pending_orders_data);
-                    console.log(' total total graph ', total_orders_pending_data);
+                    console.log(' total total graph ', responseJson.data.paid);
                     this.setState({
                         target: responseJson.data.target,
                         graph: responseJson.data.graph,
@@ -110,6 +115,7 @@ class Dashnoard extends React.Component {
 
                     })
                     console.log("%%%%%%%%%%%%%%%%", graph_lable)
+                    
                     // this.props.navigation.navigate('DrawerNavigation')
                 }
                 else if (responseJson.status == 401) {
@@ -149,6 +155,9 @@ class Dashnoard extends React.Component {
 
     getGraphData(graph_lable, orders_data) {
         let graphdata = [];
+        if(orders_data.length == 0){
+            return [];
+        }
         graphdata.push({
             data: orders_data,
             // color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
@@ -317,7 +326,7 @@ class Dashnoard extends React.Component {
                                 </TouchableOpacity>
                             </View>
                             
-                            {this.state.graph_data.length == 0 ? null :
+                            {(this.state.graph_data.length == 0) ? null :
                                 <LineChart
                                     data={this.state.graph_data}
                                     width={Dimensions.get("window").width-40} // from react-native
@@ -403,6 +412,8 @@ class Dashnoard extends React.Component {
                         </View>
                     </TouchableOpacity>
                 </Modal>
+            
+            
             </View>
         )
     }
