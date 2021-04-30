@@ -82,7 +82,7 @@ class TabNavigater extends React.Component {
           }}
         />
         <Tab.Screen
-          name="Order"
+          name="Orders"
           component={Order}
           listeners={{
             tabPress: e => {
