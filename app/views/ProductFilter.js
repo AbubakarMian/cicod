@@ -224,7 +224,7 @@ class ProductFilter extends React.Component {
                 onChangeItem={item => this.onCreatedByText(item.value)}
               />
             }
-            {this.state.categoryarr.length < 1 ? null :
+            {/* {this.state.categoryarr.length < 1 ? null :
               <DropDownPicker
                 items={this.state.categoryarr}
                 placeholder="Catagory"
@@ -236,7 +236,7 @@ class ProductFilter extends React.Component {
                 dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                 labelStyle={{ color: '#A9A9A9' }}
                 onChangeItem={item => this.onCategoryText(item.value)}
-              />}
+              />} */}
 
 
 
