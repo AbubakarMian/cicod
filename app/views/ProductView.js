@@ -21,17 +21,14 @@ class ProductView extends React.Component {
             searchPress: 1,
             productImageModal: false,
             spinner: false,
-            prodDetail: {}
+            prodDetail: {},
+            supendModal:false,
         }
 
     }
 
     componentDidMount() {
-        //  this.props.route.params.prod_id,
-        // console.log(' this.props.route.params.prod_id  this.props.route.params.prod_id !!!!!!!!!!', this.props.route.params.prod_id);
-        // console.log('product view props !!!!!!!!!!', Constants.products);
         let pro_url = Constants.products + '/' + this.props.route.params.prod_id
-        console.log('hewre !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!@@@@@@@@@@@@@@@@@')
         this.getProductDetail(pro_url)
     }
 
@@ -54,7 +51,7 @@ class ProductView extends React.Component {
                     spinner: false,
 
                 });
-                console.log('response json in products !!!!!!!!!!!!!!!!!!', responseJson);
+                console.log('response json in products detail !!!!!!!!!!!!!!!!!!', responseJson);
                 if (responseJson.status === "success" || responseJson.success === true) {
                     this.setState({
                         prodDetail: responseJson.data
@@ -134,12 +131,16 @@ class ProductView extends React.Component {
                         <Image
                             style={[{ alignSelf: 'baseline' }]}
                             source={require('../images/ticket.png')} />
-                        <Icon
-                            style={[{}, styles.settingIcon]}
-                            size={25}
-                            color={'#929497'}
-                            name="ellipsis-h" />
-
+                      <TouchableOpacity
+                    style={[{}, styles.settingIcon]}
+                    onPress={() => this.setState({ supendModal: true })}
+                      >
+                            <Icon
+                                
+                                size={25}
+                                color={'#929497'}
+                                name="ellipsis-h" />
+                        </TouchableOpacity>
                     </View>
                     <Text style={[{color:'#4E4D4D',textAlign:'center'},fontStyles.bold18]}>{this.state.prodDetail.name + ' ' + this.state.prodDetail.quantity}</Text>
                     <Text style={[{color:'#929497',textAlign:'center'}, fontStyles.normal12]}>{this.state.prodDetail.code}</Text>
@@ -223,6 +224,34 @@ class ProductView extends React.Component {
                             source={{ uri: this.state.prodDetail.image }}
                         />
                     </View>
+
+                </Modal>
+            
+                <Modal
+                    visible={this.state.supendModal}
+
+                    transparent={true}
+                >
+                    <TouchableOpacity
+                        onPress={() => this.setState({ supendModal: false })}
+                    >
+                        <View style={[{}, styles.suspendmodalBackGround]}>
+                           <View style={[{flexDirection:'column',alignSelf:'baseline'},styles.suspendTouch]}></View>
+                           <TouchableOpacity
+                                onPress={() => this.suspendAction(this.state.items)}
+                                style={[{ }, ]}>
+                                <Image source={require('../images/ban.png')} style={[{}, styles.banImage]} />
+                                <Text style={{}}>Suspendffffffffff</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                onPress={() => this.suspendAction(this.state.items)}
+                                style={[{ }, ]}>
+                                <Image source={require('../images/ban.png')} style={[{}, styles.banImage]} />
+                                <Text style={{}}>Update</Text>
+                            </TouchableOpacity>
+                           </View>
+                      
+                    </TouchableOpacity>
 
                 </Modal>
             </View>
