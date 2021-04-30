@@ -19,7 +19,7 @@ export default class SplashScreen extends React.Component {
                 source={require('../images/loginlogo.png')}
               />
             </View>
-            <View style={{ alignItems: 'center', position: 'absolute', bottom: 0, alignSelf: 'center', marginBottom:80 }}>
+            <View style={{ alignItems: 'center', position: 'absolute', bottom: 0, alignSelf: 'center', marginBottom:height/4 }}>
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('Login')}
               >
@@ -36,11 +36,12 @@ export default class SplashScreen extends React.Component {
                   source={require('../images/splashbottomlogo.png')}
                 />
               </View> */}
+              
             </View>
-            <View>
-
-            </View>
+            
+         
           </View>
+          <Text style={{position:'absolute',bottom:50,textAlign:'center',alignSelf:'center',color:'#B1272C',fontWeight:'bold'}}>A PRODUCT OF CROWN INTERACTIVE</Text>
         </View>
       </ImageBackground>
 
