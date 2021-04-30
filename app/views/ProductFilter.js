@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Dimensions, Image, Platform, TouchableOpacity,Alert } from 'react-native'
+import { View, Dimensions, Image, Platform, TouchableOpacity, Alert } from 'react-native'
 import { Text, TextInput } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/Filter.Css';
@@ -30,10 +30,11 @@ class ProductFilter extends React.Component {
       spinner: false,
     };
   }
-  componentDidMount() {
+  async componentDidMount() {
 
-    this.getCategoryList()
-    this.getProductList(Constants.productslist);
+    await this.getCategoryList()
+    await this.getProductList(Constants.productslist);
+    return
     this.setState({ spinner: true })
     let postData = {
       method: 'GET',
@@ -143,7 +144,7 @@ class ProductFilter extends React.Component {
   }
 
   onCategoryText(text) {
-    let filters = 'Freezer'; //this.state.filters;
+    let filters = this.state.filters; //this.state.filters;
     filters.push({ key: 'category', value: text });
     this.setState({
       filters: filters
@@ -152,7 +153,7 @@ class ProductFilter extends React.Component {
   onCreatedByText(text) {
     // console.log(' category text text ', text);
     // return
-    let filters = 'Freezer'; //this.state.filters;
+    let filters = this.state.filters; //this.state.filters;
     filters.push({ key: 'createdBy', value: text });
     this.setState({
       filters: filters
@@ -195,92 +196,92 @@ class ProductFilter extends React.Component {
           </TouchableOpacity>
           <Text onPress={() => { this.setState({ filters: [] }) }} style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20, top: 20 }]}>Clear Filter</Text>
         </View>
-        <View style={{width: width - 20,alignSelf:'center',backgroundColor:'#fff',borderRadius:10,padding:10}}>
-        <View style={{ width: width - 20, backgroundColor: '#fff', paddingVertical: 10, marginTop: 20 }}>
-          <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 5, flexDirection: 'row', position: 'relative' }}>
-            <TextInput onChangeText={text => this.onQuantityText(text)}
-              label="Quantity"
-              style={{ backgroundColor: 'transparent', }}
-              width={width - 50}
-              alignSelf={'center'}
-              color={'#000'}
-            />
-            <View style={{ position: 'absolute', right: 10, bottom: 10 }}>
+        <View style={{ width: width - 20, alignSelf: 'center', backgroundColor: '#fff', borderRadius: 10, padding: 10 }}>
+          <View style={{ width: width - 20, backgroundColor: '#fff', paddingVertical: 10, marginTop: 20 }}>
+            <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 5, flexDirection: 'row', position: 'relative' }}>
+              <TextInput onChangeText={text => this.onQuantityText(text)}
+                label="Quantity"
+                style={{ backgroundColor: 'transparent', }}
+                width={width - 50}
+                alignSelf={'center'}
+                color={'#000'}
+              />
+              <View style={{ position: 'absolute', right: 10, bottom: 10 }}>
 
+              </View>
             </View>
-          </View>
             {this.state.createdby_arr.length < 1 ? null :
               <DropDownPicker
                 items={this.state.createdby_arr}
                 placeholder="Created By"
-                containerStyle={{ height: 50, width: width-50,}}
-                style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5,marginBottom:10,alignSelf:'center' }}
+                containerStyle={{ height: 50, width: width - 30, }}
+                style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                 itemStyle={{
                   justifyContent: 'flex-start',
-             }}
-                dropDownStyle={{height:80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1,  }}
+                }}
+                dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                 labelStyle={{ color: '#A9A9A9' }}
                 onChangeItem={item => this.onCreatedByText(item.value)}
-              /> 
-              }
-              {this.state.categoryarr.length < 1 ? null :
+              />
+            }
+            {this.state.categoryarr.length < 1 ? null :
               <DropDownPicker
                 items={this.state.categoryarr}
                 placeholder="Catagory"
-                containerStyle={{ height: 50, width: width-50,}}
-                style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5,alignSelf:'center' }}
+                containerStyle={{ height: 50, width: width - 30, }}
+                style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                 itemStyle={{
                   justifyContent: 'flex-start',
-             }}
-                dropDownStyle={{height:80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1,  }}
+                }}
+                dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                 labelStyle={{ color: '#A9A9A9' }}
                 onChangeItem={item => this.onCategoryText(item.value)}
               />}
 
-   
 
-        </View>
-        <View style={[{ flexDirection: 'row', zIndex: -0.999 }]}>
-          <View style={[{ flex: 1, paddingVertical: 10 }]}>
-            <Text style={{ color: '#929497', fontWeight: 'bold' }}>Created Date</Text>
-            <TouchableOpacity>
-              <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginRight: 10, padding: 10, marginVertical: 10 }}>
-                <Image
-                  source={require('../images/calenderIcon.png')}
-                />
-                <Text style={{ marginLeft: 10, color: '#aaa' }}>DD-MM-YY</Text>
-              </View>
-              <View style={{ position: 'absolute', right: 20, bottom: 10 }}>
-                <Icon
-                  size={30}
 
-                  name="caret-down"
-                  color={'#707070'}
-                />
-              </View>
-            </TouchableOpacity>
           </View>
-          <View style={[{ flex: 1, paddingVertical: 10 }]}>
-            <Text style={{ color: '#929497', fontWeight: 'bold', marginLeft: 10 }}>Updated Date</Text>
-            <TouchableOpacity>
+          <View style={[{ flexDirection: 'row', zIndex: -0.999 }]}>
+            <View style={[{ flex: 1, paddingVertical: 10 }]}>
+              <Text style={{ color: '#929497', fontWeight: 'bold' }}>Created Date</Text>
+              <TouchableOpacity>
+                <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginRight: 10, padding: 10, marginVertical: 10 }}>
+                  <Image
+                    source={require('../images/calenderIcon.png')}
+                  />
+                  <Text style={{ marginLeft: 10, color: '#aaa' }}>DD-MM-YY</Text>
+                </View>
+                <View style={{ position: 'absolute', right: 20, bottom: 10 }}>
+                  <Icon
+                    size={30}
 
-              <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginLeft: 10, padding: 10, marginVertical: 10 }}>
-                <Image
-                  source={require('../images/calenderIcon.png')}
-                />
-                <Text style={{ marginLeft: 10, color: '#aaa' }}>DD-MM-YY</Text>
-              </View>
-              <View style={{ position: 'absolute', right: 20, bottom: 10 }}>
-                <Icon
-                  size={30}
+                    name="caret-down"
+                    color={'#707070'}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
+            <View style={[{ flex: 1, paddingVertical: 10 }]}>
+              <Text style={{ color: '#929497', fontWeight: 'bold', marginLeft: 10 }}>Updated Date</Text>
+              <TouchableOpacity>
 
-                  name="caret-down"
-                  color={'#707070'}
-                />
-              </View>
-            </TouchableOpacity>
+                <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginLeft: 10, padding: 10, marginVertical: 10 }}>
+                  <Image
+                    source={require('../images/calenderIcon.png')}
+                  />
+                  <Text style={{ marginLeft: 10, color: '#aaa' }}>DD-MM-YY</Text>
+                </View>
+                <View style={{ position: 'absolute', right: 20, bottom: 10 }}>
+                  <Icon
+                    size={30}
+
+                    name="caret-down"
+                    color={'#707070'}
+                  />
+                </View>
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
         </View>
         <Text style={[{ color: '#929497', fontWeight: 'bold', fontSize: 20, marginVertical: 10 }]}>Status</Text>
         <View>
