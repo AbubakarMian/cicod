@@ -34,7 +34,7 @@ class Products extends React.Component {
     }
     async componentDidMount() {
         
-        await this.getCategoryList() 
+        // await this.getCategoryList() 
 
         console.log('this.props.route',this.props.route);
         if(this.props.route==undefined || this.props.route.params==undefined || this.props.route.params.seller_id==undefined
@@ -46,34 +46,19 @@ class Products extends React.Component {
             console.log('URL @@@@@@@@@@@@@@@@@@@', url)
             await this.getData(url);
         } 
-        // else {
-        //     console.log('URL  els e @@@@@@@@@@@@@@@@@@@', Constants.productslist)
-        //     this.getData(Constants.productslist);
-        // }
-        
-        return;
-        console.log('this.props.params', this.props.route);
-        if (this.props.params != undefined) {
-            let filters = this.props.route.params.filters;
-            let filter = '?';
-            for (let i = 0; i < filters.length; i++) {
-                filter = filter + filters[i].key + '=' + filters[i].value;
-                if (i != filters.length - 1) {
-                    filter = filter + '&';
-                }
-            }
-            this.getData(Constants.productslist + filter);
-        }
-
+        const that = this;
+        setTimeout(function(){ 
+            that.getCategoryList()}, 700);
     }
    async componentWillReceiveProps() {
 
+         console.log('this.props. componentWillReceiveProps');
         if( this.props.route == null ||  this.props.route.params == null ||  this.props.route.params.filters == null){
             return;
         }
         
        
-        console.log('this.props.route', this.props.route.params.filters);
+       
         // console.log('this.props.route',this.props.route.params);
         // this.getData(Constants.productslist);
         let filters = this.props.route.params.filters;
@@ -97,14 +82,14 @@ class Products extends React.Component {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                Authorization: token,
+                Authorization: this.props.user.access_token,
             },
         };
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log('responseJson.message', responseJson);
-                console.log('responseJson.postData', postData);
+                // console.log('responseJson.message', responseJson);
+                // console.log('responseJson.postData', postData);
                 this.setState({
                     spinner: false,
 
@@ -141,10 +126,13 @@ class Products extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
+       
         fetch(Constants.productcategorylist, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({ spinner: false });
+                console.log(' category body ', postData);
+                console.log('URLLLLLLLLLLLLLLLLLLLLLLL', Constants.productcategorylist);
                 console.log('responseJson responseJson', responseJson);
                 if (responseJson.status === 'success') {
 
@@ -167,11 +155,13 @@ class Products extends React.Component {
 
     }
 
-    onCategoryText(text){
-
-        this.setState({
-            search_product:text
-        })
+    onCategoryText(category_id){
+        console.log(' category ID search !!!!!!!!!!!!!!!@@@@@@@@@@@@@@',category_id)
+        let url = Constants.productslist+'?category_id='+category_id ;
+        this.getData(url);
+        // this.setState({
+        //     search_product:text
+        // })
     }
 
     unauthorizedLogout() {
@@ -205,7 +195,7 @@ class Products extends React.Component {
                             <Text style={{ fontSize: 12, color: '#B1272C', marginRight: 10 }}>View Product Category</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate('CreateProduct')}
+                            onPress={() => this.props.navigation.navigate('CreateProduct',{action:'create'})}
                         >
                             <Image
                                 source={require('../images/products/circlePlus.png')}
