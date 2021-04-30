@@ -59,6 +59,14 @@ export default StyleSheet.create({
         left:10,
         
     },
+    inaciveView:{
+        position:'absolute',
+        backgroundColor:'#FFF4F4',
+        paddingHorizontal:10,
+        borderRadius:100,
+        left:10,
+        
+    },
     settingIcon:{
         position:'absolute',
         right:10,
@@ -119,10 +127,12 @@ export default StyleSheet.create({
         paddingHorizontal: 30,
         paddingTop: 20,
         flexDirection: 'row',
-        paddingBottom: 50,
+        paddingBottom: 20,
         alignSelf: 'baseline',
         position: 'absolute',
-        bottom:10
+        bottom:0,
+        flexDirection:'column',
+        justifyContent:'center'
        
     },
     banImage: {
