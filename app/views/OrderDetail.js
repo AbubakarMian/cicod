@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, TouchableOpacity, Dimensions, Touchable, ScrollView,Alert } from 'react-native';
+import { View, Image, TouchableOpacity, Dimensions,FlatList, Touchable, ScrollView,Alert } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 import styles from '../css/OrderDetailCss';
 import fontStyles from '../css/FontCss'
@@ -61,7 +61,7 @@ class OrderDetail extends React.Component {
                 this.setState({
                     Spinner: false,
                 });
-                console.log('data data data res res res ', responseJson.message)
+                console.log('data data data res res res ', responseJson.data)
                 if (responseJson.status === 'success') {
                     if (responseJson.message == "Order not found") {
                         this.props.navigation.goBack();
@@ -152,7 +152,7 @@ class OrderDetail extends React.Component {
                         <View style={[{alignItems:'center'}, styles.headingRow]}>
                             <Icon name="arrow-left" size={25} color="#929497" />
                             {/* <Text style={[{color:'#2F2E7C',fontWeight:'700',marginLeft:10,}fontStyles.normal15]}>ORDER DETAIL</Text> */}
-                            <Text style={[{color:'#2F2E7C',fontWeight:'700',marginLeft:10,},fontStyles.normal15]}>ORDER DETAIL</Text>
+                            <Text style={[{color:'#2F2E7C',fontWeight:'700',marginLeft:10,},fontStyles.normal15]}>ORDER DETAILS</Text>
                         </View>
                     </TouchableOpacity>
                     <View style={[{}, styles.textInputView]}>
@@ -279,7 +279,7 @@ class OrderDetail extends React.Component {
                                 <Text style={[{}, styles.detailColumn1text]}>Delivery Address</Text>
                             </View>
                             <View style={[{}, styles.detailColumn2]}>
-                                <Text style={[{}, styles.detailColumn2text]}>Delivery Address</Text>
+                                <Text style={[{}, styles.detailColumn2text]}>{this.state.data.delivery_address ?? '--'}</Text>
                             </View>
                         </View>
                         <View style={{}, styles.detailRow}>
@@ -301,35 +301,39 @@ class OrderDetail extends React.Component {
                                 <Text style={[{ fontWeight: 'bold' }, styles.detailInvoiceDarkGraytext]}>PCIN00000915</Text>
                             </View>
                         </View>
-                        <View style={{}, styles.invoiceRow}>
-                            <View style={{ flexDirection: 'column', width: width - 50 }}>
-                                <Text style={[{}, styles.detailInvoiceLable]}>Pure ORANGE JUICE 12PACK</Text>
-                                <Text style={{ color: '#929497', fontSize: 12 }}>LAGOS- Palms</Text>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>Unit Price: </Text>
-                                    <Text style={{ fontSize: 13, color: '#929497', marginRight: 20 }}>N100,000 </Text>
-                                    <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>QTY: </Text>
-                                    <Text style={{ fontSize: 13, color: '#929497', marginRight: width / 4 }}>5 </Text>
-                                    <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end' }}>N500,000 </Text>
+                        <FlatList
+                        data={this.state.item}
+                        ItemSeparatorComponent={
+                            Platform.OS !== 'android' &&
+                            (({ highlighted }) => (
+                                <View
+                                    style={[
+                                        style.separator,
+                                        highlighted && { marginLeft: 0 }
+                                    ]}
+                                />
+                            ))
+                        }
+                        renderItem={({ item, index, separators }) => (
+                            <View style={{}, styles.invoiceRow}>
+                                <View style={{ flexDirection: 'column', width: width - 50 }}>
+                                    <Text style={[{}, styles.detailInvoiceLable]}>{item.name}</Text>
+                                    {/* <Text style={{ color: '#929497', fontSize: 12 }}>LAGOS- Palms</Text> */}
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>Unit Price: </Text>
+                                        <Text style={{ fontSize: 13, color: '#929497', marginRight: 20 }}>{item.price} </Text>
+                                        <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>QTY: </Text>
+                                        <Text style={{ fontSize: 13, color: '#929497', marginRight: width / 4 }}>{item.quantity} </Text>
+                                        <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end' }}>N500,000 </Text>
+                                    </View>
                                 </View>
                             </View>
-                        </View>
-                        <View style={{}, styles.invoiceRow}>
-                            <View style={{ flexDirection: 'column', width: width - 50 }}>
-                                <Text style={[{}, styles.detailInvoiceLable]}>APPLE BUST FRUTTA 250ML</Text>
-                                <Text style={{ color: '#929497', fontSize: 12 }}>LAGOS- Palms</Text>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>Unit Price: </Text>
-                                    <Text style={{ fontSize: 13, color: '#929497', marginRight: 20 }}>N50,000 </Text>
-                                    <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>QTY: </Text>
-                                    <Text style={{ fontSize: 13, color: '#929497', marginRight: width / 4 }}>5 </Text>
-                                    <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end' }}>N250,000 </Text>
-                                </View>
-                            </View>
-                        </View>
+
+                        )}
+                       />
                         <View style={{ alignSelf: 'flex-end', marginRight: 20, marginVertical: 20, flexDirection: 'row' }}>
                             <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>Total:  </Text>
-                            <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>N750,000</Text>
+                            <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>N{this.state.total_amount}</Text>
                         </View>
 
                     </View>

@@ -20,9 +20,9 @@ class Login extends React.Component {
         super(props);
         this.state = {
             Spinner: false,
-            tenantId: 'ndanitv',//sandbox
-            username: 'ndanitv@sharklasers.com',//cicodsandbox@yopmail.com
-            password: 'Ndanitv@123',//Sandbox@123
+            tenantId: 'ndanitv',//sandbox , ndanitv
+            username: 'ndanitv@sharklasers.com',//cicodsandbox@yopmail.com ,ndanitv@sharklasers.com
+            password: 'Ndanitv@123',//Sandbox@123 ,Ndanitv@123
             isChecked: false,
             hide_password: true,
             domain_text_color:'black',
@@ -78,17 +78,17 @@ class Login extends React.Component {
                 AsyncStorage.setItem('remember_credentials','false');
                 AsyncStorage.removeItem('user_credentials');
             }
-            this.props.setUser({
+            // this.props.setUser({
 
-                firstname: "sandbox last", //responseJson.user.firstname,
-                lastname: "sandbox last", //responseJson.user.lastname,
-                email: "cicodsandbox@yopmail.com",//responsejson.user.email,
-                phone: "123314324",//responseJson.user.phone,
-                access_token: "Bearer TX3IxCClw0YxCE8ImQB0",  //+ responseJson.token
-            });
-            this.setState({ Spinner: false })
-            this.props.navigation.navigate('Home')
-            return;
+            //     firstname: "sandbox last", //responseJson.user.firstname,
+            //     lastname: "sandbox last", //responseJson.user.lastname,
+            //     email: "cicodsandbox@yopmail.com",//responsejson.user.email,
+            //     phone: "123314324",//responseJson.user.phone,
+            //     access_token: "Bearer TX3IxCClw0YxCE8ImQB0",  //+ responseJson.token
+            // });
+            // this.setState({ Spinner: false })
+            // this.props.navigation.navigate('Home')
+            // return;
             this.setState({ Spinner: true })
             let postData = {
                 method: 'POST',
@@ -133,6 +133,7 @@ class Login extends React.Component {
                 }
                 )
                 .catch((error) => {
+                    this.setState({ Spinner: false })
                     console.log("Api call error", error);
                     // Alert.alert(error.message);
                 });
