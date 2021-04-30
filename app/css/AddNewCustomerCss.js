@@ -33,10 +33,11 @@ export default StyleSheet.create({
     },
     mainFormView:{
         backgroundColor:'#fff',
+        borderRadius:5,
         width:width-20,
         alignSelf:'center',
         paddingVertical:10,
-        paddingHorizontal:5,
+        paddingHorizontal:15,
     },
     formRow:{
         flexDirection:'row'

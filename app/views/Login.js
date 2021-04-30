@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Image, Dimensions, TouchableOpacity, ScrollView ,Alert} from 'react-native';
 // import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, Touchable, ScrollView, Alert } from 'react-native';
 import styles from '../css/LoginCss';
 import fontStyles from '../css/FontCss'
@@ -9,7 +9,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import { Constants } from '../views/Constant';
-import { Text, TextInput, Alert,Modal } from 'react-native-paper';
+import { Text, TextInput,Modal } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -20,9 +20,9 @@ class Login extends React.Component {
         super(props);
         this.state = {
             Spinner: false,
-            tenantId: 'ndanitv',//sandbox , ndanitv
-            username: 'ndanitv@sharklasers.com',//cicodsandbox@yopmail.com ,ndanitv@sharklasers.com
-            password: 'Ndanitv@123',//Sandbox@123 ,Ndanitv@123
+            tenantId: '',// ndanitv ,sandbox
+            username: '',//ndanitv@sharklasers.com ,cicodsandbox@yopmail.com
+            password: '',//Ndanitv@123 ,Sandbox@123
             isChecked: false,
             hide_password: true,
             domain_text_color:'black',

@@ -248,14 +248,15 @@ class AddProduct extends React.Component {
                                 <DropDownPicker
                                     items={this.state.categoryarr}
                                     placeholder="Catagory"
-                                    style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, zIndex: 9999999 }}
-                                    itemStyle={{
-                                        justifyContent: 'flex-start', zIndex: 0.99
-                                    }}
-                                    labelStyle={{ color: '#A9A9A9' }}
-                                    containerStyle={{ height: 50, width: width - 20 ,alignSelf:'center' }}
-                                    dropDownStyle={{ zIndex: 99999999, height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
-                                    labelStyle={{ color: '#A9A9A9' }}
+                                            containerStyle={{ height: 50, width: width - 20,}}
+                                            style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
+                                            itemStyle={{
+                                                 justifyContent: 'flex-start',
+                                            }}
+                                       
+                                            dropDownStyle={{height:80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1,  }}
+                                            labelStyle={{ color: '#A9A9A9' }}
+                                            onChangeItem={item =>this.onSelectCountry(item.value)}  //this.onSelectCountry(item.value)}
                                     onChangeItem={item => this.onCategoryText(item.value)}
                                 />}
                         </View>
@@ -319,7 +320,7 @@ class AddProduct extends React.Component {
                                                     </View>
                                                     <TouchableOpacity
                                                         onPress={() => this.addProduct()}
-                                                        style={{ flexDirection: 'row', backgroundColor: '#B1272C', position: 'absolute', right: 2, paddingHorizontal: 10, borderRadius: 100, paddingVertical: 2, width: width / 6, alignItems: 'center' }}
+                                                        style={{ flexDirection: 'row', backgroundColor: '#B1272C', position: 'absolute', right: 10, paddingHorizontal: 10, borderRadius: 100, paddingVertical: 2, width: width / 6, alignItems: 'center' }}
                                                     >
                                                         <Icon name="plus-circle" color={'#fff'} />
                                                         <Text style={{ color: '#fff', marginLeft: 5 }}>Add</Text>

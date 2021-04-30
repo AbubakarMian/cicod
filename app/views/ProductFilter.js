@@ -32,8 +32,11 @@ class ProductFilter extends React.Component {
   }
   async componentDidMount() {
 
-    await this.getCategoryList()
-    await this.getProductList(Constants.productslist);
+    await this.getCategoryList();
+    const that = this;
+    setTimeout(function(){ 
+      that.getProductList(Constants.productslist)}, 700);
+    // await this.getProductList(Constants.productslist);
     return
     this.setState({ spinner: true })
     let postData = {
@@ -118,6 +121,7 @@ class ProductFilter extends React.Component {
       .then(response => response.json())
       .then(async responseJson => {
         this.setState({ spinner: false });
+        console.log('jhgj gtjhgfhgfghfghfghfghfhgf', responseJson)
         if (responseJson.status === 'success') {
 
           let res = responseJson.data;
@@ -224,7 +228,7 @@ class ProductFilter extends React.Component {
                 onChangeItem={item => this.onCreatedByText(item.value)}
               />
             }
-            {/* {this.state.categoryarr.length < 1 ? null :
+            {this.state.categoryarr.length < 1 ? null :
               <DropDownPicker
                 items={this.state.categoryarr}
                 placeholder="Catagory"
@@ -236,7 +240,7 @@ class ProductFilter extends React.Component {
                 dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                 labelStyle={{ color: '#A9A9A9' }}
                 onChangeItem={item => this.onCategoryText(item.value)}
-              />} */}
+              />}
 
 
 
@@ -245,13 +249,14 @@ class ProductFilter extends React.Component {
             <View style={[{ flex: 1, paddingVertical: 10 }]}>
               <Text style={{ color: '#929497', fontWeight: 'bold' }}>Created Date</Text>
               <TouchableOpacity>
-                <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginRight: 10, padding: 10, marginVertical: 10 }}>
+                <View style={{ backgroundColor: '#fff', flexDirection: 'row',alignItems:'center',justifyContent:'center', marginRight: 10, padding: 10, marginVertical: 10 }}>
                   <Image
+                    style={{height:20,width:20}}
                     source={require('../images/calenderIcon.png')}
                   />
                   <Text style={{ marginLeft: 10, color: '#aaa' }}>DD-MM-YY</Text>
                 </View>
-                <View style={{ position: 'absolute', right: 20, bottom: 10 }}>
+                <View style={{ position: 'absolute', right: 0, bottom: 20 }}>
                   <Icon
                     size={30}
 
@@ -267,11 +272,12 @@ class ProductFilter extends React.Component {
 
                 <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginLeft: 10, padding: 10, marginVertical: 10 }}>
                   <Image
+                    style={{height:20,width:20}}
                     source={require('../images/calenderIcon.png')}
                   />
                   <Text style={{ marginLeft: 10, color: '#aaa' }}>DD-MM-YY</Text>
                 </View>
-                <View style={{ position: 'absolute', right: 20, bottom: 10 }}>
+                <View style={{ position: 'absolute', right: 0, bottom: 20 }}>
                   <Icon
                     size={30}
 

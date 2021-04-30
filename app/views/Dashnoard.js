@@ -227,12 +227,12 @@ class Dashnoard extends React.Component {
         return (
             <View style={{ paddingBottom: 50, width: width, alignItems: 'center', position: 'relative', backgroundColor: '#F0F0F0', }}>
                 <Header navigation={this.props.navigation} />
-                <Spinner
+                {/* <Spinner
                     visible={this.state.spinner}
                     textContent={'Please Wait...'}
                     textStyle={{ color: '#fff' }}
                     color={'#fff'}
-                />
+                /> */}
                 <DateTimePickerModal
           isVisible={this.state.isDatePickerVisible}
           mode="date"
@@ -253,6 +253,7 @@ class Dashnoard extends React.Component {
                                 >
                                     <View style={{ backgroundColor: '#fff', flexDirection: 'row',justifyContent:'center',alignItems:'center',alignSelf:'flex-end', paddingVertical: 5, paddingHorizontal: 10, borderRadius: 5 }}>
                                         <Image
+                                            style={{height:30,width:30}}
                                             source={require('../images/dashboard/calenderIcon.png')}
                                         />
                                         <Text style={[{marginHorizontal:50}, styles.calenderText]}>{this.state.date == '' ? 'Today' : this.state.date}</Text>
@@ -267,6 +268,7 @@ class Dashnoard extends React.Component {
                             <View style={[{}, styles.cardView]}>
                                 <View style={[{ backgroundColor: '#FFE5E5' }, styles.card]}>
                                     <Image
+                                        style={{height:40,width:40}}
                                         source={require('../images/dashboard/redbage.png')}
                                     />
                                     <Text style={{ color: '#B1272C', fontSize: 10, fontFamily: 'Open Sans' }}>Total Orders</Text>
@@ -277,6 +279,7 @@ class Dashnoard extends React.Component {
                             <View style={[{}, styles.cardView]}>
                                 <View style={[{}, styles.card]}>
                                     <Image
+                                    style={{height:40,width:40}}
                                         source={require('../images/dashboard/greenbage.png')}
                                     />
                                     <Text style={{ color: '#B1272C', fontSize: 10, fontFamily: 'Open Sans' }}>Paid Orders</Text>
@@ -289,6 +292,7 @@ class Dashnoard extends React.Component {
                             <View style={[{}, styles.cardView]}>
                                 <View style={[{ backgroundColor: '#FFE5E5' }, styles.card]}>
                                     <Image
+                                    style={{height:40,width:40}}
                                         source={require('../images/dashboard/bluebage.png')}
                                     />
                                     <Text style={{ color: '#2F2E7C', fontSize: 10, fontFamily: 'Open Sans' }}>Pending Orders</Text>
@@ -299,6 +303,7 @@ class Dashnoard extends React.Component {
                             <View style={[{}, styles.cardView]}>
                                 <View style={[{}, styles.card]}>
                                     <Image
+                                    style={{height:40,width:40}}
                                         source={require('../images/dashboard/yellowbage.png')}
                                     />
                                     <Text style={{ color: '#FDB72B', fontSize: 10, fontFamily: 'Open Sans' }}>Cancelled Orders</Text>
@@ -382,6 +387,7 @@ class Dashnoard extends React.Component {
                             </View>
                             <View style={[{}, styles.bannerImagetView]}>
                                 <Image
+                                    style={{height:60,width:60}}
                                     source={require('../images/dashboard/graph.png')}
                                 />
                             </View>

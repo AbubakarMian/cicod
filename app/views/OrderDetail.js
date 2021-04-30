@@ -294,6 +294,7 @@ class OrderDetail extends React.Component {
                     <View style={[{}, styles.detailMainView]}>
                         <View style={[{ alignSelf: 'flex-start', borderBottomWidth: 0.25, paddingBottom: 10, width: width - 20, paddingHorizontal: 10, marginVertical: 10, flexDirection: 'row' }]}>
                             <Image
+                                style={{height:40,width:30}}
                                 source={require('../images/Order/invoice.png')}
                             />
                             <View style={{ marginLeft: 15, flexDirection: 'column' }}>
