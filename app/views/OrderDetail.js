@@ -330,13 +330,11 @@ class OrderDetail extends React.Component {
                                 </View>
                             </View>
 
-
                         )}
                        />
                         <View style={{ alignSelf: 'flex-end', marginRight: 20, marginVertical: 20, flexDirection: 'row' }}>
                             <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>Total:  </Text>
                             <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>N{this.state.total_amount}</Text>
-
                         </View>
 
                     </View>

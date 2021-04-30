@@ -20,11 +20,9 @@ class Login extends React.Component {
         super(props);
         this.state = {
             Spinner: false,
-
-            tenantId: 'ndanitv',//sandbox , ndanitv
-            username: 'ndanitv@sharklasers.com',//cicodsandbox@yopmail.com ,ndanitv@sharklasers.com
-            password: 'Ndanitv@123',//Sandbox@123 ,Ndanitv@123
-
+            tenantId: '',// ndanitv ,sandbox
+            username: '',//ndanitv@sharklasers.com ,cicodsandbox@yopmail.com
+            password: '',//Ndanitv@123 ,Sandbox@123
             isChecked: false,
             hide_password: true,
             domain_text_color:'black',
@@ -126,7 +124,7 @@ class Login extends React.Component {
                     } else {
                         this.setState({ Spinner: false })
                         // this.setState({ Spinner: false })
-                        let message = responseJson.message
+                        let message = responseJson.status
                         if(message == ''){
                             message = 'Server responded with error contact admin'
                         }
