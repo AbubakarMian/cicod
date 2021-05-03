@@ -385,6 +385,7 @@ class BuyersView extends React.Component {
 
                         <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
                             <Image
+                                style={{height:20,width:20}}
                                 source={require('../images/products/searchicon.png')}
                             />
                             <TextInput
@@ -404,6 +405,7 @@ class BuyersView extends React.Component {
                         // onPress={() => this.props.navigation.navigate('ProductFilter')}
                         >
                             <Image
+                                style={{height:50,width:50}}
                                 source={require('../images/Order/settingicon.png')}
                             />
                         </TouchableOpacity>

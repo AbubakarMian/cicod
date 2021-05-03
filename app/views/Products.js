@@ -255,7 +255,7 @@ class Products extends React.Component {
 
                 </View> 
                 <View style={[{}, styles.formRowView]}>
-                    <View style={[{ position: 'relative' }, styles.formColumn]}>
+                    <View style={[{ position: 'relative', }, styles.formColumn]}>
                         <DropDownPicker
                             items={this.state.categoryarr}
                             placeholder="Product Category"
@@ -266,6 +266,7 @@ class Products extends React.Component {
                             onChangeItem={item => this.onCategoryText(item.value)}
                         />
                     </View>
+                    <View style={{borderBottomWidth:0.5,borderBottomColor:'#E6E6E6',width:width-20,alignSelf:'center',marginVertical:10}}></View>
                 </View>
 
                 <ScrollView
