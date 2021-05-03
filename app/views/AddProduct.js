@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight,Alert, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import { View, ImageBackground, ScrollView, TouchableHighlight, Alert, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
 import splashImg from '../images/splash.jpg'
 import { Text, TextInput } from 'react-native-paper';
 import styles from '../css/AddProductCss';
@@ -41,7 +41,7 @@ class AddProduct extends React.Component {
 
     getProductList() {
 
-        if(this.state.search_product == '' ){
+        if (this.state.search_product == '') {
             return;
         }
         this.setState({ spinner: true })
@@ -119,11 +119,11 @@ class AddProduct extends React.Component {
 
                     let res = responseJson.data;
                     let categoryarr = res.map((x, key) => { return { label: x.name, value: x.id } });
-                   console.log('categoryarr !!!!!!!!!!!!!!!!!!', categoryarr);
+                    console.log('categoryarr !!!!!!!!!!!!!!!!!!', categoryarr);
                     this.setState({
                         categoryarr: categoryarr,
                     });
-                }   else if(responseJson.status == 401){
+                } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 }
                 else {
@@ -139,16 +139,23 @@ class AddProduct extends React.Component {
         console.log('text !!!!!!!!!!!!!!!!!', text);
     }
 
-    addProduct() {
+    async addProduct(index) {
+        let data = this.state.data;
+        if (this.props.cart.cart.length == 0 && data[index].purchased_quantity == 0 ) {
+            Alert.alert('Error ', 'Cart is empty')
+            return;
+        } else {
 
+            await this.props.cartReducer(data[index]);
+            this.props.navigation.navigate('CreateOrder', { screen: 'active' });
 
-        this.props.navigation.navigate('CreateOrder', { screen: 'active' });
+        }
+
 
     }
     async counterFun(action, index) {
 
         let data = this.state.data;
-        console.log('fun called ');
         if (action == 'add') {
 
             let updated_purchased_quantity = data[index].purchased_quantity + 1;
@@ -157,7 +164,7 @@ class AddProduct extends React.Component {
             }
             else {
                 console.log('here in else condition !!!!!!!!!', data[index].purchased_quantity);
-                await this.props.cartReducer(data[index]);
+                // await this.props.cartReducer(data[index]);
                 data[index].purchased_quantity = updated_purchased_quantity;
                 console.log('here in else condition !!!!!!!!! after : ', data[index].purchased_quantity);
 
@@ -248,27 +255,27 @@ class AddProduct extends React.Component {
                                 <DropDownPicker
                                     items={this.state.categoryarr}
                                     placeholder="Catagory"
-                                            containerStyle={{ height: 50, width: width - 20,}}
-                                            style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
-                                            itemStyle={{
-                                                 justifyContent: 'flex-start',
-                                            }}
-                                       
-                                            dropDownStyle={{height:80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1,  }}
-                                            labelStyle={{ color: '#A9A9A9' }}
-                                            onChangeItem={item =>this.onSelectCountry(item.value)}  //this.onSelectCountry(item.value)}
+                                    containerStyle={{ height: 50, width: width - 20, }}
+                                    style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
+                                    itemStyle={{
+                                        justifyContent: 'flex-start',
+                                    }}
+
+                                    dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
+                                    labelStyle={{ color: '#A9A9A9' }}
+                                    onChangeItem={item => this.onSelectCountry(item.value)}  //this.onSelectCountry(item.value)}
                                     onChangeItem={item => this.onCategoryText(item.value)}
                                 />}
                         </View>
 
-                        <View style={{borderBottomWidth:0.5,borderBottomColor:'#E6E6E6',width:width-20,alignSelf:'center',marginVertical:10}}></View>
-                        <View style={[{zIndex:-0.9999}, styles.OrderDetailContainer]}>
-                           
+                        <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#E6E6E6', width: width - 20, alignSelf: 'center', marginVertical: 10 }}></View>
+                        <View style={[{ zIndex: -0.9999 }, styles.OrderDetailContainer]}>
+
                             <View style={[{}, styles.OrderDetailHeadingRow]}>
                                 <Text style={[{}, styles.OrderDetailHeadingRowText]}>Product Catalog</Text>
                                 <Text style={[{}, styles.OrderDetailNotificationText]}>{this.state.total_add_order}</Text>
                             </View>
-                          
+
                             {(this.state.data.length != 0) ?
                                 <FlatList
                                     data={this.state.data}
@@ -319,7 +326,7 @@ class AddProduct extends React.Component {
                                                         </TouchableOpacity>
                                                     </View>
                                                     <TouchableOpacity
-                                                        onPress={() => this.addProduct()}
+                                                        onPress={() => this.addProduct(index)}
                                                         style={{ flexDirection: 'row', backgroundColor: '#B1272C', position: 'absolute', right: 10, paddingHorizontal: 10, borderRadius: 100, paddingVertical: 2, width: width / 6, alignItems: 'center' }}
                                                     >
                                                         <Icon name="plus-circle" color={'#fff'} />
