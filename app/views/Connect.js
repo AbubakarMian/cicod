@@ -95,7 +95,7 @@ class Connect extends React.Component {
                 }
                 else {
                     let message = responseJson.message
-                    Alert.alert('Error 1234', message)
+                    Alert.alert('Error', message)
                 }
 
             })

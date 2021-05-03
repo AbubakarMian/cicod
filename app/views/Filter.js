@@ -79,7 +79,7 @@ class Filter extends React.Component {
   }
 
   onCategoryText(text) {
-    let filters = 'Freezer'; //this.state.filters;
+    let filters = this.state.filters; //this.state.filters;
     filters.push({ key: 'category', value: text });
     this.setState({
       filters: filters

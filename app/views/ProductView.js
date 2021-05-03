@@ -102,8 +102,8 @@ class ProductView extends React.Component {
                 });
                 console.log('response json suspend product  !!!!!!!!!!!!!!!!!!', responseJson);
                 if (responseJson.status === "success" || responseJson.success === true) {
-                    Alert.alert('Message', responseJson.message);
-                    this.props.navigation.goBack();
+                    Alert.alert('Message 1233', responseJson.message);
+                    this.props.navigation.navigate('Products');
                 } else {
                     let message = responseJson.message;
                     Alert.alert('Error', message)

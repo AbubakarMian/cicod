@@ -149,7 +149,7 @@ class ProductCategory extends React.Component {
 
                     <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
                         <Image
-                            style={{height:30,width:30}}
+                            style={{ height: 30, width: 30 }}
                             source={require('../images/products/searchicon.png')}
                         />
 
@@ -171,7 +171,7 @@ class ProductCategory extends React.Component {
                         onPress={() => this.props.navigation.navigate('CategoryFilter', { screen: 'ProductCategory' })}
                     >
                         <Image
-                            style={{height:50,width:50}}
+                            style={{ height: 50, width: 50 }}
                             source={require('../images/Order/settingicon.png')}
                         />
                     </TouchableOpacity>
@@ -264,6 +264,20 @@ class ProductCategory extends React.Component {
                 />
             </View>
         )
+    }
+
+    async componentWillReceiveProps() {
+            console.log(this.props.user.access_token)
+        let filters = this.props.route.params.filters;
+        let filter = '?';
+        for (let i = 0; i < filters.length; i++) {
+            filter = filter + filters[i].key + '=' + filters[i].value;
+            if (i != filters.length - 1) {
+                filter = filter + '&';
+            }
+        }
+        console.log('getCategoryList url @@@@@@@@@@@@!!!!!!!!!!!!',Constants.productcategorylist + filter )
+        await this.getCategoryList(Constants.productcategorylist + filter);
     }
 }
 function mapStateToProps(state) {
