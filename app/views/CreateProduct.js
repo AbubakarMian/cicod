@@ -187,6 +187,10 @@ class CreateProduct extends React.Component {
             this.setState({ spinner: false })
             Alert.alert("Warning", "Product name and Price are required")
             return;
+        }else if(this.state.category_id == 0){
+            this.setState({ spinner: false })
+            Alert.alert("Warning", "Category is required")
+            return; 
         }
         else {
 
