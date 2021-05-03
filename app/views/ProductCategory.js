@@ -140,6 +140,7 @@ class ProductCategory extends React.Component {
                         <Text style={[{}, styles.backHeadingText]}>PRODUCT CATEGORY</Text>
                     </View>
                     <TouchableOpacity
+                        onPress={() => this.props.navigation.navigate('CreateProductCategory', { screen: 'create', item:{} })}
                         style={[{}, styles.plusTouch]}
                     >
                         <Image source={require('../images/circlePlus.png')} />
@@ -231,8 +232,7 @@ class ProductCategory extends React.Component {
                                     </MenuTrigger>
                                     <MenuOptions>
                                         <MenuOption
-                                            onSelect={() => Alert.alert('Message', 'Work In Progress .')}
-                                        // onSelect={() => this.props.navigation.navigate('UpdateProduct', { buyer_detail: item })}
+                                            onSelect={() => this.props.navigation.navigate('CreateProductCategory', { screen: 'update',items:item })}
                                         >
                                             <View style={{ flexDirection: 'row' }}>
                                                 <Image
@@ -267,7 +267,7 @@ class ProductCategory extends React.Component {
     }
 
     async componentWillReceiveProps() {
-            console.log(this.props.user.access_token)
+        console.log(this.props.user.access_token)
         let filters = this.props.route.params.filters;
         let filter = '?';
         for (let i = 0; i < filters.length; i++) {
@@ -276,7 +276,7 @@ class ProductCategory extends React.Component {
                 filter = filter + '&';
             }
         }
-        console.log('getCategoryList url @@@@@@@@@@@@!!!!!!!!!!!!',Constants.productcategorylist + filter )
+        console.log('getCategoryList url @@@@@@@@@@@@!!!!!!!!!!!!', Constants.productcategorylist + filter)
         await this.getCategoryList(Constants.productcategorylist + filter);
     }
 }
