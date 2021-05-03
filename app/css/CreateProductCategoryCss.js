@@ -33,11 +33,11 @@ export default StyleSheet.create({
     },
    mainContentView:{
        backgroundColor:'#fff',
-       borderRadius:5,
+       borderRadius:10,
        paddingBottom:20,
-       paddingHorizontal:10,
-       width:width-20,
-       marginHorizontal:10,
+       paddingHorizontal:15,
+       width:width-30,
+       marginHorizontal:15,
        alignSelf:'center'
    },
    textInputView:{
