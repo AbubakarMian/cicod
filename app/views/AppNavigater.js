@@ -47,13 +47,14 @@ import PickUpLocation from './PickUpLocation';
 import AddDiliveryAddress from './AddDiliveryAddress';
 import AddSuppliers from './AddSuppliers';
 import PaymentWeb from './PaymentWeb';
+import CreateProductCategory from './CreateProductCategory';
 const Stack = createStackNavigator();
 
 export default class AppNavigater extends React.Component {
   render() {
     return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Dashnoard">
+        <Stack.Navigator initialRouteName="CreateProductCategory">
           <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
 
@@ -115,8 +116,8 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="PickUpLocation" component={PickUpLocation} options={{ headerShown: false }} />
           <Stack.Screen name="AddDiliveryAddress" component={AddDiliveryAddress} options={{ headerShown: false }} />
           <Stack.Screen name="AddSuppliers" component={AddSuppliers} options={{ headerShown: false }} />
-
-
+          <Stack.Screen name="CreateProductCategory" component={CreateProductCategory} options={{ headerShown: false }} />
+       
         </Stack.Navigator>
       </NavigationContainer>
     );
