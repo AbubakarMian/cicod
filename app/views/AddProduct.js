@@ -236,6 +236,7 @@ class AddProduct extends React.Component {
                     <ScrollView>
                         <View style={[{}, styles.searchContainer]}>
                             <Image
+                                style={{height:20,width:20}}
                                 source={require('../images/products/searchicon.png')}
                             />
                             <TextInput
@@ -249,13 +250,13 @@ class AddProduct extends React.Component {
                             />
 
                         </View>
-                        <View style={[{}, styles.searchByCatCOntainer]}>
+                        {/* <View style={[{}, styles.searchByCatCOntainer]}> */}
 
                             {this.state.categoryarr.length < 1 ? null :
                                 <DropDownPicker
                                     items={this.state.categoryarr}
                                     placeholder="Catagory"
-                                    containerStyle={{ height: 50, width: width - 20, }}
+                                    containerStyle={{ height: 50, width: width - 20,alignSelf:'center',marginVertical:10,borderRadius:5 }}
                                     style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                                     itemStyle={{
                                         justifyContent: 'flex-start',
@@ -266,7 +267,7 @@ class AddProduct extends React.Component {
                                     onChangeItem={item => this.onSelectCountry(item.value)}  //this.onSelectCountry(item.value)}
                                     onChangeItem={item => this.onCategoryText(item.value)}
                                 />}
-                        </View>
+                        {/* </View> */}
 
                         <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#E6E6E6', width: width - 20, alignSelf: 'center', marginVertical: 10 }}></View>
                         <View style={[{ zIndex: -0.9999 }, styles.OrderDetailContainer]}>

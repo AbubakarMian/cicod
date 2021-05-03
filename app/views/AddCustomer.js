@@ -99,7 +99,8 @@ class AddCustomer extends React.Component {
 
     render() {
 
-        return (
+        return ( 
+        <ScrollView>
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
                 <Spinner
@@ -120,9 +121,10 @@ class AddCustomer extends React.Component {
                     </View>
                 </View>
                 <View>
-                    <ScrollView>
+                   
                         <View style={[{}, styles.searchContainer]}>
                             <Image
+                                style={{height:20,width:20}}
                                 source={require('../images/products/searchicon.png')}
                             />
                             <TextInput
@@ -242,9 +244,10 @@ class AddCustomer extends React.Component {
 
 
 
-                    </ScrollView>
+                    
                 </View>
             </View>
+            </ScrollView>
         )
     }
 }

@@ -65,6 +65,7 @@ export default StyleSheet.create({
     custommerDeatailContainerView:{
         width:width-20,
         alignSelf:'center',
+        borderRadius:10,marginVertical:10
     },
     custommerDtailCarView:{
         backgroundColor:'#fff',

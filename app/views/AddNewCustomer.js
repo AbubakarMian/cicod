@@ -495,6 +495,8 @@ class AddNewCustomer extends React.Component {
                                         }}
                                         isChecked={this.state.isFreeDelivery}
                                         rightText={"Enable Free Delivery"}
+                                        rightTextStyle={[{color:'#4E4D4D'},fontStyles.normal13]}
+                                        checkBoxColor={'#929497'}
 
                                     />
                                 </View>
@@ -509,12 +511,14 @@ class AddNewCustomer extends React.Component {
                                         size={2}
                                         isChecked={this.state.isFreeVAT}
                                         rightText={"Enable VAT Exemption"}
+                                        rightTextStyle={[{color:'#4E4D4D'},fontStyles.normal13]}
+                                        checkBoxColor={'#929497'}
 
                                     />
                                 </View>
                             </View>
                         </View>
-                        <View style={[{ marginTop: 10 }, styles.mainFormView]}>
+                        <View style={[{ marginTop: 10,marginBottom:20 }, styles.mainFormView]}>
                             <Text style={{ color: '#929497', fontWeight: 'bold' }}>Delivery Address</Text>
 
                             <View>
@@ -528,6 +532,8 @@ class AddNewCustomer extends React.Component {
                                     size={2}
                                     isChecked={this.state.is_same_as_customer}
                                     rightText={"Same as customer’s address"}
+                                    rightTextStyle={[{color:'#4E4D4D'},fontStyles.normal13]}
+                                        checkBoxColor={'#929497'}
 
                                 />
                             </View>
@@ -569,7 +575,7 @@ class AddNewCustomer extends React.Component {
                                                     }}
                                                     placeholder="Country *"
                                                     labelStyle={{ color: '#A9A9A9' }}
-                                                    containerStyle={{ height: 50, width: width - 20,alignSelf:'center' }}
+                                                    containerStyle={{ height: 50, width: width - 50,alignSelf:'center',marginVertical:10 }}
                                                     dropDownStyle={{ zIndex: 99999999, height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                                                     labelStyle={{ color: '#A9A9A9' }}
                                                     onChangeItem={item => this.onDeliverySelectCountry(item.value)}
@@ -623,6 +629,8 @@ class AddNewCustomer extends React.Component {
                                             size={2}
                                             isChecked={this.state.is_default}
                                             rightText={"Set as default"}
+                                            rightTextStyle={[{color:'#4E4D4D'},fontStyles.normal13]}
+                                            checkBoxColor={'#929497'}
 
                                         />
                                     </View>

@@ -349,7 +349,9 @@ class Connect extends React.Component {
                                     onHideUnderlay={separators.unhighlight}>
                                     <View style={[{}, styles.flatCardView]}>
                                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                            <Image source={require('../images/bage.png')} />
+                                            <Image 
+                                            style={{height:35,width:35}}
+                                            source={require('../images/bage.png')} />
                                         </View>
                                         <View style={{ flex: 5, flexDirection: 'column' }}>
                                             <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.buyer_name}</Text>
@@ -453,7 +455,9 @@ class Connect extends React.Component {
                                 onHideUnderlay={separators.unhighlight}>
                                 <View style={[{}, styles.flatCardView]}>
                                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Image source={require('../images/bage.png')} />
+                                        <Image 
+                                        style={{height:35,width:35}}
+                                        source={require('../images/bage.png')} />
                                     </View>
                                     <View style={{ flex: 5, flexDirection: 'column' }}>
                                         <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.buyer_name}</Text>
@@ -521,19 +525,19 @@ class Connect extends React.Component {
                     </View>
                     <View style={[{}, styles.tabView]}>
                         <TouchableOpacity
-                            style={{ flex: 1 }}
+                            style={{ flex: 1,backgroundColor:this.state.tabViewIndex === 1 ? '#FFF4F4' : '#fff',borderRadius:50,paddingVertical:5 }}
                             onPress={() => { this.setState({ tabViewIndex: 1 }) }}
                         >
                             <Text style={{ color: this.state.tabViewIndex === 1 ? '#B1272C' : '#4E4D4D', fontWeight: 'bold', textAlign: 'center' }}>Connect</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={{ flex: 1 }}
+                            style={{ flex: 1,backgroundColor:this.state.tabViewIndex === 2 ? '#FFF4F4' : '#fff',borderRadius:50,paddingVertical:5 }}
                             onPress={() => { this.setState({ tabViewIndex: 2 }) }}
                         >
                             <Text style={{ color: this.state.tabViewIndex === 2 ? '#B1272C' : '#4E4D4D', fontWeight: 'bold', textAlign: 'center' }}>Recieved</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={{ flex: 1 }}
+                            style={{ flex: 1,backgroundColor:this.state.tabViewIndex === 3 ? '#FFF4F4' : '#fff',borderRadius:50,paddingVertical:5 }}
                             onPress={() => { this.setState({ tabViewIndex: 3 }) }}
                         >
                             <Text style={{ color: this.state.tabViewIndex === 3 ? '#B1272C' : '#4E4D4D', textAlign: 'center' }}>Sent</Text>

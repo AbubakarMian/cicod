@@ -11,6 +11,7 @@ export default StyleSheet.create({
         width: width,
         backgroundColor: '#F0F0F0',
         flex: 1,
+        paddingBottom:50,
         flexDirection: 'column'
     },
     backHeaderRowView:{
@@ -45,6 +46,7 @@ export default StyleSheet.create({
         borderBottomWidth:1,
         position:'relative',
         width:width-20,
+        borderRadius:5
     },
     contentView:{
      justifyContent:'center',
