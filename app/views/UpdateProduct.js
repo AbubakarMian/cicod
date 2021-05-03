@@ -297,13 +297,17 @@ class UpdateProduct extends React.Component {
                     <Text style={[{}, styles.headingDescText]}>Select Product category or products you want Merchant to have access to</Text>
                 </View>
                 <View style={[{}, styles.headingBoxView]}>
-                    <Image source={require('../images/bage.png')} />
+                    <Image 
+                    style={{height:30,width:30}}
+                    source={require('../images/bage.png')} />
                     <Text style={[{}, styles.headingBoxText]}>{this.state.buyer_detail.buyer_name}</Text>
                 </View>
                 <View style={{ borderWidth: 0.5, borderColor: '#E6E6E6', marginVertical: 10, width: width - 20, alignSelf: 'center' }}></View>
                 <View style={[{}, styles.searchRowView]}>
                     <View>
-                        <Image source={require('../images/products/searchicon.png')} />
+                        <Image 
+                        style={{height:30,width:30}}
+                        source={require('../images/products/searchicon.png')} />
                     </View>
                     <View>
                         <TextInput
@@ -318,6 +322,7 @@ class UpdateProduct extends React.Component {
                         onPress={() => this.props.navigation.navigate('Filter', { screen: 'UpdateProduct' })}
                         style={[{}, styles.searchRowSettingIconView]}>
                         <Image
+                        style={{height:40,width:40}}
                             source={require('../images/Order/settingicon.png')}
                         />
                     </TouchableOpacity>
@@ -335,7 +340,7 @@ class UpdateProduct extends React.Component {
                         renderItem={({ item }) => <this.Item item={item} />}
                         renderSectionHeader={({ section: { category, isChecked } }) => (
                             <TouchableOpacity onPress={() => this.category_pressed(category)}>
-                                <Text style={[{}, styles.flatelistHeadingText]}>{category}</Text>
+                                <Text style={[{justifyContent:'center',alignItems:'center'}, styles.flatelistHeadingText]}>{category}</Text>
                                 <Icon
                                     style={[{ right: 20 }, styles.flatelistHeadingIcon]}
                                     name="check-circle"

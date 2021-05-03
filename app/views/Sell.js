@@ -144,8 +144,10 @@ export default class Sell extends React.Component {
                                         })
                                     }}
                                     isChecked={this.state.isChecked}
-                                    rightText={"Accept multiple part payment"}
-
+                                    rightText={"Accept Multiple Part Payment"}
+                                    rightTextStyle={{color:'#4E4D4D',fontSize:13,fontFamily:'Open Sans'}}
+                                    checkBoxColor={'#929497'}
+                                        
 
                                 />
                             </View>

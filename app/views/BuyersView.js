@@ -267,11 +267,13 @@ class BuyersView extends React.Component {
                     </View>
                     <View style={{ backgroundColor: '#fff' }}>
                         <View style={[{}, styles.productDetailContainerView]}>
-                            <Image source={require('../images/bage.png')} />
+                            <Image 
+                            style={{height:35,width:35}}
+                            source={require('../images/bage.png')} />
                             {(this.props.route.params.heading == 'BUYERS') ?
                                 <View>
-                                    <Text style={[{}, styles.darkGrayBoldText]}>{this.state.items.buyer_name}</Text>
-                                    <Text style={[{}, styles.lightGrayText]}>{this.state.items.buyer_id}</Text>
+                                    <Text style={[{textAlign:'center'}, styles.darkGrayBoldText]}>{this.state.items.buyer_name}</Text>
+                                    <Text style={[{textAlign:'center'}, styles.lightGrayText]}>{this.state.items.buyer_id}</Text>
                                 </View>
                                 : <View>
                                     <Text style={[{}, styles.darkGrayBoldText]}>{this.state.items.seller_name}</Text>
@@ -488,8 +490,9 @@ class BuyersView extends React.Component {
                                     <View style={[{}, styles.flatlistMainContianer]}>
                                         <View style={[{}, styles.flatlistMainRow]}>
                                             <Image
-                                                source={[{}, styles.listImage]}
-                                                source={require('../images/bage.png')} />
+                                                // source={[{}, styles.listImage]}
+                                                style={{height:35,width:35}}
+                                                source={require('../images/Order/bage.png')} />
                                             <View style={{ flexDirection: 'column' }}>
                                                 <Text style={[{}, styles.darkGrayBoldText]}>{item.cicod_order_id}</Text>
                                                 <Text style={[{}, styles.lightGrayText]}>{item.description}</Text>

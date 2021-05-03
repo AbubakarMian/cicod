@@ -312,16 +312,16 @@ class Buyers extends React.Component {
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
                                 <View style={[{}, styles.flatCardView]}>
-                                    <View style={[{ paddingLeft: 10, }, styles.cardRow]}>
+                                    <View style={[{ paddingLeft: 10,alignItems:'center' }, styles.cardRow]}>
                                         <Image
-                                            style={{ marginTop: 10 }}
+                                            style={{height:30,width:30}}
                                             source={require('../images/bage.png')}
                                         />
                                         <View style={[{}, styles.cardContentView]}>
                                             <Text style={[{}, styles.cardContentDarkText]}>{item.buyer_name}</Text>
                                             <Text style={[{}, styles.lightGrayText]}>{item.product_categories}</Text>
                                         </View>
-                                        <View style={[{}, styles.cardActionView]}>
+                                        <View style={[{alignItems:'center',justifyContent:'center'}, styles.cardActionView]}>
 
                                             <View style={[{}, styles.cardActionView]}>
                                                 <TouchableOpacity
