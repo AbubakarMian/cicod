@@ -194,6 +194,7 @@ class Connect extends React.Component {
             <View>
                 <View style={[{}, styles.contentView]}>
                     <Image
+                        style={{height:width/5,width:width/5,marginBottom:10}}
                         source={require('../images/home/connect.png')}
                     />
                     <Text style={{ width: width / 2, textAlign: 'center', fontWeight: 'bold', color: '#4E4D4D' }}>Search for Merchant you want to connect with</Text>
@@ -292,6 +293,7 @@ class Connect extends React.Component {
                 <View>
                     <View style={[{ paddingHorizontal: 10 }, styles.searchContainer]}>
                         <Image
+                            style={{height:20,width:20}}
                             source={require('../images/products/searchicon.png')}
                         />
                         <TextInput
@@ -387,9 +389,10 @@ class Connect extends React.Component {
                 <View style={[{ paddingHorizontal: 10 }, styles.searchContainer]}>
 
                     <Image
-
+                         
                         source={require('../images/connect/redsearch.png')}
-                    />
+                    /> 
+                
                     <TextInput
                         label="Search a products"
                         style={{ backgroundColor: 'transparent', }}
