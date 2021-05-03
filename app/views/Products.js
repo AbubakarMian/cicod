@@ -7,7 +7,8 @@ import fontStyles from '../css/FontCss'
 import SearchBar from 'react-native-search-bar';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Header from '../views/Header';
-import { connect } from 'react-redux';;
+import { connect } from 'react-redux';
+import ImagePicker from 'react-native-image-crop-picker';
 import { SET_USER, LOGOUT_USER,UpdateTabbar } from '../redux/constants/index';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
@@ -23,7 +24,9 @@ class Products extends React.Component {
             data: [],
             categoryarr: [],
             search_product: '',
-            spinner: false
+            spinner: false,
+            prod_image: '',
+            reload:true
         };
         this.onDateChange = this.onDateChange.bind(this);
     }
@@ -56,11 +59,6 @@ class Products extends React.Component {
         if( this.props.route == null ||  this.props.route.params == null ||  this.props.route.params.filters == null){
             return;
         }
-        
-       
-       
-        // console.log('this.props.route',this.props.route.params);
-        // this.getData(Constants.productslist);
         let filters = this.props.route.params.filters;
         let filter = '?';
         for (let i = 0; i < filters.length; i++) {
@@ -88,7 +86,7 @@ class Products extends React.Component {
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                // console.log('responseJson.message', responseJson);
+                console.log('responseJson.responseJson responseJson responseJson @@@@@@@', responseJson);
                 // console.log('responseJson.postData', postData);
                 this.setState({
                     spinner: false,
@@ -115,6 +113,19 @@ class Products extends React.Component {
 
     }
 
+    imageUpload(){
+        ImagePicker.openPicker({
+            width: 300,
+            height: 400,
+            cropping: true,
+            size:1000000
+          }).then(image => {
+            console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@',image);
+            this.setState({
+                prod_image:image.path
+            })
+          });
+    }
 
     getCategoryList() {
         this.setState({ spinner: true })

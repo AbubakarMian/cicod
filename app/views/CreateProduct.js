@@ -48,7 +48,8 @@ class CreateProduct extends React.Component {
             has_vat: 0,
             image: '',
             toolTipVisible:false,
-            c:''
+            c:'',
+            prod_image:''
         }
     }
 
@@ -92,8 +93,19 @@ class CreateProduct extends React.Component {
                 this.setState({ spinner: false });
                 if (responseJson.status === 'success') {
 
-                    let res = responseJson.data;
-                    let categoryarr = res.map((x, key) => { return { label: x.name, value: x.id } });
+                    let res = responseJson.data;                    
+                    console.log('props cat ',category_value);
+                    let category_value = this.props.route.params.prodDetail.category;
+                    let categoryarr = res.map((x, key) => { 
+                        let selected_bool = false;
+                        
+                        console.log('name cat ',x.name);
+                        if(category_value == x.name){
+                    console.log('found props cat ',category_value);
+                            selected_bool = true;
+                        }
+                        return { label: x.name, value: x.id ,selected:selected_bool} 
+                    });
                     console.log('category !!!!!!', categoryarr);
                     this.setState({
                         categoryarr: categoryarr,
@@ -325,6 +337,7 @@ class CreateProduct extends React.Component {
                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                     <TextInput
                                         label="Name*"
+                                        min="0"
                                         style={{ backgroundColor: 'transparent', }}
                                         width={width - 50}
                                         alignSelf={'center'}
@@ -456,7 +469,7 @@ class CreateProduct extends React.Component {
                                >
                                    {(this.state.prod_image != '') ?
                                 <Image
-                                    source={require('../images/redPlus.png')}
+                                    source={{uri:this.state.prod_image}}
                                 />
                             : <Image
                             source={require('../images/redPlus.png')}
