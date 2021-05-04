@@ -21,7 +21,6 @@ class TabNavigater extends React.Component {
     }
   }
   componentWillReceiveProps(){
-    console.log('my props extraData',this.props.extraData);
     if(this.state.active_screen == ''){
       this.setState({
         active_screen:this.props.extraData.name

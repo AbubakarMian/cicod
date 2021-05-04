@@ -277,6 +277,17 @@ class CreateProduct extends React.Component {
             this.createProduct();
         }
     }
+
+    setPrice(text){ 
+        console.log(' text @@@@@@@@@', text)
+        if(text > -1){
+            this.setState({
+                price:text
+            })
+            // Alert.alert('Warning','Value can not be negative')
+        }
+    }
+
     render() {
         console.log('this.state.price',this.state.price)
         var radio_props_dilvery = [
@@ -384,7 +395,8 @@ class CreateProduct extends React.Component {
                                         alignSelf={'center'}
                                         color={'#000'}
                                         value={this.state.price}
-                                        onChangeText={text => this.setState({ price: text })}
+                                        // onChangeText={text => this.setState({ price: text })}
+                                        onChangeText={text => this.setPrice(text)}
                                         keyboardType='numeric'
                                     />
 
@@ -411,6 +423,7 @@ class CreateProduct extends React.Component {
                                         alignSelf={'center'}
                                         color={'#000'}
                                         value={this.state.quantity}
+                                        keyboardType='numeric'
                                         onChangeText={text => this.setState({ quantity: text })}
                                     />
 

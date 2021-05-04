@@ -29,15 +29,49 @@ class Connect extends React.Component {
             merchant_id: 0,
             merchant_name: '',
             date_joined: '',
-            is_active_tab: 'connect'
+            is_active_tab: 'connect',
+            product_text: ''
+        }
+    }
+
+    timeConvertion(date){ //return 'some time';
+        console.log('dddd date',date);   
+        var datetime = date.split(" "); 
+        var date = datetime[0];
+        var time = datetime[1];
+        var time_arr = time.split(":");
+        var hr = parseInt(time_arr[0]);
+        var am_pm = 'AM';
+        if(hr > 12){
+            am_pm = 'PM';
+            hr = hr - 12;
+        }
+        if(hr == 12){
+            am_pm = 'PM';
+        }
+
+        var timestr = hr+":"+time_arr[1]+":"+time_arr[1];
+        var date_time = date+" "+timestr+" "+am_pm;
+        console.log('date_time converted ',date_time);
+        return date_time;
+    }
+
+    getProduct(action) {
+        let url = ''
+        if (action == 'receive') {
+             url = Constants.connectreceivedrequest+'?filter[buyer_name]='+this.state.product_text ;
+            this.getReceivedConnect(url);
+        }else{
+            url = Constants.connectsentrequest+'?filter[seller_name]='+this.state.product_text ;
+            this.getSendConnect(url);
         }
     }
     componentDidMount() {
 
-        this.getSendConnect()
-        this.getReceivedConnect()
+        this.getSendConnect(Constants.connectsentrequest)
+        this.getReceivedConnect(Constants.connectreceivedrequest)
     }
-    getReceivedConnect() {
+    getReceivedConnect(url) {
         this.setState({ spinner: true })
         let postData = {
             method: 'GET',
@@ -47,7 +81,7 @@ class Connect extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
-        fetch(Constants.connectreceivedrequest, postData)
+        fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 console.log('response json received!!!!', responseJson);
@@ -62,13 +96,16 @@ class Connect extends React.Component {
                     this.unauthorizedLogout();
                 }
                 else {
-                    let message = responseJson.message
-                    Alert.alert('Error 1234', message)
+                    let message = responseJson.data.message
+                    if (message == '' || message == undefined) {
+                        message = 'Server responded with error contact admin'
+                    }
+                    Alert.alert('Error', message)
                 }
 
             })
     }
-    getSendConnect() {
+    getSendConnect(url) {
         this.setState({ spinner: true })
 
         let postData = {
@@ -79,7 +116,7 @@ class Connect extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
-        fetch(Constants.connectsentrequest, postData)
+        fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({
@@ -95,6 +132,9 @@ class Connect extends React.Component {
                 }
                 else {
                     let message = responseJson.message
+                    if (message == '' || message == undefined) {
+                        message = 'Server responded with error contact admin'
+                    }
                     Alert.alert('Error', message)
                 }
 
@@ -134,8 +174,11 @@ class Connect extends React.Component {
                     this.unauthorizedLogout();
                 }
                 else {
-                    let message = responseJson.message
-                    Alert.alert('Error 1234', message)
+                    let message = responseJson.data.message
+                    if (message == '' || message == undefined) {
+                        message = 'Server responded with error contact admin'
+                    }
+                    Alert.alert('Error', message)
                 }
 
             })
@@ -169,8 +212,8 @@ class Connect extends React.Component {
                     this.unauthorizedLogout();
                 }
                 else {
-                    let message = responseJson.message
-                    Alert.alert('Error 1234', message)
+                    let message = responseJson.data.message
+                    Alert.alert('Message', message)
                 }
 
             }
@@ -194,7 +237,7 @@ class Connect extends React.Component {
             <View>
                 <View style={[{}, styles.contentView]}>
                     <Image
-                        style={{height:width/5,width:width/5,marginBottom:10}}
+                        style={{ height: width / 5, width: width / 5, marginBottom: 10 }}
                         source={require('../images/home/connect.png')}
                     />
                     <Text style={[{ width: width / 2, textAlign: 'center',color:'#4E4D4D'},fontStyles.bold15]}>Search for Merchant you want to connect with</Text>
@@ -300,7 +343,7 @@ class Connect extends React.Component {
                 <View>
                     {/* <View style={[{ paddingHorizontal: 10 }, styles.searchContainer]}>
                         <Image
-                            style={{height:20,width:20}}
+                            style={{ height: 20, width: 20 }}
                             source={require('../images/products/searchicon.png')}
                         />
                         <TextInput
@@ -372,7 +415,7 @@ class Connect extends React.Component {
                                             <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.buyer_name}</Text>
                                             <View style={{ flexDirection: 'row' }}>
                                                 <Text style={[{ color: '#929497' }, fontStyles.bold13]}>{item.buyer_id}  </Text>
-                                                <Text style={[{ color: '#929497' }, fontStyles.normal12]}>{item.time_requested}</Text>
+                                                <Text style={[{ color: '#929497' }, fontStyles.normal12]}> {this.timeConvertion(item.time_requested)}</Text>
                                             </View>
                                         </View>
 
@@ -406,16 +449,19 @@ class Connect extends React.Component {
                 {/* <View style={[{ paddingHorizontal: 10 }, styles.searchContainer]}>
 
                     <Image
-                         
+
                         source={require('../images/connect/redsearch.png')}
-                    /> 
-                
+                    />
+
                     <TextInput
                         label="Search a products"
                         style={{ backgroundColor: 'transparent', }}
                         width={width - 60}
                         alignSelf={'center'}
                         color={'#000'}
+                        onChangeText={text => this.setState({ product_text: text })}
+                        onSubmitEditing={() => this.getProduct('sent')}
+
                     />
                 </View> */}
 
@@ -486,7 +532,7 @@ class Connect extends React.Component {
                                         <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.buyer_name}</Text>
                                         <View style={{ flexDirection: 'row' }}>
                                             <Text style={[{ color: '#929497' }, fontStyles.bold13]}>{item.buyer_id}  </Text>
-                                            <Text style={[{ color: '#929497' }, fontStyles.normal12]}>{item.time_requested}</Text>
+                                            <Text style={[{ color: '#929497' }, fontStyles.normal12]}>{this.timeConvertion(item.time_requested)}</Text>
                                         </View>
                                     </View>
 

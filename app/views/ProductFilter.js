@@ -98,7 +98,7 @@ class ProductFilter extends React.Component {
           });
 
 
-          this.props.navigation.navigate('DrawerNavigation')
+          // this.props.navigation.navigate('DrawerNavigation')
         } else {
           let message = JSON.stringify(responseJson.error.message)
           Alert.alert('Error', message)
@@ -172,7 +172,7 @@ class ProductFilter extends React.Component {
   }
   applyFilter = () => {
     console.log('this.state.filters', this.state.filters);
-    this.props.navigation.navigate('Products', { filters: this.state.filters, seller_id: 0 });
+    this.props.navigation.navigate('Products', { filters: this.state.filters, seller_id: 1 });
   }
 
   render() {

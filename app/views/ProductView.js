@@ -112,7 +112,9 @@ class ProductView extends React.Component {
     }
 
     updateProductFun(){
-
+        this.setState({
+            supendModal:false
+        })
         this.props.navigation.navigate('CreateProduct',{action:'update',prodDetail:this.state.prodDetail});
     }
     render() {
