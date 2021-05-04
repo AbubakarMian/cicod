@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, ImageBackground, ScrollView, TouchableHighlight,Alert, FlatList, Dimensions, Image, Platform, TouchableOpacity, } from 'react-native'
-import { Text, TextInput } from 'react-native-paper';
+import { Text, TextInput,Searchbar } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
@@ -197,8 +197,8 @@ class Connect extends React.Component {
                         style={{height:width/5,width:width/5,marginBottom:10}}
                         source={require('../images/home/connect.png')}
                     />
-                    <Text style={{ width: width / 2, textAlign: 'center', fontWeight: 'bold', color: '#4E4D4D' }}>Search for Merchant you want to connect with</Text>
-                    <View style={[{}, styles.searchView]}>
+                    <Text style={[{ width: width / 2, textAlign: 'center',color:'#4E4D4D'},fontStyles.bold15]}>Search for Merchant you want to connect with</Text>
+                    {/* <View style={[{}, styles.searchView]}>
                         <Image
                             source={require('../images/connect/redsearch.png')}
                         />
@@ -211,7 +211,14 @@ class Connect extends React.Component {
                             onChangeText={text => this.setState({ search_text: text })}
                             onSubmitEditing={() => this.getMerchant()}
                         />
-                    </View>
+                    </View> */}
+                        <Searchbar
+                    placeholder="Search a products"
+                    iconColor="#B1272C"
+                
+                    style={{width:width/1.2,alignSelf:'center',marginTop:10,elevation:0,borderWidth:1,borderColor:'#D8DCDE'}}
+
+                    ></Searchbar>
 
 
                 </View>
@@ -222,11 +229,11 @@ class Connect extends React.Component {
                         <View style={[{}, styles.deatilcontentView]}>
                             <Icon
                                 name="briefcase"
-                                size={100}
+                                size={80}
                                 color={'#D8D8D8'}
                             />
-                            <Text style={{ fontWeight: 'bold', color: '#929497' }}>No Merchant</Text>
-                            <Text style={{ color: '#929497', fontSize: 12 }}>Search for a merchant</Text>
+                            <Text style={[{fontSize:20,color:'#929497',fontWeight:'bold',fontFamily:'Open Sans'}]}>No Merchant</Text>
+                            <Text style={[{color:'#929497'},fontStyles.normal15]}>Search for a merchant</Text>
                         </View>
                         :
                         <View style={[{}, styles.detailContentView]}>
@@ -291,7 +298,7 @@ class Connect extends React.Component {
         return (
             <ScrollView>
                 <View>
-                    <View style={[{ paddingHorizontal: 10 }, styles.searchContainer]}>
+                    {/* <View style={[{ paddingHorizontal: 10 }, styles.searchContainer]}>
                         <Image
                             style={{height:20,width:20}}
                             source={require('../images/products/searchicon.png')}
@@ -302,8 +309,16 @@ class Connect extends React.Component {
                             width={width - 60}
                             alignSelf={'center'}
                             color={'#000'}
+                        
                         />
-                    </View>
+                    </View> */}
+                    <Searchbar
+                    placeholder="Search a products"
+                    iconColor="#929497"
+                    style={{width:width-20,alignSelf:'center',marginTop:10,elevation:0,borderWidth:1,borderColor:'#D8DCDE'}}
+
+                    ></Searchbar>
+                    <View style={{borderBottomWidth:1,marginVertical:15,width:width-20,alignSelf:'center',borderBottomColor:'#E6E6E6'}}></View>
                     <View style={[{}, styles.recievedList]}>
                         <FlatList
                             ItemSeparatorComponent={
@@ -388,7 +403,7 @@ class Connect extends React.Component {
     sentView() {
         return (
             <View>
-                <View style={[{ paddingHorizontal: 10 }, styles.searchContainer]}>
+                {/* <View style={[{ paddingHorizontal: 10 }, styles.searchContainer]}>
 
                     <Image
                          
@@ -402,7 +417,15 @@ class Connect extends React.Component {
                         alignSelf={'center'}
                         color={'#000'}
                     />
-                </View>
+                </View> */}
+
+<Searchbar
+                    placeholder="Search a products"
+                    iconColor="#929497"
+                    style={{width:width-20,alignSelf:'center',marginTop:10,marginBottom:5,elevation:0,borderWidth:1,borderColor:'#D8DCDE'}}
+
+                    ></Searchbar>
+                    <View style={{borderBottomWidth:1,marginVertical:10,width:width-20,alignSelf:'center',borderBottomColor:'#E6E6E6'}}></View>
                 <View style={[{}, styles.recievedList]}>
                     <FlatList
                         ItemSeparatorComponent={
