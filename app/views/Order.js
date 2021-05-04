@@ -14,6 +14,7 @@ import { Constants } from '../views/Constant';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import TabNav from '../views/TabsNav';
 // import DropDownPicker from 'react-native-dropdown-picker';
 import FontCss from '../css/FontCss';
 
@@ -203,7 +204,7 @@ class Order extends React.Component {
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
-            <View style={{ width: width, position: 'relative', backgroundColor: '##F0F0F0', }}>
+            <View style={{ width: width, position: 'relative', backgroundColor: '##F0F0F0', flex:1}}>
                 <Header navigation={this.props.navigation} />
                 <Spinner
                     visible={this.state.spinner}
@@ -218,6 +219,7 @@ class Order extends React.Component {
                     onConfirm={this.setDate}
                     onCancel={this.hideDatePicker}
                 />
+            
                 <View style={{ flexDirection: 'row', alignContent: 'center', alignItems: 'center', width: width - 20, alignSelf: 'center' }}>
                     <View>
                         <Text style={[{color:'#2F2E7C',fontWeight:'700'},fontStyles.normal15]}>ORDER</Text>
@@ -394,7 +396,7 @@ class Order extends React.Component {
                     </TouchableOpacity>
 
                 </ScrollView>
-                <ScrollView style={{ marginBottom: 200 }}>
+                {/* <ScrollView  style={{ marginBottom: 200 }}> */}
                     <FlatList
                         data={this.state.data}
                         ItemSeparatorComponent={
@@ -454,8 +456,10 @@ class Order extends React.Component {
                             </TouchableOpacity>
                         )}
                     />
-                </ScrollView>
-
+                   
+                {/* </ScrollView> */}
+                <TabNav style={{position:'absolute',bottom:0}} />
+            
             </View>
         )
     }

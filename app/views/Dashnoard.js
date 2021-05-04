@@ -13,6 +13,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { Constants } from '../views/Constant';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER, UpdateTabbar } from '../redux/constants/index';
+import TabNav from '../views/TabsNav';
 import {
     LineChart,
     BarChart,
@@ -225,7 +226,7 @@ class Dashnoard extends React.Component {
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
-            <View style={{ paddingBottom: 50, width: width, alignItems: 'center', position: 'relative', backgroundColor: '#F0F0F0', }}>
+            <View style={{  width: width, alignItems: 'center', position: 'relative', backgroundColor: '#F0F0F0', }}>
                 <Header navigation={this.props.navigation} />
                 {/* <Spinner
                     visible={this.state.spinner}
@@ -240,8 +241,8 @@ class Dashnoard extends React.Component {
           onConfirm={this.setDate}
           onCancel={this.hideDatePicker}
         />
-                <ScrollView>
-                    <View style={{ marginBottom: 10 }}>
+                <ScrollView marginBottom={10}>
+                    <View style={{ backgroundColor:'#F0F0F0' }}>
                         <View style={[{}, styles.headerRowView]}>
                             <View style={{ flex: 1 }}>
                                 <Text style={[{}, styles.headingText]}>DASHBOARD</Text>
@@ -392,9 +393,13 @@ class Dashnoard extends React.Component {
                                 />
                             </View>
                         </View>
+                        
                     </View>
 
                 </ScrollView>
+                 
+                <TabNav style={{position:'absolute',bottom:0}} />
+
                 <Modal
                     visible={this.state.calenderModal}
                     transparent={true}
@@ -412,8 +417,7 @@ class Dashnoard extends React.Component {
                         </View>
                     </TouchableOpacity>
                 </Modal>
-            
-            
+           
             </View>
         )
     }

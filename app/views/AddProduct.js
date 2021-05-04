@@ -247,6 +247,7 @@ class AddProduct extends React.Component {
                                 alignSelf={'center'}
                                 color={'#000'}
                                 onSubmitEditing={() => this.getProductList()}
+                                
                             />
 
                         </View> */}
@@ -254,7 +255,9 @@ class AddProduct extends React.Component {
                     placeholder="Search Product"
                     iconColor="#929497"
                     style={{width:width-20,alignSelf:'center',marginTop:10,marginBottom:5,elevation:0,fontSize:14,color:'#D5D5D5', borderColor:'#D8DCDE'}}
-
+                    onSubmitEditing={() => this.getProductList()}
+                    onChangeText={text => this.setState({ search_product: text })}
+                    //update
                     ></Searchbar>
                         {/* <View style={[{}, styles.searchByCatCOntainer]}> */}
 

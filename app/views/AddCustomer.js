@@ -123,10 +123,13 @@ class AddCustomer extends React.Component {
                 <View>
                    
                 <Searchbar
+                 
                     placeholder="Search a products"
                     iconColor="#929497"
                     style={{width:width-20,alignSelf:'center',marginTop:10,marginBottom:5,elevation:0,borderColor:'#D8DCDE'}}
-
+                    onChangeText={(text) => this.setState({ search_text: text })}
+                    onSubmitEditing={() => this.searchText()}
+                    //update
                     ></Searchbar>
                     <View style={{borderBottomWidth:1,marginVertical:10,width:width-20,alignSelf:'center',borderBottomColor:'#E6E6E6'}}></View>
                         {/* <View style={[{}, styles.searchContainer]}>
@@ -143,6 +146,7 @@ class AddCustomer extends React.Component {
                                 onSubmitEditing={() => this.searchText()}
                                 // onPressIn={() => this.seacrhClick()}
                                 onChangeText={(text) => this.setState({ search_text: text })}
+                                
                             />
                         </View> */}
                         {/* <View style={[{},styles.contentView]}>

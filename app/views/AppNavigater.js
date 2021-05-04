@@ -48,6 +48,7 @@ import AddDiliveryAddress from './AddDiliveryAddress';
 import AddSuppliers from './AddSuppliers';
 import PaymentWeb from './PaymentWeb';
 import CreateProductCategory from './CreateProductCategory';
+import More from '../views/More';
 const Stack = createStackNavigator();
 
 export default class AppNavigater extends React.Component {
@@ -61,24 +62,25 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
           <Stack.Screen name="PaymentWeb" component={PaymentWeb} options={{ headerShown: false }} />
 
-
+          
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+          <Stack.Screen name="Dashnoard" component={Dashnoard} options={{ headerShown: false }} />
           {/* <Stack.Screen name="Dashnoard" component={TabNavigater}  options={{ headerShown: false }} /> */}
-          <Stack.Screen name="Dashnoard" options={{ headerShown: false }}>
+          {/* <Stack.Screen name="Dashnoard" options={{ headerShown: false }}>
             {props => <TabNavigater extraData={{ name: 'dashboard', initialRouteName: 'Dashnoard' }} />}
-          </Stack.Screen>
+          </Stack.Screen> */}
 
-          <Stack.Screen name="Products" options={{ headerShown: false }}>
+          {/* <Stack.Screen name="Products" options={{ headerShown: false }}>
             {props => <TabNavigater extraData={{ name: 'products', initialRouteName: 'Products' }}   />}
-          </Stack.Screen>
-          {/* <Stack.Screen name="Products" component={Products} options={{ headerShown: false }} /> */}
+          </Stack.Screen> */}
+          <Stack.Screen name="Products" component={Products} options={{ headerShown: false }} />
           <Stack.Screen name="ProductFilter" component={ProductFilter} options={{ headerShown: false }} />
           <Stack.Screen name="CategoryFilter" component={CategoryFilter} options={{ headerShown: false }} />
-
+{/* 
           <Stack.Screen name="Order" options={{ headerShown: false }}>
             {props => <TabNavigater extraData={{ name: 'order', initialRouteName: 'Orders' }} />}
-          </Stack.Screen>
-          {/* <Stack.Screen name="Order" component={Order} options={{ headerShown: false }} /> */}
+          </Stack.Screen> */}
+          <Stack.Screen name="Order" component={Order} options={{ headerShown: false }} />
           <Stack.Screen name="OrderDetail" component={OrderDetail} options={{ headerShown: false }} />
           <Stack.Screen name="OrderFilter" component={OrderFilter} options={{ headerShown: false }} />
           <Stack.Screen name="CreateOrder" component={CreateOrder} options={{ headerShown: false }} />
@@ -117,6 +119,7 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="AddDiliveryAddress" component={AddDiliveryAddress} options={{ headerShown: false }} />
           <Stack.Screen name="AddSuppliers" component={AddSuppliers} options={{ headerShown: false }} />
           <Stack.Screen name="CreateProductCategory" component={CreateProductCategory} options={{ headerShown: false }} />
+          <Stack.Screen name="More" component={More} options={{ headerShown: false }} />
        
         </Stack.Navigator>
       </NavigationContainer>

@@ -8,7 +8,7 @@ import CheckBox from 'react-native-check-box';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
-
+import TabNav from '../views/TabsNav';
 
 var { width, height } = Dimensions.get('window');
 
@@ -124,6 +124,7 @@ class More extends React.Component {
                         <Text style={[{}, styles.logoutText]}>Logout</Text>
                     </TouchableOpacity>
                 </ScrollView>
+                <TabNav style={{position:'absolute',bottom:0}} />
             </View>
         );
     }
