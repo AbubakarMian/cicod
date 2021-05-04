@@ -68,7 +68,7 @@ class TabNavigater extends React.Component {
                 }}>
                 <Image
                   // source={this.state.active_screen == 'dashboard'?require('../images/tabnav/chart.png'):require('../images/tabnav/red_chart.png')}
-                  source={this.state.active_screen == 'dashboard'?require('../images/tabnav/red_chart.png'):require('../images/tabnav/chart.png')}
+                  source={this.state.active_screen == 'dashboard'?require('../images/redchart.png'):require('../images/tabnav/chart.png')}
                   style={{
                     width: 25,
                     height: 25,

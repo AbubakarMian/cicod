@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, ImageBackground, ScrollView, TouchableHighlight, Alert, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
 import splashImg from '../images/splash.jpg'
-import { Text, TextInput } from 'react-native-paper';
+import { Text, TextInput,Searchbar } from 'react-native-paper';
 import styles from '../css/AddProductCss';
 import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -13,7 +13,7 @@ import { Constants } from '../views/Constant';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART } from '../redux/constants/index';
 import DropDownPicker from 'react-native-dropdown-picker';
-import SearchBar from 'react-native-search-bar';
+
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 class AddProduct extends React.Component {
@@ -234,14 +234,14 @@ class AddProduct extends React.Component {
                 </View>
                 <View>
                     <ScrollView>
-                        <View style={[{}, styles.searchContainer]}>
+                        {/* <View style={[{}, styles.searchContainer]}>
                             <Image
                                 style={{height:20,width:20}}
                                 source={require('../images/products/searchicon.png')}
                             />
                             <TextInput
                                 onChangeText={text => this.setState({ search_product: text })}
-                                label="Search Product"
+                                label=""
                                 style={{ backgroundColor: 'transparent', }}
                                 width={width - 50}
                                 alignSelf={'center'}
@@ -249,7 +249,13 @@ class AddProduct extends React.Component {
                                 onSubmitEditing={() => this.getProductList()}
                             />
 
-                        </View>
+                        </View> */}
+                          <Searchbar
+                    placeholder="Search Product"
+                    iconColor="#929497"
+                    style={{width:width-20,alignSelf:'center',marginTop:10,marginBottom:5,elevation:0,fontSize:14,color:'#D5D5D5', borderColor:'#D8DCDE'}}
+
+                    ></Searchbar>
                         {/* <View style={[{}, styles.searchByCatCOntainer]}> */}
 
                             {this.state.categoryarr.length < 1 ? null :
@@ -269,7 +275,7 @@ class AddProduct extends React.Component {
                                 />}
                         {/* </View> */}
 
-                        <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#E6E6E6', width: width - 20, alignSelf: 'center', marginVertical: 10 }}></View>
+                        <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#E6E6E6', width: width - 20, alignSelf: 'center', marginBottom: 10 }}></View>
                         <View style={[{ zIndex: -0.9999 }, styles.OrderDetailContainer]}>
 
                             <View style={[{}, styles.OrderDetailHeadingRow]}>
@@ -341,10 +347,11 @@ class AddProduct extends React.Component {
                                 />
                                 : <View style={[{}, styles.contentView]}>
                                     <Image
+                                        style={{height:100,width:100}}
                                         source={require('../images/noProduct.png')}
                                     />
                                     <Text style={[{}, styles.contentViewHeadingText]}>No product selected</Text>
-                                    <Text style={[{}, styles.contentViewDescText]}>Search for a product</Text>
+                                    <Text style={[{color:'#929497'}, fontStyles.normal15]}>Search for a product</Text>
                                 </View>}
                         </View>
 

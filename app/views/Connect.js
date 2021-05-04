@@ -419,7 +419,7 @@ class Connect extends React.Component {
                     />
                 </View> */}
 
-<Searchbar
+               <Searchbar
                     placeholder="Search a products"
                     iconColor="#929497"
                     style={{width:width-20,alignSelf:'center',marginTop:10,marginBottom:5,elevation:0,borderWidth:1,borderColor:'#D8DCDE'}}

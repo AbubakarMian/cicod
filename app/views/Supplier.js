@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, TouchableHighlight, FlatList, Dimensions, Image, Platform,  Alert ,TouchableOpacity, ScrollView, } from 'react-native'
-import { Text, TextInput } from 'react-native-paper';
+import { Text, TextInput,Searchbar } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss';
 import fontStyles from '../css/FontCss'
@@ -153,13 +153,13 @@ class Supplier extends React.Component {
                 </View> */}
                 <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
 
-                    <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
+                    {/* <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
                         <Image
                             style={{height:30,width:30}}
                             source={require('../images/products/searchicon.png')}
                         />
                         <TextInput
-                            label="Search supplier"
+                            label=""
                             // selectionColor={'#fff'}
                             disabled={true}
                             style={{ backgroundColor: 'transparent', }}
@@ -169,7 +169,15 @@ class Supplier extends React.Component {
                             onChangeText={text => this.setState({ search_product: text })}
                             onSubmitEditing={() => this.search()}
                         />
-                    </View>
+                    </View> */}
+                     <Searchbar
+                    placeholder="Search supplier"
+                    style={[{color:'#D8D8D8'},fontStyles.normal14]}
+                    iconColor="#929497"
+                    style={{width:width/1.3,alignSelf:'center', marginTop:10,marginBottom:5,elevation:0,borderColor:'#D8DCDE'}}
+
+                    ></Searchbar>
+                <View style={[{borderBottomColor:'#E6E6E6',borderBottomWidth:0.25,width:width-20,alignSelf:'center',marginTop:10,marginBottom:10}]}></View>
                     <TouchableOpacity
                         style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
                         onPress={() => this.props.navigation.navigate('Filter',{screen:'Supplier'})}

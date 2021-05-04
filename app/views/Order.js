@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, ImageBackground, Modal,Alert, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback, } from 'react-native'
-import { Text, TextInput } from 'react-native-paper';
+import { Text, TextInput,Searchbar } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 // import styles from '../css/DashboardCss';
 import styles from '../css/OrderCss';
@@ -278,14 +278,14 @@ class Order extends React.Component {
                 </View>
                 <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
 
-                    <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
-                        <Image
+                    <View style={{ flexDirection: 'row',alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
+                        {/* <Image
                             style={{height:30,width:30}}
                             source={require('../images/products/searchicon.png')}
                         />
 
                         <TextInput
-                            label="Search order ID, customer, amount, etc"
+                            label=""
                             // selectionColor={'#fff'}
 
                             style={{ backgroundColor: 'transparent', }}
@@ -294,7 +294,15 @@ class Order extends React.Component {
                             color={'#000'}
                             onChangeText={text => this.setState({ search_order: text })}
                             onSubmitEditing={() => this.search()}
-                        />
+                        /> */}
+                          <Searchbar
+                    placeholder="Search order ID, customer, amount, etc"
+                    style={[{color:'#D8D8D8'},fontStyles.normal14]}
+                    iconColor="#929497"
+                    style={{width:width/1.3,alignSelf:'center',position:'absolute',left:0, marginTop:10,marginBottom:5,elevation:0,borderColor:'#D8DCDE'}}
+
+                    ></Searchbar>
+                   
                     </View>
 
                     <TouchableOpacity

@@ -58,7 +58,8 @@ export default StyleSheet.create({
     contentViewHeadingText:{
         fontWeight:'bold',
         color:'#929497',
-        marginTop:10
+        marginTop:10,
+        fontSize:20
     },
     contentViewDescText:{
         color:'#929497',

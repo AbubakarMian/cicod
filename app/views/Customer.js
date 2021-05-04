@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, ImageBackground, Modal, TouchableHighlight,Alert, FlatList, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback } from 'react-native'
-import { Text, TextInput } from 'react-native-paper';
+import { Text, TextInput,Searchbar } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/CustomerCss';
 import fontStyles from '../css/FontCss'
@@ -114,7 +114,7 @@ class Customer extends React.Component {
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
                     <View>
-                        <Text style={[{}, styles.headerRowText]}>CUSTOMERS</Text>
+                        <Text style={[{color:'#2F2E7C',fontWeight:'700'}, fontStyles.normal15]}>CUSTOMERS</Text>
                     </View>
                     <TouchableOpacity onPress={(() => this.props.navigation.navigate('AddNewCustomer'))}
                         style={[{}, styles.headerRowPlusiconView]}>
@@ -126,7 +126,7 @@ class Customer extends React.Component {
                         {/* </View> */}
                     </TouchableOpacity>
                 </View>
-                <View style={[{}, styles.searchBoxView]}>
+                {/* <View style={[{}, styles.searchBoxView]}>
                     <Image
                         style={{height:25,width:25}}
                         source={require('../images/products/searchicon.png')}
@@ -134,14 +134,21 @@ class Customer extends React.Component {
                     <TextInput
                         onChangeText={text => this.setState({ search_text: text })}
                         onSubmitEditing={() => this.search()}
-                        label="Search Customer"
+                        label=""
                         style={{ backgroundColor: 'transparent', borderBottomWidth: 0, borderColor: '#fff' }}
                         width={width - 50}
                         alignSelf={'center'}
                         color={'#000'}
                     />
-                </View>
-                <View style={[{borderBottomColor:'#E6E6E6',borderBottomWidth:0.5,width:width-20,alignSelf:'center',marginTop:20,marginBottom:10}]}></View>
+                </View> */}
+                 <Searchbar
+                    placeholder="Search Customer"
+                    style={[{color:'#D8D8D8'},fontStyles.normal14]}
+                    iconColor="#929497"
+                    style={{width:width-20,alignSelf:'center', marginTop:10,marginBottom:5,elevation:0,borderColor:'#D8DCDE'}}
+
+                    ></Searchbar>
+                <View style={[{borderBottomColor:'#E6E6E6',borderBottomWidth:0.5,width:width-20,alignSelf:'center',marginTop:10,marginBottom:10}]}></View>
                 <ScrollView>
                     <FlatList
                         data={this.state.data}
