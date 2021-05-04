@@ -302,7 +302,9 @@ class Order extends React.Component {
                     style={[{color:'#D8D8D8'},fontStyles.normal14]}
                     iconColor="#929497"
                     style={{width:width/1.3,alignSelf:'center',position:'absolute',left:0, marginTop:10,marginBottom:5,elevation:0,borderColor:'#D8DCDE'}}
-
+                    onChangeText={text => this.setState({ search_order: text })}
+                    onSubmitEditing={() => this.search()}
+                    //update
                     ></Searchbar>
                    
                     </View>
