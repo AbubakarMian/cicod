@@ -14,7 +14,7 @@ const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Constants } from '../views/Constant';
-
+import TabNav from '../views/TabsNav';
 class Products extends React.Component {
     constructor(props) {
         super(props);
@@ -350,7 +350,7 @@ class Products extends React.Component {
                         )}
                     />
                 </ScrollView>
-
+                <TabNav style={{position:'absolute',bottom:0}} />
             </View>
         )
     }

@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight,Alert, FlatList, Dimensions, Image, Platform, TouchableOpacity, } from 'react-native'
-import { Text, TextInput,Searchbar } from 'react-native-paper';
+import { View, ImageBackground, ScrollView, TouchableHighlight, Alert, FlatList, Dimensions, Image, Platform, TouchableOpacity, } from 'react-native'
+import { Text, TextInput, Searchbar } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
@@ -34,35 +34,35 @@ class Connect extends React.Component {
         }
     }
 
-    timeConvertion(date){ //return 'some time';
-        console.log('dddd date',date);   
-        var datetime = date.split(" "); 
+    timeConvertion(date) { //return 'some time';
+        console.log('dddd date', date);
+        var datetime = date.split(" ");
         var date = datetime[0];
         var time = datetime[1];
         var time_arr = time.split(":");
         var hr = parseInt(time_arr[0]);
         var am_pm = 'AM';
-        if(hr > 12){
+        if (hr > 12) {
             am_pm = 'PM';
             hr = hr - 12;
         }
-        if(hr == 12){
+        if (hr == 12) {
             am_pm = 'PM';
         }
 
-        var timestr = hr+":"+time_arr[1]+":"+time_arr[1];
-        var date_time = date+" "+timestr+" "+am_pm;
-        console.log('date_time converted ',date_time);
+        var timestr = hr + ":" + time_arr[1] + ":" + time_arr[1];
+        var date_time = date + " " + timestr + " " + am_pm;
+        console.log('date_time converted ', date_time);
         return date_time;
     }
 
     getProduct(action) {
         let url = ''
         if (action == 'receive') {
-             url = Constants.connectreceivedrequest+'?filter[buyer_name]='+this.state.product_text ;
+            url = Constants.connectreceivedrequest + '?filter[buyer_name]=' + this.state.product_text;
             this.getReceivedConnect(url);
-        }else{
-            url = Constants.connectsentrequest+'?filter[seller_name]='+this.state.product_text ;
+        } else {
+            url = Constants.connectsentrequest + '?filter[seller_name]=' + this.state.product_text;
             this.getSendConnect(url);
         }
     }
@@ -240,7 +240,7 @@ class Connect extends React.Component {
                         style={{ height: width / 5, width: width / 5, marginBottom: 10 }}
                         source={require('../images/home/connect.png')}
                     />
-                    <Text style={[{ width: width / 2, textAlign: 'center',color:'#4E4D4D'},fontStyles.bold15]}>Search for Merchant you want to connect with</Text>
+                    <Text style={[{ width: width / 2, textAlign: 'center', color: '#4E4D4D' }, fontStyles.bold15]}>Search for Merchant you want to connect with</Text>
                     {/* <View style={[{}, styles.searchView]}>
                         <Image
                             source={require('../images/connect/redsearch.png')}
@@ -255,12 +255,14 @@ class Connect extends React.Component {
                             onSubmitEditing={() => this.getMerchant()}
                         />
                     </View> */}
-                        <Searchbar
-                    placeholder="Search a products"
-                    iconColor="#B1272C"
-                
-                    style={{width:width/1.2,alignSelf:'center',marginTop:10,elevation:0,borderWidth:1,borderColor:'#D8DCDE'}}
-
+                    <Searchbar
+                        placeholder="Search a products"
+                        iconColor="#B1272C"
+                        onChangeText={text => this.setState({ search_text: text })}
+                        style={{ width: width / 1.2, alignSelf: 'center', marginTop: 10, elevation: 0, borderWidth: 1, borderColor: '#D8DCDE' }}
+                        onSubmitEditing={() => this.getMerchant()}
+                        onChangeText={text => this.setState({ search_text: text })}
+                        //update
                     ></Searchbar>
 
 
@@ -275,8 +277,8 @@ class Connect extends React.Component {
                                 size={80}
                                 color={'#D8D8D8'}
                             />
-                            <Text style={[{fontSize:20,color:'#929497',fontWeight:'bold',fontFamily:'Open Sans'}]}>No Merchant</Text>
-                            <Text style={[{color:'#929497'},fontStyles.normal15]}>Search for a merchant</Text>
+                            <Text style={[{ fontSize: 20, color: '#929497', fontWeight: 'bold', fontFamily: 'Open Sans' }]}>No Merchant</Text>
+                            <Text style={[{ color: '#929497' }, fontStyles.normal15]}>Search for a merchant</Text>
                         </View>
                         :
                         <View style={[{}, styles.detailContentView]}>
@@ -356,12 +358,15 @@ class Connect extends React.Component {
                         />
                     </View> */}
                     <Searchbar
-                    placeholder="Search a products"
-                    iconColor="#929497"
-                    style={{width:width-20,alignSelf:'center',marginTop:10,elevation:0,borderWidth:1,borderColor:'#D8DCDE'}}
+                        placeholder="Search a products"
+                        iconColor="#929497"
+                        style={{ width: width - 20, alignSelf: 'center', marginTop: 10, elevation: 0, borderWidth: 1, borderColor: '#D8DCDE' }}
+                        onChangeText={text => this.setState({ product_text: text })}
+                        onSubmitEditing={() => this.getProduct('receive')}
+                        //update
 
                     ></Searchbar>
-                    <View style={{borderBottomWidth:1,marginVertical:15,width:width-20,alignSelf:'center',borderBottomColor:'#E6E6E6'}}></View>
+                    <View style={{ borderBottomWidth: 1, marginVertical: 15, width: width - 20, alignSelf: 'center', borderBottomColor: '#E6E6E6' }}></View>
                     <View style={[{}, styles.recievedList]}>
                         <FlatList
                             ItemSeparatorComponent={
@@ -407,9 +412,9 @@ class Connect extends React.Component {
                                     onHideUnderlay={separators.unhighlight}>
                                     <View style={[{}, styles.flatCardView]}>
                                         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                            <Image 
-                                            style={{height:35,width:35}}
-                                            source={require('../images/bage.png')} />
+                                            <Image
+                                                style={{ height: 35, width: 35 }}
+                                                source={require('../images/bage.png')} />
                                         </View>
                                         <View style={{ flex: 5, flexDirection: 'column' }}>
                                             <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.buyer_name}</Text>
@@ -465,13 +470,16 @@ class Connect extends React.Component {
                     />
                 </View> */}
 
-               <Searchbar
+                <Searchbar
                     placeholder="Search a products"
                     iconColor="#929497"
-                    style={{width:width-20,alignSelf:'center',marginTop:10,marginBottom:5,elevation:0,borderWidth:1,borderColor:'#D8DCDE'}}
+                    style={{ width: width - 20, alignSelf: 'center', marginTop: 10, marginBottom: 5, elevation: 0, borderWidth: 1, borderColor: '#D8DCDE' }}
+                    onChangeText={text => this.setState({ product_text: text })}
+                    onSubmitEditing={() => this.getProduct('sent')}
+                    //update
 
-                    ></Searchbar>
-                    <View style={{borderBottomWidth:1,marginVertical:10,width:width-20,alignSelf:'center',borderBottomColor:'#E6E6E6'}}></View>
+                ></Searchbar>
+                <View style={{ borderBottomWidth: 1, marginVertical: 10, width: width - 20, alignSelf: 'center', borderBottomColor: '#E6E6E6' }}></View>
                 <View style={[{}, styles.recievedList]}>
                     <FlatList
                         ItemSeparatorComponent={
@@ -524,9 +532,9 @@ class Connect extends React.Component {
                                 onHideUnderlay={separators.unhighlight}>
                                 <View style={[{}, styles.flatCardView]}>
                                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                                        <Image 
-                                        style={{height:35,width:35}}
-                                        source={require('../images/bage.png')} />
+                                        <Image
+                                            style={{ height: 35, width: 35 }}
+                                            source={require('../images/bage.png')} />
                                     </View>
                                     <View style={{ flex: 5, flexDirection: 'column' }}>
                                         <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.buyer_name}</Text>
@@ -594,19 +602,19 @@ class Connect extends React.Component {
                     </View>
                     <View style={[{}, styles.tabView]}>
                         <TouchableOpacity
-                            style={{ flex: 1,backgroundColor:this.state.tabViewIndex === 1 ? '#FFF4F4' : '#fff',borderRadius:50,paddingVertical:5 }}
+                            style={{ flex: 1, backgroundColor: this.state.tabViewIndex === 1 ? '#FFF4F4' : '#fff', borderRadius: 50, paddingVertical: 5 }}
                             onPress={() => { this.setState({ tabViewIndex: 1 }) }}
                         >
                             <Text style={{ color: this.state.tabViewIndex === 1 ? '#B1272C' : '#4E4D4D', fontWeight: 'bold', textAlign: 'center' }}>Connect</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={{ flex: 1,backgroundColor:this.state.tabViewIndex === 2 ? '#FFF4F4' : '#fff',borderRadius:50,paddingVertical:5 }}
+                            style={{ flex: 1, backgroundColor: this.state.tabViewIndex === 2 ? '#FFF4F4' : '#fff', borderRadius: 50, paddingVertical: 5 }}
                             onPress={() => { this.setState({ tabViewIndex: 2 }) }}
                         >
                             <Text style={{ color: this.state.tabViewIndex === 2 ? '#B1272C' : '#4E4D4D', fontWeight: 'bold', textAlign: 'center' }}>Recieved</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            style={{ flex: 1,backgroundColor:this.state.tabViewIndex === 3 ? '#FFF4F4' : '#fff',borderRadius:50,paddingVertical:5 }}
+                            style={{ flex: 1, backgroundColor: this.state.tabViewIndex === 3 ? '#FFF4F4' : '#fff', borderRadius: 50, paddingVertical: 5 }}
                             onPress={() => { this.setState({ tabViewIndex: 3 }) }}
                         >
                             <Text style={{ color: this.state.tabViewIndex === 3 ? '#B1272C' : '#4E4D4D', textAlign: 'center' }}>Sent</Text>

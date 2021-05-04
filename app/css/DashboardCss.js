@@ -103,7 +103,8 @@ export default StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 5,
         flexDirection: 'row',
-        position: 'relative'
+        position: 'relative',
+        marginBottom:10
     },
     bannerContentView: {
         flex: 3,
