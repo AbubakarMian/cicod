@@ -390,7 +390,7 @@ class CreateOrder extends React.Component {
                             <View style={[{}, styles.customerContaineraddProductView]}>
 
                                 <Image
-                                     style={{height:40,width:40}}
+                                     style={{height:30,width:30}}
                                     source={require('../images/products/circlePlus.png')}
                                 />
                                 <Text style={[{}, styles.customerContaineraddProductText]}>Add Product</Text>
@@ -655,7 +655,18 @@ class CreateOrder extends React.Component {
                                     <Text style={[{}, styles.subTotleColumn1Text]}>subtotal:</Text>
                                     <Text style={[{}, styles.subTotleColumn1Text]}>Tax(7.5%)</Text>
                                     <Text style={[{}, styles.subTotleColumn1Text]}>TOTAL:</Text>
-                                    <TouchableOpacity
+                            
+                                </View>
+                                <View style={[{}, styles.subTotleColumn2View]}>
+                                    <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.total_price ?? 0}</Text>
+                                    <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.tax ?? 0}</Text>
+                                    <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.total_price_with_tax ?? 0}</Text>
+                         
+                                </View>
+                            </View>
+                            <View style={{flexDirection:'row',width:width-50,alignSelf:'center',marginVertical:10}}>
+                            <TouchableOpacity
+                            style={{flex:1,justifyContent:'center',}}
                                         onPress={() => this.props.navigation.navigate('ApplyDiscount')}
                                     >
                                         <View style={{ flexDirection: 'row' }}>
@@ -664,12 +675,8 @@ class CreateOrder extends React.Component {
                                             <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Apply for Discount</Text>
                                         </View>
                                     </TouchableOpacity>
-                                </View>
-                                <View style={[{}, styles.subTotleColumn2View]}>
-                                    <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.total_price ?? 0}</Text>
-                                    <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.tax ?? 0}</Text>
-                                    <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.total_price_with_tax ?? 0}</Text>
                                     <TouchableOpacity
+                                    style={{flex:1,justifyContent:'center',alignItems:'flex-end'}}
                                         onPress={() => this.props.navigation.navigate('AddNote')}
                                     >
                                         <View style={{ flexDirection: 'row' }}>
@@ -678,7 +685,6 @@ class CreateOrder extends React.Component {
                                             <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Add Note</Text>
                                         </View>
                                     </TouchableOpacity>
-                                </View>
                             </View>
                             <TouchableOpacity
                                 onPress={() => this.createOrderFun()}

@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, ImageBackground, FlatList, Alert, TouchableHighlight, Dimensions, Image, Platform, TouchableOpacity, } from 'react-native'
 import splashImg from '../images/splash.jpg'
-import { Text, TextInput } from 'react-native-paper';
+import { Text, TextInput,Searchbar } from 'react-native-paper';
 import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
@@ -255,7 +255,7 @@ class Buyers extends React.Component {
                 </View> */}
                 <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
 
-                    <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
+                    {/* <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
                         <Image
                             style={{height:30,width:30}}
                             source={require('../images/products/searchicon.png')}
@@ -271,7 +271,14 @@ class Buyers extends React.Component {
                             onChangeText={text => this.setState({ search_buyers: text })}
                             onSubmitEditing={() => this.search()}
                         />
-                    </View>
+                    </View> */}
+                      <Searchbar
+                    placeholder="Search a products"
+                    iconColor="#929497"
+                    style={{width:width/1.3,alignSelf:'center',marginTop:10,marginBottom:5,elevation:0,borderColor:'#D8DCDE'}}
+
+                    ></Searchbar>
+               
 
                     <TouchableOpacity
                         style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
@@ -285,6 +292,7 @@ class Buyers extends React.Component {
                     </TouchableOpacity>
 
                 </View>
+                <View style={{borderBottomWidth:1,marginVertical:5,width:width-20,alignSelf:'center',borderBottomColor:'#E6E6E6'}}></View> 
 
                 <ScrollView
                     scrollEnabled={true}
@@ -312,16 +320,16 @@ class Buyers extends React.Component {
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
                                 <View style={[{}, styles.flatCardView]}>
-                                    <View style={[{ paddingLeft: 10, }, styles.cardRow]}>
+                                    <View style={[{ paddingLeft: 10,alignItems:'center' }, styles.cardRow]}>
                                         <Image
-                                            style={{ marginTop: 10 }}
+                                            style={{height:30,width:30}}
                                             source={require('../images/bage.png')}
                                         />
                                         <View style={[{}, styles.cardContentView]}>
                                             <Text style={[{}, styles.cardContentDarkText]}>{item.buyer_name}</Text>
                                             <Text style={[{}, styles.lightGrayText]}>{item.product_categories}</Text>
                                         </View>
-                                        <View style={[{}, styles.cardActionView]}>
+                                        <View style={[{alignItems:'center',justifyContent:'center'}, styles.cardActionView]}>
 
                                             <View style={[{}, styles.cardActionView]}>
                                                 <TouchableOpacity

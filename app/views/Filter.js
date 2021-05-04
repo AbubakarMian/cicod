@@ -120,26 +120,24 @@ class Filter extends React.Component {
           </View>
           <Text style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20 }]}>Clear Filter</Text>
         </View>
-
-        <View style={{ borderBottomWidth: 1, marginTop: 20, borderBottomColor: '#E6E6E6', marginHorizontal: 0, flexDirection: 'row', position: 'relative' }}>
-
-          {this.state.categoryarr.length < 1 ? null :
+        <View style={{paddingVertical:10,backgroundColor:'#fff',borderTopLeftRadius:10,borderTopRightRadius:10,marginTop:10}}></View> 
+        {this.state.categoryarr.length < 1 ? null :
             <DropDownPicker
               items={this.state.categoryarr}
-              containerStyle={{ height: 50, width: width - 20 }}
-              style={{ backgroundColor: '#fff',}}
-              itemStyle={{
-                justifyContent: 'flex-start',
-              }}
+              // items={[
+              //   {'1':'1'},
+              //   {'2':'2'},
+              //   {'3':'3'},
+              // ]}
               placeholder="Catagory"
-              dropDownStyle={{ backgroundColor: '#fff' }}
+              containerStyle={{ height: 50, width: width-20,alignSelf:'center'}}
+              style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5,paddingVertical:15 }}
+              dropDownStyle={{height:80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1,  }}
               labelStyle={{ color: '#A9A9A9' }}
               onChangeItem={item => this.onCategoryText(item.value)}
             />}
-
-        </View>
-
-        <View style={{ zIndex: -0.999 }}>
+            <View style={{paddingVertical:10,backgroundColor:'#fff',borderBottomLeftRadius:10,borderBottomRightRadius:10,marginBottom:10}}></View> 
+        <View style={{zIndex:-0.999 }}>
           <View style={{ paddingVertical: 20, }}>
             <Text style={[{ color: '#929497', fontWeight: 'bold', fontSize: 18 }]}>Status</Text>
           </View>
@@ -160,7 +158,7 @@ class Filter extends React.Component {
         </View>
         <TouchableOpacity
           onPress={this.applyFilter}
-          style={{ width: width / 1.5, alignSelf: 'center', backgroundColor: '#B1272C', justifyContent: 'center', alignItems: 'center', paddingVertical: 15, borderRadius: 50, marginTop: 30 }}
+          style={{ width: width / 1.2, alignSelf: 'center', backgroundColor: '#B1272C', justifyContent: 'center', alignItems: 'center', paddingVertical: 15, borderRadius: 50, marginTop: 30 }}
         >
           <Text style={{ color: '#fff', fontWeight: 'bold' }}>Apply</Text>
         </TouchableOpacity>

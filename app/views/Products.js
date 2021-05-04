@@ -215,7 +215,7 @@ class Products extends React.Component {
                 <Header navigation={this.props.navigation} />
                 <View style={{ flexDirection: 'row', paddingHorizontal: 10, alignItems: 'center', justifyContent: 'center' }}>
                     <View style={{ flex: 1 }}>
-                        <Text style={{ fontWeight: 'bold', color: '#2F2E7C' }}>Products</Text>
+                        <Text style={[{color:'#2F2E7C',fontWeight:'700'},fontStyles.normal15]}>Products</Text>
                     </View>
                     <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
                         <TouchableOpacity
@@ -235,24 +235,33 @@ class Products extends React.Component {
                 </View>
                 <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
 
-                    <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
+                    {/* <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
                         <Image
-                            style={{ height: 30, width: 30 }}
+                        style={{height:20,width:20}}
                             source={require('../images/products/searchicon.png')}
                         />
-
+                      
                         <TextInput
-                            label="Search product, Price and code"
+                            label=""
                             // selectionColor={'#fff'}
-
-                            style={{ backgroundColor: 'transparent', }}
+                            
+                            style={{borderBottom: 'none', backgroundColor: 'transparent', }}
                             width={width - 50}
                             alignSelf={'center'}
                             color={'#000'}
+                            labelStyle={{color:'#929497'},fontStyles.normal13}
                             onChangeText={text => this.setState({ search_product: text })}
                             onSubmitEditing={() => this.search()}
                         />
-                    </View>
+                    </View> */}
+                     <Searchbar
+                    placeholder="Search product, Price and code"
+                    style={[{color:'#D8D8D8'},fontStyles.normal14]}
+                    iconColor="#929497"
+                    style={{width:width/1.3,alignSelf:'center', marginTop:5,marginBottom:5,elevation:0,borderColor:'#D8DCDE'}}
+
+                    ></Searchbar>
+                <View style={[{borderBottomColor:'#E6E6E6',borderBottomWidth:0.5,width:width-20,alignSelf:'center',marginTop:10,marginBottom:10}]}></View>
 
                     <TouchableOpacity
                         style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
@@ -266,7 +275,7 @@ class Products extends React.Component {
 
                 </View>
                 <View style={[{}, styles.formRowView]}>
-                    <View style={[{ position: 'relative' }, styles.formColumn]}>
+                    <View style={[{ position: 'relative', }, styles.formColumn]}>
                         <DropDownPicker
                             items={this.state.categoryarr}
                             placeholder="Product Category"
@@ -277,6 +286,7 @@ class Products extends React.Component {
                             onChangeItem={item => this.onCategoryText(item.value)}
                         />
                     </View>
+                    <View style={{borderBottomWidth:0.5,borderBottomColor:'#E6E6E6',width:width-20,alignSelf:'center',marginVertical:10}}></View>
                 </View>
 
                 <ScrollView

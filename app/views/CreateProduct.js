@@ -331,7 +331,7 @@ class CreateProduct extends React.Component {
                                     {this.state.categoryarr.length < 1 ? null :
                                         <DropDownPicker
                                             items={this.state.categoryarr}
-                                            containerStyle={{ height: 50, width: width - 35, marginTop: 15 }}
+                                            containerStyle={{ height: 50, width: width - 35, marginTop: 15,alignSelf:'center' }}
                                             style={{ backgroundColor: '#fff' }}
                                             itemStyle={{
                                                 justifyContent: 'flex-start', zIndex: 0.99

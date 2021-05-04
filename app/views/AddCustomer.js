@@ -13,7 +13,7 @@ import { Constants } from '../views/Constant';
 import { connect } from 'react-redux';
 import { SET_USER, SET_CUSTOMER } from '../redux/constants/index';
 import { Item } from 'native-base';
-import { Text, TextInput } from 'react-native-paper';
+import { Text, TextInput,Searchbar } from 'react-native-paper';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 class AddCustomer extends React.Component {
@@ -99,7 +99,8 @@ class AddCustomer extends React.Component {
 
     render() {
 
-        return (
+        return ( 
+        <ScrollView>
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
                 <Spinner
@@ -120,9 +121,17 @@ class AddCustomer extends React.Component {
                     </View>
                 </View>
                 <View>
-                    <ScrollView>
-                        <View style={[{}, styles.searchContainer]}>
+                   
+                <Searchbar
+                    placeholder="Search a products"
+                    iconColor="#929497"
+                    style={{width:width-20,alignSelf:'center',marginTop:10,marginBottom:5,elevation:0,borderColor:'#D8DCDE'}}
+
+                    ></Searchbar>
+                    <View style={{borderBottomWidth:1,marginVertical:10,width:width-20,alignSelf:'center',borderBottomColor:'#E6E6E6'}}></View>
+                        {/* <View style={[{}, styles.searchContainer]}>
                             <Image
+                                style={{height:20,width:20}}
                                 source={require('../images/products/searchicon.png')}
                             />
                             <TextInput
@@ -135,7 +144,7 @@ class AddCustomer extends React.Component {
                                 // onPressIn={() => this.seacrhClick()}
                                 onChangeText={(text) => this.setState({ search_text: text })}
                             />
-                        </View>
+                        </View> */}
                         {/* <View style={[{},styles.contentView]}>
                           <Image 
                           source={require('../images/user-circle.png')}
@@ -224,27 +233,31 @@ class AddCustomer extends React.Component {
                                         </View>
                                     )}
                                 />
-                                <TouchableOpacity
-                                    onPress={() => this.props.navigation.navigate('AddNewCustomer')}
-                                    style={[{ marginBottom: 100 }, styles.addCustommerRowView]}>
-                                    <Image source={require('../images/circlePlus.png')} />
-                                    <Text style={[{}, styles.addCustommerText]}>Add new customer</Text>
-                                </TouchableOpacity>
+                               
                             </View>
                             : <View style={[{}, styles.contentView]}>
                                 <Image
+                                    style={{height:100,width:100}} 
                                     source={require('../images/user-circle.png')}
                                 />
                                 <Text style={[{}, styles.contentViewHeadingText]}>No customer selected</Text>
-                                <Text style={[{}, styles.contentViewDescText]}>Search for a customer</Text>
+                                <Text style={[{color:'#929497'},fontStyles.normal15]}>Search for a customer</Text>
+                            
+                                <TouchableOpacity
+                                    onPress={() => this.props.navigation.navigate('AddNewCustomer')}
+                                    style={[{  }, styles.addCustommerRowView]}>
+                                    <Image source={require('../images/circlePlus.png')} />
+                                    <Text style={[{color:'#4E4D4D',marginLeft:10}, fontStyles.bold15]}>Add new customer</Text>
+                                </TouchableOpacity>
                             </View>}
 
 
 
 
-                    </ScrollView>
+                    
                 </View>
             </View>
+            </ScrollView>
         )
     }
 }

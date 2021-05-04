@@ -253,7 +253,7 @@ class Dashnoard extends React.Component {
                                 >
                                     <View style={{ backgroundColor: '#fff', flexDirection: 'row',justifyContent:'center',alignItems:'center',alignSelf:'flex-end', paddingVertical: 5, paddingHorizontal: 10, borderRadius: 5 }}>
                                         <Image
-                                            style={{height:30,width:30}}
+                                            style={{height:20,width:20}}
                                             source={require('../images/dashboard/calenderIcon.png')}
                                         />
                                         <Text style={[{marginHorizontal:50}, styles.calenderText]}>{this.state.date == '' ? 'Today' : this.state.date}</Text>

@@ -108,11 +108,12 @@ export default StyleSheet.create({
     },
     flatlistMainContianer: {
         backgroundColor: '#fff',
-        paddingVertical: 10,
+        paddingVertical: 20,
+        paddingHorizontal:10,
         marginTop: 5,
         width: width - 20,
         alignSelf: 'center',
-        borderRadius: 3,
+        borderRadius: 5,
         flexDirection: 'column',
         paddingHorizontal: 10
     },

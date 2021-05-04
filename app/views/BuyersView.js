@@ -267,11 +267,13 @@ class BuyersView extends React.Component {
                     </View>
                     <View style={{ backgroundColor: '#fff' }}>
                         <View style={[{}, styles.productDetailContainerView]}>
-                            <Image source={require('../images/bage.png')} />
+                            <Image 
+                            style={{height:35,width:35}}
+                            source={require('../images/bage.png')} />
                             {(this.props.route.params.heading == 'BUYERS') ?
                                 <View>
-                                    <Text style={[{}, styles.darkGrayBoldText]}>{this.state.items.buyer_name}</Text>
-                                    <Text style={[{}, styles.lightGrayText]}>{this.state.items.buyer_id}</Text>
+                                    <Text style={[{textAlign:'center'}, styles.darkGrayBoldText]}>{this.state.items.buyer_name}</Text>
+                                    <Text style={[{textAlign:'center'}, styles.lightGrayText]}>{this.state.items.buyer_id}</Text>
                                 </View>
                                 : <View>
                                     <Text style={[{}, styles.darkGrayBoldText]}>{this.state.items.seller_name}</Text>
@@ -385,6 +387,7 @@ class BuyersView extends React.Component {
 
                         <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
                             <Image
+                                style={{height:20,width:20}}
                                 source={require('../images/products/searchicon.png')}
                             />
                             <TextInput
@@ -404,6 +407,7 @@ class BuyersView extends React.Component {
                         // onPress={() => this.props.navigation.navigate('ProductFilter')}
                         >
                             <Image
+                                style={{height:50,width:50}}
                                 source={require('../images/Order/settingicon.png')}
                             />
                         </TouchableOpacity>
@@ -486,8 +490,9 @@ class BuyersView extends React.Component {
                                     <View style={[{}, styles.flatlistMainContianer]}>
                                         <View style={[{}, styles.flatlistMainRow]}>
                                             <Image
-                                                source={[{}, styles.listImage]}
-                                                source={require('../images/bage.png')} />
+                                                // source={[{}, styles.listImage]}
+                                                style={{height:35,width:35}}
+                                                source={require('../images/Order/bage.png')} />
                                             <View style={{ flexDirection: 'column' }}>
                                                 <Text style={[{}, styles.darkGrayBoldText]}>{item.cicod_order_id}</Text>
                                                 <Text style={[{}, styles.lightGrayText]}>{item.description}</Text>

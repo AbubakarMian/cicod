@@ -56,6 +56,7 @@ export default StyleSheet.create({
     contentViewHeadingText:{
         fontWeight:'bold',
         color:'#929497',
+        fontSize:20,
         marginTop:10
     },
     contentViewDescText:{
@@ -65,6 +66,7 @@ export default StyleSheet.create({
     custommerDeatailContainerView:{
         width:width-20,
         alignSelf:'center',
+        borderRadius:10,marginVertical:10
     },
     custommerDtailCarView:{
         backgroundColor:'#fff',

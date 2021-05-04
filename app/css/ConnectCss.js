@@ -48,12 +48,13 @@ export default StyleSheet.create({
     },
     tabView:{
         backgroundColor:'#fff',
-        paddingVertical:10,
+        paddingVertical:2,
         width:width-20,
         display:'flex',
         alignSelf:'center',
-        paddingHorizontal:10,
-        flexDirection:'row'
+        paddingHorizontal:2,
+        flexDirection:'row',
+        borderRadius:50
     },
     contentView:{
         backgroundColor:'#fff',
@@ -86,7 +87,8 @@ export default StyleSheet.create({
         width:width-20,
         alignSelf:'center',
         justifyContent:'center',
-        alignItems:'center'
+        alignItems:'center',
+        borderRadius:10,
     },
     searchView:{
         borderWidth:1,
@@ -95,7 +97,8 @@ export default StyleSheet.create({
         marginTop:20,
         flexDirection:'row',
         alignItems:'center',
-        paddingHorizontal:10
+        paddingHorizontal:10,
+        borderRadius:5
     },
     deatilcontentView:{
         width:width-20,
@@ -117,7 +120,7 @@ export default StyleSheet.create({
         width:width-10,
         alignSelf:'center',
         paddingHorizontal:5,
-        paddingVertical:10
+        // paddingVertical:10
     },
     flatCardView:{
         paddingHorizontal:5,
