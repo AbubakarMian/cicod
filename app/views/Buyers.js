@@ -276,7 +276,9 @@ class Buyers extends React.Component {
                     placeholder="Search a products"
                     iconColor="#929497"
                     style={{width:width/1.3,alignSelf:'center',marginTop:10,marginBottom:5,elevation:0,borderColor:'#D8DCDE'}}
-
+                    onChangeText={text => this.setState({ search_buyers: text })}
+                    onSubmitEditing={() => this.search()}
+                    //update
                     ></Searchbar>
                
 

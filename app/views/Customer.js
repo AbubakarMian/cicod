@@ -146,7 +146,9 @@ class Customer extends React.Component {
                     style={[{color:'#D8D8D8'},fontStyles.normal14]}
                     iconColor="#929497"
                     style={{width:width-20,alignSelf:'center', marginTop:10,marginBottom:5,elevation:0,borderColor:'#D8DCDE'}}
-
+                    onChangeText={text => this.setState({ search_text: text })}
+                    onSubmitEditing={() => this.search()}
+                    //update
                     ></Searchbar>
                 <View style={[{borderBottomColor:'#E6E6E6',borderBottomWidth:0.5,width:width-20,alignSelf:'center',marginTop:10,marginBottom:10}]}></View>
                 <ScrollView>
