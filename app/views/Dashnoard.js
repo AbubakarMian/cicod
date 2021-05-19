@@ -76,7 +76,6 @@ class Dashnoard extends React.Component {
                 console.log('response !!!!!!!!!!!!!@@@@@@@@@@@@@@', responseJson);
                 console.log('url url url !!!!!!!!!!!!!@@@@@@@@@@@@@@', url);
                 if (responseJson.status === 'success') {
-                    // console.log('**************', this.state.data)
                     var total_orders = responseJson.data.graph.total_orders ?? [];
                     var graph_total_orders_data = [];
                     var graph_lable = [];
