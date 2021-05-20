@@ -20,7 +20,7 @@ tabRoW:{
     paddingVertical: 2,
     paddingHorizontal:10,
     borderTopWidth:0.75,
-    paddingVertical:10,
+    paddingVertical:0,
     borderTopColor:'#e2e2e2',
     backgroundColor:'#FFF' 
 },

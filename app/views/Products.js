@@ -352,7 +352,7 @@ class Products extends React.Component {
                         )}
                     />
                 </ScrollView>
-                <TabNav style={{position:'absolute',bottom:0}} />
+                <TabNav style={{position:'absolute',bottom:0}}  screen={'product'} props={this.props} />
             </View>
         )
     }
