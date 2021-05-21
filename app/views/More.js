@@ -124,7 +124,7 @@ class More extends React.Component {
                         <Text style={[{}, styles.logoutText]}>Logout</Text>
                     </TouchableOpacity>
                 </ScrollView>
-                <TabNav style={{position:'absolute',bottom:0}} />
+                <TabNav active_screen='More' props={this.props} style={{position:'absolute',bottom:0}} />
             </View>
         );
     }
