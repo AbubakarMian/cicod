@@ -54,7 +54,7 @@ export default class BuyCreateOrder extends React.Component {
                                 <Icon name="arrow-left" size={25} color="#929497" />
                             </TouchableOpacity>
                             <View style={[{}, styles.backHeadingView]}>
-                                <Text style={[{}, styles.backHeadingText]}>CREATE sdfs fsdfsdfORDER</Text>
+                                <Text style={[{}, styles.backHeadingText]}>CREATE ORDER</Text>
                             </View>
                             <View style={[{}, styles.backHeadingCloseView]}>
                                 <Icon name="times" size={20} color="#929497" />

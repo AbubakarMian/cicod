@@ -262,7 +262,7 @@ class Connect extends React.Component {
                         style={{ width: width / 1.2, alignSelf: 'center', marginTop: 10, elevation: 0, borderWidth: 1, borderColor: '#D8DCDE' }}
                         onSubmitEditing={() => this.getMerchant()}
                         onChangeText={text => this.setState({ search_text: text })}
-                        //update
+                    //update
                     ></Searchbar>
 
 
@@ -363,7 +363,7 @@ class Connect extends React.Component {
                         style={{ width: width - 20, alignSelf: 'center', marginTop: 10, elevation: 0, borderWidth: 1, borderColor: '#D8DCDE' }}
                         onChangeText={text => this.setState({ product_text: text })}
                         onSubmitEditing={() => this.getProduct('receive')}
-                        //update
+                    //update
 
                     ></Searchbar>
                     <View style={{ borderBottomWidth: 1, marginVertical: 15, width: width - 20, alignSelf: 'center', borderBottomColor: '#E6E6E6' }}></View>
@@ -476,7 +476,7 @@ class Connect extends React.Component {
                     style={{ width: width - 20, alignSelf: 'center', marginTop: 10, marginBottom: 5, elevation: 0, borderWidth: 1, borderColor: '#D8DCDE' }}
                     onChangeText={text => this.setState({ product_text: text })}
                     onSubmitEditing={() => this.getProduct('sent')}
-                    //update
+                //update
 
                 ></Searchbar>
                 <View style={{ borderBottomWidth: 1, marginVertical: 10, width: width - 20, alignSelf: 'center', borderBottomColor: '#E6E6E6' }}></View>

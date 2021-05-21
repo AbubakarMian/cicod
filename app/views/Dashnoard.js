@@ -55,6 +55,7 @@ class Dashnoard extends React.Component {
         this.getDashboardData(Constants.dashboard);
     }
     getDashboardData(url){
+        console.log('hit url ',url);
         this.props.setTabBar({ tab_name: 'dashboard' })
         this.setState({ spinner: true })
         let postData = {
@@ -76,7 +77,6 @@ class Dashnoard extends React.Component {
                 console.log('response !!!!!!!!!!!!!@@@@@@@@@@@@@@', responseJson);
                 console.log('url url url !!!!!!!!!!!!!@@@@@@@@@@@@@@', url);
                 if (responseJson.status === 'success') {
-                    // console.log('**************', this.state.data)
                     var total_orders = responseJson.data.graph.total_orders ?? [];
                     var graph_total_orders_data = [];
                     var graph_lable = [];
@@ -115,7 +115,7 @@ class Dashnoard extends React.Component {
                         total_orders_pending_data: total_orders_pending_data,
 
                     })
-                    console.log("%%%%%%%%%%%%%%%%", graph_lable)
+                    console.log("%%%%%%%%%%%%%%%", graph_lable)
                     
                     // this.props.navigation.navigate('DrawerNavigation')
                 }
@@ -313,7 +313,7 @@ class Dashnoard extends React.Component {
                                 </View>
                             </View>
                         </View>
-                        <View style={{ backgroundColor: '#fff', paddingVertical: 20,marginBottom:10, width: width - 30, alignSelf: 'center', borderRadius: 5,paddingLeft:10 }}>
+                        {/* <View style={{ backgroundColor: '#fff', paddingVertical: 20,marginBottom:10, width: width - 30, alignSelf: 'center', borderRadius: 5,paddingLeft:10 }}>
                             <View style={[{}, styles.calenderbtn]}>
                                 <TouchableOpacity
                                     style={{ backgroundColor: this.state.selected_graph === 'all_orders' ? '#FFE5E5' : '#fff', paddingHorizontal: 5, borderTopLeftRadius: 50, borderBottomLeftRadius: 50, paddingVertical: 5 }}
@@ -373,7 +373,7 @@ class Dashnoard extends React.Component {
                                     }}
                                 />
                             }
-                        </View>
+                        </View> */}
                         <View style={[{}, styles.bannerView]}>
                             <View style={[{}, styles.bannerContentView]}>
                                 <Text style={[{}, styles.bannerText]}>Monthly Sales</Text>
