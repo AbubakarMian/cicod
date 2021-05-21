@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, TouchableOpacity, Dimensions, Touchable,Alert, ScrollView, } from 'react-native';
+import { View, Image, TouchableOpacity, Dimensions, Touchable, Alert, ScrollView, } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 import styles from '../css/MoreCss';
 import fontStyles from '../css/FontCss'
@@ -124,7 +124,7 @@ class More extends React.Component {
                         <Text style={[{}, styles.logoutText]}>Logout</Text>
                     </TouchableOpacity>
                 </ScrollView>
-                <TabNav active_screen='More' props={this.props} style={{position:'absolute',bottom:0}} />
+                <TabNav style={{ position: 'absolute', bottom: 0 }} screen={'more'} props={this.props} />
             </View>
         );
     }

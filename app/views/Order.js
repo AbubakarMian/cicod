@@ -460,7 +460,7 @@ class Order extends React.Component {
                     />
                    
                 {/* </ScrollView> */}
-                <TabNav active_screen='Order' props={this.props} style={{position:'absolute',bottom:0}} />
+                <TabNav style={{position:'absolute',bottom:0}} screen={'order'} props={this.props} />
             
             </View>
         )

@@ -398,7 +398,7 @@ class Dashnoard extends React.Component {
 
                 </ScrollView>
                  
-                <TabNav active_screen='Dashboard' props={this.props} style={{position:'absolute',bottom:0}} />
+                <TabNav style={{position:'absolute',bottom:0}} screen={'dashboard'} props={this.props}/>
 
                 <Modal
                     visible={this.state.calenderModal}

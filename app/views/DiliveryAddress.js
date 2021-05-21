@@ -80,7 +80,6 @@ class DiliveryAddress extends React.Component {
         this.setState({
             is_selected_address: !this.state.is_selected_address
         })
-        console.log(' value !!!!!!!!!!!!!!', object);
         this.props.setDeliveryAddress({
 
             address: object.value,

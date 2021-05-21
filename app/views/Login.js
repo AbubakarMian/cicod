@@ -21,7 +21,7 @@ class Login extends React.Component {
         this.state = {
             Spinner: false,
             tenantId: 'sandbox',// ndanitv ,sandbox
-            username: 'cicodsandbox@yopmail.com ',//ndanitv@sharklasers.com ,cicodsandbox@yopmail.com
+            username: 'cicodsandbox@yopmail.com',//ndanitv@sharklasers.com ,cicodsandbox@yopmail.com
             password: 'Sandbox@123',//Ndanitv@123 ,Sandbox@123
             isChecked: false,
             hide_password: true,
@@ -82,7 +82,7 @@ class Login extends React.Component {
                 lastname: "sandbox last", //responseJson.user.lastname,
                 email: "cicodsandbox@yopmail.com",//responsejson.user.email,
                 phone: "123314324",//responseJson.user.phone,
-                access_token: "Bearer ngtA5uufmpt4eHg3ECJY",  //+ responseJson.token
+                access_token: "Bearer MJafNhLPhulXkMLyZea6",  //+ responseJson.token
             });
             this.setState({ Spinner: false })
             this.props.navigation.navigate('Home')

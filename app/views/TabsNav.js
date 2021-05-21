@@ -11,11 +11,19 @@ export default class TabsNav extends React.Component {
         super(props);
         this.state = {
             selectedStartDate: null,
-            calenderModal: false
+            calenderModal: false,
+            screen: '',
         };
         this.onDateChange = this.onDateChange.bind(this);
     }
 
+    componentDidMount() {
+
+        console.log('props in tab !!!!!!!!')
+        this.setState({
+            screen: this.props.screen
+        })
+    }
     onDateChange(date) {
         this.setState({
             selectedStartDate: date,
@@ -23,45 +31,96 @@ export default class TabsNav extends React.Component {
     }
 
     render() {
-     const that=this;
+        const that = this;
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
-            <View style={[{},styles.tabRoW]}>
-             <TouchableOpacity style={[{},styles.tabCoulumn]}
-                onPress={()=>{this.props.props.navigation.navigate('Dashnoard')}}>
-                <Image
-                style={{height:30,width:30}}
-                source={this.props.active_screen == 'Dashboard'?require('../images/tabnav/red_chart.png'):require('../images/tabnav/chart.png')}
-                />
-                <Text style={[{color:'#929497'},fontStyles.normal13]}>Dashboard</Text>
-             </TouchableOpacity>
-             <TouchableOpacity style={[{},styles.tabCoulumn]}             
-             onPress={()=>{this.props.props.navigation.navigate('Order')}}>
-                <Image                
-                style={{height:30,width:25}}
-                source={this.props.active_screen == 'Order'?require('../images/tabnav/red_order.png'):require('../images/tabnav/order.png')}
-                />
-                <Text>Orders</Text>
-             </TouchableOpacity>
-             <TouchableOpacity style={[{},styles.tabCoulumn]}             
-             onPress={()=>{this.props.props.navigation.navigate('Products')}}>
-                <Image
-                style={{height:30,width:30}}
-                source={this.props.active_screen == 'Products'?require('../images/tabnav/red_products.png'):require('../images/tabnav/products.png')}
+            <View style={[{}, styles.tabRoW]}>
+                <TouchableOpacity style={[{}, styles.tabCoulumn]}
+                onPress={()=> this.props.props.navigation.navigate('Dashboard')}
+                >
+                    {(this.state.screen == 'dashboard') ?
+                        <View style={{ marginTop: 2 }}>
+                            <Image
+                                style={{ height: 35, width: 50 }}
+                                source={require('../images/tabnav/red_chart.png')}
+                            />
 
-                />
-                <Text>Products</Text>
-             </TouchableOpacity>
-             <TouchableOpacity style={[{},styles.tabCoulumn]}             
-             onPress={()=>{this.props.props.navigation.navigate('More')}}>
-                <Image
-                style={{height:30,width:30}}
-                source={this.props.active_screen == 'More'?require('../images/tabnav/red_more.png'):require('../images/tabnav/more.png')}
 
-                />
-                <Text>More</Text>
-             </TouchableOpacity>
+                            <Text style={[{ color: '#b00000' }, fontStyles.normal13]}>Dashboard</Text>
+                        </View>
+                        :
+                        <View>
+                            <Image
+                                style={{ height: 30, width: 30 }}
+                                source={require('../images/tabnav/chart.png')}
+                            />
+                            <Text style={[{ color: '#929497' }, fontStyles.normal13]}>Dashboard</Text>
+                        </View>
+                    }
+
+                </TouchableOpacity>
+                <TouchableOpacity style={[{}, styles.tabCoulumn]}
+                onPress={()=> this.props.props.navigation.navigate('Order')}
+                >
+                    {(this.state.screen == 'order') ?
+                        <View style={{ marginTop: 2 }}>
+                            <Image
+
+                                style={{ height: 30, width: 25 }}
+                                source={require('../images/tabnav/red_order.png')}
+                            />
+                            <Text style={[{ color: '#b00000' }, fontStyles.normal13]}>Orders</Text>
+                        </View> :
+                        <View style={{ marginTop: 2 }}>
+                            <Image
+
+                                style={{ height: 30, width: 25 }}
+                                source={require('../images/tabnav/order.png')}
+                            />
+                            <Text style={[{ color: '#929497' }, fontStyles.normal13]}>Orders</Text>
+                        </View>
+                    }
+
+                </TouchableOpacity>
+                <TouchableOpacity style={[{}, styles.tabCoulumn]}
+                    onPress={()=> this.props.props.navigation.navigate('Products')}
+                >
+                    {(this.state.screen == 'product') ?
+                        <View style={{ marginTop: 2 }}>
+                            <Image
+                                style={{ height: 30, width: 30 }}
+                                source={require('../images/tabnav/red_products.png')}
+                            />
+                            <Text style={[{ color: '#b00000' }, fontStyles.normal13]}>Products</Text>
+                        </View> :
+                        <View>
+                            <Image
+                                style={{ height: 30, width: 30 }}
+                                source={require('../images/tabnav/products.png')}
+                            />
+                            <Text style={[{ color: '#929497' }, fontStyles.normal13]}>Products</Text>
+                        </View>}
+                </TouchableOpacity>
+                <TouchableOpacity style={[{}, styles.tabCoulumn]}
+                onPress={()=> this.props.props.navigation.navigate('More')}
+                >
+                    {(this.state.screen == 'more') ?
+                        <View style={{ marginTop: 2 }}>
+                            <Image
+                                style={{ height: 30, width: 30 }}
+                                source={require('../images/tabnav/red_more.png')}
+                            />
+                            <Text style={[{ color: '#b00000' }, fontStyles.normal13]}>More</Text>
+                        </View> :
+                        <View style={{ marginTop: 2 }}>
+                            <Image
+                                style={{ height: 30, width: 30 }}
+                                source={require('../images/tabnav/more.png')}
+                            />
+                            <Text style={[{ color: '#929497' }, fontStyles.normal13]}>More</Text>
+                        </View>}
+                </TouchableOpacity>
             </View>
         )
     }
