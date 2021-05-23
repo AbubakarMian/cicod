@@ -122,6 +122,7 @@ class Order extends React.Component {
     }
     componentWillReceiveProps() {
         console.log('this.props.route', this.props.route.params.filters);
+        
         let filters = this.props.route.params.filters;
         let filter = '?';
         for (let i = 0; i < filters.length; i++) {
@@ -131,6 +132,8 @@ class Order extends React.Component {
             }
         }
         console.log(' will receive props !!!!!!!!!!!!!', Constants.orderslist + filter);
+
+        return ;
         this.orderList(Constants.orderslist + filter);
     }
 
@@ -311,7 +314,7 @@ class Order extends React.Component {
 
                     <TouchableOpacity
                         style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
-                        onPress={() => this.props.navigation.navigate('ProductFilter')}
+                        onPress={() => this.props.navigation.navigate('OrderFilter')}
                     >
                         <Image
                             style={{height:50,width:50}}

@@ -77,6 +77,11 @@ class Dashnoard extends React.Component {
                 console.log('response !!!!!!!!!!!!!@@@@@@@@@@@@@@', responseJson);
                 console.log('url url url !!!!!!!!!!!!!@@@@@@@@@@@@@@', url);
                 if (responseJson.status === 'success') {
+
+
+                    if(responseJson.data.length< 1){
+                        Alert.alert('Message', responseJson.message)
+                    }
                     var total_orders = responseJson.data.graph.total_orders ?? [];
                     var graph_total_orders_data = [];
                     var graph_lable = [];
@@ -211,9 +216,10 @@ class Dashnoard extends React.Component {
       date: newdate,
     })
 
-    // start_date
-    let url = Constants.dashboard+'?start_date='+date ;
-    // this.getDashboardData(url);
+    let sendDate = year + "/" + month + "/" + day;
+    let url = Constants.dashboard+'?start_date='+sendDate ;
+    console.log('url !!!!!!!!!!!!!!!!!!!!!!!!!!!!', url)
+    this.getDashboardData(url);
 
   }
   hideDatePicker = () => {
@@ -381,10 +387,10 @@ class Dashnoard extends React.Component {
                                 <View style={{ flexDirection: 'row', marginBottom: 3, marginTop: 10, width: width / 1.5, position: 'relative' }}>
                                     <Text style={[{ color: '#707070' }]}>Target: ₦ {this.state.target.sales_target_amount}</Text>
                                     <Text style={[{ position: 'absolute', right: 0 }, styles.bannerpercentText]}>
-                                        75%
+                                        0%
                               </Text>
                                 </View>
-                                <Progress.Bar color="#B1272C" backgroundColor="#fff" progress={0.75} width={200} />
+                                <Progress.Bar color="#B1272C" backgroundColor="#fff" progress={0.00} width={200} />
                             </View>
                             <View style={[{}, styles.bannerImagetView]}>
                                 <Image
