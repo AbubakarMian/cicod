@@ -90,6 +90,26 @@ export default StyleSheet.create({
         // textAlign:'center',
         paddingHorizontal:100
     },
+    redTouch:{
+        backgroundColor:'#B1272C',
+        marginVertical:20,
+        width:width-220,
+        alignSelf:'center',
+        justifyContent:'center',
+        alignItems:'center',
+        paddingVertical:15,
+        borderRadius:100
+    },
+    greyTouch:{
+        backgroundColor:'#E6E6E6',
+        marginVertical:20,
+        width:width-220,
+        alignSelf:'center',
+        justifyContent:'center',
+        alignItems:'center',
+        paddingVertical:15,
+        borderRadius:100,
+    },
     descRow:{
         flexDirection:'row',
         marginTop:20

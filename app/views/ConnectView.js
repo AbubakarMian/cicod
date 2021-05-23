@@ -29,7 +29,7 @@ class ConnectView extends React.Component {
     }
 
     componentDidMount() {
-
+        console.log('props !!!!!!!!!!!!!!!!!!!!!', this.props.route.params.items.buyer_id)
         // let pro_url = Constants.products + '/' + this.props.route.params.prod_id
         // this.getProductDetail(pro_url)
     }
@@ -142,7 +142,7 @@ class ConnectView extends React.Component {
                     <View style={[{}, styles.productDeatailHeaderRow]}>
 
                         <Image
-                            style={[{ alignSelf: 'baseline',height:40, width:40 }]}
+                            style={[{ alignSelf: 'baseline', height: 40, width: 40 }]}
                             source={require('../images/bage.png')} />
 
                     </View>
@@ -179,25 +179,26 @@ class ConnectView extends React.Component {
                             <Text style={[{}, styles.darkGarayText]}>324234</Text>
                         </View>
                     </View>
-                 
-                   
+
+
 
                 </View>
-                
-                <TouchableOpacity
-                    onPress={() => this.setState({ productImageModal: true })}
-                >
-                    <Text>
-                        DEcline 
-                    </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => this.setState({ productImageModal: true })}
-                >
-                    <Text>
-                        Enable 
-                    </Text>
-                </TouchableOpacity>
+
+                <View style={{ flexDirection: 'row', padding: 40 , justifyContent:'space-between' }}>
+                    <TouchableOpacity
+                       onPress={() => this.props.navigation.navigate('UpdateProduct', { buyer_detail: this.state.items })}
+                        style={[{}, styles.greyTouch]}>
+                        <Text style={{ color: '#929497' }}>Decline</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => this.onSaveFun()}
+                        style={[{}, styles.redTouch]}>
+                        <Text style={{ color: '#fff' }}>Enable</Text>
+                    </TouchableOpacity>
+                  
+                </View>
+
+
                 <Modal
                     visible={this.state.productImageModal}
                     transparent={true}

@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, Dimensions, Image,Alert, Platform, TouchableOpacity, } from 'react-native'
+import { View, ImageBackground, ScrollView, Dimensions, Image, Alert, Platform, TouchableOpacity, } from 'react-native'
 import { Text, TextInput } from 'react-native-paper';
 import styles from '../css/Filter.Css';
 import fontStyles from '../css/FontCss'
@@ -56,7 +56,7 @@ class OrderFilter extends React.Component {
         if (responseJson.status === 'success') {
 
           let res = responseJson.data;
-          let createdby_arr = res.map((x, key) => { return { label: x.created_by ??'', value: x.created_by ??'' } });
+          let createdby_arr = res.map((x, key) => { return { label: x.created_by ?? '', value: x.created_by ?? '' } });
           let paymentmode_arr = res.map((x, key) => { return { label: x.payment_mode, value: x.payment_mode } });
           console.log('createdby_arr createdby_arr !!!!!!', createdby_arr);
           console.log('paymentmode_arr paymentmode_arr !!!!!!', paymentmode_arr);
@@ -249,7 +249,7 @@ class OrderFilter extends React.Component {
                 >
                   <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginRight: 10, padding: 10, marginVertical: 10 }}>
                     <Image
-                      style={{height:15,width:15}}
+                      style={{ height: 15, width: 15 }}
                       source={require('../images/calenderIcon.png')}
                     />
                     <Text style={{ marginLeft: 10, color: '#aaa' }}>DD-MM-YY</Text>
@@ -305,19 +305,19 @@ class OrderFilter extends React.Component {
               </View>
             </View>
             <View style={{ width: width - 20, backgroundColor: '#fff', paddingVertical: 10, marginTop: 20 }}>
-            {/* {this.state.orderchannel_arr.length < 1 ? null : */}
-                <DropDownPicker
-                  items={this.state.orderchannel_arr}
-                  containerStyle={{ height: 50, width: width - 25, marginTop: 15, }}
-                  style={{ backgroundColor: '#fff' }}
-                  itemStyle={{
-                    justifyContent: 'flex-start',
-                  }}
-                  placeholder="Order channel"
-                  dropDownStyle={{ backgroundColor: '#fff', zIndex: 0.999, marginBottom: 10 }}
-                  onChangeItem={item => this.onorderChannelText(item.value)}
-                />
-                {/* } */}
+              {/* {this.state.orderchannel_arr.length < 1 ? null : */}
+              <DropDownPicker
+                items={this.state.orderchannel_arr}
+                containerStyle={{ height: 50, width: width - 25, marginTop: 15, }}
+                style={{ backgroundColor: '#fff' }}
+                itemStyle={{
+                  justifyContent: 'flex-start',
+                }}
+                placeholder="Order channel"
+                dropDownStyle={{ backgroundColor: '#fff', zIndex: 0.999, marginBottom: 10 }}
+                onChangeItem={item => this.onorderChannelText(item.value)}
+              />
+              {/* } */}
 
               {this.state.paymentmode_arr.length < 1 ? null :
                 <DropDownPicker
@@ -344,7 +344,7 @@ class OrderFilter extends React.Component {
                   placeholder="Created By"
                   dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, paddingBottom: 20 }}
                   labelStyle={{ color: '#A9A9A9' }}
-                  onChangeItem={item => this.onCreatedByText(item.value??'')}
+                  onChangeItem={item => this.onCreatedByText(item.value ?? '')}
                 />}
             </View>
             <TouchableOpacity

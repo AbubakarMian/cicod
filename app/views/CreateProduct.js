@@ -56,7 +56,8 @@ class CreateProduct extends React.Component {
     componentDidMount() {
 
         this.getCategoryList()
-        // console.log('product detail peops @@@@@@@@!!!!!!!!!!!!!!', this.props);
+        console.log('product detail peops @@@@@@@@!!!!!!!!!!!!!!', this.props.route.params);
+        // return
         if(this.props.route.params.action == "update"){
             console.log('sdkf hsjkdhfjkshgkfdgs djgjsgdfjgsdf',this.props.route.params.prodDetail);
             this.setState({
@@ -93,20 +94,19 @@ class CreateProduct extends React.Component {
                 this.setState({ spinner: false });
                 if (responseJson.status === 'success') {
 
-                    let res = responseJson.data;                    
-                    console.log('props cat ',category_value);
-                    let category_value = this.props.route.params.prodDetail.category;
+                    let res = responseJson.data;              
+                    let category_value = (this.props.route.params.prodDetail) ?this.props.route.params.prodDetail.category : '';
                     let categoryarr = res.map((x, key) => { 
                         let selected_bool = false;
                         
                         console.log('name cat ',x.name);
                         if(category_value == x.name){
-                    console.log('found props cat ',category_value);
                             selected_bool = true;
                         }
+                        
                         return { label: x.name, value: x.id ,selected:selected_bool} 
                     });
-                    console.log('category !!!!!!', categoryarr);
+                    console.log('category !!!!!!!!!!!!!!!#@@@@@@@@@@ !!!!!!', categoryarr);
                     this.setState({
                         categoryarr: categoryarr,
                     });
@@ -289,7 +289,7 @@ class CreateProduct extends React.Component {
     }
 
     render() {
-        console.log('this.state.price',this.state.price)
+        console.log('this.state.price',this.state.categoryarr)
         var radio_props_dilvery = [
             { label: 'Dilivery', value: 0 },
 

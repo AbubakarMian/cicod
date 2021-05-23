@@ -15,6 +15,7 @@ const isAndroid = Platform.OS == 'android'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Constants } from '../views/Constant';
 import TabNav from '../views/TabsNav';
+import { nativeViewProps } from 'react-native-gesture-handler/lib/typescript/handlers/NativeViewGestureHandler';
 class Products extends React.Component {
     constructor(props) {
         super(props);
@@ -26,7 +27,9 @@ class Products extends React.Component {
             search_product: '',
             spinner: false,
             prod_image: '',
-            reload: true
+            reload: true,
+            filters:[],
+            url_products:''
         };
         this.onDateChange = this.onDateChange.bind(this);
     }
@@ -36,46 +39,17 @@ class Products extends React.Component {
         });
     }
     async componentDidMount() {
-
-        // await this.getCategoryList() 
-
-        console.log('this.props.route', this.props.route);
-        if (this.props.route == undefined || this.props.route.params == undefined || this.props.route.params.seller_id == undefined
-            || this.props.route.params.seller_id == 0) {
-            await this.getData(Constants.productslist);
-        }
-        else {// (this.props.route.params.seller_id != 0)
-            let url = Constants.sellerProductList + '?id=' + this.props.route.params.seller_id + '&sort=-id';
-            console.log('URL @@@@@@@@@@@@@@@@@@@', url)
-            await this.getData(url);
-        }
         const that = this;
         setTimeout(function () {
             that.getCategoryList()
         }, 700);
     }
-    async componentWillReceiveProps() {
-
-        console.log('this.props. componentWillReceiveProps',this.props);
-        if (this.props.route == null || this.props.route.params == null || this.props.route.params.filters == null) {
-            return;
-        }
-        let filters = this.props.route.params.filters;
-        let filter = '?';
-        for (let i = 0; i < filters.length; i++) {
-            filter = filter + filters[i].key + '=' + filters[i].value;
-            if (i != filters.length - 1) {
-                filter = filter + '&';
-            }
-        }
-        console.log(' Constants.productslist + filterfilter url !!!!!!!!!!!!!!!!!!!', Constants.productslist + filter)
-        await this.getData(Constants.productslist + filter);
-    }
+  
 
     async getData(url) {
-        console.log()
-        let token = this.props.user.access_token;
         this.setState({ spinner: true })
+           
+        
         let postData = {
             method: 'GET',
             headers: {
@@ -108,7 +82,6 @@ class Products extends React.Component {
     }
 
     search() {
-
         let search_url = Constants.productslist + '?search=' + this.state.search_product;
         this.getData(search_url);
 
@@ -171,9 +144,6 @@ class Products extends React.Component {
         console.log(' category ID search !!!!!!!!!!!!!!!@@@@@@@@@@@@@@', category_id)
         let url = Constants.productslist + '?category_id=' + category_id;
         this.getData(url);
-        // this.setState({
-        //     search_product:text
-        // })
     }
 
     unauthorizedLogout() {
@@ -181,122 +151,51 @@ class Products extends React.Component {
         this.props.logoutUser();
         this.props.navigation.navigate('Login');
     }
-    static getDerivedStateFromProps(nextProps, prevState){
-        console.log('nextProps nextProps nextProps',nextProps)
-        console.log('prevState prevState prevState',prevState)
-    }
-    componentWillUnmount(){
-        console.log('componenet unmounted')
-        this.didFocusListener.remove();
-        this.setState({
-            reload:true
-        })
-    }
-    
-    render() {
-        if(!this.state.reload){
-            console.log('relad the screen')
-            this.setState({
-                reload:false
+    havenewProps(){
+        console.log('got new props');
+        let prop_filters = this.props.route.params.filters;
+        let state_filters = this.state.filters;
+        for(let i=0; i<prop_filters.length;i++){
+            
+            if (prop_filters[0].key != state_filters[0].key 
+                || prop_filters[0].value != state_filters[0].value) {
+                return true;
+            }
+        }    
+        return false;    
+    }   
+
+     listProducts(props){
+        let _that = props._that;
+        let url = '';
+        if (_that.props.route == null || _that.props.route.params == null || _that.props.route.params.filters == null) {
+            url = Constants.productslist;
+        }
+        else{
+            let filters = _that.props.route.params.filters;
+            let filter = '?';
+            for (let i = 0; i < filters.length; i++) {
+                filter = filter + filters[i].key + '=' + filters[i].value;
+                if (i != filters.length - 1) {
+                    filter = filter + '&';
+                }
+            }
+            url = (Constants.productslist + filter);
+        }
+        if(url != _that.state.url_products){
+             _that.getData(url);
+            _that.setState({
+                url_products:url
             })
         }
-        console.log('categoryarr categoryarr categoryarr', this.props);
-        const { selectedStartDate } = this.state;
-        const startDate = selectedStartDate ? selectedStartDate.toString() : '';
-
+        // console.log('all data ',_that.state.data);
+        // return null;
+        
         return (
-            <View style={{ height: height, width: width, position: 'relative', backgroundColor: '#F0F0F0' }}>
-                <Spinner
-                    visible={this.state.spinner}
-                    textContent={'Please Wait...'}
-                    textStyle={{ color: '#fff' }}
-                    color={'#fff'}
-                />
-                <Header navigation={this.props.navigation} />
-                <View style={{ flexDirection: 'row', paddingHorizontal: 10, alignItems: 'center', justifyContent: 'center' }}>
-                    <View style={{ flex: 1 }}>
-                        <Text style={[{color:'#2F2E7C',fontWeight:'700'},fontStyles.normal15]}>Products</Text>
-                    </View>
-                    <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-                        <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate('ProductCategory')}
-                        >
-                            <Text style={{ fontSize: 12, color: '#B1272C', marginRight: 10 }}>View Product Category</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate('CreateProduct', { action: 'create', prodDetail: null })}
-                        >
-                            <Image
-                                style={{ height: 30, width: 30 }}
-                                source={require('../images/products/circlePlus.png')}
-                            />
-                        </TouchableOpacity>
-                    </View>
-                </View>
-                <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
-
-                    {/* <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
-                        <Image
-                        style={{height:20,width:20}}
-                            source={require('../images/products/searchicon.png')}
-                        />
-                      
-                        <TextInput
-                            label=""
-                            // selectionColor={'#fff'}
-                            
-                            style={{borderBottom: 'none', backgroundColor: 'transparent', }}
-                            width={width - 50}
-                            alignSelf={'center'}
-                            color={'#000'}
-                            labelStyle={{color:'#929497'},fontStyles.normal13}
-                            onChangeText={text => this.setState({ search_product: text })}
-                            onSubmitEditing={() => this.search()}
-                        />
-                    </View> */}
-                     <Searchbar
-                    placeholder="Search product, Price and code"
-                    style={[{color:'#D8D8D8'},fontStyles.normal14]}
-                    iconColor="#929497"
-                    style={{width:width/1.3,alignSelf:'center', marginTop:5,marginBottom:5,elevation:0,borderColor:'#D8DCDE'}}
-                    onChangeText={text => this.setState({ search_product: text })}
-                    onSubmitEditing={() => this.search()}
-                    //update
-                    ></Searchbar>
-                <View style={[{borderBottomColor:'#E6E6E6',borderBottomWidth:0.5,width:width-20,alignSelf:'center',marginTop:10,marginBottom:10}]}></View>
-
-                    <TouchableOpacity
-                        style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
-                        onPress={() => this.props.navigation.navigate('ProductFilter')}
-                    >
-                        <Image
-                            style={{ height: 50, width: 50 }}
-                            source={require('../images/Order/settingicon.png')}
-                        />
-                    </TouchableOpacity>
-
-                </View>
-                <View style={[{}, styles.formRowView]}>
-                    <View style={[{ position: 'relative', }, styles.formColumn]}>
-                        <DropDownPicker
-                            items={this.state.categoryarr}
-                            placeholder="Product Category"
-                            containerStyle={{ height: 50, marginTop: 5, width: width - 20, alignSelf: 'center' }}
-                            style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
-                            dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
-                            labelStyle={{ color: '#A9A9A9' }}
-                            onChangeItem={item => this.onCategoryText(item.value)}
-                        />
-                    </View>
-                    <View style={{borderBottomWidth:0.5,borderBottomColor:'#E6E6E6',width:width-20,alignSelf:'center',marginVertical:10}}></View>
-                </View>
-
-                <ScrollView
-                    zIndex={-0.999}
-                >
-                    <FlatList
+            <View>
+            <FlatList
                         style={{}}
-                        data={this.state.data}
+                        data={_that.state.data}
 
                         ItemSeparatorComponent={
                             Platform.OS !== 'android' &&
@@ -312,9 +211,8 @@ class Products extends React.Component {
 
                         renderItem={({ item, index, separators }) => (
                             <TouchableOpacity
-
                                 key={item.key}
-                                onPress={() => this.props.navigation.navigate('ProductView', { prod_id: item.id })}
+                                onPress={() => _that.props.navigation.navigate('ProductView', { prod_id: item.id })}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
                                 <View style={{ zIndex: -0.999, position: 'relative', alignSelf: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 5 }}>
@@ -351,8 +249,91 @@ class Products extends React.Component {
                             </TouchableOpacity>
                         )}
                     />
+                    </View>
+        );
+    }
+
+    render() {
+        console.log('categoryarr categoryarr categoryarr', this.props);
+        const { selectedStartDate } = this.state;
+        const startDate = selectedStartDate ? selectedStartDate.toString() : '';
+
+        return (
+            <View style={{ height: height, width: width, position: 'relative', backgroundColor: '#F0F0F0' }}>
+                <Spinner
+                    visible={this.state.spinner}
+                    textContent={'Please Wait...'}
+                    textStyle={{ color: '#fff' }}
+                    color={'#fff'}
+                />
+                <Header navigation={this.props.navigation} />
+                <View style={{ flexDirection: 'row', paddingHorizontal: 10, alignItems: 'center', justifyContent: 'center' }}>
+                    <View style={{ flex: 1 }}>
+                        <Text style={[{ color: '#2F2E7C', fontWeight: '700' }, fontStyles.normal15]}>Products</Text>
+                    </View>
+                    <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
+                        <TouchableOpacity
+                            onPress={() => this.props.navigation.navigate('ProductCategory')}
+                        >
+                            <Text style={{ fontSize: 12, color: '#B1272C', marginRight: 10 }}>View Product Category</Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity
+                            onPress={() => this.props.navigation.navigate('CreateProduct', { action: 'create', prodDetail: null })}
+                        >
+                            <Image
+                                style={{ height: 30, width: 30 }}
+                                source={require('../images/products/circlePlus.png')}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                </View>
+                <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
+                    <Searchbar
+                        placeholder="Search product, Price and code"
+                        style={[{ color: '#D8D8D8' }, fontStyles.normal14]}
+                        iconColor="#929497"
+                        style={{ width: width / 1.3, alignSelf: 'center', marginTop: 5, marginBottom: 5, elevation: 0, borderColor: '#D8DCDE' }}
+                        onChangeText={text => this.setState({ search_product: text })}
+                        onSubmitEditing={() => this.search()}
+                    //update
+                    ></Searchbar>
+                    <View style={[{ borderBottomColor: '#E6E6E6', borderBottomWidth: 0.5, width: width - 20, alignSelf: 'center', marginTop: 10, marginBottom: 10 }]}></View>
+
+                    <TouchableOpacity
+                        style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
+                        onPress={() =>  {this.setState({
+                            reload: true
+                        });
+                        this.props.navigation.navigate('ProductFilter')}}
+                    >
+                        <Image
+                            style={{ height: 50, width: 50 }}
+                            source={require('../images/Order/settingicon.png')}
+                        />
+                    </TouchableOpacity>
+
+                </View>
+                <View style={[{}, styles.formRowView]}>
+                    <View style={[{ position: 'relative', }, styles.formColumn]}>
+                        <DropDownPicker
+                            items={this.state.categoryarr}
+                            placeholder="Product Category"
+                            containerStyle={{ height: 50, marginTop: 5, width: width - 20, alignSelf: 'center' }}
+                            style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
+                            dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
+                            labelStyle={{ color: '#A9A9A9' }}
+                            onChangeItem={item => this.onCategoryText(item.value)}
+                        />
+                    </View>
+                    <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#E6E6E6', width: width - 20, alignSelf: 'center', marginVertical: 10 }}></View>
+                </View>
+
+                <ScrollView
+                    zIndex={-0.999}
+                >
+                    <this.listProducts _that={this}/>
                 </ScrollView>
-                <TabNav style={{position:'absolute',bottom:0}}  screen={'product'} props={this.props} />
+                <TabNav style={{ position: 'absolute', bottom: 0 }} screen={'product'} props={this.props} />
             </View>
         )
     }
