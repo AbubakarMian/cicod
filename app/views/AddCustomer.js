@@ -124,7 +124,7 @@ class AddCustomer extends React.Component {
                    
                 <Searchbar
                  
-                    placeholder="Search a products"
+                    placeholder="Search a Customer"
                     iconColor="#929497"
                     style={{width:width-20,alignSelf:'center',marginTop:10,marginBottom:5,elevation:0,borderColor:'#D8DCDE'}}
                     onChangeText={(text) => this.setState({ search_text: text })}

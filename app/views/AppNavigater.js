@@ -37,6 +37,7 @@ import ApplyDiscount from './ApplyDiscount';
 import AddNote from './AddNote';
 import BuyersView from './BuyersView';
 import ProductView from './ProductView';
+import ConnectView from './ConnectView';
 import EnableProduct from './EnableProduct';
 import AddNewCustomer from './AddNewCustomer';
 import UpdateProduct from './UpdateProduct';
@@ -93,6 +94,7 @@ export default class AppNavigater extends React.Component {
 
           <Stack.Screen name="Filter" component={Filter} options={{ headerShown: false }} />
           <Stack.Screen name="Connect" component={Connect} options={{ headerShown: false }} />
+          <Stack.Screen name="ConnectView" component={ConnectView} options={{ headerShown: false }} />
           <Stack.Screen name="Buyers" component={Buyers} options={{ headerShown: false }} />
           <Stack.Screen name="BuyersFilter" component={BuyersFilter} options={{ headerShown: false }} />
           <Stack.Screen name="Buy" component={Buy} options={{ headerShown: false }} />

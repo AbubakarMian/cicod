@@ -449,26 +449,9 @@ class Connect extends React.Component {
         );
     }
     sentView() {
+        console.log('this.props.navigation')
         return (
             <View>
-                {/* <View style={[{ paddingHorizontal: 10 }, styles.searchContainer]}>
-
-                    <Image
-
-                        source={require('../images/connect/redsearch.png')}
-                    />
-
-                    <TextInput
-                        label="Search a products"
-                        style={{ backgroundColor: 'transparent', }}
-                        width={width - 60}
-                        alignSelf={'center'}
-                        color={'#000'}
-                        onChangeText={text => this.setState({ product_text: text })}
-                        onSubmitEditing={() => this.getProduct('sent')}
-
-                    />
-                </View> */}
 
                 <Searchbar
                     placeholder="Search a products"
@@ -496,38 +479,10 @@ class Connect extends React.Component {
                         }
                         data={this.state.send_arr}
                         renderItem={({ item, index, separators }) => (
-                            // <TouchableHighlight
-                            //     key={item.key}
-                            //     // onPress={() => this._onPress(item)}
-                            //     onShowUnderlay={separators.highlight}
-                            //     onHideUnderlay={separators.unhighlight}>
-                            //     <View style={[{}, styles.flatCardView]}>
-                            //         <View style={{ flex: 1 }}>
-                            //             <Image source={require('../images/Order/bage.png')} />
-                            //         </View>
-                            //         <View style={{ flex: 3, flexDirection: 'column' }}>
-                            //             <Text>{item.buyer_name}</Text>
-                            //             <View style={{ flexDirection: 'row' }}>
-                            //                 <Text style={{ fontWeight: 'bold', fontSize: 12 }}>{item.buyer_id}  </Text>
-                            //                 <Text style={{ color: '#aaa', fontSize: 10 }}>{item.time_requested}</Text>
-                            //             </View>
-                            //         </View>
-                            //         {(item.status == 'PENDING') ?
-                            //             <View style={[{ position: 'absolute', right: 0, marginTop: 5, backgroundColor: '#FFFF99', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
-                            //                 <Text style={[{ color: '#CCCC00' }]}>PENDING</Text>
-                            //             </View>
-                            //             :
-                            //             (item.status == 'APPROVED') ?
-                            //                 <View style={[{ position: 'absolute', right: 0, marginTop: 5, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
-                            //                     <Text style={[{ color: '#26C281' }]}>APPROVED</Text>
-                            //                 </View>
-                            //                 : null
-                            //         }
-                            //     </View>
-                            // </TouchableHighlight>
+                            
                             <TouchableOpacity
                                 key={item.key}
-                                // onPress={() => this._onPress(item)}
+                                onPress={() => this.props.navigation.navigate('ConnectView',{items:item})}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
                                 <View style={[{}, styles.flatCardView]}>

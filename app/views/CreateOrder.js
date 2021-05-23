@@ -38,8 +38,8 @@ class CreateOrder extends React.Component {
             suppliereModal: false,
             search_supplier: '',
             supplierlist: [],
-            address_backgound:'',
-            deliveryType:'',
+            address_backgound: '',
+            deliveryType: '',
         }
     }
     clearOrder() {
@@ -120,14 +120,14 @@ class CreateOrder extends React.Component {
     DeliveryType(type) {
         console.log(' type !!!!!!!', type);
         this.setState({ is_pickup: !this.state.is_pickup, })
-        if(type==='delivery'){
-          this.setState({deliveryType:'delivery'})
+        if (type === 'delivery') {
+            this.setState({ deliveryType: 'delivery' })
 
-        }else if(type==='pickup'){
-          this.setState({deliveryType:'pickup'})
-            
+        } else if (type === 'pickup') {
+            this.setState({ deliveryType: 'pickup' })
+
         }
-        
+
 
         if (this.props.customer.name == '') {
 
@@ -169,7 +169,7 @@ class CreateOrder extends React.Component {
     }
     createOrderFun() {
 
-        
+
         // return;
 
         let dilevery_type = ''
@@ -210,7 +210,7 @@ class CreateOrder extends React.Component {
                 discount_amount: discounted_price ?? 0,
             })
         };
-        console.log('body params list @@@@@@!!!!!!!!!!!!!!',postData );
+        console.log('body params list @@@@@@!!!!!!!!!!!!!!', postData);
         fetch(Constants.orderslist, postData)
             .then(response => response.json())
             .then(async responseJson => {
@@ -279,9 +279,9 @@ class CreateOrder extends React.Component {
         this.props.navigation.goBack()
     }
 
-    supplierModalFun(item){
+    supplierModalFun(item) {
         this.setState({
-            suppliereModal:false
+            suppliereModal: false
         })
         this.props.navigation.navigate('BuyersView', { items: item, heading: 'SUPPLIERS' })
     }
@@ -334,9 +334,9 @@ class CreateOrder extends React.Component {
                         </View>
                         {(this.props.route.params.screen_name == 'buy') ?
                             <View style={[{}, styles.customerTitleRowView]}>
-                                {(this.props.supplier.name != '') ? 
-                                <Text style={[{}, styles.customerTitleRowHeadingText]}>{this.props.supplier.name}</Text>
-                                : null}
+                                {(this.props.supplier.name != '') ?
+                                    <Text style={[{}, styles.customerTitleRowHeadingText]}>{this.props.supplier.name}</Text>
+                                    : null}
                                 <TouchableOpacity
                                     onPress={() => this.setState({ suppliereModal: true })}
                                 >
@@ -390,7 +390,7 @@ class CreateOrder extends React.Component {
                             <View style={[{}, styles.customerContaineraddProductView]}>
 
                                 <Image
-                                     style={{height:30,width:30}}
+                                    style={{ height: 30, width: 30 }}
                                     source={require('../images/products/circlePlus.png')}
                                 />
                                 <Text style={[{}, styles.customerContaineraddProductText]}>Add Product</Text>
@@ -410,9 +410,9 @@ class CreateOrder extends React.Component {
                             </TouchableOpacity>
                             {(this.state.cart_arr.length == 0) ?
                                 <View style={[{}, styles.cartSlashView]}>
-                                    <Image 
-                                      style={{height:width/3,width:width/3}}
-                                      source={require('../images/cartSlash.png')} 
+                                    <Image
+                                        style={{ height: width / 3, width: width / 3 }}
+                                        source={require('../images/cartSlash.png')}
                                     />
                                     <Text style={[{}, styles.cartSlashheadingText]}>No product added</Text>
                                     <Text style={[{}, styles.cartSlashNormalText]}>Add a product</Text>
@@ -486,9 +486,9 @@ class CreateOrder extends React.Component {
                             <TouchableOpacity
                                 // onPress={() => this.props.navigation.navigate('DiliveryAddress')}
                                 onPress={() => this.DeliveryType('delivery')}
-                                
+
                             >
-                                <View style={[{ borderWidth: 0.25,backgroundColor:this.state.deliveryType === 'delivery' ? '#FFF4F4' : '#fff', }, styles.radioFormView]}>
+                                <View style={[{ borderWidth: 0.25, backgroundColor: this.state.deliveryType === 'delivery' ? '#FFF4F4' : '#fff', }, styles.radioFormView]}>
 
                                     <RadioForm
                                         isSelected={!this.state.is_pickup}
@@ -535,7 +535,7 @@ class CreateOrder extends React.Component {
                             <TouchableOpacity
                                 onPress={() => this.DeliveryType('pickup')}
                             >
-                                <View style={[{ borderWidth: 0.25,backgroundColor:this.state.deliveryType === 'pickup' ? '#FFF4F4' : '#fff', }, styles.radioFormView]}>
+                                <View style={[{ borderWidth: 0.25, backgroundColor: this.state.deliveryType === 'pickup' ? '#FFF4F4' : '#fff', }, styles.radioFormView]}>
                                     <RadioForm
                                         isSelected={this.state.is_pickup}
                                         color={'yellow'}
@@ -639,7 +639,7 @@ class CreateOrder extends React.Component {
                                     }}
                                     isChecked={this.state.isChecked}
                                     rightText={"Accept multiple part payment"}
-                                    rightTextStyle={{color:'#4E4D4D',fontSize:13,fontFamily:'Open Sans'}}
+                                    rightTextStyle={{ color: '#4E4D4D', fontSize: 13, fontFamily: 'Open Sans' }}
                                     checkBoxColor={'#929497'}
 
 
@@ -655,36 +655,45 @@ class CreateOrder extends React.Component {
                                     <Text style={[{}, styles.subTotleColumn1Text]}>subtotal:</Text>
                                     <Text style={[{}, styles.subTotleColumn1Text]}>Tax(7.5%)</Text>
                                     <Text style={[{}, styles.subTotleColumn1Text]}>TOTAL:</Text>
-                            
+
                                 </View>
                                 <View style={[{}, styles.subTotleColumn2View]}>
                                     <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.total_price ?? 0}</Text>
                                     <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.tax ?? 0}</Text>
-                                    <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.total_price_with_tax ?? 0}</Text>
-                         
+
+                                    {(this.props.orderDiscountReducer.discount_type == 'percentage') ?
+
+                                        <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.total_price_with_tax - (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01) ?? 0}</Text>
+                                        :
+                                        (this.props.orderDiscountReducer.discount_type == 'value') ?
+                                            <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.total_price_with_tax - (this.props.orderDiscountReducer.discount_amount) ?? 0}</Text>
+                                            : <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.total_price_with_tax ?? 0}</Text>
+                                    }
+
+
                                 </View>
                             </View>
-                            <View style={{flexDirection:'row',width:width-50,alignSelf:'center',marginVertical:10}}>
-                            <TouchableOpacity
-                            style={{flex:1,justifyContent:'center',}}
-                                        onPress={() => this.props.navigation.navigate('ApplyDiscount')}
-                                    >
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <Image source={require('../images/icon15.png')}
-                                            style={{height:20,width:20}} />
-                                            <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Apply for Discount</Text>
-                                        </View>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                    style={{flex:1,justifyContent:'center',alignItems:'flex-end'}}
-                                        onPress={() => this.props.navigation.navigate('AddNote')}
-                                    >
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <Image source={require('../images/addNote.png')}
-                                            style={{height:20,width:15}} />
-                                            <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Add Note</Text>
-                                        </View>
-                                    </TouchableOpacity>
+                            <View style={{ flexDirection: 'row', width: width - 50, alignSelf: 'center', marginVertical: 10 }}>
+                                <TouchableOpacity
+                                    style={{ flex: 1, justifyContent: 'center', }}
+                                    onPress={() => this.props.navigation.navigate('ApplyDiscount')}
+                                >
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Image source={require('../images/icon15.png')}
+                                            style={{ height: 20, width: 20 }} />
+                                        <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Apply for Discount</Text>
+                                    </View>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}
+                                    onPress={() => this.props.navigation.navigate('AddNote')}
+                                >
+                                    <View style={{ flexDirection: 'row' }}>
+                                        <Image source={require('../images/addNote.png')}
+                                            style={{ height: 20, width: 15 }} />
+                                        <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Add Note</Text>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
                             <TouchableOpacity
                                 onPress={() => this.createOrderFun()}

@@ -39,7 +39,7 @@ class ProductFilter extends React.Component {
     // await this.getProductList(Constants.productslist);
     return
     this.setState({ spinner: true })
-    let postData = {
+    let postData = {  
       method: 'GET',
       headers: {
         Accept: 'application/json',
@@ -170,7 +170,9 @@ class ProductFilter extends React.Component {
       filters: filters
     })
   }
-  applyFilter = () => {
+
+ 
+  applyFilter () {
     console.log('this.state.filters', this.state.filters);
     this.props.navigation.navigate('Products', { filters: this.state.filters, seller_id: 1 });
   }
@@ -314,7 +316,7 @@ class ProductFilter extends React.Component {
         </View>
 
         <TouchableOpacity
-          onPress={this.applyFilter}
+          onPress={()=>this.applyFilter()}
           style={{ width: width / 1.5, marginTop: 20, alignSelf: 'center', backgroundColor: '#B1272C', justifyContent: 'center', alignItems: 'center', paddingVertical: 15, borderRadius: 50 }}
         >
           <Text style={{ color: '#fff', fontWeight: 'bold' }}>Apply</Text>

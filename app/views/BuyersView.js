@@ -326,7 +326,8 @@ class BuyersView extends React.Component {
                             <View style={[{}, styles.columnView]}>
                                 {(this.props.route.params.heading == 'BUYERS') ?
                                     <TouchableOpacity
-                                        onPress={() => this.props.navigation.navigate('UpdateProduct', { buyer_detail: this.state.items })}
+                                        onPress={() => this.props.navigation.navigate('UpdateProduct', {fetch_action:'updateproduct', 
+                                        buyer_detail: this.state.items })}
                                         style={[{}, styles.redTouch]}
                                     >
 

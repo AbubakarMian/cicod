@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, Dimensions, Image,Alert, Platform, TouchableOpacity, } from 'react-native'
+import { View, ImageBackground, ScrollView, Dimensions, Image, Alert, Platform, TouchableOpacity, } from 'react-native'
 import { Text, TextInput } from 'react-native-paper';
 import styles from '../css/Filter.Css';
 import fontStyles from '../css/FontCss'
@@ -14,7 +14,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { Constants } from '../views/Constant';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
-class Filter extends React.Component {
+class OrderFilter extends React.Component {
 
   constructor(props) {
     super(props);
@@ -24,6 +24,7 @@ class Filter extends React.Component {
       categoryarr: [],
       createdby_arr: [],
       paymentmode_arr: [],
+      orderchannel_arr: [],
       category_name: '',
       spinner: false,
       date: '',
@@ -55,7 +56,7 @@ class Filter extends React.Component {
         if (responseJson.status === 'success') {
 
           let res = responseJson.data;
-          let createdby_arr = res.map((x, key) => { return { label: x.created_by, value: x.created_by } });
+          let createdby_arr = res.map((x, key) => { return { label: x.created_by ?? '', value: x.created_by ?? '' } });
           let paymentmode_arr = res.map((x, key) => { return { label: x.payment_mode, value: x.payment_mode } });
           console.log('createdby_arr createdby_arr !!!!!!', createdby_arr);
           console.log('paymentmode_arr paymentmode_arr !!!!!!', paymentmode_arr);
@@ -78,6 +79,13 @@ class Filter extends React.Component {
     this.props.logoutUser();
     this.props.navigation.navigate('Login');
   }
+  onorderChannelText(text) {
+    let filters = this.state.filters;
+    filters.push({ key: 'orderChannel', value: text });
+    this.setState({
+      filters: filters
+    })
+  }
   onQuantityText(text) {
     let filters = this.state.filters;
     filters.push({ key: 'quantity', value: text });
@@ -95,7 +103,7 @@ class Filter extends React.Component {
   }
   onPaymentmodeText(text) {
     let filters = 'Freezer'; //this.state.filters;
-    filters.push({ key: 'createdBy', value: text });
+    filters.push({ key: 'payment_mode', value: text });
     this.setState({
       filters: filters
     })
@@ -241,7 +249,7 @@ class Filter extends React.Component {
                 >
                   <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginRight: 10, padding: 10, marginVertical: 10 }}>
                     <Image
-                      style={{height:15,width:15}}
+                      style={{ height: 15, width: 15 }}
                       source={require('../images/calenderIcon.png')}
                     />
                     <Text style={{ marginLeft: 10, color: '#aaa' }}>DD-MM-YY</Text>
@@ -297,23 +305,19 @@ class Filter extends React.Component {
               </View>
             </View>
             <View style={{ width: width - 20, backgroundColor: '#fff', paddingVertical: 10, marginTop: 20 }}>
-              <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 5, flexDirection: 'row', position: 'relative' }}>
-                <TextInput
-                  label="Order Channel"
-                  style={{ backgroundColor: 'transparent', }}
-                  width={width - 50}
-                  alignSelf={'center'}
-                  color={'#000'}
-                />
-                <View style={{ position: 'absolute', right: 10, bottom: 10 }}>
-                  <Icon
-                    size={30}
-
-                    name="caret-down"
-                    color={'#707070'}
-                  />
-                </View>
-              </View>
+              {/* {this.state.orderchannel_arr.length < 1 ? null : */}
+              <DropDownPicker
+                items={this.state.orderchannel_arr}
+                containerStyle={{ height: 50, width: width - 25, marginTop: 15, }}
+                style={{ backgroundColor: '#fff' }}
+                itemStyle={{
+                  justifyContent: 'flex-start',
+                }}
+                placeholder="Order channel"
+                dropDownStyle={{ backgroundColor: '#fff', zIndex: 0.999, marginBottom: 10 }}
+                onChangeItem={item => this.onorderChannelText(item.value)}
+              />
+              {/* } */}
 
               {this.state.paymentmode_arr.length < 1 ? null :
                 <DropDownPicker
@@ -323,7 +327,7 @@ class Filter extends React.Component {
                   itemStyle={{
                     justifyContent: 'flex-start',
                   }}
-                  placeholder="Created By"
+                  placeholder="Payment Mode"
                   dropDownStyle={{ backgroundColor: '#fff', zIndex: 0.999, marginBottom: 10 }}
                   onChangeItem={item => this.onPaymentmodeText(item.value)}
                 />}
@@ -340,7 +344,7 @@ class Filter extends React.Component {
                   placeholder="Created By"
                   dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, paddingBottom: 20 }}
                   labelStyle={{ color: '#A9A9A9' }}
-                  onChangeItem={item => this.onCreatedByText(item.value)}
+                  onChangeItem={item => this.onCreatedByText(item.value ?? '')}
                 />}
             </View>
             <TouchableOpacity
@@ -368,4 +372,4 @@ function mapDispatchToProps(dispatch) {
     logoutUser: () => dispatch({ type: LOGOUT_USER })
   }
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Filter)
+export default connect(mapStateToProps, mapDispatchToProps)(OrderFilter)
