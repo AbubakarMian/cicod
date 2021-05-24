@@ -407,7 +407,7 @@ class Connect extends React.Component {
                                 // </TouchableOpacity>
                                 <TouchableOpacity
                                     key={item.key}
-                                    // onPress={() => this._onPress(item)}
+                                    onPress={() => this.props.navigation.navigate('ConnectView',{item:item})}
                                     onShowUnderlay={separators.highlight}
                                     onHideUnderlay={separators.unhighlight}>
                                     <View style={[{}, styles.flatCardView]}>
@@ -482,7 +482,7 @@ class Connect extends React.Component {
                             
                             <TouchableOpacity
                                 key={item.key}
-                                onPress={() => this.props.navigation.navigate('ConnectView',{items:item})}
+                                onPress={() => this.props.navigation.navigate('ConnectView',{item:item})}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
                                 <View style={[{}, styles.flatCardView]}>

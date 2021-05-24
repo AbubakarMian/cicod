@@ -617,9 +617,25 @@ class CreateProduct extends React.Component {
                                             <TouchableOpacity style={[{}, styles.productImageCross]}>
                                                 <Image source={require('../images/productCross.png')} />
                                             </TouchableOpacity>
-                                            <Image
+                                            {/* <Image
                                                 style={[[], styles.productImage]}
-                                                source={require('../images/juice.png')} />
+                                                source={require('../images/juice.png')} /> */}
+
+                                    <View style={[{}, styles.addImageView]}>
+                                        <Text style={[{}, styles.addImageLableText]}>Image</Text>
+                                    <TouchableOpacity
+                                    onPress={()=> this.imageUpload()}
+                                    >
+                                        {(this.state.prod_image != '') ?
+                                        <Image
+                                            source={{uri:this.state.prod_image}}
+                                        />
+                                    : <Image
+                                    source={require('../images/redPlus.png')}
+                                />
+                                    }
+                                </TouchableOpacity>
+                            </View>
                                         </View>
                                     </View>
 

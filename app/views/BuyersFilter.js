@@ -93,7 +93,9 @@ class BuyersFilter extends React.Component {
         });
         if (responseJson.success === true) {
           let res = responseJson.data;
-          let approvedby_arr = res.map((x, key) => { return { label: x.approved_by, value: x.approved_by } });
+          console.log('buyer filter response : ',res);
+          let approvedby_arr = res.map((x, key) => {
+            return { label: x.approved_by ?? '', value: x.approved_by ?? '' } });
           this.setState({
             approvedby_arr: approvedby_arr,
           });

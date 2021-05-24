@@ -47,7 +47,7 @@ class CreateOrder extends React.Component {
     }
     componentDidMount() {
 
-        console.log(' create order !!!! !!!!!!!!', this.props);
+        console.log(' create order !!!! !!!!!!!!', this.props.user);
 
         let res = this.props.cart.cart;
         let cart_arr = res.map((x, key) => { return { id: x.id, quantity: x.purchased_quantity } });
@@ -144,7 +144,13 @@ class CreateOrder extends React.Component {
                 })
             }
             else {
-                this.props.navigation.navigate('DiliveryAddress', { type })
+
+                if (this.props.route.params.screen_name == 'buy') {
+                    this.props.navigation.navigate('BuyDiliveryAddress', { type })
+                } else {
+                    this.props.navigation.navigate('DiliveryAddress', { type })
+                }
+
             }
         }
 
@@ -336,7 +342,8 @@ class CreateOrder extends React.Component {
                             <View style={[{}, styles.customerTitleRowView]}>
                                 {(this.props.supplier.name != '') ?
                                     <Text style={[{}, styles.customerTitleRowHeadingText]}>{this.props.supplier.name}</Text>
-                                    : null}
+                                    :
+                                    <Text style={[{}, styles.customerTitleRowHeadingText]}>{this.props.user.firstname + ' ' + this.props.user.lastname}</Text>}
                                 <TouchableOpacity
                                     onPress={() => this.setState({ suppliereModal: true })}
                                 >
@@ -499,6 +506,7 @@ class CreateOrder extends React.Component {
                                         buttonOuterSize={20}
                                         onPress={(value) => { this.setState({ value3Index: value }) }}
                                     />
+
                                     {
                                         radio_props_dilvery.map((obj, i) => (
                                             <RadioButton labelHorizontal={true} key={i} >
@@ -761,7 +769,7 @@ class CreateOrder extends React.Component {
                                             onShowUnderlay={separators.highlight}
                                             onHideUnderlay={separators.unhighlight}>
                                             <View style={[{ marginTop: 10 }, styles.modalListContainer]}>
-                                                <Image source={require('../images/bage.png')} />
+                                                <Image style={{ width: 30, height: 30 }} source={require('../images/bage.png')} />
                                                 <View style={[{}, styles.modalListContentView]}>
                                                     <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.seller_name}</Text>
                                                     <Text style={[{ color: '#929497' }, fontStyles.normal12]}>{item.seller_id}</Text>

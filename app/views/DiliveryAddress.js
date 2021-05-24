@@ -45,8 +45,6 @@ class DiliveryAddress extends React.Component {
         fetch(Constants.customerdelivery + '?customer_id='+this.props.customer.id, postData) //+ this.props.customer.id
             .then(response => response.json())
             .then(async responseJson => {
-                console.log('***************@@@@@@@@########### addrez apoi ', responseJson.data.country)
-
                 this.setState({
                     spinner: false,
                 });
@@ -74,9 +72,6 @@ class DiliveryAddress extends React.Component {
     }
 
     selectAddress(object) {
-
-     
-        
         this.setState({
             is_selected_address: !this.state.is_selected_address
         })
@@ -173,6 +168,7 @@ class DiliveryAddress extends React.Component {
 
                                 <Image
                                     source={require('../images/products/circlePlus.png')}
+                                    style={{width:30, height:30}}
                                 />
                                 <Text style={[{}, styles.customerContaineraddProductText]}>Add Address</Text>
                             </View>
