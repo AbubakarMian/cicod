@@ -135,9 +135,7 @@ class Products extends React.Component {
                     let message = responseJson.message
                     Alert.alert('Error', message)
                 }
-
             })
-
     }
 
     onCategoryText(category_id) {
@@ -151,19 +149,7 @@ class Products extends React.Component {
         this.props.logoutUser();
         this.props.navigation.navigate('Login');
     }
-    havenewProps(){
-        console.log('got new props');
-        let prop_filters = this.props.route.params.filters;
-        let state_filters = this.state.filters;
-        for(let i=0; i<prop_filters.length;i++){
-            
-            if (prop_filters[0].key != state_filters[0].key 
-                || prop_filters[0].value != state_filters[0].value) {
-                return true;
-            }
-        }    
-        return false;    
-    }   
+     
 
      listProducts(props){
         let _that = props._that;

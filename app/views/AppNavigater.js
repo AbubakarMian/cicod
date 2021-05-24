@@ -48,6 +48,7 @@ import PickUpLocation from './PickUpLocation';
 import AddDiliveryAddress from './AddDiliveryAddress';
 import AddSuppliers from './AddSuppliers';
 import PaymentWeb from './PaymentWeb';
+import BuyDiliveryAddress from './BuyDiliveryAddress';
 import CreateProductCategory from './CreateProductCategory';
 import More from '../views/More';
 const Stack = createStackNavigator();
@@ -62,6 +63,7 @@ export default class AppNavigater extends React.Component {
 
           <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
           <Stack.Screen name="PaymentWeb" component={PaymentWeb} options={{ headerShown: false }} />
+          <Stack.Screen name="BuyDiliveryAddress" component={BuyDiliveryAddress} options={{ headerShown: false }} />
 
           
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />

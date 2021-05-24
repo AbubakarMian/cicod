@@ -24,16 +24,79 @@ class ConnectView extends React.Component {
             prodDetail: {},
             supendModal: false,
             action: 'suspend',
+            item: {},
+            area: '',
+            business_sector: '',
+            business_type: '',
+            merchant_id: 0,
+            buyer_name: '',
+            buyer_id: '',
+            date_joined: '',
+            buyer_data: '',
         }
 
     }
 
     componentDidMount() {
-        console.log('props !!!!!!!!!!!!!!!!!!!!!', this.props.route.params.items.buyer_id)
+        console.log('props !!!!!!!!!!!!!!!!!!!!!', this.props.route.params.item);
         // let pro_url = Constants.products + '/' + this.props.route.params.prod_id
         // this.getProductDetail(pro_url)
+        let buyer_name = this.props.route.params.item.buyer_name;
+        let url = Constants.searchMerchant + '?merchantId=' + buyer_name;
+        console.log('url @@@@@@@@@@ !!!!!!!!!!!!!!!!!!!!!', url);
+        this.getBuyer(url);
     }
+    getBuyer(url) {
+        this.setState({ spinner: true })
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            },
+        };
 
+
+        fetch(url, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                console.log('response json received buyers !!!!!!!!!!!!!', responseJson);
+                this.setState({
+                    spinner: false
+                });
+                if (responseJson.success === true) {
+
+                    // let buyer_data = responseJson.data.map((x, key) => { return { buyer_id: x.merchant_id, buyer_name: x.id } });
+
+                    // console.log(' responseJson.responseJson.data buyer data  !!!!!!!!!!!!!!!', buyer_data)
+                    let buyer_detail = responseJson.data
+                    this.setState({
+                        area: buyer_detail.area,
+                        business_sector: buyer_detail.business_sector,
+                        business_type: buyer_detail.business_type,
+                        buyer_id: buyer_detail.merchant_id,
+                        buyer_name: buyer_detail.merchant_name,
+                        date_joined: buyer_detail.date_joined,
+                        buyer_data: {
+                            buyer_id: responseJson.data.merchant_id,
+                            buyer_name: responseJson.data.merchant_name
+                        },
+                    })
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.data.message
+                    if (message == '' || message == undefined) {
+                        message = 'Server responded with error contact admin'
+                    }
+                    Alert.alert('Error', message)
+                }
+
+            })
+
+    }
     getConnectDetail(url) {
         let token = this.props.user.access_token;
         this.setState({ spinner: true })
@@ -110,14 +173,8 @@ class ConnectView extends React.Component {
                 }
             })
     }
-
-    // updateProductFun(){
-    //     this.setState({
-    //         supendModal:false
-    //     })
-    //     this.props.navigation.navigate('CreateProduct',{action:'update',prodDetail:this.state.prodDetail});
-    // }
     render() {
+        console.log('this.state.buyer_data this.state.buyer_data: ', this.state.buyer_data);
 
         return (
             <View style={[{}, styles.mainView]}>
@@ -146,59 +203,52 @@ class ConnectView extends React.Component {
                             source={require('../images/bage.png')} />
 
                     </View>
-                    <Text style={[{ color: '#4E4D4D', textAlign: 'center' }, fontStyles.bold18]}>King Crown</Text>
+                    <Text style={[{ color: '#4E4D4D', textAlign: 'center' }, fontStyles.bold18]}>{this.state.buyer_name}</Text>
                     {/* <Text style={[{ color: '#929497', textAlign: 'center' }, fontStyles.normal12]}>sdf sdf sdfsdf sfd</Text> */}
                     <View style={{ borderBottomWidth: 1, borderColor: '#E6E6E6', marginVertical: 10 }}></View>
                     <View style={[{}, styles.descRow]}>
                         <View style={[{}, styles.descColumn]}>
                             <Text style={[{}, styles.lightGrayTex]}>Merchant ID</Text>
-                            <Text style={[{}, styles.darkGarayText]}>324234</Text>
+                            <Text style={[{}, styles.darkGarayText]}>{this.state.buyer_id}</Text>
                         </View>
                     </View>
                     <View style={[{}, styles.descRow]}>
                         <View style={[{}, styles.descColumn]}>
                             <Text style={[{}, styles.lightGrayTex]}>Business Sector</Text>
-                            <Text style={[{}, styles.darkGarayText]}>324234</Text>
+                            <Text style={[{}, styles.darkGarayText]}>{this.state.business_sector}</Text>
                         </View>
                     </View>
                     <View style={[{}, styles.descRow]}>
                         <View style={[{}, styles.descColumn]}>
                             <Text style={[{}, styles.lightGrayTex]}>Business Type</Text>
-                            <Text style={[{}, styles.darkGarayText]}>324234</Text>
+                            <Text style={[{}, styles.darkGarayText]}>{this.state.business_type}</Text>
                         </View>
                     </View>
                     <View style={[{}, styles.descRow]}>
                         <View style={[{}, styles.descColumn]}>
                             <Text style={[{}, styles.lightGrayTex]}>Area</Text>
-                            <Text style={[{}, styles.darkGarayText]}>324234</Text>
+                            <Text style={[{}, styles.darkGarayText]}>{this.state.area}</Text>
                         </View>
                     </View>
                     <View style={[{}, styles.descRow]}>
                         <View style={[{}, styles.descColumn]}>
                             <Text style={[{}, styles.lightGrayTex]}>Date joined</Text>
-                            <Text style={[{}, styles.darkGarayText]}>324234</Text>
+                            <Text style={[{}, styles.darkGarayText]}>{this.state.date_joined}</Text>
                         </View>
                     </View>
-
-
-
                 </View>
-
-                <View style={{ flexDirection: 'row', padding: 40 , justifyContent:'space-between' }}>
+                <View style={{ flexDirection: 'row', padding: 40, justifyContent: 'space-between' }}>
                     <TouchableOpacity
-                       onPress={() => this.props.navigation.navigate('UpdateProduct', { buyer_detail: this.state.items })}
+                        // onPress={() => this.props.navigation.navigate('UpdateProduct', { buyer_detail: this.state.buyer_data })}
                         style={[{}, styles.greyTouch]}>
                         <Text style={{ color: '#929497' }}>Decline</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => this.onSaveFun()}
+                        onPress={() => this.props.navigation.navigate('UpdateProduct', { buyer_detail: this.state.buyer_data, screen: 'buyer' })}
                         style={[{}, styles.redTouch]}>
                         <Text style={{ color: '#fff' }}>Enable</Text>
                     </TouchableOpacity>
-                  
                 </View>
-
-
                 <Modal
                     visible={this.state.productImageModal}
                     transparent={true}

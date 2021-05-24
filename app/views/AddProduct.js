@@ -234,23 +234,7 @@ class AddProduct extends React.Component {
                 </View>
                 <View>
                     <ScrollView>
-                        {/* <View style={[{}, styles.searchContainer]}>
-                            <Image
-                                style={{height:20,width:20}}
-                                source={require('../images/products/searchicon.png')}
-                            />
-                            <TextInput
-                                onChangeText={text => this.setState({ search_product: text })}
-                                label=""
-                                style={{ backgroundColor: 'transparent', }}
-                                width={width - 50}
-                                alignSelf={'center'}
-                                color={'#000'}
-                                onSubmitEditing={() => this.getProductList()}
-                                
-                            />
-
-                        </View> */}
+                        
                           <Searchbar
                     placeholder="Search Product"
                     iconColor="#929497"

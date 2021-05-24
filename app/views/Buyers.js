@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, ImageBackground, FlatList, Alert, TouchableHighlight, Dimensions, Image, Platform, TouchableOpacity, } from 'react-native'
 import splashImg from '../images/splash.jpg'
-import { Text, TextInput,Searchbar } from 'react-native-paper';
+import { Text, TextInput, Searchbar } from 'react-native-paper';
 import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
@@ -29,14 +29,17 @@ class Buyers extends React.Component {
             spinner: false,
             data: [],
             search_buyers: '',
-            reload: true
+            reload: true,
+            url_buyers: ''
 
         }
     }
 
-    componentDidMount() {
-        this.buyerList(Constants.buyerlist);
-    }
+    // componentDidMount() {
+    //     this.buyerList(Constants.buyerlist);
+    // }
+
+
 
     unauthorizedLogout() {
         Alert.alert('Error', Constants.UnauthorizedErrorMsg)
@@ -66,7 +69,7 @@ class Buyers extends React.Component {
                         data: responseJson.data
                     })
 
-                }    else if(responseJson.status == 401){
+                } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 }
                 else {
@@ -76,39 +79,37 @@ class Buyers extends React.Component {
             })
     }
 
-    
+    // componentDidUpdate() {
 
-    componentDidUpdate() {
+    //     console.log('componentDidUpdate  !!!!!!!!!!!!!!!!', this.props.route.params)
+    //     console.log('this.state.reload @@@@@@@@@@@@@  !!!!!!!!!!!!!!!!', this.state.reload)
 
-        console.log('componentDidUpdate  !!!!!!!!!!!!!!!!', this.props.route.params)
-        console.log('this.state.reload this.state.reload  !!!!!!!!!!!!!!!!', this.state.reload)
+    //     if (this.state.reload == true) {
+    //         if (this.props.route.params === undefined) {
+    //             console.log('IN If Condition !!!!!!!!!!!!!!!!!!!!!!!!')
 
-        if (this.state.reload == true) {
-            if (this.props.route.params === undefined) {
-                console.log('IN If Condition !!!!!!!!!!!!!!!!!!!!!!!!')
+    //         } else {
+    //             console.log('IN Else Condition !!!!!!!!!!!!!!!!!!!!!!!!')
 
-            } else {
-                console.log('IN Else Condition !!!!!!!!!!!!!!!!!!!!!!!!')
-
-                let filters = this.props.route.params.filters;
-                let filter = '?';
-                for (let i = 0; i < filters.length; i++) {
-                    filter = filter + filters[i].key + '=' + filters[i].value;
-                    if (i != filters.length - 1) {
-                        filter = filter + '&';
-                    }
-                }
-                console.log(' Constants.buyerlist + filter Constants.buyerlist + filter', Constants.buyerlist + filter)
-               this.setState({
-                reload:false
-               })
-                this.buyerList(Constants.buyerlist + filter);
-            }
-        }
-        else{
-            console.log('IN reload  else Condition !!!!!!!!!!!!!!!!!!!!!!!!')
-        }
-    }
+    //             let filters = this.props.route.params.filters;
+    //             let filter = '?';
+    //             for (let i = 0; i < filters.length; i++) {
+    //                 filter = filter + filters[i].key + '=' + filters[i].value;
+    //                 if (i != filters.length - 1) {
+    //                     filter = filter + '&';
+    //                 }
+    //             }
+    //             console.log(' Constants.buyerlist + filter Constants.buyerlist + filter', Constants.buyerlist + filter)
+    //             this.setState({
+    //                 reload: false
+    //             })
+    //             this.buyerList(Constants.buyerlist + filter);
+    //         }
+    //     }
+    //     else {
+    //         console.log('IN reload  else Condition !!!!!!!!!!!!!!!!!!!!!!!!')
+    //     }
+    // }
 
     search() {
 
@@ -146,7 +147,7 @@ class Buyers extends React.Component {
                     // })
                     Alert.alert('Message', responseJson.data.message);
 
-                }     else if(responseJson.status == 401){
+                } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 }
                 else {
@@ -180,7 +181,7 @@ class Buyers extends React.Component {
                     Alert.alert('Message', responseJson.data.message);
                     this.props.navigation.navigate('Buyers')
 
-                }     else if(responseJson.status == 401){
+                } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 }
                 else {
@@ -202,6 +203,115 @@ class Buyers extends React.Component {
             this.unsuspendBuyer(item.buyer_id);
             this.buyerList(Constants.buyerlist);
         }
+    }
+    listBuyers(props) {
+        
+        let _that = props._that;
+        let url = '';
+        if (_that.props.route == null || _that.props.route.params == null || _that.props.route.params.filters == null) {
+            url = Constants.buyerlist;
+        }
+        else {
+           
+            let filters = _that.props.route.params.filters;
+            let filter = '?';
+            for (let i = 0; i < filters.length; i++) {
+                filter = filter +'filter'+ '['+filters[i].key +']' + '=' + filters[i].value;
+                if (i != filters.length - 1) {
+                    filter = filter + '&';
+                }
+            }
+            url = (Constants.buyerlist + filter);
+        }
+        if (url != _that.state.url_buyers) {
+            _that.buyerList(url);
+            _that.setState({
+                url_buyers: url
+            })
+        }
+
+        return (
+            <View>
+                <FlatList
+                    data={_that.state.data}
+                    ItemSeparatorComponent={
+                        Platform.OS !== 'android' &&
+                        (({ highlighted }) => (
+                            <View
+                                style={[
+                                    style.separator,
+                                    highlighted && { marginLeft: 0 }
+                                ]}
+                            />
+                        ))
+                    }
+
+                    renderItem={({ item, index, separators }) => (
+                        <TouchableOpacity
+                            key={item.key}
+                            onPress={() => _that.buyersDetail(item)}
+                            onShowUnderlay={separators.highlight}
+                            onHideUnderlay={separators.unhighlight}>
+                            <View style={[{}, styles.flatCardView]}>
+                                <View style={[{ paddingLeft: 10, alignItems: 'center' }, styles.cardRow]}>
+                                    <Image
+                                        style={{ height: 30, width: 30 }}
+                                        source={require('../images/bage.png')}
+                                    />
+                                    <View style={[{}, styles.cardContentView]}>
+                                        <Text style={[{}, styles.cardContentDarkText]}>{item.buyer_name}</Text>
+                                        <Text style={[{}, styles.lightGrayText]}>{item.product_categories}</Text>
+                                    </View>
+                                    <View style={[{ alignItems: 'center', justifyContent: 'center' }, styles.cardActionView]}>
+
+                                        <View style={[{}, styles.cardActionView]}>
+                                            <TouchableOpacity
+                                                // onPress={() => this.setState({ toolTipVisible: true })}
+                                                style={[{}, styles.cardActionTouch]}
+                                            >
+                                                <Menu>
+                                                    {/* <MenuTrigger text='. . .' customStyles={{}} /> */}
+                                                    <MenuTrigger style={styles.trigger}>
+                                                        {/* <Text style={styles.triggerText}>Slide-in menu...</Text> */}
+                                                        <Icon name="ellipsis-h" color={'#929497'} size={20} />
+                                                    </MenuTrigger>
+                                                    <MenuOptions>
+                                                        <MenuOption onSelect={() => this.props.navigation.navigate('UpdateProduct', { buyer_detail: item })} >
+                                                            <View style={{ flexDirection: 'row' }}>
+                                                                <Image
+                                                                    source={require('../images/update.png')}
+                                                                />
+                                                                <Text style={{ marginLeft: 10 }}>Update</Text>
+                                                            </View>
+                                                        </MenuOption>
+                                                        <MenuOption onSelect={() => this.suspendAction(item)} >
+                                                            <View style={{ flexDirection: 'row' }}>
+                                                                <Image
+                                                                    source={require('../images/suspend.png')}
+                                                                />
+                                                                {(item.is_active == 1) ?
+                                                                    <Text style={{ marginLeft: 10 }}>Suspend</Text>
+                                                                    : <Text style={{ marginLeft: 10 }}>Unsuspend</Text>}
+                                                            </View>
+                                                        </MenuOption>
+
+                                                    </MenuOptions>
+                                                </Menu>
+                                            </TouchableOpacity>
+                                            {(item.is_active == 1) ?
+                                                <Text style={[{}, styles.statusText]}>Active</Text>
+                                                : <Text style={[{}, styles.statusPendingText]}>In Active</Text>}
+                                        </View>
+
+                                    </View>
+                                </View>
+
+                            </View>
+                        </TouchableOpacity>
+                    )}
+                />
+            </View>
+        );
     }
 
     render() {
@@ -272,15 +382,15 @@ class Buyers extends React.Component {
                             onSubmitEditing={() => this.search()}
                         />
                     </View> */}
-                      <Searchbar
-                    placeholder="Search a products"
-                    iconColor="#929497"
-                    style={{width:width/1.3,alignSelf:'center',marginTop:10,marginBottom:5,elevation:0,borderColor:'#D8DCDE'}}
-                    onChangeText={text => this.setState({ search_buyers: text })}
-                    onSubmitEditing={() => this.search()}
+                    <Searchbar
+                        placeholder="Search a products"
+                        iconColor="#929497"
+                        style={{ width: width / 1.3, alignSelf: 'center', marginTop: 10, marginBottom: 5, elevation: 0, borderColor: '#D8DCDE' }}
+                        onChangeText={text => this.setState({ search_buyers: text })}
+                        onSubmitEditing={() => this.search()}
                     //update
                     ></Searchbar>
-               
+
 
                     <TouchableOpacity
                         style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
@@ -288,103 +398,29 @@ class Buyers extends React.Component {
                         onPress={() => this.props.navigation.navigate('BuyersFilter')}
                     >
                         <Image
-                            style={{height:50,width:50}}
+                            style={{ height: 50, width: 50 }}
                             source={require('../images/Order/settingicon.png')}
                         />
                     </TouchableOpacity>
 
                 </View>
-                <View style={{borderBottomWidth:1,marginVertical:5,width:width-20,alignSelf:'center',borderBottomColor:'#E6E6E6'}}></View> 
+                <View style={{ borderBottomWidth: 1, marginVertical: 5, width: width - 20, alignSelf: 'center', borderBottomColor: '#E6E6E6' }}></View>
 
                 <ScrollView
                     scrollEnabled={true}
                     horizontal={true}
                     marginTop={10}
                 >
-                    <FlatList
-                        data={this.state.data}
-                        ItemSeparatorComponent={
-                            Platform.OS !== 'android' &&
-                            (({ highlighted }) => (
-                                <View
-                                    style={[
-                                        style.separator,
-                                        highlighted && { marginLeft: 0 }
-                                    ]}
-                                />
-                            ))
-                        }
-
-                        renderItem={({ item, index, separators }) => (
-                            <TouchableOpacity
-                                key={item.key}
-                                onPress={() => this.buyersDetail(item)}
-                                onShowUnderlay={separators.highlight}
-                                onHideUnderlay={separators.unhighlight}>
-                                <View style={[{}, styles.flatCardView]}>
-                                    <View style={[{ paddingLeft: 10,alignItems:'center' }, styles.cardRow]}>
-                                        <Image
-                                            style={{height:30,width:30}}
-                                            source={require('../images/bage.png')}
-                                        />
-                                        <View style={[{}, styles.cardContentView]}>
-                                            <Text style={[{}, styles.cardContentDarkText]}>{item.buyer_name}</Text>
-                                            <Text style={[{}, styles.lightGrayText]}>{item.product_categories}</Text>
-                                        </View>
-                                        <View style={[{alignItems:'center',justifyContent:'center'}, styles.cardActionView]}>
-
-                                            <View style={[{}, styles.cardActionView]}>
-                                                <TouchableOpacity
-                                                    // onPress={() => this.setState({ toolTipVisible: true })}
-                                                    style={[{}, styles.cardActionTouch]}
-                                                >
-                                                    <Menu>
-                                                        {/* <MenuTrigger text='. . .' customStyles={{}} /> */}
-                                                        <MenuTrigger style={styles.trigger}>
-                                                            {/* <Text style={styles.triggerText}>Slide-in menu...</Text> */}
-                                                            <Icon name="ellipsis-h" color={'#929497'} size={20} />
-                                                        </MenuTrigger>
-                                                        <MenuOptions>
-                                                            <MenuOption onSelect={() => this.props.navigation.navigate('UpdateProduct', { buyer_detail: item })} >
-                                                                <View style={{ flexDirection: 'row' }}>
-                                                                    <Image
-                                                                        source={require('../images/update.png')}
-                                                                    />
-                                                                    <Text style={{ marginLeft: 10 }}>Update</Text>
-                                                                </View>
-                                                            </MenuOption>
-                                                            <MenuOption onSelect={() => this.suspendAction(item)} >
-                                                                <View style={{ flexDirection: 'row' }}>
-                                                                    <Image
-                                                                        source={require('../images/suspend.png')}
-                                                                    />
-                                                                    {(item.is_active == 1) ?
-                                                                        <Text style={{ marginLeft: 10 }}>Suspend</Text>
-                                                                        : <Text style={{ marginLeft: 10 }}>Unsuspend</Text>}
-                                                                </View>
-                                                            </MenuOption>
-
-                                                        </MenuOptions>
-                                                    </Menu>
-                                                </TouchableOpacity>
-                                                {(item.is_active == 1) ?
-                                                    <Text style={[{}, styles.statusText]}>Active</Text>
-                                                    : <Text style={[{}, styles.statusPendingText]}>In Active</Text>}
-                                            </View>
-
-                                        </View>
-                                    </View>
-
-                                </View>
-                            </TouchableOpacity>
-                        )}
-                    />
+                    <this.listBuyers _that={this} />
                 </ScrollView>
+
+
 
             </View>
         )
     }
 }
+
 function mapStateToProps(state) {
     return {
         user: state.userReducer

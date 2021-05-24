@@ -290,7 +290,7 @@ class UpdateProduct extends React.Component {
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
                     <View style={[{}, styles.backHeadingView]}>
-                        <Text style={[{}, styles.backHeadingText]}>UPDATE PRODUCTS - {this.state.buyer_detail.buyer_name}</Text>
+                        <Text style={[{}, styles.backHeadingText]}> {(this.props.route.params.screen == 'buyer') ? "CONNECT":"UPDATE PRODUCTS"} - {this.state.buyer_detail.buyer_name}</Text>
                     </View>
                 </View>
                 <View style={[{}, styles.headingDescView]}>
@@ -357,7 +357,9 @@ class UpdateProduct extends React.Component {
                     onPress={() => this.showUpdateProductAccessPopup()}
                     style={[{}, styles.redTouchView]}
                 >
-                    <Text style={{ color: '#fff' }}>Update Product Access</Text>
+                    {(this.props.route.params.screen == 'buyer') ?
+                    <Text style={{ color: '#fff' }}>Enable Products </Text> :
+                    <Text style={{ color: '#fff' }}>Update Product Access</Text>}
                 </TouchableOpacity>
 
                 <Modal

@@ -27,7 +27,6 @@ class BuyersView extends React.Component {
     }
 
     componentDidMount() {
-        console.log('suppliers Props @@@@@@@@@!!!!!!!!!!!', this.props.route.params.items);
         this.setState({
             items: this.props.route.params.items,
             spinner: false,
