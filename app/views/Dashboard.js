@@ -4,16 +4,16 @@ import { Text, TextInput, Modal } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss';
 import fontStyles from '../css/FontCss'
-import Header from '../views/Header';
+import Header from './Header';
 import CalendarPicker from 'react-native-calendar-picker';
 import Icon from 'react-native-vector-icons/Ionicons';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import * as Progress from 'react-native-progress';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { Constants } from '../views/Constant';
+import { Constants } from './Constant';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER, UpdateTabbar } from '../redux/constants/index';
-import TabNav from '../views/TabsNav';
+import TabNav from './TabsNav';
 import {
     LineChart,
     BarChart,
@@ -24,7 +24,7 @@ import {
 } from "react-native-chart-kit";
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
-class Dashnoard extends React.Component {
+class Dashboard extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -441,4 +441,4 @@ function mapDispatchToProps(dispatch) {
         setTabBar: (value) => dispatch({ type: UpdateTabbar, value: value }),
     }
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Dashnoard)
+export default connect(mapStateToProps, mapDispatchToProps)(Dashboard)

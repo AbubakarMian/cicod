@@ -19,13 +19,16 @@ class AddNote extends React.Component {
         this.state = {
             value: 0,
             isChecked: false,
-            notestext: '',
+            notestext: this.props.notes.notes,
         }
+    }
+    getnote(){
+        return this.state.getnote
     }
     setNotes() {
         console.log('notes props !!!!!!!!', this.state.notestext);
         this.props.setNotes({
-            notes: this.state.notes
+            notes: this.state.notestext
         })
         this.props.navigation.goBack();
     }
@@ -51,6 +54,7 @@ class AddNote extends React.Component {
                     <View>
 
                         <TextInput
+                            value={this.state.notestext}
                             onChangeText={text => this.setState({ notestext: text })} //this.setState({ notestext: text })
                             label="Add note to this order"
                             style={{ backgroundColor: 'transparent', }}

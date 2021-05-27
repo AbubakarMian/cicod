@@ -12,6 +12,7 @@ import { Constants } from '../views/Constant';
 import { connect } from 'react-redux';
 import { SET_USER, SET_CUSTOMER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART, REMOVE_PRODUCT_FORM_CART, CLEAR_ORDER, SET_DELIVERY_ADDRESS } from '../redux/constants/index';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SearchBar from 'react-native-search-bar';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
@@ -20,7 +21,6 @@ class CreateOrder extends React.Component {
         super(props);
         this.state = {
             value: 0,
-            isChecked: false,
             spinner: false,
             customer_name: this.props.customer.name,
             customer_email: this.props.customer.email,
@@ -40,6 +40,11 @@ class CreateOrder extends React.Component {
             supplierlist: [],
             address_backgound: '',
             deliveryType: '',
+            show_part_payment:false,
+            isDatePickerVisible:false,
+            part_payment_balance_due_date:new Date(),
+            part_payment_percent:0,
+            part_payment_amount:0
         }
     }
     clearOrder() {
@@ -161,10 +166,17 @@ class CreateOrder extends React.Component {
     paymentFun(item) {
         let mode = '';
         if (item.label == 'Pay Acount') {
-            mode = 'ONLINE'
+            mode = 'ACCOUNT'
         } else if (item.label == 'Pay Now' || item.label == 'Pay Invoice') {
             mode = 'ONLINE'
         }
+        else if(item.label == 'Part Payment'){
+            mode = ['CASH','ONLINE','POS','USSD','ATM','BANK'];
+            this.setState({
+                show_part_payment:true
+            })
+        }
+        
         this.setState({
             value3Index: item.value,
             payment_mode: mode,
@@ -175,9 +187,6 @@ class CreateOrder extends React.Component {
     }
     createOrderFun() {
 
-
-        // return;
-
         let dilevery_type = ''
         if (this.state.is_pickup == true) {
             dilevery_type = 'Pickup';
@@ -187,8 +196,10 @@ class CreateOrder extends React.Component {
         console.log('dilevery_type', dilevery_type);
         console.log('this.props.deliveryAddress.type this.props.deliveryAddress.type', this.props.deliveryAddress);
         let discounted_price = 0
+        let discounted_percentage = 0
         if (this.props.orderDiscountReducer.discount_type == 'percentage') {
-            discounted_price = (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01);
+            discounted_percentage = this.props.orderDiscountReducer.discount_amount;
+            // discounted_price = (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01);
         }
         else {
             discounted_price = this.props.orderDiscountReducer.discount_amount;
@@ -211,9 +222,14 @@ class CreateOrder extends React.Component {
                 payment_mode: this.state.payment_mode, //required
                 country_id: this.props.deliveryAddress.country_id,
                 state_id: this.props.deliveryAddress.state_id,
+                part_payment_balance_due_date:this.state.part_payment_balance_due_date,
                 // lga_id: this.state.customer_lga,
                 note: this.props.notes.notes ?? '',
-                discount_amount: discounted_price ?? 0,
+                discount_amount: discounted_price,
+                discount_percent: discounted_percentage,
+                accept_multiple_part_payment:this.state.show_part_payment,
+                part_payment_percent:this.state.part_payment_percent,
+                part_payment_amount:this.state.part_payment_amount,
             })
         };
         console.log('body params list @@@@@@!!!!!!!!!!!!!!', postData);
@@ -267,6 +283,7 @@ class CreateOrder extends React.Component {
                         supplierlist: responseJson.data
                     })
                 } else {
+                    console.log('errorrrrr',responseJson);
                     let message = JSON.stringify(responseJson.error.message)
                     Alert.alert('Error', message)
                 }
@@ -291,6 +308,23 @@ class CreateOrder extends React.Component {
         })
         this.props.navigation.navigate('BuyersView', { items: item, heading: 'SUPPLIERS' })
     }
+
+    setDate (date) {
+        var month = date.getUTCMonth() + 1; //months from 1-12
+        var day = date.getUTCDate();
+        var year = date.getUTCFullYear();
+    
+        let newdate = day + "/" + month + "/" + year;
+    
+        let filters = this.state.filters;
+        filters.push({ key: 'create_time', value: date });
+        this.setState({
+          isDatePickerVisible: !this.state.isDatePickerVisible,
+          filters: filters,
+          part_payment_balance_due_date: newdate,
+        })
+    
+      }
     render() {
         console.log(' supplierlist @@@@@@@@@@@@@@@ supplierlist  !!!!!!!!!!!!!!', this.props.supplier);
         var radio_props_dilvery = [
@@ -537,7 +571,9 @@ class CreateOrder extends React.Component {
                                         ))
                                     }
                                     {/* <Text style={[{}, styles.smailGrayText]}>{this.props.deliveryAddress.address ?? 'Dilivery to customer address'}</Text> */}
-                                    <Text style={[{}, styles.smailGrayText]}>Delivery to customer address</Text>
+                                    <Text style={[{}, styles.smailGrayText]}>
+                                        {this.props.deliveryAddress.address ?? 'Delivery to customer address'}
+                                    </Text>
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity
@@ -642,17 +678,46 @@ class CreateOrder extends React.Component {
                                     style={{ width: width / 1.5, alignSelf: 'center', alignItems: 'center' }}
                                     onClick={() => {
                                         this.setState({
-                                            isChecked: !this.state.isChecked
+                                            show_part_payment: !this.state.show_part_payment
                                         })
                                     }}
-                                    isChecked={this.state.isChecked}
+                                    isChecked={this.state.show_part_payment}
                                     rightText={"Accept multiple part payment"}
                                     rightTextStyle={{ color: '#4E4D4D', fontSize: 13, fontFamily: 'Open Sans' }}
                                     checkBoxColor={'#929497'}
-
-
                                 />
                             </View>
+
+                            {this.state.show_part_payment ? 
+                            <View>
+                                <TextInput 
+                                    label="Part Payment Amount"
+                                    keyboardType="numeric"
+                                    style={{ backgroundColor: 'transparent', }}
+                                    width={width - 50}
+                                    alignSelf={'center'}
+                                    color={'#000'}
+                                    onChangeText={text => this.setState({ part_payment_amount: text })}
+                                />
+                                <TextInput 
+                                    label="Part Payment Percent"
+                                    keyboardType="numeric"
+                                    style={{ backgroundColor: 'transparent', }}
+                                    width={width - 50}
+                                    alignSelf={'center'}
+                                    color={'#000'}
+                                    onChangeText={text => this.setState({ part_payment_percent: text })}
+                                />
+                                <TouchableOpacity onPress={()=>this.setState({isDatePickerVisible:!this.state.isDatePickerVisible})}>
+                                    <Text>Date : {this.state.part_payment_balance_due_date.toDateString()}</Text></TouchableOpacity>
+                                <DateTimePickerModal
+                                    isVisible={this.state.isDatePickerVisible}
+                                    mode="date"
+                                    date={this.state.part_payment_balance_due_date}
+                                    onConfirm={(date)=>this.setDate(date)}
+                                    onCancel={()=>{this.setState({isDatePickerVisible:false})}}
+                                />
+                            </View>:null}
                         </View>
 
 
