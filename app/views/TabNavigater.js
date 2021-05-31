@@ -6,7 +6,7 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
 import { UpdateTabbar } from '../redux/constants/index';
-import Dashnoard from './Dashnoard';
+import Dashboard from './Dashboard';
 import Order from './Order';
 import Products from './Products';
 import More from './More';
@@ -41,8 +41,8 @@ class TabNavigater extends React.Component {
         initialRouteName={this.props.extraData.initialRouteName}
       >
         <Tab.Screen
-          name="Dashnoard"
-          component={Dashnoard} 
+          name="Dashboard"
+          component={Dashboard} 
           listeners={{
             tabPress: e => {
               this.setState({active_screen:'dashboard'})

@@ -53,8 +53,12 @@ class AddProduct extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
-        //+ '?is_active=1&search=' + this.state.search_product + '&category_id=' + this.state.category_id
-        fetch(Constants.productslist + '?is_active=1&search=' + this.state.search_product, postData)
+        //Constants.productslist + '?is_active=1&search=' + this.state.search_product
+        // let search_url =  '?is_active=1&search=' + this.state.search_product + '&category_id=' + this.state.category_id
+        let search_url =  Constants.productslist + '?is_active=1&search=' + this.state.search_product+'&category_id=' + this.state.category_id
+        console.log('search url ',search_url);
+        console.log('postData ',postData);
+        fetch(search_url, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({
@@ -135,8 +139,11 @@ class AddProduct extends React.Component {
 
     }
 
-    onCategoryText(text) {
-        console.log('text !!!!!!!!!!!!!!!!!', text);
+    onCategoryText(category_id) {
+        console.log('text !!!!!!!!!!!!!!!!!', category_id);
+        this.setState({
+            category_id:category_id
+        })
     }
 
     async addProduct(index) {
@@ -257,7 +264,7 @@ class AddProduct extends React.Component {
 
                                     dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                                     labelStyle={{ color: '#A9A9A9' }}
-                                    onChangeItem={item => this.onSelectCountry(item.value)}  //this.onSelectCountry(item.value)}
+                                    // onChangeItem={item => this.onSelectCountry(item.value)}  //this.onSelectCountry(item.value)}
                                     onChangeItem={item => this.onCategoryText(item.value)}
                                 />}
                         {/* </View> */}

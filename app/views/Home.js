@@ -100,7 +100,7 @@ class Home extends React.Component {
             <View style={[{ flexDirection: 'row', alignSelf: 'center', width: width - 20, alignSelf: 'center', marginTop: 20, alignItems: 'center', justifyContent: 'center', paddingRight: 10 }]}>
               <TouchableOpacity
                 style={{ flex: 1 }}
-                onPress={() => this.props.navigation.navigate('Dashnoard')}
+                onPress={() => this.props.navigation.navigate('Dashboard')}
               >
               <View style={[{
                 flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,

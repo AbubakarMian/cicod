@@ -185,7 +185,8 @@ class Buyers extends React.Component {
                     this.unauthorizedLogout();
                 }
                 else {
-                    let message = responseJson.message
+                    console.log('error un suspend Request !!!!!!!!!!', responseJson.data)
+                    let message = responseJson.data.message
                     Alert.alert('Error', message)
                 }
             })
@@ -203,6 +204,7 @@ class Buyers extends React.Component {
             this.unsuspendBuyer(item.buyer_id);
             this.buyerList(Constants.buyerlist);
         }
+        this.listBuyers(this)
     }
     listBuyers(props) {
         
@@ -276,7 +278,7 @@ class Buyers extends React.Component {
                                                         <Icon name="ellipsis-h" color={'#929497'} size={20} />
                                                     </MenuTrigger>
                                                     <MenuOptions>
-                                                        <MenuOption onSelect={() => this.props.navigation.navigate('UpdateProduct', { buyer_detail: item })} >
+                                                        <MenuOption onSelect={() => _that.props.navigation.navigate('UpdateProduct', { buyer_detail: item })} >
                                                             <View style={{ flexDirection: 'row' }}>
                                                                 <Image
                                                                     source={require('../images/update.png')}
@@ -284,11 +286,11 @@ class Buyers extends React.Component {
                                                                 <Text style={{ marginLeft: 10 }}>Update</Text>
                                                             </View>
                                                         </MenuOption>
-                                                        <MenuOption onSelect={() => this.suspendAction(item)} >
+                                                        <MenuOption onSelect={() => _that.suspendAction(item)} >
                                                             <View style={{ flexDirection: 'row' }}>
                                                                 <Image
                                                                     source={require('../images/suspend.png')}
-                                                                />
+                                                                /> 
                                                                 {(item.is_active == 1) ?
                                                                     <Text style={{ marginLeft: 10 }}>Suspend</Text>
                                                                     : <Text style={{ marginLeft: 10 }}>Unsuspend</Text>}

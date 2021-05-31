@@ -176,22 +176,23 @@ class UpdateProduct extends React.Component {
             })
         };
         let buyer_id = this.state.buyer_detail.buyer_id;
-        console.log('buyer_id ', buyer_id);
+        console.log('buyer_id ', Constants.updateBuyerProduct + '?id=' + buyer_id);
         fetch(Constants.updateBuyerProduct + '?id=' + buyer_id, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 console.log('update products access data ', postData)
-                console.log('update products access respones ', responseJson)
+                console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&update products access respones ', responseJson)
                 this.setState({ spinner: false })
                 if (responseJson.success) {
-                    Alert.alert('Message',responseJson.data.message)
+                    Alert.alert('*********************Message',responseJson.data.message)
                     // this.props.navigation.navigate('Home')
                     this.props.navigation.goBack();
                 } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 }
                 else {
-                    let message = responseJson.message
+                    console.log('error --------- ',responseJson.data);
+                    let message = responseJson.data.message
                     Alert.alert('Error', message)
                 }
             }

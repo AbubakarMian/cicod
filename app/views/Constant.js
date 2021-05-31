@@ -29,6 +29,7 @@ export const Constants = {
   suspendBuyer: `${base_url}/value-chain/suspend-buyer`,
   unsuspendBuyer: `${base_url}/value-chain/unsuspend-buyer`,
   updateBuyerProduct: `${base_url}/value-chain/update-buyer-products`,
+  decline_request: `${base_url}/value-chain/reject`,
 
 };
 

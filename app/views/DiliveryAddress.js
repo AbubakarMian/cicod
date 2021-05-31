@@ -22,6 +22,7 @@ class DiliveryAddress extends React.Component {
             spinner: false,
             is_selected_address: false,
             addressarr: [],
+            selected_address_id:0,
             delivery_type: this.props.route.params.type ?? ''
         }
 
@@ -51,12 +52,12 @@ class DiliveryAddress extends React.Component {
                 if (responseJson.status === 'success') {
                     let res = responseJson.data;
                     let addressarr = res.map((x, key) => { return { 
-                        
+                        list_id:(key+1),
                         country_id:x.country.id,
                         state_id:x.state.id,
                         label: x.house_no + ',' + x.street + ',' + x.state.name + ',' + x.country.name, 
                         value: x.house_no + ',' + x.street + ',' + x.state.name + ',' + x.country.name } });
-                    console.log('addressarr  !!!!!!', addressarr);
+                    console.log('addressarr  respone !!!!!!', addressarr);
                     this.setState({
                         addressarr: addressarr,
                     });
@@ -72,8 +73,10 @@ class DiliveryAddress extends React.Component {
     }
 
     selectAddress(object) {
+        console.log('select address object',object);
         this.setState({
-            is_selected_address: !this.state.is_selected_address
+            is_selected_address: !this.state.is_selected_address,
+            selected_address_id:object.list_id
         })
         this.props.setDeliveryAddress({
 
@@ -116,7 +119,7 @@ class DiliveryAddress extends React.Component {
                                 <View style={[{}, styles.radioFormView]}>
 
                                     <RadioForm
-                                        isSelected={this.state.is_selected_address}
+                                        // isSelected={this.state.is_selected_address}
                                         color={'yellow'}
                                         // radio_props={radio_props_payment}
                                         size={5}
@@ -133,7 +136,7 @@ class DiliveryAddress extends React.Component {
                                                 <RadioButtonInput
                                                     obj={obj}
                                                     index={i}
-                                                    isSelected={this.state.is_selected_address}
+                                                    isSelected={obj.list_id === this.state.selected_address_id}
                                                     onPress={(value) => this.selectAddress(obj)}
                                                     borderWidth={1}
                                                     buttonInnerColor={'#e74c3c'}

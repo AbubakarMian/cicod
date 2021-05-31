@@ -7,7 +7,7 @@ import Login from './Login';
 import ResetPassword from '../views/ResetPassword'
 import Filter from './Filter';
 import Home from './Home';
-import Dashnoard from './Dashnoard';
+import Dashboard from './Dashboard';
 import Products from './Products';
 import CategoryFilter from './CategoryFilter';
 import ProductFilter from './ProductFilter';
@@ -67,10 +67,10 @@ export default class AppNavigater extends React.Component {
 
           
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
-          <Stack.Screen name="Dashnoard" component={Dashnoard} options={{ headerShown: false }} />
-          {/* <Stack.Screen name="Dashnoard" component={TabNavigater}  options={{ headerShown: false }} /> */}
-          {/* <Stack.Screen name="Dashnoard" options={{ headerShown: false }}>
-            {props => <TabNavigater extraData={{ name: 'dashboard', initialRouteName: 'Dashnoard' }} />}
+          <Stack.Screen name="Dashboard" component={Dashboard} options={{ headerShown: false }} />
+          {/* <Stack.Screen name="Dashboard" component={TabNavigater}  options={{ headerShown: false }} /> */}
+          {/* <Stack.Screen name="Dashboard" options={{ headerShown: false }}>
+            {props => <TabNavigater extraData={{ name: 'dashboard', initialRouteName: 'Dashboard' }} />}
           </Stack.Screen> */}
 
           {/* <Stack.Screen name="Products" options={{ headerShown: false }}>

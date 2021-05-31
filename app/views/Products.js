@@ -245,7 +245,7 @@ class Products extends React.Component {
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
 
         return (
-            <View style={{ height: height, width: width, position: 'relative', backgroundColor: '#F0F0F0' }}>
+            <View style={{ height: height, width: width, position: 'relative', backgroundColor: '#F0F0F0',paddingBottom:30 }}>
                 <Spinner
                     visible={this.state.spinner}
                     textContent={'Please Wait...'}
@@ -313,13 +313,16 @@ class Products extends React.Component {
                     </View>
                     <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#E6E6E6', width: width - 20, alignSelf: 'center', marginVertical: 10 }}></View>
                 </View>
-
+                {/* <ScrollView></ScrollView> */}
                 <ScrollView
                     zIndex={-0.999}
+                    
                 >
                     <this.listProducts _that={this}/>
-                </ScrollView>
-                <TabNav style={{ position: 'absolute', bottom: 0 }} screen={'product'} props={this.props} />
+                    
+               </ScrollView> 
+                 
+                <TabNav style={{ position: 'absolute', bottom: 0,height:50 }} screen={'more'} props={this.props} />
             </View>
         )
     }
