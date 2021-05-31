@@ -40,25 +40,19 @@ class CreateOrder extends React.Component {
             supplierlist: [],
             address_backgound: '',
             deliveryType: '',
-            show_part_payment:false,
-            isDatePickerVisible:false,
-            part_payment_balance_due_date:new Date(),
-            part_payment_percent:0,
-            part_payment_amount:0
+            show_part_payment: false,
+            isDatePickerVisible: false,
+            part_payment_balance_due_date: new Date(),
+            part_payment_percent: 0,
+            part_payment_amount: 0,
+            goto_payment_screen: '',
         }
     }
     clearOrder() {
         this.props.emptyOrder();
     }
     componentDidMount() {
-
-        console.log(' create order !!!! !!!!!!!!', this.props.user);
-
-        let res = this.props.cart.cart;
-        let cart_arr = res.map((x, key) => { return { id: x.id, quantity: x.purchased_quantity } });
-        this.setState({
-            limit_cart_arr: cart_arr,
-        });
+        console.log(' create order !!!! !!!!!!!!', this.props.user);        
         this.getSuppliersList(Constants.supplierlist);
     }
 
@@ -115,11 +109,6 @@ class CreateOrder extends React.Component {
 
         let cart_product = this.state.product_cart;
 
-        // cart_product.forEach(item ,index, function(){
-
-        //     return item ;
-        // })
-
     }
 
     DeliveryType(type) {
@@ -158,32 +147,47 @@ class CreateOrder extends React.Component {
 
             }
         }
-
-
-
     }
 
     paymentFun(item) {
         let mode = '';
+        let goto_payment_screen = '';
         if (item.label == 'Pay Acount') {
             mode = 'ACCOUNT'
-        } else if (item.label == 'Pay Now' || item.label == 'Pay Invoice') {
+            goto_payment_screen = 'MakePayment';
+        } else if (item.label == 'Pay Now') {
             mode = 'ONLINE'
+            goto_payment_screen = 'MakePayment';
         }
-        else if(item.label == 'Part Payment'){
-            mode = ['CASH','ONLINE','POS','USSD','ATM','BANK'];
+        else if (item.label == 'Pay Invoice') {
+            mode = 'ONLINE'
+            goto_payment_screen = '';
+        }
+        else if (item.label == 'Part Payment') {
+            mode = '';
+            goto_payment_screen = '';
             this.setState({
-                show_part_payment:true
+                show_part_payment: true
             })
         }
-        
+
         this.setState({
             value3Index: item.value,
             payment_mode: mode,
+            goto_payment_screen: goto_payment_screen
         })
     }
     removeProduct(id) {
         this.props.removeProductFromCart(id);
+    }
+
+    set_limit_cart_arr(){
+        let res = this.props.cart.cart;
+        let cart_arr = res.map((x, key) => { return { id: x.id, quantity: x.purchased_quantity } });
+        this.setState({
+            limit_cart_arr: cart_arr,
+        });
+        return cart_arr;
     }
     createOrderFun() {
 
@@ -197,12 +201,52 @@ class CreateOrder extends React.Component {
         console.log('this.props.deliveryAddress.type this.props.deliveryAddress.type', this.props.deliveryAddress);
         let discounted_price = 0
         let discounted_percentage = 0
+        let amount_payable = 0
         if (this.props.orderDiscountReducer.discount_type == 'percentage') {
             discounted_percentage = this.props.orderDiscountReducer.discount_amount;
             // discounted_price = (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01);
+            amount_payable = this.state.cart_detail.total_price_with_tax - (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01) ?? 0;
         }
         else {
             discounted_price = this.props.orderDiscountReducer.discount_amount;
+            amount_payable = this.state.cart_detail.total_price_with_tax - (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01) ?? 0;
+        }
+
+        let bodyOrder = {
+            customer_name: this.state.customer_name,//this.state.customer_name,//required
+            customer_phone: this.state.customer_phone, //this.state.customer_phone,//required
+            customer_email: this.state.customer_email,//this.state.customer_email,
+            products: this.set_limit_cart_arr(), //required this.state.limit_cart_arr
+            delivery_type: this.props.deliveryAddress.type,//dilevery_type,?? 'PICKUP'
+            delivery_address: this.props.deliveryAddress.address ?? '',
+            payment_mode: this.state.payment_mode, //required
+            country_id: this.props.deliveryAddress.country_id,
+            state_id: this.props.deliveryAddress.state_id,
+            part_payment_balance_due_date: this.state.part_payment_balance_due_date,
+            lga_id: this.state.customer_lga,
+            note: this.props.notes.notes ?? '',
+            discount_amount: discounted_price,
+            discount_percent: discounted_percentage,
+            accept_multiple_part_payment: this.state.show_part_payment,
+            part_payment_percent: this.state.part_payment_percent,
+            part_payment_amount: this.state.part_payment_amount,
+
+        };
+
+        if (bodyOrder.mode) {
+
+        }
+
+        if (this.state.goto_payment_screen != '') {//show_part_payment
+            console.log('step  1 ')
+
+            this.props.navigation.navigate(this.state.goto_payment_screen, { bodyOrder: bodyOrder,
+                payment_mode: this.state.payment_mode ,
+                 amount_payable: amount_payable ,
+                });
+            // this.props.navigation.navigate('MakePayment', { bodyOrder: bodyOrder });
+            console.log('step  2 ')
+            return;
         }
         console.log('this.props.notes this.props.notes !!!!!!!!!!!!', this.props.notes)
         let postData = {
@@ -212,27 +256,10 @@ class CreateOrder extends React.Component {
                 'Content-Type': 'application/json',
                 'Authorization': this.props.user.access_token
             },
-            body: JSON.stringify({
-                customer_name: this.state.customer_name,//this.state.customer_name,//required
-                customer_phone: this.state.customer_phone, //this.state.customer_phone,//required
-                customer_email: this.state.customer_email,//this.state.customer_email,
-                products: this.state.limit_cart_arr, //required
-                delivery_type: this.props.deliveryAddress.type,//dilevery_type,?? 'PICKUP'
-                delivery_address: this.props.deliveryAddress.address ?? '',
-                payment_mode: this.state.payment_mode, //required
-                country_id: this.props.deliveryAddress.country_id,
-                state_id: this.props.deliveryAddress.state_id,
-                part_payment_balance_due_date:this.state.part_payment_balance_due_date,
-                // lga_id: this.state.customer_lga,
-                note: this.props.notes.notes ?? '',
-                discount_amount: discounted_price,
-                discount_percent: discounted_percentage,
-                accept_multiple_part_payment:this.state.show_part_payment,
-                part_payment_percent:this.state.part_payment_percent,
-                part_payment_amount:this.state.part_payment_amount,
-            })
+            body: JSON.stringify(bodyOrder)
         };
         console.log('body params list @@@@@@!!!!!!!!!!!!!!', postData);
+        return;
         fetch(Constants.orderslist, postData)
             .then(response => response.json())
             .then(async responseJson => {
@@ -254,7 +281,6 @@ class CreateOrder extends React.Component {
                 console.log("Api call error", error);
                 // Alert.alert(error.message);
             });
-
 
     }
 
@@ -283,7 +309,7 @@ class CreateOrder extends React.Component {
                         supplierlist: responseJson.data
                     })
                 } else {
-                    console.log('errorrrrr',responseJson);
+                    console.log('errorrrrr', responseJson);
                     let message = JSON.stringify(responseJson.error.message)
                     Alert.alert('Error', message)
                 }
@@ -309,22 +335,22 @@ class CreateOrder extends React.Component {
         this.props.navigation.navigate('BuyersView', { items: item, heading: 'SUPPLIERS' })
     }
 
-    setDate (date) {
+    setDate(date) {
         var month = date.getUTCMonth() + 1; //months from 1-12
         var day = date.getUTCDate();
         var year = date.getUTCFullYear();
-    
+
         let newdate = day + "/" + month + "/" + year;
-    
+
         let filters = this.state.filters;
         filters.push({ key: 'create_time', value: date });
         this.setState({
-          isDatePickerVisible: !this.state.isDatePickerVisible,
-          filters: filters,
-          part_payment_balance_due_date: newdate,
+            isDatePickerVisible: !this.state.isDatePickerVisible,
+            filters: filters,
+            part_payment_balance_due_date: newdate,
         })
-    
-      }
+
+    }
     render() {
         console.log(' supplierlist @@@@@@@@@@@@@@@ supplierlist  !!!!!!!!!!!!!!', this.props.supplier);
         var radio_props_dilvery = [
@@ -519,9 +545,6 @@ class CreateOrder extends React.Component {
                                     )}
                                 />
                             }
-
-
-
                         </View>
                         <View style={[{}, styles.diliveryTypeContainerView]}>
                             <TouchableOpacity
@@ -688,7 +711,7 @@ class CreateOrder extends React.Component {
                                 />
                             </View>
 
-                            {this.state.show_part_payment ? 
+                            {/* {this.state.show_part_payment ? 
                             <View>
                                 <TextInput 
                                     label="Part Payment Amount"
@@ -717,7 +740,7 @@ class CreateOrder extends React.Component {
                                     onConfirm={(date)=>this.setDate(date)}
                                     onCancel={()=>{this.setState({isDatePickerVisible:false})}}
                                 />
-                            </View>:null}
+                            </View>:null} */}
                         </View>
 
 

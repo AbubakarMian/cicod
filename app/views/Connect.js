@@ -339,24 +339,17 @@ class Connect extends React.Component {
             </View>
         );
     }
+
+    approveConnect(item){
+        if(item.status != 'APPROVED'){
+            this.props.navigation.navigate('ConnectView',{item:item})
+        }        
+    }
+
     recievedView() {
-        return (
+        return (            
             <ScrollView>
-                <View>
-                    {/* <View style={[{ paddingHorizontal: 10 }, styles.searchContainer]}>
-                        <Image
-                            style={{ height: 20, width: 20 }}
-                            source={require('../images/products/searchicon.png')}
-                        />
-                        <TextInput
-                            label="Search a products"
-                            style={{ backgroundColor: 'transparent', }}
-                            width={width - 60}
-                            alignSelf={'center'}
-                            color={'#000'}
-                        
-                        />
-                    </View> */}
+                <View>                    
                     <Searchbar
                         placeholder="Search a products"
                         iconColor="#929497"
@@ -383,6 +376,7 @@ class Connect extends React.Component {
                             }
                             data={this.state.received_arr}
                             renderItem={({ item, index, separators }) => (
+                                
                                 // <TouchableOpacity
                                 //     key={item.key}
                                 //     // onPress={() => this._onPress(item)}
@@ -404,10 +398,11 @@ class Connect extends React.Component {
                                 //             <Text style={[{ color: '#26C281' }]}>ACTIVE</Text>
                                 //         </View>
                                 //     </View>
-                                // </TouchableOpacity>
+                                // </TouchableOpacity>                                 
                                 <TouchableOpacity
                                     key={item.key}
-                                    onPress={() => this.props.navigation.navigate('ConnectView',{item:item})}
+                                   
+                                    onPress={() => this.approveConnect(item)}
                                     onShowUnderlay={separators.highlight}
                                     onHideUnderlay={separators.unhighlight}>
                                     <View style={[{}, styles.flatCardView]}>
@@ -448,6 +443,12 @@ class Connect extends React.Component {
             </ScrollView>
         );
     }
+    sentConnect(item){
+        if(item.status != 'APPROVED'){
+            this.props.navigation.navigate('ConnectView',{item:item})
+        }        
+    }
+  
     sentView() {
         console.log('this.props.navigation')
         return (
@@ -482,7 +483,8 @@ class Connect extends React.Component {
                             
                             <TouchableOpacity
                                 key={item.key}
-                                onPress={() => this.props.navigation.navigate('ConnectView',{item:item})}
+                                onPress={() => this.sentConnect(item)}
+                                // onPress={() => this.props.navigation.navigate('ConnectView',{item:item})}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
                                 <View style={[{}, styles.flatCardView]}>

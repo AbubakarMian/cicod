@@ -66,7 +66,7 @@ class AddNewCustomer extends React.Component {
             Alert.alert("Warning", "First name and Last Name are required")
             return;
         }
-        else if (this.state.country_id === '' && this.state.delivery_country_id === '' && this.state.delivery_state_id === '' && this.state.state_id === '') {
+        else if (this.state.country_id === '' && this.state.delivery_country_id === '' && this.state.delivery_state_id === '') { // && this.state.state_id === ''
             Alert.alert("Warning", "Country and State are required")
             return;
         }
@@ -91,7 +91,7 @@ class AddNewCustomer extends React.Component {
                 email: this.state.email,
                 phone: this.state.phone_number,
                 country_id: this.state.country_id, // required
-                state_id: this.state.state_id, // required
+                state_id: this.state.delivery_state_id, // required state_id
                 lga_id: this.state.lgas_id,
                 house_no: this.state.house_no,
                 street: this.state.street,
@@ -100,6 +100,8 @@ class AddNewCustomer extends React.Component {
                 enable_free_delivery: this.state.isFreeDelivery, // boolean
             })
         };
+
+        console.log('body sent  == ',postData);
         fetch(Constants.customerlist, postData)
             .then(response => response.json())
             .then(async responseJson => {
@@ -138,7 +140,7 @@ class AddNewCustomer extends React.Component {
             body: JSON.stringify({
                 customer_id: customer_id,
                 country_id: this.state.delivery_country_id ?? this.state.country_id,
-                state_id: this.state.delivery_state_id ?? this.state.state_id,
+                state_id: this.state.delivery_state_id,// ?? this.state.state_id,
                 lga_id: this.state.delivery_lgas_id ?? this.state.lgas_id,
                 house_no: this.state.delivery_house_no ?? this.state.house_no,
                 street: this.state.delivery_street ?? this.state.street,
@@ -282,16 +284,16 @@ class AddNewCustomer extends React.Component {
         this.getStateList(statesUrl);
 
     }
-    onSelectState(item) {
-        console.log('state Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item)
-        this.setState({
-            state_id: item
-        });
-        let lgasUrl = Constants.lgaslist + '?state_id=' + item;
-        console.log('lgasUrl !!!!!!!!!!!!!!@@@@@@@@@@@@@', lgasUrl)
-        this.getLgaList(lgasUrl);
+    // onSelectState(item) {
+    //     console.log('state Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item)
+    //     this.setState({
+    //         state_id: item
+    //     });
+    //     let lgasUrl = Constants.lgaslist + '?state_id=' + item;
+    //     console.log('lgasUrl !!!!!!!!!!!!!!@@@@@@@@@@@@@', lgasUrl)
+    //     this.getLgaList(lgasUrl);
 
-    }
+    // }
     onSelectLgas(item) {
         this.setState({
             lgas_id: item

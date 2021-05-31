@@ -30,11 +30,14 @@ class Order extends React.Component {
             date: '',
             search_order: '',
             isDatePickerVisible: false,
-            setDatePickerVisibility: false
+            setDatePickerVisibility: false,
+            date_range:null,
+            url_orders:''
         };
         this.onDateChange = this.onDateChange.bind(this);
     }
     componentDidMount() {
+        return;
         var dt = new Date();
         var hours = dt.getHours(); // gives the value in 24 hours format
         var minutes = dt.getMinutes();
@@ -42,7 +45,9 @@ class Order extends React.Component {
 
         console.log('final time !!!!!!!!!!!!!!!!!', finalTime)
 
-        this.orderList(Constants.orderslist);
+        // this.orderList(Constants.orderslist);
+        // this.orderList(Constants.order_range);
+        
     }
     customeList(listType) {
 
@@ -59,13 +64,13 @@ class Order extends React.Component {
             },
 
         };
-        console.log("%%%%%%%%%%", Constants.orderslist + '?order_status=' + listType)
+        // console.log("%%%%%%%%%%", Constants.orderslist + '?order_status=' + listType)
         fetch(Constants.orderslist + '?order_status=' + listType, postData)
 
             .then(response => response.json())
             .then(async responseJson => {
 
-                console.log("@@@@@@@@@@@@", responseJson)
+                // console.log("@@@@@@@@@@@@", responseJson)
                 if (responseJson.status === 'success') {
                     this.setState({ spinner: false });
                     this.setState({
@@ -83,6 +88,7 @@ class Order extends React.Component {
             })
     }
     orderList(url) {
+        console.log("############################################",url)
         this.setState({ spinner: true })
         let postData = {
             method: 'GET',
@@ -121,6 +127,7 @@ class Order extends React.Component {
         this.props.navigation.navigate('Login');
     }
     componentWillReceiveProps() {
+        return;
         console.log('this.props.route', this.props.route.params.filters);
 
         let filters = this.props.route.params.filters;
@@ -159,15 +166,17 @@ class Order extends React.Component {
         var day = date.getUTCDate();
         var year = date.getUTCFullYear();
 
+        // date.timeConvertion();
+
         let newdate = day + "/" + month + "/" + year;
 
         let order_url = Constants.orderslist + '?date_created=' + date;
 
         this.setState({
             isDatePickerVisible: !this.state.isDatePickerVisible,
-            date: newdate,
+            date: date.getTime(),
         })
-        this.orderList(order_url);
+        // this.orderList(order_url);
 
     }
     hideDatePicker = () => {
@@ -178,11 +187,14 @@ class Order extends React.Component {
     }
     search() {
         let url = Constants.orderslist + '?order_id=' + this.state.search_order;
-        this.orderList(url);
+        // this.orderList(url);
+
+
     }
 
     timeConvertion(date) { //return 'some time';
-        console.log('dddd date', date);
+        console.log('dddd date');
+
         var datetime = date.split(" ");
         var date = datetime[0];
         var time = datetime[1];
@@ -196,11 +208,138 @@ class Order extends React.Component {
         if (hr == 12) {
             am_pm = 'PM';
         }
+        if(hr == 0){
+            am_pm = 'AM';
+        }
 
         var timestr = hr + ":" + time_arr[1] + ":" + time_arr[1];
         var date_time = date + " " + timestr + " " + am_pm;
-        console.log('date_time converted ', date_time);
+        // console.log('date_time converted ', date_time);
         return date_time;
+    }
+
+    getOrderList(props){
+        console.log('props ---- ',props);
+        // return null;
+        let _that = props._that;
+        let url = Constants.orderslist;
+        let filters = [];
+        if (_that.props.route == null || _that.props.route.params == null || _that.props.route.params.filters == null) {
+            url = Constants.orderslist;
+        }
+        else {
+           
+             filters = _that.props.route.params.filters;
+            let filter = '?';
+            for (let i = 0; i < filters.length; i++) {
+                filter = filter +'filter'+ '['+filters[i].key +']' + '=' + filters[i].value;
+                if (i != filters.length - 1) {
+                    filter = filter + '&';
+                }
+            }
+            url = (url + filter);
+            // console.log('this.props.route', _that.props.route.params.filters);
+        }
+        
+        let filter_concat = '?';
+        if(filters.length != 0){
+            filter_concat = '&';
+        }
+        if(_that.state.search_order != ''){
+            url = url+filter_concat+'order_id=' + _that.state.search_order
+            filter_concat = '&';
+        }
+        
+        if(_that.state.date != ''){
+            
+            url = url+filter_concat+'date_created=' + _that.state.date
+        }
+
+        if (url != _that.state.url_orders) {
+            _that.orderList(url);
+            console.log('url ',url);
+            _that.setState({
+                url_orders: url
+            })
+        }
+
+
+
+
+        ////
+
+        // let filters = this.props.route.params.filters;
+        // let filter = '?';
+        // for (let i = 0; i < filters.length; i++) {
+        //     filter = filter + filters[i].key + '=' + filters[i].value;
+        //     if (i != filters.length - 1) {
+        //         filter = filter + '&';
+        //     }
+        // }
+        // _that.orderList(url);
+        console.log(' will receive props !!!!!!!!!!!!!', url);
+
+        return(
+            <FlatList
+                    data={_that.state.data}
+                    ItemSeparatorComponent={
+                        Platform.OS !== 'android' &&
+                        (({ highlighted }) => (
+                            <View
+                                style={[
+                                    style.separator,
+                                    highlighted && { marginLeft: 0 }
+                                ]}
+                            />
+                        ))
+                    }
+                    renderItem={({ item, index, separators }) => (
+                        <TouchableOpacity
+                            key={item.key}
+                            onPress={() => _that.itemDetail(item)}
+                            onShowUnderlay={separators.highlight}
+                            onHideUnderlay={separators.unhighlight}>
+                            <View style={{ position: 'relative', alignSelf: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginBottom: 5 }}>
+                                <View style={{ flex: 1 }}>
+                                    <View style={{ flexDirection: 'column' }}>
+                                        <View style={{ flexDirection: 'row' }}>
+                                            <Image
+                                                style={{ height: 30, width: 30, marginRight: 5 }}
+                                                source={require('../images/Order/bage.png')}
+                                            />
+                                            <View style={{ flexDirection: 'column' }}>
+                                                <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.cicod_order_id}</Text>
+                                                <Text style={[{ color: '#929497' }, fontStyles.normal12]}>{item.customer.name}</Text>
+                                            </View>
+                                        </View>
+                                        {
+
+                                        }
+                                        <Text style={[{ color: '#929497', marginTop: 5 }, fontStyles.normal12]}>  {_that.timeConvertion(item.order_date)}</Text>
+                                    </View>
+                                </View>
+                                <View style={{ flex: 1, alignItems: 'flex-end', flexDirection: 'column' }}>
+                                    <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>N{item.amount}</Text>
+
+                                    {(item.order_status == 'PENDING') ?
+                                        <Text style={[{ borderRadius: 50, paddingHorizontal: 5, textAlign: 'center', backgroundColor: '#FFF3DB', color: '#FDB72B', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
+                                            {item.order_status}
+                                        </Text>
+                                        : (item.order_status == 'PAID') ?
+                                            <Text style={[{ borderRadius: 50, paddingHorizontal: 5, textAlign: 'center', backgroundColor: '#DAF8EC', color: '#26C281', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
+                                                {item.order_status}
+                                            </Text>
+                                            : (item.order_status == 'PART PAYMENT') ?
+                                                <Text style={[{ borderRadius: 50, paddingHorizontal: 5, textAlign: 'center', backgroundColor: '#E6E6E6', color: '#929497', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
+                                                    {item.order_status}
+                                                </Text>
+                                                : null}
+                                </View>
+                            </View>
+                        </TouchableOpacity>
+                    )}
+                />
+        )
     }
     render() {
 
@@ -377,65 +516,7 @@ class Order extends React.Component {
 
                 </ScrollView>
                 {/* <ScrollView  style={{ marginBottom: 200 }}> */}
-                <FlatList
-                    data={this.state.data}
-                    ItemSeparatorComponent={
-                        Platform.OS !== 'android' &&
-                        (({ highlighted }) => (
-                            <View
-                                style={[
-                                    style.separator,
-                                    highlighted && { marginLeft: 0 }
-                                ]}
-                            />
-                        ))
-                    }
-                    renderItem={({ item, index, separators }) => (
-                        <TouchableOpacity
-                            key={item.key}
-                            onPress={() => this.itemDetail(item)}
-                            onShowUnderlay={separators.highlight}
-                            onHideUnderlay={separators.unhighlight}>
-                            <View style={{ position: 'relative', alignSelf: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginBottom: 5 }}>
-                                <View style={{ flex: 1 }}>
-                                    <View style={{ flexDirection: 'column' }}>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <Image
-                                                style={{ height: 30, width: 30, marginRight: 5 }}
-                                                source={require('../images/Order/bage.png')}
-                                            />
-                                            <View style={{ flexDirection: 'column' }}>
-                                                <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.cicod_order_id}</Text>
-                                                <Text style={[{ color: '#929497' }, fontStyles.normal12]}>{item.customer.name}</Text>
-                                            </View>
-                                        </View>
-                                        {
-
-                                        }
-                                        <Text style={[{ color: '#929497', marginTop: 5 }, fontStyles.normal12]}>  {this.timeConvertion(item.order_date)}</Text>
-                                    </View>
-                                </View>
-                                <View style={{ flex: 1, alignItems: 'flex-end', flexDirection: 'column' }}>
-                                    <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>N{item.amount}</Text>
-
-                                    {(item.order_status == 'PENDING') ?
-                                        <Text style={[{ borderRadius: 50, paddingHorizontal: 5, textAlign: 'center', backgroundColor: '#FFF3DB', color: '#FDB72B', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
-                                            {item.order_status}
-                                        </Text>
-                                        : (item.order_status == 'PAID') ?
-                                            <Text style={[{ borderRadius: 50, paddingHorizontal: 5, textAlign: 'center', backgroundColor: '#DAF8EC', color: '#26C281', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
-                                                {item.order_status}
-                                            </Text>
-                                            : (item.order_status == 'PART PAYMENT') ?
-                                                <Text style={[{ borderRadius: 50, paddingHorizontal: 5, textAlign: 'center', backgroundColor: '#E6E6E6', color: '#929497', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
-                                                    {item.order_status}
-                                                </Text>
-                                                : null}
-                                </View>
-                            </View>
-                        </TouchableOpacity>
-                    )}
-                />
+                <this.getOrderList _that={this}/>
 
                 {/* </ScrollView> */}
                 <TabNav style={{ position: 'absolute', bottom: 0 }} screen={'order'} props={this.props} />
