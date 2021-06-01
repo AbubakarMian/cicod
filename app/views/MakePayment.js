@@ -36,19 +36,30 @@ class MakePayment extends React.Component {
             },
             body: JSON.stringify(bodyOrder)
         };
-        console.log('body params list @@@@@@!!!!!!!!!!!!!!', postData);
+        console.log(' setPaymentMode body params list @@@@@@!!!!!!!!!!!!!!', postData);
         fetch(Constants.orderslist, postData)
             .then(response => response.json())
             .then(async responseJson => {
-
-                let payment_link = responseJson.data.payment_link
-                this.payment_response(responseJson, navigateScreen,
-                    {
-                        // bodyOrder: bodyOrder,
-                        data:responseJson.data,
-                        amount_payable: this.props.route.params.amount_payable,
-                        payment_link: payment_link
-                    });
+                console.log(' setPaymentMode responseJson @@@@@@!!!!!!!!!!!!!!', responseJson);
+                if (responseJson.status.toUpperCase() === 'SUCCESS') {
+                    console.log('navigate to ', navigateScreen)
+                    console.log('reerere to ', responseJson)
+                    let payment_link = responseJson.data.payment_link
+                    this.payment_response(responseJson, navigateScreen,
+                        {
+                            // bodyOrder: bodyOrder,
+                            data: responseJson.data,
+                            amount_payable: this.props.route.params.amount_payable,
+                            payment_link: payment_link
+                        });
+                }
+                else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
+                    Alert.alert('Error', message)
+                }
             }
             )
             .catch((error) => {
@@ -56,9 +67,15 @@ class MakePayment extends React.Component {
                 // Alert.alert(error.message);
             });
 
-        this.props.navigation.navigate(navigateScreen, { bodyOrder: bodyOrder, amount_payable: this.props.route.params.amount_payable });
+        // this.props.navigation.navigate(navigateScreen, { bodyOrder: bodyOrder, amount_payable: this.props.route.params.amount_payable });
     }
-    makePayment(payment_mode) {
+
+    unauthorizedLogout() {
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
+    }
+    makePaymentFun(payment_mode) {
 
         let bodyOrder = this.props.route.params.bodyOrder;
         bodyOrder.payment_mode = payment_mode;
@@ -72,13 +89,13 @@ class MakePayment extends React.Component {
             },
             body: JSON.stringify(bodyOrder)
         };
-        console.log('body params list @@@@@@!!!!!!!!!!!!!!', postData);
+        console.log('makePaymentFun body params list @@@@@@!!!!!!!!!!!!!!', postData);
         fetch(Constants.orderslist, postData)
             .then(response => response.json())
             .then(async responseJson => {
 
                 let payment_link = responseJson.data.payment_link
-                this.payment_response(responseJson, 'PaymentWeb', { payment_link: payment_link });
+                this.payment_response(responseJson, 'PaymentWeb', { payment_link: payment_link, data: responseJson.data });
             }
             )
             .catch((error) => {
@@ -135,7 +152,7 @@ class MakePayment extends React.Component {
                         <View>
                             <TouchableOpacity
                                 style={[{}, styles.cardTouch]}
-                                onPress={() => this.makePayment('ONLINE')}
+                                onPress={() => this.makePaymentFun('ONLINE')}
                             >
                                 <View>
                                     <View>
