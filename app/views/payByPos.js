@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
-import {   Text, TextInput, Alert} from 'react-native-paper';
+import { View, ImageBackground, ScrollView, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, Alert } from 'react-native'
+import { Text, TextInput } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/PayByPosCss';
 import fontStyles from '../css/FontCss'
@@ -19,16 +19,25 @@ class PayByPOS extends React.Component {
         this.state = {
             value: 0,
             isChecked: false,
-            order_detail:{}
+            order_detail: null,
+            payment_link: null,
+            order_id:0
         }
     }
 
-    press_confirm(){
+    press_confirm() {
         // let payment_link = this.state.payment_link;
-        this.props.navigation.navigate('PaymentWeb', { payment_link: this.props.route.params.data.payment_link });
+        console.log('param',this.props.route.params.payment_link);
+        if (this.props.route.params.payment_link == null) {
+            Alert.alert('payment error','Payment link not found')
+        }
+        else {
+            this.props.navigation.navigate('PaymentWeb', { payment_link: this.props.route.params.payment_link });
+        }
+
     }
 
-    get_order_detail(){
+    get_order_detail() {
         let postData = {
             method: 'GET',
             headers: {
@@ -37,30 +46,29 @@ class PayByPOS extends React.Component {
                 'Authorization': this.props.user.access_token
             },
         };
-        console.log('body params list @@@@@@!!!!!!!!!!!!!!', postData);
-        fetch(Constants.orderslist+'order_id'+order_id, postData)
+
+        let order_id = this.props.route.params.data.id;
+        let url = Constants.orderslist + '/' + order_id
+        console.log('---- body params list @@@@@@!!!!!!!!!!!!!!', this.props.route.params);
+        console.log('order url detail ', url);
+        console.log('order postData ', postData);
+        fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log(" response Json responseJson responseJson!!!!!!!!!!!", responseJson)
-                if (responseJson.status === "success") {
+                console.log("order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
+                if (responseJson.status.toUpperCase() === "SUCCESS") {
                     let data = responseJson.data;
-                    this.setState({ 
+                    this.setState({
                         spinner: false,
-                        order_detail:{
-                            cicod_order_id: data.cicod_order_id,
-                            expiry_date: data.expiry_date,
-                            id: data.id,
-                            payment_link: data.payment_link
-                        }
-                    
+                        order_detail: data,
+                        order_id:order_id
                     })
-                    alert(responseJson.message)
                     // let payment_link = responseJson.data.payment_link
                     // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
                 } else {
                     this.setState({ spinner: false })
                     let message = responseJson.message
-                    alert(message)
+                    console.log('some error',responseJson)
                 }
             }
             )
@@ -70,19 +78,32 @@ class PayByPOS extends React.Component {
             });
     }
 
-     pay(_that){
-            _that = _that._that;
-            let params = _that.props.route.params;
-            console.log('props pay by pos ',params.data.cicod_order_id);
-            // return null;
-            return(
-                <View style={[{}, styles.mainView]}>
-                <Header navigation={_that.props.navigation}/>
+     pay(_that) {
+        _that = _that._that;
+        let params = _that.props.route.params;
+        let order = {};
+        console.log('_that.state.order_detail',_that.state.order_detail)
+        console.log('_that.state.order_detail',_that.state.order_id)
+        console.log('params.data.id',params.data.id)
+        if(_that.state.order_detail == null || params.data.id != _that.state.order_id){
+            console.log('false conditio _that.state.order_detail',_that.state.order_detail == null)
+            console.log('false conditio param',params.data.id != _that.state.order_id)
+            order = _that.get_order_detail();
+            return null;
+        }
+        console.log('true conditio _that.state.order_detail',_that.state.order_detail == null)
+        console.log('true conditio param',params.data.id != _that.state.order_id)
+        
+        order = _that.state.order_detail
+        console.log('props pay by pos ', order);
+        return (
+            <View style={[{}, styles.mainView]}>
+                <Header navigation={_that.props.navigation} />
                 <View style={[{}, styles.backHeaderRowView]}>
                     <TouchableOpacity
-                    // onPress={()=>_that.props.navigation.navigate('MakePayment')}
-                    onPress={() => _that.props.navigation.goBack()}
-                    
+                        // onPress={()=>_that.props.navigation.navigate('MakePayment')}
+                        onPress={() => _that.props.navigation.goBack()}
+
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
@@ -93,53 +114,37 @@ class PayByPOS extends React.Component {
                 <View>
                     <ScrollView>
                         <View style={[{}, styles.contentContainer]}>
-                            <Image style={{height:60,width:40}} source={require('../images/pos-terminal.png')} />
+                            <Image style={{ height: 60, width: 40 }} source={require('../images/pos-terminal.png')} />
                             <Text style={[{}, styles.collectText]}>Collect the sum of</Text>
-                            <Text style={[{}, styles.payText]}>N{params.amount_payable}</Text>
-                            <View style={{flexDirection:'row'}}>
-                            <Text style={[{}, styles.cashText]}>for CICOD ORDER ID </Text>
-                            <Text style={[{fontWeight:'bold'}, styles.cashText]}> {params.data.cicod_order_id}</Text>
+                            <Text style={[{}, styles.payText]}>N{order.amount}</Text>
+                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={[{}, styles.cashText]}>for CICOD ORDER ID </Text>
+                                <Text style={[{ fontWeight: 'bold' }, styles.cashText]}> {order.cicod_order_id}</Text>
                             </View>
-                            <View style={{flexDirection:'row'}}>
-                              <TouchableOpacity
-                              style={[{backgroundColor:'#E6E6E6'},styles.touchView]}
-                              onPress={() => _that.props.navigation.goBack()}
-                              >
-                                  <Text style={{color:'#4E4D4D'}}>Cancel</Text>
-                              </TouchableOpacity>
-                              <TouchableOpacity
-                              onPress={()=>_that.press_confirm()}
-                              style={[{ backgroundColor:'#B1272C',},styles.touchView]}
-                              >
-                                  <Text style={{color:'#fff'}}>Confirm</Text>
-                              </TouchableOpacity>
+                            <View style={{ flexDirection: 'row' }}>
+                                <TouchableOpacity
+                                    style={[{ backgroundColor: '#E6E6E6' }, styles.touchView]}
+                                    onPress={() => _that.props.navigation.goBack()}
+                                >
+                                    <Text style={{ color: '#4E4D4D' }}>Cancel</Text>
+                                </TouchableOpacity>
+                                <TouchableOpacity
+                                    onPress={() => _that.press_confirm()}
+                                    style={[{ backgroundColor: '#B1272C', }, styles.touchView]}
+                                >
+                                    <Text style={{ color: '#fff' }}>Confirm</Text>
+                                </TouchableOpacity>
                             </View>
                         </View>
-                       
                     </ScrollView>
                 </View>
             </View>
-            );
+        );
 
-        }
+    }
     render() {
-        var radio_props_dilvery = [
-            { label: 'Dilivery', value: 0 },
-
-        ];
-        var radio_props_pickup = [
-            { label: 'Pickup', value: 1 },
-        ];
-        var radio_props_payment = [
-            { label: 'Pay Now', value: 0 },
-            { label: 'Pay Acount', value: 1 },
-            { label: 'Pay Invoice', value: 2 },
-            { label: 'Part Payment', value: 3 },
-        ];
-
-       
         return (
-            <this.pay _that={this}/>
+            <this.pay _that={this} />
         )
     }
 }

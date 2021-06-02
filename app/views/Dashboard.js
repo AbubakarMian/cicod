@@ -50,12 +50,9 @@ class Dashboard extends React.Component {
     }
     componentDidMount() {
         console.log('this.props.user.access_token',this.props.user.access_token);
-      
-
         this.getDashboardData(Constants.dashboard);
     }
     getDashboardData(url){
-        console.log('hit url ',url);
         this.props.setTabBar({ tab_name: 'dashboard' })
         this.setState({ spinner: true })
         let postData = {
@@ -71,24 +68,21 @@ class Dashboard extends React.Component {
             .then(async responseJson => {
                 this.setState({
                     spinner: false,
-
                 });
                 console.log('postData postDatapostData !!!!!!!!!!!!!@@@@@@@@@@@@@@', postData);
                 console.log('response !!!!!!!!!!!!!@@@@@@@@@@@@@@', responseJson);
                 console.log('url url url !!!!!!!!!!!!!@@@@@@@@@@@@@@', url);
                 if (responseJson.status === 'success') {
 
-
+                    console.log('response pending_orders 66666666666666666666666', responseJson.data.graph.pending_orders);
+                    console.log('response total_orders  66666666666666666666666', responseJson.data.graph.total_orders);
                     if(responseJson.data.length< 1){
                         Alert.alert('Message', responseJson.message)
                     }
                     var total_orders = responseJson.data.graph.total_orders ?? [];
                     var graph_total_orders_data = [];
                     var graph_lable = [];
-                    console.log('total_orders 66666666666666666666666', total_orders);
                     for (var i = 0; i < total_orders.length; i++) {
-                        console.log('total_orders[i].amount', total_orders[i].amount);
-                        console.log('total_orders[i].year', total_orders[i].year);
                         let amount = parseInt(total_orders[i].amount);
                         graph_total_orders_data.push(amount);
                         graph_lable.push(total_orders[i].year);
@@ -98,8 +92,6 @@ class Dashboard extends React.Component {
                     var graph_total_pending_orders_label = [];
 
                     for (var i = 0; i < total_pending_orders.length; i++) {
-                        console.log('total_orders[i].amount', total_pending_orders[i].amount);
-                        console.log('total_orders[i].year', total_pending_orders[i].year);
                         let amount = parseInt(total_pending_orders[i].amount);
                         graph_total_pending_orders_data.push(amount);
                         graph_total_pending_orders_label.push(total_pending_orders[i].year);
@@ -107,7 +99,6 @@ class Dashboard extends React.Component {
                     let total_orders_data = this.getGraphData(graph_lable, graph_total_orders_data);
 
                     let total_orders_pending_data = this.getGraphData(graph_total_pending_orders_label, graph_total_pending_orders_data);
-                    console.log(' total total graph ', responseJson.data.paid);
                     this.setState({
                         target: responseJson.data.target,
                         graph: responseJson.data.graph,
@@ -120,9 +111,6 @@ class Dashboard extends React.Component {
                         total_orders_pending_data: total_orders_pending_data,
 
                     })
-                    console.log("%%%%%%%%%%%%%%%", graph_lable)
-                    
-                    // this.props.navigation.navigate('DrawerNavigation')
                 }
                 else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
@@ -131,7 +119,6 @@ class Dashboard extends React.Component {
                     let message = responseJson.message
                     Alert.alert('Error', message)
                 }
-                // console.log("this.state.item.item_name this.state.item.item_name this.state.item.item_name", this.state.item.item_name)
             })
     }
     unauthorizedLogout() {
@@ -207,6 +194,8 @@ class Dashboard extends React.Component {
     var month = date.getUTCMonth() + 1; //months from 1-12
     var day = date.getUTCDate();
     var year = date.getUTCFullYear();
+    
+    var timestamp = date.getTime();    
 
     let newdate = day + "/" + month + "/" + year;
 
@@ -217,7 +206,9 @@ class Dashboard extends React.Component {
     })
 
     let sendDate = year + "/" + month + "/" + day;
-    let url = Constants.dashboard+'?start_date='+sendDate ;
+    var timestamp = Date.parse(new Date(sendDate));   
+    console.log(sendDate + " is: " + timestamp);
+    let url = Constants.dashboard+'?start_date='+timestamp ;
     console.log('url !!!!!!!!!!!!!!!!!!!!!!!!!!!!', url)
     this.getDashboardData(url);
 
@@ -241,12 +232,12 @@ class Dashboard extends React.Component {
                     color={'#fff'}
                 /> */}
                 <DateTimePickerModal
-          isVisible={this.state.isDatePickerVisible}
-          mode="date"
-          date={new Date()}
-          onConfirm={this.setDate}
-          onCancel={this.hideDatePicker}
-        />
+                    isVisible={this.state.isDatePickerVisible}
+                    mode="date"
+                    date={new Date()}
+                    onConfirm={this.setDate}
+                    onCancel={this.hideDatePicker}
+                />
                 <ScrollView marginBottom={10}>
                     <View style={{ backgroundColor:'#F0F0F0' }}>
                         <View style={[{}, styles.headerRowView]}>
@@ -319,7 +310,7 @@ class Dashboard extends React.Component {
                                 </View>
                             </View>
                         </View>
-                        {/* <View style={{ backgroundColor: '#fff', paddingVertical: 20,marginBottom:10, width: width - 30, alignSelf: 'center', borderRadius: 5,paddingLeft:10 }}>
+                        <View style={{ backgroundColor: '#fff', paddingVertical: 20,marginBottom:10, width: width - 30, alignSelf: 'center', borderRadius: 5,paddingLeft:10 }}>
                             <View style={[{}, styles.calenderbtn]}>
                                 <TouchableOpacity
                                     style={{ backgroundColor: this.state.selected_graph === 'all_orders' ? '#FFE5E5' : '#fff', paddingHorizontal: 5, borderTopLeftRadius: 50, borderBottomLeftRadius: 50, paddingVertical: 5 }}
@@ -379,7 +370,7 @@ class Dashboard extends React.Component {
                                     }}
                                 />
                             }
-                        </View> */}
+                        </View> 
                         <View style={[{}, styles.bannerView]}>
                             <View style={[{}, styles.bannerContentView]}>
                                 <Text style={[{}, styles.bannerText]}>Monthly Sales</Text>

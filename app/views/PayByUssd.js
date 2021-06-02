@@ -9,30 +9,67 @@ import Header from '../views/Header';
 import CheckBox from 'react-native-check-box';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import SearchBar from 'react-native-search-bar';
+import { Constants } from '../views/Constant';
+import { connect } from 'react-redux';
+import DropDownPicker from 'react-native-dropdown-picker';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
-export default class PayByUssd extends React.Component {
+class PayByUssd extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             value: 0,
-            isChecked: false
+            isChecked: false,
+            ussd_codes:[],
+            ussd_code_selected:null
         }
     }
-    render() {
-        var radio_props_dilvery = [
-            { label: 'Dilivery', value: 0 },
 
-        ];
-        var radio_props_pickup = [
-            { label: 'Pickup', value: 1 },
-        ];
-        var radio_props_payment = [
-            { label: 'Pay Now', value: 0 },
-            { label: 'Pay Acount', value: 1 },
-            { label: 'Pay Invoice', value: 2 },
-            { label: 'Part Payment', value: 3 },
-        ];
+    componentDidMount(){
+        this.get_ussd_codes();
+    }
+
+    get_ussd_codes(){
+        // https://com.cicodsaasstaging.com/com/api/ussd-codes
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': this.props.user.access_token
+            },
+        };
+        console.log('body params list @@@@@@!!!!!!!!!!!!!!', postData);
+        fetch(Constants.ussd_codes, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                console.log(" response Json responseJson usssd codes!!!!!!!!!!!", responseJson)
+                if (responseJson.status === "success") {
+                    let data = responseJson.data;
+                    let ussd_codes = data.map((x, key) => {
+                        return { label: x.bank_name, value: x.cicod_code+x.bank_ussd_code }
+                    });
+                    this.setState({ 
+                        spinner: false,
+                        ussd_codes:ussd_codes
+                    
+                    })
+                    // let payment_link = responseJson.data.payment_link
+                    // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
+                } else {
+                    this.setState({ spinner: false })
+                    let message = responseJson.message
+                    alert(message)
+                }
+            }
+            )
+            .catch((error) => {
+                console.log("Api call error", error);
+                // Alert.alert(error.message);
+            });
+    }
+    render() {
+        console.log('props',this.props);
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
@@ -40,7 +77,6 @@ export default class PayByUssd extends React.Component {
                     <TouchableOpacity
                         // onPress={() => this.props.navigation.navigate('MakePayment')}
                         onPress={() => this.props.navigation.goBack()}
-
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
@@ -52,25 +88,42 @@ export default class PayByUssd extends React.Component {
                     <ScrollView>
                         <View style={[{}, styles.contentContainer]}>
                             <Image source={require('../images/payByUssd.png')} />
-                            <Text style={[{}, styles.collectText]}>Collect the sum of</Text>
-                            <Text style={[{}, styles.payText]}>N50,000.00</Text>
-                            <Text style={[{}, styles.collectText]}>omotayo.odupitan@cicod.com</Text>
-                            <View style={[{}, styles.selectBankView]}>
-                                <TextInput
+                            <Text style={[{}, styles.collectText]}>Pay with USSD CODE</Text>
+                            <Text style={[{}, styles.payText]}>N{this.props.route.params.amount_payable}</Text>
+                            <Text style={[{}, styles.collectText]}>{this.props.user.email}</Text>
+                            {/* <View style={[{}, styles.selectBankView]}> */}
+                            
+                                {/* <TextInput
                                     label="Select Bank"
                                     style={{ backgroundColor: 'transparent', }}
                                     width={width - 50}
                                     alignSelf={'center'}
                                     color={'#000'}
-                                />
+                                /> */}
                                 <View style={[{}, styles.iconView]}>
                                     <Icon name="caret-down" size={20} color={'#4E4D4D'} />
                                 </View>
-                            </View>
+                            {/* </View> */}
 
                         </View>
+                        <DropDownPicker
+                                    items={this.state.ussd_codes}
+                                    placeholder="Select Bank"
+                                    containerStyle={{ height: 50, marginTop: 5, width: width - 20, alignSelf: 'center' }}
+                                    style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5,zIndex:0.99 }}
+                                    dropDownStyle={{ height: 150, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
+                                    labelStyle={{ color: '#A9A9A9' }}
+                                    onChangeItem={item => this.setState({ussd_code_selected:item.value})} // 
+                            />
                         <View style={[{}, styles.bankDetailView]}>
-                            <Text style={[{}, styles.bankDetailText]}>Select a bank above to get USSD CODE</Text>
+                            {this.state.ussd_code_selected == null ? 
+                            <Text style={[{}, styles.bankDetailText]}>Select a bank above to get USSD CODE</Text> :
+                            <View>
+                               <Text>Dial the code below on your mobile phone to complete this transaction</Text>
+                               <Text style={{textAlign:'center',color:'red'}}>{this.state.ussd_code_selected}</Text>
+                            </View>
+                            }
+                            
                         </View>
                     </ScrollView>
                 </View>
@@ -78,3 +131,29 @@ export default class PayByUssd extends React.Component {
         )
     }
 }
+
+function mapStateToProps(state) {
+    return {
+        user: state.userReducer,
+        customer: state.customReducer,
+        cart: state.cartReducer,
+        notes: state.orderNotesReducer,
+        deliveryAddress: state.deliveryAddressReducer,
+        orderDiscountReducer: state.orderDiscountReducer,
+        supplier: state.supplierReducer,
+    }
+};
+function mapDispatchToProps(dispatch) {
+    return {
+        setUser: (value) => dispatch({ type: SET_USER, value: value }),
+        logoutUser: () => dispatch({ type: LOGOUT_USER }),
+        emptyOrder: () => dispatch({ type: CLEAR_ORDER }),
+        cartReducer: (value) => dispatch({ type: ADD_TO_PRODUCT, value: value }),
+        removeFromCart: (value) => dispatch({ type: REMOVE_FROM_CART, value: value }),
+        removeProductFromCart: (value) => dispatch({ type: REMOVE_PRODUCT_FORM_CART, value: value }),
+        setDeliveryAddress: (value) => dispatch({ type: SET_DELIVERY_ADDRESS, value: value }),
+        setCustomer: (value) => dispatch({ type: SET_CUSTOMER, value: value }),
+        setSupplier: (value) => dispatch({ type: SET_SUPPLIER, value: value }),
+    }
+};
+export default connect(mapStateToProps, mapDispatchToProps)(PayByUssd)
