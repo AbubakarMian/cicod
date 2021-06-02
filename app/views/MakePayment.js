@@ -93,7 +93,6 @@ class MakePayment extends React.Component {
         fetch(Constants.orderslist, postData)
             .then(response => response.json())
             .then(async responseJson => {
-
                 let payment_link = responseJson.data.payment_link
                 this.payment_response(responseJson, 'PaymentWeb', { payment_link: payment_link, data: responseJson.data });
             }
