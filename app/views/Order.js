@@ -227,9 +227,8 @@ class Order extends React.Component {
         if (_that.props.route == null || _that.props.route.params == null || _that.props.route.params.filters == null) {
             url = Constants.orderslist;
         }
-        else {
-           
-             filters = _that.props.route.params.filters;
+        else {           
+            filters = _that.props.route.params.filters;
             let filter = '?';
             for (let i = 0; i < filters.length; i++) {
                 filter = filter +'filter'+ '['+filters[i].key +']' + '=' + filters[i].value;
@@ -238,7 +237,6 @@ class Order extends React.Component {
                 }
             }
             url = (url + filter);
-            // console.log('this.props.route', _that.props.route.params.filters);
         }
         
         let filter_concat = '?';
@@ -262,21 +260,6 @@ class Order extends React.Component {
                 url_orders: url
             })
         }
-
-
-
-
-        ////
-
-        // let filters = this.props.route.params.filters;
-        // let filter = '?';
-        // for (let i = 0; i < filters.length; i++) {
-        //     filter = filter + filters[i].key + '=' + filters[i].value;
-        //     if (i != filters.length - 1) {
-        //         filter = filter + '&';
-        //     }
-        // }
-        // _that.orderList(url);
         console.log(' will receive props !!!!!!!!!!!!!', url);
 
         return(
@@ -342,9 +325,6 @@ class Order extends React.Component {
         )
     }
     render() {
-
-        const { selectedStartDate } = this.state;
-        const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
             <View style={{ width: width, position: 'relative', backgroundColor: '##F0F0F0', flex: 1 }}>
                 <Header navigation={this.props.navigation} />

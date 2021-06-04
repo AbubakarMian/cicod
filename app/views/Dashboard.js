@@ -22,6 +22,7 @@ import {
     ContributionGraph,
     StackedBarChart
 } from "react-native-chart-kit";
+import { Console } from 'node:console';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 class Dashboard extends React.Component {
@@ -96,6 +97,7 @@ class Dashboard extends React.Component {
                         graph_total_pending_orders_data.push(amount);
                         graph_total_pending_orders_label.push(total_pending_orders[i].year);
                     }
+                    console.log('graph_total_pending_orders_data',graph_total_pending_orders_data);
                     let total_orders_data = this.getGraphData(graph_lable, graph_total_orders_data);
 
                     let total_orders_pending_data = this.getGraphData(graph_total_pending_orders_label, graph_total_pending_orders_data);
@@ -223,7 +225,7 @@ class Dashboard extends React.Component {
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
-            <View style={{  width: width, alignItems: 'center', position: 'relative', backgroundColor: '#F0F0F0', }}>
+            <View style={{  width: width,height:height, alignItems: 'center', position: 'relative', backgroundColor: '#F0F0F0', }}>
                 <Header navigation={this.props.navigation} />
                 {/* <Spinner
                     visible={this.state.spinner}
@@ -390,13 +392,11 @@ class Dashboard extends React.Component {
                                 />
                             </View>
                         </View>
-                        
+                       
                     </View>
-
+                    
                 </ScrollView>
-                 
-                <TabNav style={{position:'absolute',bottom:0}} screen={'dashboard'} props={this.props}/>
-
+                
                 <Modal
                     visible={this.state.calenderModal}
                     transparent={true}
@@ -413,8 +413,8 @@ class Dashboard extends React.Component {
                             </View>
                         </View>
                     </TouchableOpacity>
-                </Modal>
-           
+                </Modal>           
+                <TabNav style={{ position: 'absolute', bottom: 0 }} screen={'order'} props={this.props} />
             </View>
         )
     }

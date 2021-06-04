@@ -87,15 +87,6 @@ export default StyleSheet.create({
         width:width/10
     },
 
-
-
-
-
-
-
-
-
-
     bannerView: {
         width: width - 20,
         backgroundColor: '#2F2E7C',

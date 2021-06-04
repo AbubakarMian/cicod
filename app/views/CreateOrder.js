@@ -46,6 +46,7 @@ class CreateOrder extends React.Component {
             part_payment_percent: 0,
             part_payment_amount: 0,
             goto_payment_screen: '',
+            payment_option_selected: '',
         }
     }
     clearOrder() {
@@ -174,7 +175,8 @@ class CreateOrder extends React.Component {
         this.setState({
             value3Index: item.value,
             payment_mode: mode,
-            goto_payment_screen: goto_payment_screen
+            goto_payment_screen: goto_payment_screen,
+            payment_option_selected:item.label
         })
     }
     removeProduct(id) {
@@ -233,13 +235,12 @@ class CreateOrder extends React.Component {
 
         };
 
-        if (bodyOrder.mode) {
-
-        }
-
-        if (this.state.goto_payment_screen != '') {//show_part_payment
+        if (this.state.goto_payment_screen == '') {//show_part_payment
             console.log('step  1 ')
-
+            this.create_order_id(Constants.orderslist,postData)
+            
+        }
+        else{
             this.props.navigation.navigate(this.state.goto_payment_screen, { bodyOrder: bodyOrder,
                 payment_mode: this.state.payment_mode ,
                  amount_payable: amount_payable ,
@@ -260,7 +261,11 @@ class CreateOrder extends React.Component {
         };
         console.log('body params list @@@@@@!!!!!!!!!!!!!!', postData);
         return;
-        fetch(Constants.orderslist, postData)
+        
+
+    }
+    create_order_id(url,postData){
+        fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 console.log(" response Json responseJson responseJson!!!!!!!!!!!", responseJson)
@@ -269,7 +274,13 @@ class CreateOrder extends React.Component {
                     this.setState({ spinner: false })
                     alert(responseJson.message)
                     let payment_link = responseJson.data.payment_link
-                    this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
+                    if(this.state.payment_option_selected == 'Pay Account'){
+                        this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
+                    }
+                    else if(this.state.payment_option_selected == 'Part Payment'){
+
+                    }                    
+                    
                 } else {
                     this.setState({ spinner: false })
                     let message = responseJson.message
@@ -281,7 +292,6 @@ class CreateOrder extends React.Component {
                 console.log("Api call error", error);
                 // Alert.alert(error.message);
             });
-
     }
 
     getSuppliersList(url) {
