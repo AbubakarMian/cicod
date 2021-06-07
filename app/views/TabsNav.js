@@ -42,7 +42,7 @@ export default class TabsNav extends React.Component {
                     {(this.state.screen == 'dashboard') ?
                         <View style={{ marginTop: 2 }}>
                             <Image
-                                style={{ height: 35, width: 50 }}
+                                style={{ height: 35, width: 50,alignSelf:'center' }}
                                 source={require('../images/tabnav/red_chart.png')}
                             />
 
@@ -52,7 +52,7 @@ export default class TabsNav extends React.Component {
                         :
                         <View>
                             <Image
-                                style={{ height: 30, width: 30 }}
+                                style={{ height: 30, width: 30,alignSelf:'center' }}
                                 source={require('../images/tabnav/chart.png')}
                             />
                             <Text style={[{ color: '#929497' }, fontStyles.normal13]}>Dashboard</Text>
@@ -67,7 +67,7 @@ export default class TabsNav extends React.Component {
                         <View style={{ marginTop: 2 }}>
                             <Image
 
-                                style={{ height: 30, width: 25 }}
+                                style={{ height: 30, width: 25,alignSelf:'center' }}
                                 source={require('../images/tabnav/red_order.png')}
                             />
                             <Text style={[{ color: '#b00000' }, fontStyles.normal13]}>Orders</Text>
@@ -75,7 +75,7 @@ export default class TabsNav extends React.Component {
                         <View style={{ marginTop: 2 }}>
                             <Image
 
-                                style={{ height: 30, width: 25 }}
+                                style={{ height: 30, width: 25,alignSelf:'center' }}
                                 source={require('../images/tabnav/order.png')}
                             />
                             <Text style={[{ color: '#929497' }, fontStyles.normal13]}>Orders</Text>
@@ -89,14 +89,14 @@ export default class TabsNav extends React.Component {
                     {(this.state.screen == 'product') ?
                         <View style={{ marginTop: 2 }}>
                             <Image
-                                style={{ height: 30, width: 30 }}
+                                style={{ height: 30, width: 30,alignSelf:'center' }}
                                 source={require('../images/tabnav/red_products.png')}
                             />
                             <Text style={[{ color: '#b00000' }, fontStyles.normal13]}>Products</Text>
                         </View> :
                         <View>
                             <Image
-                                style={{ height: 30, width: 30 }}
+                                style={{ height: 30, width: 30,alignSelf:'center' }}
                                 source={require('../images/tabnav/products.png')}
                             />
                             <Text style={[{ color: '#929497' }, fontStyles.normal13]}>Products</Text>
@@ -108,14 +108,14 @@ export default class TabsNav extends React.Component {
                     {(this.state.screen == 'more') ?
                         <View style={{ marginTop: 2 }}>
                             <Image
-                                style={{ height: 30, width: 30 }}
+                                style={{ height: 30, width: 30,alignSelf:'center' }}
                                 source={require('../images/tabnav/red_more.png')}
                             />
                             <Text style={[{ color: '#b00000' }, fontStyles.normal13]}>More</Text>
                         </View> :
                         <View style={{ marginTop: 2 }}>
                             <Image
-                                style={{ height: 30, width: 30 }}
+                                style={{ height: 30, width: 30,alignSelf:'center' }}
                                 source={require('../images/tabnav/more.png')}
                             />
                             <Text style={[{ color: '#929497' }, fontStyles.normal13]}>More</Text>

@@ -51,13 +51,14 @@ import PaymentWeb from './PaymentWeb';
 import BuyDiliveryAddress from './BuyDiliveryAddress';
 import CreateProductCategory from './CreateProductCategory';
 import More from '../views/More';
+import PartPaytment from './PartPaytment';
 const Stack = createStackNavigator();
 
 export default class AppNavigater extends React.Component {
   render() {
     return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Splash">
+        <Stack.Navigator initialRouteName="PartPaytment">
           <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
 
@@ -124,7 +125,8 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="AddSuppliers" component={AddSuppliers} options={{ headerShown: false }} />
           <Stack.Screen name="CreateProductCategory" component={CreateProductCategory} options={{ headerShown: false }} />
           <Stack.Screen name="More" component={More} options={{ headerShown: false }} />
-       
+          <Stack.Screen name="PartPaytment" component={PartPaytment} options={{ headerShown: false }} />
+          
         </Stack.Navigator>
       </NavigationContainer>
     );

@@ -17,8 +17,6 @@ class PayByPOS extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            value: 0,
-            isChecked: false,
             order_detail: null,
             payment_link: null,
             order_id:0
@@ -34,7 +32,6 @@ class PayByPOS extends React.Component {
         else {
             this.props.navigation.navigate('PaymentWeb', { payment_link: this.props.route.params.payment_link });
         }
-
     }
 
     get_order_detail() {
@@ -82,20 +79,11 @@ class PayByPOS extends React.Component {
         _that = _that._that;
         let params = _that.props.route.params;
         let order = {};
-        console.log('_that.state.order_detail',_that.state.order_detail)
-        console.log('_that.state.order_detail',_that.state.order_id)
-        console.log('params.data.id',params.data.id)
         if(_that.state.order_detail == null || params.data.id != _that.state.order_id){
-            console.log('false conditio _that.state.order_detail',_that.state.order_detail == null)
-            console.log('false conditio param',params.data.id != _that.state.order_id)
             order = _that.get_order_detail();
             return null;
-        }
-        console.log('true conditio _that.state.order_detail',_that.state.order_detail == null)
-        console.log('true conditio param',params.data.id != _that.state.order_id)
-        
+        }        
         order = _that.state.order_detail
-        console.log('props pay by pos ', order);
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={_that.props.navigation} />
