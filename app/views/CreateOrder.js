@@ -47,6 +47,7 @@ class CreateOrder extends React.Component {
             part_payment_amount: 0,
             goto_payment_screen: '',
             payment_option_selected: '',
+            pay_button_lable: 'Pay',
         }
     }
     clearOrder() {
@@ -152,6 +153,7 @@ class CreateOrder extends React.Component {
 
     paymentFun(item) {
         let mode = '';
+        let pay_button_lable = 'Pay'
         let goto_payment_screen = '';
         if (item.label == 'Pay Acount') {
             mode = 'ACCOUNT'
@@ -163,6 +165,7 @@ class CreateOrder extends React.Component {
         else if (item.label == 'Pay Invoice') {
             mode = 'ONLINE'
             goto_payment_screen = '';
+            pay_button_lable = 'Generate CICOD Order ID'
         }
         else if (item.label == 'Part Payment') {
             mode = '';
@@ -176,7 +179,8 @@ class CreateOrder extends React.Component {
             value3Index: item.value,
             payment_mode: mode,
             goto_payment_screen: goto_payment_screen,
-            payment_option_selected:item.label
+            payment_option_selected:item.label,
+            pay_button_lable:pay_button_lable
         })
     }
     removeProduct(id) {
@@ -237,7 +241,7 @@ class CreateOrder extends React.Component {
 
         if (this.state.goto_payment_screen == '') {//show_part_payment
             console.log('step  1 ')
-            this.create_order_id(Constants.orderslist,postData)
+            this.create_order_id(Constants.orderslist,bodyOrder)
             
         }
         else{
@@ -264,22 +268,33 @@ class CreateOrder extends React.Component {
         
 
     }
-    create_order_id(url,postData){
+    create_order_id(url,bodyOrder){
+        console.log('create_order_id',bodyOrder);
+        let postData = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': this.props.user.access_token
+            },
+            body: JSON.stringify(bodyOrder)
+        };
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log(" response Json responseJson responseJson!!!!!!!!!!!", responseJson)
+                console.log("create_order_id responseJson responseJson!!!!!!!!!!!", responseJson)
                 if (responseJson.status === "success") {
 
                     this.setState({ spinner: false })
                     alert(responseJson.message)
                     let payment_link = responseJson.data.payment_link
-                    if(this.state.payment_option_selected == 'Pay Account'){
+                    if(this.state.payment_option_selected == 'Pay Account' || this.state.payment_option_selected == 'Pay Invoice'){
+                        alert(responseJson.message)
                         this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
                     }
                     else if(this.state.payment_option_selected == 'Part Payment'){
 
-                    }                    
+                    }
                     
                 } else {
                     this.setState({ spinner: false })
@@ -804,7 +819,7 @@ class CreateOrder extends React.Component {
                             <TouchableOpacity
                                 onPress={() => this.createOrderFun()}
                                 style={[{}, styles.btnContinuueView]}>
-                                <Text style={{ color: '#FFFFFF' }}>Pay</Text>
+                                <Text style={{ color: '#FFFFFF' }}>{this.state.pay_button_lable}</Text>
                             </TouchableOpacity>
 
                         </View>

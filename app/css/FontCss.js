@@ -51,6 +51,11 @@ export default StyleSheet.create({
     fontSize:15,
     fontFamily:'Open Sans',
   },
+  bold25:{
+    fontSize:25,
+    fontWeight:'bold',
+    fontFamily:'Open Sans',
+  }
 
 })
 
