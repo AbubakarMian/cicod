@@ -228,9 +228,6 @@ class Products extends React.Component {
                                                 </View>}
                                         </View>
                                     </View>
-
-
-
                                 </View>
                             </TouchableOpacity>
                         )}
@@ -245,7 +242,7 @@ class Products extends React.Component {
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
 
         return (
-            <View style={{ height: height, width: width, position: 'relative', backgroundColor: '#F0F0F0',paddingBottom:30 }}>
+            <View style={{ height: height, width: width, position: 'relative', backgroundColor: '#F0F0F0',}}>
                 <Spinner
                     visible={this.state.spinner}
                     textContent={'Please Wait...'}
@@ -318,11 +315,9 @@ class Products extends React.Component {
                     zIndex={-0.999}
                     
                 >
-                    <this.listProducts _that={this}/>
-                    
-               </ScrollView> 
-                 
-                <TabNav style={{ position: 'absolute', bottom: 0,height:50 }} screen={'more'} props={this.props} />
+                    <this.listProducts _that={this}/>                    
+               </ScrollView>
+                <TabNav style={{ position: 'absolute', bottom: 0,height:50 }} screen={'product'} props={this.props} />
             </View>
         )
     }

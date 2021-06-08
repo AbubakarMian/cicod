@@ -407,14 +407,14 @@ class Dashboard extends React.Component {
                         <View style={{ height: height, justifyContent: 'center', alignItems: 'center' }}>
                             <View style={{ width: width, height: height / 2, justifyContent: 'center', alignItems: 'center', transparent: false, backgroundColor: '#fff' }}>
                                 <CalendarPicker
-                                    onDateChange={this.onDateChange}
+                                    onDateChange={this.setDate}
                                     startDate={''}
                                 />
                             </View>
                         </View>
                     </TouchableOpacity>
                 </Modal>           
-                <TabNav style={{ position: 'absolute', bottom: 0 }} screen={'order'} props={this.props} />
+                <TabNav style={{ position: 'absolute', bottom: 0 }} screen={'dashboard'} props={this.props} />
             </View>
         )
     }
