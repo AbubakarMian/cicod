@@ -75,14 +75,19 @@ class PartPaytment extends React.Component {
             });
     }
 
-    create_order(){
+    pay_now(){
+        let bodyOrder = this.get_body_order();
+        this.props.navigation.navigate('MakePayment', { bodyOrder: bodyOrder,
+            payment_mode: this.state.payment_mode ,
+            amount_payable: bodyOrder.part_payment_amount,
+        });
+    }
 
-        // part_payment_balance_due_date: this.state.part_payment_balance_due_date //this.state.part_payment_balance_due_date,
-        // part_payment_percent:  // this.state.part_payment_percent,
-        // part_payment_amount:  // this.state.part_payment_amount,
+    get_body_order(){
         let part_payment_percent = 0;
         let part_payment_amount = 0;
         let part_payment_due_date = this.state.part_payment_balance_due_date;
+        let bodyOrder = this.props.route.params.bodyOrder;        
 
         if(this.state.payment_option_selected == 'fixed_amount'){
             // amount_to_pay_now = this.state.amount_to_pay_now
@@ -91,6 +96,23 @@ class PartPaytment extends React.Component {
         else{ //percentage
             part_payment_percent = this.state.amount_to_pay_now;
         }
+        console.log('---- bodyOrder params list @@@@@@!!!!!!!!!!!!!!', bodyOrder);
+        bodyOrder = {
+            ...bodyOrder,
+            part_payment_percent:part_payment_percent,
+            part_payment_amount:part_payment_amount,
+            part_payment_due_date:part_payment_due_date,
+        }
+        return bodyOrder;
+    }
+
+    create_order(){
+
+        // part_payment_balance_due_date: this.state.part_payment_balance_due_date //this.state.part_payment_balance_due_date,
+        // part_payment_percent:  // this.state.part_payment_percent,
+        // part_payment_amount:  // this.state.part_payment_amount,
+        let bodyOrder = this.get_body_order();
+        console.log('---- update bodyOrder params list @@@@@@!!!!!!!!!!!!!!', bodyOrder);
         
         // part_payment_balance_due_date:  //this.state.part_payment_balance_due_date,
         // part_payment_percent:  // this.state.part_payment_percent,
@@ -104,7 +126,7 @@ class PartPaytment extends React.Component {
             },
             body: JSON.stringify(bodyOrder)
         };
-        fetch(url, postData)
+        fetch(Constants.orderslist, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 console.log("create_order_id responseJson responseJson!!!!!!!!!!!", responseJson)
@@ -113,13 +135,9 @@ class PartPaytment extends React.Component {
                     this.setState({ spinner: false })
                     alert(responseJson.message)
                     let payment_link = responseJson.data.payment_link
-                    if(this.state.payment_option_selected == 'Pay Account' || this.state.payment_option_selected == 'Pay Invoice'){
-                        alert(responseJson.message)
+                    
                         this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
-                    }
-                    else if(this.state.payment_option_selected == 'Part Payment'){
-
-                    }
+                    
                     
                 } else {
                     this.setState({ spinner: false })
@@ -272,6 +290,7 @@ class PartPaytment extends React.Component {
             <View style={[{},styles.btnRow]}>
             <View style={[{},styles.btnColumn]}>
                 <TouchableOpacity
+                onPress={()=>_that.create_order()}
                 style={[{borderColor:'#B1272C',borderWidth:1},styles.btnTouch]}
                 >
                     <Text style={[{color:'#B1272C'},fontStyles.normal15]}>Send Invoice</Text>
@@ -279,6 +298,7 @@ class PartPaytment extends React.Component {
             </View>
             <View style={[{},styles.btnColumn]}>
                 <TouchableOpacity
+                onPress={()=>_that.pay_now()}
                 style={[{backgroundColor:'#B1272C',borderColor:'#B1272C',borderWidth:1},styles.btnTouch]}
                 >
                     <Text style={[{color:'#fff'},fontStyles.normal15]}>Pay now</Text>
