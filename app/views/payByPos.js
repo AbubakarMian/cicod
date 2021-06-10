@@ -89,9 +89,7 @@ class PayByPOS extends React.Component {
                 <Header navigation={_that.props.navigation} />
                 <View style={[{}, styles.backHeaderRowView]}>
                     <TouchableOpacity
-                        // onPress={()=>_that.props.navigation.navigate('MakePayment')}
                         onPress={() => _that.props.navigation.goBack()}
-
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
@@ -128,8 +126,8 @@ class PayByPOS extends React.Component {
                 </View>
             </View>
         );
-
     }
+
     render() {
         return (
             <this.pay _that={this} />

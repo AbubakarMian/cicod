@@ -12,7 +12,8 @@ export default StyleSheet.create({
      backgroundColor:'#FFF',
      alignItems:'center',
      flex:1,
-     flexDirection:'column'
+     flexDirection:'column',
+     
  },
 tabRoW:{ 
     flexDirection:'row', 
@@ -23,7 +24,8 @@ tabRoW:{
     borderTopWidth:0.75,
     paddingVertical:0,
     borderTopColor:'#e2e2e2',
-    backgroundColor:'#FFF' 
+    backgroundColor:'#FFF',
+    paddingTop:5 
 },
  tabCoulumn:{
     flex:1,

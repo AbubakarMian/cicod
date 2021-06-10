@@ -48,6 +48,7 @@ class CreateOrder extends React.Component {
             goto_payment_screen: '',
             payment_option_selected: '',
             pay_button_lable: 'Pay',
+            amount_payable:0
         }
     }
     clearOrder() {
@@ -155,12 +156,13 @@ class CreateOrder extends React.Component {
         let mode = '';
         let pay_button_lable = 'Pay'
         let goto_payment_screen = '';
-        if (item.label == 'Pay Acount') {
+        if (item.label == 'Pay Now') {
+            mode = ''
+            goto_payment_screen = 'MakePayment';
+        }
+        else if (item.label == 'Pay Acount') {
             mode = 'ACCOUNT'
-            goto_payment_screen = 'MakePayment';
-        } else if (item.label == 'Pay Now') {
-            mode = 'ONLINE'
-            goto_payment_screen = 'MakePayment';
+            goto_payment_screen = '';
         }
         else if (item.label == 'Pay Invoice') {
             mode = 'ONLINE'
@@ -168,8 +170,8 @@ class CreateOrder extends React.Component {
             pay_button_lable = 'Generate CICOD Order ID'
         }
         else if (item.label == 'Part Payment') {
-            mode = '';
-            goto_payment_screen = '';
+            mode = 'ONLINE';
+            goto_payment_screen = 'PartPaytment';
             this.setState({
                 show_part_payment: true
             })
@@ -228,16 +230,20 @@ class CreateOrder extends React.Component {
             payment_mode: this.state.payment_mode, //required
             country_id: this.props.deliveryAddress.country_id,
             state_id: this.props.deliveryAddress.state_id,
-            part_payment_balance_due_date: this.state.part_payment_balance_due_date,
             lga_id: this.state.customer_lga,
             note: this.props.notes.notes ?? '',
             discount_amount: discounted_price,
             discount_percent: discounted_percentage,
             accept_multiple_part_payment: this.state.show_part_payment,
-            part_payment_percent: this.state.part_payment_percent,
-            part_payment_amount: this.state.part_payment_amount,
+            // part_payment_balance_due_date: this.state.part_payment_balance_due_date,
+            // part_payment_percent: this.state.part_payment_percent,
+            // part_payment_amount: this.state.part_payment_amount,
 
         };
+
+        this.setState({
+            amount_payable:amount_payable
+        })
 
         if (this.state.goto_payment_screen == '') {//show_part_payment
             console.log('step  1 ')
@@ -253,18 +259,18 @@ class CreateOrder extends React.Component {
             console.log('step  2 ')
             return;
         }
-        console.log('this.props.notes this.props.notes !!!!!!!!!!!!', this.props.notes)
-        let postData = {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': this.props.user.access_token
-            },
-            body: JSON.stringify(bodyOrder)
-        };
-        console.log('body params list @@@@@@!!!!!!!!!!!!!!', postData);
-        return;
+        // console.log('this.props.notes this.props.notes !!!!!!!!!!!!', this.props.notes)
+        // let postData = {
+        //     method: 'POST',
+        //     headers: {
+        //         Accept: 'application/json',
+        //         'Content-Type': 'application/json',
+        //         'Authorization': this.props.user.access_token
+        //     },
+        //     body: JSON.stringify(bodyOrder)
+        // };
+        // console.log('body params list @@@@@@!!!!!!!!!!!!!!', postData);
+        // return;
         
 
     }
@@ -291,9 +297,6 @@ class CreateOrder extends React.Component {
                     if(this.state.payment_option_selected == 'Pay Account' || this.state.payment_option_selected == 'Pay Invoice'){
                         alert(responseJson.message)
                         this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
-                    }
-                    else if(this.state.payment_option_selected == 'Part Payment'){
-
                     }
                     
                 } else {

@@ -58,7 +58,7 @@ export default class AppNavigater extends React.Component {
   render() {
     return (
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="PartPaytment">
+        <Stack.Navigator initialRouteName="Splash">{/* PartPaytment  OrderDetail*/}          
           <Stack.Screen name="Splash" component={Splash} options={{ headerShown: false }} />
           <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
 
@@ -89,12 +89,9 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="OrderFilter" component={OrderFilter} options={{ headerShown: false }} />
           <Stack.Screen name="CreateOrder" component={CreateOrder} options={{ headerShown: false }} />
           <Stack.Screen name="MakePayment" component={MakePayment} options={{ headerShown: false }} />
-
           <Stack.Screen name="Customer" component={Customer} options={{ headerShown: false }} />
-
           <Stack.Screen name="CustomersDetal" component={CustomersDetal} options={{ headerShown: false }} />
           <Stack.Screen name="Supplier" component={Supplier} options={{ headerShown: false }} />
-
           <Stack.Screen name="Filter" component={Filter} options={{ headerShown: false }} />
           <Stack.Screen name="Connect" component={Connect} options={{ headerShown: false }} />
           <Stack.Screen name="ConnectView" component={ConnectView} options={{ headerShown: false }} />

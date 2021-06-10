@@ -95,5 +95,5 @@ function updateCart (){
     console.log('00000000000000000000000',total_price);
     initialState.cart_detail.total_price = total_price;
     initialState.cart_detail.tax = (total_price*0.75);
-    initialState.cart_detail.total_price_with_tax = (total_price+(total_price*0.75));
+    initialState.cart_detail.total_price_with_tax = (total_price+(total_price*0.075));
 }
