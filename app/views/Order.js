@@ -32,7 +32,8 @@ class Order extends React.Component {
             isDatePickerVisible: false,
             setDatePickerVisibility: false,
             date_range:null,
-            url_orders:''
+            url_orders:'',
+            date_created_timestamp:''
         };
         this.onDateChange = this.onDateChange.bind(this);
     }
@@ -89,6 +90,7 @@ class Order extends React.Component {
     }
     orderList(url) {
         console.log("############################################",url)
+        console.log('access token',this.props.user.access_token)
         this.setState({ spinner: true })
         let postData = {
             method: 'GET',
@@ -168,13 +170,19 @@ class Order extends React.Component {
 
         // date.timeConvertion();
 
-        let newdate = day + "/" + month + "/" + year;
+        // let newdate = day + "/" + month + "/" + year;
+        let newdate = year + "/" + month + "/" + day;
+        // // let sendDate = year + "/" + month + "/" + day;
+        // var timestamp = Date.parse(new Date(sendDate));
 
-        let order_url = Constants.orderslist + '?date_created=' + date;
+        // let order_url = Constants.orderslist + '?date_created=' + timestamp;
+
+        console.log('timestamptimestamptimestamptimestamp',newdate);
 
         this.setState({
-            isDatePickerVisible: !this.state.isDatePickerVisible,
-            date: date.getTime(),
+            isDatePickerVisible: false,
+            date:newdate,
+            date_created_timestamp:newdate
         })
         // this.orderList(order_url);
 
@@ -182,7 +190,7 @@ class Order extends React.Component {
     hideDatePicker = () => {
         this.setState({
             // setDatePickerVisibility: !this.state.setDatePickerVisibility,
-            isDatePickerVisible: !this.state.isDatePickerVisible
+            isDatePickerVisible: false
         })
     }
     search() {
@@ -248,9 +256,9 @@ class Order extends React.Component {
             filter_concat = '&';
         }
         
-        if(_that.state.date != ''){
+        if(_that.state.date_created_timestamp != ''){
             
-            url = url+filter_concat+'date_created=' + _that.state.date
+            url = url+filter_concat+'date_created=' + _that.state.date_created_timestamp
         }
 
         if (url != _that.state.url_orders) {

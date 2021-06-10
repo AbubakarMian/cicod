@@ -147,21 +147,22 @@ class OrderFilter extends React.Component {
     
     var timestamp = date.getTime();    
 
-    let newdate = day + "/" + month + "/" + year;
+    // let newdate = day + "/" + month + "/" + year;
+    let newdate = year + "/" + month + "/" + day;
 
-    let sendDate = year + "/" + month + "/" + day;
-    var timestamp = Date.parse(new Date(sendDate));  
+    // let sendDate = year + "/" + month + "/" + day;
+    // var timestamp = Date.parse(new Date(sendDate));  
 
     let filters = this.state.filters;
     if (this.state.modal_date_type == 'order') {
-      filters.push({ key: 'date_created', value: timestamp });
+      filters.push({ key: 'date_created', value: newdate });
       this.setState({
         orderdate: newdate,
       })
     }
     if (this.state.modal_date_type == 'payment') {
 
-      filters.push({ key: 'payment_status_date', value: timestamp });
+      filters.push({ key: 'payment_status_date', value: newdate });
       this.setState({
         paymentdate: newdate,
       })

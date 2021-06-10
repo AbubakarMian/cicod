@@ -48,7 +48,8 @@ class CreateOrder extends React.Component {
             goto_payment_screen: '',
             payment_option_selected: '',
             pay_button_lable: 'Pay',
-            amount_payable:0
+            amount_payable:0,
+            ConfirmationPayInvoice:false
         }
     }
     clearOrder() {
@@ -199,6 +200,13 @@ class CreateOrder extends React.Component {
     }
     createOrderFun() {
 
+        if(this.state.payment_option_selected == 'Pay Invoice' && !this.state.ConfirmationPayInvoice){
+            this.setState({
+                ConfirmationPayInvoice:true
+            })
+            return;
+        }
+
         let dilevery_type = ''
         if (this.state.is_pickup == true) {
             dilevery_type = 'Pickup';
@@ -242,7 +250,8 @@ class CreateOrder extends React.Component {
         };
 
         this.setState({
-            amount_payable:amount_payable
+            amount_payable:amount_payable,
+            ConfirmationPayInvoice:false
         })
 
         if (this.state.goto_payment_screen == '') {//show_part_payment
@@ -299,6 +308,9 @@ class CreateOrder extends React.Component {
                         this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
                     }
                     
+                }
+                else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
                 } else {
                     this.setState({ spinner: false })
                     let message = responseJson.message
@@ -902,6 +914,39 @@ class CreateOrder extends React.Component {
                         </View>
                     </View>
 
+                </Modal>
+                <Modal
+                visible={this.state.ConfirmationPayInvoice}
+                >
+                 <View
+                 style={{alignSelf:'center',backgroundColor:'#fff',width:width-50,justifyContent:'center',alignItems:'center',paddingVertical:20,borderRadius:10,flexDirection:'column'}}
+                 >
+                    <View style={{flexDirection:'row',marginBottom:30}}>
+                    <Text style={{color:'#B1272C',fontWeight:'bold',fontSize:20}}>Generate CICOD Order</Text>    
+                    </View> 
+                   <View style={{flexDirection:'row'}}>
+                       <View 
+                       style={{flex:1,justifyContent:'center',alignItems:'center'}}
+                       >
+                         <TouchableOpacity
+                         style={{backgroundColor:'#fff',paddingVertical:15,padding:30,borderRadius:100,borderWidth:1,borderColor:'#B1272C'}}
+                         onPress={()=>{this.setState({ConfirmationPayInvoice:false})}}
+                         >
+                           <Text style={{color:'#B1272C',paddingHorizontal:10}}>Cancel</Text>
+                       </TouchableOpacity>
+                       </View>
+                       <View 
+                       style={{flex:1,justifyContent:'center',alignItems:'center',}}
+                       >
+                         <TouchableOpacity
+                         style={{backgroundColor:'#B1272C',paddingVertical:15,padding:40,borderRadius:100}}
+                         onPress={()=>this.createOrderFun()}
+                         >
+                           <Text style={{color:'#fff',}}>Confirm</Text>
+                       </TouchableOpacity>
+                       </View>
+                   </View>
+                 </View>
                 </Modal>
             </View>
 
