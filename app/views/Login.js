@@ -20,9 +20,9 @@ class Login extends React.Component {
         super(props);
         this.state = {
             Spinner: false,
-            tenantId: 'sandbox',// ndanitv ,sandbox
-            username: 'cicodsandbox@yopmail.com',//ndanitv@sharklasers.com ,cicodsandbox@yopmail.com
-            password: 'Sandbox@123',//Ndanitv@123 ,Sandbox@123
+            tenantId: 'ndanitv',// ndanitv ,sandbox
+            username: 'ndanitv@sharklasers.com',//ndanitv@sharklasers.com ,cicodsandbox@yopmail.com
+            password: 'Ndanitv@123',//Ndanitv@123 ,Sandbox@123
             isChecked: false,
             hide_password: true,
             domain_text_color: 'black',
@@ -76,17 +76,6 @@ class Login extends React.Component {
                 AsyncStorage.setItem('remember_credentials', 'false');
                 AsyncStorage.removeItem('user_credentials');
             }
-            // this.props.setUser({
-
-            //     firstname: "sandbox last", //responseJson.user.firstname,
-            //     lastname: "sandbox last", //responseJson.user.lastname,
-            //     email: "cicodsandbox@yopmail.com",//responsejson.user.email,
-            //     phone: "123314324",//responseJson.user.phone,
-            //     access_token: "Bearer MJafNhLPhulXkMLyZea6",  //+ responseJson.token
-            // });
-            // this.setState({ Spinner: false })
-            // this.props.navigation.navigate('Home')
-            // return;
             this.setState({ Spinner: true })
             let postData = {
                 method: 'POST',
@@ -182,26 +171,6 @@ class Login extends React.Component {
                             <Text>.cicod.com</Text>
                         </View>
                     </View>
-                    {/* <View style={[{position:'relative'}, styles.comtextInputView]}>
-                        <TextInput
-                            
-                            onChangeText={text => this.setState({ tenantId: text })}
-                            label="Domain Name"
-                            placeholder="Domain Name"
-                            style={{height:60, backgroundColor:'transparent',borderBottomWidth:0,borderTopWidth:0.5,borderLeftWidth:0.5, borderColor:'#CFCFCF'}}
-                            alignSelf={'center'}
-                            color={'#000'}
-                            
-                            onFocus={()=>{this.setState({domain_text_color:'red'})}}
-                            onBlur={()=>{this.setState({domain_text_color:'black'})}}
-                            width={width-50}
-                            height={height/12}
-                            alignSelf={'flex-start'}
-                            value={this.state.tenantId}
-                        /> */}
-                    {/* <Text style={{paddingVertical:50,borderBottomWidth:1,borderBottomColor:this.state.domain_text_color, height:height/12,textAlignVertical:'center', backgroundColor: '#CFCFCF', color: '#4E4D4D',position:'absolute',right:0, paddingVertical: 15, paddingHorizontal: 5 }}>.cicod.com</Text> */}
-                    {/* <Text style={{  paddingVertical:22,borderTopRightRadius:5,borderBottomRightRadius:5, textAlignVertical:'center', backgroundColor: '#CFCFCF', color: '#4E4D4D',position:'absolute',right:0, paddingHorizontal: 5 }}>.cicod.com</Text>
-                    </View> */}
                     <View style={[{}, styles.textInputView]}>
                         <TextInput
                             onChangeText={text => this.setState({ username: text })}
@@ -246,8 +215,6 @@ class Login extends React.Component {
                             }}
                             isChecked={this.state.rememberIsChecked}
                             rightText={"Remember details"}
-
-
                         />
                     </View>
                     <TouchableOpacity
@@ -262,14 +229,6 @@ class Login extends React.Component {
                             <Text style={{ color: '#487AE0', fontSize: 14, textAlign: 'left', fontFamily: 'Open Sans' }}>Reset Password</Text>
                         </TouchableOpacity>
                     </View>
-                    {/* <View
-                        style={{ marginBottom: 10 }}
-                    >
-                        <Image
-                            source={require('../images/splashbottomlogo.png')}
-                        />
-                    </View> */}
-
                 </View>
 
             </ScrollView>

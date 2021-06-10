@@ -109,11 +109,11 @@ class UpdateProduct extends React.Component {
                                 category: cat_name,
                                 data: []
                             });
-                            data_arr.push({
-                                category: 'null cat here',
-                                data: [],
-                                isChecked:false
-                            });
+                            // data_arr.push({
+                            //     category: 'null cat here',
+                            //     data: [],
+                            //     isChecked:false
+                            // });
                             for (let j = 0; j < datares_arr.length; j++) {
                                 // console.log('datares_arr[j].category 1', datares_arr[j].category);
                                 // console.log('cat_name 1', cat_name);
@@ -184,7 +184,7 @@ class UpdateProduct extends React.Component {
                 console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&update products access respones ', responseJson)
                 this.setState({ spinner: false })
                 if (responseJson.success) {
-                    Alert.alert('*********************Message',responseJson.data.message)
+                    Alert.alert('Message',responseJson.data.message)
                     // this.props.navigation.navigate('Home')
                     this.props.navigation.goBack();
                 } else if (responseJson.status == 401) {

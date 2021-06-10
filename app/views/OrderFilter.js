@@ -27,10 +27,11 @@ class OrderFilter extends React.Component {
       orderchannel_arr: [],
       category_name: '',
       spinner: false,
-      date: '',
-      type: '',
+      orderdate: 'DD-MM-YY',
+      paymentdate: 'DD-MM-YY',
       isDatePickerVisible: false,
-      setDatePickerVisibility: false
+      setDatePickerVisibility: false,
+      modal_date_type:''
     };
   }
   componentDidMount() {
@@ -129,23 +130,45 @@ class OrderFilter extends React.Component {
   //     isDatePickerVisible: !this.state.isDatePickerVisible
   //   })
   // }
+  onDateChange(date) {
+    () => this.setState({
+        selectedStartDate: date,
+    });
+}
+  setDate(date) {
 
-  setDate(date = null, type = null) {
+    console.log('date',date)
+    console.log('this.state.modal_date_type',this.state.modal_date_type)
+  
 
-    this.setState({
-      type: type
-    })
+    var month = date.getUTCMonth() + 1; //months from 1-12
+    var day = date.getUTCDate();
+    var year = date.getUTCFullYear();
+    
+    var timestamp = date.getTime();    
+
+    let newdate = day + "/" + month + "/" + year;
+
+    let sendDate = year + "/" + month + "/" + day;
+    var timestamp = Date.parse(new Date(sendDate));  
+
     let filters = this.state.filters;
-    if (type == 'order') {
-      filters.push({ key: 'date_created', value: date });
+    if (this.state.modal_date_type == 'order') {
+      filters.push({ key: 'date_created', value: timestamp });
+      this.setState({
+        orderdate: newdate,
+      })
     }
-    if (type == 'payment') {
+    if (this.state.modal_date_type == 'payment') {
 
-      filters.push({ key: 'payment_status_date', value: date });
+      filters.push({ key: 'payment_status_date', value: timestamp });
+      this.setState({
+        paymentdate: newdate,
+      })
     }
     console.log('filters !!!!!!!!!!!!!!', filters);
     this.setState({
-      isDatePickerVisible: !this.state.isDatePickerVisible,
+      isDatePickerVisible: false,
       filters: filters
     })
 
@@ -154,7 +177,7 @@ class OrderFilter extends React.Component {
   hideDatePicker() {
     console.log(' visibility !!!!!!!!!!!!!');
     this.setState({
-      isDatePickerVisible: !this.state.isDatePickerVisible
+      isDatePickerVisible: false
     })
   }
   deliveryType(value) {
@@ -164,7 +187,29 @@ class OrderFilter extends React.Component {
       filters: filters
     })
   }
+  // setDate = (date) => {
+  //   var month = date.getUTCMonth() + 1; //months from 1-12
+  //   var day = date.getUTCDate();
+  //   var year = date.getUTCFullYear();
+    
+  //   var timestamp = date.getTime();    
 
+  //   let newdate = day + "/" + month + "/" + year;
+
+  //   // filters.push({ key: 'create_time', value: date });
+  //   this.setState({
+  //     isDatePickerVisible: !this.state.isDatePickerVisible,
+  //     date: newdate,
+  //   })
+
+  //   let sendDate = year + "/" + month + "/" + day;
+  //   var timestamp = Date.parse(new Date(sendDate));   
+  //   console.log(sendDate + " is: " + timestamp);
+  //   let url = Constants.dashboard+'?start_date='+timestamp ;
+  //   console.log('url !!!!!!!!!!!!!!!!!!!!!!!!!!!!', url)
+  //   this.getDashboardData(url);
+
+  // }
   render() {
     return (
       <View style={[{}, styles.mainView]}>
@@ -179,11 +224,14 @@ class OrderFilter extends React.Component {
               color={'#fff'}
             />
             <DateTimePickerModal
-              isVisible={this.state.isDatePickerVisible}
-              mode="date"
-              date={new Date()}
-              onConfirm={(date) => this.setDate(date, this.state.type)}
-              onCancel={this.hideDatePicker}
+              // isVisible={this.state.isDatePickerVisible}
+         
+              // onCancel={this.hideDatePicker}
+                   isVisible={this.state.isDatePickerVisible}
+                    mode="date"
+                    date={new Date()}
+                    onConfirm={(date)=>this.setDate(date)}
+                    onCancel={this.hideDatePicker}
             />
             <View style={[{}, styles.mainRow]}>
               <View style={[{ flexDirection: 'row', alignItems: 'center', marginVertical: 10 }]}>
@@ -245,14 +293,14 @@ class OrderFilter extends React.Component {
               <View style={[{ flex: 1, paddingVertical: 10 }]}>
                 <Text style={{ color: '#929497', fontWeight: 'bold' }}>Order Date</Text>
                 <TouchableOpacity
-                  onPress={() => this.setDate(null, 'order')}
+                  onPress={() => this.setState({isDatePickerVisible:true, modal_date_type:'order'})}
                 >
                   <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginRight: 10, padding: 10, marginVertical: 10 }}>
                     <Image
                       style={{ height: 15, width: 15 }}
                       source={require('../images/calenderIcon.png')}
                     />
-                    <Text style={{ marginLeft: 10, color: '#aaa' }}>DD-MM-YY</Text>
+                    <Text style={{ marginLeft: 10, color: '#aaa' }}>{this.state.orderdate}</Text>
                   </View>
                   <View style={{ position: 'absolute', right: 20, bottom: 10 }}>
                     <Icon
@@ -267,7 +315,7 @@ class OrderFilter extends React.Component {
               <View style={[{ flex: 1, paddingVertical: 10 }]}>
                 <Text style={{ color: '#929497', fontWeight: 'bold', marginLeft: 10 }}>Payment Date</Text>
                 <TouchableOpacity
-                  onPress={() => this.setDate(null, 'payment')}
+                  onPress={() => this.setState({isDatePickerVisible:true,modal_date_type:'payment'})} 
                 >
 
                   <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginLeft: 10, padding: 10, marginVertical: 10 }}>
@@ -275,7 +323,7 @@ class OrderFilter extends React.Component {
                     style={{height:15,width:15,alignSelf:'center'}}
                       source={require('../images/calenderIcon.png')}
                     />
-                    <Text style={{ marginLeft: 10, color: '#aaa' }}>DD-MM-YY</Text>
+                    <Text style={{ marginLeft: 10, color: '#aaa' }}>{this.state.paymentdate}</Text>
                   </View>
                   <View style={{ position: 'absolute', right: 20, bottom: 10 }}>
                     <Icon
@@ -333,7 +381,6 @@ class OrderFilter extends React.Component {
                   onChangeItem={item => this.onPaymentmodeText(item.value)}
                 />}
               {this.state.createdby_arr.length < 1 ? null :
-
                 <DropDownPicker
                   items={this.state.createdby_arr}
                   autoScrollToDefaultValue={true}
@@ -349,7 +396,7 @@ class OrderFilter extends React.Component {
                 />}
             </View>
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('Order')}
+              onPress={() => this.applyFilter()}
               style={{ width: width / 1.5, alignSelf: 'center', zIndex: -0.9999, backgroundColor: '#B1272C', justifyContent: 'center', alignItems: 'center', paddingVertical: 15, borderRadius: 50, marginTop: 10 }}
             >
               <Text style={{ color: '#fff', fontWeight: 'bold' }}>Apply</Text>

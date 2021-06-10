@@ -122,7 +122,8 @@ class PayByCash extends React.Component {
                                     style={{ backgroundColor: 'transparent', }}
                                     width={width - 50}
                                     alignSelf={'center'}
-                                    color={'#red'}
+                                    // color={'red'}
+                                    editable={false} 
                                     // keyboardType={'numeric'}
                                     value={_that.getChange()}
                                 />

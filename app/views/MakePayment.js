@@ -1,5 +1,6 @@
 import React from 'react'
 import { View, ImageBackground, ScrollView, TouchableHighlight, Alert, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import { SET_USER, SET_CUSTOMER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART, REMOVE_PRODUCT_FORM_CART, CLEAR_ORDER, SET_DELIVERY_ADDRESS } from '../redux/constants/index';
 import { Text, TextInput } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/MakePaymentCss';
@@ -93,8 +94,14 @@ class MakePayment extends React.Component {
         fetch(Constants.orderslist, postData)
             .then(response => response.json())
             .then(async responseJson => {
+                console.log('all response ',responseJson);
+                if (responseJson.status === "success") {
                 let payment_link = responseJson.data.payment_link
                 this.payment_response(responseJson, 'PaymentWeb', { payment_link: payment_link, data: responseJson.data });
+                }
+                else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
             }
             )
             .catch((error) => {

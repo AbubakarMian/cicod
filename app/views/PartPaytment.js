@@ -1,5 +1,5 @@
 import React from 'react';
-import {View,Dimensions, TouchableOpacity, ScrollView,Image  } from 'react-native';
+import {View,Dimensions, TouchableOpacity, ScrollView,Image, Alert  } from 'react-native';
 // import { View, Text, Image, TextInput, TouchableOpacity,  Touchable, ScrollView, Alert } from 'react-native';
 import styles from '../css/PartPaymentCss';
 import fontStyles from '../css/FontCss'
@@ -33,6 +33,7 @@ class PartPaytment extends React.Component {
             payment_option_selected :'fixed_amount',
             selected_date:'DD-MM-YYY',
             part_payment_balance_due_date:0,
+            part_amount_request:0
         }
     }
     
@@ -75,7 +76,11 @@ class PartPaytment extends React.Component {
             });
     }
 
-    pay_now(){
+    pay_now(){       
+
+        if(!this.required_fields_check()){
+            return;
+        }
         let bodyOrder = this.get_body_order();
         this.props.navigation.navigate('MakePayment', { bodyOrder: bodyOrder,
             payment_mode: this.state.payment_mode ,
@@ -101,18 +106,31 @@ class PartPaytment extends React.Component {
             ...bodyOrder,
             part_payment_percent:part_payment_percent,
             part_payment_amount:part_payment_amount,
-            part_payment_due_date:part_payment_due_date,
+            part_payment_balance_due_date:part_payment_due_date,
         }
+        console.log('---- after bodyOrder params list @@@@@@!!!!!!!!!!!!!!', bodyOrder);
         return bodyOrder;
     }
 
+    required_fields_check(){
+        console.log('this.state.amount_to_pay_now',this.state.amount_to_pay_now);
+        if(this.state.part_amount_request < 1 || this.state.part_amount_request==''){
+            Alert.alert('Invalid payable amount');
+            return false;
+        }
+        else if(this.state.part_payment_balance_due_date == 0 || this.state.part_payment_balance_due_date == ''){
+            Alert.alert('Balance amount due date required');
+            return false;
+        }
+        return true;
+    }
     create_order(){
 
-        // part_payment_balance_due_date: this.state.part_payment_balance_due_date //this.state.part_payment_balance_due_date,
-        // part_payment_percent:  // this.state.part_payment_percent,
-        // part_payment_amount:  // this.state.part_payment_amount,
+        if(!this.required_fields_check()){
+            return;
+        }
         let bodyOrder = this.get_body_order();
-        console.log('---- update bodyOrder params list @@@@@@!!!!!!!!!!!!!!', bodyOrder);
+        
         
         // part_payment_balance_due_date:  //this.state.part_payment_balance_due_date,
         // part_payment_percent:  // this.state.part_payment_percent,
@@ -126,6 +144,7 @@ class PartPaytment extends React.Component {
             },
             body: JSON.stringify(bodyOrder)
         };
+        console.log('---- update postData params list @@@@@@!!!!!!!!!!!!!!', postData);
         fetch(Constants.orderslist, postData)
             .then(response => response.json())
             .then(async responseJson => {
@@ -157,17 +176,26 @@ class PartPaytment extends React.Component {
         this.setState({
             payment_option_selected:item.value
         })
+        this.get_payable_amount(0)
     }
-    get_payable_amount(amount_to_pay_now){
+    get_payable_amount(amount_to_pay_now){//part_amount_request
+        
+        let part_amount_request = this.state.part_amount_request
         console.log('1111111111111111',this.state.amount_to_pay_now)
         let total_amount = this.state.total_amount
         let balance_amount = 0
+        if(amount_to_pay_now >= total_amount && this.state.payment_option_selected =='fixed_amount'){
+            amount_to_pay_now = part_amount_request;
+        }
+        else if(amount_to_pay_now > 99 && this.state.payment_option_selected !='fixed_amount'){
+            amount_to_pay_now = this.state.part_amount_request;
+        }
+        let req_amount = amount_to_pay_now
         if(this.state.payment_option_selected == 'fixed_amount'){
             // amount_to_pay_now = this.state.amount_to_pay_now
             balance_amount = total_amount - amount_to_pay_now
         }
         else{ //percentage
-            console.log('elese hihihihihih')
             // amount_to_pay_now = this.state.amount_to_pay_now
             amount_to_pay_now =  amount_to_pay_now * total_amount *0.01;
             balance_amount = total_amount - amount_to_pay_now
@@ -175,7 +203,8 @@ class PartPaytment extends React.Component {
         }
             this.setState({
                 amount_to_pay_now:amount_to_pay_now,
-                balance_amount:balance_amount
+                balance_amount:balance_amount,
+                part_amount_request:req_amount
             })
         
     }
@@ -200,14 +229,6 @@ class PartPaytment extends React.Component {
     pay(_that) {
        _that = _that._that;
        let params = _that.props.route.params;
-    //    console.log('part paymentr params ',params);
-       let order = {};
-       if(_that.state.order_detail == null || params.data.id != _that.state.order_id){
-        //    order = _that.get_order_detail();
-        //    return null;
-       }        
-    //    order = _that.state.order_detail
-    // _that.get_payable_amount()
        
        return (
         <View style={[{ position: 'relative' }, styles.mainView]}>
@@ -261,7 +282,9 @@ class PartPaytment extends React.Component {
                         width={width - 50}
                         alignSelf={'center'}
                         color={'#000'}
+                        keyboardType={'numeric'}
                         onChangeText={amount_to_pay_now => _that.get_payable_amount(amount_to_pay_now)}
+                        value={_that.state.part_amount_request}
                     />
                     <Text style={[{color:'#929497',alignSelf:'center',marginTop:20},fontStyles.normal15]}>Amount to pay now</Text>
                     <View style={[{backgroundColor:'#FFF4F4'},styles.balanceView]}>

@@ -25,6 +25,7 @@ import {
 import { Console } from 'node:console';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
+const date="";
 class Dashboard extends React.Component {
     constructor(props) {
         super(props);
@@ -225,7 +226,12 @@ class Dashboard extends React.Component {
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
-            <View style={{  width: width,height:height, alignItems: 'center', position: 'relative', backgroundColor: '#F0F0F0', }}>
+            <View style={{  width:width,
+                backgroundColor:'#F0F0F0',
+                alignItems:'center',
+                flex:1,
+                borderRadius:10,
+                flexDirection:'column'}}>
                 <Header navigation={this.props.navigation} />
                 {/* <Spinner
                     visible={this.state.spinner}
@@ -240,7 +246,7 @@ class Dashboard extends React.Component {
                     onConfirm={this.setDate}
                     onCancel={this.hideDatePicker}
                 />
-                <ScrollView marginBottom={10}>
+                <ScrollView >
                     <View style={{ backgroundColor:'#F0F0F0' }}>
                         <View style={[{}, styles.headerRowView]}>
                             <View style={{ flex: 1 }}>
@@ -414,7 +420,9 @@ class Dashboard extends React.Component {
                         </View>
                     </TouchableOpacity>
                 </Modal>           
+               
                 <TabNav style={{ position: 'absolute', bottom: 0 }} screen={'dashboard'} props={this.props} />
+             
             </View>
         )
     }
