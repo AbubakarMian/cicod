@@ -129,7 +129,7 @@ class Login extends React.Component {
     render() {
         return (
             <ScrollView>
-                <View style={[{ position: 'relative' }, styles.mainView]}>
+                <View style={[{ position: 'relative', }, styles.mainView]}>
                     <Spinner
                         visible={this.state.Spinner}
                         textContent={'Please Wait...'}
@@ -222,13 +222,19 @@ class Login extends React.Component {
                         style={[{}, styles.btnContinuueView]}>
                         <Text style={{ color: '#FFFFFF', fontSize: 16, fontFamily: 'Open Sans' }}>Continue</Text>
                     </TouchableOpacity>
-                    <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'flex-start' }}>
                         <TouchableOpacity
+                           style={{ marginTop: 20,zIndex:0.9999,marginBottom:height/5 ,marginTop:20}}
                             onPress={() => this.props.navigation.navigate('ResetPassword')}
-                            style={{ marginTop: 10, }}>
+                            >
                             <Text style={{ color: '#487AE0', fontSize: 14, textAlign: 'left', fontFamily: 'Open Sans' }}>Reset Password</Text>
                         </TouchableOpacity>
-                    </View>
+                        <View>
+                           <Image
+                           source={require('../images/home/1.png')}
+                                style={{ height: width / 3, width: width / 3.6 }}
+                           />
+                        </View>
+                    
                 </View>
 
             </ScrollView>

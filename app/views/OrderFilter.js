@@ -27,8 +27,8 @@ class OrderFilter extends React.Component {
       orderchannel_arr: [],
       category_name: '',
       spinner: false,
-      orderdate: 'DD-MM-YY',
-      paymentdate: 'DD-MM-YY',
+      orderdate: 'YY-MM-DD',
+      paymentdate: 'YY-MM-DD',
       isDatePickerVisible: false,
       setDatePickerVisibility: false,
       modal_date_type:''
@@ -53,18 +53,30 @@ class OrderFilter extends React.Component {
       .then(response => response.json())
       .then(async responseJson => {
         this.setState({ spinner: false });
-        console.log('response json @@@@@@@@@@@@!!!!!!!!!!!!!!!!!', responseJson);
+        // console.log('response json @@@@@@@@@@@@!!!!!!!!!!!!!!!!!', responseJson);
         if (responseJson.status === 'success') {
 
           let res = responseJson.data;
-          let createdby_arr = res.map((x, key) => { return { label: x.created_by ?? '', value: x.created_by ?? '' } });
-          let paymentmode_arr = res.map((x, key) => { return { label: x.payment_mode, value: x.payment_mode } });
-          console.log('createdby_arr createdby_arr !!!!!!', createdby_arr);
-          console.log('paymentmode_arr paymentmode_arr !!!!!!', paymentmode_arr);
+          // let createdby_arr = res.map((x, key) => { return { label: x.created_by ?? '', value: x.created_by ?? '' } });
+          // let paymentmode_arr = res.map((x, key) => { return { label: x.payment_mode, value: x.payment_mode } });
+          let createdby_arr = [];
+          let paymentmode_arr = [];
+          
+          for(let i =0 ; i<res.length; i++){
+            
+            let created_by = { label: res[i].created_by ?? '', value: res[i].created_by ?? '' }
+            let payment_mode = { label: res[i].payment_mode, value: res[i].payment_mode }
+            createdby_arr = this.upsert_list_dropdown(createdby_arr,created_by )
+            paymentmode_arr = this.upsert_list_dropdown(paymentmode_arr, payment_mode)
+          }
+
+          // console.log('createdby_arr createdby_arr !!!!!!', createdby_arr);
+          // console.log('paymentmode_arr paymentmode_arr !!!!!!', paymentmode_arr);
           this.setState({
             createdby_arr: createdby_arr,
             paymentmode_arr: paymentmode_arr,
           });
+          
           // this.props.navigation.navigate('DrawerNavigation')
         } else {
           let message = JSON.stringify(responseJson.message)
@@ -80,41 +92,87 @@ class OrderFilter extends React.Component {
     this.props.logoutUser();
     this.props.navigation.navigate('Login');
   }
-  onorderChannelText(text) {
-    let filters = this.state.filters;
-    filters.push({ key: 'orderChannel', value: text });
+  upsert(array, item) { // (1)
+    let foundindex = -1;
+    for(let i=0;i<array.length;i++){
+      if(array[i].key == item.key){
+        foundindex = i;
+        break;
+      }
+    }
+    if (foundindex == -1){
+      array.push(item)
+    }
+    else{
+      array[foundindex].value = item.value;
+    }
+    return array;
+  }
+  
+  upsert_list_dropdown(array, item) { // (1)
+    let foundindex = -1;
+    for(let i=0;i<array.length;i++){
+      if(array[i].label == item.label){
+        foundindex = i;
+        break;
+      }
+    }
+    if (foundindex == -1){
+      array.push(item)
+    }
+    else{
+      array[foundindex].value = item.value;
+    }
+    return array;
+  }
+
+  upsert_filters( item) { // (1)
+    let array = this.state.filters;
+    array = this.upsert(array, item)    
     this.setState({
-      filters: filters
+      filters:array
     })
   }
+  onorderChannelText(text) {
+    this.upsert_filters({ key: 'orderChannel', value: text })
+    // let filters = this.state.filters;
+    // filters.push({ key: 'orderChannel', value: text });
+    // this.setState({
+    //   filters: filters
+    // })
+  }
   onQuantityText(text) {
-    let filters = this.state.filters;
-    filters.push({ key: 'quantity', value: text });
-    this.setState({
-      filters: filters
-    })
+    this.upsert_filters({ key: 'quantity', value: text })
+    // let filters = this.state.filters;
+    // filters.push({ key: 'quantity', value: text });
+    // this.setState({
+    //   filters: filters
+    // })
   }
 
   onCreatedByText(text) {
-    let filters = 'Freezer'; //this.state.filters;
-    filters.push({ key: 'createdBy', value: text });
-    this.setState({
-      filters: filters
-    })
+    this.upsert_filters({ key: 'created_by', value: text })
+    // let filters = 'Freezer'; //this.state.filters;
+    // filters.push({ key: 'createdBy', value: text });
+    // this.setState({
+    //   filters: filters
+    // })
   }
   onPaymentmodeText(text) {
-    let filters = 'Freezer'; //this.state.filters;
-    filters.push({ key: 'payment_mode', value: text });
-    this.setState({
-      filters: filters
-    })
+    this.upsert_filters({ key: 'payment_mode', value: text })
+    // let filters = 'Freezer'; //this.state.filters;
+    // filters.push({ key: 'payment_mode', value: text });
+    // this.setState({
+    //   filters: filters
+    // })
   }
-  activeSet(value) {
-    let filters = this.state.filters;
-    filters.push({ key: 'is_active', value: value })
-    this.setState({
-      filters: filters
-    })
+  activeSet(text) {
+    this.upsert_filters({ key: 'is_active', value: text })
+    // let filters = this.state.filters;
+    // filters.push({ key: 'is_active', value: value })
+    // this.setState({
+    //   filters: filters
+    // })
   }
   applyFilter = () => {
     console.log('this.state.filters', this.state.filters);
@@ -135,7 +193,11 @@ class OrderFilter extends React.Component {
         selectedStartDate: date,
     });
 }
-  setDate(date) {
+  setDate=(date)=> {
+    this.setState({
+      isDatePickerVisible: false,
+      // filters: filters
+    })
 
     console.log('date',date)
     console.log('this.state.modal_date_type',this.state.modal_date_type)
@@ -148,32 +210,36 @@ class OrderFilter extends React.Component {
     var timestamp = date.getTime();    
 
     // let newdate = day + "/" + month + "/" + year;
-    let newdate = year + "/" + month + "/" + day;
+    // let newdate = year + "/" + month + "/" + day;
+    
+    
+    if(month < 10){
+      month = "0"+month;
+    }   
+    if(day < 10){
+        day = "0"+day;
+    }  
+    let newdate = year + "-" + month + "-" + day;
 
     // let sendDate = year + "/" + month + "/" + day;
     // var timestamp = Date.parse(new Date(sendDate));  
 
     let filters = this.state.filters;
     if (this.state.modal_date_type == 'order') {
-      filters.push({ key: 'date_created', value: newdate });
+      this.upsert_filters({ key: 'date_created', value: newdate })
+      // filters.push({ key: 'date_created', value: newdate });
       this.setState({
         orderdate: newdate,
       })
     }
     if (this.state.modal_date_type == 'payment') {
-
-      filters.push({ key: 'payment_status_date', value: newdate });
+      this.upsert_filters({ key: 'payment_status_date', value: newdate })
+      // filters.push({ key: 'payment_status_date', value: newdate });
       this.setState({
         paymentdate: newdate,
       })
     }
     console.log('filters !!!!!!!!!!!!!!', filters);
-    this.setState({
-      isDatePickerVisible: false,
-      filters: filters
-    })
-
-
   }
   hideDatePicker() {
     console.log(' visibility !!!!!!!!!!!!!');
@@ -188,34 +254,14 @@ class OrderFilter extends React.Component {
       filters: filters
     })
   }
-  // setDate = (date) => {
-  //   var month = date.getUTCMonth() + 1; //months from 1-12
-  //   var day = date.getUTCDate();
-  //   var year = date.getUTCFullYear();
-    
-  //   var timestamp = date.getTime();    
+  clear_filter(){
 
-  //   let newdate = day + "/" + month + "/" + year;
-
-  //   // filters.push({ key: 'create_time', value: date });
-  //   this.setState({
-  //     isDatePickerVisible: !this.state.isDatePickerVisible,
-  //     date: newdate,
-  //   })
-
-  //   let sendDate = year + "/" + month + "/" + day;
-  //   var timestamp = Date.parse(new Date(sendDate));   
-  //   console.log(sendDate + " is: " + timestamp);
-  //   let url = Constants.dashboard+'?start_date='+timestamp ;
-  //   console.log('url !!!!!!!!!!!!!!!!!!!!!!!!!!!!', url)
-  //   this.getDashboardData(url);
-
-  // }
+  }
   render() {
     return (
       <View style={[{}, styles.mainView]}>
         <Header navigation={this.props.navigation} />
-        <ScrollView>
+        {/* <ScrollView> */}
           <View>
 
             <Spinner
@@ -225,13 +271,10 @@ class OrderFilter extends React.Component {
               color={'#fff'}
             />
             <DateTimePickerModal
-              // isVisible={this.state.isDatePickerVisible}
-         
-              // onCancel={this.hideDatePicker}
                    isVisible={this.state.isDatePickerVisible}
                     mode="date"
                     date={new Date()}
-                    onConfirm={(date)=>this.setDate(date)}
+                    onConfirm={this.setDate}
                     onCancel={this.hideDatePicker}
             />
             <View style={[{}, styles.mainRow]}>
@@ -241,10 +284,14 @@ class OrderFilter extends React.Component {
                 >
                   <Icon name="arrow-left" size={25} color="#929497" />
                 </TouchableOpacity>
-
                 <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>FILTER</Text>
               </View>
-              <Text style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20, top: 20 }]}>Clear Filter</Text>
+              <TouchableOpacity style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20, top: 20 }]}
+                  onPress={() => this.clear_filter()}
+                >
+                  <Text style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20, top: 20 }]}>Clear Filter</Text>
+                </TouchableOpacity>
+              
             </View>
             <Text style={[{ color: '#929497', fontWeight: 'bold', fontSize: 20, marginVertical: 10 }]}>Status</Text>
             <View>
@@ -354,7 +401,7 @@ class OrderFilter extends React.Component {
                 </View>
               </View>
             </View>
-            <View style={{ width: width - 20, backgroundColor: '#fff', paddingVertical: 10, marginTop: 20 }}>
+            <View style={{ width: width - 20, backgroundColor: '#fff', paddingTop: 30,paddingBottom:40,borderRadius:10 }}>
               {/* {this.state.orderchannel_arr.length < 1 ? null : */}
               <DropDownPicker
                 items={this.state.orderchannel_arr}
@@ -365,6 +412,7 @@ class OrderFilter extends React.Component {
                 }}
                 placeholder="Order channel"
                 dropDownStyle={{ backgroundColor: '#fff', zIndex: 0.999, marginBottom: 10 }}
+                labelStyle={{ color: '#A9A9A9' }}
                 onChangeItem={item => this.onorderChannelText(item.value)}
               />
               {/* } */}
@@ -372,6 +420,7 @@ class OrderFilter extends React.Component {
               {this.state.paymentmode_arr.length < 1 ? null :
                 <DropDownPicker
                   items={this.state.paymentmode_arr}
+                  autoScrollToDefaultValue={true}
                   containerStyle={{ height: 50, width: width - 25, marginTop: 15, }}
                   style={{ backgroundColor: '#fff' }}
                   itemStyle={{
@@ -379,21 +428,23 @@ class OrderFilter extends React.Component {
                   }}
                   placeholder="Payment Mode"
                   dropDownStyle={{ backgroundColor: '#fff', zIndex: 0.999, marginBottom: 10 }}
+                  labelStyle={{ color: '#A9A9A9' }}
                   onChangeItem={item => this.onPaymentmodeText(item.value)}
                 />}
               {this.state.createdby_arr.length < 1 ? null :
                 <DropDownPicker
                   items={this.state.createdby_arr}
                   autoScrollToDefaultValue={true}
-                  containerStyle={{ height: 50, width: width - 20, marginTop: 15 }}
+                  containerStyle={{ height: 50, width: width - 25, marginTop: 15 }}
                   style={{ backgroundColor: '#fff' }}
                   itemStyle={{
-                    justifyContent: 'flex-start', zIndex: 0.99
+                    justifyContent: 'flex-start',
                   }}
                   placeholder="Created By"
-                  dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, paddingBottom: 20 }}
+                  dropDownStyle={{ backgroundColor: '#fff', zIndex: 0.999,  marginBottom: 10 }}
                   labelStyle={{ color: '#A9A9A9' }}
                   onChangeItem={item => this.onCreatedByText(item.value ?? '')}
+                  // 
                 />}
             </View>
             <TouchableOpacity
@@ -404,7 +455,7 @@ class OrderFilter extends React.Component {
             </TouchableOpacity>
 
           </View>
-        </ScrollView>
+        {/* </ScrollView> */}
       </View>
     )
   }

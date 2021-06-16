@@ -31,6 +31,7 @@ export const Constants = {
   updateBuyerProduct: `${base_url}/value-chain/update-buyer-products`,
   decline_request: `${base_url}/value-chain/reject`,
   ussd_codes: `${base_url}/ussd-codes`,
+  reset_password: `${auth_url}/sso/auth/forgot_password`,
 
 };
 

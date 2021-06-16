@@ -24,7 +24,9 @@ class MakePayment extends React.Component {
             bodyOrder: this.props.route.params.bodyOrder
         }
     }
-
+componentDidMount(){
+    console.log("!!!!!!!!!@@@@@@@@@@@!!!!!!!!!!!!~~~~~~~~~~",this.state.bodyOrder)
+}
     setPaymentMode(payment_mode, navigateScreen) {
         let bodyOrder = this.props.route.params.bodyOrder;
         bodyOrder.payment_mode = payment_mode;
@@ -125,19 +127,6 @@ class MakePayment extends React.Component {
     }
 
     render() {
-        var radio_props_dilvery = [
-            { label: 'Dilivery', value: 0 },
-
-        ];
-        var radio_props_pickup = [
-            { label: 'Pickup', value: 1 },
-        ];
-        var radio_props_payment = [
-            { label: 'Pay Now', value: 0 },
-            { label: 'Pay Acount', value: 1 },
-            { label: 'Pay Invoice', value: 2 },
-            { label: 'Part Payment', value: 3 },
-        ];
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />

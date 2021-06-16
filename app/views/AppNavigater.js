@@ -13,6 +13,7 @@ import CategoryFilter from './CategoryFilter';
 import ProductFilter from './ProductFilter';
 import Order from './Order';
 import OrderDetail from './OrderDetail';
+import OrderDetail_pending from './OrderDetail_pending';
 import OrderFilter from './OrderFilter';
 import CreateOrder from './CreateOrder';
 import MakePayment from './MakePayment';
@@ -86,6 +87,7 @@ export default class AppNavigater extends React.Component {
           </Stack.Screen> */}
           <Stack.Screen name="Order" component={Order} options={{ headerShown: false }} />
           <Stack.Screen name="OrderDetail" component={OrderDetail} options={{ headerShown: false }} />
+          <Stack.Screen name="OrderDetail_pending" component={OrderDetail_pending} options={{ headerShown: false }} />
           <Stack.Screen name="OrderFilter" component={OrderFilter} options={{ headerShown: false }} />
           <Stack.Screen name="CreateOrder" component={CreateOrder} options={{ headerShown: false }} />
           <Stack.Screen name="MakePayment" component={MakePayment} options={{ headerShown: false }} />

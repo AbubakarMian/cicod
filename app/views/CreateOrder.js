@@ -116,40 +116,33 @@ class CreateOrder extends React.Component {
     }
 
     DeliveryType(type) {
-        console.log(' type !!!!!!!', type);
+        console.log(' ********************~~~~~~~~~~~type !!!!!!!', type);
         this.setState({ is_pickup: !this.state.is_pickup, })
         if (type === 'delivery') {
             this.setState({ deliveryType: 'delivery' })
 
         } else if (type === 'pickup') {
             this.setState({ deliveryType: 'pickup' })
-
         }
-
 
         if (this.props.customer.name == '') {
 
             alert('ADD CUSTOMER FIRST');
             return
         } else {
-
-
-            if (type == 'pickup') {
-                // this.props.navigation.navigate('PickUpLocation', { type })
-                this.props.setDeliveryAddress({
-                    address: '',
-                    type: 'pickup',
-                })
-            }
-            else {
-
+            // if (type == 'pickup' || type== 'delivery') {
+            //     this.props.setDeliveryAddress({
+            //         address: '',
+            //         type: 'pickup',
+            //     })
+            // }
+            // else {
                 if (this.props.route.params.screen_name == 'buy') {
                     this.props.navigation.navigate('BuyDiliveryAddress', { type })
                 } else {
                     this.props.navigation.navigate('DiliveryAddress', { type })
                 }
-
-            }
+            // }
         }
     }
 
@@ -261,27 +254,12 @@ class CreateOrder extends React.Component {
         }
         else{
             this.props.navigation.navigate(this.state.goto_payment_screen, { bodyOrder: bodyOrder,
-                payment_mode: this.state.payment_mode ,
+                 payment_mode: this.state.payment_mode ,
                  amount_payable: amount_payable ,
                 });
-            // this.props.navigation.navigate('MakePayment', { bodyOrder: bodyOrder });
             console.log('step  2 ')
             return;
         }
-        // console.log('this.props.notes this.props.notes !!!!!!!!!!!!', this.props.notes)
-        // let postData = {
-        //     method: 'POST',
-        //     headers: {
-        //         Accept: 'application/json',
-        //         'Content-Type': 'application/json',
-        //         'Authorization': this.props.user.access_token
-        //     },
-        //     body: JSON.stringify(bodyOrder)
-        // };
-        // console.log('body params list @@@@@@!!!!!!!!!!!!!!', postData);
-        // return;
-        
-
     }
     create_order_id(url,bodyOrder){
         console.log('create_order_id',bodyOrder);

@@ -263,7 +263,7 @@ class UpdateProduct extends React.Component {
             let cat_marked = false;
             for (let j = 0; j < list[i].data.length; j++) {
                 if (list[i].data[j].isChecked) {
-                    products.push(list[i].data[j].id);
+                    products.push(list[i].data[j].id+"");
                     cat_marked = true;
                 }
             }

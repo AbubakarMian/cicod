@@ -125,8 +125,8 @@ class ProductFilter extends React.Component {
         if (responseJson.status === 'success') {
 
           let res = responseJson.data;
-          let categoryarr = res.map((x, key) => { return { label: x.name, value: x.name } });
-          console.log('category !!!!!!', categoryarr);
+          let categoryarr = res.map((x, key) => { return { label: x.name, value: x.name ,id:x.id} });
+          console.log('category !!!!!!', responseJson.data);
           this.setState({
             categoryarr: categoryarr,
           });
@@ -147,9 +147,9 @@ class ProductFilter extends React.Component {
     })
   }
 
-  onCategoryText(text) {
+  onCategoryText(id) {
     let filters = this.state.filters; //this.state.filters;
-    filters.push({ key: 'category', value: text });
+    filters.push({ key: 'category_id', value: id });
     this.setState({
       filters: filters
     })
@@ -158,7 +158,7 @@ class ProductFilter extends React.Component {
     // console.log(' category text text ', text);
     // return
     let filters = this.state.filters; //this.state.filters;
-    filters.push({ key: 'createdBy', value: text });
+    filters.push({ key: 'created_by', value: text });
     this.setState({
       filters: filters
     })
@@ -203,7 +203,7 @@ class ProductFilter extends React.Component {
           <Text onPress={() => { this.setState({ filters: [] }) }} style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20, top: 20 }]}>Clear Filter</Text>
         </View>
         <View style={{ width: width - 20, alignSelf: 'center', backgroundColor: '#fff', borderRadius: 10, padding: 10 }}>
-          <View style={{ width: width - 20, backgroundColor: '#fff', paddingVertical: 10, marginTop: 20 }}>
+          <View style={{ width: width - 20, backgroundColor: '#fff', paddingVertical: 10, marginTop: 20,paddingBottom:50, }}>
             <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 5, flexDirection: 'row', position: 'relative' }}>
               <TextInput onChangeText={text => this.onQuantityText(text)}
                 label="Quantity"
@@ -237,11 +237,11 @@ class ProductFilter extends React.Component {
                 containerStyle={{ height: 50, width: width - 30, }}
                 style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                 itemStyle={{
-                  justifyContent: 'flex-start',
+                  justifyContent: 'flex-start',zIndex:999
                 }}
                 dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                 labelStyle={{ color: '#A9A9A9' }}
-                onChangeItem={item => this.onCategoryText(item.value)}
+                onChangeItem={item => this.onCategoryText(item.id)}
               />}
 
 
