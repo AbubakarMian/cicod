@@ -4,10 +4,10 @@ import {   Text, TextInput} from 'react-native-paper';
 import styles from '../css/DiliveryAddressCss';
 import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
-import CheckBox from 'react-native-check-box';
 import Header from '../views/Header';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Constants } from './Constant';
+import CheckBox from 'react-native-check-box';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER, SET_DELIVERY_ADDRESS } from '../redux/constants/index';
@@ -23,15 +23,34 @@ class DiliveryAddress extends React.Component {
             is_selected_address: false,
             addressarr: [],
             selected_address_id:0,
-            delivery_type: this.props.route.params.type ?? ''
+            delivery_type: this.props.route.params.type ?? '',
+            isChecked: false,
         }
 
     }
 
     componentDidMount() {
+        this.setState({delivery_type:this.props.route.params.type})
         this.getDeliveryAddress();
-    }
 
+    }
+    set_address(){
+        // this.setState({
+        //     rememberIsChecked: !this.state.rememberIsChecked
+        // })
+        if(this.state.rememberIsChecked==true){
+            this.setState({
+            rememberIsChecked: true
+        })
+            console.log("Not Set")
+        }else{
+            this.setState({
+            rememberIsChecked: false
+        })
+             console.log("Set")
+             console.log("~~~~~~~~~~~",this.state.addressarr)
+        }          
+    }
     getDeliveryAddress() {
         this.setState({ spinner: true })
         let postData = {
@@ -99,6 +118,7 @@ class DiliveryAddress extends React.Component {
                 />
                 <ScrollView>
                     <View>
+                   
                         <View style={[{}, styles.backHeaderRowView]}>
                             <TouchableOpacity
                                 // onPress={() => this.props.navigation.navigate('BuyCreateOrder')}
@@ -109,10 +129,23 @@ class DiliveryAddress extends React.Component {
                             </TouchableOpacity>
                             <View style={[{}, styles.backHeadingView]}>
                                 <Text style={[{}, styles.backHeadingText]}>DELIVERY ADDRESS</Text>
+                                   
                             </View>
 
                         </View>
+                        {this.props.route.params.type === 'delivery'?
+                            <CheckBox
+                            style={{ width: width-20,marginVertical:10, alignSelf: 'center', alignItems: 'center' }}
+                            onClick={() =>{this.set_address(), this.setState({
+                                    rememberIsChecked: !this.state.rememberIsChecked
+                                })} }
+                            isChecked={this.state.rememberIsChecked}
+                            rightText={"Same as customer’s address"}
+                            rightTextStyle={{fontSize:10}}
+                        /> 
+                        : null }
                         <View style={[{}, styles.addressContainer]}>
+                      
                             <TouchableOpacity
                             // onPress={() => this.selectAddress(value)}
                             >

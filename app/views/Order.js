@@ -32,22 +32,12 @@ class Order extends React.Component {
             isDatePickerVisible: false,
             setDatePickerVisibility: false,
             date_range:null,
-            url_orders:''
+            url_orders:'',
+            date_created_timestamp:'YY-MM-DD',
+            apply_filter:false,
+            search_order_text:''
         };
         this.onDateChange = this.onDateChange.bind(this);
-    }
-    componentDidMount() {
-        return;
-        var dt = new Date();
-        var hours = dt.getHours(); // gives the value in 24 hours format
-        var minutes = dt.getMinutes();
-        var finalTime = "Time  - > " + hours + ":" + minutes;
-
-        console.log('final time !!!!!!!!!!!!!!!!!', finalTime)
-
-        // this.orderList(Constants.orderslist);
-        // this.orderList(Constants.order_range);
-        
     }
     customeList(listType) {
 
@@ -70,7 +60,6 @@ class Order extends React.Component {
             .then(response => response.json())
             .then(async responseJson => {
 
-                // console.log("@@@@@@@@@@@@", responseJson)
                 if (responseJson.status === 'success') {
                     this.setState({ spinner: false });
                     this.setState({
@@ -89,7 +78,8 @@ class Order extends React.Component {
     }
     orderList(url) {
         console.log("############################################",url)
-        this.setState({ spinner: true })
+        console.log('access token',this.props.user.access_token)
+        this.setState({ spinner: true }) //,apply_filter:false
         let postData = {
             method: 'GET',
             headers: {
@@ -102,7 +92,7 @@ class Order extends React.Component {
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log("###############", responseJson)
+                // console.log("###############", responseJson)
                 if (responseJson.status === 'success') {
                     this.setState({ spinner: false });
                     this.setState({
@@ -118,7 +108,6 @@ class Order extends React.Component {
                 }
 
             })
-
     }
 
     unauthorizedLogout() {
@@ -126,37 +115,31 @@ class Order extends React.Component {
         this.props.logoutUser();
         this.props.navigation.navigate('Login');
     }
-    componentWillReceiveProps() {
-        return;
-        console.log('this.props.route', this.props.route.params.filters);
-
-        let filters = this.props.route.params.filters;
-        let filter = '?';
-        for (let i = 0; i < filters.length; i++) {
-            filter = filter + filters[i].key + '=' + filters[i].value;
-            if (i != filters.length - 1) {
-                filter = filter + '&';
-            }
-        }
-        console.log(' will receive props !!!!!!!!!!!!!', Constants.orderslist + filter);
-
-        return;
-        this.orderList(Constants.orderslist + filter);
-    }
 
     onDateChange(date) {
         this.setState({
             selectedStartDate: date,
         });
     }
-    itemDetail(item) {
+    itemDetail(item,type) {
+        console.log("~~~~~~~~~~~~~~~~~",type)
         const id = item.id
-        console.log("item_id item_id item_id item_id ", id)
-        this.props.navigation.navigate('OrderDetail', { id })
+        if(type=='PENDING'){
+            this.props.navigation.navigate('OrderDetail_pending', { id })
+        }
+        else{
+            this.props.navigation.navigate('OrderDetail', { id })
+        }
+        // const id = item.id
+        // console.log("item_id item_id item_id item_id ", id)
+        // this.props.navigation.navigate('OrderDetail', { id })
+        // this.props.navigation.navigate('OrderDetail', { id })
+        // OrderDetail_pending
     }
 
     datePickerFun = () => {
         this.setState({
+            apply_filter:false,
             isDatePickerVisible: !this.state.isDatePickerVisible
         })
     }
@@ -164,37 +147,42 @@ class Order extends React.Component {
     setDate = (date) => {
         var month = date.getUTCMonth() + 1; //months from 1-12
         var day = date.getUTCDate();
-        var year = date.getUTCFullYear();
+        var year = date.getUTCFullYear();       
+        if(month < 10){
+            month = "0"+month;
+        }   
+        if(day < 10){
+            day = "0"+day;
+        }  
+        let newdate = year + "-" + month + "-" + day;
+        // // let sendDate = year + "/" + month + "/" + day;
+        // var timestamp = Date.parse(new Date(sendDate));
 
-        // date.timeConvertion();
+        // let order_url = Constants.orderslist + '?date_created=' + timestamp;
 
-        let newdate = day + "/" + month + "/" + year;
-
-        let order_url = Constants.orderslist + '?date_created=' + date;
+        console.log('timestamptimestamptimestamptimestamp',newdate);
 
         this.setState({
-            isDatePickerVisible: !this.state.isDatePickerVisible,
-            date: date.getTime(),
+            isDatePickerVisible: false,
+            date:newdate,
+            date_created_timestamp:newdate
         })
-        // this.orderList(order_url);
 
     }
     hideDatePicker = () => {
         this.setState({
             // setDatePickerVisibility: !this.state.setDatePickerVisibility,
-            isDatePickerVisible: !this.state.isDatePickerVisible
+            isDatePickerVisible: false
         })
     }
-    search() {
-        let url = Constants.orderslist + '?order_id=' + this.state.search_order;
-        // this.orderList(url);
-
-
+     search(text) {
+         this.setState({
+            search_order: text.nativeEvent.text,
+            apply_filter:false
+        })
     }
 
     timeConvertion(date) { //return 'some time';
-        console.log('dddd date');
-
         var datetime = date.split(" ");
         var date = datetime[0];
         var time = datetime[1];
@@ -217,6 +205,15 @@ class Order extends React.Component {
         // console.log('date_time converted ', date_time);
         return date_time;
     }
+    apply_filters(){
+        this.setState({ 
+            apply_filter:true,
+            date_created_timestamp:'YY-MM-DD',
+            search_order:'',
+            search_order_text:''
+        });
+        this.props.navigation.navigate('OrderFilter');
+    }
 
     getOrderList(props){
         console.log('props ---- ',props);
@@ -227,11 +224,12 @@ class Order extends React.Component {
         if (_that.props.route == null || _that.props.route.params == null || _that.props.route.params.filters == null) {
             url = Constants.orderslist;
         }
-        else {           
+        else if(_that.state.apply_filter){           
             filters = _that.props.route.params.filters;
             let filter = '?';
             for (let i = 0; i < filters.length; i++) {
-                filter = filter +'filter'+ '['+filters[i].key +']' + '=' + filters[i].value;
+                // filter = filter +'filter'+ '['+filters[i].key +']' + '=' + filters[i].value;
+                filter = filter +filters[i].key  + '=' + filters[i].value;
                 if (i != filters.length - 1) {
                     filter = filter + '&';
                 }
@@ -248,9 +246,9 @@ class Order extends React.Component {
             filter_concat = '&';
         }
         
-        if(_that.state.date != ''){
+        if(_that.state.date_created_timestamp != 'YY-MM-DD'){
             
-            url = url+filter_concat+'date_created=' + _that.state.date
+            url = url+filter_concat+'date_created=' + _that.state.date_created_timestamp
         }
 
         if (url != _that.state.url_orders) {
@@ -260,7 +258,8 @@ class Order extends React.Component {
                 url_orders: url
             })
         }
-        console.log(' will receive props !!!!!!!!!!!!!', url);
+        console.log('url hit', url);
+        console.log(' will receive props !!!!!!!!!!!!!', _that.state.apply_filter);
 
         return(
             <FlatList
@@ -279,7 +278,7 @@ class Order extends React.Component {
                     renderItem={({ item, index, separators }) => (
                         <TouchableOpacity
                             key={item.key}
-                            onPress={() => _that.itemDetail(item)}
+                            onPress={() => _that.itemDetail(item,item.order_status)}
                             onShowUnderlay={separators.highlight}
                             onHideUnderlay={separators.unhighlight}>
                             <View style={{ position: 'relative', alignSelf: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginBottom: 5 }}>
@@ -356,7 +355,7 @@ class Order extends React.Component {
                                     style={{ height: 20, width: 20 }}
                                     source={require('../images/calenderIcon.png')}
                                 />
-                                <Text style={[{ color: '#909090', marginLeft: 5 }, fontStyles.normal12]}>{this.state.date == '' ? 'Today' : this.state.date}</Text>
+                                <Text style={[{ color: '#909090', marginLeft: 5 }, fontStyles.normal12]}>{this.state.date_created_timestamp}</Text>
                             </View>
                             <View style={{ position: 'absolute', right: 20, bottom: 15 }}>
                                 <Icon
@@ -367,28 +366,7 @@ class Order extends React.Component {
                                 />
                             </View>
                         </TouchableOpacity>
-                        {/* <DropDownPicker
-                            items={[
-                                { label: 'USA', value: 'usa', hidden: true },
-                                { label: 'UK', value: 'uk', },
-                                { label: 'France', value: 'france', },
-                            ]}
-                            defaultValue={this.state.country}
-                            containerStyle={{ height: 50 }}
-                            style={{ backgroundColor: '#fafafa' }}
-                            itemStyle={{
-                                justifyContent: 'flex-start',
-                            }}
-                            dropDownStyle={{ backgroundColor: '#fafafa' }}
-                            onChangeItem={item => this.setState({
-                                date: item.value
-                            })}
-                            style={{ width: width / 2 - 30, alignSelf: 'center', marginTop: 10, marginLeft: 10 }}
-                        /> */}
                     </View>
-                    {/* style={{ width: width / 2 - 30, alignSelf: 'center', marginTop: 10, marginLeft: 10 }} 
-                    containerStyle={{ height: 50 }}
-                    */}
                     <View style={{ position: 'absolute', right: 0 }}>
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('CreateOrder', { heading: 'order' })}
@@ -403,29 +381,14 @@ class Order extends React.Component {
                 <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
 
                     <View style={{ flexDirection: 'row', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
-                        {/* <Image
-                            style={{height:30,width:30}}
-                            source={require('../images/products/searchicon.png')}
-                        />
-
-                        <TextInput
-                            label=""
-                            // selectionColor={'#fff'}
-
-                            style={{ backgroundColor: 'transparent', }}
-                            width={width - 110}
-                            alignSelf={'center'}
-                            color={'#000'}
-                            onChangeText={text => this.setState({ search_order: text })}
-                            onSubmitEditing={() => this.search()}
-                        /> */}
                         <Searchbar
                             placeholder="Search order ID, customer, amount, etc"
                             style={[{ color: '#D8D8D8' }, fontStyles.normal14]}
                             iconColor="#929497"
                             style={{ width: width / 1.3, alignSelf: 'center', position: 'absolute', left: 0, marginTop: 10, marginBottom: 5, elevation: 0, borderColor: '#D8DCDE' }}
-                            onChangeText={text => this.setState({ search_order: text })}
-                            onSubmitEditing={() => this.search()}
+                            onChangeText={text => this.setState({search_order_text:text})}
+                            value={this.state.search_order_text}
+                            onSubmitEditing={(text) => this.search(text)}
                         //update
                         ></Searchbar>
 
@@ -433,7 +396,7 @@ class Order extends React.Component {
 
                     <TouchableOpacity
                         style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
-                        onPress={() => this.props.navigation.navigate('OrderFilter')}
+                        onPress={() => this.apply_filters()}
                     >
                         <Image
                             style={{ height: 50, width: 50 }}
@@ -442,59 +405,63 @@ class Order extends React.Component {
                     </TouchableOpacity>
 
                 </View>
-
-                <ScrollView
-                    horizontal={true}
-                    paddingHorizontal={10}
-                    // marginBottom={10}
-                    height={30}
-                    marginTop={5}
-                    marginBottom={5}
-                    scrollEnabled={true}
+                <View
+                style={{width:width-20,alignSelf:'center',height:40}}
                 >
+                    
+                <ScrollView
+                   
+                   horizontal={true}
+                   paddingHorizontal={10}
+                   // marginBottom={10}
+                   // height={5}
+                   marginTop={5}
+                   marginBottom={5}
+                   scrollEnabled={true}
+               >
+                 <TouchableOpacity
+                       onPress={() => this.customeList("")}
+                   >
+                       <Text style={{
+                           color: this.state.is_active_list === 'all' ? '#000' : '#e2e2e2',
+                           fontWeight: 'bold', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
+                       }}>ALL</Text>
+                   </TouchableOpacity>
+                   <TouchableOpacity
+                       onPress={() => this.customeList("pending")}
+                   >
+                       <Text style={{
+                           color: this.state.is_active_list === 'pending' ? '#000' : '#e2e2e2',
+                           backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
+                       }}>PENDING</Text>
+                   </TouchableOpacity>
+                   <TouchableOpacity
+                       onPress={() => this.customeList("paid")}
+                   >
+                       <Text style={{
+                           color: this.state.is_active_list === 'paid' ? '#000' : '#e2e2e2',
+                           backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
+                       }}>PAID</Text>
+                   </TouchableOpacity>
+                   <TouchableOpacity
+                       onPress={() => this.customeList("partPayment")}
+                   >
+                       <Text style={{
+                           color: this.state.is_active_list === 'partPayment' ? '#000' : '#e2e2e2',
+                           backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
+                       }}>PART PAYMENT</Text>
+                   </TouchableOpacity>
+                   <TouchableOpacity
+                       onPress={() => this.customeList("paidFromCredit")}
+                   >
+                       <Text style={{
+                           color: this.state.is_active_list === 'paidFromCredit' ? '#000' : '#e2e2e2',
+                           backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
+                       }}>PAID FROM CREDIT</Text>
+                   </TouchableOpacity> 
 
-                    <TouchableOpacity
-                        onPress={() => this.customeList("")}
-                    >
-                        <Text style={{
-                            color: this.state.is_active_list === 'all' ? '#000' : '#e2e2e2',
-                            fontWeight: 'bold', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
-                        }}>ALL</Text>
-                    </TouchableOpacity >
-                    <TouchableOpacity
-                        onPress={() => this.customeList("pending")}
-                    >
-                        <Text style={{
-                            color: this.state.is_active_list === 'pending' ? '#000' : '#e2e2e2',
-                            backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
-                        }}>PENDING</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => this.customeList("paid")}
-                    >
-                        <Text style={{
-                            color: this.state.is_active_list === 'paid' ? '#000' : '#e2e2e2',
-                            backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
-                        }}>PAID</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => this.customeList("partPayment")}
-                    >
-                        <Text style={{
-                            color: this.state.is_active_list === 'partPayment' ? '#000' : '#e2e2e2',
-                            backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
-                        }}>PART PAYMENT</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={() => this.customeList("paidFromCredit")}
-                    >
-                        <Text style={{
-                            color: this.state.is_active_list === 'paidFromCredit' ? '#000' : '#e2e2e2',
-                            backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
-                        }}>PAID FROM CREDIT</Text>
-                    </TouchableOpacity>
-
-                </ScrollView>
+               </ScrollView>
+                    </View> 
                 {/* <ScrollView  style={{ marginBottom: 200 }}> */}
                 <this.getOrderList _that={this}/>
 
@@ -515,5 +482,5 @@ function mapDispatchToProps(dispatch) {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
         logoutUser: () => dispatch({ type: LOGOUT_USER })
     }
-};
+}; 
 export default connect(mapStateToProps, mapDispatchToProps)(Order)

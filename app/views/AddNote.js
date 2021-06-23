@@ -22,9 +22,6 @@ class AddNote extends React.Component {
             notestext: this.props.notes.notes,
         }
     }
-    getnote(){
-        return this.state.getnote
-    }
     setNotes() {
         console.log('notes props !!!!!!!!', this.state.notestext);
         this.props.setNotes({

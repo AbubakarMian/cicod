@@ -48,7 +48,8 @@ class CreateOrder extends React.Component {
             goto_payment_screen: '',
             payment_option_selected: '',
             pay_button_lable: 'Pay',
-            amount_payable:0
+            amount_payable:0,
+            ConfirmationPayInvoice:false
         }
     }
     clearOrder() {
@@ -115,40 +116,33 @@ class CreateOrder extends React.Component {
     }
 
     DeliveryType(type) {
-        console.log(' type !!!!!!!', type);
+        console.log(' ********************~~~~~~~~~~~type !!!!!!!', type);
         this.setState({ is_pickup: !this.state.is_pickup, })
         if (type === 'delivery') {
             this.setState({ deliveryType: 'delivery' })
 
         } else if (type === 'pickup') {
             this.setState({ deliveryType: 'pickup' })
-
         }
-
 
         if (this.props.customer.name == '') {
 
             alert('ADD CUSTOMER FIRST');
             return
         } else {
-
-
-            if (type == 'pickup') {
-                // this.props.navigation.navigate('PickUpLocation', { type })
-                this.props.setDeliveryAddress({
-                    address: '',
-                    type: 'pickup',
-                })
-            }
-            else {
-
+            // if (type == 'pickup' || type== 'delivery') {
+            //     this.props.setDeliveryAddress({
+            //         address: '',
+            //         type: 'pickup',
+            //     })
+            // }
+            // else {
                 if (this.props.route.params.screen_name == 'buy') {
                     this.props.navigation.navigate('BuyDiliveryAddress', { type })
                 } else {
                     this.props.navigation.navigate('DiliveryAddress', { type })
                 }
-
-            }
+            // }
         }
     }
 
@@ -172,9 +166,6 @@ class CreateOrder extends React.Component {
         else if (item.label == 'Part Payment') {
             mode = 'ONLINE';
             goto_payment_screen = 'PartPaytment';
-            this.setState({
-                show_part_payment: true
-            })
         }
 
         this.setState({
@@ -198,6 +189,13 @@ class CreateOrder extends React.Component {
         return cart_arr;
     }
     createOrderFun() {
+
+        if(this.state.payment_option_selected == 'Pay Invoice' && !this.state.ConfirmationPayInvoice){
+            this.setState({
+                ConfirmationPayInvoice:true
+            })
+            return;
+        }
 
         let dilevery_type = ''
         if (this.state.is_pickup == true) {
@@ -242,7 +240,8 @@ class CreateOrder extends React.Component {
         };
 
         this.setState({
-            amount_payable:amount_payable
+            amount_payable:amount_payable,
+            ConfirmationPayInvoice:false
         })
 
         if (this.state.goto_payment_screen == '') {//show_part_payment
@@ -252,27 +251,12 @@ class CreateOrder extends React.Component {
         }
         else{
             this.props.navigation.navigate(this.state.goto_payment_screen, { bodyOrder: bodyOrder,
-                payment_mode: this.state.payment_mode ,
+                 payment_mode: this.state.payment_mode ,
                  amount_payable: amount_payable ,
                 });
-            // this.props.navigation.navigate('MakePayment', { bodyOrder: bodyOrder });
             console.log('step  2 ')
             return;
         }
-        // console.log('this.props.notes this.props.notes !!!!!!!!!!!!', this.props.notes)
-        // let postData = {
-        //     method: 'POST',
-        //     headers: {
-        //         Accept: 'application/json',
-        //         'Content-Type': 'application/json',
-        //         'Authorization': this.props.user.access_token
-        //     },
-        //     body: JSON.stringify(bodyOrder)
-        // };
-        // console.log('body params list @@@@@@!!!!!!!!!!!!!!', postData);
-        // return;
-        
-
     }
     create_order_id(url,bodyOrder){
         console.log('create_order_id',bodyOrder);
@@ -299,6 +283,9 @@ class CreateOrder extends React.Component {
                         this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
                     }
                     
+                }
+                else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
                 } else {
                     this.setState({ spinner: false })
                     let message = responseJson.message
@@ -353,6 +340,7 @@ class CreateOrder extends React.Component {
     closeOrder() {
         let user_data = {}
         this.props.setCustomer(user_data);
+        this.props.emptyOrder();
         this.props.navigation.goBack()
     }
 
@@ -576,7 +564,6 @@ class CreateOrder extends React.Component {
                         </View>
                         <View style={[{}, styles.diliveryTypeContainerView]}>
                             <TouchableOpacity
-                                // onPress={() => this.props.navigation.navigate('DiliveryAddress')}
                                 onPress={() => this.DeliveryType('delivery')}
 
                             >
@@ -738,45 +725,12 @@ class CreateOrder extends React.Component {
                                     checkBoxColor={'#929497'}
                                 />
                             </View>
-
-                            {/* {this.state.show_part_payment ? 
-                            <View>
-                                <TextInput 
-                                    label="Part Payment Amount"
-                                    keyboardType="numeric"
-                                    style={{ backgroundColor: 'transparent', }}
-                                    width={width - 50}
-                                    alignSelf={'center'}
-                                    color={'#000'}
-                                    onChangeText={text => this.setState({ part_payment_amount: text })}
-                                />
-                                <TextInput 
-                                    label="Part Payment Percent"
-                                    keyboardType="numeric"
-                                    style={{ backgroundColor: 'transparent', }}
-                                    width={width - 50}
-                                    alignSelf={'center'}
-                                    color={'#000'}
-                                    onChangeText={text => this.setState({ part_payment_percent: text })}
-                                />
-                                <TouchableOpacity onPress={()=>this.setState({isDatePickerVisible:!this.state.isDatePickerVisible})}>
-                                    <Text>Date : {this.state.part_payment_balance_due_date.toDateString()}</Text></TouchableOpacity>
-                                <DateTimePickerModal
-                                    isVisible={this.state.isDatePickerVisible}
-                                    mode="date"
-                                    date={this.state.part_payment_balance_due_date}
-                                    onConfirm={(date)=>this.setDate(date)}
-                                    onCancel={()=>{this.setState({isDatePickerVisible:false})}}
-                                />
-                            </View>:null} */}
                         </View>
-
-
                         <View style={{ backgroundColor: '#fff', width: width - 20, alignSelf: 'center', marginTop: 10, borderRadius: 10, paddingBottom: 10 }}>
                             <View style={[{ borderBottomWidth: 0.25 }, styles.subTotleRowView]}>
 
                                 <View style={[{}, styles.subTotleColumn1View]}>
-                                    <Text style={[{}, styles.subTotleColumn1Text]}>subtotal:</Text>
+                                    <Text style={[{}, styles.subTotleColumn1Text]}>Subtotal:</Text>
                                     <Text style={[{}, styles.subTotleColumn1Text]}>Tax(7.5%)</Text>
                                     <Text style={[{}, styles.subTotleColumn1Text]}>TOTAL:</Text>
 
@@ -784,13 +738,12 @@ class CreateOrder extends React.Component {
                                 <View style={[{}, styles.subTotleColumn2View]}>
                                     <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.total_price ?? 0}</Text>
                                     <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.tax ?? 0}</Text>
-
                                     {(this.props.orderDiscountReducer.discount_type == 'percentage') ?
 
-                                        <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.total_price_with_tax - (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01) ?? 0}</Text>
+                                        <Text style={[{}, styles.subTotleColumn2Text]}>N {(this.state.cart_detail.total_price_with_tax - (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01)).toFixed(2) ?? 0}</Text>
                                         :
                                         (this.props.orderDiscountReducer.discount_type == 'value') ?
-                                            <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.total_price_with_tax - (this.props.orderDiscountReducer.discount_amount) ?? 0}</Text>
+                                            <Text style={[{}, styles.subTotleColumn2Text]}>N {(this.state.cart_detail.total_price_with_tax - (this.props.orderDiscountReducer.discount_amount)).toFixed(2) ?? 0}</Text>
                                             : <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.total_price_with_tax ?? 0}</Text>
                                     }
 
@@ -800,12 +753,12 @@ class CreateOrder extends React.Component {
                             <View style={{ flexDirection: 'row', width: width - 50, alignSelf: 'center', marginVertical: 10 }}>
                                 <TouchableOpacity
                                     style={{ flex: 1, justifyContent: 'center', }}
-                                    onPress={() => this.props.navigation.navigate('ApplyDiscount')}
+                                    onPress={() => this.props.navigation.navigate('ApplyDiscount',{total_price:this.state.cart_detail.total_price})}
                                 >
                                     <View style={{ flexDirection: 'row' }}>
                                         <Image source={require('../images/icon15.png')}
                                             style={{ height: 20, width: 20 }} />
-                                        <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Apply for Discount</Text>
+                                        <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Apply Discount</Text>
                                     </View>
                                 </TouchableOpacity>
                                 <TouchableOpacity
@@ -902,6 +855,39 @@ class CreateOrder extends React.Component {
                         </View>
                     </View>
 
+                </Modal>
+                <Modal
+                visible={this.state.ConfirmationPayInvoice}
+                >
+                 <View
+                 style={{alignSelf:'center',backgroundColor:'#fff',width:width-50,justifyContent:'center',alignItems:'center',paddingVertical:20,borderRadius:10,flexDirection:'column'}}
+                 >
+                    <View style={{flexDirection:'row',marginBottom:30}}>
+                    <Text style={{color:'#B1272C',fontWeight:'bold',fontSize:20}}>Generate CICOD Order</Text>    
+                    </View> 
+                   <View style={{flexDirection:'row'}}>
+                       <View 
+                       style={{flex:1,justifyContent:'center',alignItems:'center'}}
+                       >
+                         <TouchableOpacity
+                         style={{backgroundColor:'#fff',paddingVertical:15,padding:30,borderRadius:100,borderWidth:1,borderColor:'#B1272C'}}
+                         onPress={()=>{this.setState({ConfirmationPayInvoice:false})}}
+                         >
+                           <Text style={{color:'#B1272C',paddingHorizontal:10}}>Cancel</Text>
+                       </TouchableOpacity>
+                       </View>
+                       <View 
+                       style={{flex:1,justifyContent:'center',alignItems:'center',}}
+                       >
+                         <TouchableOpacity
+                         style={{backgroundColor:'#B1272C',paddingVertical:15,padding:40,borderRadius:100}}
+                         onPress={()=>this.createOrderFun()}
+                         >
+                           <Text style={{color:'#fff',}}>Confirm</Text>
+                       </TouchableOpacity>
+                       </View>
+                   </View>
+                 </View>
                 </Modal>
             </View>
 

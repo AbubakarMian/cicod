@@ -48,6 +48,9 @@ class AddCustomer extends React.Component {
         this.props.navigation.navigate('Login');
     }
     getCustomers(search_text) {
+        if(search_text == ''){
+            return;
+        }
 
         this.setState({ spinner: true })
         let postData = {

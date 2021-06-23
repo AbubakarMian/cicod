@@ -7,7 +7,7 @@ import CheckBox from 'react-native-check-box';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER,CLEAR_ORDER,RESET } from '../redux/constants/index';
 import { Constants } from '../views/Constant';
 import { Text, TextInput, Modal } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -44,10 +44,17 @@ class Login extends React.Component {
                 tenantId: user_credentials.tenantId,
                 rememberIsChecked: true
             })
-        }
+        }        
+    }
+    resetReducer(){
+        this.props.emptyOrder();
+        this.props.resetDeliveryAddress();
+        this.props.resetCustomer();
+        this.props.resetSupplier();
     }
     login() {
         console.log("Login Login Login ")
+        this.resetReducer();
         if (this.state.tenantId === '') {
             alert("Domain required")
         }
@@ -129,7 +136,7 @@ class Login extends React.Component {
     render() {
         return (
             <ScrollView>
-                <View style={[{ position: 'relative' }, styles.mainView]}>
+                <View style={[{ position: 'relative', }, styles.mainView]}>
                     <Spinner
                         visible={this.state.Spinner}
                         textContent={'Please Wait...'}
@@ -222,13 +229,19 @@ class Login extends React.Component {
                         style={[{}, styles.btnContinuueView]}>
                         <Text style={{ color: '#FFFFFF', fontSize: 16, fontFamily: 'Open Sans' }}>Continue</Text>
                     </TouchableOpacity>
-                    <View style={{ flex: 1, justifyContent: 'flex-start', alignItems: 'flex-start' }}>
                         <TouchableOpacity
+                           style={{ marginTop: 20,zIndex:0.9999,marginBottom:height/5 ,marginTop:20}}
                             onPress={() => this.props.navigation.navigate('ResetPassword')}
-                            style={{ marginTop: 10, }}>
+                            >
                             <Text style={{ color: '#487AE0', fontSize: 14, textAlign: 'left', fontFamily: 'Open Sans' }}>Reset Password</Text>
                         </TouchableOpacity>
-                    </View>
+                        <View>
+                           <Image
+                           source={require('../images/home/1.png')}
+                                style={{ height: width / 3, width: width / 3.6 }}
+                           />
+                        </View>
+                    
                 </View>
 
             </ScrollView>
@@ -244,7 +257,11 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
-        logoutUser: () => dispatch({ type: LOGOUT_USER })
+        logoutUser: () => dispatch({ type: LOGOUT_USER }),
+        emptyOrder: () => dispatch({ type: CLEAR_ORDER }),
+        resetDeliveryAddress: () => dispatch({ type: RESET}),
+        resetCustomer: () => dispatch({ type: RESET }),
+        resetSupplier: () => dispatch({ type: RESET}),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Login)

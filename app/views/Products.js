@@ -48,7 +48,8 @@ class Products extends React.Component {
 
     async getData(url) {
         this.setState({ spinner: true })
-           
+           console.log('search url ',url)
+           console.log('token ',this.props.user.access_token)
         
         let postData = {
             method: 'GET',
@@ -174,7 +175,7 @@ class Products extends React.Component {
                 url_products:url
             })
         }
-        // console.log('all data ',_that.state.data);
+        console.log('url_products ',url);
         // return null;
         
         return (
@@ -290,7 +291,8 @@ class Products extends React.Component {
                     <TouchableOpacity
                         style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
                         onPress={() =>  {this.setState({
-                            reload: true
+                            reload: true,
+                            search_product:''
                         });
                         this.props.navigation.navigate('ProductFilter')}}
                     >

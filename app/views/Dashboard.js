@@ -25,7 +25,6 @@ import {
 import { Console } from 'node:console';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
-const date="";
 class Dashboard extends React.Component {
     constructor(props) {
         super(props);
@@ -200,7 +199,15 @@ class Dashboard extends React.Component {
     
     var timestamp = date.getTime();    
 
-    let newdate = day + "/" + month + "/" + year;
+    // let newdate = day + "/" + month + "/" + year;
+    
+    if(month < 10){
+        month = "0"+month;
+    }   
+    if(day < 10){
+        day = "0"+day;
+    }  
+    let newdate = year + "-" + month + "-" + day;
 
     // filters.push({ key: 'create_time', value: date });
     this.setState({
@@ -209,9 +216,9 @@ class Dashboard extends React.Component {
     })
 
     let sendDate = year + "/" + month + "/" + day;
-    var timestamp = Date.parse(new Date(sendDate));   
-    console.log(sendDate + " is: " + timestamp);
-    let url = Constants.dashboard+'?start_date='+timestamp ;
+    // var timestamp = Date.parse(new Date(sendDate));   
+    // console.log(sendDate + " is: " + timestamp);
+    let url = Constants.dashboard+'?start_date='+sendDate ;
     console.log('url !!!!!!!!!!!!!!!!!!!!!!!!!!!!', url)
     this.getDashboardData(url);
 
