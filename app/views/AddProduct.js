@@ -39,9 +39,9 @@ class AddProduct extends React.Component {
         this.getCategoryList();
     }
 
-    getProductList() {
+    getProductList(search_product , category_id) {
 
-        if (this.state.search_product == '') {
+        if (search_product == '' && category_id=='') {
             return;
         }
         this.setState({ spinner: true })
@@ -55,7 +55,7 @@ class AddProduct extends React.Component {
         };
         //Constants.productslist + '?is_active=1&search=' + this.state.search_product
         // let search_url =  '?is_active=1&search=' + this.state.search_product + '&category_id=' + this.state.category_id
-        let search_url =  Constants.productslist + '?is_active=1&search=' + this.state.search_product+'&category_id=' + this.state.category_id
+        let search_url =  Constants.productslist + '?is_active=1&search=' + search_product+'&category_id=' + category_id
         console.log('search url ',search_url);
         console.log('postData ',postData);
         fetch(search_url, postData)
@@ -144,6 +144,7 @@ class AddProduct extends React.Component {
         this.setState({
             category_id:category_id
         })
+        this.getProductList(this.state.search_product , category_id);
     }
 
     async addProduct(index) {
@@ -246,7 +247,7 @@ class AddProduct extends React.Component {
                     placeholder="Search Product"
                     iconColor="#929497"
                     style={{width:width-20,alignSelf:'center',marginTop:10,marginBottom:5,elevation:0,fontSize:14,color:'#D5D5D5', borderColor:'#D8DCDE'}}
-                    onSubmitEditing={() => this.getProductList()}
+                    onSubmitEditing={() => this.getProductList(this.state.search_product , this.state.category_id)}
                     onChangeText={text => this.setState({ search_product: text })}
                     //update
                     ></Searchbar>

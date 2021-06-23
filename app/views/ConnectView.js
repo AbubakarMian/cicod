@@ -133,10 +133,7 @@ class ConnectView extends React.Component {
                 }
             })
     }
-
-    actionFun() {
-
-    }
+    
     suspendUnsuspendFun() {
         // https://com.cicodsaasstaging.com/com/api/products/23?action=suspend
         let url = Constants.products + '/' + this.state.prodDetail.id + '?action=' + this.state.action;

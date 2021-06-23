@@ -291,7 +291,8 @@ class Products extends React.Component {
                     <TouchableOpacity
                         style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
                         onPress={() =>  {this.setState({
-                            reload: true
+                            reload: true,
+                            search_product:''
                         });
                         this.props.navigation.navigate('ProductFilter')}}
                     >

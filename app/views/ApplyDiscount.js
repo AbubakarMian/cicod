@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight, FlatList,Alert, Dimensions, Image, Platform, TouchableOpacity, Touchable, } from 'react-native'
+import { View, ImageBackground, ScrollView, TouchableHighlight, FlatList, Alert, Dimensions, Image, Platform, TouchableOpacity, Touchable, } from 'react-native'
 import splashImg from '../images/splash.jpg'
 import { Text, TextInput } from 'react-native-paper';
 import styles from '../css/ApplyDiscountCss';
@@ -17,10 +17,10 @@ class ApplyDiscount extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            value3Index: 0,
+            value3Index: this.props.orderDiscountReducer.discount_type != 'percentage' ? 1 : 0,
             isChecked: false,
             // discount_percent: '',
-            discount_amount: '',
+            discount_amount: 0,
         }
     }
 
@@ -56,6 +56,32 @@ class ApplyDiscount extends React.Component {
         this.setState({ value3Index: index })
 
     }
+
+    setDiscountAmount(amount){
+        amount = parseFloat(amount);
+        if(isNaN(amount)){
+            console.log('not a number');
+            return;
+        }
+        
+        if(this.state.value3Index == 0){
+            console.log('percentage');
+            if(amount < 99){
+                this.setState({ discount_amount: amount })
+                return;
+            }
+        }
+        else{console.log('value',this.props.route.params.total_price);
+            let total_amount = parseFloat(this.props.route.params.total_price);
+            if(total_amount >= amount){
+                console.log('true',total_amount)
+                this.setState({ discount_amount: amount })
+                return;
+            }
+        }
+       
+        this.setState({ discount_amount: ''})
+    }
     render() {
 
         var radio_props_per = [
@@ -63,9 +89,7 @@ class ApplyDiscount extends React.Component {
             { label: 'Value', value: 1 },
 
         ];
-
-
-
+ 
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
@@ -90,7 +114,6 @@ class ApplyDiscount extends React.Component {
                             animation={true}
                             onPress={(index, lable) => this.radioBtnFun(index, lable)}
                         >
-
                             {
                                 radio_props_per.map((obj, i) => (
                                     <RadioButton labelHorizontal={true} key={i}
@@ -119,6 +142,7 @@ class ApplyDiscount extends React.Component {
                                             onPress={(index) => this.setState({ value3Index: index })}
                                             labelStyle={{ fontSize: 20, color: '#000', paddingVertical: 10 }}
                                             labelWrapStyle={{ marginRight: 10 }}
+                                            value={this.props.orderDiscountReducer.discount_amount}
                                         />
                                     </RadioButton>
                                 ))
@@ -135,7 +159,8 @@ class ApplyDiscount extends React.Component {
                             alignSelf={'center'}
                             color={'#000'}
                             keyboardType='numeric'
-                            onChangeText={text => this.setState({ discount_amount: text })}
+                            onChangeText={text => this.setDiscountAmount(text)}
+                            value={this.state.discount_amount}
                         />
                     </View>
                 </View>
@@ -153,7 +178,7 @@ class ApplyDiscount extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        discount: state.orderDiscountReducer,
+        orderDiscountReducer: state.orderDiscountReducer,
 
     }
 };

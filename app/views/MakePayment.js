@@ -104,6 +104,10 @@ componentDidMount(){
                 else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 }
+                else {
+                    let message = responseJson.message
+                    Alert.alert('Error', message)
+                }
             }
             )
             .catch((error) => {
