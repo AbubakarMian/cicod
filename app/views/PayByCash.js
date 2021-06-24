@@ -101,13 +101,13 @@ class PayByCash extends React.Component {
                         <View style={[{}, styles.contentContainer]}>
                             <Image source={require('../images/payByCash.png')} />
                             <Text style={[{}, styles.collectText]}>Collect the sum of</Text>
-                            <Text style={[{}, styles.payText]}>N{order.amount}</Text>
+                            <Text style={[{}, styles.payText]}>{_that.props.currency.currency+" "+order.amount}</Text>
                             <Text style={[{}, styles.cashText]}>in cash</Text>
                         </View>
                         <View style={[{}, styles.inputContainer]}>
                             <View style={[{}, styles.inputView]}>
                                 <TextInput
-                                    label="Cash Collected (N)"
+                                    label={"Cash Collected ("+_that.props.currency.currency+")"}
                                     style={{ backgroundColor: 'transparent', }}
                                     width={width - 50}
                                     alignSelf={'center'}
@@ -118,7 +118,7 @@ class PayByCash extends React.Component {
                             </View>
                             <View style={[{}, styles.inputView]}>
                                 <TextInput
-                                    label="Change (N)"
+                                    label={"Change ("+_that.props.currency.currency+")"}
                                     style={{ backgroundColor: 'transparent', }}
                                     width={width - 50}
                                     alignSelf={'center'}
@@ -168,6 +168,7 @@ function mapStateToProps(state) {
         deliveryAddress: state.deliveryAddressReducer,
         orderDiscountReducer: state.orderDiscountReducer,
         supplier: state.supplierReducer,
+        currency: state.currencyReducer,
     }
 };
 function mapDispatchToProps(dispatch) {

@@ -69,7 +69,6 @@ class PayByUssd extends React.Component {
             });
     }
     render() {
-        console.log('props',this.props);
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
@@ -88,7 +87,7 @@ class PayByUssd extends React.Component {
                         <View style={[{}, styles.contentContainer]}>
                             <Image source={require('../images/payByUssd.png')} />
                             <Text style={[{}, styles.collectText]}>Pay with USSD CODE</Text>
-                            <Text style={[{}, styles.payText]}>N{this.props.route.params.amount_payable}</Text>
+                            <Text style={[{}, styles.payText]}>{this.props.currency.currency+" "+this.props.route.params.amount_payable}</Text>
                             <Text style={[{}, styles.collectText]}>{this.props.user.email}</Text>
                             {/* <View style={[{}, styles.selectBankView]}> */}
                             
