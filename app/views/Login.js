@@ -7,7 +7,7 @@ import CheckBox from 'react-native-check-box';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER,CLEAR_ORDER,RESET } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER,CLEAR_ORDER,RESET,SET_CURRENCY } from '../redux/constants/index';
 import { Constants } from '../views/Constant';
 import { Text, TextInput, Modal } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -103,16 +103,17 @@ class Login extends React.Component {
                 .then(async responseJson => {
                     console.log("response Json responseJson responseJson!!!!!!!!!!!", responseJson)
                     if (responseJson.status === "SUCCESS") {
+                        let user_token = 'Bearer ' + responseJson.token;
                         this.props.setUser({
                             firstname: responseJson.user.firstname,
                             lastname: responseJson.user.lastname,
                             email: responseJson.user.email,
                             phone: responseJson.user.phone,
-                            access_token: 'Bearer ' + responseJson.token
+                            access_token: user_token
                         });
                         this.setState({ Spinner: false })
 
-
+                        this.setCurrency(user_token);
                         console.log('get user !!!!!!!!!!!!!!!!', this.props.user)
                         this.props.navigation.navigate('Home')
                     } else {
@@ -132,6 +133,43 @@ class Login extends React.Component {
                     // Alert.alert(error.message);
                 });
         }
+    }
+
+    setCurrency(user_token){
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': user_token,
+            },
+        };
+        fetch(Constants.currency, postData)
+                .then(response => response.json())
+                .then(async responseJson => {
+                    console.log("response Json currency!!!!!!!!!!!", responseJson)
+                    console.log("responseJson.data.symbol Json currency!!!!!!!!!!!", responseJson.data.symbol)
+                    if ((responseJson.status).toUpperCase() === "SUCCESS") {
+                        this.props.setCurrency({
+                            currency: responseJson.data.symbol,
+                        });
+                       
+                    } else {
+                        this.setState({ Spinner: false })
+                        // this.setState({ Spinner: false })
+                        let message = responseJson.status
+                        if (message == '') {
+                            message = 'Server responded with error contact admin'
+                        }
+                        Alert.alert('Error', message)
+                    }
+                }
+                )
+                .catch((error) => {
+                    this.setState({ Spinner: false })
+                    console.log("Currency Api call error", error);
+                    // Alert.alert(error.message);
+                });
     }
     render() {
         return (
@@ -257,6 +295,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
+        setCurrency: (value) => dispatch({ type: SET_CURRENCY, value: value }),
         logoutUser: () => dispatch({ type: LOGOUT_USER }),
         emptyOrder: () => dispatch({ type: CLEAR_ORDER }),
         resetDeliveryAddress: () => dispatch({ type: RESET}),

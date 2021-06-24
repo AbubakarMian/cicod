@@ -101,8 +101,13 @@ class Dashboard extends React.Component {
                     let total_orders_data = this.getGraphData(graph_lable, graph_total_orders_data);
 
                     let total_orders_pending_data = this.getGraphData(graph_total_pending_orders_label, graph_total_pending_orders_data);
+                    let target = responseJson.data.target;
+                    let sales_target_amount = parseInt(target.sales_target_amount.replace(",", ""));
+                    let sales_made_amount = parseInt(target.sales_made_amount.replace(",", ""));
+                    let percentage = (sales_made_amount/sales_target_amount)*100;
+                    target.percentage = percentage;
                     this.setState({
-                        target: responseJson.data.target,
+                        target: target,
                         graph: responseJson.data.graph,
                         totalOrder: responseJson.data.total,
                         paidOrder: responseJson.data.paid,
@@ -285,7 +290,7 @@ class Dashboard extends React.Component {
                                         source={require('../images/dashboard/redbage.png')}
                                     />
                                     <Text style={{ color: '#B1272C', fontSize: 10, fontFamily: 'Open Sans' }}>Total Orders</Text>
-                                    <Text style={{ fontSize: 20, fontFamily: 'Open Sans', fontWeight: 'bold', color: '#4E4D4D' }}>₦{this.state.totalOrder.amount}</Text>
+                                    <Text style={{ fontSize: 20, fontFamily: 'Open Sans', fontWeight: 'bold', color: '#4E4D4D' }}>{this.props.currency.currency}{this.state.totalOrder.amount}</Text>
                                     <Text style={[{}, styles.recardtext]}>{this.state.totalOrder.count}</Text>
                                 </View>
                             </View>
@@ -296,7 +301,7 @@ class Dashboard extends React.Component {
                                         source={require('../images/dashboard/greenbage.png')}
                                     />
                                     <Text style={{ color: '#B1272C', fontSize: 10, fontFamily: 'Open Sans' }}>Paid Orders</Text>
-                                    <Text style={{ fontSize: 20, fontFamily: 'Open Sans', fontWeight: 'bold', color: '#4E4D4D' }}>₦{this.state.paidOrder.amount}</Text>
+                                    <Text style={{ fontSize: 20, fontFamily: 'Open Sans', fontWeight: 'bold', color: '#4E4D4D' }}>{this.props.currency.currency}{this.state.paidOrder.amount}</Text>
                                     <Text style={[{}, styles.greencardtext]}>{this.state.paidOrder.count}</Text>
                                 </View>
                             </View>
@@ -309,7 +314,7 @@ class Dashboard extends React.Component {
                                         source={require('../images/dashboard/bluebage.png')}
                                     />
                                     <Text style={{ color: '#2F2E7C', fontSize: 10, fontFamily: 'Open Sans' }}>Pending Orders</Text>
-                                    <Text style={{ fontSize: 20, fontFamily: 'Open Sans', fontWeight: 'bold', color: '#4E4D4D' }}>₦{this.state.pendingOrder.amount}</Text>
+                                    <Text style={{ fontSize: 20, fontFamily: 'Open Sans', fontWeight: 'bold', color: '#4E4D4D' }}>{this.props.currency.currency}{this.state.pendingOrder.amount}</Text>
                                     <Text style={[{}, styles.bluecardtext]}>{this.state.pendingOrder.count}</Text>
                                 </View>
                             </View>
@@ -320,7 +325,7 @@ class Dashboard extends React.Component {
                                         source={require('../images/dashboard/yellowbage.png')}
                                     />
                                     <Text style={{ color: '#FDB72B', fontSize: 10, fontFamily: 'Open Sans' }}>Cancelled Orders</Text>
-                                    <Text style={{ fontSize: 20, fontFamily: 'Open Sans', fontWeight: 'bold', color: '#4E4D4D' }}>₦{this.state.canclledOrder.amount}</Text>
+                                    <Text style={{ fontSize: 20, fontFamily: 'Open Sans', fontWeight: 'bold', color: '#4E4D4D' }}>{this.props.currency.currency}{this.state.canclledOrder.amount}</Text>
                                     <Text style={[{}, styles.yellowcardtext]}>{this.state.canclledOrder.count}</Text>
                                 </View>
                             </View>
@@ -389,11 +394,11 @@ class Dashboard extends React.Component {
                         <View style={[{}, styles.bannerView]}>
                             <View style={[{}, styles.bannerContentView]}>
                                 <Text style={[{}, styles.bannerText]}>Monthly Sales</Text>
-                                <Text style={[{}, styles.bannerboldText]}>₦{this.state.target.sales_made_amount}</Text>
+                                <Text style={[{}, styles.bannerboldText]}>{this.props.currency.currency}{this.state.target.sales_made_amount}</Text>
                                 <View style={{ flexDirection: 'row', marginBottom: 3, marginTop: 10, width: width / 1.5, position: 'relative' }}>
-                                    <Text style={[{ color: '#707070' }]}>Target: ₦ {this.state.target.sales_target_amount}</Text>
+                                    <Text style={[{ color: '#707070' }]}>Target: {this.props.currency.currency} {this.state.target.sales_target_amount}</Text>
                                     <Text style={[{ position: 'absolute', right: 0 }, styles.bannerpercentText]}>
-                                        0%
+                                        {this.state.target.percentage}%
                               </Text>
                                 </View>
                                 <Progress.Bar color="#B1272C" backgroundColor="#fff" progress={0.00} width={200} />
@@ -437,7 +442,8 @@ class Dashboard extends React.Component {
 function mapStateToProps(state) {
     return {
         user: state.userReducer,
-        tabBar: state.tabBarReducer
+        tabBar: state.tabBarReducer,
+        currency: state.currencyReducer,
     }
 };
 function mapDispatchToProps(dispatch) {
