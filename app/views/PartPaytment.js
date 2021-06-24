@@ -260,7 +260,7 @@ class PartPaytment extends React.Component {
             <View style={[{paddingHorizontal:10},styles.balanceHeadingView]}>
                 <Text style={[{color:'#929497',alignSelf:'center'},fontStyles.normal15]}>TOTAL AMOUNT</Text>
                 <View style={[{backgroundColor:'#DAF8EC'},styles.balanceView]}>
-                  <Text style={[{color:'#4E4D4D'},fontStyles.bold25]}>N{params.amount_payable}</Text>
+                  <Text style={[{color:'#4E4D4D'},fontStyles.bold25]}>{_that.props.currency.currency+" "+params.amount_payable}</Text>
                 </View>
                 <Text style={[{color:'#929497',fontSize:8}]}>Type of payment</Text>
                 <DropDownPicker
@@ -294,11 +294,11 @@ class PartPaytment extends React.Component {
                     />
                     <Text style={[{color:'#929497',alignSelf:'center',marginTop:20},fontStyles.normal15]}>Amount to pay now</Text>
                     <View style={[{backgroundColor:'#FFF4F4'},styles.balanceView]}>
-                  <Text style={[{color:'#4E4D4D'},fontStyles.bold25]}>N{_that.state.amount_to_pay_now}</Text>
+                  <Text style={[{color:'#4E4D4D'},fontStyles.bold25]}>{_that.props.currency.currency+" "+_that.state.amount_to_pay_now}</Text>
                 </View>
                 <View style={[{flexDirection:'row',marginTop:20,alignSelf:'center'}]}>
                 <Text style={[{color:'#B1272C'},fontStyles.normal15]}>Balance amount of </Text>
-                <Text style={[{color:'#B1272C'},fontStyles.bold15]}>N{_that.state.balance_amount} </Text>
+                <Text style={[{color:'#B1272C'},fontStyles.bold15]}>{_that.props.currency.currency+" "+_that.state.balance_amount} </Text>
                 <Text style={[{color:'#B1272C'},fontStyles.normal15]}>is due</Text>
             </View>
             <TouchableOpacity
@@ -377,7 +377,8 @@ class PartPaytment extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        user: state.userReducer
+        user: state.userReducer,
+        currency: state.currencyReducer,
     }
 };
 function mapDispatchToProps(dispatch) {

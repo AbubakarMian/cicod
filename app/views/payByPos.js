@@ -102,7 +102,7 @@ class PayByPOS extends React.Component {
                         <View style={[{}, styles.contentContainer]}>
                             <Image style={{ height: 60, width: 40 }} source={require('../images/pos-terminal.png')} />
                             <Text style={[{}, styles.collectText]}>Collect the sum of</Text>
-                            <Text style={[{}, styles.payText]}>N{order.amount}</Text>
+                            <Text style={[{}, styles.payText]}>{_that.props.currency.currency+" "+order.amount}</Text>
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={[{}, styles.cashText]}>for CICOD ORDER ID </Text>
                                 <Text style={[{ fontWeight: 'bold' }, styles.cashText]}> {order.cicod_order_id}</Text>
@@ -144,6 +144,7 @@ function mapStateToProps(state) {
         deliveryAddress: state.deliveryAddressReducer,
         orderDiscountReducer: state.orderDiscountReducer,
         supplier: state.supplierReducer,
+        currency: state.currencyReducer,
     }
 };
 function mapDispatchToProps(dispatch) {
