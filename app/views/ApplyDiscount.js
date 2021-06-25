@@ -23,32 +23,30 @@ class ApplyDiscount extends React.Component {
         }
     }
 
-    setDiscount() {
-
+    apply(){
         if (this.state.discount_amount == '') {
             Alert.alert('INFO', 'Discount Amount is Required .');
-
+            return;
         }
-        else {
+        this.props.navigation.goBack();
+    }
+
+    setDiscount(discount_amount) {        
             let discount_type = '';
             if (this.state.value3Index == 0) {
                 discount_type = 'percentage';
                 this.props.setDiscount({
-                    discount_amount: this.state.discount_amount,
+                    discount_amount: discount_amount,
                     discount_type: discount_type
                 })
             }
             else {
                 discount_type = 'value';
                 this.props.setDiscount({
-                    discount_amount: this.state.discount_amount,
+                    discount_amount: discount_amount,
                     discount_type: discount_type
                 })
             }
-            // this.props.cartReducer();
-            this.props.navigation.goBack();
-
-        }
     }
 
     radioBtnFun(index, lable) {
@@ -60,9 +58,11 @@ class ApplyDiscount extends React.Component {
     setDiscountAmount(amount){  
         console.log('amount 000ttt',amount);
         if(amount.includes(",")||amount.includes("-")||amount.includes(" ")||amount.includes("..")){
+            console.log('asdin if')
             this.setState({
                 discount_amount : ''
             })
+            this.setDiscount('');
             return;
         }
         amount = parseFloat(amount);
@@ -70,6 +70,7 @@ class ApplyDiscount extends React.Component {
             console.log('percentage');
             if(amount < 100){
                 this.setState({ discount_amount: amount })
+                this.setDiscount(amount);
                 return;
             }
         }
@@ -79,12 +80,17 @@ class ApplyDiscount extends React.Component {
             console.log('total_amount',total_amount)
             if(total_amount > amount){
                 this.setState({ discount_amount: amount })
+                this.setDiscount(amount);
                 return;
             }
         }
         this.setState({
             discount_amount : ''
         })
+    }
+    changeDiscountType(index){
+        this.setDiscountAmount('0')
+        this.setState({ value3Index: index })
     }
     render() {
 
@@ -134,7 +140,7 @@ class ApplyDiscount extends React.Component {
                                             obj={obj}
                                             index={i}
                                             isSelected={this.state.value3Index === i}
-                                            onPress={(index) => this.setState({ value3Index: index })}
+                                            onPress={(index) => this.changeDiscountType(index)}
                                             //   onPress={()=>console.log('button input')}
                                             borderWidth={2}
                                             buttonInnerColor={'#e74c3c'}
@@ -148,7 +154,7 @@ class ApplyDiscount extends React.Component {
                                             obj={obj}
                                             index={i}
                                             labelHorizontal={true}
-                                            onPress={(index) => this.setState({ value3Index: index })}
+                                            onPress={(index) => this.changeDiscountType(index)}
                                             labelStyle={{ fontSize: 20, color: '#000', paddingVertical: 10 }}
                                             labelWrapStyle={{ marginRight: 10 }}
                                             value={this.props.orderDiscountReducer.discount_amount}
@@ -174,7 +180,7 @@ class ApplyDiscount extends React.Component {
                     </View>
                 </View>
                 <TouchableOpacity
-                    onPress={() => this.setDiscount()}
+                    onPress={() => this.apply()}
                     style={[{}, styles.btnView]}
                 >
                     <Text style={{ color: '#fff' }}>Apply</Text>

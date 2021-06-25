@@ -33,7 +33,8 @@ class PartPaytment extends React.Component {
             payment_option_selected :'fixed_amount',
             selected_date:'DD-MM-YYY',
             part_payment_balance_due_date:0,
-            part_amount_request:0
+            part_amount_request:0,
+            order:null
         }
     }
     
@@ -49,9 +50,6 @@ class PartPaytment extends React.Component {
 
         let order_id = this.props.route.params.data.id;
         let url = Constants.orderslist + '/' + order_id
-        console.log('---- body params list @@@@@@!!!!!!!!!!!!!!', this.props.route.params);
-        console.log('order url detail ', url);
-        console.log('order postData ', postData);
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
@@ -76,15 +74,20 @@ class PartPaytment extends React.Component {
             });
     }
 
-    pay_now(){       
+    async pay_now(){       
 
         if(!this.required_fields_check()){
             return;
         }
+        if(this.state.order == null){
+            await this.create_order();            
+        }
+        let order = await this.state.order
         let bodyOrder = this.get_body_order();
         this.props.navigation.navigate('MakePayment', { bodyOrder: bodyOrder,
             payment_mode: this.state.payment_mode ,
             amount_payable: bodyOrder.part_payment_amount,
+            data:order
         });
     }
 
@@ -124,11 +127,18 @@ class PartPaytment extends React.Component {
         }
         return true;
     }
+    resendInvoice(){
+
+    }
+
     create_order(){
 
         if(!this.required_fields_check()){
             return;
         }
+        // if(order!=null){
+        //     this.resendInvoice();
+        // }
         let bodyOrder = this.get_body_order();
         
         
@@ -152,16 +162,24 @@ class PartPaytment extends React.Component {
                 if (responseJson.status === "success") {
 
                     this.setState({ spinner: false })
+                    // alert(responseJson.message)
                     alert(responseJson.message)
                     let payment_link = responseJson.data.payment_link
+                        this.setState({
+                            order:responseJson.data
+                        })
                     
-                        this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
+                        // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
                     
                     
-                } else {
+                }                
+                else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                } 
+                else {
                     this.setState({ spinner: false })
                     let message = responseJson.message
-                    alert(message)
+                    console.log('obj',responseJson)
                 }
             }
             )
@@ -170,13 +188,18 @@ class PartPaytment extends React.Component {
                 // Alert.alert(error.message);
             });
     }
+    
+    unauthorizedLogout() {
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
+    }
 
     onSelectPaymentType(item){
-        console.log('payment option selected ',item.value)
         this.setState({
             payment_option_selected:item.value
         })
-        this.get_payable_amount(0)
+        this.get_payable_amount('0')
     }
     get_payable_amount(amount_to_pay_now){//part_amount_request        
         let part_amount_request = this.state.part_amount_request
@@ -205,7 +228,7 @@ class PartPaytment extends React.Component {
             // amount_to_pay_now = this.state.amount_to_pay_now
             amount_to_pay_now =  amount_to_pay_now * total_amount *0.01;
             balance_amount = total_amount - amount_to_pay_now
-            part_payment_percent = total_amount
+            // part_payment_percent = total_amount
         }
             this.setState({
                 amount_to_pay_now:amount_to_pay_now,
@@ -235,7 +258,7 @@ class PartPaytment extends React.Component {
             calenderModal:false,
             selected_date: sendDate,
         })
-        console.log('timestamp ',timestamp);
+        // console.log('timestamp ',timestamp);
       }
 
     pay(_that) {
@@ -350,6 +373,8 @@ class PartPaytment extends React.Component {
             isVisible={_that.state.calenderModal}
             mode="date"
             date={new Date()}
+            minimumDate={new Date()}
+            // maximumDate
             onConfirm={(date)=>_that.setDate(date)}
             onCancel={() => _that.setState({ calenderModal: false })}
         />

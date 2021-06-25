@@ -262,11 +262,7 @@ class AddDiliveryAddress extends React.Component {
 
                         </View>
                         <View style={[{}, styles.addressContainer]}>
-                            <View style={[{ marginTop: 10 }, styles.mainFormView]}>
-
-
-
-
+                            <View style={[{ marginTop: 10,height:height-150 }, styles.mainFormView]}>
                                 <View>
                                     <TextInput
                                         label="House No.*"
@@ -302,44 +298,44 @@ class AddDiliveryAddress extends React.Component {
                                                 containerStyle={{ height: 50, width: width - 20, alignSelf: 'center' }}
                                                 style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                                                 itemStyle={{
-                                                    justifyContent: 'flex-start',
+                                                    justifyContent: 'flex-start',height:50
                                                 }}
-                                                dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
+                                                dropDownStyle={{ height: 120, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectCountry(item)}
                                             />
                                         </View>
 
                                     </View>
-                                    <View style={[{ flexDirection: 'row', alignSelf: 'center' }, styles.formRow]}>
-                                        <View style={[{}, styles.formColumn]}>
+                                    <View style={[{ flexDirection: 'row', alignSelf: 'center' }]}>
+                                        <View style={{flex:1}}>
 
                                             <DropDownPicker
                                                 placeholder="States *"
                                                 items={this.state.states_arr}
-                                                items={this.state.states_arr}
-
-                                                containerStyle={{ height: 50, width: width / 2 - 20, alignSelf: 'center' }}
+                                                autoScrollToDefaultValue={true}
+                                                containerStyle={{ height: 50, width: width / 2-20, alignSelf: 'center' }}
                                                 style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                                                 itemStyle={{
-                                                    justifyContent: 'flex-start',
+                                                    justifyContent: 'flex-start',height:50
                                                 }}
-                                                dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
+                                                dropDownStyle={{ height: 120, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectState(item)}
                                             />
                                         </View>
-                                        <View style={[{ marginHorizontal: 10 }, styles.formColumn]}>
+                                        <View style={{flex:1}}>
 
                                             <DropDownPicker
                                                 placeholder="LGA *"
                                                 items={this.state.lgas_arr}
-                                                containerStyle={{ height: 50, width: width / 2 - 20, alignSelf: 'center' }}
+                                                autoScrollToDefaultValue={true}
+                                                containerStyle={{ height: 50, width: width /2- 20, alignSelf: 'center' }}
                                                 style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                                                 itemStyle={{
-                                                    justifyContent: 'flex-start',
+                                                    justifyContent: 'flex-start',height:50
                                                 }}
-                                                dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
+                                                dropDownStyle={{ height: 120,zIndex:0.999, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectLgas(item)}
                                             />
@@ -347,7 +343,7 @@ class AddDiliveryAddress extends React.Component {
                                     </View>
                                     <View style={{ zIndex: -0.999, marginVertical:20 }}>
                                         <CheckBox
-                                            style={[{ width: width, }, styles.cheBox]}
+                                            style={[{ width: width,zIndex: -0.999, }, styles.cheBox]}
                                             onClick={() => {
                                                 this.setState({
                                                     is_default: !this.state.is_default
@@ -363,14 +359,12 @@ class AddDiliveryAddress extends React.Component {
                                     </View>
                                 </View>
 
-
-
                             </View>
                            
                         </View>
                          <TouchableOpacity
                                 onPress={() => this.createDeliveryAddress()}
-                                style={[{}, styles.redBtn]}
+                                style={[{zIndex:-0.999}, styles.redBtn]}
                             >
                                 <Text style={{ color: '#fff' }}>Save</Text>
                             </TouchableOpacity>
