@@ -62,15 +62,10 @@ class PayByCash extends React.Component {
                 // Alert.alert(error.message);
             });
     }
-    amountRecieved(recieved,actual){        
-        console.log('what',recieved)
-        console.log('whatactual',actual)
-        console.log('amount_returned',(recieved-actual))
+    amountRecieved(recieved,actual){   
         this.setState({cashCollected:recieved,
-            amount_returned:(recieved-actual)+''
-            
+            amount_returned:(recieved-actual)+''            
         })
-
     }
     getChange(){
         return this.state.amount_returned;        
