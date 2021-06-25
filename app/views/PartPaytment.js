@@ -178,12 +178,18 @@ class PartPaytment extends React.Component {
         })
         this.get_payable_amount(0)
     }
-    get_payable_amount(amount_to_pay_now){//part_amount_request
-        
+    get_payable_amount(amount_to_pay_now){//part_amount_request        
         let part_amount_request = this.state.part_amount_request
-        console.log('1111111111111111',this.state.amount_to_pay_now)
+        if(amount_to_pay_now.includes(",")||amount_to_pay_now.includes("-")||amount_to_pay_now.includes(" ")||amount_to_pay_now.includes("..")){
+            this.setState({
+                part_amount_request : part_amount_request
+            })
+            return;
+        }
         let total_amount = this.state.total_amount
         let balance_amount = 0
+        console.log('amount_to_pay_now',amount_to_pay_now)
+        console.log('total_amount',total_amount)
         if(amount_to_pay_now >= total_amount && this.state.payment_option_selected =='fixed_amount'){
             amount_to_pay_now = part_amount_request;
         }
@@ -235,6 +241,8 @@ class PartPaytment extends React.Component {
     pay(_that) {
        _that = _that._that;
        let params = _that.props.route.params;
+       console.log('params',params)
+
        
        return (
         <View style={[{ position: 'relative' }, styles.mainView]}>
@@ -260,7 +268,7 @@ class PartPaytment extends React.Component {
             <View style={[{paddingHorizontal:10},styles.balanceHeadingView]}>
                 <Text style={[{color:'#929497',alignSelf:'center'},fontStyles.normal15]}>TOTAL AMOUNT</Text>
                 <View style={[{backgroundColor:'#DAF8EC'},styles.balanceView]}>
-                  <Text style={[{color:'#4E4D4D'},fontStyles.bold25]}>{_that.props.currency.currency+" "+params.amount_payable}</Text>
+                  <Text style={[{color:'#4E4D4D'},fontStyles.bold25]}>{_that.props.currency.currency+" "+params.amount_payable.toFixed(2)}</Text>
                 </View>
                 <Text style={[{color:'#929497',fontSize:8}]}>Type of payment</Text>
                 <DropDownPicker
@@ -294,11 +302,11 @@ class PartPaytment extends React.Component {
                     />
                     <Text style={[{color:'#929497',alignSelf:'center',marginTop:20},fontStyles.normal15]}>Amount to pay now</Text>
                     <View style={[{backgroundColor:'#FFF4F4'},styles.balanceView]}>
-                  <Text style={[{color:'#4E4D4D'},fontStyles.bold25]}>{_that.props.currency.currency+" "+_that.state.amount_to_pay_now}</Text>
+                  <Text style={[{color:'#4E4D4D'},fontStyles.bold25]}>{_that.props.currency.currency+" "+parseFloat(_that.state.amount_to_pay_now).toFixed(2)}</Text>
                 </View>
                 <View style={[{flexDirection:'row',marginTop:20,alignSelf:'center'}]}>
                 <Text style={[{color:'#B1272C'},fontStyles.normal15]}>Balance amount of </Text>
-                <Text style={[{color:'#B1272C'},fontStyles.bold15]}>{_that.props.currency.currency+" "+_that.state.balance_amount} </Text>
+                <Text style={[{color:'#B1272C'},fontStyles.bold15]}>{_that.props.currency.currency+" "+parseFloat(_that.state.balance_amount).toFixed(2)} </Text>
                 <Text style={[{color:'#B1272C'},fontStyles.normal15]}>is due</Text>
             </View>
             <TouchableOpacity

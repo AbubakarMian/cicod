@@ -1,4 +1,4 @@
-import { REMOVE_FROM_CART, ADD_TO_PRODUCT, REMOVE_PRODUCT_FORM_CART,CLEAR_ORDER } from '../constants';
+import { REMOVE_FROM_CART, ADD_TO_PRODUCT, REMOVE_PRODUCT_FORM_CART,CLEAR_ORDER ,UPDATE_CART} from '../constants';
 const initialState = {
     cart: [],
     cart_detail:{
@@ -70,7 +70,9 @@ const cartReducer = (state = initialState, action) => {
             updateCart();
             return { ...state, cart };
             break;
-
+        case UPDATE_CART:
+            updateCart();
+            return { state };
         default:
             return state;
     }    
@@ -90,5 +92,5 @@ function updateCart (){
     initialState.cart_detail.total_price_with_tax = (parseFloat(total_price)+parseFloat(tax)).toFixed(2);
     console.log('total_price',total_price)
     console.log('tax',tax)
-    console.log('total_price+tax',(total_price+tax))
+    console.log('total_price+tax',(initialState.cart_detail.total_price_with_tax))
 }

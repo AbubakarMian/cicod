@@ -9,7 +9,7 @@ import Header from '../views/Header';
 import CheckBox from 'react-native-check-box';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import SearchBar from 'react-native-search-bar';
-import { SET_DISCOUNT } from '../redux/constants';
+import { SET_DISCOUNT,UPDATE_CART } from '../redux/constants';
 import { connect } from 'react-redux';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
@@ -19,8 +19,7 @@ class ApplyDiscount extends React.Component {
         this.state = {
             value3Index: this.props.orderDiscountReducer.discount_type != 'percentage' ? 1 : 0,
             isChecked: false,
-            // discount_percent: '',
-            discount_amount: 0,
+            discount_amount: '',
         }
     }
 
@@ -46,6 +45,7 @@ class ApplyDiscount extends React.Component {
                     discount_type: discount_type
                 })
             }
+            // this.props.cartReducer();
             this.props.navigation.goBack();
 
         }
@@ -57,30 +57,34 @@ class ApplyDiscount extends React.Component {
 
     }
 
-    setDiscountAmount(amount){
-        amount = parseFloat(amount);
-        if(isNaN(amount)){
-            console.log('not a number');
+    setDiscountAmount(amount){  
+        console.log('amount 000ttt',amount);
+        if(amount.includes(",")||amount.includes("-")||amount.includes(" ")||amount.includes("..")){
+            this.setState({
+                discount_amount : ''
+            })
             return;
         }
-        
+        amount = parseFloat(amount);
         if(this.state.value3Index == 0){
             console.log('percentage');
-            if(amount < 99){
+            if(amount < 100){
                 this.setState({ discount_amount: amount })
                 return;
             }
         }
-        else{console.log('value',this.props.route.params.total_price);
+        else{
             let total_amount = parseFloat(this.props.route.params.total_price);
-            if(total_amount >= amount){
-                console.log('true',total_amount)
+            console.log('amount',amount)
+            console.log('total_amount',total_amount)
+            if(total_amount > amount){
                 this.setState({ discount_amount: amount })
                 return;
             }
         }
-       
-        this.setState({ discount_amount: ''})
+        this.setState({
+            discount_amount : ''
+        })
     }
     render() {
 
@@ -89,6 +93,11 @@ class ApplyDiscount extends React.Component {
             { label: 'Value', value: 1 },
 
         ];
+        if(this.props.route.params.discount_amount != '' && this.state.discount_amount == ''){
+            this.setState({
+                discount_amount:parseFloat(this.props.route.params.discount_amount)})
+        }
+        console.log(this.props.orderDiscountReducer.discount_amount)
  
         return (
             <View style={[{}, styles.mainView]}>
@@ -160,7 +169,7 @@ class ApplyDiscount extends React.Component {
                             color={'#000'}
                             keyboardType='numeric'
                             onChangeText={text => this.setDiscountAmount(text)}
-                            value={this.state.discount_amount}
+                            value={this.props.orderDiscountReducer.discount_amount+""}
                         />
                     </View>
                 </View>
@@ -185,6 +194,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         setDiscount: (value) => dispatch({ type: SET_DISCOUNT, value: value }),
+        cartReducer: () => dispatch({ type: UPDATE_CART}),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ApplyDiscount)
