@@ -41,12 +41,11 @@ export default class Headet extends React.Component {
                  source={require('../images/headerLogo.png')}
                  />
               </View>
-              <View style={{flex:1,alignItems:'flex-end',flexDirection:'row',}}>
+              <View style={{flex:1,alignItems:'flex-end',position:'absolute',right:10,top:10, flexDirection:'row',}}>
                   <Image 
                   source={require('../images/bellIcon.png')}
                   />
-                  <Text 
-                  style={{backgroundColor:'#B1272C',color:'#fff',paddingHorizontal:12,paddingVertical:4,borderRadius:50}}>3</Text>
+                  {/* <Text style={{backgroundColor:'#B1272C',color:'#fff',paddingHorizontal:12,paddingVertical:4,borderRadius:50}}>3</Text> */}
               </View>
             </View>
         )

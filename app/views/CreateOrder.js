@@ -215,7 +215,7 @@ class CreateOrder extends React.Component {
         }
         else {
             discounted_price = this.props.orderDiscountReducer.discount_amount;
-            amount_payable = this.state.cart_detail.total_price_with_tax - (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01) ?? 0;
+            amount_payable = (this.state.cart_detail.total_price_with_tax - this.props.orderDiscountReducer.discount_amount ) ?? 0;
         }
 
         let bodyOrder = {
@@ -732,19 +732,25 @@ class CreateOrder extends React.Component {
 
                                 <View style={[{}, styles.subTotleColumn1View]}>
                                     <Text style={[{}, styles.subTotleColumn1Text]}>Subtotal:</Text>
-                                    <Text style={[{}, styles.subTotleColumn1Text]}>Tax(7.5%)</Text>
+                                    {this.state.cart_detail.vat_percent == 0 ?null :
+                                    <Text style={[{}, styles.subTotleColumn1Text]}>Tax{this.state.cart_detail.vat_percent}%)</Text>
+                                    }
+                                    
                                     <Text style={[{}, styles.subTotleColumn1Text]}>TOTAL:</Text>
 
                                 </View>
                                 <View style={[{}, styles.subTotleColumn2View]}>
                                     <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency+" "+this.state.cart_detail.total_price ?? 0}</Text>
-                                    <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency+" "+this.state.cart_detail.tax ?? 0}</Text>
+                                    {this.state.cart_detail.vat_percent == 0 ?null :
+                                    <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency+" "+this.state.cart_detail.tax ?? 0}</Text>}
                                     {(this.props.orderDiscountReducer.discount_type == 'percentage') ?
 
-                                        <Text style={[{}, styles.subTotleColumn2Text]}>{(this.props.currency.currency+" "+this.state.cart_detail.total_price_with_tax - (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01)).toFixed(2) ?? 0}</Text>
+                                        <Text style={[{}, styles.subTotleColumn2Text]}>{(this.props.currency.currency+" "+(this.state.cart_detail.total_price_with_tax - (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01)).toFixed(2)) ?? 0}</Text>
                                         :
                                         (this.props.orderDiscountReducer.discount_type == 'value') ?
-                                            <Text style={[{}, styles.subTotleColumn2Text]}>{(this.props.currency.currency+" "+this.state.cart_detail.total_price_with_tax - (this.props.orderDiscountReducer.discount_amount)).toFixed(2) ?? 0}</Text>
+                                            <Text style={[{}, styles.subTotleColumn2Text]}>{(this.props.currency.currency+" "+(
+                                                // (this.state.cart_detail.total_price - this.props.orderDiscountReducer.discount_amount)+
+                                                ((this.state.cart_detail.total_price_with_tax - this.props.orderDiscountReducer.discount_amount))).toFixed(2)) ?? 0}</Text>
                                             : <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency+" "+this.state.cart_detail.total_price_with_tax ?? 0}</Text>
                                     }
 
@@ -754,7 +760,10 @@ class CreateOrder extends React.Component {
                             <View style={{ flexDirection: 'row', width: width - 50, alignSelf: 'center', marginVertical: 10 }}>
                                 <TouchableOpacity
                                     style={{ flex: 1, justifyContent: 'center', }}
-                                    onPress={() => this.props.navigation.navigate('ApplyDiscount',{total_price:this.state.cart_detail.total_price})}
+                                    onPress={() => this.props.navigation.navigate('ApplyDiscount',{
+                                        total_price:this.state.cart_detail.total_price,
+                                        discount_amount:this.props.orderDiscountReducer.discount_amount
+                                    })}
                                 >
                                     <View style={{ flexDirection: 'row' }}>
                                         <Image source={require('../images/icon15.png')}

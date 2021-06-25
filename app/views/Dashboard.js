@@ -254,7 +254,8 @@ class Dashboard extends React.Component {
                 <DateTimePickerModal
                     isVisible={this.state.isDatePickerVisible}
                     mode="date"
-                    date={new Date()}
+                    date={new Date()} 
+                    maximumDate={new Date()}
                     onConfirm={this.setDate}
                     onCancel={this.hideDatePicker}
                 />
