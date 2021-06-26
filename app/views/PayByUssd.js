@@ -139,6 +139,7 @@ function mapStateToProps(state) {
         deliveryAddress: state.deliveryAddressReducer,
         orderDiscountReducer: state.orderDiscountReducer,
         supplier: state.supplierReducer,
+        currency: state.currencyReducer,
     }
 };
 function mapDispatchToProps(dispatch) {

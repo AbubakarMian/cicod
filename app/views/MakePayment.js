@@ -44,7 +44,10 @@ componentDidMount(){
             .then(response => response.json())
             .then(async responseJson => {
                 console.log(' setPaymentMode responseJson @@@@@@!!!!!!!!!!!!!!', responseJson);
-                if (responseJson.status.toUpperCase() === 'SUCCESS') {
+                if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else if (responseJson.status.toUpperCase() === 'SUCCESS') {
                     console.log('navigate to ', navigateScreen)
                     console.log('reerere to ', responseJson)
                     let payment_link = responseJson.data.payment_link
@@ -55,9 +58,6 @@ componentDidMount(){
                             amount_payable: this.props.route.params.amount_payable,
                             payment_link: payment_link
                         });
-                }
-                else if (responseJson.status == 401) {
-                    this.unauthorizedLogout();
                 }
                 else {
                     let message = responseJson.message
@@ -123,6 +123,9 @@ componentDidMount(){
             this.setState({ spinner: false })
             alert(responseJson.message)
             this.props.navigation.navigate(redirect_screen, redirect_body);
+        }              
+        else if (responseJson.status == 401) {
+            this.unauthorizedLogout();
         } else {
             this.setState({ spinner: false })
             let message = responseJson.message

@@ -1,4 +1,4 @@
-import { SET_NOTES } from '../constants';
+import { RESET, SET_NOTES } from '../constants';
 const initialState = {
     notes: '',
 }
@@ -13,6 +13,11 @@ const orderNotesReducer = (state = initialState, action) => {
                 ...state,
                 notes: action.value.notes,
             }
+            case RESET:
+                return {
+                    ...state,
+                    notes:''
+                }
 
             break;
 

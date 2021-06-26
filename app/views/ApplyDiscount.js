@@ -33,6 +33,10 @@ class ApplyDiscount extends React.Component {
 
     setDiscount(discount_amount) {        
             let discount_type = '';
+            if(discount_amount == 'NaN'){
+                discount_amount ='0';
+            }
+            discount_amount = parseFloat(discount_amount)
             if (this.state.value3Index == 0) {
                 discount_type = 'percentage';
                 this.props.setDiscount({
@@ -47,46 +51,44 @@ class ApplyDiscount extends React.Component {
                     discount_type: discount_type
                 })
             }
+            this.setState({ discount_amount: discount_amount })
     }
 
     radioBtnFun(index, lable) {
-        console.log(' lable @@@@@@@@@@', lable);
         this.setState({ value3Index: index })
 
     }
 
     setDiscountAmount(amount){  
-        console.log('amount 000ttt',amount);
-        if(amount.includes(",")||amount.includes("-")||amount.includes(" ")||amount.includes("..")){
-            console.log('asdin if')
-            this.setState({
-                discount_amount : ''
-            })
-            this.setDiscount('');
-            return;
+        if( amount == '' || 
+            amount.split(".").length > 2 || amount.includes(",")||amount.includes("-")||amount.includes(" ")||amount.includes("..")){
+            console.log('amount if ',amount)
+          
+            amount = '0';
+            this.setDiscount('0');
+            // return;
         }
-        amount = parseFloat(amount);
+        // amount = parseFloat(amount);
         if(this.state.value3Index == 0){
             console.log('percentage');
             if(amount < 100){
-                this.setState({ discount_amount: amount })
                 this.setDiscount(amount);
                 return;
             }
         }
         else{
-            let total_amount = parseFloat(this.props.route.params.total_price);
-            console.log('amount',amount)
-            console.log('total_amount',total_amount)
+            let total_amount = this.props.route.params.total_price;
+            console.log('amount ',amount)
             if(total_amount > amount){
-                this.setState({ discount_amount: amount })
+                console.log('if amount ',amount)                
                 this.setDiscount(amount);
                 return;
             }
         }
-        this.setState({
-            discount_amount : ''
-        })
+        this.setDiscount('0');
+        // this.setState({
+        //     discount_amount : ''
+        // })
     }
     changeDiscountType(index){
         this.setDiscountAmount('0')
