@@ -11,6 +11,7 @@ import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 var { width, height } = Dimensions.get('window');
 
 class PaymentWeb extends React.Component {
+    _isMounted = true;
     constructor(props) {
         super(props);
         this.state = {
@@ -22,7 +23,9 @@ class PaymentWeb extends React.Component {
     }
 
      async check() {
-         while(wait){
+         let wait = this.state.wait
+        //  while(wait){
+         while(this._isMounted){
             console.log('timer while',this.state.order)
             this.get_order_detail();
             let a = await this.performTimeConsumingTask(); 
@@ -43,7 +46,8 @@ class PaymentWeb extends React.Component {
             this.setState({
                 timer:t
             })
-         }         
+            wait = await this.state.wait
+         }       
          return;
       }
       
@@ -100,6 +104,13 @@ class PaymentWeb extends React.Component {
                 console.log("Api call error", error);
                 // Alert.alert(error.message);
             });
+    }
+    async componentWillUnmount(){
+        this._isMounted = false;
+        console.log('componentWillUnmount')
+        await this.setState({
+            wait:false
+        })
     }
 
     render() {
