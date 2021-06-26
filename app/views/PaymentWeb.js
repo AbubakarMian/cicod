@@ -108,9 +108,9 @@ class PaymentWeb extends React.Component {
     async componentWillUnmount(){
         this._isMounted = false;
         console.log('componentWillUnmount')
-        await this.setState({
-            wait:false
-        })
+        // await this.setState({
+        //     wait:false
+        // })
     }
 
     render() {
