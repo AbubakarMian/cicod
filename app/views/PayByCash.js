@@ -21,7 +21,8 @@ class PayByCash extends React.Component {
             payment_link: null,
             order_id:0,
             amount_returned:'0',
-            amount:0
+            amount:0,
+            cashCollected:''
         }
     }
     get_order_detail() {
@@ -43,14 +44,18 @@ class PayByCash extends React.Component {
             .then(response => response.json())
             .then(async responseJson => {
                 console.log("order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
-                if (responseJson.status.toUpperCase() === "SUCCESS") {
+                if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else if (responseJson.status.toUpperCase() === "SUCCESS") {
                     let data = responseJson.data;
                     this.setState({
                         spinner: false,
                         order_detail: data,
                         order_id:order_id
                     })
-                } else {
+                }               
+                else {
                     this.setState({ spinner: false })
                     let message = responseJson.message
                     console.log('some error',responseJson)
@@ -62,14 +67,36 @@ class PayByCash extends React.Component {
                 // Alert.alert(error.message);
             });
     }
+    
+    unauthorizedLogout() {
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
+    }
     amountRecieved(recieved,actual){   
+        if(recieved == '' || 
+            recieved.split(".").length > 2 ||
+            recieved.includes(",")||recieved.includes("-")||recieved.includes(" ")||recieved.includes("..")){
+            this.setState({
+                cashCollected : ''
+            })
+            return;
+        }
+
         this.setState({cashCollected:recieved,
             amount_returned:(recieved-actual)+''            
         })
-    }
-    getChange(){
-        return this.state.amount_returned;        
     }    
+
+    getChange(){
+        if(this.state.amount_returned=='NaN'){
+            this.setState({
+                amount_returned:'0'
+            })
+            return '0';
+        }
+        return this.state.amount_returned;        
+    }
 
     press_done() {
         // let payment_link = this.state.payment_link;
@@ -109,6 +136,7 @@ class PayByCash extends React.Component {
                                     color={'#000'}
                                     keyboardType={'numeric'}
                                     onChangeText={(recieved)=>_that.amountRecieved(recieved,order.amount)}
+                                    value={_that.state.cashCollected}
                                 />
                             </View>
                             <View style={[{}, styles.inputView]}>

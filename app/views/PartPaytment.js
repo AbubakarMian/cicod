@@ -203,10 +203,17 @@ class PartPaytment extends React.Component {
     }
     get_payable_amount(amount_to_pay_now){//part_amount_request        
         let part_amount_request = this.state.part_amount_request
-        if(amount_to_pay_now.includes(",")||amount_to_pay_now.includes("-")||amount_to_pay_now.includes(" ")||amount_to_pay_now.includes("..")){
-            this.setState({
-                part_amount_request : part_amount_request
-            })
+        if(amount_to_pay_now == ''){
+            amount_to_pay_now = '0';
+        }
+        
+        if( amount_to_pay_now.split(".").length > 2 || 
+            amount_to_pay_now.includes(",") ||
+            amount_to_pay_now.includes("-") ||
+            amount_to_pay_now.includes(" ") ||
+            amount_to_pay_now.includes("..")){
+            // part_amount_request = 0
+            this.get_payable_amount(part_amount_request)
             return;
         }
         let total_amount = this.state.total_amount

@@ -1,4 +1,4 @@
-import { SET_DISCOUNT } from '../constants';
+import { RESET, SET_DISCOUNT } from '../constants';
 const initialState = {
     discount_amount: '',
     discount_type: '',
@@ -17,6 +17,14 @@ const orderDiscountReducer = (state = initialState, action) => {
             }
 
             break;
+            case RESET:
+                return {
+                    ...state,
+                    discount_amount: '',
+                    discount_type: '',
+                }
+    
+                break;
 
         default:
             return state;
