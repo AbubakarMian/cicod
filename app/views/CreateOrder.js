@@ -32,7 +32,7 @@ class CreateOrder extends React.Component {
             limit_cart_arr: [],
             cart_detail: this.props.cart.cart_detail,
             payment_option: 0,
-            delivery_type_btn: 0,
+            delivery_type_option: null,
             is_pickup: true,
             payment_mode: '',
             suppliereModal: false,
@@ -84,10 +84,8 @@ class CreateOrder extends React.Component {
                 alert('Out of stock');
             }
             else {
-                console.log('here in else condition !!!!!!!!!', data[index].purchased_quantity);
                 await this.props.cartReducer(data[index]);
                 data[index].purchased_quantity = updated_purchased_quantity;
-                console.log('here in else condition !!!!!!!!! after : ', data[index].purchased_quantity);
                 let res = data;
                 let cart_arr = res.map((x, key) => { return { id: x.id, quantity: x.purchased_quantity } });
                 this.setState({
@@ -116,34 +114,31 @@ class CreateOrder extends React.Component {
     }
 
     DeliveryType(type) {
-        console.log(' ********************~~~~~~~~~~~type !!!!!!!', type);
-        this.setState({ is_pickup: !this.state.is_pickup, })
+        if (this.props.customer.name == '') {
+            alert('ADD CUSTOMER FIRST');
+            return
+        }
+        this.setState({ delivery_type_option: type })
+        // this.setState({ is_pickup: !this.state.is_pickup, })
         if (type === 'delivery') {
             this.setState({ deliveryType: 'delivery' })
 
         } else if (type === 'pickup') {
             this.setState({ deliveryType: 'pickup' })
+        }//return;
+        if(type == 'delivery'){
+            if (this.props.route.params.screen_name == 'buy') {
+                this.props.navigation.navigate('BuyDiliveryAddress', { type,address:this.props.customer.address })
+            } else {
+                this.props.navigation.navigate('DiliveryAddress', { type,address:this.props.customer.address })
+            }
         }
-
-        if (this.props.customer.name == '') {
-
-            alert('ADD CUSTOMER FIRST');
-            return
-        } else {
-            // if (type == 'pickup' || type== 'delivery') {
-            //     this.props.setDeliveryAddress({
-            //         address: '',
-            //         type: 'pickup',
-            //     })
-            // }
-            // else {
-                if (this.props.route.params.screen_name == 'buy') {
-                    this.props.navigation.navigate('BuyDiliveryAddress', { type })
-                } else {
-                    this.props.navigation.navigate('DiliveryAddress', { type })
-                }
-            // }
-        }
+        else{ // pickup
+            this.props.setDeliveryAddress({
+                address: '',
+                type: 'pickup',
+            })
+        }        
     }
 
     paymentFun(item) {
@@ -154,7 +149,7 @@ class CreateOrder extends React.Component {
             mode = ''
             goto_payment_screen = 'MakePayment';
         }
-        else if (item.label == 'Pay Acount') {
+        else if (item.label == 'Pay Account') {
             mode = 'ACCOUNT'
             goto_payment_screen = '';
         }
@@ -198,7 +193,13 @@ class CreateOrder extends React.Component {
         }
 
         let dilevery_type = ''
-        if (this.state.is_pickup == true) {
+        // if (this.state.is_pickup == true) {
+        if(this.state.delivery_type_option == null || (this.props.deliveryAddress.address!='' 
+        && this.state.delivery_type_option == 'delivery')){
+            alert('Select delivery type')
+            return
+        }
+        if (this.state.delivery_type_option == 'pickup') {
             dilevery_type = 'Pickup';
         } else {
             dilevery_type = 'Delivery';
@@ -272,14 +273,13 @@ class CreateOrder extends React.Component {
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log("create_order_id responseJson responseJson!!!!!!!!!!!", responseJson)
                 if (responseJson.status === "success") {
-
                     this.setState({ spinner: false })
                     alert(responseJson.message)
-                    let payment_link = responseJson.data.payment_link
+                    let payment_link = responseJson.data.payment_link//Pay Account,ACCOUNT
                     if(this.state.payment_option_selected == 'Pay Account' || this.state.payment_option_selected == 'Pay Invoice'){
                         alert(responseJson.message)
+                        console.log("create_order_id payment_link!", payment_link)
                         this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
                     }
                     
@@ -378,7 +378,7 @@ class CreateOrder extends React.Component {
         ];
         var radio_props_payment = [
             { label: 'Pay Now', value: 0 },
-            { label: 'Pay Acount', value: 1 },
+            { label: 'Pay Account', value: 1 },
             { label: 'Pay Invoice', value: 2 },
             { label: 'Part Payment', value: 3 },
         ];
@@ -568,10 +568,12 @@ class CreateOrder extends React.Component {
                                 onPress={() => this.DeliveryType('delivery')}
 
                             >
-                                <View style={[{ borderWidth: 0.25, backgroundColor: this.state.deliveryType === 'delivery' ? '#FFF4F4' : '#fff', }, styles.radioFormView]}>
+                                <View style={[{ borderWidth: 0.25, backgroundColor: this.state.deliveryType === 'delivery' 
+                                        && this.props.deliveryAddress.address!=''
+                                ? '#FFF4F4' : '#fff', }, styles.radioFormView]}>
 
                                     <RadioForm
-                                        isSelected={!this.state.is_pickup}
+                                        // isSelected={this.state.delivery_type_option == 'delivery'}
                                         color={'yellow'}
                                         size={5}
                                         buttonColor={'green'}
@@ -588,11 +590,11 @@ class CreateOrder extends React.Component {
                                                     obj={obj}
                                                     index={i}
                                                     null
-                                                    isSelected={!this.state.is_pickup}
+                                                    isSelected={this.state.delivery_type_option == 'delivery'&& this.props.deliveryAddress.address!=''}
                                                     onPress={() => this.DeliveryType('delivery')}
                                                     borderWidth={1}
                                                     buttonInnerColor={'#e74c3c'}
-                                                    buttonOuterColor={this.state.value3Index === i ? '#2196f3' : '#000'}
+                                                    buttonOuterColor={this.state.value3Index === i &&this.props.deliveryAddress.address!='' ? '#2196f3' : '#000'}
                                                     buttonSize={10}
                                                     buttonOuterSize={20}
                                                     buttonStyle={{}}
@@ -611,7 +613,8 @@ class CreateOrder extends React.Component {
                                     }
                                     {/* <Text style={[{}, styles.smailGrayText]}>{this.props.deliveryAddress.address ?? 'Dilivery to customer address'}</Text> */}
                                     <Text style={[{}, styles.smailGrayText]}>
-                                        {this.props.deliveryAddress.address ?? 'Delivery to customer address'}
+                                        {this.state.delivery_type_option == 'delivery' && this.props.deliveryAddress.address!=''
+                                        ? this.props.deliveryAddress.address : 'Delivery to customer address'}
                                     </Text>
                                 </View>
                             </TouchableOpacity>
@@ -620,7 +623,7 @@ class CreateOrder extends React.Component {
                             >
                                 <View style={[{ borderWidth: 0.25, backgroundColor: this.state.deliveryType === 'pickup' ? '#FFF4F4' : '#fff', }, styles.radioFormView]}>
                                     <RadioForm
-                                        isSelected={this.state.is_pickup}
+                                        isSelected={this.state.delivery_type_option == 'pickup'}
                                         color={'yellow'}
                                         // radio_props={radio_props_payment}
                                         size={5}
@@ -637,7 +640,7 @@ class CreateOrder extends React.Component {
                                                 <RadioButtonInput
                                                     obj={obj}
                                                     index={i}
-                                                    isSelected={this.state.is_pickup}
+                                                    isSelected={this.state.delivery_type_option == 'pickup'}
                                                     onPress={() => this.DeliveryType('pickup')}
                                                     borderWidth={1}
                                                     buttonInnerColor={'#e74c3c'}

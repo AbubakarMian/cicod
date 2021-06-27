@@ -298,9 +298,9 @@ class AddDiliveryAddress extends React.Component {
                                                 containerStyle={{ height: 50, width: width - 20, alignSelf: 'center' }}
                                                 style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                                                 itemStyle={{
-                                                    justifyContent: 'flex-start',height:50
+                                                    justifyContent: 'flex-start',height:height/19
                                                 }}
-                                                dropDownStyle={{ height: 120, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
+                                                dropDownStyle={{ height: height/4, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectCountry(item)}
                                             />
@@ -317,9 +317,9 @@ class AddDiliveryAddress extends React.Component {
                                                 containerStyle={{ height: 50, width: width / 2-20, alignSelf: 'center' }}
                                                 style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                                                 itemStyle={{
-                                                    justifyContent: 'flex-start',height:50
+                                                    justifyContent: 'flex-start',height:height/19
                                                 }}
-                                                dropDownStyle={{ height: 120, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
+                                                dropDownStyle={{ height:height/4, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectState(item)}
                                             />
@@ -333,9 +333,9 @@ class AddDiliveryAddress extends React.Component {
                                                 containerStyle={{ height: 50, width: width /2- 20, alignSelf: 'center' }}
                                                 style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                                                 itemStyle={{
-                                                    justifyContent: 'flex-start',height:50
+                                                    justifyContent: 'flex-start',height:height/19
                                                 }}
-                                                dropDownStyle={{ height: 120,zIndex:0.999, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
+                                                dropDownStyle={{ height:height/4,zIndex:0.999, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectLgas(item)}
                                             />

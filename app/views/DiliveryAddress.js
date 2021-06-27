@@ -38,18 +38,29 @@ class DiliveryAddress extends React.Component {
         // this.setState({
         //     rememberIsChecked: !this.state.rememberIsChecked
         // })
-        if(this.state.rememberIsChecked==true){
-            this.setState({
-            rememberIsChecked: true
-        })
-            console.log("Not Set")
-        }else{
-            this.setState({
-            rememberIsChecked: false
-        })
+        // if(this.state.rememberIsChecked==true){
+        //     this.setState({
+        //     rememberIsChecked: true
+        // })
+        //     console.log("Not Set")
+        // }else{
+        //     this.setState({
+        //     rememberIsChecked: false
+        // })
+        this.setState({rememberIsChecked:!this.state.rememberIsChecked})
+        // let address = this.props.route.params.address
              console.log("Set")
-             console.log("~~~~~~~~~~~",this.state.addressarr)
-        }          
+             this.props.setDeliveryAddress({
+
+                address: this.props.route.params.address,
+                // country_id: object.country_id,
+                // state_id: object.state_id,
+                type:'Delivery'
+            })
+             console.log("~diliver this.props.route.params",this.props.route.params)
+        this.props.navigation.goBack();
+
+                  
     }
     getDeliveryAddress() {
         this.setState({ spinner: true })
@@ -133,17 +144,18 @@ class DiliveryAddress extends React.Component {
                             </View>
 
                         </View>
-                        {this.props.route.params.type === 'delivery'?
                             <CheckBox
                             style={{ width: width-20,marginVertical:10, alignSelf: 'center', alignItems: 'center' }}
-                            onClick={() =>{this.set_address(), this.setState({
-                                    rememberIsChecked: !this.state.rememberIsChecked
-                                })} }
+                            onClick={() =>{this.set_address()
+                                // , this.setState({
+                                //     rememberIsChecked: !this.state.rememberIsChecked
+                                // })
+                                }
+                             }
                             isChecked={this.state.rememberIsChecked}
                             rightText={"Same as customer’s address"}
                             rightTextStyle={{fontSize:10}}
-                        /> 
-                        : null }
+                        />
                         <View style={[{}, styles.addressContainer]}>
                       
                             <TouchableOpacity
@@ -160,7 +172,7 @@ class DiliveryAddress extends React.Component {
                                         buttonSize={10}
                                         buttonOuterSize={20}
                                         initial={0}
-                                        onPress={(value) => this.selectAddress(obj)} //{ this.setState({ value3Index: value }) }
+                                        // onPress={(value) => this.selectAddress(obj)} //{ this.setState({ value3Index: value }) }
                                     />
                                     {
                                         this.state.addressarr.map((obj, i) => (

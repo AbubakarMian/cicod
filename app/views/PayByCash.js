@@ -73,18 +73,20 @@ class PayByCash extends React.Component {
         this.props.logoutUser();
         this.props.navigation.navigate('Login');
     }
-    amountRecieved(recieved,actual){   
+    async amountRecieved(recieved,actual){   
+       
+        let amount_returned = recieved-actual;
+        console.log('recieved',recieved);
         if(recieved == '' || 
             recieved.split(".").length > 2 ||
             recieved.includes(",")||recieved.includes("-")||recieved.includes(" ")||recieved.includes("..")){
-            this.setState({
-                cashCollected : ''
-            })
-            return;
+                recieved=''
+                amount_returned=''
         }
-
-        this.setState({cashCollected:recieved,
-            amount_returned:(recieved-actual)+''            
+       
+        await this.setState({
+            cashCollected:recieved,
+            amount_returned:amount_returned+''            
         })
     }    
 

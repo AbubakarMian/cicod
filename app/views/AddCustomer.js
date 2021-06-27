@@ -94,6 +94,8 @@ class AddCustomer extends React.Component {
             customer_country: item.country,
             customer_state: item.state,
             customer_lga: item.lga,
+            customer_address: item.address,
+            
         }
         await this.props.setCustomer(user_data);
         console.log('user info !!!!!!!!!!!!!!! @@@@@@@@@@@@@', this.props);
