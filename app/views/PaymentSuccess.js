@@ -25,104 +25,34 @@ class PaymentSuccess extends React.Component {
         }
     }
 
-    setPaymentMode(payment_mode, navigateScreen) {
-        let bodyOrder = this.props.route.params.bodyOrder;
-        bodyOrder.payment_mode = payment_mode;
-        let postData = {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': this.props.user.access_token
-            },
-            body: JSON.stringify(bodyOrder)
-        };
-        console.log(' setPaymentMode body params list @@@@@@!!!!!!!!!!!!!!', postData);
-        fetch(Constants.orderslist, postData)
-            .then(response => response.json())
-            .then(async responseJson => {
-                console.log(' setPaymentMode responseJson @@@@@@!!!!!!!!!!!!!!', responseJson);
-                if (responseJson.status.toUpperCase() === 'SUCCESS') {
-                    console.log('navigate to ', navigateScreen)
-                    console.log('reerere to ', responseJson)
-                    let payment_link = responseJson.data.payment_link
-                    this.payment_response(responseJson, navigateScreen,
-                        {
-                            // bodyOrder: bodyOrder,
-                            data: responseJson.data,
-                            amount_payable: this.props.route.params.amount_payable,
-                            payment_link: payment_link
-                        });
-                }
-                else if (responseJson.status == 401) {
-                    this.unauthorizedLogout();
-                }
-                else {
-                    let message = responseJson.message
-                    Alert.alert('Error', message)
-                }
-            }
-            )
-            .catch((error) => {
-                console.log("Api call error", error);
-                // Alert.alert(error.message);
-            });
-
-        // this.props.navigation.navigate(navigateScreen, { bodyOrder: bodyOrder, amount_payable: this.props.route.params.amount_payable });
-    }
-
     unauthorizedLogout() {
         Alert.alert('Error', Constants.UnauthorizedErrorMsg)
         this.props.logoutUser();
         this.props.navigation.navigate('Login');
     }
-    makePaymentFun(payment_mode) {
-
-        let bodyOrder = this.props.route.params.bodyOrder;
-        bodyOrder.payment_mode = payment_mode;
-
-        let postData = {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': this.props.user.access_token
-            },
-            body: JSON.stringify(bodyOrder)
-        };
-        console.log('makePaymentFun body params list @@@@@@!!!!!!!!!!!!!!', postData);
-        fetch(Constants.orderslist, postData)
-            .then(response => response.json())
-            .then(async responseJson => {
-                console.log('all response ',responseJson);
-                if (responseJson.status === "success") {
-                let payment_link = responseJson.data.payment_link
-                this.payment_response(responseJson, 'PaymentWeb', { payment_link: payment_link, data: responseJson.data });
-                }
-                else if (responseJson.status == 401) {
-                    this.unauthorizedLogout();
-                }
-            }
-            )
-            .catch((error) => {
-                console.log("Api call error", error);
-                // Alert.alert(error.message);
-            });
-    }
-
-    payment_response(responseJson, redirect_screen, redirect_body) {
-        console.log(" response Json responseJson responseJson!!!!!!!!!!!", responseJson)
-        if (responseJson.status === "success") {
-
-            this.setState({ spinner: false })
-            alert(responseJson.message)
-            this.props.navigation.navigate(redirect_screen, redirect_body);
-        } else {
-            this.setState({ spinner: false })
-            let message = responseJson.message
-            alert(message)
+    successview(props){
+        let _that = props._that;
+        let order = _that.props.route.params.order
+        if(order.status != 'Paid'){
+            return null;
         }
+        return(
+            <Text>Success</Text>
+        )
     }
+    rejectview(){
+        let _that = props._that;
+        let order = _that.props.route.params.order
+        if(order.status != 'Reject'){
+            return null;
+        }
+        return(
+            <View>
+            <Text>rejectview</Text>
+            </View>
+        )
+    }
+    
 
     render() {
         var radio_props_dilvery = [
@@ -144,14 +74,18 @@ class PaymentSuccess extends React.Component {
                 <View style={[{}, styles.backHeaderRowView]}>
                     <TouchableOpacity
                         // onPress={()=>this.props.navigation.navigate('Sell')}
-                        onPress={() => this.props.navigation.goBack()}
+                        onPress={() => this.props.navigation.navigate('CreateOrder')}
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
                     <View style={[{}, styles.backHeadingView]}>
                         <Text style={[{}, styles.backHeadingText]}>MAKE PAYMENT</Text>
                     </View>
-                </View>
+                    <this.successview _that={this}/>
+                    <this.rejectview _that={this}/>
+                    
+                       <Text>View Order</Text>
+                </View>             
                
             </View>
         )
