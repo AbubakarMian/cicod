@@ -109,7 +109,7 @@ class CreateOrder extends React.Component {
             }
         }
 
-        let cart_product = this.state.product_cart;
+        // let cart_product = this.state.product_cart;
 
     }
 
@@ -119,6 +119,10 @@ class CreateOrder extends React.Component {
             return
         }
         this.setState({ delivery_type_option: type })
+        this.props.setDeliveryAddress({
+            type: type,
+        })
+        console.log('dilivery type ------',type)
         // this.setState({ is_pickup: !this.state.is_pickup, })
         if (type === 'delivery') {
             this.setState({ deliveryType: 'delivery' })
@@ -184,7 +188,8 @@ class CreateOrder extends React.Component {
         return cart_arr;
     }
     createOrderFun() {
-
+        this.setState({ spinner: true })
+        
         if(this.state.payment_option_selected == 'Pay Invoice' && !this.state.ConfirmationPayInvoice){
             this.setState({
                 ConfirmationPayInvoice:true
@@ -194,9 +199,11 @@ class CreateOrder extends React.Component {
 
         let dilevery_type = ''
         // if (this.state.is_pickup == true) {
-        if(this.state.delivery_type_option == null || (this.props.deliveryAddress.address!='' 
+            // this.props.deliveryAddress.address
+        if(this.state.delivery_type_option == null || (this.props.deliveryAddress.address=='' 
         && this.state.delivery_type_option == 'delivery')){
             alert('Select delivery type')
+            this.setState({ spinner: false })
             return
         }
         if (this.state.delivery_type_option == 'pickup') {
@@ -244,13 +251,14 @@ class CreateOrder extends React.Component {
             amount_payable:amount_payable,
             ConfirmationPayInvoice:false
         })
-
+        // return;
         if (this.state.goto_payment_screen == '') {//show_part_payment
             console.log('step  1 ')
             this.create_order_id(Constants.orderslist,bodyOrder)
             
         }
         else{
+            this.setState({ spinner: false })
             this.props.navigation.navigate(this.state.goto_payment_screen, { bodyOrder: bodyOrder,
                  payment_mode: this.state.payment_mode ,
                  amount_payable: amount_payable ,
@@ -260,6 +268,7 @@ class CreateOrder extends React.Component {
         }
     }
     create_order_id(url,bodyOrder){
+       
         console.log('create_order_id',bodyOrder);
         let postData = {
             method: 'POST',
@@ -273,8 +282,8 @@ class CreateOrder extends React.Component {
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
+                this.setState({ spinner: false })
                 if (responseJson.status === "success") {
-                    this.setState({ spinner: false })
                     alert(responseJson.message)
                     let payment_link = responseJson.data.payment_link//Pay Account,ACCOUNT
                     if(this.state.payment_option_selected == 'Pay Account' || this.state.payment_option_selected == 'Pay Invoice'){
@@ -287,7 +296,7 @@ class CreateOrder extends React.Component {
                 else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 } else {
-                    this.setState({ spinner: false })
+                    
                     let message = responseJson.message
                     alert(message)
                 }
@@ -300,7 +309,6 @@ class CreateOrder extends React.Component {
     }
 
     getSuppliersList(url) {
-
         console.log('get Suppliers List');
         this.setState({ spinner: true })
         let postData = {
