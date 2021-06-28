@@ -26,6 +26,8 @@ class PayByCash extends React.Component {
         }
     }
     get_order_detail() {
+        console.log('pay by cash ',this.props.route.params.data.id);
+        // return;
         let postData = {
             method: 'GET',
             headers: {
@@ -37,7 +39,7 @@ class PayByCash extends React.Component {
 
         let order_id = this.props.route.params.data.id;
         let url = Constants.orderslist + '/' + order_id
-        console.log('---- body params list @@@@@@!!!!!!!!!!!!!!', this.props.route.params);
+        console.log('pay cash---- body params list @@@@@@!!!!!!!!!!!!!!', this.props.route.params);
         console.log('order url detail ', url);
         console.log('order postData ', postData);
         fetch(url, postData)
@@ -118,7 +120,7 @@ class PayByCash extends React.Component {
             Alert.alert('payment error','Payment link not found')
         } 
         else {
-            this.props.navigation.navigate('PaymentWeb', { payment_link: this.props.route.params.payment_link });
+            this.props.navigation.navigate('PaymentWeb', { payment_link: this.props.route.params.payment_link,data:order });
         }
     }
     payByCash(props){

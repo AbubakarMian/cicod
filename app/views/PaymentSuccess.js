@@ -3,7 +3,7 @@ import { View, ImageBackground, ScrollView, TouchableHighlight, Alert, FlatList,
 import { SET_USER, SET_CUSTOMER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART, REMOVE_PRODUCT_FORM_CART, CLEAR_ORDER, SET_DELIVERY_ADDRESS } from '../redux/constants/index';
 import { Text, TextInput } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
-import styles from '../css/MakePaymentCss';
+import styles from '../css/PaymentSuccessCss';
 import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
@@ -21,8 +21,48 @@ class PaymentSuccess extends React.Component {
         this.state = {
             value: 0,
             isChecked: false,
-            bodyOrder: this.props.route.params.bodyOrder
+            // bodyOrder: this.props.route.params.bodyOrder
         }
+    }
+    get_order_detail() {
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': this.props.user.access_token
+            },
+        };
+
+        let order_id = this.props.route.params.data.id;
+        let url = Constants.orderslist + '/' + order_id
+        console.log('---- body params list @@@@@@!!!!!!!!!!!!!!', this.props.route.params);
+        console.log('order url detail ', url);
+        console.log('order postData ', postData);
+        fetch(url, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                console.log("order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
+                if (responseJson.status.toUpperCase() === "SUCCESS") {
+                    let data = responseJson.data;
+                    this.setState({
+                        spinner: false,
+                        order_detail: data,
+                        order_id:order_id
+                    })
+                    // let payment_link = responseJson.data.payment_link
+                    // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
+                } else {
+                    this.setState({ spinner: false })
+                    let message = responseJson.message
+                    console.log('some error',responseJson)
+                }
+            }
+            )
+            .catch((error) => {
+                console.log("Api call error", error);
+                // Alert.alert(error.message);
+            });
     }
 
     unauthorizedLogout() {
@@ -30,44 +70,70 @@ class PaymentSuccess extends React.Component {
         this.props.logoutUser();
         this.props.navigation.navigate('Login');
     }
-    successview(props){
+    successview(props) {
         let _that = props._that;
-        let order = _that.props.route.params.order
-        if(order.status != 'Paid'){
-            return null;
-        }
-        return(
-            <Text>Success</Text>
-        )
-    }
-    rejectview(){
-        let _that = props._that;
-        let order = _that.props.route.params.order
-        if(order.status != 'Reject'){
-            return null;
-        }
-        return(
-            <View>
-            <Text>rejectview</Text>
+        let order = _that.props.route.params.data;
+        console.log("order @@@@@@@@@@@@~~~~~~~~~~~~~~~~ order",order)
+        if (order.payment_status == 'PAID') {            
+        return (
+            <View style={[{},styles.mainContainer]}>
+                
+                <View style={{borderColor:'#DAF8EC',borderWidth:20,borderRadius:100}}>     
+            <Image
+            style={{height:width/4,width:width/4}} 
+            source={require('../images/greenTick.png')}
+            />
+            </View>
+                <Text style={[{color:'#4E4D4D',marginTop:20},fontStyles.bold25]}>Payment Successful</Text>
+                <Text style={[{color:'#929497'},fontStyles.normal15]}>Your payment of {_that.props.currency.currency+" "+order.amount} was successful</Text>
+                <TouchableOpacity
+                onPress={()=>_that.props.navigation.navigate('OrderDetail', { id:order.id })}
+                style={[{},styles.touchView]}
+                >
+                    <Text style={[{},styles.touchText]}>View order</Text>
+                </TouchableOpacity>
             </View>
         )
+        }
+        else{
+            return null;
+        }
     }
-    
+    rejectview(props) {
+        let _that = props._that;
+        let order = _that.props.route.params.data;
+        order.payment_status
+        console.log("!!!!!!!!!!!!!~~~~~~~~~~~~~~~~",order.payment_status)
+        let status = 'PAID'//REJECT
+        if (order.payment_status != status) {
+            return (
+                <View style={[{},styles.mainContainer]}>
+                <View style={{borderColor:'#FFF4F4',borderWidth:20,borderRadius:100}}>     
+                <Image
+                style={{height:width/4,width:width/4}} 
+                source={require('../images/redCross.png')}
+                />
+                </View>
+                <Text style={[{color:'#4E4D4D',marginTop:10},fontStyles.bold25]}>Payment Unsuccessful</Text>
+                <Text style={[{color:'#929497'},fontStyles.normal15]}>Your payment of {_that.props.currency.currency+" "+order.amount} was not successful</Text>
+                <TouchableOpacity
+                onPress={()=>_that.props.navigation.navigate('OrderDetail', { id:order.id })}
+                style={[{},styles.touchView]}
+                >
+                    <Text style={[{},styles.touchText]}>View order</Text>
+                </TouchableOpacity>
+            </View>
+            )
+        }
+        else{            
+            return null;
+        }
+        
+    }
+
 
     render() {
-        var radio_props_dilvery = [
-            { label: 'Dilivery', value: 0 },
 
-        ];
-        var radio_props_pickup = [
-            { label: 'Pickup', value: 1 },
-        ];
-        var radio_props_payment = [
-            { label: 'Pay Now', value: 0 },
-            { label: 'Pay Acount', value: 1 },
-            { label: 'Pay Invoice', value: 2 },
-            { label: 'Part Payment', value: 3 },
-        ];
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
@@ -81,12 +147,10 @@ class PaymentSuccess extends React.Component {
                     <View style={[{}, styles.backHeadingView]}>
                         <Text style={[{}, styles.backHeadingText]}>MAKE PAYMENT</Text>
                     </View>
-                    <this.successview _that={this}/>
-                    <this.rejectview _that={this}/>
-                    
-                       <Text>View Order</Text>
-                </View>             
-               
+                </View>
+                <this.successview _that={this} />
+                <this.rejectview _that={this} />
+
             </View>
         )
     }
@@ -100,6 +164,7 @@ function mapStateToProps(state) {
         deliveryAddress: state.deliveryAddressReducer,
         orderDiscountReducer: state.orderDiscountReducer,
         supplier: state.supplierReducer,
+        currency: state.currencyReducer,
     }
 };
 function mapDispatchToProps(dispatch) {
