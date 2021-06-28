@@ -11,6 +11,7 @@ import CheckBox from 'react-native-check-box';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import SearchBar from 'react-native-search-bar';
 import { Constants } from '../views/Constant';
+import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
 
 const { width, height } = Dimensions.get('window')
@@ -21,13 +22,18 @@ class MakePayment extends React.Component {
         this.state = {
             value: 0,
             isChecked: false,
-            bodyOrder: this.props.route.params.bodyOrder
+            bodyOrder: this.props.route.params.bodyOrder,
+            spinner:false
         }
     }
 componentDidMount(){
     console.log("!!!!!!!!!@@@@@@@@@@@!!!!!!!!!!!!~~~~~~~~~~",this.state.bodyOrder)
 }
-    setPaymentMode(payment_mode, navigateScreen) {
+    async setPaymentMode(payment_mode, navigateScreen) {
+        if(await this.state.spinner){
+            return;
+        }
+        await this.setState({ spinner: true })
         let bodyOrder = this.props.route.params.bodyOrder;
         bodyOrder.payment_mode = payment_mode;
         let postData = {
@@ -39,10 +45,11 @@ componentDidMount(){
             },
             body: JSON.stringify(bodyOrder)
         };
-        console.log(' setPaymentMode body params list @@@@@@!!!!!!!!!!!!!!', postData);
+        console.log('1111111111111 setPaymentMode body params list @@@@@@!!!!!!!!!!!!!!', postData);
         fetch(Constants.orderslist, postData)
             .then(response => response.json())
             .then(async responseJson => {
+                this.setState({ spinner: false })
                 console.log(' setPaymentMode responseJson @@@@@@!!!!!!!!!!!!!!', responseJson);
                 if (responseJson.status == 401) {
                     this.unauthorizedLogout();
@@ -79,7 +86,10 @@ componentDidMount(){
         this.props.navigation.navigate('Login');
     }
     makePaymentFun(payment_mode) {
-
+        if(await this.state.spinner){
+            return;
+        }
+        await this.setState({ spinner: true })
         let bodyOrder = this.props.route.params.bodyOrder;
         bodyOrder.payment_mode = payment_mode;
 
@@ -92,10 +102,11 @@ componentDidMount(){
             },
             body: JSON.stringify(bodyOrder)
         };
-        console.log('makePaymentFun body params list @@@@@@!!!!!!!!!!!!!!', postData);
+        console.log('222222222222 makePaymentFun body params list @@@@@@!!!!!!!!!!!!!!', postData);
         fetch(Constants.orderslist, postData)
             .then(response => response.json())
             .then(async responseJson => {
+                this.setState({ spinner: false })
                 console.log('all response ',responseJson);
                 if (responseJson.status === "success") {
                 let payment_link = responseJson.data.payment_link
@@ -116,10 +127,9 @@ componentDidMount(){
             });
     }
 
-    payment_response(responseJson, redirect_screen, redirect_body) {
+    async payment_response(responseJson, redirect_screen, redirect_body) {
         console.log(" response Json responseJson responseJson!!!!!!!!!!!", responseJson)
         if (responseJson.status === "success") {
-
             this.setState({ spinner: false })
             alert(responseJson.message)
             this.props.navigation.navigate(redirect_screen, redirect_body);
@@ -137,6 +147,12 @@ componentDidMount(){
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
+                <Spinner
+                    visible={this.state.spinner}
+                    textContent={'Please Wait...'}
+                    textStyle={{ color: '#fff' }}
+                    color={'#fff'}
+                />
                 <View style={[{}, styles.backHeaderRowView]}>
                     <TouchableOpacity
                         // onPress={()=>this.props.navigation.navigate('Sell')}
