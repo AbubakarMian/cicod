@@ -93,20 +93,20 @@ class OrderDetail_pending extends React.Component {
                         amount_paid_from_credit_limit: resdata.amount_paid_from_credit_limit,
                         bodyOrder:{
                             customer_name: resdata.customer.name,
-                            customer_phone: resdata.customer.customer_phone, //this.state.customer_phone,//required
-                            customer_email: resdata.customer.customer_email,//this.state.customer_email,
-                            products: [], //required this.state.limit_cart_arr
-                            // delivery_type:resdata.customer.deliveryAddress.type,//dilevery_type,?? 'PICKUP'
-                            // delivery_address: resdata.customer.deliveryAddress.address ?? '',
+                            customer_phone: resdata.customer.phone, //this.state.customer_phone,//required
+                            customer_email: resdata.customer.email,//this.state.customer_email,
+                            products:  resdata.items,//[]
+                            delivery_type:resdata.delivery_type,//dilevery_type,?? 'PICKUP'
+                            delivery_address: resdata.customer.address ?? '',
                             payment_mode: resdata.payment_mode, //required
                             amount: resdata.amount, //required
-                            // country_id: resdata.customer.deliveryAddress.country_id,
-                            // state_id: resdata.customer.deliveryAddress.state_id,
-                            lga_id: resdata.customer_lga,
-                            // note: resdata.customer.notes.notes ?? '',
+                            country_id: resdata.customer.country_id,
+                            state_id: resdata.customer.state_id,
+                            lga_id: resdata.customer.lga_id,
+                            note: resdata.note ?? '',
                             discount_amount: resdata.discount_amount,
                             discount_percent: resdata.discount_percent,
-                            // accept_multiple_part_payment: resdata.customer.show_part_payment,
+                            accept_multiple_part_payment: resdata.is_part_payment,
                         }
                     })
                     console.log("%%%%%%%%%% bodyOrder bodyOrder bodyOrder~~~~~~~~~~~~~~~",this.state.data)

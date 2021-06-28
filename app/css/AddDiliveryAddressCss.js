@@ -8,6 +8,7 @@ var { width, height } = Dimensions.get('window');
 export default StyleSheet.create({
     mainView: {
         width: width,
+        height:height,
         backgroundColor: '#F0F0F0',
         flex: 1,
         paddingBottom:10,
@@ -68,7 +69,7 @@ export default StyleSheet.create({
         alignSelf:'center',
         justifyContent:'center',
         alignItems:'center',
-        marginTop:20,
+        marginTop:60,
         paddingVertical:15,
         marginBottom:20,
     }

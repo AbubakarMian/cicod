@@ -10,7 +10,7 @@ const initialState = {
     access_token: 'EvcGFyZWl0LWFwcC1hZG1pbjo4NmRmMjZkMi01NjE1LTRiOTAtYTBjYy1jMDM5OWJiasdYAnHYzYNCg=='
 }
 const userReducer = (state = initialState, action) =>  {
-   
+   console.log('data----------user',state);
      switch (action.type) {
 
         case SET_USER:

@@ -7,6 +7,7 @@ const initialState = {
     country: '',
     state: '',
     lga: '',
+    address:''
 }
  const customerReducer = (state = initialState, action) => {
 
@@ -24,6 +25,7 @@ const initialState = {
                 country: action.value.customer_country,
                 state: action.value.customer_state,
                 lga: action.value.customer_lga,
+                address: action.value.customer_address,
             }
 
             break;
@@ -37,6 +39,7 @@ const initialState = {
             country: '',
             state: '',
             lga: '',
+            address: '',
         }
 
         default:

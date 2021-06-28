@@ -34,6 +34,9 @@ class AddDiliveryAddress extends React.Component {
             street: '',
             landmark: '',
             is_default: false,
+            setCountry:false,
+            setStates:false,
+            setRegion:false,
         }
 
     }
@@ -155,7 +158,8 @@ class AddDiliveryAddress extends React.Component {
         console.log('country Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item)
         this.setState({
             country_id: item.value,
-            country_name: item.label
+            country_name: item.label,
+            setCountry:false,
         })
         let statesUrl = Constants.stateslist + '?country_id=' + item.value;
         console.log('statesUrl !!!!!!!!!!!!!!@@@@@@@@@@@@@', statesUrl)
@@ -166,7 +170,8 @@ class AddDiliveryAddress extends React.Component {
         console.log('state Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item)
         this.setState({
             state_id: item.value,
-            state_name: item.lable
+            state_name: item.lable,
+            setStates:false
         });
         let lgasUrl = Constants.lgaslist + '?state_id=' + item.value;
         console.log('lgasUrl !!!!!!!!!!!!!!@@@@@@@@@@@@@', lgasUrl)
@@ -177,20 +182,31 @@ class AddDiliveryAddress extends React.Component {
         this.setState({
             lgas_id: item.value,
             lgas_name: item.lable,
+            setRegion:false
         });
     }
 
     createDeliveryAddress() {
-
-
-        if (this.state.street === '') {
-            Alert.alert("Warning", "Street Name are required")
-            return;
-        }
-        else if (this.state.house_no === '') {
+        if (this.state.house_no.trim() === '') {
             Alert.alert("Warning", "House No required")
             return;
         }
+        else if (this.state.street.trim() == '') {
+            Alert.alert("Warning", "Street Name are required")
+            return;
+        }
+        else if (this.state.country_id == 0) {
+            Alert.alert("Warning", "Country required")
+            return;
+        } 
+        else if (this.state.state_id == 0) {
+            Alert.alert("Warning", "State required")
+            return;
+        } 
+        else if (this.state.lgas_id == 0) {
+            Alert.alert("Warning", "Region required")
+            return;
+        } 
         this.setState({ spinner: true })
         let postData = {
             method: 'POST',
@@ -262,11 +278,7 @@ class AddDiliveryAddress extends React.Component {
 
                         </View>
                         <View style={[{}, styles.addressContainer]}>
-                            <View style={[{ marginTop: 10 }, styles.mainFormView]}>
-
-
-
-
+                            <View style={[{ marginTop: 10,height:height/1.5 }, styles.mainFormView]}>
                                 <View>
                                     <TextInput
                                         label="House No.*"
@@ -294,60 +306,84 @@ class AddDiliveryAddress extends React.Component {
                                     />
                                     <View style={[{}, styles.formRow]}>
                                         <View style={[{}, styles.formColumn]}>
-
                                             <DropDownPicker
+                                                onOpen={()=>
+                                                this.setState({
+                                                    setCountry:true,
+                                                    setStates:false,
+                                                    setRegion:false,
+                                                    })
+                                                }
+                                                isVisible={this.state.setCountry}
                                                 placeholder="Country *"
                                                 items={this.state.countries_arr}
                                                 autoScrollToDefaultValue={true}
                                                 containerStyle={{ height: 50, width: width - 20, alignSelf: 'center' }}
                                                 style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                                                 itemStyle={{
-                                                    justifyContent: 'flex-start',
+                                                    justifyContent: 'flex-start',height:height/19
                                                 }}
-                                                dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
+                                                dropDownStyle={{ height: height/4, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectCountry(item)}
                                             />
                                         </View>
 
                                     </View>
-                                    <View style={[{ flexDirection: 'row', alignSelf: 'center' }, styles.formRow]}>
-                                        <View style={[{}, styles.formColumn]}>
+                                    <View style={[{ flexDirection: 'row', alignSelf: 'center' }]}>
+                                        <View style={{flex:1}}>
 
                                             <DropDownPicker
+                                               onOpen={()=>
+                                            this.setState({
+                                                 setCountry:false,
+                                                 setStates:true,
+                                                 setRegion:false,
+                                                })
+                                             }
+                                             isVisible={this.state.setStates}
                                                 placeholder="States *"
                                                 items={this.state.states_arr}
-                                                items={this.state.states_arr}
-
-                                                containerStyle={{ height: 50, width: width / 2 - 20, alignSelf: 'center' }}
+                                                autoScrollToDefaultValue={true}
+                                                containerStyle={{ height: 50, width: width / 2-20, alignSelf: 'center' }}
                                                 style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                                                 itemStyle={{
-                                                    justifyContent: 'flex-start',
+                                                    justifyContent: 'flex-start',height:height/19
                                                 }}
-                                                dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
+                                                dropDownStyle={{ height:height/4, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectState(item)}
                                             />
                                         </View>
-                                        <View style={[{ marginHorizontal: 10 }, styles.formColumn]}>
+                                        <View style={{flex:1}}>
 
                                             <DropDownPicker
-                                                placeholder="LGA *"
+                                                onOpen={()=>
+                                                this.setState({
+                                                    setCountry:false,
+                                                    setStates:false,
+                                                    setRegion:true,
+                                                   })
+                                                }
+                                                isVisible={this.state.setRegion}
+                                                placeholder="Region *"
                                                 items={this.state.lgas_arr}
-                                                containerStyle={{ height: 50, width: width / 2 - 20, alignSelf: 'center' }}
+                                                autoScrollToDefaultValue={true}
+                                                containerStyle={{ height: 50, width: width /2- 20, alignSelf: 'center' }}
                                                 style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                                                 itemStyle={{
-                                                    justifyContent: 'flex-start',
+                                                    justifyContent: 'flex-start',height:height/19
                                                 }}
-                                                dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
+                                                dropDownStyle={{ height:height/4,zIndex:0.999, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectLgas(item)}
+                                                
                                             />
                                         </View>
                                     </View>
                                     <View style={{ zIndex: -0.999, marginVertical:20 }}>
                                         <CheckBox
-                                            style={[{ width: width, }, styles.cheBox]}
+                                            style={[{ width: width,zIndex: -0.999, }, styles.cheBox]}
                                             onClick={() => {
                                                 this.setState({
                                                     is_default: !this.state.is_default
@@ -363,14 +399,12 @@ class AddDiliveryAddress extends React.Component {
                                     </View>
                                 </View>
 
-
-
                             </View>
                            
                         </View>
                          <TouchableOpacity
                                 onPress={() => this.createDeliveryAddress()}
-                                style={[{}, styles.redBtn]}
+                                style={[{zIndex:-0.999}, styles.redBtn]}
                             >
                                 <Text style={{ color: '#fff' }}>Save</Text>
                             </TouchableOpacity>

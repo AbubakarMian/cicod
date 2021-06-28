@@ -16,6 +16,7 @@ import { Container, Content, List, ListItem, Radio } from 'native-base';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 class DiliveryAddress extends React.Component {
+     loadDelivery_address=true
     constructor(props) {
         super(props);
         this.state = {
@@ -25,33 +26,38 @@ class DiliveryAddress extends React.Component {
             selected_address_id:0,
             delivery_type: this.props.route.params.type ?? '',
             isChecked: false,
+            
         }
 
     }
 
     componentDidMount() {
-        this.setState({delivery_type:this.props.route.params.type})
-        this.getDeliveryAddress();
-
+        // this.setState({delivery_type:this.props.route.params.type})
+        // this.getDeliveryAddress();
+    }
+    componentWillUnmount(){
+        this.loadDelivery_address = true
     }
     set_address(){
-        // this.setState({
-        //     rememberIsChecked: !this.state.rememberIsChecked
-        // })
-        if(this.state.rememberIsChecked==true){
-            this.setState({
-            rememberIsChecked: true
-        })
-            console.log("Not Set")
-        }else{
-            this.setState({
-            rememberIsChecked: false
-        })
+
+        this.setState({rememberIsChecked:!this.state.rememberIsChecked})
              console.log("Set")
-             console.log("~~~~~~~~~~~",this.state.addressarr)
-        }          
+             this.props.setDeliveryAddress({
+                address: this.props.route.params.address,
+                type:'Delivery'
+            })
+             console.log("~diliver this.props.route.params",this.props.route.params)
+        this.props.navigation.goBack();
+
+                  
     }
     getDeliveryAddress() {
+        if(!this.loadDelivery_address){
+            return;
+        }
+        this.loadDelivery_address = false
+        this.setState({delivery_type:this.props.route.params.type})
+        // this.getDeliveryAddress();
         this.setState({ spinner: true })
         let postData = {
             method: 'GET',
@@ -69,17 +75,30 @@ class DiliveryAddress extends React.Component {
                     spinner: false,
                 });
                 if (responseJson.status === 'success') {
+                    let default_address = null;
                     let res = responseJson.data;
-                    let addressarr = res.map((x, key) => { return { 
+                    let addressarr = res.map((x, key) => { 
+                        let address_item = { 
                         list_id:(key+1),
+                        is_default:x.is_default,
                         country_id:x.country.id,
                         state_id:x.state.id,
                         label: x.house_no + ',' + x.street + ',' + x.state.name + ',' + x.country.name, 
-                        value: x.house_no + ',' + x.street + ',' + x.state.name + ',' + x.country.name } });
+                        value: x.house_no + ',' + x.street + ',' + x.state.name + ',' + x.country.name 
+                    }
+                    if(x.is_default){
+                        default_address = address_item
+                    }
+                    return address_item
+                    });
                     console.log('addressarr  respone !!!!!!', addressarr);
-                    this.setState({
+                    await this.setState({
                         addressarr: addressarr,
                     });
+                    if(default_address!=null){
+                        this.selectAddress(default_address)
+                    }
+                    
                 } else {
                     let message = responseJson.message;
                     Alert.alert('Message', message)
@@ -87,8 +106,13 @@ class DiliveryAddress extends React.Component {
             })
     }
     componentWillReceiveProps() {
-        console.log('deliveryAddress deliveryAddress', this.props.deliveryAddress);
-        this.getDeliveryAddress();
+        // console.log('deliveryAddress deliveryAddress', this.props.deliveryAddress);
+        // this.getDeliveryAddress();
+    }
+
+    selectAddressGoBack(object){
+        this.selectAddress(object)
+        this.props.navigation.goBack();
     }
 
     selectAddress(object) {
@@ -97,16 +121,16 @@ class DiliveryAddress extends React.Component {
             is_selected_address: !this.state.is_selected_address,
             selected_address_id:object.list_id
         })
+        console.log('object',object)
         this.props.setDeliveryAddress({
-
             address: object.value,
             country_id: object.country_id,
             state_id: object.state_id,
             type:'Delivery'
-        })
-        this.props.navigation.goBack();
+        })       
     }
     render() {
+        this.getDeliveryAddress()
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
@@ -133,17 +157,18 @@ class DiliveryAddress extends React.Component {
                             </View>
 
                         </View>
-                        {this.props.route.params.type === 'delivery'?
                             <CheckBox
                             style={{ width: width-20,marginVertical:10, alignSelf: 'center', alignItems: 'center' }}
-                            onClick={() =>{this.set_address(), this.setState({
-                                    rememberIsChecked: !this.state.rememberIsChecked
-                                })} }
+                            onClick={() =>{this.set_address()
+                                // , this.setState({
+                                //     rememberIsChecked: !this.state.rememberIsChecked
+                                // })
+                                }
+                             }
                             isChecked={this.state.rememberIsChecked}
                             rightText={"Same as customer’s address"}
                             rightTextStyle={{fontSize:10}}
-                        /> 
-                        : null }
+                        />
                         <View style={[{}, styles.addressContainer]}>
                       
                             <TouchableOpacity
@@ -160,7 +185,7 @@ class DiliveryAddress extends React.Component {
                                         buttonSize={10}
                                         buttonOuterSize={20}
                                         initial={0}
-                                        onPress={(value) => this.selectAddress(obj)} //{ this.setState({ value3Index: value }) }
+                                        // onPress={(value) => this.selectAddress(obj)} //{ this.setState({ value3Index: value }) }
                                     />
                                     {
                                         this.state.addressarr.map((obj, i) => (
@@ -170,7 +195,7 @@ class DiliveryAddress extends React.Component {
                                                     obj={obj}
                                                     index={i}
                                                     isSelected={obj.list_id === this.state.selected_address_id}
-                                                    onPress={(value) => this.selectAddress(obj)}
+                                                    onPress={(value) => this.selectAddressGoBack(obj)}
                                                     borderWidth={1}
                                                     buttonInnerColor={'#e74c3c'}
                                                     buttonOuterColor={this.state.value3Index === i ? '#2196f3' : '#000'}
@@ -185,7 +210,7 @@ class DiliveryAddress extends React.Component {
                                                     obj={obj}
                                                     index={i}
                                                     labelHorizontal={true}
-                                                    onPress={(value) => this.selectAddress(obj)}
+                                                    onPress={(value) => this.selectAddressGoBack(obj)}
                                                     // labelStyle={{fontSize: 20, color: '#2ecc71'}}
                                                     labelWrapStyle={{}}
                                                 />

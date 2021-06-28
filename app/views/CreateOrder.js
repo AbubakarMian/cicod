@@ -32,7 +32,7 @@ class CreateOrder extends React.Component {
             limit_cart_arr: [],
             cart_detail: this.props.cart.cart_detail,
             payment_option: 0,
-            delivery_type_btn: 0,
+            delivery_type_option: null,
             is_pickup: true,
             payment_mode: '',
             suppliereModal: false,
@@ -48,15 +48,15 @@ class CreateOrder extends React.Component {
             goto_payment_screen: '',
             payment_option_selected: '',
             pay_button_lable: 'Pay',
-            amount_payable:0,
-            ConfirmationPayInvoice:false
+            amount_payable: 0,
+            ConfirmationPayInvoice: false
         }
     }
     clearOrder() {
         this.props.emptyOrder();
     }
     componentDidMount() {
-        console.log(' create order !!!! !!!!!!!!', this.props.user);        
+        console.log(' create order !!!! !!!!!!!!', this.props.user);
         this.getSuppliersList(Constants.supplierlist);
     }
 
@@ -84,10 +84,8 @@ class CreateOrder extends React.Component {
                 alert('Out of stock');
             }
             else {
-                console.log('here in else condition !!!!!!!!!', data[index].purchased_quantity);
                 await this.props.cartReducer(data[index]);
                 data[index].purchased_quantity = updated_purchased_quantity;
-                console.log('here in else condition !!!!!!!!! after : ', data[index].purchased_quantity);
                 let res = data;
                 let cart_arr = res.map((x, key) => { return { id: x.id, quantity: x.purchased_quantity } });
                 this.setState({
@@ -111,38 +109,39 @@ class CreateOrder extends React.Component {
             }
         }
 
-        let cart_product = this.state.product_cart;
+        // let cart_product = this.state.product_cart;
 
     }
 
     DeliveryType(type) {
-        console.log(' ********************~~~~~~~~~~~type !!!!!!!', type);
-        this.setState({ is_pickup: !this.state.is_pickup, })
+        if (this.props.customer.name == '') {
+            alert('ADD CUSTOMER FIRST');
+            return
+        }
+        this.setState({ delivery_type_option: type })
+        this.props.setDeliveryAddress({
+            type: type,
+        })
+        console.log('dilivery type ------', type)
+        // this.setState({ is_pickup: !this.state.is_pickup, })
         if (type === 'delivery') {
             this.setState({ deliveryType: 'delivery' })
 
         } else if (type === 'pickup') {
             this.setState({ deliveryType: 'pickup' })
+        }//return;
+        if (type == 'delivery') {
+            if (this.props.route.params.screen_name == 'buy') {
+                this.props.navigation.navigate('BuyDiliveryAddress', { type, address: this.props.customer.address })
+            } else {
+                this.props.navigation.navigate('DiliveryAddress', { type, address: this.props.customer.address })
+            }
         }
-
-        if (this.props.customer.name == '') {
-
-            alert('ADD CUSTOMER FIRST');
-            return
-        } else {
-            // if (type == 'pickup' || type== 'delivery') {
-            //     this.props.setDeliveryAddress({
-            //         address: '',
-            //         type: 'pickup',
-            //     })
-            // }
-            // else {
-                if (this.props.route.params.screen_name == 'buy') {
-                    this.props.navigation.navigate('BuyDiliveryAddress', { type })
-                } else {
-                    this.props.navigation.navigate('DiliveryAddress', { type })
-                }
-            // }
+        else { // pickup
+            this.props.setDeliveryAddress({
+                address: '',
+                type: 'pickup',
+            })
         }
     }
 
@@ -154,7 +153,7 @@ class CreateOrder extends React.Component {
             mode = ''
             goto_payment_screen = 'MakePayment';
         }
-        else if (item.label == 'Pay Acount') {
+        else if (item.label == 'Pay Account') {
             mode = 'ACCOUNT'
             goto_payment_screen = '';
         }
@@ -169,18 +168,18 @@ class CreateOrder extends React.Component {
         }
 
         this.setState({
-            value3Index: item.value,
+            value3IndexPayment: item.value,
             payment_mode: mode,
             goto_payment_screen: goto_payment_screen,
-            payment_option_selected:item.label,
-            pay_button_lable:pay_button_lable
+            payment_option_selected: item.label,
+            pay_button_lable: pay_button_lable
         })
     }
     removeProduct(id) {
         this.props.removeProductFromCart(id);
     }
 
-    set_limit_cart_arr(){
+    set_limit_cart_arr() {
         let res = this.props.cart.cart;
         let cart_arr = res.map((x, key) => { return { id: x.id, quantity: x.purchased_quantity } });
         this.setState({
@@ -188,21 +187,37 @@ class CreateOrder extends React.Component {
         });
         return cart_arr;
     }
-    createOrderFun() {
+    async createOrderFun() {
+        if(await this.state.spinner){
+            return;
+        }
+        await this.setState({ spinner: true })
 
-        if(this.state.payment_option_selected == 'Pay Invoice' && !this.state.ConfirmationPayInvoice){
+        if (this.state.payment_option_selected == 'Pay Invoice' && !this.state.ConfirmationPayInvoice) {
             this.setState({
-                ConfirmationPayInvoice:true
+                ConfirmationPayInvoice: true
             })
             return;
         }
 
         let dilevery_type = ''
-        if (this.state.is_pickup == true) {
+        // if (this.state.is_pickup == true) {
+        // this.props.deliveryAddress.address
+        if (this.state.delivery_type_option == null || (this.props.deliveryAddress.address == ''
+            && this.state.delivery_type_option == 'delivery')) {
+            alert('Select delivery type')
+            this.setState({ spinner: false })
+            return
+        }
+        if (this.state.delivery_type_option == 'pickup') {
             dilevery_type = 'Pickup';
         } else {
             dilevery_type = 'Delivery';
         }
+        let cart = this.set_limit_cart_arr();
+        // if(cart.length<1){
+        //     alert('Add products to cart')
+        // }
         console.log('dilevery_type', dilevery_type);
         console.log('this.props.deliveryAddress.type this.props.deliveryAddress.type', this.props.deliveryAddress);
         let discounted_price = 0
@@ -215,14 +230,15 @@ class CreateOrder extends React.Component {
         }
         else {
             discounted_price = this.props.orderDiscountReducer.discount_amount;
-            amount_payable = this.state.cart_detail.total_price_with_tax - (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01) ?? 0;
+            amount_payable = (this.state.cart_detail.total_price_with_tax - this.props.orderDiscountReducer.discount_amount) ?? 0;
         }
+        
 
         let bodyOrder = {
             customer_name: this.state.customer_name,//this.state.customer_name,//required
             customer_phone: this.state.customer_phone, //this.state.customer_phone,//required
             customer_email: this.state.customer_email,//this.state.customer_email,
-            products: this.set_limit_cart_arr(), //required this.state.limit_cart_arr
+            products: cart, //required this.state.limit_cart_arr
             delivery_type: this.props.deliveryAddress.type,//dilevery_type,?? 'PICKUP'
             delivery_address: this.props.deliveryAddress.address ?? '',
             payment_mode: this.state.payment_mode, //required
@@ -240,26 +256,28 @@ class CreateOrder extends React.Component {
         };
 
         this.setState({
-            amount_payable:amount_payable,
-            ConfirmationPayInvoice:false
+            amount_payable: amount_payable,
+            ConfirmationPayInvoice: false
         })
-
         if (this.state.goto_payment_screen == '') {//show_part_payment
             console.log('step  1 ')
-            this.create_order_id(Constants.orderslist,bodyOrder)
-            
+            await this.create_order_id(Constants.orderslist, bodyOrder)
+
         }
-        else{
-            this.props.navigation.navigate(this.state.goto_payment_screen, { bodyOrder: bodyOrder,
-                 payment_mode: this.state.payment_mode ,
-                 amount_payable: amount_payable ,
-                });
+        else {
+            await this.setState({ spinner: false })
+            this.props.navigation.navigate(this.state.goto_payment_screen, {
+                bodyOrder: bodyOrder,
+                payment_mode: this.state.payment_mode,
+                amount_payable: amount_payable,
+            });
             console.log('step  2 ')
             return;
         }
     }
-    create_order_id(url,bodyOrder){
-        console.log('create_order_id',bodyOrder);
+    create_order_id(url, bodyOrder) {
+
+        console.log('create_order_id', bodyOrder);
         let postData = {
             method: 'POST',
             headers: {
@@ -272,22 +290,21 @@ class CreateOrder extends React.Component {
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log("create_order_id responseJson responseJson!!!!!!!!!!!", responseJson)
+                this.setState({ spinner: false })
                 if (responseJson.status === "success") {
-
-                    this.setState({ spinner: false })
                     alert(responseJson.message)
-                    let payment_link = responseJson.data.payment_link
-                    if(this.state.payment_option_selected == 'Pay Account' || this.state.payment_option_selected == 'Pay Invoice'){
+                    let payment_link = responseJson.data.payment_link//Pay Account,ACCOUNT
+                    if (this.state.payment_option_selected == 'Pay Account' || this.state.payment_option_selected == 'Pay Invoice') {
                         alert(responseJson.message)
+                        console.log("create_order_id payment_link!", payment_link)
                         this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
                     }
-                    
+
                 }
                 else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 } else {
-                    this.setState({ spinner: false })
+
                     let message = responseJson.message
                     alert(message)
                 }
@@ -300,7 +317,6 @@ class CreateOrder extends React.Component {
     }
 
     getSuppliersList(url) {
-
         console.log('get Suppliers List');
         this.setState({ spinner: true })
         let postData = {
@@ -378,7 +394,7 @@ class CreateOrder extends React.Component {
         ];
         var radio_props_payment = [
             { label: 'Pay Now', value: 0 },
-            { label: 'Pay Acount', value: 1 },
+            { label: 'Pay Account', value: 1 },
             { label: 'Pay Invoice', value: 2 },
             { label: 'Part Payment', value: 3 },
         ];
@@ -546,7 +562,8 @@ class CreateOrder extends React.Component {
                                             </View>
                                             <View style={[{}, styles.orderDetailAmmountRow]}>
                                                 <View style={[{}, styles.orderDetailAmmountColumn]}>
-                                                    <Text style={[{}, styles.orderDetailAmmountColumnGaryBolText]}>N{item.price}</Text>
+                                                    <Text style={[{}, styles.orderDetailAmmountColumnGaryBolText]}>
+                                                        {this.props.currency.currency + " " + item.price}</Text>
                                                 </View>
                                                 <View style={[{}, styles.orderDetailAmmountColumn]}>
                                                     <TouchableOpacity
@@ -567,10 +584,14 @@ class CreateOrder extends React.Component {
                                 onPress={() => this.DeliveryType('delivery')}
 
                             >
-                                <View style={[{ borderWidth: 0.25, backgroundColor: this.state.deliveryType === 'delivery' ? '#FFF4F4' : '#fff', }, styles.radioFormView]}>
+                                <View style={[{
+                                    borderWidth: 0.25, backgroundColor: this.state.deliveryType === 'delivery'
+                                        && this.props.deliveryAddress.address != ''
+                                        ? '#FFF4F4' : '#fff',
+                                }, styles.radioFormView]}>
 
                                     <RadioForm
-                                        isSelected={!this.state.is_pickup}
+                                        // isSelected={this.state.delivery_type_option == 'delivery'}
                                         color={'yellow'}
                                         size={5}
                                         buttonColor={'green'}
@@ -587,11 +608,11 @@ class CreateOrder extends React.Component {
                                                     obj={obj}
                                                     index={i}
                                                     null
-                                                    isSelected={!this.state.is_pickup}
+                                                    isSelected={this.state.delivery_type_option == 'delivery' && this.props.deliveryAddress.address != ''}
                                                     onPress={() => this.DeliveryType('delivery')}
                                                     borderWidth={1}
                                                     buttonInnerColor={'#e74c3c'}
-                                                    buttonOuterColor={this.state.value3Index === i ? '#2196f3' : '#000'}
+                                                    buttonOuterColor={this.state.value3Index === i && this.props.deliveryAddress.address != '' ? '#2196f3' : '#000'}
                                                     buttonSize={10}
                                                     buttonOuterSize={20}
                                                     buttonStyle={{}}
@@ -610,7 +631,8 @@ class CreateOrder extends React.Component {
                                     }
                                     {/* <Text style={[{}, styles.smailGrayText]}>{this.props.deliveryAddress.address ?? 'Dilivery to customer address'}</Text> */}
                                     <Text style={[{}, styles.smailGrayText]}>
-                                        {this.props.deliveryAddress.address ?? 'Delivery to customer address'}
+                                        {this.state.delivery_type_option == 'delivery' && this.props.deliveryAddress.address != ''
+                                            ? this.props.deliveryAddress.address : 'Delivery to customer address'}
                                     </Text>
                                 </View>
                             </TouchableOpacity>
@@ -619,7 +641,7 @@ class CreateOrder extends React.Component {
                             >
                                 <View style={[{ borderWidth: 0.25, backgroundColor: this.state.deliveryType === 'pickup' ? '#FFF4F4' : '#fff', }, styles.radioFormView]}>
                                     <RadioForm
-                                        isSelected={this.state.is_pickup}
+                                        isSelected={this.state.delivery_type_option == 'pickup'}
                                         color={'yellow'}
                                         // radio_props={radio_props_payment}
                                         size={5}
@@ -636,7 +658,7 @@ class CreateOrder extends React.Component {
                                                 <RadioButtonInput
                                                     obj={obj}
                                                     index={i}
-                                                    isSelected={this.state.is_pickup}
+                                                    isSelected={this.state.delivery_type_option == 'pickup'}
                                                     onPress={() => this.DeliveryType('pickup')}
                                                     borderWidth={1}
                                                     buttonInnerColor={'#e74c3c'}
@@ -676,8 +698,8 @@ class CreateOrder extends React.Component {
                                     buttonOuterSize={20}
                                     initial={0}
                                     style={{}}
-                                    onPress={(value) => { this.setState({ value3Index: value }) }}
-                                    onPress={() => this.DeliveryType('delivery')}
+                                    onPress={(value) => { this.setState({ value3IndexPayment: value }) }}
+                                    // onPress={() => this.DeliveryType('delivery')}
                                 />
                                 {
                                     radio_props_payment.map((obj, i) => (
@@ -689,11 +711,11 @@ class CreateOrder extends React.Component {
                                                 index={i}
 
                                                 style={{ backgroundColor: 'red' }}
-                                                isSelected={this.state.value3Index === i}
+                                                isSelected={this.state.value3IndexPayment === i}
                                                 onPress={(value, label) => this.paymentFun(obj)}
                                                 borderWidth={1}
                                                 buttonInnerColor={'#e74c3c'}
-                                                buttonOuterColor={this.state.value3Index === i ? '#2196f3' : '#000'}
+                                                buttonOuterColor={this.state.value3IndexPayment === i ? '#2196f3' : '#000'}
                                                 buttonSize={10}
                                                 buttonOuterSize={20}
                                                 buttonStyle={{}}
@@ -731,20 +753,26 @@ class CreateOrder extends React.Component {
 
                                 <View style={[{}, styles.subTotleColumn1View]}>
                                     <Text style={[{}, styles.subTotleColumn1Text]}>Subtotal:</Text>
-                                    <Text style={[{}, styles.subTotleColumn1Text]}>Tax(7.5%)</Text>
+                                    {this.state.cart_detail.vat_percent == 0 ? null :
+                                        <Text style={[{}, styles.subTotleColumn1Text]}>Tax{this.state.cart_detail.vat_percent}%)</Text>
+                                    }
+
                                     <Text style={[{}, styles.subTotleColumn1Text]}>TOTAL:</Text>
 
                                 </View>
                                 <View style={[{}, styles.subTotleColumn2View]}>
-                                    <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.total_price ?? 0}</Text>
-                                    <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.tax ?? 0}</Text>
+                                    <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.total_price ?? 0}</Text>
+                                    {this.state.cart_detail.vat_percent == 0 ? null :
+                                        <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.tax ?? 0}</Text>}
                                     {(this.props.orderDiscountReducer.discount_type == 'percentage') ?
 
-                                        <Text style={[{}, styles.subTotleColumn2Text]}>N {(this.state.cart_detail.total_price_with_tax - (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01)).toFixed(2) ?? 0}</Text>
+                                        <Text style={[{}, styles.subTotleColumn2Text]}>{(this.props.currency.currency + " " + (this.state.cart_detail.total_price_with_tax - (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01)).toFixed(2)) ?? 0}</Text>
                                         :
                                         (this.props.orderDiscountReducer.discount_type == 'value') ?
-                                            <Text style={[{}, styles.subTotleColumn2Text]}>N {(this.state.cart_detail.total_price_with_tax - (this.props.orderDiscountReducer.discount_amount)).toFixed(2) ?? 0}</Text>
-                                            : <Text style={[{}, styles.subTotleColumn2Text]}>N {this.state.cart_detail.total_price_with_tax ?? 0}</Text>
+                                            <Text style={[{}, styles.subTotleColumn2Text]}>{(this.props.currency.currency + " " + (
+                                                // (this.state.cart_detail.total_price - this.props.orderDiscountReducer.discount_amount)+
+                                                ((this.state.cart_detail.total_price_with_tax - this.props.orderDiscountReducer.discount_amount))).toFixed(2)) ?? 0}</Text>
+                                            : <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.total_price_with_tax ?? 0}</Text>
                                     }
 
 
@@ -753,7 +781,10 @@ class CreateOrder extends React.Component {
                             <View style={{ flexDirection: 'row', width: width - 50, alignSelf: 'center', marginVertical: 10 }}>
                                 <TouchableOpacity
                                     style={{ flex: 1, justifyContent: 'center', }}
-                                    onPress={() => this.props.navigation.navigate('ApplyDiscount',{total_price:this.state.cart_detail.total_price})}
+                                    onPress={() => this.props.navigation.navigate('ApplyDiscount', {
+                                        total_price: this.state.cart_detail.total_price,
+                                        discount_amount: this.props.orderDiscountReducer.discount_amount
+                                    })}
                                 >
                                     <View style={{ flexDirection: 'row' }}>
                                         <Image source={require('../images/icon15.png')}
@@ -777,9 +808,7 @@ class CreateOrder extends React.Component {
                                 style={[{}, styles.btnContinuueView]}>
                                 <Text style={{ color: '#FFFFFF' }}>{this.state.pay_button_lable}</Text>
                             </TouchableOpacity>
-
                         </View>
-
                     </View>
                 </ScrollView>
                 <Modal
@@ -857,37 +886,37 @@ class CreateOrder extends React.Component {
 
                 </Modal>
                 <Modal
-                visible={this.state.ConfirmationPayInvoice}
+                    visible={this.state.ConfirmationPayInvoice}
                 >
-                 <View
-                 style={{alignSelf:'center',backgroundColor:'#fff',width:width-50,justifyContent:'center',alignItems:'center',paddingVertical:20,borderRadius:10,flexDirection:'column'}}
-                 >
-                    <View style={{flexDirection:'row',marginBottom:30}}>
-                    <Text style={{color:'#B1272C',fontWeight:'bold',fontSize:20}}>Generate CICOD Order</Text>    
-                    </View> 
-                   <View style={{flexDirection:'row'}}>
-                       <View 
-                       style={{flex:1,justifyContent:'center',alignItems:'center'}}
-                       >
-                         <TouchableOpacity
-                         style={{backgroundColor:'#fff',paddingVertical:15,padding:30,borderRadius:100,borderWidth:1,borderColor:'#B1272C'}}
-                         onPress={()=>{this.setState({ConfirmationPayInvoice:false})}}
-                         >
-                           <Text style={{color:'#B1272C',paddingHorizontal:10}}>Cancel</Text>
-                       </TouchableOpacity>
-                       </View>
-                       <View 
-                       style={{flex:1,justifyContent:'center',alignItems:'center',}}
-                       >
-                         <TouchableOpacity
-                         style={{backgroundColor:'#B1272C',paddingVertical:15,padding:40,borderRadius:100}}
-                         onPress={()=>this.createOrderFun()}
-                         >
-                           <Text style={{color:'#fff',}}>Confirm</Text>
-                       </TouchableOpacity>
-                       </View>
-                   </View>
-                 </View>
+                    <View
+                        style={{ alignSelf: 'center', backgroundColor: '#fff', width: width - 50, justifyContent: 'center', alignItems: 'center', paddingVertical: 20, borderRadius: 10, flexDirection: 'column' }}
+                    >
+                        <View style={{ flexDirection: 'row', marginBottom: 30 }}>
+                            <Text style={{ color: '#B1272C', fontWeight: 'bold', fontSize: 20 }}>Generate CICOD Order</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <View
+                                style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+                            >
+                                <TouchableOpacity
+                                    style={{ backgroundColor: '#fff', paddingVertical: 15, padding: 30, borderRadius: 100, borderWidth: 1, borderColor: '#B1272C' }}
+                                    onPress={() => { this.setState({ ConfirmationPayInvoice: false }) }}
+                                >
+                                    <Text style={{ color: '#B1272C', paddingHorizontal: 10 }}>Cancel</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View
+                                style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}
+                            >
+                                <TouchableOpacity
+                                    style={{ backgroundColor: '#B1272C', paddingVertical: 15, padding: 40, borderRadius: 100 }}
+                                    onPress={() => this.createOrderFun()}
+                                >
+                                    <Text style={{ color: '#fff', }}>Confirm</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
                 </Modal>
             </View>
 
@@ -903,6 +932,7 @@ function mapStateToProps(state) {
         deliveryAddress: state.deliveryAddressReducer,
         orderDiscountReducer: state.orderDiscountReducer,
         supplier: state.supplierReducer,
+        currency: state.currencyReducer,
     }
 };
 function mapDispatchToProps(dispatch) {

@@ -32,6 +32,7 @@ export const Constants = {
   decline_request: `${base_url}/value-chain/reject`,
   ussd_codes: `${base_url}/ussd-codes`,
   reset_password: `${auth_url}/sso/auth/forgot_password`,
+  currency: `${base_url}/currency`,
 
 };
 

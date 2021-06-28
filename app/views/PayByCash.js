@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
-import { Text, TextInput, Alert } from 'react-native-paper';
+import { View, ImageBackground, ScrollView, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity,Alert } from 'react-native'
+import { Text, TextInput } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/PayByCashCss';
 import fontStyles from '../css/FontCss'
@@ -21,7 +21,8 @@ class PayByCash extends React.Component {
             payment_link: null,
             order_id:0,
             amount_returned:'0',
-            amount:0
+            amount:0,
+            cashCollected:''
         }
     }
     get_order_detail() {
@@ -43,14 +44,18 @@ class PayByCash extends React.Component {
             .then(response => response.json())
             .then(async responseJson => {
                 console.log("order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
-                if (responseJson.status.toUpperCase() === "SUCCESS") {
+                if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else if (responseJson.status.toUpperCase() === "SUCCESS") {
                     let data = responseJson.data;
                     this.setState({
                         spinner: false,
                         order_detail: data,
                         order_id:order_id
                     })
-                } else {
+                }               
+                else {
                     this.setState({ spinner: false })
                     let message = responseJson.message
                     console.log('some error',responseJson)
@@ -62,26 +67,56 @@ class PayByCash extends React.Component {
                 // Alert.alert(error.message);
             });
     }
-    amountRecieved(recieved,actual){        
-        console.log('what',recieved)
-        console.log('whatactual',actual)
-        console.log('amount_returned',(recieved-actual))
-        this.setState({cashCollected:recieved,
-            amount_returned:(recieved-actual)+''
-            
-        })
-
+    
+    unauthorizedLogout() {
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
     }
-    getChange(){
-        return this.state.amount_returned;        
+    async amountRecieved(recieved,actual){   
+       
+        let amount_returned = recieved-actual;
+        console.log('recieved',recieved);
+        if(recieved == '' || 
+            recieved.split(".").length > 2 ||
+            recieved.includes(",")||recieved.includes("-")||recieved.includes(" ")||recieved.includes("..")){
+                recieved=''
+                amount_returned=''
+        }
+       
+        await this.setState({
+            cashCollected:recieved,
+            amount_returned:amount_returned+''
+        })
     }    
 
+    getChange(){
+        if(this.state.amount_returned=='NaN'){
+            this.setState({
+                amount_returned:'0'
+            })
+            return '0';
+        }
+        if(this.state.amount_returned < 0){
+            return '0';
+        }
+        return this.state.amount_returned;        
+    }
+
     press_done() {
-        // let payment_link = this.state.payment_link;
+        let order = this.state.order_detail
+        let cashCollected = parseFloat(this.state.cashCollected)
+        console.log('cashCollected) < 0 ',cashCollected <  order.amount)
+        console.log('this.getChange() == \'\'',this.getChange() == '')
+        console.log('cashCollected == \'\'',cashCollected)
+        if(this.state.cashCollected == '' || cashCollected <  order.amount){
+            Alert.alert('Alert','Insufficient Cash Collection')
+            return;
+        }
         console.log('param',this.props.route.params.payment_link);
         if (this.props.route.params.payment_link == null) {
             Alert.alert('payment error','Payment link not found')
-        }
+        } 
         else {
             this.props.navigation.navigate('PaymentWeb', { payment_link: this.props.route.params.payment_link });
         }
@@ -101,24 +136,25 @@ class PayByCash extends React.Component {
                         <View style={[{}, styles.contentContainer]}>
                             <Image source={require('../images/payByCash.png')} />
                             <Text style={[{}, styles.collectText]}>Collect the sum of</Text>
-                            <Text style={[{}, styles.payText]}>N{order.amount}</Text>
+                            <Text style={[{}, styles.payText]}>{_that.props.currency.currency+" "+order.amount}</Text>
                             <Text style={[{}, styles.cashText]}>in cash</Text>
                         </View>
                         <View style={[{}, styles.inputContainer]}>
                             <View style={[{}, styles.inputView]}>
                                 <TextInput
-                                    label="Cash Collected (N)"
+                                    label={"Cash Collected ("+_that.props.currency.currency+")"}
                                     style={{ backgroundColor: 'transparent', }}
                                     width={width - 50}
                                     alignSelf={'center'}
                                     color={'#000'}
                                     keyboardType={'numeric'}
                                     onChangeText={(recieved)=>_that.amountRecieved(recieved,order.amount)}
+                                    value={_that.state.cashCollected}
                                 />
                             </View>
                             <View style={[{}, styles.inputView]}>
                                 <TextInput
-                                    label="Change (N)"
+                                    label={"Change ("+_that.props.currency.currency+")"}
                                     style={{ backgroundColor: 'transparent', }}
                                     width={width - 50}
                                     alignSelf={'center'}
@@ -168,6 +204,7 @@ function mapStateToProps(state) {
         deliveryAddress: state.deliveryAddressReducer,
         orderDiscountReducer: state.orderDiscountReducer,
         supplier: state.supplierReducer,
+        currency: state.currencyReducer,
     }
 };
 function mapDispatchToProps(dispatch) {

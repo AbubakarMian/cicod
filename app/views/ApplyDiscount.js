@@ -9,7 +9,7 @@ import Header from '../views/Header';
 import CheckBox from 'react-native-check-box';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import SearchBar from 'react-native-search-bar';
-import { SET_DISCOUNT } from '../redux/constants';
+import { SET_DISCOUNT,UPDATE_CART } from '../redux/constants';
 import { connect } from 'react-redux';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
@@ -19,68 +19,80 @@ class ApplyDiscount extends React.Component {
         this.state = {
             value3Index: this.props.orderDiscountReducer.discount_type != 'percentage' ? 1 : 0,
             isChecked: false,
-            // discount_percent: '',
-            discount_amount: 0,
+            discount_amount: '',
         }
     }
 
-    setDiscount() {
-
+    apply(){
         if (this.state.discount_amount == '') {
             Alert.alert('INFO', 'Discount Amount is Required .');
-
+            return;
         }
-        else {
+        this.props.navigation.goBack();
+    }
+
+    setDiscount(discount_amount) {        
             let discount_type = '';
+            if(discount_amount == 'NaN'){
+                discount_amount ='0';
+            }
+            discount_amount = parseFloat(discount_amount)
             if (this.state.value3Index == 0) {
                 discount_type = 'percentage';
                 this.props.setDiscount({
-                    discount_amount: this.state.discount_amount,
+                    discount_amount: discount_amount,
                     discount_type: discount_type
                 })
             }
             else {
                 discount_type = 'value';
                 this.props.setDiscount({
-                    discount_amount: this.state.discount_amount,
+                    discount_amount: discount_amount,
                     discount_type: discount_type
                 })
             }
-            this.props.navigation.goBack();
-
-        }
+            this.setState({ discount_amount: discount_amount })
     }
 
     radioBtnFun(index, lable) {
-        console.log(' lable @@@@@@@@@@', lable);
         this.setState({ value3Index: index })
 
     }
 
-    setDiscountAmount(amount){
-        amount = parseFloat(amount);
-        if(isNaN(amount)){
-            console.log('not a number');
-            return;
+    setDiscountAmount(amount){  
+        if( amount == '' || 
+            amount.split(".").length > 2 || amount.includes(",")||amount.includes("-")||amount.includes(" ")||amount.includes("..")){
+            console.log('amount if ',amount)
+          
+            amount = '0';
+            this.setDiscount('0');
+            // return;
         }
-        
+        // amount = parseFloat(amount);
         if(this.state.value3Index == 0){
             console.log('percentage');
-            if(amount < 99){
-                this.setState({ discount_amount: amount })
+            if(amount < 100){
+                this.setDiscount(amount);
                 return;
             }
         }
-        else{console.log('value',this.props.route.params.total_price);
-            let total_amount = parseFloat(this.props.route.params.total_price);
-            if(total_amount >= amount){
-                console.log('true',total_amount)
-                this.setState({ discount_amount: amount })
+        else{
+            let total_amount = this.props.route.params.total_price;
+            console.log('amount ',amount)
+            if(total_amount > amount){
+                console.log('if amount ',amount)                
+                this.setDiscount(amount);
                 return;
             }
         }
-       
-        this.setState({ discount_amount: ''})
+        this.setDiscount('0');
+        // this.setState({
+        //     discount_amount : ''
+        // })
+    }
+    changeDiscountType(index){
+        this.setDiscountAmount('0')
+        this.setState({ value3Index: index })
     }
     render() {
 
@@ -89,6 +101,11 @@ class ApplyDiscount extends React.Component {
             { label: 'Value', value: 1 },
 
         ];
+        if(this.props.route.params.discount_amount != '' && this.state.discount_amount == ''){
+            this.setState({
+                discount_amount:parseFloat(this.props.route.params.discount_amount)})
+        }
+        console.log(this.props.orderDiscountReducer.discount_amount)
  
         return (
             <View style={[{}, styles.mainView]}>
@@ -125,7 +142,7 @@ class ApplyDiscount extends React.Component {
                                             obj={obj}
                                             index={i}
                                             isSelected={this.state.value3Index === i}
-                                            onPress={(index) => this.setState({ value3Index: index })}
+                                            onPress={(index) => this.changeDiscountType(index)}
                                             //   onPress={()=>console.log('button input')}
                                             borderWidth={2}
                                             buttonInnerColor={'#e74c3c'}
@@ -139,7 +156,7 @@ class ApplyDiscount extends React.Component {
                                             obj={obj}
                                             index={i}
                                             labelHorizontal={true}
-                                            onPress={(index) => this.setState({ value3Index: index })}
+                                            onPress={(index) => this.changeDiscountType(index)}
                                             labelStyle={{ fontSize: 20, color: '#000', paddingVertical: 10 }}
                                             labelWrapStyle={{ marginRight: 10 }}
                                             value={this.props.orderDiscountReducer.discount_amount}
@@ -160,12 +177,12 @@ class ApplyDiscount extends React.Component {
                             color={'#000'}
                             keyboardType='numeric'
                             onChangeText={text => this.setDiscountAmount(text)}
-                            value={this.state.discount_amount}
+                            value={this.props.orderDiscountReducer.discount_amount+""}
                         />
                     </View>
                 </View>
                 <TouchableOpacity
-                    onPress={() => this.setDiscount()}
+                    onPress={() => this.apply()}
                     style={[{}, styles.btnView]}
                 >
                     <Text style={{ color: '#fff' }}>Apply</Text>
@@ -185,6 +202,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         setDiscount: (value) => dispatch({ type: SET_DISCOUNT, value: value }),
+        cartReducer: () => dispatch({ type: UPDATE_CART}),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ApplyDiscount)

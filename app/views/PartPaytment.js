@@ -33,7 +33,8 @@ class PartPaytment extends React.Component {
             payment_option_selected :'fixed_amount',
             selected_date:'DD-MM-YYY',
             part_payment_balance_due_date:0,
-            part_amount_request:0
+            part_amount_request:0,
+            order:null
         }
     }
     
@@ -49,9 +50,6 @@ class PartPaytment extends React.Component {
 
         let order_id = this.props.route.params.data.id;
         let url = Constants.orderslist + '/' + order_id
-        console.log('---- body params list @@@@@@!!!!!!!!!!!!!!', this.props.route.params);
-        console.log('order url detail ', url);
-        console.log('order postData ', postData);
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
@@ -76,15 +74,20 @@ class PartPaytment extends React.Component {
             });
     }
 
-    pay_now(){       
+    async pay_now(){       
 
         if(!this.required_fields_check()){
             return;
         }
+        if(this.state.order == null){
+            await this.create_order();            
+        }
+        let order = await this.state.order
         let bodyOrder = this.get_body_order();
         this.props.navigation.navigate('MakePayment', { bodyOrder: bodyOrder,
             payment_mode: this.state.payment_mode ,
             amount_payable: bodyOrder.part_payment_amount,
+            data:order
         });
     }
 
@@ -124,11 +127,18 @@ class PartPaytment extends React.Component {
         }
         return true;
     }
+    resendInvoice(){
+
+    }
+
     create_order(){
 
         if(!this.required_fields_check()){
             return;
         }
+        // if(order!=null){
+        //     this.resendInvoice();
+        // }
         let bodyOrder = this.get_body_order();
         
         
@@ -152,16 +162,24 @@ class PartPaytment extends React.Component {
                 if (responseJson.status === "success") {
 
                     this.setState({ spinner: false })
+                    // alert(responseJson.message)
                     alert(responseJson.message)
                     let payment_link = responseJson.data.payment_link
+                        this.setState({
+                            order:responseJson.data
+                        })
                     
-                        this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
+                        // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
                     
                     
-                } else {
+                }                
+                else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                } 
+                else {
                     this.setState({ spinner: false })
                     let message = responseJson.message
-                    alert(message)
+                    console.log('obj',responseJson)
                 }
             }
             )
@@ -170,20 +188,38 @@ class PartPaytment extends React.Component {
                 // Alert.alert(error.message);
             });
     }
+    
+    unauthorizedLogout() {
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
+    }
 
     onSelectPaymentType(item){
-        console.log('payment option selected ',item.value)
         this.setState({
             payment_option_selected:item.value
         })
-        this.get_payable_amount(0)
+        this.get_payable_amount('0')
     }
-    get_payable_amount(amount_to_pay_now){//part_amount_request
-        
+    get_payable_amount(amount_to_pay_now){//part_amount_request        
         let part_amount_request = this.state.part_amount_request
-        console.log('1111111111111111',this.state.amount_to_pay_now)
+        if(amount_to_pay_now == ''){
+            amount_to_pay_now = '0';
+        }
+        
+        if( amount_to_pay_now.split(".").length > 2 || 
+            amount_to_pay_now.includes(",") ||
+            amount_to_pay_now.includes("-") ||
+            amount_to_pay_now.includes(" ") ||
+            amount_to_pay_now.includes("..")){
+            // part_amount_request = 0
+            this.get_payable_amount(part_amount_request)
+            return;
+        }
         let total_amount = this.state.total_amount
         let balance_amount = 0
+        console.log('amount_to_pay_now',amount_to_pay_now)
+        console.log('total_amount',total_amount)
         if(amount_to_pay_now >= total_amount && this.state.payment_option_selected =='fixed_amount'){
             amount_to_pay_now = part_amount_request;
         }
@@ -199,7 +235,7 @@ class PartPaytment extends React.Component {
             // amount_to_pay_now = this.state.amount_to_pay_now
             amount_to_pay_now =  amount_to_pay_now * total_amount *0.01;
             balance_amount = total_amount - amount_to_pay_now
-            part_payment_percent = total_amount
+            // part_payment_percent = total_amount
         }
             this.setState({
                 amount_to_pay_now:amount_to_pay_now,
@@ -229,12 +265,14 @@ class PartPaytment extends React.Component {
             calenderModal:false,
             selected_date: sendDate,
         })
-        console.log('timestamp ',timestamp);
+        // console.log('timestamp ',timestamp);
       }
 
     pay(_that) {
        _that = _that._that;
        let params = _that.props.route.params;
+       console.log('params',params)
+
        
        return (
         <View style={[{ position: 'relative' }, styles.mainView]}>
@@ -260,7 +298,7 @@ class PartPaytment extends React.Component {
             <View style={[{paddingHorizontal:10},styles.balanceHeadingView]}>
                 <Text style={[{color:'#929497',alignSelf:'center'},fontStyles.normal15]}>TOTAL AMOUNT</Text>
                 <View style={[{backgroundColor:'#DAF8EC'},styles.balanceView]}>
-                  <Text style={[{color:'#4E4D4D'},fontStyles.bold25]}>N{params.amount_payable}</Text>
+                  <Text style={[{color:'#4E4D4D'},fontStyles.bold25]}>{_that.props.currency.currency+" "+params.amount_payable.toFixed(2)}</Text>
                 </View>
                 <Text style={[{color:'#929497',fontSize:8}]}>Type of payment</Text>
                 <DropDownPicker
@@ -294,11 +332,11 @@ class PartPaytment extends React.Component {
                     />
                     <Text style={[{color:'#929497',alignSelf:'center',marginTop:20},fontStyles.normal15]}>Amount to pay now</Text>
                     <View style={[{backgroundColor:'#FFF4F4'},styles.balanceView]}>
-                  <Text style={[{color:'#4E4D4D'},fontStyles.bold25]}>N{_that.state.amount_to_pay_now}</Text>
+                  <Text style={[{color:'#4E4D4D'},fontStyles.bold25]}>{_that.props.currency.currency+" "+parseFloat(_that.state.amount_to_pay_now).toFixed(2)}</Text>
                 </View>
                 <View style={[{flexDirection:'row',marginTop:20,alignSelf:'center'}]}>
                 <Text style={[{color:'#B1272C'},fontStyles.normal15]}>Balance amount of </Text>
-                <Text style={[{color:'#B1272C'},fontStyles.bold15]}>N{_that.state.balance_amount} </Text>
+                <Text style={[{color:'#B1272C'},fontStyles.bold15]}>{_that.props.currency.currency+" "+parseFloat(_that.state.balance_amount).toFixed(2)} </Text>
                 <Text style={[{color:'#B1272C'},fontStyles.normal15]}>is due</Text>
             </View>
             <TouchableOpacity
@@ -342,6 +380,8 @@ class PartPaytment extends React.Component {
             isVisible={_that.state.calenderModal}
             mode="date"
             date={new Date()}
+            minimumDate={new Date()}
+            // maximumDate
             onConfirm={(date)=>_that.setDate(date)}
             onCancel={() => _that.setState({ calenderModal: false })}
         />
@@ -377,7 +417,8 @@ class PartPaytment extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        user: state.userReducer
+        user: state.userReducer,
+        currency: state.currencyReducer,
     }
 };
 function mapDispatchToProps(dispatch) {
