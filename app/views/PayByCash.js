@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
-import { Text, TextInput, Alert } from 'react-native-paper';
+import { View, ImageBackground, ScrollView, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity,Alert } from 'react-native'
+import { Text, TextInput } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/PayByCashCss';
 import fontStyles from '../css/FontCss'
@@ -73,18 +73,20 @@ class PayByCash extends React.Component {
         this.props.logoutUser();
         this.props.navigation.navigate('Login');
     }
-    amountRecieved(recieved,actual){   
+    async amountRecieved(recieved,actual){   
+       
+        let amount_returned = recieved-actual;
+        console.log('recieved',recieved);
         if(recieved == '' || 
             recieved.split(".").length > 2 ||
             recieved.includes(",")||recieved.includes("-")||recieved.includes(" ")||recieved.includes("..")){
-            this.setState({
-                cashCollected : ''
-            })
-            return;
+                recieved=''
+                amount_returned=''
         }
-
-        this.setState({cashCollected:recieved,
-            amount_returned:(recieved-actual)+''            
+       
+        await this.setState({
+            cashCollected:recieved,
+            amount_returned:amount_returned+''
         })
     }    
 
@@ -95,15 +97,26 @@ class PayByCash extends React.Component {
             })
             return '0';
         }
+        if(this.state.amount_returned < 0){
+            return '0';
+        }
         return this.state.amount_returned;        
     }
 
     press_done() {
-        // let payment_link = this.state.payment_link;
+        let order = this.state.order_detail
+        let cashCollected = parseFloat(this.state.cashCollected)
+        console.log('cashCollected) < 0 ',cashCollected <  order.amount)
+        console.log('this.getChange() == \'\'',this.getChange() == '')
+        console.log('cashCollected == \'\'',cashCollected)
+        if(this.state.cashCollected == '' || cashCollected <  order.amount){
+            Alert.alert('Alert','Insufficient Cash Collection')
+            return;
+        }
         console.log('param',this.props.route.params.payment_link);
         if (this.props.route.params.payment_link == null) {
             Alert.alert('payment error','Payment link not found')
-        }
+        } 
         else {
             this.props.navigation.navigate('PaymentWeb', { payment_link: this.props.route.params.payment_link });
         }

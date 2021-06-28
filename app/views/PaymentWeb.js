@@ -11,10 +11,10 @@ import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 var { width, height } = Dimensions.get('window');
 
 class PaymentWeb extends React.Component {
+    _isMounted = true;
     constructor(props) {
         super(props);
         this.state = {
-            wait: true,
             order_id:0,
             timer:3,
             order:null
@@ -22,28 +22,27 @@ class PaymentWeb extends React.Component {
     }
 
      async check() {
-         while(wait){
-            console.log('timer while',this.state.order)
+         while(this._isMounted){
             this.get_order_detail();
+            console.log('timer while',this.state.order)
             let a = await this.performTimeConsumingTask(); 
+             if(this.state.order != null){               
                 console.log('this.state.order.payment_status',this.state.order.payment_status);
-                if(this.state.order.payment_status!= 'PENDING'){
-                    this.setState({
-                        wait:false
-                    })
-                    this.props.navigation.navigate('Order');
+                if(this.state.order.payment_status != 'PENDING'){
+                    this._isMounted = false;
+                    // this.props.navigation.navigate('Order');
+                    this.props.navigation.navigate('OrderDetail', { id:this.state.order_id })
                     break;
                 }
-                if(this.timer > 300){
-                    this.setState({
-                        wait:false
-                    })
-                }
+             }
+             if(this.timer > 300){
+                this._isMounted = false;
+            }
             let t = this.state.timer + 3
             this.setState({
                 timer:t
-            })
-         }         
+            })            
+         }       
          return;
       }
       
@@ -54,8 +53,7 @@ class PaymentWeb extends React.Component {
         resolve('result');
       }, time),
     );
-  };
-    
+  };    
     
      async get_order_detail() { 
         let order_id = this.props.route.params.data.id;
@@ -100,6 +98,10 @@ class PaymentWeb extends React.Component {
                 console.log("Api call error", error);
                 // Alert.alert(error.message);
             });
+    }
+    async componentWillUnmount(){
+        this._isMounted = false;
+        console.log('componentWillUnmount')
     }
 
     render() {
