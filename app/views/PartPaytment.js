@@ -213,15 +213,21 @@ class PartPaytment extends React.Component {
         var month = date.getUTCMonth() + 1; //months from 1-12     
         console.log('month ',month);   
         var day = date.getUTCDate();
-        var year = date.getUTCFullYear();    
+        var year = date.getUTCFullYear();
+        if(month < 10){
+            month = "0"+month;
+        }   
+        if(day < 10){
+            day = "0"+day;
+        }   
         let newdate = day + "/" + month + "/" + year;
-        let sendDate = year + "/" + month + "/" + day;
-        var timestamp = Date.parse(new Date(sendDate));   
-        console.log(sendDate + " is: " + timestamp);
+        let sendDate = year + "-" + month + "-" + day;
+        // var timestamp = Date.parse(new Date(sendDate));   
+        // console.log(sendDate + " is: " + timestamp);
         this.setState({
-            part_payment_balance_due_date:timestamp,
+            part_payment_balance_due_date:sendDate,
             calenderModal:false,
-            selected_date: newdate,
+            selected_date: sendDate,
         })
         console.log('timestamp ',timestamp);
       }

@@ -1,4 +1,4 @@
-import { SET_SUPPLIER } from '../constants';
+import { RESET, SET_SUPPLIER } from '../constants';
 const initialState = {
     id: 0,
     name: '',
@@ -16,6 +16,12 @@ const initialState = {
             }
 
             break;
+        case RESET:
+            return {
+            ...state,
+            id: 0,
+            name: '',
+        }
 
         default:
             return state;

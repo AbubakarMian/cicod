@@ -30,7 +30,8 @@ class Buyers extends React.Component {
             data: [],
             search_buyers: '',
             reload: true,
-            url_buyers: ''
+            url_buyers: '',
+            refreshlist:false
 
         }
     }
@@ -79,38 +80,6 @@ class Buyers extends React.Component {
             })
     }
 
-    // componentDidUpdate() {
-
-    //     console.log('componentDidUpdate  !!!!!!!!!!!!!!!!', this.props.route.params)
-    //     console.log('this.state.reload @@@@@@@@@@@@@  !!!!!!!!!!!!!!!!', this.state.reload)
-
-    //     if (this.state.reload == true) {
-    //         if (this.props.route.params === undefined) {
-    //             console.log('IN If Condition !!!!!!!!!!!!!!!!!!!!!!!!')
-
-    //         } else {
-    //             console.log('IN Else Condition !!!!!!!!!!!!!!!!!!!!!!!!')
-
-    //             let filters = this.props.route.params.filters;
-    //             let filter = '?';
-    //             for (let i = 0; i < filters.length; i++) {
-    //                 filter = filter + filters[i].key + '=' + filters[i].value;
-    //                 if (i != filters.length - 1) {
-    //                     filter = filter + '&';
-    //                 }
-    //             }
-    //             console.log(' Constants.buyerlist + filter Constants.buyerlist + filter', Constants.buyerlist + filter)
-    //             this.setState({
-    //                 reload: false
-    //             })
-    //             this.buyerList(Constants.buyerlist + filter);
-    //         }
-    //     }
-    //     else {
-    //         console.log('IN reload  else Condition !!!!!!!!!!!!!!!!!!!!!!!!')
-    //     }
-    // }
-
     search() {
 
         let search_url = Constants.buyerlist + '?filter[buyer_name]=' + this.state.search_buyers;
@@ -158,7 +127,9 @@ class Buyers extends React.Component {
     }
 
     unsuspendBuyer(buyer_id) {
-        this.setState({ spinner: true })
+        this.setState({ spinner: true ,
+            refreshlist:true
+        })
         let postData = {
             method: 'GET',
             headers: {
@@ -193,7 +164,9 @@ class Buyers extends React.Component {
     }
 
     suspendAction(item) {
-
+        this.setState({
+            refreshlist:true
+        })
         if (item.is_active) {
             // suspend
             this.suspendBuyer(item.buyer_id);
@@ -204,7 +177,7 @@ class Buyers extends React.Component {
             this.unsuspendBuyer(item.buyer_id);
             this.buyerList(Constants.buyerlist);
         }
-        this.listBuyers(this)
+        // this.listBuyers(this)
     }
     listBuyers(props) {
         
@@ -225,10 +198,11 @@ class Buyers extends React.Component {
             }
             url = (Constants.buyerlist + filter);
         }
-        if (url != _that.state.url_buyers) {
+        if (url != _that.state.url_buyers || _that.state.refreshlist) {
             _that.buyerList(url);
             _that.setState({
-                url_buyers: url
+                url_buyers: url,
+                refreshlist:false
             })
         }
 

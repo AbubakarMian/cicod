@@ -19,11 +19,8 @@ const cartReducer = (state = initialState, action) => {
 
                 if (item.id == action.value.id && !product_found) {
                     let updated_purchased_quantity = cart[i].purchased_quantity + 1
-                    console.log('action.value.id action.value.id quantity', cart[i].purchased_quantity)
-                    console.log('item.id item.id', item.id)
                     cart[i].purchased_quantity = updated_purchased_quantity
                     product_found = true;
-                    console.log('upfates quantity', cart[i].purchased_quantity)
                     break;
                 }
             }
@@ -56,8 +53,6 @@ const cartReducer = (state = initialState, action) => {
             break;
 
         case REMOVE_PRODUCT_FORM_CART:
-            console.log('my value value ', action.value);
-
             cart = state.cart;
             i = 0;
             for (; i < cart.length; i++) {
@@ -84,16 +79,16 @@ export default cartReducer;
 
 function updateCart (){
     let cart= initialState.cart;
-    console.log('update cart ',cart);
     let total_price = 0;
     for(let i=0;i<cart.length;i++){
-        console.log('cart.purchased_quantity',cart[i].purchased_quantity);
-        console.log('cart.price',cart[i].price);
-        console.log('cart.purchased_quantity cart.price',(cart[i].purchased_quantity * cart[i].price));
         total_price = total_price + (cart[i].purchased_quantity * cart[i].price);
     }
-    console.log('00000000000000000000000',total_price);
+    total_price = parseFloat(total_price).toFixed(2);
+    let tax = parseFloat(total_price*0.075).toFixed(2);
     initialState.cart_detail.total_price = total_price;
-    initialState.cart_detail.tax = (total_price*0.75);
-    initialState.cart_detail.total_price_with_tax = (total_price+(total_price*0.075));
+    initialState.cart_detail.tax = tax;
+    initialState.cart_detail.total_price_with_tax = (parseFloat(total_price)+parseFloat(tax)).toFixed(2);
+    console.log('total_price',total_price)
+    console.log('tax',tax)
+    console.log('total_price+tax',(total_price+tax))
 }
