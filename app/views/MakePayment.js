@@ -85,6 +85,7 @@ componentDidMount(){
         this.props.logoutUser();
         this.props.navigation.navigate('Login');
     }
+    
     async makePaymentFun(payment_mode) {
         if(await this.state.spinner){
             return;
