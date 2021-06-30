@@ -31,7 +31,8 @@ class PaymentWeb extends React.Component {
                 if(this.state.order.payment_status != 'PENDING'){
                     this._isMounted = false;
                     // this.props.navigation.navigate('Order');
-                    this.props.navigation.navigate('OrderDetail', { id:this.state.order_id })
+                    // this.props.navigation.navigate('OrderDetail', { id:this.state.order_id })
+                    this.props.navigation.navigate('PaymentSuccess', { order:this.state.order})
                     break;
                 }
              }
