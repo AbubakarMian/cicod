@@ -23,7 +23,7 @@ class PaymentWeb extends React.Component {
 
      async check() {
          while(this._isMounted){
-            this.get_order_detail();
+            this.get_order_detail();//return;
             console.log('timer while',this.state.order)
             let a = await this.performTimeConsumingTask(); 
              if(this.state.order != null){               
@@ -32,7 +32,7 @@ class PaymentWeb extends React.Component {
                     this._isMounted = false;
                     // this.props.navigation.navigate('Order');
                     // this.props.navigation.navigate('OrderDetail', { id:this.state.order_id })
-                    this.props.navigation.navigate('PaymentSuccess', { order:this.state.order})
+                    this.props.navigation.navigate('PaymentSuccess', { data:this.state.order})
                     break;
                 }
              }
@@ -57,6 +57,8 @@ class PaymentWeb extends React.Component {
   };    
     
      async get_order_detail() { 
+        //  console.log(' webthis.props.route.params.data web',this.props.route.params)
+        //  return
         let order_id = this.props.route.params.data.id;
         if(this.state.order_id == order_id){
             return;

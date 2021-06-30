@@ -53,6 +53,7 @@ import BuyDiliveryAddress from './BuyDiliveryAddress';
 import CreateProductCategory from './CreateProductCategory';
 import More from '../views/More';
 import PartPaytment from './PartPaytment';
+import PaymentSuccess from './PaymentSuccess';
 const Stack = createStackNavigator();
 
 export default class AppNavigater extends React.Component {
@@ -125,6 +126,8 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="CreateProductCategory" component={CreateProductCategory} options={{ headerShown: false }} />
           <Stack.Screen name="More" component={More} options={{ headerShown: false }} />
           <Stack.Screen name="PartPaytment" component={PartPaytment} options={{ headerShown: false }} />
+          <Stack.Screen name="PaymentSuccess" component={PaymentSuccess} options={{ headerShown: false }} />
+          
           
         </Stack.Navigator>
       </NavigationContainer>

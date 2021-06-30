@@ -92,7 +92,7 @@ class Order extends React.Component {
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                // console.log("###############", responseJson)
+                console.log("**********************###############", responseJson)
                 if (responseJson.status === 'success') {
                     this.setState({ spinner: false });
                     this.setState({
@@ -260,72 +260,77 @@ class Order extends React.Component {
         }
         console.log('url hit', url);
         console.log(' will receive props !!!!!!!!!!!!!', _that.state.apply_filter);
-
-        return(
-            <FlatList
-                    data={_that.state.data}
-                    ItemSeparatorComponent={
-                        Platform.OS !== 'android' &&
-                        (({ highlighted }) => (
-                            <View
-                                style={[
-                                    style.separator,
-                                    highlighted && { marginLeft: 0 }
-                                ]}
-                            />
-                        ))
-                    }
-                    renderItem={({ item, index, separators }) => (
-                        <TouchableOpacity
-                            key={item.key}
-                            onPress={() => _that.itemDetail(item,item.order_status)}
-                            onShowUnderlay={separators.highlight}
-                            onHideUnderlay={separators.unhighlight}>
-                            <View style={{ position: 'relative', alignSelf: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginBottom: 5 }}>
-                                <View style={{ flex: 1 }}>
-                                    <View style={{ flexDirection: 'column' }}>
-                                        <View style={{ flexDirection: 'row' }}>
-                                            <Image
-                                                style={{ height: 30, width: 30, marginRight: 5 }}
-                                                source={require('../images/Order/bage.png')}
-                                            />
-                                            <View style={{ flexDirection: 'column' }}>
-                                                <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.cicod_order_id}</Text>
-                                                <Text style={[{ color: '#929497' }, fontStyles.normal12]}>{item.customer.name}</Text>
+     
+            return(
+                 
+                <FlatList
+                        data={_that.state.data}
+                        ItemSeparatorComponent={
+                            Platform.OS !== 'android' &&
+                            (({ highlighted }) => (
+                                <View
+                                    style={[
+                                        style.separator,
+                                        highlighted && { marginLeft: 0 }
+                                    ]}
+                                />
+                            ))
+                        }
+                        renderItem={({ item, index, separators }) => (
+                      
+                            <TouchableOpacity
+                                key={item.key}
+                                onPress={() => _that.itemDetail(item,item.order_status)}
+                                onShowUnderlay={separators.highlight}
+                                onHideUnderlay={separators.unhighlight}>
+                                <View style={{ position: 'relative', alignSelf: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginBottom: 5 }}>
+                                    <View style={{ flex: 1 }}>
+                                        <View style={{ flexDirection: 'column' }}>
+                                            <View style={{ flexDirection: 'row' }}>
+                                                <Image
+                                                    style={{ height: 30, width: 30, marginRight: 5 }}
+                                                    source={require('../images/Order/bage.png')}
+                                                />
+                                                <View style={{ flexDirection: 'column' }}>
+                                                    <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.cicod_order_id}</Text>
+                                                    <Text style={[{ color: '#929497' }, fontStyles.normal12]}>{item.customer.name}</Text>
+                                                </View>
                                             </View>
+                                            {
+    
+                                            }
+                                            <Text style={[{ color: '#929497', marginTop: 5 }, fontStyles.normal12]}>  {_that.timeConvertion(item.order_date)}</Text>
                                         </View>
-                                        {
-
-                                        }
-                                        <Text style={[{ color: '#929497', marginTop: 5 }, fontStyles.normal12]}>  {_that.timeConvertion(item.order_date)}</Text>
                                     </View>
-                                </View>
-                                <View style={{ flex: 1, alignItems: 'flex-end', flexDirection: 'column' }}>
-                                    <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>N{item.amount}</Text>
-
-                                    {(item.order_status == 'PENDING') ?
-                                        <Text style={[{ borderRadius: 50, paddingHorizontal: 5, textAlign: 'center', backgroundColor: '#FFF3DB', color: '#FDB72B', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
-                                            {item.order_status}
-                                        </Text>
-                                        : (item.order_status == 'PAID') ?
-                                            <Text style={[{ borderRadius: 50, paddingHorizontal: 5, textAlign: 'center', backgroundColor: '#DAF8EC', color: '#26C281', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
+                                    <View style={{ flex: 1, alignItems: 'flex-end', flexDirection: 'column' }}>
+                                        <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>N{item.amount}</Text>
+    
+                                        {(item.order_status == 'PENDING') ?
+                                            <Text style={[{ borderRadius: 50, paddingHorizontal: 5, textAlign: 'center', backgroundColor: '#FFF3DB', color: '#FDB72B', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
                                                 {item.order_status}
                                             </Text>
-                                            : (item.order_status == 'PART PAYMENT') ?
-                                                <Text style={[{ borderRadius: 50, paddingHorizontal: 5, textAlign: 'center', backgroundColor: '#E6E6E6', color: '#929497', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
+                                            : (item.order_status == 'PAID') ?
+                                                <Text style={[{ borderRadius: 50, paddingHorizontal: 5, textAlign: 'center', backgroundColor: '#DAF8EC', color: '#26C281', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
                                                     {item.order_status}
                                                 </Text>
-                                                : null}
+                                                : (item.order_status == 'PART PAYMENT') ?
+                                                    <Text style={[{ borderRadius: 50, paddingHorizontal: 5, textAlign: 'center', backgroundColor: '#E6E6E6', color: '#929497', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
+                                                        {item.order_status}
+                                                    </Text>
+                                                    : null}
+                                    </View>
                                 </View>
-                            </View>
-                        </TouchableOpacity>
-                    )}
-                />
-        )
-    }
+                            </TouchableOpacity>
+                        )}
+                    />
+            )
+        }
+        
+    
     render() {
         return (
-            <View style={{ width: width, position: 'relative', backgroundColor: '##F0F0F0', flex: 1 }}>
+            <View style={{ width: width,height:height, position: 'relative', backgroundColor: '##F0F0F0', flex: 1 }}>
+                <View style={{height:height/3.1}}>
                 <Header navigation={this.props.navigation} />
                 <Spinner
                     visible={this.state.spinner}
@@ -341,7 +346,7 @@ class Order extends React.Component {
                     onCancel={this.hideDatePicker}
                 />
 
-                <View style={{ flexDirection: 'row', alignContent: 'center', alignItems: 'center', width: width - 20, alignSelf: 'center' }}>
+                <View style={{  flexDirection: 'row', alignContent: 'center', alignItems: 'center', width: width - 20, alignSelf: 'center' }}>
                     <View>
                         <Text style={[{ color: '#2F2E7C', fontWeight: '700' }, fontStyles.normal15]}>ORDER</Text>
                     </View>
@@ -462,9 +467,18 @@ class Order extends React.Component {
 
                </ScrollView>
                     </View> 
+                    </View>
                 {/* <ScrollView  style={{ marginBottom: 200 }}> */}
-                <this.getOrderList _that={this}/>
-
+               
+               {this.state.data.length > 0 ? <this.getOrderList _that={this} /> 
+                    : 
+                    <View style={{ height:height/1.75, position: 'relative',flexDirection:'column', alignSelf: 'center',alignItems:'center',justifyContent:'center',  backgroundColor: '#F0F0F0', width: width - 20, padding: 10, borderRadius: 10, marginBottom: 5 }}>
+                        <Image
+                            source={require('../images/Untitled-1.png')}
+                        />
+                        <Text style={{color:'#929497',fontSize:20,fontWeight:'bold',fontFamily:'Open Sans'}}>No order found</Text>
+                    </View>            
+                }
                 {/* </ScrollView> */}
                 <TabNav style={{ position: 'absolute', bottom: 0 }} screen={'order'} props={this.props} />
 

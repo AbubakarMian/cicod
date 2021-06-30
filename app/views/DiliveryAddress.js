@@ -40,6 +40,11 @@ class DiliveryAddress extends React.Component {
     }
     set_address(){
 
+        if(this.props.route.params.address == ''){
+            alert('Customer Address not avalible');
+            return;
+        }
+
         this.setState({rememberIsChecked:!this.state.rememberIsChecked})
              console.log("Set")
              this.props.setDeliveryAddress({

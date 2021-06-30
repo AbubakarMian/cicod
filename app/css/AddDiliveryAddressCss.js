@@ -45,6 +45,7 @@ export default StyleSheet.create({
         alignSelf:'center',
         padding:5,
         marginTop:5,
+        paddingBottom:15,
         borderRadius:5
 
     },
