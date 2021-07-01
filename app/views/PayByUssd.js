@@ -132,8 +132,7 @@ class PayByUssd extends React.Component {
                             onPress={()=>this.props.navigation.navigate('OrderDetail',{id:this.state.order_id})}
                             >
                                 <Text style={{color:'#fff'}}>ORDER DETAIL</Text>
-                            </TouchableOpacity>
-                            
+                            </TouchableOpacity>                            
                         </View>
                     </ScrollView>
                 </View>

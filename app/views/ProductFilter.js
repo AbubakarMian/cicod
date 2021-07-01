@@ -14,6 +14,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { color } from 'react-native-reanimated';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
@@ -28,6 +29,11 @@ class ProductFilter extends React.Component {
       createdby_arr: [],
       category_name: '',
       spinner: false,
+      created_at: 'YY-MM-DD',
+      updated_at: 'YY-MM-DD',
+      isDatePickerVisible: false,
+      setDatePickerVisibility: false,
+      modal_date_type:''
     };
   }
   async componentDidMount() {
@@ -176,7 +182,72 @@ class ProductFilter extends React.Component {
     console.log('this.state.filters', this.state.filters);
     this.props.navigation.navigate('Products', { filters: this.state.filters, seller_id: 1 });
   }
+  upsert_filters( item) { // (1)
+    let array = this.state.filters;
+    // array = this.upsert(array, item)    
+    this.setState({
+      filters:array
+    })
+  }
+  onDateChange(date) {
+    () => this.setState({
+        selectedStartDate: date,
+    });
+}
+  setDate=(date)=> {
+    this.setState({
+      isDatePickerVisible: false,
+      // filters: filters
+    })
 
+    console.log('date',date)
+    console.log('this.state.modal_date_type',this.state.modal_date_type)
+  
+
+    var month = date.getUTCMonth() + 1; //months from 1-12
+    var day = date.getUTCDate();
+    var year = date.getUTCFullYear();
+    
+    var timestamp = date.getTime();    
+
+    // let newdate = day + "/" + month + "/" + year;
+    // let newdate = year + "/" + month + "/" + day;
+    
+    
+    if(month < 10){
+      month = "0"+month;
+    }   
+    if(day < 10){
+        day = "0"+day;
+    }  
+    let newdate = year + "-" + month + "-" + day;
+
+    // let sendDate = year + "/" + month + "/" + day;
+    // var timestamp = Date.parse(new Date(sendDate));  
+
+    let filters = this.state.filters;
+    if (this.state.modal_date_type == 'created_at') {
+      this.upsert_filters({ key: 'date_created', value: newdate })
+      // filters.push({ key: 'date_created', value: newdate });
+      this.setState({
+        created_at: newdate,
+      })
+    }
+    if (this.state.modal_date_type == 'updated_at') {
+      this.upsert_filters({ key: 'payment_date', value: newdate })
+      // filters.push({ key: 'payment_status_date', value: newdate });
+      this.setState({
+        updated_at: newdate,
+      })
+    }
+    console.log('filters !!!!!!!!!!!!!!', filters);
+  }
+  hideDatePicker() {
+    console.log(' visibility !!!!!!!!!!!!!');
+    this.setState({
+      isDatePickerVisible: false
+    })
+  }
   render() {
     return (
       <View style={[{}, styles.mainView]}>
@@ -187,6 +258,13 @@ class ProductFilter extends React.Component {
           textStyle={{ color: '#fff' }}
           color={'#fff'}
         />
+     <DateTimePickerModal
+                    isVisible={this.state.isDatePickerVisible}
+                    mode="date"
+                    date={new Date()}
+                    onConfirm={this.setDate}
+                    onCancel={this.hideDatePicker}
+            />
         <View style={[{}, styles.mainRow]}>
           {/* <Image
           source={require('../images')}
@@ -218,6 +296,11 @@ class ProductFilter extends React.Component {
             </View>
             {this.state.createdby_arr.length < 1 ? null :
               <DropDownPicker
+              scrollViewProps={{
+                persistentScrollbar: true,
+            }}
+            dropDownDirection="AUTO"
+            bottomOffset={200}
                 items={this.state.createdby_arr}
                 placeholder="Created By"
                 containerStyle={{ height: 50, width: width - 30, }}
@@ -225,13 +308,18 @@ class ProductFilter extends React.Component {
                 itemStyle={{
                   justifyContent: 'flex-start',
                 }}
-                dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
+                dropDownStyle={{ height: 120, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                 labelStyle={{ color: '#A9A9A9' }}
                 onChangeItem={item => this.onCreatedByText(item.value)}
               />
             }
             {this.state.categoryarr.length < 1 ? null :
               <DropDownPicker
+              scrollViewProps={{
+                persistentScrollbar: true,
+            }}
+            dropDownDirection="AUTO"
+            bottomOffset={200}
                 items={this.state.categoryarr}
                 placeholder="Catagory"
                 containerStyle={{ height: 50, width: width - 30, }}
@@ -239,7 +327,7 @@ class ProductFilter extends React.Component {
                 itemStyle={{
                   justifyContent: 'flex-start',zIndex:999
                 }}
-                dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
+                dropDownStyle={{ height: 120, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                 labelStyle={{ color: '#A9A9A9' }}
                 onChangeItem={item => this.onCategoryText(item.id)}
               />}
@@ -250,13 +338,15 @@ class ProductFilter extends React.Component {
           <View style={[{ flexDirection: 'row', zIndex: -0.999 }]}>
             <View style={[{ flex: 1, paddingVertical: 10 }]}>
               <Text style={{ color: '#929497', fontWeight: 'bold' }}>Created Date</Text>
-              <TouchableOpacity>
+              <TouchableOpacity
+             onPress={() => this.setState({isDatePickerVisible:true, modal_date_type:'created_at'})}
+              >
                 <View style={{ backgroundColor: '#fff', flexDirection: 'row',alignItems:'center',justifyContent:'center', marginRight: 10, padding: 10, marginVertical: 10 }}>
                   <Image
                     style={{height:20,width:20}}
                     source={require('../images/calenderIcon.png')}
                   />
-                  <Text style={{ marginLeft: 10, color: '#aaa' }}>DD-MM-YY</Text>
+                  <Text style={{ marginLeft: 10, color: '#aaa' }}>{this.state.created_at}</Text>
                 </View>
                 <View style={{ position: 'absolute', right: 0, bottom: 20 }}>
                   <Icon
@@ -270,14 +360,18 @@ class ProductFilter extends React.Component {
             </View>
             <View style={[{ flex: 1, paddingVertical: 10 }]}>
               <Text style={{ color: '#929497', fontWeight: 'bold', marginLeft: 10 }}>Updated Date</Text>
-              <TouchableOpacity>
+              <TouchableOpacity
+                           onPress={() => this.setState({isDatePickerVisible:true,modal_date_type:'updated_at'})}
+
+              
+              >
 
                 <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginLeft: 10, padding: 10, marginVertical: 10 }}>
                   <Image
                     style={{height:20,width:20}}
                     source={require('../images/calenderIcon.png')}
                   />
-                  <Text style={{ marginLeft: 10, color: '#aaa' }}>DD-MM-YY</Text>
+                  <Text style={{ marginLeft: 10, color: '#aaa' }}>{this.state.updated_at}</Text>
                 </View>
                 <View style={{ position: 'absolute', right: 0, bottom: 20 }}>
                   <Icon

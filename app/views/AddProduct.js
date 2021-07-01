@@ -146,9 +146,9 @@ class AddProduct extends React.Component {
 
     async addProduct(index) {
         let data = this.state.data;
-        if (this.props.cart.cart.length == 0 ) {// && data[index].purchased_quantity == 0
+        if (data.length== 0 ) {// && data[index].purchased_quantity == 0  this.props.cart.cart.length 
             Alert.alert('Error ', 'Cart is empty')
-            return;
+            return; 
         } else {
 
             for(let i = 0 ; i < data.length; i++){

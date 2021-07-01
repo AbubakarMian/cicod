@@ -46,40 +46,40 @@ class Order extends React.Component {
         })
         return;
 console.log("**************************",listType)
-        this.setState({
-            spinner: true,
-            is_active_list: listType
-        })
-        let postData = {
-            method: 'GET',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                Authorization: this.props.user.access_token,
-            },
+        // this.setState({
+        //     spinner: true,
+        //     is_active_list: listType
+        // })
+        // let postData = {
+        //     method: 'GET',
+        //     headers: {
+        //         Accept: 'application/json',
+        //         'Content-Type': 'application/json',
+        //         Authorization: this.props.user.access_token,
+        //     },
 
-        };
-        // console.log("%%%%%%%%%%", Constants.orderslist + '?order_status=' + listType)
-        fetch(Constants.orderslist + '?order_status=' + listType, postData)
+        // };
+        // // console.log("%%%%%%%%%%", Constants.orderslist + '?order_status=' + listType)
+        // fetch(Constants.orderslist + '?order_status=' + listType, postData)
 
-            .then(response => response.json())
-            .then(async responseJson => {
+        //     .then(response => response.json())
+        //     .then(async responseJson => {
 
-                if (responseJson.status === 'success') {
-                    this.setState({ spinner: false });
-                    this.setState({
-                        data: responseJson.data
-                    });
-                    // this.props.navigation.navigate('DrawerNavigation')
-                } else if (responseJson.status == 401) {
-                    this.unauthorizedLogout();
-                }
-                else {
-                    let message = responseJson.message
-                    Alert.alert('Error', message)
-                }
+        //         if (responseJson.status === 'success') {
+        //             this.setState({ spinner: false });
+        //             this.setState({
+        //                 data: responseJson.data
+        //             });
+        //             // this.props.navigation.navigate('DrawerNavigation')
+        //         } else if (responseJson.status == 401) {
+        //             this.unauthorizedLogout();
+        //         }
+        //         else {
+        //             let message = responseJson.message
+        //             Alert.alert('Error', message)
+        //         }
 
-            })
+        //     })
     }
     orderList(url) {
         console.log("############################################",url)
@@ -249,7 +249,9 @@ console.log("**************************",listType)
         if(_that.state.date_created_timestamp != 'YY-MM-DD'){            
             url = url+filter_concat+'date_created=' + _that.state.date_created_timestamp
         }
-        url = url + filter_concat+'order_status=' + _that.state.is_active_list
+        if(_that.state.is_active_list != ''){
+            url = url + filter_concat+'order_status=' + _that.state.is_active_list
+        }       
 
         if (url != _that.state.url_orders) {
             console.log('urllllll',url)

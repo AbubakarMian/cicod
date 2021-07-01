@@ -336,10 +336,10 @@ class CreateOrder extends React.Component {
             .then(async responseJson => {
                 this.setState({ spinner: false })
                 if (responseJson.status === "success") {
-                    alert(responseJson.message)
+                    // alert(responseJson.message)
                     let payment_link = responseJson.data.payment_link//Pay Account,ACCOUNT
                     if (this.state.payment_option_selected == 'Pay Account' || this.state.payment_option_selected == 'Pay Invoice') {
-                        alert(responseJson.message)
+                        // alert(responseJson.message)
                         console.log("create_order_id payment_link!", responseJson)
                         this.get_order_detail(responseJson.data.id);
                         

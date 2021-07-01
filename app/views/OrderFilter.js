@@ -166,8 +166,9 @@ class OrderFilter extends React.Component {
     //   filters: filters
     // })
   }
-  activeSet(text) {
-    this.upsert_filters({ key: 'is_active', value: text })
+  orderStatus(text) {
+    // this.upsert_filters({ key: 'is_active', value: text })
+    this.upsert_filters({ key: 'order_status', value: text })
     // let filters = this.state.filters;
     // filters.push({ key: 'is_active', value: value })
     // this.setState({
@@ -176,8 +177,11 @@ class OrderFilter extends React.Component {
   }
   applyFilter = () => {
     console.log('this.state.filters', this.state.filters);
-
-    this.props.navigation.navigate('Order', { filters: this.state.filters });
+    let filters = this.state.filters 
+    this.setState({
+      filters:[]
+    })
+    this.props.navigation.navigate('Order', { filters:filters });
   }
 
   // datePickerFun = () => {
@@ -233,7 +237,7 @@ class OrderFilter extends React.Component {
       })
     }
     if (this.state.modal_date_type == 'payment') {
-      this.upsert_filters({ key: 'payment_status_date', value: newdate })
+      this.upsert_filters({ key: 'payment_date', value: newdate })
       // filters.push({ key: 'payment_status_date', value: newdate });
       this.setState({
         paymentdate: newdate,
@@ -261,7 +265,7 @@ class OrderFilter extends React.Component {
     return (
       <View style={[{}, styles.mainView]}>
         <Header navigation={this.props.navigation} />
-        {/* <ScrollView> */}
+        <ScrollView>
           <View>
 
             <Spinner
@@ -271,7 +275,7 @@ class OrderFilter extends React.Component {
               color={'#fff'}
             />
             <DateTimePickerModal
-                   isVisible={this.state.isDatePickerVisible}
+                    isVisible={this.state.isDatePickerVisible}
                     mode="date"
                     date={new Date()}
                     onConfirm={this.setDate}
@@ -302,35 +306,35 @@ class OrderFilter extends React.Component {
                 <View style={[{ paddingRight: 20 }, styles.mainRow]}>
                   <View style={[{ marginRight: 10 }]}>
                     <TouchableOpacity
-                      onPress={() => this.activeSet('All')}
+                      onPress={() => this.orderStatus('All')}
                     >
                       <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>All</Text>
                     </TouchableOpacity>
                   </View>
                   <View style={[{}]}>
                     <TouchableOpacity
-                      onPress={() => this.activeSet('PENDING')}
+                      onPress={() => this.orderStatus('PENDING')}
                     >
                       <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>PENDING </Text>
                     </TouchableOpacity>
                   </View>
                   <View style={[{}]}>
                     <TouchableOpacity
-                      onPress={() => this.activeSet('PAID')}
+                      onPress={() => this.orderStatus('PAID')}
                     >
                       <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>PAID </Text>
                     </TouchableOpacity>
                   </View>
                   <View style={[{}]}>
                     <TouchableOpacity
-                      onPress={() => this.activeSet('PART PAYMENT')}
+                      onPress={() => this.orderStatus('PART PAYMENT')}
                     >
                       <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>PART PAYMENT </Text>
                     </TouchableOpacity>
                   </View>
                   <View style={[{}]}>
                     <TouchableOpacity
-                      onPress={() => this.activeSet('PAID FROM CREDIT')}>
+                      onPress={() => this.orderStatus('PAID FROM CREDIT')}>
                       <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>PAID FROM CREDIT </Text>
                     </TouchableOpacity>
                   </View>
@@ -401,9 +405,14 @@ class OrderFilter extends React.Component {
                 </View>
               </View>
             </View>
-            <View style={{ width: width - 20, backgroundColor: '#fff', paddingTop: 30,paddingBottom:40,borderRadius:10 }}>
+            <View style={{ width: width - 20, backgroundColor: '#fff', paddingTop: 30,paddingBottom:120,borderRadius:10 }}>
               {/* {this.state.orderchannel_arr.length < 1 ? null : */}
               <DropDownPicker
+                 scrollViewProps={{
+                  persistentScrollbar: true,
+              }}
+              dropDownDirection="AUTO"
+              bottomOffset={200}
                 items={this.state.orderchannel_arr}
                 containerStyle={{ height: 50, width: width - 25, marginTop: 15, }}
                 style={{ backgroundColor: '#fff' }}
@@ -411,7 +420,7 @@ class OrderFilter extends React.Component {
                   justifyContent: 'flex-start',
                 }}
                 placeholder="Order channel"
-                dropDownStyle={{ backgroundColor: '#fff', zIndex: 0.999, marginBottom: 10 }}
+                dropDownStyle={{height:120, backgroundColor: '#fff', zIndex: 0.999, marginBottom: 10 }}
                 labelStyle={{ color: '#A9A9A9' }}
                 onChangeItem={item => this.onorderChannelText(item.value)}
               />
@@ -419,6 +428,11 @@ class OrderFilter extends React.Component {
 
               {this.state.paymentmode_arr.length < 1 ? null :
                 <DropDownPicker
+                scrollViewProps={{
+                  persistentScrollbar: true,
+              }}
+              dropDownDirection="AUTO"
+              bottomOffset={200}
                   items={this.state.paymentmode_arr}
                   autoScrollToDefaultValue={true}
                   containerStyle={{ height: 50, width: width - 25, marginTop: 15, }}
@@ -427,12 +441,17 @@ class OrderFilter extends React.Component {
                     justifyContent: 'flex-start',
                   }}
                   placeholder="Payment Mode"
-                  dropDownStyle={{ backgroundColor: '#fff', zIndex: 0.999, marginBottom: 10 }}
+                  dropDownStyle={{height:120, backgroundColor: '#fff', zIndex: 0.999, marginBottom: 10 }}
                   labelStyle={{ color: '#A9A9A9' }}
                   onChangeItem={item => this.onPaymentmodeText(item.value)}
                 />}
               {this.state.createdby_arr.length < 1 ? null :
                 <DropDownPicker
+                scrollViewProps={{
+                  persistentScrollbar: true,
+              }}
+              dropDownDirection="AUTO"
+              bottomOffset={200}
                   items={this.state.createdby_arr}
                   autoScrollToDefaultValue={true}
                   containerStyle={{ height: 50, width: width - 25, marginTop: 15 }}
@@ -441,7 +460,7 @@ class OrderFilter extends React.Component {
                     justifyContent: 'flex-start',
                   }}
                   placeholder="Created By"
-                  dropDownStyle={{ backgroundColor: '#fff', zIndex: 0.999,  marginBottom: 10 }}
+                  dropDownStyle={{height:120, backgroundColor: '#fff', zIndex: 0.999, }}
                   labelStyle={{ color: '#A9A9A9' }}
                   onChangeItem={item => this.onCreatedByText(item.value ?? '')}
                   // 
@@ -455,7 +474,7 @@ class OrderFilter extends React.Component {
             </TouchableOpacity>
 
           </View>
-        {/* </ScrollView> */}
+        </ScrollView>
       </View>
     )
   }
