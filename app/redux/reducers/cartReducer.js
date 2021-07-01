@@ -7,6 +7,7 @@ const initialState = {
         total_price_with_tax:0,
         vat_amount:0,
         vat_percent:0,
+        has_vat:false,
     }
 };
 const cartReducer = (state = initialState, action) => {
@@ -86,10 +87,12 @@ function updateCart (){
     let total_price = 0;
     let vat_amount = 0;
     let vat_percent = 0;
+    let has_vat = false;
     for(let i=0;i<cart.length;i++){
         total_price = total_price + (cart[i].purchased_quantity * cart[i].price);
         vat_amount = vat_amount + (cart[i].purchased_quantity *cart[i].vat_amount);
-        vat_percent = vat_percent; // amount is single percent cant be added multiple times
+        vat_percent = cart[i].vat_percent; // amount is single percent cant be added multiple times
+        has_vat = cart[i].has_vat; // amount is single percent cant be added multiple times
 
     }
     total_price = parseFloat(total_price).toFixed(2);
@@ -97,7 +100,8 @@ function updateCart (){
     initialState.cart_detail.total_price = total_price;
     initialState.cart_detail.tax = tax;
     initialState.cart_detail.total_price_with_tax = (parseFloat(total_price)+parseFloat(tax)).toFixed(2);
-    initialState.cart_detail.vat_percent = vat_percent.toFixed(2);
+    initialState.cart_detail.vat_percent = vat_percent;
+    initialState.cart_detail.has_vat = has_vat;
     console.log('total_price',total_price)
     console.log('tax',tax)
     console.log('total_price+tax',(initialState.cart_detail.total_price_with_tax))

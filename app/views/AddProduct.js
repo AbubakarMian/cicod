@@ -28,10 +28,8 @@ class AddProduct extends React.Component {
             total_add_order: 0,
             categoryarr: [],
             category_id: 0,
-            count: 0,
+            // catelog_products_total: 0,
             selected_product: [],
-            product_cart: []
-
         }
     }
 
@@ -136,7 +134,6 @@ class AddProduct extends React.Component {
                 }
 
             })
-
     }
 
     onCategoryText(category_id) {
@@ -154,12 +151,27 @@ class AddProduct extends React.Component {
             return;
         } else {
 
-            await this.props.cartReducer(data[index]);
+            for(let i = 0 ; i < data.length; i++){
+                if(data[i].purchased_quantity > 0){
+                    await this.props.cartReducer(data[i]);
+                }
+            }            
+            console.log('aadded cart',data[index])
             this.props.navigation.navigate('CreateOrder', { screen: 'active' });
-
         }
-
-
+    }
+    catelog_count(){
+        let data = this.state.data;
+        let count = 0;
+        for(let i = 0 ; i < data.length; i++){
+            if(data[i].purchased_quantity > 0){
+                count = count + 1;
+            }
+        }
+        // this.setState({
+        //     catelog_products_total:count
+        // })
+        return count;
     }
     async counterFun(action, index) {
 
@@ -195,14 +207,6 @@ class AddProduct extends React.Component {
                 console.log(' remove from cart cart : ', this.props.cart);
             }
         }
-
-        let cart_product = this.state.product_cart;
-
-        // cart_product.forEach(item ,index, function(){
-
-        //     return item ;
-        // })
-
     }
 
     render() {
@@ -280,7 +284,7 @@ class AddProduct extends React.Component {
 
                             <View style={[{}, styles.OrderDetailHeadingRow]}>
                                 <Text style={[{}, styles.OrderDetailHeadingRowText]}>Product Catalog</Text>
-                                <Text style={[{}, styles.OrderDetailNotificationText]}>{this.state.total_add_order}</Text>
+                                <Text style={[{}, styles.OrderDetailNotificationText]}>{this.catelog_count()}</Text>
                             </View>
 
                             {(this.state.data.length != 0) ?
