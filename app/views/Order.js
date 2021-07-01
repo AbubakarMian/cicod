@@ -25,7 +25,7 @@ class Order extends React.Component {
             selectedStartDate: null,
             calenderModal: false,
             data: [],
-            is_active_list: 'all',
+            is_active_list: '',
             spinner: false,
             date: '',
             search_order: '',
@@ -41,6 +41,10 @@ class Order extends React.Component {
         this.onDateChange = this.onDateChange.bind(this);
     }
     customeList(listType) {
+        this.setState({
+            is_active_list:listType
+        })
+        return;
 console.log("**************************",listType)
         this.setState({
             spinner: true,
@@ -131,11 +135,6 @@ console.log("**************************",listType)
         else{
             this.props.navigation.navigate('OrderDetail', { id })
         }
-        // const id = item.id
-        // console.log("item_id item_id item_id item_id ", id)
-        // this.props.navigation.navigate('OrderDetail', { id })
-        // this.props.navigation.navigate('OrderDetail', { id })
-        // OrderDetail_pending
     }
 
     datePickerFun = () => {
@@ -247,12 +246,13 @@ console.log("**************************",listType)
             filter_concat = '&';
         }
         
-        if(_that.state.date_created_timestamp != 'YY-MM-DD'){
-            
+        if(_that.state.date_created_timestamp != 'YY-MM-DD'){            
             url = url+filter_concat+'date_created=' + _that.state.date_created_timestamp
         }
+        url = url + filter_concat+'order_status=' + _that.state.is_active_list
 
         if (url != _that.state.url_orders) {
+            console.log('urllllll',url)
             _that.orderList(url);
             console.log('url ',url);
             _that.setState({
@@ -260,10 +260,20 @@ console.log("**************************",listType)
             })
         }
         console.log('url hit', url);
-        console.log(' will receive props !!!!!!!!!!!!!', _that.state.apply_filter);
-     
+        console.log(' will data !!!!!!!!!!!!!', _that.state.data.length);
+
+        if(_that.state.data.length < 1){
             return(
-                 
+            <View style={{ height:height/1.75, position: 'relative',flexDirection:'column', alignSelf: 'center',alignItems:'center',justifyContent:'center',  backgroundColor: '#F0F0F0', width: width - 20, padding: 10, borderRadius: 10, marginBottom: 5 }}>
+                <Image
+                    source={require('../images/Untitled-1.png')}
+                />
+                <Text style={{color:'#929497',fontSize:20,fontWeight:'bold',fontFamily:'Open Sans'}}>No order found</Text>
+            </View>
+            )
+        }
+        else{
+            return(                 
                 <FlatList
                         data={_that.state.data}
                         ItemSeparatorComponent={
@@ -277,8 +287,7 @@ console.log("**************************",listType)
                                 />
                             ))
                         }
-                        renderItem={({ item, index, separators }) => (
-                      
+                        renderItem={({ item, index, separators }) => (                      
                             <TouchableOpacity
                                 key={item.key}
                                 onPress={() => _that.itemDetail(item,item.order_status)}
@@ -325,6 +334,7 @@ console.log("**************************",listType)
                         )}
                     />
             )
+        }            
         }
         
     
@@ -426,10 +436,10 @@ console.log("**************************",listType)
                    scrollEnabled={true}
                >
                  <TouchableOpacity
-                       onPress={() => this.customeList("all")}
+                       onPress={() => this.customeList("")}
                    >
                        <Text style={{
-                           color: this.state.is_active_list === 'all' ? '#000' : '#e2e2e2',
+                           color: this.state.is_active_list === '' ? '#000' : '#e2e2e2',
                            fontWeight: 'bold', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
                        }}>ALL</Text>
                    </TouchableOpacity>
@@ -470,18 +480,7 @@ console.log("**************************",listType)
                     </View> 
                     </View>
                 {/* <ScrollView  style={{ marginBottom: 200 }}> */}
-               
-               {this.state.data.length < 1 ?  
-                    
-                    <View style={{ height:height/1.75, position: 'relative',flexDirection:'column', alignSelf: 'center',alignItems:'center',justifyContent:'center',  backgroundColor: '#F0F0F0', width: width - 20, padding: 10, borderRadius: 10, marginBottom: 5 }}>
-                        <Image
-                            source={require('../images/Untitled-1.png')}
-                        />
-                        <Text style={{color:'#929497',fontSize:20,fontWeight:'bold',fontFamily:'Open Sans'}}>No order found</Text>
-                    </View>
-                    :<this.getOrderList _that={this} />            
-                }
-                {/* </ScrollView> */}
+                <this.getOrderList _that={this}/>
                 <TabNav style={{ position: 'absolute', bottom: 0 }} screen={'order'} props={this.props} />
 
             </View>

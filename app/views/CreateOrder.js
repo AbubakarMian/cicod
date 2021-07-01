@@ -799,8 +799,9 @@ class CreateOrder extends React.Component {
 
                                 <View style={[{}, styles.subTotleColumn1View]}>
                                     <Text style={[{}, styles.subTotleColumn1Text]}>Subtotal:</Text>
-                                    {this.state.cart_detail.vat_percent == 0 ? null :
-                                        <Text style={[{}, styles.subTotleColumn1Text]}>Tax{this.state.cart_detail.vat_percent}%)</Text>
+                                    {this.state.cart_detail.has_vat ? 
+                                        <Text style={[{}, styles.subTotleColumn1Text]}>Tax({this.state.cart_detail.vat_percent}%)</Text>
+                                        : null
                                     }
 
                                     <Text style={[{}, styles.subTotleColumn1Text]}>TOTAL:</Text>
@@ -808,8 +809,9 @@ class CreateOrder extends React.Component {
                                 </View>
                                 <View style={[{}, styles.subTotleColumn2View]}>
                                     <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.total_price ?? 0}</Text>
-                                    {this.state.cart_detail.vat_percent == 0 ? null :
-                                        <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.tax ?? 0}</Text>}
+                                    {this.state.cart_detail.has_vat ?
+                                        <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.tax ?? 0}</Text>
+                                        : null}
                                     {(this.props.orderDiscountReducer.discount_type == 'percentage') ?
 
                                         <Text style={[{}, styles.subTotleColumn2Text]}>{(this.props.currency.currency + " " + (this.state.cart_detail.total_price_with_tax - (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01)).toFixed(2)) ?? 0}</Text>

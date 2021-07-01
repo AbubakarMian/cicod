@@ -77,8 +77,8 @@ class ApplyDiscount extends React.Component {
             }
         }
         else{
-            let total_amount = this.props.route.params.total_price;
-            console.log('amount ',amount)
+            let total_amount = parseFloat(this.props.route.params.total_price);
+            console.log('total_amount ',total_amount)
             if(total_amount > amount){
                 console.log('if amount ',amount)                
                 this.setDiscount(amount);
