@@ -146,7 +146,7 @@ class AddProduct extends React.Component {
 
     async addProduct(index) {
         let data = this.state.data;
-        if (this.props.cart.cart.length == 0 && data[index].purchased_quantity == 0) {
+        if (this.props.cart.cart.length == 0 ) {// && data[index].purchased_quantity == 0
             Alert.alert('Error ', 'Cart is empty')
             return;
         } else {
@@ -179,7 +179,7 @@ class AddProduct extends React.Component {
         if (action == 'add') {
 
             let updated_purchased_quantity = data[index].purchased_quantity + 1;
-            if (updated_purchased_quantity > data[index].quantity) {
+            if (updated_purchased_quantity > data[index].quantity && !data[index].no_qty_limit) {
                 alert('Out of stock');
             }
             else {
@@ -306,7 +306,7 @@ class AddProduct extends React.Component {
                                             <View style={[{}, styles.OrderDetailDataCOntainer]}>
                                                 <View style={[{}, styles.OrderDetailDataCOntainerRow]}>
                                                     <View>
-                                                        <Text style={[{}, styles.OrderDetailDataCOntainerHeadingText]}>{item.name} {item.quantity}PACK</Text>
+                                                        <Text style={[{}, styles.OrderDetailDataCOntainerHeadingText]}>{item.name} {item.no_qty_limit?'':item.quantity}PACK</Text>
                                                         <Text style={[{}, styles.OrderDetailHeadingRowText]}>{item.name}</Text>
                                                     </View>
                                                 </View>
