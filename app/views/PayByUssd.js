@@ -21,11 +21,16 @@ class PayByUssd extends React.Component {
             value: 0,
             isChecked: false,
             ussd_codes:[],
-            ussd_code_selected:null
+            ussd_code_selected:null,
+            order_id:this.props.route.params.data.id
         }
     }
 
     componentDidMount(){
+        console.log('~~~~~~~~~~~',this.props.route.params.data.id)
+        // this.setState({
+        //     order_id:
+        // })
         this.get_ussd_codes();
     }
 
@@ -51,7 +56,8 @@ class PayByUssd extends React.Component {
                     });
                     this.setState({ 
                         spinner: false,
-                        ussd_codes:ussd_codes
+                        ussd_codes:ussd_codes,
+                   
                     
                     })
                     // let payment_link = responseJson.data.payment_link
@@ -121,6 +127,12 @@ class PayByUssd extends React.Component {
                                <Text style={{textAlign:'center',color:'red'}}>{this.state.ussd_code_selected}</Text>
                             </View>
                             }
+                            <TouchableOpacity
+                            style={{backgroundColor:'#B1272C',borderRadius:100,paddingVertical:15,width:width/2,alignItems:'center',justifyContent:'center',marginTop:20}}
+                            onPress={()=>this.props.navigation.navigate('OrderDetail',{id:this.state.order_id})}
+                            >
+                                <Text style={{color:'#fff'}}>ORDER DETAIL</Text>
+                            </TouchableOpacity>
                             
                         </View>
                     </ScrollView>
