@@ -104,7 +104,10 @@ class Dashboard extends React.Component {
                     let target = responseJson.data.target;
                     let sales_target_amount = parseInt(target.sales_target_amount.replace(",", ""));
                     let sales_made_amount = parseInt(target.sales_made_amount.replace(",", ""));
-                    let percentage = (sales_made_amount/sales_target_amount)*100;
+                    let percentage = 0;
+                    if(sales_target_amount != 0){
+                        percentage = (sales_made_amount/sales_target_amount)*100;                       
+                    }
                     target.percentage = percentage;
                     this.setState({
                         target: target,
@@ -291,7 +294,7 @@ class Dashboard extends React.Component {
                                         source={require('../images/dashboard/redbage.png')}
                                     />
                                     <Text style={{ color: '#B1272C', fontSize: 10, fontFamily: 'Open Sans' }}>Total Orders</Text>
-                                    <Text style={{ fontSize: 20, fontFamily: 'Open Sans', fontWeight: 'bold', color: '#4E4D4D' }}>{this.props.currency.currency}{this.state.totalOrder.amount}</Text>
+                                    <Text style={{ fontSize: 16, fontFamily: 'Open Sans', fontWeight: 'bold', color: '#4E4D4D' }}>{this.props.currency.currency}{this.state.totalOrder.amount}</Text>
                                     <Text style={[{}, styles.recardtext]}>{this.state.totalOrder.count}</Text>
                                 </View>
                             </View>
@@ -302,7 +305,7 @@ class Dashboard extends React.Component {
                                         source={require('../images/dashboard/greenbage.png')}
                                     />
                                     <Text style={{ color: '#B1272C', fontSize: 10, fontFamily: 'Open Sans' }}>Paid Orders</Text>
-                                    <Text style={{ fontSize: 20, fontFamily: 'Open Sans', fontWeight: 'bold', color: '#4E4D4D' }}>{this.props.currency.currency}{this.state.paidOrder.amount}</Text>
+                                    <Text style={{ fontSize: 16, fontFamily: 'Open Sans', fontWeight: 'bold', color: '#4E4D4D' }}>{this.props.currency.currency}{this.state.paidOrder.amount}</Text>
                                     <Text style={[{}, styles.greencardtext]}>{this.state.paidOrder.count}</Text>
                                 </View>
                             </View>
@@ -315,7 +318,7 @@ class Dashboard extends React.Component {
                                         source={require('../images/dashboard/bluebage.png')}
                                     />
                                     <Text style={{ color: '#2F2E7C', fontSize: 10, fontFamily: 'Open Sans' }}>Pending Orders</Text>
-                                    <Text style={{ fontSize: 20, fontFamily: 'Open Sans', fontWeight: 'bold', color: '#4E4D4D' }}>{this.props.currency.currency}{this.state.pendingOrder.amount}</Text>
+                                    <Text style={{ fontSize: 16, fontFamily: 'Open Sans', fontWeight: 'bold', color: '#4E4D4D' }}>{this.props.currency.currency}{this.state.pendingOrder.amount}</Text>
                                     <Text style={[{}, styles.bluecardtext]}>{this.state.pendingOrder.count}</Text>
                                 </View>
                             </View>
@@ -326,7 +329,8 @@ class Dashboard extends React.Component {
                                         source={require('../images/dashboard/yellowbage.png')}
                                     />
                                     <Text style={{ color: '#FDB72B', fontSize: 10, fontFamily: 'Open Sans' }}>Cancelled Orders</Text>
-                                    <Text style={{ fontSize: 20, fontFamily: 'Open Sans', fontWeight: 'bold', color: '#4E4D4D' }}>{this.props.currency.currency}{this.state.canclledOrder.amount}</Text>
+                                    <Text style={{ fontSize: 16, fontFamily: 'Open Sans', fontWeight: 'bold', color: '#4E4D4D' }}>{this.props.currency.currency}{this.state.canclledOrder.amount}</Text>
+                               
                                     <Text style={[{}, styles.yellowcardtext]}>{this.state.canclledOrder.count}</Text>
                                 </View>
                             </View>

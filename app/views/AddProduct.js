@@ -1,7 +1,7 @@
 import React from 'react'
 import { View, ImageBackground, ScrollView, TouchableHighlight, Alert, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
 import splashImg from '../images/splash.jpg'
-import { Text, TextInput,Searchbar } from 'react-native-paper';
+import { Text, TextInput, Searchbar } from 'react-native-paper';
 import styles from '../css/AddProductCss';
 import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -39,9 +39,9 @@ class AddProduct extends React.Component {
         this.getCategoryList();
     }
 
-    getProductList(search_product , category_id) {
+    getProductList(search_product, category_id) {
 
-        if (search_product == '' && category_id=='') {
+        if (search_product == '' && category_id == '') {
             return;
         }
         this.setState({ spinner: true })
@@ -55,9 +55,9 @@ class AddProduct extends React.Component {
         };
         //Constants.productslist + '?is_active=1&search=' + this.state.search_product
         // let search_url =  '?is_active=1&search=' + this.state.search_product + '&category_id=' + this.state.category_id
-        let search_url =  Constants.productslist + '?is_active=1&search=' + search_product+'&category_id=' + category_id
-        console.log('search url ',search_url);
-        console.log('postData ',postData);
+        let search_url = Constants.productslist + '?is_active=1&search=' + search_product + '&category_id=' + category_id
+        console.log('search url ', search_url);
+        console.log('postData ', postData);
         fetch(search_url, postData)
             .then(response => response.json())
             .then(async responseJson => {
@@ -142,14 +142,14 @@ class AddProduct extends React.Component {
     onCategoryText(category_id) {
         console.log('text !!!!!!!!!!!!!!!!!', category_id);
         this.setState({
-            category_id:category_id
+            category_id: category_id
         })
-        this.getProductList(this.state.search_product , category_id);
+        this.getProductList(this.state.search_product, category_id);
     }
 
     async addProduct(index) {
         let data = this.state.data;
-        if (this.props.cart.cart.length == 0 && data[index].purchased_quantity == 0 ) {
+        if (this.props.cart.cart.length == 0 && data[index].purchased_quantity == 0) {
             Alert.alert('Error ', 'Cart is empty')
             return;
         } else {
@@ -242,32 +242,37 @@ class AddProduct extends React.Component {
                 </View>
                 <View>
                     <ScrollView>
-                        
-                          <Searchbar
-                    placeholder="Search Product"
-                    iconColor="#929497"
-                    style={{width:width-20,alignSelf:'center',marginTop:10,marginBottom:5,elevation:0,fontSize:14,color:'#D5D5D5', borderColor:'#D8DCDE'}}
-                    onSubmitEditing={() => this.getProductList(this.state.search_product , this.state.category_id)}
-                    onChangeText={text => this.setState({ search_product: text })}
-                    //update
-                    ></Searchbar>
+
+                        <Searchbar
+                            placeholder="Search Product"
+                            iconColor="#929497"
+                            style={{ width: width - 20, alignSelf: 'center', marginTop: 10, marginBottom: 5, elevation: 0, fontSize: 14, color: '#D5D5D5', borderColor: '#D8DCDE' }}
+                            onSubmitEditing={() => this.getProductList(this.state.search_product, this.state.category_id)}
+                            onChangeText={text => this.setState({ search_product: text })}
+                        //update
+                        ></Searchbar>
                         {/* <View style={[{}, styles.searchByCatCOntainer]}> */}
 
-                            {this.state.categoryarr.length < 1 ? null :
-                                <DropDownPicker
-                                    items={this.state.categoryarr}
-                                    placeholder="Catagory"
-                                    containerStyle={{ height: 50, width: width - 20,alignSelf:'center',marginVertical:10,borderRadius:5 }}
-                                    style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
-                                    itemStyle={{
-                                        justifyContent: 'flex-start',
-                                    }}
+                        {this.state.categoryarr.length < 1 ? null :
+                            <DropDownPicker
+                                scrollViewProps={{
+                                    persistentScrollbar: true,
+                                }}
+                                dropDownDirection="AUTO"
+                                bottomOffset={200}
+                                items={this.state.categoryarr}
+                                placeholder="Catagory"
+                                containerStyle={{ height: 50, width: width - 20, alignSelf: 'center', marginVertical: 10, borderRadius: 5 }}
+                                style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
+                                itemStyle={{
+                                    justifyContent: 'flex-start',
+                                }}
 
-                                    dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
-                                    labelStyle={{ color: '#A9A9A9' }}
-                                    // onChangeItem={item => this.onSelectCountry(item.value)}  //this.onSelectCountry(item.value)}
-                                    onChangeItem={item => this.onCategoryText(item.value)}
-                                />}
+                                dropDownStyle={{ height: 160, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
+                                labelStyle={{ color: '#A9A9A9' }}
+                                // onChangeItem={item => this.onSelectCountry(item.value)}  //this.onSelectCountry(item.value)}
+                                onChangeItem={item => this.onCategoryText(item.value)}
+                            />}
                         {/* </View> */}
 
                         <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#E6E6E6', width: width - 20, alignSelf: 'center', marginBottom: 10 }}></View>
@@ -342,11 +347,11 @@ class AddProduct extends React.Component {
                                 />
                                 : <View style={[{}, styles.contentView]}>
                                     <Image
-                                        style={{height:100,width:100}}
+                                        style={{ height: 100, width: 100 }}
                                         source={require('../images/noProduct.png')}
                                     />
                                     <Text style={[{}, styles.contentViewHeadingText]}>No product selected</Text>
-                                    <Text style={[{color:'#929497'}, fontStyles.normal15]}>Search for a product</Text>
+                                    <Text style={[{ color: '#929497' }, fontStyles.normal15]}>Search for a product</Text>
                                 </View>}
                         </View>
 
