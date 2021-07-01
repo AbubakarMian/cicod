@@ -30,7 +30,9 @@ class PayByPOS extends React.Component {
             Alert.alert('payment error','Payment link not found')
         }
         else {
-            this.props.navigation.navigate('PaymentWeb', { payment_link: this.props.route.params.payment_link,data:this.state.order_detail });
+           this.props.navigation.navigate('OrderDetail',{id:this.state.order_id})
+            
+            // this.props.navigation.navigate('PaymentWeb', { payment_link: this.props.route.params.payment_link,data:this.state.order_detail });
         }
     }
 

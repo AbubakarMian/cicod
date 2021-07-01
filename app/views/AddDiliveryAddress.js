@@ -320,6 +320,11 @@ class AddDiliveryAddress extends React.Component {
                                                     setRegion:false,
                                                     })
                                                 }
+                                                scrollViewProps={{
+                                                    persistentScrollbar: true,
+                                                }}
+                                                dropDownDirection="AUTO"
+                                                bottomOffset={200}
                                                 isVisible={this.state.setCountry}
                                                 placeholder="Country *"
                                                 items={this.state.countries_arr}
@@ -347,6 +352,11 @@ class AddDiliveryAddress extends React.Component {
                                                  setRegion:false,
                                                 })
                                              }
+                                             scrollViewProps={{
+                                                persistentScrollbar: true,
+                                            }}
+                                            dropDownDirection="AUTO"
+                                            bottomOffset={200}
                                              isVisible={this.state.setStates}
                                                 placeholder="States *"
                                                 items={this.state.states_arr}
@@ -371,6 +381,11 @@ class AddDiliveryAddress extends React.Component {
                                                     setRegion:true,
                                                    })
                                                 }
+                                                scrollViewProps={{
+                                                    persistentScrollbar: true,
+                                                }}
+                                                dropDownDirection="AUTO"
+                                                bottomOffset={200}
                                                 isVisible={this.state.setRegion}
                                                 placeholder="Region *"
                                                 items={this.state.lgas_arr}
