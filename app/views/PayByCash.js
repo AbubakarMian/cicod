@@ -120,7 +120,8 @@ class PayByCash extends React.Component {
             Alert.alert('payment error','Payment link not found')
         } 
         else {
-            this.props.navigation.navigate('PaymentWeb', { payment_link: this.props.route.params.payment_link,data:order });
+            this.props.navigation.navigate('PaymentSuccess', { data:order})
+            // this.props.navigation.navigate('PaymentWeb', { payment_link: this.props.route.params.payment_link,data:order });
         }
     }
     payByCash(props){

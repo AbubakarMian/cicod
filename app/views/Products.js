@@ -39,6 +39,7 @@ class Products extends React.Component {
         });
     }
     async componentDidMount() {
+        console.log("~~~~~~~~~~~~~~~~~~~~*************",this.props.user.access_token)
         const that = this;
         setTimeout(function () {
             that.getCategoryList()
@@ -120,6 +121,7 @@ class Products extends React.Component {
                 console.log(' category body ', postData);
                 console.log('URLLLLLLLLLLLLLLLLLLLLLLL', Constants.productcategorylist);
                 console.log('responseJson responseJson', responseJson);
+                
                 if (responseJson.status === 'success') {
 
                     let res = responseJson.data;
@@ -306,11 +308,17 @@ class Products extends React.Component {
                 <View style={[{}, styles.formRowView]}>
                     <View style={[{ position: 'relative', }, styles.formColumn]}>
                         <DropDownPicker
+                            scrollViewProps={{
+                                persistentScrollbar: true,
+                            }}
+                            dropDownDirection="AUTO"
+                            bottomOffset={200}
+                            
                             items={this.state.categoryarr}
                             placeholder="Product Category"
                             containerStyle={{ height: 50, marginTop: 5, width: width - 20, alignSelf: 'center' }}
                             style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
-                            dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
+                            dropDownStyle={{ height: 160, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                             labelStyle={{ color: '#A9A9A9' }}
                             onChangeItem={item => this.onCategoryText(item.value)}
                         />

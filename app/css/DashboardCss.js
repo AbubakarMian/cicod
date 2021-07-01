@@ -60,7 +60,10 @@ export default StyleSheet.create({
         textAlign:'center',
         borderRadius:50,
         color:'#B1272C',
-        width:width/10
+        width:width/8,
+        height:width/8,
+        textAlignVertical:'center',
+        fontSize:8
     },
     greencardtext:{
         backgroundColor:'#DFFCEB',
@@ -68,7 +71,10 @@ export default StyleSheet.create({
         textAlign:'center',
         borderRadius:50,
         color:'#18A757',
-        width:width/10
+        width:width/8,
+        height:width/8,
+        textAlignVertical:'center',
+        fontSize:8
     },
     bluecardtext:{
         backgroundColor:'#ACABCB',
@@ -76,7 +82,10 @@ export default StyleSheet.create({
         textAlign:'center',
         borderRadius:50,
         color:'#2F2E7C',
-        width:width/10
+        width:width/8,
+        height:width/8,
+        textAlignVertical:'center',
+        fontSize:8
     },
     yellowcardtext:{
         backgroundColor:'#FFF3DB',
@@ -84,7 +93,10 @@ export default StyleSheet.create({
         textAlign:'center',
         borderRadius:50,
         color:'#FDB72B',
-        width:width/10
+        width:width/8,
+        height:width/8,
+        textAlignVertical:'center',
+        fontSize:8
     },
 
     bannerView: {

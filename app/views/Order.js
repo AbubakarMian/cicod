@@ -35,12 +35,13 @@ class Order extends React.Component {
             url_orders:'',
             date_created_timestamp:'YY-MM-DD',
             apply_filter:false,
-            search_order_text:''
+            search_order_text:'',
+            
         };
         this.onDateChange = this.onDateChange.bind(this);
     }
     customeList(listType) {
-
+console.log("**************************",listType)
         this.setState({
             spinner: true,
             is_active_list: listType
@@ -425,7 +426,7 @@ class Order extends React.Component {
                    scrollEnabled={true}
                >
                  <TouchableOpacity
-                       onPress={() => this.customeList("")}
+                       onPress={() => this.customeList("all")}
                    >
                        <Text style={{
                            color: this.state.is_active_list === 'all' ? '#000' : '#e2e2e2',
@@ -470,14 +471,15 @@ class Order extends React.Component {
                     </View>
                 {/* <ScrollView  style={{ marginBottom: 200 }}> */}
                
-               {this.state.data.length > 0 ? <this.getOrderList _that={this} /> 
-                    : 
+               {this.state.data.length < 1 ?  
+                    
                     <View style={{ height:height/1.75, position: 'relative',flexDirection:'column', alignSelf: 'center',alignItems:'center',justifyContent:'center',  backgroundColor: '#F0F0F0', width: width - 20, padding: 10, borderRadius: 10, marginBottom: 5 }}>
                         <Image
                             source={require('../images/Untitled-1.png')}
                         />
                         <Text style={{color:'#929497',fontSize:20,fontWeight:'bold',fontFamily:'Open Sans'}}>No order found</Text>
-                    </View>            
+                    </View>
+                    :<this.getOrderList _that={this} />            
                 }
                 {/* </ScrollView> */}
                 <TabNav style={{ position: 'absolute', bottom: 0 }} screen={'order'} props={this.props} />

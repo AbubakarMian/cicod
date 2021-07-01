@@ -39,11 +39,12 @@ export default StyleSheet.create({
         marginLeft:5
     },
     addressContainer:{
-        backgroundColor:'#fff',
+        // backgroundColor:'#fff',
         width:width-20,
         alignSelf:'center',
         padding:5,
         marginTop:5,
+        marginBottom:5
 
     },
     customerContaineraddProductView:{

@@ -195,7 +195,8 @@ class CreateOrder extends React.Component {
 
         if (this.state.payment_option_selected == 'Pay Invoice' && !this.state.ConfirmationPayInvoice) {
             this.setState({
-                ConfirmationPayInvoice: true
+                ConfirmationPayInvoice: true,
+                spinner: false 
             })
             return;
         }
@@ -275,6 +276,49 @@ class CreateOrder extends React.Component {
             return;
         }
     }
+
+    get_order_detail(order_id) {
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': this.props.user.access_token
+            },
+        };
+
+        // let order_id = this.props.route.params.data.id;
+        let url = Constants.orderslist + '/' + order_id
+        // console.log('---- body params list @@@@@@!!!!!!!!!!!!!!', this.props.route.params);
+        console.log('order url detail ', url);
+        console.log('order postData ', postData);
+        fetch(url, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                console.log("get_order_detail order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
+                if (responseJson.status.toUpperCase() === "SUCCESS") {
+                    let data = responseJson.data;
+                    this.props.navigation.navigate('PaymentSuccess', { data:responseJson.data})
+                    // this.setState({
+                    //     spinner: false,
+                    //     order_detail: data,
+                    //     order_id:order_id
+                    // })
+                    // let payment_link = responseJson.data.payment_link
+                    // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
+                } else {
+                    this.setState({ spinner: false })
+                    let message = responseJson.message
+                    console.log('some error',responseJson)
+                }
+            }
+            )
+            .catch((error) => {
+                console.log("Api call error", error);
+                // Alert.alert(error.message);
+            });
+    }
+
     create_order_id(url, bodyOrder) {
 
         console.log('create_order_id', bodyOrder);
@@ -296,8 +340,10 @@ class CreateOrder extends React.Component {
                     let payment_link = responseJson.data.payment_link//Pay Account,ACCOUNT
                     if (this.state.payment_option_selected == 'Pay Account' || this.state.payment_option_selected == 'Pay Invoice') {
                         alert(responseJson.message)
-                        console.log("create_order_id payment_link!", payment_link)
-                        this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
+                        console.log("create_order_id payment_link!", responseJson)
+                        this.get_order_detail(responseJson.data.id);
+                        
+                        // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link,data:responseJson.data });
                     }
 
                 }
@@ -792,7 +838,7 @@ class CreateOrder extends React.Component {
                                         <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Apply Discount</Text>
                                     </View>
                                 </TouchableOpacity>
-                                <TouchableOpacity
+                                {/* <TouchableOpacity
                                     style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}
                                     onPress={() => this.props.navigation.navigate('AddNote')}
                                 >
@@ -801,7 +847,7 @@ class CreateOrder extends React.Component {
                                             style={{ height: 20, width: 15 }} />
                                         <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Add Note</Text>
                                     </View>
-                                </TouchableOpacity>
+                                </TouchableOpacity> */}
                             </View>
                             <TouchableOpacity
                                 onPress={() => this.createOrderFun()}

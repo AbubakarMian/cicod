@@ -132,7 +132,7 @@ componentDidMount(){
         console.log(" response Json responseJson responseJson!!!!!!!!!!!", responseJson)
         if (responseJson.status === "success") {
             this.setState({ spinner: false })
-            alert(responseJson.message)
+            // alert(responseJson.message)
             this.props.navigation.navigate(redirect_screen, redirect_body);
         }              
         else if (responseJson.status == 401) {

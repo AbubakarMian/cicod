@@ -178,6 +178,7 @@ class DiliveryAddress extends React.Component {
                       
                             <TouchableOpacity
                             // onPress={() => this.selectAddress(value)}
+                            // style={{marginBott}}
                             >
                                 <View style={[{}, styles.radioFormView]}>
 
@@ -187,18 +188,23 @@ class DiliveryAddress extends React.Component {
                                         // radio_props={radio_props_payment}
                                         size={5}
                                         buttonColor={'green'}
+                                        // backgroundColor={'#fff'}
+                                        paddingVertical={10}
                                         buttonSize={10}
                                         buttonOuterSize={20}
                                         initial={0}
+                                       
                                         // onPress={(value) => this.selectAddress(obj)} //{ this.setState({ value3Index: value }) }
                                     />
                                     {
                                         this.state.addressarr.map((obj, i) => (
                                             <RadioButton labelHorizontal={true} key={i} >
                                                 {/*  You can set RadioButtonLabel before RadioButtonInput */}
+                                               <View style={{backgroundColor:'#fff',borderTopLeftRadius:5,marginBottom:15,paddingVertical:10, borderBottomLeftRadius:5}}>
                                                 <RadioButtonInput
                                                     obj={obj}
                                                     index={i}
+                                                  
                                                     isSelected={obj.list_id === this.state.selected_address_id}
                                                     onPress={(value) => this.selectAddressGoBack(obj)}
                                                     borderWidth={1}
@@ -206,18 +212,22 @@ class DiliveryAddress extends React.Component {
                                                     buttonOuterColor={this.state.value3Index === i ? '#2196f3' : '#000'}
                                                     buttonSize={10}
                                                     buttonOuterSize={20}
-                                                    buttonStyle={{}}
-
-
-                                                    buttonWrapStyle={{ marginLeft: 10 }}
+                                                    paddingVertical={30}
+                                                    // backgroundColor={'#fff'}
+                                                    // buttonStyle={{backgroundColor:'#fff'}}
+                                         
+                                                   
+                                                    buttonWrapStyle={{ marginLeft: 10,marginVertical:10, }}
                                                 />
+                                                </View>
                                                 <RadioButtonLabel
                                                     obj={obj}
                                                     index={i}
+                                                 
                                                     labelHorizontal={true}
                                                     onPress={(value) => this.selectAddressGoBack(obj)}
                                                     // labelStyle={{fontSize: 20, color: '#2ecc71'}}
-                                                    labelWrapStyle={{}}
+                                                    labelWrapStyle={{marginBottom:15, backgroundColor:'#fff',width:width-width/5,paddingVertical:20,borderTopRightRadius:5,borderBottomRightRadius:5}}
                                                 />
                                             </RadioButton>
                                         ))
