@@ -337,13 +337,16 @@ class CreateOrder extends React.Component {
                 this.setState({ spinner: false })
                 if (responseJson.status === "success") {
                     // alert(responseJson.message)
-                    let payment_link = responseJson.data.payment_link//Pay Account,ACCOUNT
-                    if (this.state.payment_option_selected == 'Pay Account' || this.state.payment_option_selected == 'Pay Invoice') {
+                    let payment_link = responseJson.data//Pay Account,ACCOUNT
+                    if (this.state.payment_option_selected == 'Pay Account') {
                         // alert(responseJson.message)
                         console.log("create_order_id payment_link!", responseJson)
                         this.get_order_detail(responseJson.data.id);
                         
                         // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link,data:responseJson.data });
+                    }
+                    if(this.state.payment_option_selected == 'Pay Invoice'){
+                        this.props.navigation.navigate('OrderDetail',{id:responseJson.data.id})
                     }
 
                 }
