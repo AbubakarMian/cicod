@@ -19,18 +19,37 @@ const isAndroid = Platform.OS == 'android'
 class MakePayment extends React.Component {
     constructor(props) {
         super(props);
+        let p = null
+        if(this.props.route.params.pending_order_res != 'undefinded'){ 
+
+        }
         this.state = {
             value: 0,
             isChecked: false,
             bodyOrder: this.props.route.params.bodyOrder,
-            spinner:false
+            spinner: false,
+            pending_order_res:this.props.route.params.pending_order_res ?? null,
+            data:[]
         }
     }
-componentDidMount(){
-    console.log("!!!!!!!!!@@@@@@@@@@@!!!!!!!!!!!!~~~~~~~~~~",this.state.bodyOrder)
-}
+    componentDidMount() {
+        console.log("!!!!!!!!!@@@@@@@@@@@!!!!!!!!!!!!~~~~~~~~~~", this.state.bodyOrder)
+    }
     async setPaymentMode(payment_mode, navigateScreen) {
-        if(await this.state.spinner){
+        if (await this.state.spinner) {
+            return;
+        }
+        let pending_order_res = this.state.pending_order_res
+        console.log('pending_order_res.data.payment_link',pending_order_res)
+        if(pending_order_res != null ){    
+            this.setState({
+                data:pending_order_res.data
+            });    
+            this.payment_response(pending_order_res, 
+            'PaymentWeb', { 
+                payment_link: pending_order_res.data.payment_link,
+                amount_payable: pending_order_res.data.amount,
+                 data: pending_order_res.data });
             return;
         }
         await this.setState({ spinner: true })
@@ -85,14 +104,24 @@ componentDidMount(){
         this.props.logoutUser();
         this.props.navigation.navigate('Login');
     }
-    
-    async makePaymentFun(payment_mode) {
-        if(await this.state.spinner){
+
+    async makePaymentFun(payment_mode) { // only for online
+        if (await this.state.spinner) {
             return;
         }
+        let pending_order_res = this.state.pending_order_res 
+        console.log('pending_order_res.data.payment_link 121212121212',pending_order_res);
+        
+        if(pending_order_res != null ){            
+            this.payment_response(pending_order_res, 
+            'PaymentWeb', { payment_link: pending_order_res.data.payment_link, data: pending_order_res.data });
+            return;
+        }
+
         await this.setState({ spinner: true })
         let bodyOrder = this.props.route.params.bodyOrder;
         bodyOrder.payment_mode = payment_mode;
+
 
         let postData = {
             method: 'POST',
@@ -103,15 +132,15 @@ componentDidMount(){
             },
             body: JSON.stringify(bodyOrder)
         };
-        console.log('222222222222 makePaymentFun body params list @@@@@@!!!!!!!!!!!!!!', postData);
+        console.log('222222222222 makePaymentFun body params l!!', postData);
         fetch(Constants.orderslist, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({ spinner: false })
-                console.log('all response ',responseJson);
+                console.log('all response ', responseJson);
                 if (responseJson.status === "success") {
-                let payment_link = responseJson.data.payment_link
-                this.payment_response(responseJson, 'PaymentWeb', { payment_link: payment_link, data: responseJson.data });
+                    let payment_link = responseJson.data.payment_link
+                    this.payment_response(responseJson, 'PaymentWeb', { payment_link: payment_link, data: responseJson.data });
                 }
                 else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
@@ -134,7 +163,7 @@ componentDidMount(){
             this.setState({ spinner: false })
             // alert(responseJson.message)
             this.props.navigation.navigate(redirect_screen, redirect_body);
-        }              
+        }
         else if (responseJson.status == 401) {
             this.unauthorizedLogout();
         } else {
@@ -184,8 +213,14 @@ componentDidMount(){
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity
-                                // onPress={()=>this.props.navigation.navigate('PayByPos')}
-                                onPress={() => this.setPaymentMode('POS', 'PayByPos')}
+                                onPress={()=>
+                                    this.props.navigation.navigate('PayByPos',{
+                                    bodyOrder:this.props.route.params.bodyOrder,
+                                    amount_payable:this.props.route.params.amount_payable,
+                                    // pending_order_res:this.props.route.params.pending_order_res,
+                                    data:this.props.route.params.pending_order_res.data,
+                            })}
+                                // onPress={() => this.setPaymentMode('POS', 'PayByPos')}
                                 style={[{}, styles.cardTouch]}
                             >
                                 <View>
@@ -199,8 +234,13 @@ componentDidMount(){
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity
-                                // onPress={()=>this.props.navigation.navigate('PayByUssd')}
-                                onPress={() => this.setPaymentMode('USSD', 'PayByUssd')}
+                                onPress={() => this.props.navigation.navigate('PayByUssd', {
+                                    bodyOrder: this.props.route.params.bodyOrder,
+                                    amount_payable: this.props.route.params.amount_payable,
+                                    data: this.props.route.params.pending_order_res,
+                                    payment_mode:  'USSD',
+                                })}
+                                // onPress={() => this.setPaymentMode('USSD', 'PayByUssd')}
                                 style={[{}, styles.cardTouch]}
                             >
                                 <View>
@@ -214,8 +254,13 @@ componentDidMount(){
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity
-                                // onPress={()=>this.props.navigation.navigate('PayByCash')}
-                                onPress={() => this.setPaymentMode('CASH', 'PayByCash')}
+                                onPress={() => this.props.navigation.navigate('PayByCash', {
+                                    bodyOrder: this.props.route.params.bodyOrder,
+                                    amount_payable: this.props.route.params.amount_payable,
+                                    data: this.props.route.params.pending_order_res,
+                                    payment_mode:  'CASH',
+                                })}
+                                // onPress={() => this.setPaymentMode('CASH', 'PayByCash')}
                                 style={[{}, styles.cardTouch]}
                             >
                                 <View>
