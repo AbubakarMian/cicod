@@ -223,16 +223,16 @@ class CreateOrder extends React.Component {
         console.log('this.props.deliveryAddress.type this.props.deliveryAddress.type', this.props.deliveryAddress);
         let discounted_price = 0
         let discounted_percentage = 0
-        let amount_payable = 0
-        if (this.props.orderDiscountReducer.discount_type == 'percentage') {
-            discounted_percentage = this.props.orderDiscountReducer.discount_amount;
-            // discounted_price = (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01);
-            amount_payable = this.state.cart_detail.total_price_with_tax - (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01) ?? 0;
-        }
-        else {
-            discounted_price = this.props.orderDiscountReducer.discount_amount;
-            amount_payable = (this.state.cart_detail.total_price_with_tax - this.props.orderDiscountReducer.discount_amount) ?? 0;
-        }
+        let amount_payable = this.state.amount_payable
+        // if (this.props.orderDiscountReducer.discount_type == 'percentage') {
+        //     discounted_percentage = this.props.orderDiscountReducer.discount_amount;
+        //     // discounted_price = (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01);
+        //     amount_payable = this.state.cart_detail.total_price_with_tax - (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01) ?? 0;
+        // }
+        // else {
+        //     discounted_price = this.props.orderDiscountReducer.discount_amount;
+        //     amount_payable = (this.state.cart_detail.total_price_with_tax - this.props.orderDiscountReducer.discount_amount) ?? 0;
+        // }
         
 
         let bodyOrder = {
@@ -256,10 +256,10 @@ class CreateOrder extends React.Component {
 
         };
 
-        this.setState({
-            amount_payable: amount_payable,
-            ConfirmationPayInvoice: false
-        })
+        // this.setState({
+        //     amount_payable: amount_payable,
+        //     ConfirmationPayInvoice: false
+        // })
         if (this.state.goto_payment_screen == '') {//show_part_payment
             console.log('step  1 ')
             await this.create_order_id(Constants.orderslist, bodyOrder)
@@ -270,7 +270,7 @@ class CreateOrder extends React.Component {
             this.props.navigation.navigate(this.state.goto_payment_screen, {
                 bodyOrder: bodyOrder,
                 payment_mode: this.state.payment_mode,
-                amount_payable: amount_payable,
+                amount_payable: this.state.amount_payable,
             });
             console.log('step  2 ')
             return;
@@ -447,6 +447,22 @@ class CreateOrder extends React.Component {
             { label: 'Pay Invoice', value: 2 },
             { label: 'Part Payment', value: 3 },
         ];
+        var amount_payable = 0; //this.props.currency.currency + " "
+        if(this.props.orderDiscountReducer.discount_type == 'percentage'){
+            amount_payable = this.state.cart_detail.total_price_with_tax - 
+                (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01).toFixed(2);
+        }
+        else{ //'value'
+            amount_payable = (this.state.cart_detail.total_price_with_tax - this.props.orderDiscountReducer.discount_amount).toFixed(2)
+        }
+
+        if(this.state.amount_payable != amount_payable){
+            this.setState({
+                amount_payable:amount_payable
+            })
+            
+        }
+
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
@@ -815,18 +831,7 @@ class CreateOrder extends React.Component {
                                     {this.state.cart_detail.has_vat ?
                                         <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.tax ?? 0}</Text>
                                         : null}
-                                    {(this.props.orderDiscountReducer.discount_type == 'percentage') ?
-
-                                        <Text style={[{}, styles.subTotleColumn2Text]}>{(this.props.currency.currency + " " + (this.state.cart_detail.total_price_with_tax - (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01)).toFixed(2)) ?? 0}</Text>
-                                        :
-                                        (this.props.orderDiscountReducer.discount_type == 'value') ?
-                                            <Text style={[{}, styles.subTotleColumn2Text]}>{(this.props.currency.currency + " " + (
-                                                // (this.state.cart_detail.total_price - this.props.orderDiscountReducer.discount_amount)+
-                                                ((this.state.cart_detail.total_price_with_tax - this.props.orderDiscountReducer.discount_amount))).toFixed(2)) ?? 0}</Text>
-                                            : <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.total_price_with_tax ?? 0}</Text>
-                                    }
-
-
+                                        <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " +parseFloat(this.state.amount_payable+'').toFixed(2)}</Text>
                                 </View>
                             </View>
                             <View style={{ flexDirection: 'row', width: width - 50, alignSelf: 'center', marginVertical: 10 }}>
