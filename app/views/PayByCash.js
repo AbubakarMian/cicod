@@ -25,9 +25,8 @@ class PayByCash extends React.Component {
             cashCollected:''
         }
     }
-    get_order_detail() {
-        console.log('pay by cash ',this.props.route.params.data.id);
-        // return;
+    
+    get_order_detail(order_id) {
         let postData = {
             method: 'GET',
             headers: {
@@ -37,36 +36,71 @@ class PayByCash extends React.Component {
             },
         };
 
-        let order_id = this.props.route.params.data.id;
+        // let order_id = this.props.route.params.data.id;
         let url = Constants.orderslist + '/' + order_id
-        console.log('pay cash---- body params list @@@@@@!!!!!!!!!!!!!!', this.props.route.params);
+        console.log('---- body params list @@@@@@!!!!!!!!!!!!!!', this.props.route.params);
         console.log('order url detail ', url);
         console.log('order postData ', postData);
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 console.log("order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
-                if (responseJson.status == 401) {
-                    this.unauthorizedLogout();
-                }
-                else if (responseJson.status.toUpperCase() === "SUCCESS") {
-                    let data = responseJson.data;
-                    this.setState({
-                        spinner: false,
-                        order_detail: data,
-                        order_id:order_id
-                    })
-                }               
-                else {
+                if (responseJson.status.toUpperCase() === "SUCCESS") {
+                    this.props.navigation.navigate('OrderDetail', { id: this.responseJson.data.id })
+                    // let payment_link = responseJson.data.payment_link
+                    // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
+                } else {
                     this.setState({ spinner: false })
                     let message = responseJson.message
-                    console.log('some error',responseJson)
+                    console.log('some error', responseJson)
                 }
             }
             )
             .catch((error) => {
                 console.log("Api call error", error);
                 // Alert.alert(error.message);
+            });
+    }
+    async makePaymentFun(payment_mode) {
+        if (await this.state.spinner) {
+            return;
+        }
+        await this.setState({ spinner: true })
+        let bodyOrder = this.props.route.params.bodyOrder;
+        bodyOrder.payment_mode = payment_mode;
+        let postData = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': this.props.user.access_token
+            },
+            body: JSON.stringify(bodyOrder)
+        };
+        console.log('222222222222 makePaymentFun body params list @@@@@@!!!!!!!!!!!!!!', postData);
+        fetch(Constants.orderslist, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                this.setState({ spinner: false })
+                console.log('all response  ', responseJson);
+                if (responseJson.status === "success") {
+                    this.props.navigation.navigate('PaymentSuccess', { data:responseJson.data})
+                    // this.get_order_detail(responseJson.data.id);
+                    // let payment_link = responseJson.data.payment_link
+                    // this.payment_response(responseJson, 'PaymentWeb', { payment_link: payment_link, data: responseJson.data });
+
+                }
+                else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
+                    Alert.alert('Error', message)
+                }
+            }
+            )
+            .catch((error) => {
+                console.log("Api call error", error);
             });
     }
     
@@ -105,8 +139,7 @@ class PayByCash extends React.Component {
         return this.state.amount_returned;        
     }
 
-    press_done() {
-        let order = this.state.order_detail
+    press_done(order) {
         let cashCollected = parseFloat(this.state.cashCollected)
         console.log('cashCollected) < 0 ',cashCollected <  order.amount)
         console.log('this.getChange() == \'\'',this.getChange() == '')
@@ -115,31 +148,40 @@ class PayByCash extends React.Component {
             Alert.alert('Alert','Insufficient Cash Collection')
             return;
         }
-        console.log('param',this.props.route.params.payment_link);
-        if (this.props.route.params.payment_link == null) {
-            Alert.alert('payment error','Payment link not found')
-        } 
-        else {
-            this.props.navigation.navigate('PaymentSuccess', { data:order})
-            // this.props.navigation.navigate('PaymentWeb', { payment_link: this.props.route.params.payment_link,data:order });
+        if(this.props.route.params.data != undefined){
+            console.log('in if this.props.route.params.data.id',this.props.route.params.data.data.id)
+            this.props.navigation.navigate('OrderDetail',{id:this.props.route.params.data.data.id})
+            return;
         }
+
+        // console.log('param',this.props.route.params.payment_link);
+        // if (this.props.route.params.payment_link == null) {
+        //     Alert.alert('payment error','Payment link not found')
+        // } 
+        // else {
+            console.log('oaramsiiiiiiiii',this.props.route.params)
+            console.log('oaramsiiiiiiiiipayment_mode',this.props.route.params.payment_mode)
+            this.makePaymentFun(this.props.route.params.payment_mode);
+            
+            // this.props.navigation.navigate('PaymentWeb', { payment_link: this.props.route.params.payment_link,data:order });
+        // }
     }
     payByCash(props){
         let _that = props._that;
         let params = _that.props.route.params;
-        let order = {};
-        if(_that.state.order_detail == null || params.data.id != _that.state.order_id){
-            order = _that.get_order_detail();
-            return null;
-        }        
-        order = _that.state.order_detail
+        console.log('params',params)
+        let order_detail = {
+                amount:params.amount_payable
+            }
+        console.log('order_detail',order_detail)              
+        order_detail = order_detail
         return(
             <View>
                     <ScrollView>
                         <View style={[{}, styles.contentContainer]}>
                             <Image source={require('../images/payByCash.png')} />
                             <Text style={[{}, styles.collectText]}>Collect the sum of</Text>
-                            <Text style={[{}, styles.payText]}>{_that.props.currency.currency+" "+order.amount}</Text>
+                            <Text style={[{}, styles.payText]}>{_that.props.currency.currency+" "+order_detail.amount}</Text>
                             <Text style={[{}, styles.cashText]}>in cash</Text>
                         </View>
                         <View style={[{}, styles.inputContainer]}>
@@ -151,7 +193,7 @@ class PayByCash extends React.Component {
                                     alignSelf={'center'}
                                     color={'#000'}
                                     keyboardType={'numeric'}
-                                    onChangeText={(recieved)=>_that.amountRecieved(recieved,order.amount)}
+                                    onChangeText={(recieved)=>_that.amountRecieved(recieved,order_detail.amount)}
                                     value={_that.state.cashCollected}
                                 />
                             </View>
@@ -168,7 +210,7 @@ class PayByCash extends React.Component {
                                 />
                             </View>
                             <TouchableOpacity style={[{}, styles.touchView]}
-                                onPress={()=>_that.press_done()}
+                                onPress={()=>_that.press_done(order_detail)}
                             >
                                 <Text style={[{}, styles.touchText]}>Done</Text>
                             </TouchableOpacity>

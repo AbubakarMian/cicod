@@ -34,7 +34,8 @@ class PartPaytment extends React.Component {
             selected_date:'DD-MM-YYY',
             part_payment_balance_due_date:0,
             part_amount_request:0,
-            order:null
+            order:null,
+            invoice_sent_msg:'Invoice Sent'
         }
     }
     
@@ -80,9 +81,10 @@ class PartPaytment extends React.Component {
             return;
         }
         if(this.state.order == null){
-            await this.create_order();            
+            await this.create_order('pay');            
         }
         let order = await this.state.order
+        console.log('order',order)
         let bodyOrder = this.get_body_order();
         this.props.navigation.navigate('MakePayment', { bodyOrder: bodyOrder,
             payment_mode: this.state.payment_mode ,
@@ -128,17 +130,55 @@ class PartPaytment extends React.Component {
         return true;
     }
     resendInvoice(){
-
+        let postData = {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': this.props.user.access_token
+            },
+            body: JSON.stringify(bodyOrder)
+        };
+        console.log('---- update postData params list @@@@@@!!!!!!!!!!!!!!', postData);
+        // https://com.cicodsaasstaging.com/com/api/orders/948?action=send_invoice
+        let url = Constants.orderslist +'/'+this.state.order.id+'?action=send_invoice'
+        fetch(Constants.orderslist, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                console.log("create_order_id responseJson responseJson!!!!!!!!!!!", responseJson)
+                if (responseJson.status === "success") {
+                    this.setState({ spinner: false })
+                    alert(this.state.invoice_sent_msg)
+                }                
+                else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                } 
+                else {
+                    this.setState({ spinner: false })
+                    let message = responseJson.message
+                    console.log('obj',responseJson)
+                }
+            }
+            )
+            .catch((error) => {
+                console.log("Api call error", error);
+                // Alert.alert(error.message);
+            });
+    }
+    send_order_invoice(){
+        this.create_order('invoice');
     }
 
-    create_order(){
-
+    async create_order(action){
         if(!this.required_fields_check()){
             return;
         }
-        // if(order!=null){
-        //     this.resendInvoice();
-        // }
+        if(this.state.order!=null){
+            await this.resendInvoice();
+            return;
+        }
+
+
         let bodyOrder = this.get_body_order();
         
         
@@ -160,18 +200,12 @@ class PartPaytment extends React.Component {
             .then(async responseJson => {
                 console.log("create_order_id responseJson responseJson!!!!!!!!!!!", responseJson)
                 if (responseJson.status === "success") {
-
-                    this.setState({ spinner: false })
-                    // alert(responseJson.message)
-                    alert(responseJson.message)
-                    let payment_link = responseJson.data.payment_link
-                        this.setState({
+                    if(action == 'invoice'){
+                        alert(this.state.invoice_sent_msg)
+                    }
+                        this.setState({spinner: false,
                             order:responseJson.data
                         })
-                    
-                        // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
-                    
-                    
                 }                
                 else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
@@ -298,7 +332,7 @@ class PartPaytment extends React.Component {
             <View style={[{paddingHorizontal:10},styles.balanceHeadingView]}>
                 <Text style={[{color:'#929497',alignSelf:'center'},fontStyles.normal15]}>TOTAL AMOUNT</Text>
                 <View style={[{backgroundColor:'#DAF8EC'},styles.balanceView]}>
-                  <Text style={[{color:'#4E4D4D'},fontStyles.bold25]}>{_that.props.currency.currency+" "+params.amount_payable.toFixed(2)}</Text>
+                  <Text style={[{color:'#4E4D4D'},fontStyles.bold25]}>{_that.props.currency.currency+" "+parseFloat(params.amount_payable+"").toFixed(2)}</Text>
                 </View>
                 <Text style={[{color:'#929497',fontSize:8}]}>Type of payment</Text>
                 <DropDownPicker
@@ -357,7 +391,7 @@ class PartPaytment extends React.Component {
             <View style={[{},styles.btnRow]}>
             <View style={[{},styles.btnColumn]}>
                 <TouchableOpacity
-                onPress={()=>_that.create_order()}
+                onPress={()=>_that.send_order_invoice()}
                 style={[{borderColor:'#B1272C',borderWidth:1},styles.btnTouch]}
                 >
                     <Text style={[{color:'#B1272C'},fontStyles.normal15]}>Send Invoice</Text>

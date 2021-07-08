@@ -25,15 +25,16 @@ class PayByPOS extends React.Component {
 
     press_confirm() {
         // let payment_link = this.state.payment_link;
-        console.log('param',this.props.route.params.payment_link);
-        if (this.props.route.params.payment_link == null) {
-            Alert.alert('payment error','Payment link not found')
-        }
-        else {
-           this.props.navigation.navigate('OrderDetail',{id:this.state.order_id})
+        this.props.navigation.navigate('OrderDetail',{id:this.state.order_id})
+        // console.log('param',this.props.route.params.payment_link);
+        // if (this.props.route.params.payment_link == null) {
+        //     Alert.alert('payment error','Payment link not found')
+        // }
+        // else {
+        //    this.props.navigation.navigate('OrderDetail',{id:this.state.order_id})
             
-            // this.props.navigation.navigate('PaymentWeb', { payment_link: this.props.route.params.payment_link,data:this.state.order_detail });
-        }
+        //     // this.props.navigation.navigate('PaymentWeb', { payment_link: this.props.route.params.payment_link,data:this.state.order_detail });
+        // }
     }
 
     get_order_detail() {
@@ -45,7 +46,7 @@ class PayByPOS extends React.Component {
                 'Authorization': this.props.user.access_token
             },
         };
-
+        console.log('~~~~~~~~~~~~~~~',this.props.route.params.data)
         let order_id = this.props.route.params.data.id;
         let url = Constants.orderslist + '/' + order_id
         console.log('---- body params list @@@@@@!!!!!!!!!!!!!!', this.props.route.params);

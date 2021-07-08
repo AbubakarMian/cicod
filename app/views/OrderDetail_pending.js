@@ -67,7 +67,8 @@ class OrderDetail_pending extends React.Component {
                 console.log('data data data res res res ', responseJson.data)
                 if (responseJson.status === 'success') {
                     if (responseJson.message == "Order not found") {
-                        this.props.navigation.goBack();
+                        // this.props.navigation.goBack();
+                        this.props.navigation.navigate('Order')
                         Alert.alert('Message', responseJson.message)
                         return
                     }
@@ -79,6 +80,7 @@ class OrderDetail_pending extends React.Component {
                     }
                     let resdata = responseJson.data;
                     this.setState({
+                        pending_order_res: responseJson,
                         data: resdata,
                         cicod_order_id: resdata.cicod_order_id,
                         delivery_type: resdata.delivery_type,
@@ -162,7 +164,50 @@ class OrderDetail_pending extends React.Component {
         let bodyOrder = this.state.bodyOrder;
         let payment_mode = bodyOrder.payment_mode;
         let amount_payable = bodyOrder.amount; // amount_payable not available
-        this.props.navigation.navigate('MakePayment',{bodyOrder,payment_mode,amount_payable})
+        let order_id = order_id; // this.props.route.params.id
+        this.props.navigation.navigate('MakePayment',{
+            bodyOrder,
+            payment_mode,
+            amount_payable,
+            pending_order_res:this.state.pending_order_res
+          
+    })
+    }
+    cancelOrder(){
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': this.props.user.access_token
+            },
+        };
+
+        // https://com.cicodsaasstaging.com/com/api/orders/179?action=cancel_order
+        let order_id = this.props.route.params.id;
+        let url = Constants.orderslist + '/' + order_id+'?action=cancel_order'
+        console.log('order postData ', postData);
+        fetch(url, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                console.log("order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
+                if (responseJson.status.toUpperCase() === "SUCCESS") {
+                    Alert.alert('Message',responseJson.message);
+                    this.props.navigation.navigate('Order')
+                    // this.props.navigation.goBack();
+                    // let payment_link = responseJson.data.payment_link
+                    // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
+                } else {
+                    this.setState({ spinner: false })
+                    let message = responseJson.message
+                    console.log('some error', responseJson)
+                }
+            }
+            )
+            .catch((error) => {
+                console.log("Api call error", error);
+                // Alert.alert(error.message);
+            });
     }
     send_order_confirmation(){
         let url=Constants.orderslist+"/"+this.state.order_id+"?action=send_invoice";
@@ -213,7 +258,8 @@ class OrderDetail_pending extends React.Component {
                         color={'#fff'}
                     />
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.goBack()}
+                        // onPress={() => this.props.navigation.goBack()}
+                        onPress={() => this.props.navigation.navigate('Order')}
                     >
                         <View style={[{alignItems:'center'}, styles.headingRow]}>
                             <Icon name="arrow-left" size={25} color="#929497" />
@@ -423,7 +469,7 @@ class OrderDetail_pending extends React.Component {
                         </View>
                         <View style={[{flexDirection:'row',width:width-20,alignSelf:'center'}]}>
                         <TouchableOpacity
-                            onPress={() => this.ReciptResend()}
+                            onPress={() => this.pay()}
                             style={[{}, styles.btnContinuueView]}>
                             <Text style={{ color: '#FFFFFF' }}>Pay</Text>
                         </TouchableOpacity>
@@ -468,13 +514,10 @@ class OrderDetail_pending extends React.Component {
                                     <Text style={{}}>Update</Text>
                                 </TouchableOpacity> */}
                                 <TouchableOpacity
-                                    onPress={() => this.suspendUnsuspendFun()}
+                                    onPress={() => this.cancelOrder()}
                                     style={[{ flexDirection: 'row', marginVertical: 10 },]}>
                                     <Image source={require('../images/ban.png')} style={[{}, styles.banImage]} />
-                                    {(this.state.action == "suspend") ?
-                                        <Text style={{}}>Suspend</Text> :
-                                        <Text style={{}}>Unsuspend</Text>
-                                    }
+                                    <Text>Cancel</Text>
 
                                 </TouchableOpacity>
                             </View>
