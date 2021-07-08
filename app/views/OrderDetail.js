@@ -147,7 +147,7 @@ class OrderDetail extends React.Component {
                         color={'#fff'}
                     />
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.goBack()}
+                        onPress={() => this.props.navigation.navigate('Order')}
                     >
                         <View style={[{alignItems:'center'}, styles.headingRow]}>
                             <Icon name="arrow-left" size={25} color="#929497" />

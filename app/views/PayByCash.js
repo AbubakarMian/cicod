@@ -46,7 +46,7 @@ class PayByCash extends React.Component {
             .then(async responseJson => {
                 console.log("order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
                 if (responseJson.status.toUpperCase() === "SUCCESS") {
-                    this.props.navigation.navigate('OrderDetail', { id: this.responseJson.data.id })
+                    this.props.navigation.navigate('OrderDetail', { id: this.responseJson.data.id ,data:responseJson.data})
                     // let payment_link = responseJson.data.payment_link
                     // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
                 } else {
@@ -62,12 +62,14 @@ class PayByCash extends React.Component {
             });
     }
     async makePaymentFun(payment_mode) {
+        
         if (await this.state.spinner) {
             return;
         }
         await this.setState({ spinner: true })
         let bodyOrder = this.props.route.params.bodyOrder;
-        bodyOrder.payment_mode = payment_mode;
+        // bodyOrder.payment_mode = payment_mode;
+        // console.log("$$$$$$$$$$$$$$$$$$$",bodyOrder.payment_mode)
         let postData = {
             method: 'POST',
             headers: {
@@ -84,8 +86,8 @@ class PayByCash extends React.Component {
                 this.setState({ spinner: false })
                 console.log('all response  ', responseJson);
                 if (responseJson.status === "success") {
-                    this.props.navigation.navigate('PaymentSuccess', { data:responseJson.data})
-                    // this.get_order_detail(responseJson.data.id);
+                    // this.props.navigation.navigate('PaymentSuccess', { data:responseJson.data})
+                    this.get_order_detail(responseJson.data.id);
                     // let payment_link = responseJson.data.payment_link
                     // this.payment_response(responseJson, 'PaymentWeb', { payment_link: payment_link, data: responseJson.data });
 
@@ -141,6 +143,7 @@ class PayByCash extends React.Component {
 
     press_done(order) {
         let cashCollected = parseFloat(this.state.cashCollected)
+        console.log("###########!~~~~~~~~~~",cashCollected)
         console.log('cashCollected) < 0 ',cashCollected <  order.amount)
         console.log('this.getChange() == \'\'',this.getChange() == '')
         console.log('cashCollected == \'\'',cashCollected)
@@ -148,23 +151,16 @@ class PayByCash extends React.Component {
             Alert.alert('Alert','Insufficient Cash Collection')
             return;
         }
-        if(this.props.route.params.data != undefined){
-            console.log('in if this.props.route.params.data.id',this.props.route.params.data.data.id)
-            this.props.navigation.navigate('OrderDetail',{id:this.props.route.params.data.data.id})
-            return;
-        }
-
-        // console.log('param',this.props.route.params.payment_link);
-        // if (this.props.route.params.payment_link == null) {
-        //     Alert.alert('payment error','Payment link not found')
-        // } 
-        // else {
-            console.log('oaramsiiiiiiiii',this.props.route.params)
-            console.log('oaramsiiiiiiiiipayment_mode',this.props.route.params.payment_mode)
-            this.makePaymentFun(this.props.route.params.payment_mode);
-            
-            // this.props.navigation.navigate('PaymentWeb', { payment_link: this.props.route.params.payment_link,data:order });
+        console.log("~~~~~~~~~~~~~~~",this.props.route.params.data)
+        // if(this.props.route.params.pending_order_res != undefined){
+            // console.log('in if this.props.route.params.data.id',this.props.route.params.pending_order_res.data.id)
+            // this.props.navigation.navigate('PaymentSuccess',{data:this.props.route.params.pending_order_res.data})
+            // return;
         // }
+        this.props.navigation.navigate('PaymentSuccess',{data:this.props.route.params.data})
+        return;
+            // this.makePaymentFun(this.props.route.params.payment_mode);
+            
     }
     payByCash(props){
         let _that = props._that;
