@@ -19,6 +19,7 @@ import TabNav from '../views/TabsNav';
 import FontCss from '../css/FontCss';
 
 class Order extends React.Component {
+    reload = true;
     constructor(props) {
         super(props);
         this.state = {
@@ -45,41 +46,6 @@ class Order extends React.Component {
             is_active_list:listType
         })
         return;
-console.log("**************************",listType)
-        // this.setState({
-        //     spinner: true,
-        //     is_active_list: listType
-        // })
-        // let postData = {
-        //     method: 'GET',
-        //     headers: {
-        //         Accept: 'application/json',
-        //         'Content-Type': 'application/json',
-        //         Authorization: this.props.user.access_token,
-        //     },
-
-        // };
-        // // console.log("%%%%%%%%%%", Constants.orderslist + '?order_status=' + listType)
-        // fetch(Constants.orderslist + '?order_status=' + listType, postData)
-
-        //     .then(response => response.json())
-        //     .then(async responseJson => {
-
-        //         if (responseJson.status === 'success') {
-        //             this.setState({ spinner: false });
-        //             this.setState({
-        //                 data: responseJson.data
-        //             });
-        //             // this.props.navigation.navigate('DrawerNavigation')
-        //         } else if (responseJson.status == 401) {
-        //             this.unauthorizedLogout();
-        //         }
-        //         else {
-        //             let message = responseJson.message
-        //             Alert.alert('Error', message)
-        //         }
-
-        //     })
     }
     orderList(url) {
         console.log("############################################",url)
@@ -114,6 +80,11 @@ console.log("**************************",listType)
 
             })
     }
+    async componentWillUnmount(){
+        this.reload = true;
+        console.log('reload un mount ',this.reload)
+        console.log('componentWillUnmount')
+    }
 
     unauthorizedLogout() {
         Alert.alert('Error', Constants.UnauthorizedErrorMsg)
@@ -128,8 +99,10 @@ console.log("**************************",listType)
     }
     itemDetail(item,type) {
         console.log("~~~~~~~~~~~~~~~~~",type)
+        this.reload = true;
         const id = item.id
         if(type=='PENDING'){
+           
             this.props.navigation.navigate('OrderDetail_pending', { id })
         }
         else{
@@ -252,13 +225,14 @@ console.log("**************************",listType)
         if(_that.state.is_active_list != ''){
             url = url + filter_concat+'order_status=' + _that.state.is_active_list
         }       
-
-        if (url != _that.state.url_orders) {
+        console.log('reload hata ',_that.reload)
+        if (url != _that.state.url_orders || _that.reload) {
+            _that.reload = false;
             console.log('urllllll',url)
             _that.orderList(url);
             console.log('url ',url);
             _that.setState({
-                url_orders: url
+                url_orders: url,
             })
         }
         console.log('url hit', url);

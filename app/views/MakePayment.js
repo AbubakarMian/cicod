@@ -39,22 +39,23 @@ class MakePayment extends React.Component {
         if (await this.state.spinner) {
             return;
         }
-        let pending_order_res = this.state.pending_order_res
-        console.log('pending_order_res.data.payment_link',pending_order_res)
-        if(pending_order_res != null ){    
-            this.setState({
-                data:pending_order_res.data
-            });    
-            this.payment_response(pending_order_res, 
-            'PaymentWeb', { 
-                payment_link: pending_order_res.data.payment_link,
-                amount_payable: pending_order_res.data.amount,
-                 data: pending_order_res.data });
-            return;
-        }
+        // let pending_order_res = this.state.pending_order_res
+        // console.log('pending_order_res.data.payment_link',pending_order_res)
+        // if(pending_order_res != null ){    
+        //     this.setState({
+        //         data:pending_order_res.data
+        //     });    
+        //     this.payment_response(pending_order_res, 
+        //     'PaymentWeb', { 
+        //         payment_link: pending_order_res.data.payment_link,
+        //         amount_payable: pending_order_res.data.amount,
+        //          data: pending_order_res.data });
+        //     return;
+        // }
         await this.setState({ spinner: true })
         let bodyOrder = this.props.route.params.bodyOrder;
         bodyOrder.payment_mode = payment_mode;
+      
         let postData = {
             method: 'POST',
             headers: {
@@ -82,7 +83,8 @@ class MakePayment extends React.Component {
                             // bodyOrder: bodyOrder,
                             data: responseJson.data,
                             amount_payable: this.props.route.params.amount_payable,
-                            payment_link: payment_link
+                            payment_link: payment_link,
+                            payment_mode: payment_mode,
                         });
                 }
                 else {
@@ -173,6 +175,28 @@ class MakePayment extends React.Component {
         }
     }
 
+    payByCash(){
+        if(this.props.route.params.pending_order_res == undefined){
+            this.setPaymentMode('CASH', 'PayByCash')
+        }
+        else{
+            this.props.navigation.navigate('PayByCash', {
+                bodyOrder: this.props.route.params.bodyOrder,
+                amount_payable: this.props.route.params.amount_payable,
+                // pending_order_res: this.props.route.params.pending_order_res,
+                payment_link: this.props.route.params.pending_order_res.data.payment_link,
+                payment_mode:  'CASH',
+                data:this.props.route.params.pending_order_res.data
+            })
+
+            // data: responseJson.data,
+                            // amount_payable: this.props.route.params.amount_payable,
+                            // payment_link: payment_link,
+                            // payment_mode: payment_mode,
+        }
+        
+    }
+
     render() {
         return (
             <View style={[{}, styles.mainView]}>
@@ -254,13 +278,8 @@ class MakePayment extends React.Component {
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity
-                                onPress={() => this.props.navigation.navigate('PayByCash', {
-                                    bodyOrder: this.props.route.params.bodyOrder,
-                                    amount_payable: this.props.route.params.amount_payable,
-                                    data: this.props.route.params.pending_order_res,
-                                    payment_mode:  'CASH',
-                                })}
-                                // onPress={() => this.setPaymentMode('CASH', 'PayByCash')}
+                           
+                                onPress={()=>this.payByCash()}
                                 style={[{}, styles.cardTouch]}
                             >
                                 <View>
