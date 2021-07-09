@@ -306,7 +306,7 @@ class OrderFilter extends React.Component {
                 <View style={[{ paddingRight: 20 }, styles.mainRow]}>
                   <View style={[{ marginRight: 10 }]}>
                     <TouchableOpacity
-                      onPress={() => this.orderStatus('All')}
+                      onPress={() => this.orderStatus('')}
                     >
                       <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>All</Text>
                     </TouchableOpacity>

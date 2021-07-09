@@ -111,7 +111,33 @@ class ProductFilter extends React.Component {
         }
       })
   }
+  upsert(array, item) { // (1)
+    let foundindex = -1;
+    for(let i=0;i<array.length;i++){
+      if(array[i].key == item.key){
+        foundindex = i;
+        break;
+      }
+    }
+    if (foundindex == -1){
+      array.push(item)
+    }
+    else{
+      array[foundindex].value = item.value;
+    }
+    return array;
+  }
+  upsert_filters( item) { // (1)
+    let array = this.state.filters;
+    array = this.upsert(array, item)    
+    this.setState({
+      filters:array
+    })
+  }
+  
 
+
+ 
   getCategoryList() {
     this.setState({ spinner: true })
     let postData = {
@@ -180,15 +206,14 @@ class ProductFilter extends React.Component {
  
   applyFilter () {
     console.log('this.state.filters', this.state.filters);
-    this.props.navigation.navigate('Products', { filters: this.state.filters, seller_id: 1 });
-  }
-  upsert_filters( item) { // (1)
-    let array = this.state.filters;
-    // array = this.upsert(array, item)    
+    let filters = this.state.filters 
     this.setState({
-      filters:array
+      filters:[]
     })
+    // this.props.navigation.navigate('Products', { filters: this.state.filters, seller_id: 1 });
+    this.props.navigation.navigate('Products', { filters:filters });
   }
+
   onDateChange(date) {
     () => this.setState({
         selectedStartDate: date,
@@ -197,6 +222,7 @@ class ProductFilter extends React.Component {
   setDate=(date)=> {
     this.setState({
       isDatePickerVisible: false,
+    
       // filters: filters
     })
 
@@ -226,15 +252,15 @@ class ProductFilter extends React.Component {
     // var timestamp = Date.parse(new Date(sendDate));  
 
     let filters = this.state.filters;
-    if (this.state.modal_date_type == 'created_at') {
+    if (this.state.modal_date_type == 'date_created') {
       this.upsert_filters({ key: 'date_created', value: newdate })
       // filters.push({ key: 'date_created', value: newdate });
       this.setState({
         created_at: newdate,
       })
     }
-    if (this.state.modal_date_type == 'updated_at') {
-      this.upsert_filters({ key: 'payment_date', value: newdate })
+    if (this.state.modal_date_type == 'date_updated') {
+      this.upsert_filters({ key: 'date_updated', value: newdate })
       // filters.push({ key: 'payment_status_date', value: newdate });
       this.setState({
         updated_at: newdate,
@@ -250,7 +276,7 @@ class ProductFilter extends React.Component {
   }
   render() {
     return (
-      <View style={[{}, styles.mainView]}>
+      <View style={[{zIndex:0.999}, styles.mainView]}>
         <Header navigation={this.props.navigation} />
         <Spinner
           visible={this.state.Spinner}
@@ -281,7 +307,7 @@ class ProductFilter extends React.Component {
           <Text onPress={() => { this.setState({ filters: [] }) }} style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20, top: 20 }]}>Clear Filter</Text>
         </View>
         <View style={{ width: width - 20, alignSelf: 'center', backgroundColor: '#fff', borderRadius: 10, padding: 10 }}>
-          <View style={{ width: width - 20, backgroundColor: '#fff', paddingVertical: 10, marginTop: 20,paddingBottom:50, }}>
+          <View style={{ width: width - 20, backgroundColor: '#fff',zIndex:0.999, paddingVertical: 10, marginTop: 20, }}>
             <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 5, flexDirection: 'row', position: 'relative' }}>
               <TextInput onChangeText={text => this.onQuantityText(text)}
                 label="Quantity"
@@ -293,6 +319,7 @@ class ProductFilter extends React.Component {
               <View style={{ position: 'absolute', right: 10, bottom: 10 }}>
 
               </View>
+            </View>
             </View>
             {this.state.createdby_arr.length < 1 ? null :
               <DropDownPicker
@@ -325,7 +352,7 @@ class ProductFilter extends React.Component {
                 containerStyle={{ height: 50, width: width - 30, }}
                 style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                 itemStyle={{
-                  justifyContent: 'flex-start',zIndex:999
+                  justifyContent: 'flex-start',zIndex:0.999
                 }}
                 dropDownStyle={{ height: 120, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                 labelStyle={{ color: '#A9A9A9' }}
@@ -334,8 +361,8 @@ class ProductFilter extends React.Component {
 
 
 
-          </View>
-          <View style={[{ flexDirection: 'row', zIndex: -0.999 }]}>
+          
+          <View style={[{ flexDirection: 'row', zIndex: -0.999, }]}>
             <View style={[{ flex: 1, paddingVertical: 10 }]}>
               <Text style={{ color: '#929497', fontWeight: 'bold' }}>Created Date</Text>
               <TouchableOpacity
@@ -351,7 +378,6 @@ class ProductFilter extends React.Component {
                 <View style={{ position: 'absolute', right: 0, bottom: 20 }}>
                   <Icon
                     size={30}
-
                     name="caret-down"
                     color={'#707070'}
                   />
@@ -361,7 +387,7 @@ class ProductFilter extends React.Component {
             <View style={[{ flex: 1, paddingVertical: 10 }]}>
               <Text style={{ color: '#929497', fontWeight: 'bold', marginLeft: 10 }}>Updated Date</Text>
               <TouchableOpacity
-                           onPress={() => this.setState({isDatePickerVisible:true,modal_date_type:'updated_at'})}
+                           onPress={() => this.setState({isDatePickerVisible:true,modal_date_type:'date_updated'})}
 
               
               >
