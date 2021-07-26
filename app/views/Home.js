@@ -7,7 +7,7 @@ import fontStyles from '../css/FontCss'
 import Spinner from 'react-native-loading-spinner-overlay';
 import Header from '../views/Header';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { SET_USER,SET_CUSTOMER, LOGOUT_USER,CLEAR_ORDER } from '../redux/constants/index';
 import { Constants } from '../views/Constant';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
@@ -67,7 +67,17 @@ class Home extends React.Component {
     this.props.logoutUser();
     this.props.navigation.navigate('Login');
   }
-
+createOrder(){
+  this.props.setCustomer({
+    customer_name: '',
+    customer_email: '',
+    customer_phone: '',
+})
+this.props.emptyOrder({
+   cart:[]
+}) 
+this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
+}
 
   render() {
     return (
@@ -116,7 +126,7 @@ class Home extends React.Component {
               </TouchableOpacity>
               <TouchableOpacity
                 style={{ flex: 1 }}
-                onPress={() => this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })}
+                onPress={() => this.createOrder() }
               >
                 <View style={[{
                   flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
@@ -269,7 +279,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     setUser: (value) => dispatch({ type: SET_USER, value: value }),
-    logoutUser: () => dispatch({ type: LOGOUT_USER })
+    logoutUser: () => dispatch({ type: LOGOUT_USER }),
+    setCustomer: (value) => dispatch({ type: SET_CUSTOMER, value: value }),
+    emptyOrder: () => dispatch({ type: CLEAR_ORDER }),
   }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Home)

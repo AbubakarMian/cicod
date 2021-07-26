@@ -12,7 +12,7 @@ import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'reac
 import SearchBar from 'react-native-search-bar';
 import { Constants } from '../views/Constant';
 import { connect } from 'react-redux';
-
+import Spinner from 'react-native-loading-spinner-overlay';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 class PaymentSuccess extends React.Component {
@@ -21,9 +21,11 @@ class PaymentSuccess extends React.Component {
         this.state = {
             value: 0,
             isChecked: false,
+            payment_status:'',
             // bodyOrder: this.props.route.params.bodyOrder
         }
     }
+    
     get_order_detail() {
         let postData = {
             method: 'GET',
@@ -43,11 +45,14 @@ class PaymentSuccess extends React.Component {
             .then(response => response.json())
             .then(async responseJson => {
                 console.log("order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
-                if (responseJson.status.toUpperCase() === "SUCCESS") {
-                    let data = responseJson.data;
+                // if (responseJson.status.toUpperCase() === "SUCCESS") {
+                    if (responseJson.status === "success") {
+                    console.log("~~~~~~~~~~",responseJson)
+                    
+                        let data = responseJson.data;
                     this.setState({
                         spinner: false,
-                        order_detail: data,
+                        // order_detail: data,
                         order_id:order_id
                     })
                     // let payment_link = responseJson.data.payment_link
@@ -74,7 +79,7 @@ class PaymentSuccess extends React.Component {
         let _that = props._that;
         let order = _that.props.route.params.data;
         console.log("order @@@@@@@@@@@@~~~~~~~~~~~~~~~~ order",order)
-        if (order.payment_status == 'PAID') {            
+        if (order.payment_status == 'success') {            
         return (
             <View style={[{},styles.mainContainer]}>
                 
@@ -96,16 +101,35 @@ class PaymentSuccess extends React.Component {
         )
         }
         else{
-            return null;
+           return(
+            <View style={[{},styles.mainContainer]}>
+            <View style={{borderColor:'#FFF4F4',borderWidth:20,borderRadius:100}}>     
+            <Image
+            style={{height:width/4,width:width/4}} 
+            source={require('../images/redCross.png')}
+            />
+            </View>
+            <Text style={[{color:'#4E4D4D',marginTop:10},fontStyles.bold25]}>Payment Unsuccessful</Text>
+            <Text style={[{color:'#929497'},fontStyles.normal15]}>Your payment of {_that.props.currency.currency+" "+order.amount} was not successful</Text>
+            <TouchableOpacity
+            onPress={()=>_that.props.navigation.navigate('OrderDetail', { id:order.id })}
+            style={[{},styles.touchView]}
+            >
+                <Text style={[{},styles.touchText]}>View order</Text>
+            </TouchableOpacity>
+        </View>
+           )
         }
     }
     rejectview(props) {
         let _that = props._that;
         let order = _that.props.route.params.data;
-        order.payment_status
-        console.log("!!!!!!!!!!!!!~~~~~~~~~~~~~~~~",order.payment_status)
-        let status = 'PAID'//REJECT
-        if (order.payment_status != status) {
+        // order.payment_status
+        console.log("!!!!!!!!!!!!!~~~~~~~~~~~~~~~~",order)
+        // let status = 'PAID'//REJECT
+        let status = 'success'//REJECT
+        
+        if (order != status) {
             return (
                 <View style={[{},styles.mainContainer]}>
                 <View style={{borderColor:'#FFF4F4',borderWidth:20,borderRadius:100}}>     
@@ -130,10 +154,91 @@ class PaymentSuccess extends React.Component {
         }
         
     }
+    performTimeConsumingTask = async () => {
+        return new Promise(resolve =>
+          setTimeout(() => {
+            resolve('result');
+          }, 1000),
+        );
+      };
+    sccess_view_select(_that){
+       
+        _that = _that.that
+        console.log(_that)
+        let loader = true;
+        // const data =_that.performTimeConsumingTask();
+
+    if (data !== null) {
+        loader = false;
+    }
+
+        if(loader){
+            return (
+                <Spinner
+                visible={loader}
+                textContent={'Please Wait...'}
+                textStyle={{ color: '#fff' }}
+                color={'#fff'}
+            />
+            )
+        }
+        else{
+            if(_that.props.route.params.data.payment_status=='success'){
+                    // successview(props) {
+                    //     let _that = props._that;
+                    //     let order = _that.props.route.params.data;
+                    //     console.log("order @@@@@@@@@@@@~~~~~~~~~~~~~~~~ order",order)
+                        // if (order.payment_status == 'success') {            
+                        return (
+                            <View style={[{},styles.mainContainer]}>
+                                
+                                <View style={{borderColor:'#DAF8EC',borderWidth:20,borderRadius:100}}>     
+                            <Image
+                            style={{height:width/4,width:width/4}} 
+                            source={require('../images/greenTick.png')}
+                            />
+                            </View>
+                                <Text style={[{color:'#4E4D4D',marginTop:20},fontStyles.bold25]}>Payment Successful</Text>
+                                <Text style={[{color:'#929497'},fontStyles.normal15]}>Your payment of {_that.props.currency.currency+" "+order.amount} was successful</Text>
+                                <TouchableOpacity
+                                onPress={()=>_that.props.navigation.navigate('OrderDetail', { id:order.id })}
+                                style={[{},styles.touchView]}
+                                >
+                                    <Text style={[{},styles.touchText]}>View order</Text>
+                                </TouchableOpacity>
+                            </View>
+                        )
+                        // }
+                     
+                    // }
+                    
+            }else{
+                return(
+                    <View style={[{},styles.mainContainer]}>
+                    <View style={{borderColor:'#FFF4F4',borderWidth:20,borderRadius:100}}>     
+                    <Image
+                    style={{height:width/4,width:width/4}} 
+                    source={require('../images/redCross.png')}
+                    />
+                    </View>
+                    <Text style={[{color:'#4E4D4D',marginTop:10},fontStyles.bold25]}>Payment Unsuccessful</Text>
+                    <Text style={[{color:'#929497'},fontStyles.normal15]}>Your payment of {_that.props.currency.currency+" "+order.amount} was not successful</Text>
+                    <TouchableOpacity
+                    onPress={()=>_that.props.navigation.navigate('OrderDetail', { id:order.id })}
+                    style={[{},styles.touchView]}
+                    >
+                        <Text style={[{},styles.touchText]}>View order</Text>
+                    </TouchableOpacity>
+                </View>
+                   )
+            }
+        }
+
+    }
 
 
     render() {
-
+        
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
@@ -148,8 +253,13 @@ class PaymentSuccess extends React.Component {
                         <Text style={[{}, styles.backHeadingText]}>MAKE PAYMENT</Text>
                     </View>
                 </View>
-                <this.successview _that={this} />
-                <this.rejectview _that={this} />
+                {/* {(this.props.route.params.data.payment_status== 'success')? */}
+                {/* <this.successview _that={this} /> */}
+                {/* <this.sccess_view_select _that={this}/> */}
+                {/* :<this.rejectview _that={this} />
+                } */}
+                
+                {/* <this.rejectview _that={this} /> */}
 
             </View>
         )

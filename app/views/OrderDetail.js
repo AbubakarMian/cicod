@@ -299,7 +299,7 @@ class OrderDetail extends React.Component {
                             />
                             <View style={{ marginLeft: 15, flexDirection: 'column' }}>
                                 <Text style={[{}, styles.detailInvoiceGraytext]}>Invoice Number:</Text>
-                                <Text style={[{ fontWeight: 'bold' }, styles.detailInvoiceDarkGraytext]}>PCIN00000915</Text>
+                                <Text style={[{ fontWeight: 'bold' }, styles.detailInvoiceDarkGraytext]}>PCIN {this.state.data.cicod_order_id}</Text>
                             </View>
                         </View>
                         <FlatList
@@ -325,7 +325,8 @@ class OrderDetail extends React.Component {
                                         <Text style={{ fontSize: 13, color: '#929497', marginRight: 20 }}>{item.price} </Text>
                                         <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>QTY: </Text>
                                         <Text style={{ fontSize: 13, color: '#929497', marginRight: width / 4 }}>{item.quantity} </Text>
-                                        <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end' }}>N500,000 </Text>
+                                        <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end' }}>
+                                            {this.props.currency.currency+' '+(item.quantity*item.price)} </Text>
                                     </View>
                                 </View>
                             </View>
@@ -334,7 +335,8 @@ class OrderDetail extends React.Component {
                        />
                         <View style={{ alignSelf: 'flex-end', marginRight: 20, marginVertical: 20, flexDirection: 'row' }}>
                             <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>Total:  </Text>
-                            <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>N{this.state.total_amount}</Text>
+                            <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>
+                                {this.props.currency.currency+' '+this.state.total_amount}</Text>
                         </View>
 
                     </View>
@@ -346,7 +348,8 @@ class OrderDetail extends React.Component {
 }
 function mapStateToProps(state) {
     return {
-        user: state.userReducer
+        user: state.userReducer,
+        currency: state.currencyReducer,
     }
 };
 function mapDispatchToProps(dispatch) {

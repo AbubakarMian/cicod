@@ -59,10 +59,23 @@ class Connect extends React.Component {
     getProduct(action) {
         let url = ''
         if (action == 'receive') {
-            url = Constants.connectreceivedrequest + '?filter[buyer_name]=' + this.state.product_text;
+            if(this.state.product_text==''){
+                url = Constants.connectreceivedrequest;
+            } else {
+                url = Constants.connectreceivedrequest + '?filter[buyer_name]=' + this.state.product_text;
+            }
+            
+            console.log('**************1',url)
             this.getReceivedConnect(url);
         } else {
-            url = Constants.connectsentrequest + '?filter[seller_name]=' + this.state.product_text;
+            if(this.state.product_text==''){
+                url = Constants.connectsentrequest;
+            }
+            else{
+                url = Constants.connectsentrequest + '?filter[seller_name]=' + this.state.product_text;
+            }
+            // url = Constants.connectsentrequest + '?filter[seller_name]=' + this.state.product_text;
+            // console.log('**************1',this.state.product_text)
             this.getSendConnect(url);
         }
     }
@@ -106,6 +119,7 @@ class Connect extends React.Component {
             })
     }
     getSendConnect(url) {
+        console.log("+++++++++++++++++++",url)
         this.setState({ spinner: true })
 
         let postData = {
@@ -174,11 +188,17 @@ class Connect extends React.Component {
                     this.unauthorizedLogout();
                 }
                 else {
+                    let show_msg=true;
                     let message = responseJson.data.message
+                    if(message.includes('No records found for')){
+                        show_msg=false;
+                    }
                     if (message == '' || message == undefined) {
                         message = 'Server responded with error contact admin'
                     }
+                    if(show_msg==true){
                     Alert.alert('Error', message)
+                    }
                 }
 
             })
@@ -258,7 +278,7 @@ class Connect extends React.Component {
                     <Searchbar
                         placeholder="Search a products"
                         iconColor="#B1272C"
-                        onChangeText={text => this.setState({ search_text: text })}
+                        // onChangeText={text => this.setState({ search_text: text })}
                         style={{ width: width / 1.2, alignSelf: 'center', marginTop: 10, elevation: 0, borderWidth: 1, borderColor: '#D8DCDE' }}
                         onSubmitEditing={() => this.getMerchant()}
                         onChangeText={text => this.setState({ search_text: text })}

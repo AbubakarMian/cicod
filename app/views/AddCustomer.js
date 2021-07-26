@@ -25,7 +25,8 @@ class AddCustomer extends React.Component {
             searchPress: 1,
             spinner: false,
             customerData: [],
-            search_text: ''
+            search_text: '',
+            
         }
 
     }

@@ -268,17 +268,17 @@ class Login extends React.Component {
                         <Text style={{ color: '#FFFFFF', fontSize: 16, fontFamily: 'Open Sans' }}>Continue</Text>
                     </TouchableOpacity>
                         <TouchableOpacity
-                           style={{ marginTop: 20,zIndex:0.9999,marginBottom:height/5 ,marginTop:20}}
+                           style={{ marginTop: 20,zIndex:0.9999,marginBottom:height/10}}
                             onPress={() => this.props.navigation.navigate('ResetPassword')}
                             >
                             <Text style={{ color: '#487AE0', fontSize: 14, textAlign: 'left', fontFamily: 'Open Sans' }}>Reset Password</Text>
                         </TouchableOpacity>
-                        <View>
+                        {/* <View>
                            <Image
                            source={require('../images/home/1.png')}
                                 style={{ height: width / 3, width: width / 3.6 }}
                            />
-                        </View>
+                        </View> */}
                     
                 </View>
 

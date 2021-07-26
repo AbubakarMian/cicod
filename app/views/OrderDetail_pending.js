@@ -79,6 +79,7 @@ class OrderDetail_pending extends React.Component {
                         total_ammount = total_ammount + (product_items[i].price * product_items[i].quantity);
                     }
                     let resdata = responseJson.data;
+                    console.log("%%%~~~!!!!!!!#@",resdata)
                     this.setState({
                         pending_order_res: responseJson,
                         data: resdata,
@@ -224,7 +225,7 @@ class OrderDetail_pending extends React.Component {
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log("create_order_id responseJson responseJson!!!!!!!!!!!", responseJson)
+                console.log("~~~~~~~~~~~~~~~~~~create_order_id responseJson responseJson!!!!!!!!!!!", responseJson)
                 if (responseJson.status === "success") {
 
                     Alert.alert('Message',responseJson.message);
@@ -430,7 +431,7 @@ class OrderDetail_pending extends React.Component {
                             />
                             <View style={{ marginLeft: 15, flexDirection: 'column' }}>
                                 <Text style={[{}, styles.detailInvoiceGraytext]}>Invoice Number:</Text>
-                                <Text style={[{ fontWeight: 'bold' }, styles.detailInvoiceDarkGraytext]}>PCIN00000915</Text>
+                                <Text style={[{ fontWeight: 'bold' }, styles.detailInvoiceDarkGraytext]}>{"PCIN  "+this.state.data.cicod_order_id}</Text>
                             </View>
                         </View>
                         <FlatList
@@ -453,19 +454,22 @@ class OrderDetail_pending extends React.Component {
                                     {/* <Text style={{ color: '#929497', fontSize: 12 }}>LAGOS- Palms</Text> */}
                                     <View style={{ flexDirection: 'row' }}>
                                         <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>Unit Price: </Text>
-                                        <Text style={{ fontSize: 13, color: '#929497', marginRight: 20 }}>{item.price} </Text>
+                                        <Text style={{ fontSize: 13, color: '#929497',  }}>{item.price} </Text>
                                         <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>QTY: </Text>
                                         <Text style={{ fontSize: 13, color: '#929497', marginRight: width / 4 }}>{item.quantity} </Text>
-                                        <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end' }}>N500,000 </Text>
+                                        <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end' }}>{this.props.currency.currency+" "+ this.state.total_amount}</Text>
+                                   
                                     </View>
                                 </View>
                             </View>
 
                         )}
                        />
+                       {/* this.props.currency.currency */}
                         <View style={{ alignSelf: 'flex-end', marginRight: 20, marginVertical: 20, flexDirection: 'row' }}>
+                        
                             <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>Total:  </Text>
-                            <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>N{this.state.total_amount}</Text>
+                            <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}> {this.props.currency.currency +" "+ this.state.total_amount}</Text>
                         </View>
                         <View style={[{flexDirection:'row',width:width-20,alignSelf:'center'}]}>
                         <TouchableOpacity
@@ -532,7 +536,8 @@ class OrderDetail_pending extends React.Component {
 }
 function mapStateToProps(state) {
     return {
-        user: state.userReducer
+        user: state.userReducer,
+        currency: state.currencyReducer,
     }
 };
 function mapDispatchToProps(dispatch) {

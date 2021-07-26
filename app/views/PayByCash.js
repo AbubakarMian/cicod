@@ -25,8 +25,13 @@ class PayByCash extends React.Component {
             cashCollected:''
         }
     }
+    componentDidMount(){
+        // this.get_order_detail();
+    }
     
-    get_order_detail(order_id) {
+    get_order_detail() {
+        let order_id = this.props.route.params.data.id;     
+
         let postData = {
             method: 'GET',
             headers: {
@@ -44,9 +49,13 @@ class PayByCash extends React.Component {
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log("order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
-                if (responseJson.status.toUpperCase() === "SUCCESS") {
-                    this.props.navigation.navigate('OrderDetail', { id: this.responseJson.data.id ,data:responseJson.data})
+                console.log("order response response Json responseJson responseJson!!!!!!!!!!!", responseJson.status)
+                if (responseJson.status==="success") {
+                    let data = responseJson.data;
+                    data.payment_status = 'success';
+                    this.props.navigation.navigate('PaymentCash', { data:responseJson.data})
+
+                    // this.props.navigation.navigate('OrderDetail', { id: this.responseJson.data.id ,data:responseJson.data})
                     // let payment_link = responseJson.data.payment_link
                     // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
                 } else {
@@ -62,32 +71,44 @@ class PayByCash extends React.Component {
             });
     }
     async makePaymentFun(payment_mode) {
-        
+
         if (await this.state.spinner) {
             return;
-        }
+        }        
         await this.setState({ spinner: true })
+        // this.get_order_detail();
         let bodyOrder = this.props.route.params.bodyOrder;
+        // console.log("@@@@@@@@@@@!!!!!!!!!!!~~~~~~~~~~",bodyOrder)
         // bodyOrder.payment_mode = payment_mode;
         // console.log("$$$$$$$$$$$$$$$$$$$",bodyOrder.payment_mode)
         let postData = {
-            method: 'POST',
+            method: 'GET', // POST
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
                 'Authorization': this.props.user.access_token
             },
-            body: JSON.stringify(bodyOrder)
+            // body: JSON.stringify(bodyOrder)
         };
-        console.log('222222222222 makePaymentFun body params list @@@@@@!!!!!!!!!!!!!!', postData);
-        fetch(Constants.orderslist, postData)
+        let order_id = this.props.route.params.data.id;     
+        
+        let url = Constants.orderslist+'/'+order_id+'?action=make_cash_payment'
+        console.log("*****************#########33333333333",url)
+        // console.log("*****************#########33333333333",Constants.orderslist+'/'+order_id+'?action=make_cash_payment')
+        // console.log('222222222222 makePaymentFun body params list @@@@@@!!!!!!!!!!!!!!', postData);
+        
+        fetch(url, postData)
+        
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({ spinner: false })
-                console.log('all response  ', responseJson);
+                console.log('**************all response  ',responseJson);
                 if (responseJson.status === "success") {
-                    // this.props.navigation.navigate('PaymentSuccess', { data:responseJson.data})
-                    this.get_order_detail(responseJson.data.id);
+                    
+                   console.log("&&&&&&&&&&&&&&&&&&&&& responseJson.data",responseJson.data)
+                   this.get_order_detail();
+                    // this.props.navigation.navigate('PaymentSuccess', { data:responseJson.status})
+                    // this.get_order_detail(responseJson.data.id);
                     // let payment_link = responseJson.data.payment_link
                     // this.payment_response(responseJson, 'PaymentWeb', { payment_link: payment_link, data: responseJson.data });
 
@@ -142,6 +163,7 @@ class PayByCash extends React.Component {
     }
 
     press_done(order) {
+    
         let cashCollected = parseFloat(this.state.cashCollected)
         console.log("###########!~~~~~~~~~~",cashCollected)
         console.log('cashCollected) < 0 ',cashCollected <  order.amount)
@@ -157,7 +179,8 @@ class PayByCash extends React.Component {
             // this.props.navigation.navigate('PaymentSuccess',{data:this.props.route.params.pending_order_res.data})
             // return;
         // }
-        this.props.navigation.navigate('PaymentSuccess',{data:this.props.route.params.data})
+        this.makePaymentFun(this.props.route.params.payment_mode);
+        this.props.navigation.navigate('PaymentSuccess                                                                                                                                                                                                                                                                                                                                                                           ',{data:this.props.route.params.data})
         return;
             // this.makePaymentFun(this.props.route.params.payment_mode);
             

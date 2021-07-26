@@ -31,14 +31,18 @@ class ApplyDiscount extends React.Component {
         this.props.navigation.goBack();
     }
 
-    setDiscount(discount_amount) {        
+    setDiscount(discount_amount) {
+ 
+                
             let discount_type = '';
             if(discount_amount == 'NaN'){
                 discount_amount ='0';
             }
             discount_amount = parseFloat(discount_amount)
+            
             if (this.state.value3Index == 0) {
                 discount_type = 'percentage';
+                
                 this.props.setDiscount({
                     discount_amount: discount_amount,
                     discount_type: discount_type
@@ -51,7 +55,8 @@ class ApplyDiscount extends React.Component {
                     discount_type: discount_type
                 })
             }
-            this.setState({ discount_amount: discount_amount })
+            this.setState({ discount_amount: discount_amount.toFixed(2) })
+            console.log(this.state.discount_amount)
     }
 
     radioBtnFun(index, lable) {

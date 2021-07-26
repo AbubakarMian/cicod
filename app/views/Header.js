@@ -27,15 +27,15 @@ export default class Headet extends React.Component {
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
         return (
-            <View style={{ flexDirection:'row', width: width, position: 'relative', backgroundColor: '#FFFFFF', paddingVertical: 10,paddingHorizontal:10 }}>
+            <View style={{ flexDirection:'row', width: width, position: 'relative',alignItems:'center',justifyContent:'center', backgroundColor: '#FFFFFF', paddingVertical: 10,paddingHorizontal:10 }}>
               <TouchableOpacity 
               onPress={()=>this.props.navigation.navigate('Home')}
-              style={{flex:1}}>
+              style={{flex:2}}>
                   <Image 
                   source={require('../images/homeIcone.png')}
                   />
               </TouchableOpacity>
-              <View style={{flex:3,justifyContent:'center',alignItems:'center'}}>
+              <View style={{flex:4, justifyContent:'center',alignItems:'flex-start',alignSelf:'center'}}>
                  <Image
                  style={{height:30,width:120}} 
                  source={require('../images/headerLogo.png')}

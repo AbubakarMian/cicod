@@ -208,7 +208,8 @@ class AddDiliveryAddress extends React.Component {
         else if (this.state.state_id == 0) {
             Alert.alert("Warning", "State required")
             return;
-        } 
+        }
+  
         else if (this.state.lgas_id == 0) {
             Alert.alert("Warning", "Region required")
             return;
@@ -232,16 +233,21 @@ class AddDiliveryAddress extends React.Component {
                 is_default: this.state.is_default,
             })
         };
+      
         fetch(Constants.customerdelivery, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({ spinner: false })
                 if (responseJson.status === "success") {
                     let address = this.state.house_no + ',' + this.state.street + ',' + this.state.landmark + ',' + this.state.state_name + ',' + this.state.country_name;
-                    this.props.setDeliveryAddress({
+                    
+                    address = address.replace('undefined','');
+                    await this.props.setDeliveryAddress({
                         address: address,
                         type: 'delivery',
                     })
+                    console.log("~~~~~~~~~~~~~~~",address)
+                 
                     Alert.alert('Message', responseJson.message)
                     this.props.navigation.navigate('CreateOrder', { render: true })
                 } else {

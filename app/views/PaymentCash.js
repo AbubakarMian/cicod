@@ -1,8 +1,9 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity, Alert } from 'react-native'
+import { View, ImageBackground, ScrollView, TouchableHighlight, Alert, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import { SET_USER, SET_CUSTOMER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART, REMOVE_PRODUCT_FORM_CART, CLEAR_ORDER, SET_DELIVERY_ADDRESS } from '../redux/constants/index';
 import { Text, TextInput } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
-import styles from '../css/PayByPosCss';
+import styles from '../css/PaymentSuccessCss';
 import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
@@ -11,33 +12,20 @@ import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'reac
 import SearchBar from 'react-native-search-bar';
 import { Constants } from '../views/Constant';
 import { connect } from 'react-redux';
+import Spinner from 'react-native-loading-spinner-overlay';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
-class PayByPOS extends React.Component {
+class PaymentCash extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            order_detail: null,
-            payment_link: null,
-            order_id:0
+            value: 0,
+            isChecked: false,
+            payment_status:'',
+            // bodyOrder: this.props.route.params.bodyOrder
         }
     }
-
-    press_confirm() {
-        // let payment_link = this.state.payment_link;
-        this.props.navigation.navigate('OrderDetail',{id:this.state.order_id})
-
-        // console.log('param',this.props.route.params.payment_link);
-        // if (this.props.route.params.payment_link == null) {
-        //     Alert.alert('payment error','Payment link not found')
-        // }
-        // else {
-        //    this.props.navigation.navigate('OrderDetail',{id:this.state.order_id})
-            
-        //     // this.props.navigation.navigate('PaymentWeb', { payment_link: this.props.route.params.payment_link,data:this.state.order_detail });
-        // }
-    }
-
+    
     get_order_detail() {
         let postData = {
             method: 'GET',
@@ -47,7 +35,7 @@ class PayByPOS extends React.Component {
                 'Authorization': this.props.user.access_token
             },
         };
-        console.log('~~~~~~~~~~~~~~~',this.props.route.params.data)
+
         let order_id = this.props.route.params.data.id;
         let url = Constants.orderslist + '/' + order_id
         console.log('---- body params list @@@@@@!!!!!!!!!!!!!!', this.props.route.params);
@@ -57,7 +45,8 @@ class PayByPOS extends React.Component {
             .then(response => response.json())
             .then(async responseJson => {
                 console.log("order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
-                if (responseJson.status.toUpperCase() === "SUCCESS") {
+                // if (responseJson.status.toUpperCase() === "SUCCESS") {
+                    if (responseJson.status === "success") {
                     let data = responseJson.data;
                     this.setState({
                         spinner: false,
@@ -79,21 +68,55 @@ class PayByPOS extends React.Component {
             });
     }
 
-     pay(_that) {
-        _that = _that._that;
-        let params = _that.props.route.params;
-        let order = {};
-        if(_that.state.order_detail == null || params.data.id != _that.state.order_id){
-            order = _that.get_order_detail();
-            return null;
-        }        
-        order = _that.state.order_detail
+    unauthorizedLogout() {
+        Alert.alert('Error', Constants.UnauthorizedErrorMsg)
+        this.props.logoutUser();
+        this.props.navigation.navigate('Login');
+    }
+    successview(props) {
+        let _that = props._that;
+       
+        let order = _that.props.route.params.data;
+        console.log("order @@@@@@@@@@@@~~~~~~~~~~~~~~~~ order",order)
+        if (order.payment_status == 'success') {            
+        return (
+            <View style={[{},styles.mainContainer]}>
+                
+                <View style={{borderColor:'#DAF8EC',borderWidth:20,borderRadius:100}}>     
+            <Image
+            style={{height:width/4,width:width/4}} 
+            source={require('../images/greenTick.png')}
+            />
+            </View>
+                <Text style={[{color:'#4E4D4D',marginTop:20},fontStyles.bold25]}>Payment Successful</Text>
+                <Text style={[{color:'#929497'},fontStyles.normal15]}>Your payment of {_that.props.currency.currency+" "+order.amount} was successful</Text>
+                <TouchableOpacity
+                onPress={()=>_that.props.navigation.navigate('OrderDetail', { id:order.id })}
+                style={[{},styles.touchView]}
+                >
+                    <Text style={[{},styles.touchText]}>View order</Text>
+                </TouchableOpacity>
+            </View>
+        )
+        }
+      
+    }
+
+ 
+
+
+    
+
+
+    render() {
+        
         return (
             <View style={[{}, styles.mainView]}>
-                <Header navigation={_that.props.navigation} />
+                <Header navigation={this.props.navigation} />
                 <View style={[{}, styles.backHeaderRowView]}>
                     <TouchableOpacity
-                        onPress={() => _that.props.navigation.goBack()}
+                        // onPress={()=>this.props.navigation.navigate('Sell')}
+                        onPress={() => this.props.navigation.navigate('CreateOrder')}
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
@@ -101,44 +124,35 @@ class PayByPOS extends React.Component {
                         <Text style={[{}, styles.backHeadingText]}>MAKE PAYMENT</Text>
                     </View>
                 </View>
-                <View>
-                    <ScrollView>
-                        <View style={[{}, styles.contentContainer]}>
-                            <Image style={{ height: 60, width: 40 }} source={require('../images/pos-terminal.png')} />
-                            <Text style={[{}, styles.collectText]}>Collect the sum of</Text>
-                            <Text style={[{}, styles.payText]}>{_that.props.currency.currency+" "+order.amount}</Text>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Text style={[{}, styles.cashText]}>for CICOD ORDER ID </Text>
-                                <Text style={[{ fontWeight: 'bold' }, styles.cashText]}> {order.cicod_order_id}</Text>
+                {/* <View style={[{},styles.mainContainer]}>
+                                
+                                <View style={{borderColor:'#DAF8EC',borderWidth:20,borderRadius:100}}>     
+                            <Image
+                            style={{height:width/4,width:width/4}} 
+                            source={require('../images/greenTick.png')}
+                            />
                             </View>
-                            <View style={{ flexDirection: 'row' }}>
+                                <Text style={[{color:'#4E4D4D',marginTop:20},fontStyles.bold25]}>Payment Successful</Text>
+                                <Text style={[{color:'#929497'},fontStyles.normal15]}>Your payment of {_that.props.currency.currency+" "+order.amount} was successful</Text>
                                 <TouchableOpacity
-                                    style={[{ backgroundColor: '#E6E6E6' }, styles.touchView]}
-                                    onPress={() => _that.props.navigation.goBack()}
+                                onPress={()=>_that.props.navigation.navigate('OrderDetail', { id:order.id })}
+                                style={[{},styles.touchView]}
                                 >
-                                    <Text style={{ color: '#4E4D4D' }}>Cancel</Text>
+                                    <Text style={[{},styles.touchText]}>View order</Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity
-                                    onPress={() => _that.press_confirm()}
-                                    style={[{ backgroundColor: '#B1272C', }, styles.touchView]}
-                                >
-                                    <Text style={{ color: '#fff' }}>Confirm</Text>
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-                    </ScrollView>
-                </View>
-            </View>
-        );
-    }
+                            </View> */}
+                {/* {(this.props.route.params.data.payment_status== 'success')? */}
+                <this.successview _that={this} />
+                {/* <this.sccess_view_select _that={this}/> */}
+                {/* :<this.rejectview _that={this} />
+                } */}
+                
+                {/* <this.rejectview _that={this} /> */}
 
-    render() {
-        return (
-            <this.pay _that={this} />
+            </View>
         )
     }
 }
-
 function mapStateToProps(state) {
     return {
         user: state.userReducer,
@@ -164,4 +178,5 @@ function mapDispatchToProps(dispatch) {
         setSupplier: (value) => dispatch({ type: SET_SUPPLIER, value: value }),
     }
 };
-export default connect(mapStateToProps, mapDispatchToProps)(PayByPOS)
+export default connect(mapStateToProps, mapDispatchToProps)(PaymentCash)
+
