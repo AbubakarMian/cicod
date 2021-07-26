@@ -581,7 +581,7 @@ class CreateOrder extends React.Component {
                                 style={[{}, styles.OrderDetailClearTouc]}>
                                 <Text style={[{}, styles.OrderDetailNormalgRowText]}>Clear Order</Text>
                             </TouchableOpacity>
-                            {(this.state.cart_arr.length == 0 || this.props.customer.name == '') ?
+                            {(this.state.cart_arr.length == 0) ?
                                 <View style={[{}, styles.cartSlashView]}>
                                     <Image
                                         style={{ height: width / 3, width: width / 3 }}
