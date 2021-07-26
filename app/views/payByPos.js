@@ -26,6 +26,7 @@ class PayByPOS extends React.Component {
     press_confirm() {
         // let payment_link = this.state.payment_link;
         this.props.navigation.navigate('OrderDetail',{id:this.state.order_id})
+
         // console.log('param',this.props.route.params.payment_link);
         // if (this.props.route.params.payment_link == null) {
         //     Alert.alert('payment error','Payment link not found')

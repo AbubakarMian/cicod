@@ -83,6 +83,16 @@ class PartPaytment extends React.Component {
         if(this.state.order == null){
             await this.create_order('pay');            
         }
+        
+        if(this.state.amount_to_pay_now<100){
+            Alert.alert("Minimun Payable amount is 100")
+            return;
+        }
+  
+        if(this.state.amount_to_pay_now > this.state.total_amount){
+          Alert.alert("The amount must be equal to the payable amount")
+          return;
+        }
         let order = await this.state.order
         console.log('order',order)
         let bodyOrder = this.get_body_order();
@@ -166,7 +176,18 @@ class PartPaytment extends React.Component {
             });
     }
     send_order_invoice(){
-        this.create_order('invoice');
+        if(this.state.amount_to_pay_now<100){
+            Alert.alert("Minimun Payable amount is 100")
+            return;
+        }
+  
+        if(this.state.amount_to_pay_now > this.state.total_amount){
+          Alert.alert("The amount must be equal to the payable amount")
+          return;
+        }else{
+            this.create_order('invoice');
+        }
+        
     }
 
     async create_order(action){

@@ -431,7 +431,7 @@ class OrderDetail_pending extends React.Component {
                             />
                             <View style={{ marginLeft: 15, flexDirection: 'column' }}>
                                 <Text style={[{}, styles.detailInvoiceGraytext]}>Invoice Number:</Text>
-                                <Text style={[{ fontWeight: 'bold' }, styles.detailInvoiceDarkGraytext]}>{"PCIN  "+this.state.cicod_order_id}</Text>
+                                <Text style={[{ fontWeight: 'bold' }, styles.detailInvoiceDarkGraytext]}>{"PCIN  "+this.state.data.cicod_order_id}</Text>
                             </View>
                         </View>
                         <FlatList

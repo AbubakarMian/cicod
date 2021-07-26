@@ -47,10 +47,12 @@ class PaymentSuccess extends React.Component {
                 console.log("order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
                 // if (responseJson.status.toUpperCase() === "SUCCESS") {
                     if (responseJson.status === "success") {
-                    let data = responseJson.data;
+                    console.log("~~~~~~~~~~",responseJson)
+                    
+                        let data = responseJson.data;
                     this.setState({
                         spinner: false,
-                        order_detail: data,
+                        // order_detail: data,
                         order_id:order_id
                     })
                     // let payment_link = responseJson.data.payment_link
@@ -253,7 +255,7 @@ class PaymentSuccess extends React.Component {
                 </View>
                 {/* {(this.props.route.params.data.payment_status== 'success')? */}
                 {/* <this.successview _that={this} /> */}
-                <this.sccess_view_select _that={this}/>
+                {/* <this.sccess_view_select _that={this}/> */}
                 {/* :<this.rejectview _that={this} />
                 } */}
                 

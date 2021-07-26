@@ -4,6 +4,8 @@ const initialState = {
     state_id:0,
     address: '',
     type: 'PICKUP',
+    same_as_delivery:false,
+    selected_address_id:0
 }
 const deliveryAddressReducer = (state = initialState, action) => {
 
@@ -18,6 +20,8 @@ const deliveryAddressReducer = (state = initialState, action) => {
                 type: action.value.type,
                 country_id: action.value.country_id,
                 state_id: action.value.state_id,
+                same_as_delivery:action.value.same_as_delivery,
+                selected_address_id:action.value.selected_address_id
             }
 
             break;

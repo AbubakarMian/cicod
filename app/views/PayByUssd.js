@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
-import { Text, TextInput, Alert } from 'react-native-paper';
+import { View, ImageBackground, ScrollView, TouchableHighlight, FlatList, Dimensions,Alert, Image, Platform, TouchableOpacity } from 'react-native'
+import { Text, TextInput,  } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/PayByUssdCss';
 import fontStyles from '../css/FontCss'
@@ -120,7 +120,12 @@ class PayByUssd extends React.Component {
     }
 
     pay_redirect_detail() {
+        if(this.state.ussd_code_selected==null){
+            Alert.alert("Pleas select the Bank")
+        }
+        else{
         this.makePaymentFun(this.props.route.params.payment_mode);
+        }
     }
 
     get_ussd_codes() {
@@ -186,9 +191,9 @@ class PayByUssd extends React.Component {
                                     alignSelf={'center'}
                                     color={'#000'}
                                 /> */}
-                            <View style={[{}, styles.iconView]}>
+                            {/* <View style={[{}, styles.iconView]}>
                                 <Icon name="caret-down" size={20} color={'#4E4D4D'} />
-                            </View>
+                            </View> */}
                             {/* </View> */}
 
                         </View>

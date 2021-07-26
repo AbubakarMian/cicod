@@ -163,7 +163,7 @@ class PayByCash extends React.Component {
     }
 
     press_done(order) {
-
+    
         let cashCollected = parseFloat(this.state.cashCollected)
         console.log("###########!~~~~~~~~~~",cashCollected)
         console.log('cashCollected) < 0 ',cashCollected <  order.amount)
@@ -180,7 +180,7 @@ class PayByCash extends React.Component {
             // return;
         // }
         this.makePaymentFun(this.props.route.params.payment_mode);
-        this.props.navigation.navigate('PaymentSuccessCash                                                                                                                                                                                                                                                                                                                                                                           ',{data:this.props.route.params.data})
+        this.props.navigation.navigate('PaymentSuccess                                                                                                                                                                                                                                                                                                                                                                           ',{data:this.props.route.params.data})
         return;
             // this.makePaymentFun(this.props.route.params.payment_mode);
             

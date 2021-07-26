@@ -49,25 +49,28 @@ class CreateOrder extends React.Component {
             payment_option_selected: '',
             pay_button_lable: 'Pay',
             amount_payable: 0,
-            ConfirmationPayInvoice: false
+            ConfirmationPayInvoice: false,
+            
         }
     }
     clearOrder() {
         this.props.emptyOrder();
     }
-    componentDidMount() {
+    async componentDidMount() {
+     
         console.log(' create order !!!! !!!!!!!!', this.props.user);
         this.getSuppliersList(Constants.supplierlist);
     }
 
     componentWillReceiveProps() {
-
+     
+      
         this.setState({
             customer_name: this.props.customer.name,
             customer_email: this.props.customer.email,
             customer_phone: this.props.customer.phone,
         })
-
+    
     }
 
     searchSupplier() {
@@ -132,9 +135,11 @@ class CreateOrder extends React.Component {
         }//return;
         if (type == 'delivery') {
             if (this.props.route.params.screen_name == 'buy') {
-                this.props.navigation.navigate('BuyDiliveryAddress', { type, address: this.props.customer.address })
+                this.props.navigation.navigate('BuyDiliveryAddress', { type, address: this.props.customer.address,address_id:this.props.deliveryAddress.selected_address_id })
             } else {
-                this.props.navigation.navigate('DiliveryAddress', { type, address: this.props.customer.address })
+                console.log("RRRRRRRRRR",this.props.deliveryAddress.selected_address_id)
+               
+                this.props.navigation.navigate('DiliveryAddress', { type, address: this.props.customer.address,address_id:this.props.deliveryAddress.selected_address_id})
             }
         }
         else { // pickup
@@ -166,7 +171,8 @@ class CreateOrder extends React.Component {
             mode = 'ONLINE';
             goto_payment_screen = 'PartPaytment';
         }
-
+       
+      
         this.setState({
             value3IndexPayment: item.value,
             payment_mode: mode,
@@ -298,7 +304,9 @@ class CreateOrder extends React.Component {
                 console.log("get_order_detail order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
                 if (responseJson.status.toUpperCase() === "SUCCESS") {
                     let data = responseJson.data;
-                    this.props.navigation.navigate('PaymentSuccess', { data:responseJson.data})
+                    console.log("##########ddddddddddd",data)
+                   
+                    this.props.navigation.navigate('MakePayment',{data:data})
                     // this.setState({
                     //     spinner: false,
                     //     order_detail: data,
@@ -518,6 +526,7 @@ class CreateOrder extends React.Component {
                                 <Text style={[{}, styles.customerContaineraddBtnText]}>Add</Text>
                             </TouchableOpacity>
                             <View style={{ borderBottomWidth: 0.5, width: width - 20, alignSelf: 'center', marginVertical: 5, borderColor: '#E6E6E6' }}></View>
+                            
                             {(this.props.customer.name == '' || this.props.customer.name == undefined) ?
                                 <View style={[{}, styles.customerContainerView]}>
                                     <Icon name="user-circle" size={50} color="#D8D8D8" />
@@ -572,7 +581,7 @@ class CreateOrder extends React.Component {
                                 style={[{}, styles.OrderDetailClearTouc]}>
                                 <Text style={[{}, styles.OrderDetailNormalgRowText]}>Clear Order</Text>
                             </TouchableOpacity>
-                            {(this.state.cart_arr.length == 0) ?
+                            {(this.state.cart_arr.length == 0 || this.props.customer.name == '') ?
                                 <View style={[{}, styles.cartSlashView]}>
                                     <Image
                                         style={{ height: width / 3, width: width / 3 }}
@@ -695,6 +704,7 @@ class CreateOrder extends React.Component {
                                         ))
                                     }
                                     {/* <Text style={[{}, styles.smailGrayText]}>{this.props.deliveryAddress.address ?? 'Dilivery to customer address'}</Text> */}
+                                    
                                     <Text style={[{}, styles.smailGrayText]}>
                                         {this.state.delivery_type_option == 'delivery' && this.props.deliveryAddress.address != ''
                                             ? this.props.deliveryAddress.address : 'Delivery to customer address'}

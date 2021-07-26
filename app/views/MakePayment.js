@@ -140,6 +140,7 @@ class MakePayment extends React.Component {
             .then(async responseJson => {
                 this.setState({ spinner: false })
                 console.log('all response ', responseJson);
+                
                 if (responseJson.status === "success") {
                     let payment_link = responseJson.data.payment_link
                     this.payment_response(responseJson, 'PaymentWeb', { payment_link: payment_link, data: responseJson.data });
@@ -176,10 +177,12 @@ class MakePayment extends React.Component {
     }
 
     payByCash(){
+        this.setState({spinner:false})
         if(this.props.route.params.pending_order_res == undefined){
             this.setPaymentMode('CASH', 'PayByCash')
         }
         else{
+            
             this.props.navigation.navigate('PayByCash', {
                 bodyOrder: this.props.route.params.bodyOrder,
                 amount_payable: this.props.route.params.amount_payable,

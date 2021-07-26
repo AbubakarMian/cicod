@@ -25,7 +25,8 @@ class AddCustomer extends React.Component {
             searchPress: 1,
             spinner: false,
             customerData: [],
-            search_text: ''
+            search_text: '',
+            
         }
 
     }
@@ -117,7 +118,7 @@ class AddCustomer extends React.Component {
                 <View style={[{}, styles.backHeaderRowView]}>
                     <TouchableOpacity
                         // onPress={() => this.props.navigation.navigate('CreateOrder')}
-                        onPress={() => this.props.navigation.goBack()}
+                        onPress={() => this.props.navigation.goBack(),{customer_name:'add customer'}}
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>

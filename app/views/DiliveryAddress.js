@@ -23,7 +23,7 @@ class DiliveryAddress extends React.Component {
             spinner: false,
             is_selected_address: false,
             addressarr: [],
-            selected_address_id:0,
+            selected_address_id:this.props.route.params.address_id ?? 0,
             delivery_type: this.props.route.params.type ?? '',
             isChecked: false,
             
@@ -32,25 +32,51 @@ class DiliveryAddress extends React.Component {
     }
 
     componentDidMount() {
+        
+        
         // this.setState({delivery_type:this.props.route.params.type})
         // this.getDeliveryAddress();
     }
     componentWillUnmount(){
         this.loadDelivery_address = true
     }
-    set_address(){
-
-        if(this.props.route.params.address == ''){
+    set_address(rememberIsChecked){
+console.log('set adress 1',rememberIsChecked)
+        if(this.props.route.params.address == ''|| this.props.route.params.address == undefined){
             alert('Customer Address not avalible');
             return;
         }
+        let same_as_delivery = false
+        if(rememberIsChecked === true){
+            same_as_delivery = true
+        }
+        else{
+           same_as_delivery = !this.state.rememberIsChecked
+        }
+        console.log('set adress same as delivery address 2',same_as_delivery)
 
-        this.setState({rememberIsChecked:!this.state.rememberIsChecked})
+        if(same_as_delivery){
+            console.log('step 3',this.props.route.params.address)
+            this.setState({rememberIsChecked:same_as_delivery})
+            console.log("Set")
+            this.props.setDeliveryAddress({
+               address: this.props.route.params.address,
+               type:'Delivery',
+               same_as_delivery:same_as_delivery,
+               selected_address_id:0
+           })
+        }
+        else{
+            this.setState({rememberIsChecked:same_as_delivery})
              console.log("Set")
              this.props.setDeliveryAddress({
-                address: this.props.route.params.address,
-                type:'Delivery'
+                address: '',
+                type:'Delivery',
+                same_as_delivery:same_as_delivery,
+                selected_address_id:0
             })
+        }
+        
              console.log("~diliver this.props.route.params",this.props.route.params)
         this.props.navigation.goBack();
 
@@ -81,6 +107,7 @@ class DiliveryAddress extends React.Component {
                 });
                 if (responseJson.status === 'success') {
                     let default_address = null;
+                    let selected_address = null;
                     let res = responseJson.data;
                     let addressarr = res.map((x, key) => { 
                         let address_item = { 
@@ -89,18 +116,28 @@ class DiliveryAddress extends React.Component {
                         country_id:x.country.id,
                         state_id:x.state.id,
                         label: x.house_no + ',' + x.street + ',' + x.state.name + ',' + x.country.name, 
-                        value: x.house_no + ',' + x.street + ',' + x.state.name + ',' + x.country.name 
+                        value: x.house_no + ',' + x.street + ',' + x.state.name + ',' + x.country.name,
                     }
-                    if(x.is_default){
+                    if(x.is_default && selected_address != null){
                         default_address = address_item
+                    }
+                    console.log('selected address  respone !!!!!!', this.props.deliveryAddress);
+
+                    if(address_item.label == this.props.deliveryAddress.address             ){
+                        selected_address = address_item
                     }
                     return address_item
                     });
-                    console.log('addressarr  respone !!!!!!', addressarr);
                     await this.setState({
                         addressarr: addressarr,
                     });
-                    if(default_address!=null){
+                    if(this.props.same_as_delivery){
+                        this.set_address(true);
+                    }
+                    else if(selected_address != null){
+                        this.selectAddress(selected_address)
+                    }
+                    else if(default_address!=null){
                         this.selectAddress(default_address)
                     }
                     
@@ -131,11 +168,15 @@ class DiliveryAddress extends React.Component {
             address: object.value,
             country_id: object.country_id,
             state_id: object.state_id,
-            type:'Delivery'
+            type:'Delivery',
+            same_as_delivery:false,
+            selected_address_id:object.list_id
+
         })       
     }
     render() {
         this.getDeliveryAddress()
+        {console.log("QQQQQQQQQQQQ",this.props.route.params)}
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
@@ -170,7 +211,8 @@ class DiliveryAddress extends React.Component {
                                 // })
                                 }
                              }
-                            isChecked={this.state.rememberIsChecked}
+                            isChecked={this.props.deliveryAddress.same_as_delivery}
+                            // isChecked={this.state.rememberIsChecked}
                             rightText={"Same as customer’s address"}
                             rightTextStyle={{fontSize:10}}
                         />

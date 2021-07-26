@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { SET_USER,SET_CUSTOMER, LOGOUT_USER,CLEAR_ORDER } from '../redux/constants/index';
 import { Constants } from '../views/Constant';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
@@ -27,6 +27,7 @@ class Order extends React.Component {
             calenderModal: false,
             data: [],
             is_active_list: '',
+            payment_statu:'',
             spinner: false,
             date: '',
             search_order: '',
@@ -42,13 +43,14 @@ class Order extends React.Component {
         this.onDateChange = this.onDateChange.bind(this);
     }
     customeList(listType) {
+        
+ 
         this.setState({
             is_active_list:listType
         })
         return;
     }
-    orderList(url) {
-        console.log("############################################",url)
+    orderList(url) {   
         console.log('access token',this.props.user.access_token)
         this.setState({ spinner: true }) //,apply_filter:false
         let postData = {
@@ -187,13 +189,24 @@ class Order extends React.Component {
         });
         this.props.navigation.navigate('OrderFilter');
     }
-
+    gotAddCustomer(){
+        this.props.setCustomer({
+            customer_name: '',
+            customer_email: '',
+            customer_phone: '',
+        })
+        this.props.emptyOrder({
+           cart:[]
+        })
+        this.props.navigation.navigate('CreateOrder', { heading: 'order',customer_name:'' })
+    }
     getOrderList(props){
         console.log('props ---- ',props);
         // return null;
         let _that = props._that;
         let url = Constants.orderslist;
         let filters = [];
+
         if (_that.props.route == null || _that.props.route.params == null || _that.props.route.params.filters == null) {
             url = Constants.orderslist;
         }
@@ -223,8 +236,19 @@ class Order extends React.Component {
             url = url+filter_concat+'date_created=' + _that.state.date_created_timestamp
         }
         if(_that.state.is_active_list != ''){
-            url = url + filter_concat+'order_status=' + _that.state.is_active_list
-        }       
+            
+            if(_that.state.is_active_list == 'PART PAYMENT'){
+                url = url + filter_concat+'payment_status=' + _that.state.is_active_list
+                
+             }else if(_that.state.is_active_list == 'ACCOUNT') {
+                url = url + filter_concat+'payment_mode=' + _that.state.is_active_list
+             }
+             else  {
+                url = url + filter_concat+'order_status=' + _that.state.is_active_list
+             }
+        }
+          
+              
         console.log('reload hata ',_that.reload)
         if (url != _that.state.url_orders || _that.reload) {
             _that.reload = false;
@@ -251,6 +275,7 @@ class Order extends React.Component {
         else{
             return(                 
                 <FlatList
+            
                         data={_that.state.data}
                         ItemSeparatorComponent={
                             Platform.OS !== 'android' &&
@@ -313,7 +338,7 @@ class Order extends React.Component {
         }            
         }
         
-    
+   
     render() {
         return (
             <View style={{ width: width,height:height, position: 'relative', backgroundColor: '##F0F0F0', flex: 1 }}>
@@ -361,7 +386,7 @@ class Order extends React.Component {
                     </View>
                     <View style={{ position: 'absolute', right: 0 }}>
                         <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate('CreateOrder', { heading: 'order' })}
+                            onPress={() =>  this.gotAddCustomer()}
                         >
                             <Image
                                 style={{ height: 30, width: 30 }}
@@ -436,7 +461,7 @@ class Order extends React.Component {
                        }}>PAID</Text>
                    </TouchableOpacity>
                    <TouchableOpacity
-                       onPress={() => this.customeList("partPayment")}
+                       onPress={() => this.customeList("PART PAYMENT")}
                    >
                        <Text style={{
                            color: this.state.is_active_list === 'partPayment' ? '#000' : '#e2e2e2',
@@ -444,10 +469,10 @@ class Order extends React.Component {
                        }}>PART PAYMENT</Text>
                    </TouchableOpacity>
                    <TouchableOpacity
-                       onPress={() => this.customeList("paidFromCredit")}
+                       onPress={() => this.customeList("ACCOUNT")}
                    >
                        <Text style={{
-                           color: this.state.is_active_list === 'paidFromCredit' ? '#000' : '#e2e2e2',
+                           color: this.state.is_active_list === 'payment_mod' ? '#000' : '#e2e2e2',
                            backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
                        }}>PAID FROM CREDIT</Text>
                    </TouchableOpacity> 
@@ -471,6 +496,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
+        setCustomer: (value) => dispatch({ type: SET_CUSTOMER, value: value }),
+        emptyOrder: () => dispatch({ type: CLEAR_ORDER }),
+        
         logoutUser: () => dispatch({ type: LOGOUT_USER })
     }
 }; 
