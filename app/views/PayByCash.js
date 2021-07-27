@@ -53,7 +53,7 @@ class PayByCash extends React.Component {
                 if (responseJson.status==="success") {
                     let data = responseJson.data;
                     data.payment_status = 'success';
-                    this.props.navigation.navigate('PaymentCash', { data:responseJson.data})
+                    this.props.navigation.navigate('PaymentSuccess', { data:responseJson.data})
 
                     // this.props.navigation.navigate('OrderDetail', { id: this.responseJson.data.id ,data:responseJson.data})
                     // let payment_link = responseJson.data.payment_link
@@ -90,10 +90,11 @@ class PayByCash extends React.Component {
             },
             // body: JSON.stringify(bodyOrder)
         };
-        let order_id = this.props.route.params.data.id;     
+        let order_id = this.props.route.params.order_id;     
         
         let url = Constants.orderslist+'/'+order_id+'?action=make_cash_payment'
         console.log("*****************#########33333333333",url)
+        console.log(this.props.user)
         // console.log("*****************#########33333333333",Constants.orderslist+'/'+order_id+'?action=make_cash_payment')
         // console.log('222222222222 makePaymentFun body params list @@@@@@!!!!!!!!!!!!!!', postData);
         
@@ -180,7 +181,10 @@ class PayByCash extends React.Component {
             // return;
         // }
         this.makePaymentFun(this.props.route.params.payment_mode);
-        this.props.navigation.navigate('PaymentCash                                                                                                                                                                                                                                                                                                                                                                          ',{data:this.props.route.params.data})
+        console.log('EEEEEEEEEEEEEE',this.props.route.params.data.id)
+        let order_id=this.props.route.params.data.id
+        console.log(order_id)
+        // this.props.navigation.navigate('PaymentSuccess',{data:this.props.route.params.data,order_id})
         return;
             // this.makePaymentFun(this.props.route.params.payment_mode);
             

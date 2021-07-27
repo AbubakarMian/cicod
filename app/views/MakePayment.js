@@ -44,7 +44,8 @@ class MakePayment extends React.Component {
         console.log('AAAAAAAAAAAAAAAAAAAAAAAAA',this.props.route.params)
         if(this.props.route.params.pending_order_res != undefined){
            console.log('RRRRRRRR',this.props.route.params.pending_order_res.data.id)
-    
+            console.log('FFFFFFFFFFF',navigateScreen)
+            return;
             this.props.navigation.navigate(navigateScreen,{
                         bodyOrder:this.props.route.params.bodyOrder,
                         amount_payable:this.props.route.params.amount_payable,
@@ -179,23 +180,27 @@ class MakePayment extends React.Component {
     }
 
     payByCash(){
+        console.log('WWWWWWWWWWWWWWW',this.props)
+    
         this.setState({spinner:false})
+     
         this.setPaymentMode('CASH', 'PayByCash')
-        // if(this.props.route.params.pending_order_res == undefined){
-        //     this.setPaymentMode('CASH', 'PayByCash')
-        // }
-        // else{
+        if(this.props.route.params.pending_order_res == undefined){
+            this.setPaymentMode('CASH', 'PayByCash')
+        }
+        else{
             
-        //     this.props.navigation.navigate('PayByCash', {
-        //         bodyOrder: this.props.route.params.bodyOrder,
-        //         amount_payable: this.props.route.params.amount_payable,
-        //         // pending_order_res: this.props.route.params.pending_order_res,
-        //         payment_link: this.props.route.params.pending_order_res.data.payment_link,
-        //         payment_mode:  'CASH',
-        //         data:this.props.route.params.pending_order_res.data
-        //     })
+            this.props.navigation.navigate('PayByCash', {
+                bodyOrder: this.props.route.params.bodyOrder,
+                amount_payable: this.props.route.params.amount_payable,
+                // pending_order_res: this.props.route.params.pending_order_res,
+                payment_link: this.props.route.params.pending_order_res.data.payment_link,
+                payment_mode:  'CASH',
+                data:this.props.route.params.pending_order_res.data,
+                order_id:this.props.route.params.pending_order_res.data.id,
+            })
 
-        // }
+        }
         
     }
 
@@ -266,13 +271,13 @@ class MakePayment extends React.Component {
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity
-                                onPress={()=>
-                                    // console.log("RRRRRRRRRRRRRRRR",this.props.route.params)
+                                onPress={
+                                    // () => console.log("RRRRRRRRRRRRRRRR",this.props.route.params.bodyOrder)
                                     () => this.props.navigation.navigate('PayByUssd', {
                                     bodyOrder: this.props.route.params.bodyOrder,
                                     amount_payable: this.props.route.params.amount_payable,
                                     data: this.props.route.params.pending_order_res,
-                                    payment_mode:  'USSD',
+                                    payment_mode:'USSD',
                                 })
                             }
                                 // onPress={() => this.setPaymentMode('USSD', 'PayByUssd')}

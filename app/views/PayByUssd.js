@@ -3,6 +3,7 @@ import { View, ImageBackground, ScrollView, TouchableHighlight, FlatList, Dimens
 import { Text, TextInput,  } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/PayByUssdCss';
+import Spinner from 'react-native-loading-spinner-overlay';
 import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
@@ -21,7 +22,8 @@ class PayByUssd extends React.Component {
             value: 0,
             isChecked: false,
             ussd_codes: [],
-            ussd_code_selected: null
+            ussd_code_selected: null,
+            spinner:false
         }
     }
 
@@ -54,6 +56,7 @@ class PayByUssd extends React.Component {
             .then(async responseJson => {
                 console.log("order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
                 if (responseJson.status.toUpperCase() === "SUCCESS") {
+                    console.log('##########',responseJson.data.id)
                     this.props.navigation.navigate('OrderDetail', { id: responseJson.data.id })
                     // let payment_link = responseJson.data.payment_link
                     // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
@@ -72,6 +75,7 @@ class PayByUssd extends React.Component {
 
 
     async makePaymentFun(payment_mode) {
+        
         if (await this.state.spinner) {
             return;
         }
@@ -99,7 +103,7 @@ class PayByUssd extends React.Component {
                 this.setState({ spinner: false })
                 console.log('all response ', responseJson);
                 if (responseJson.status === "success") {
-
+   
                     this.get_order_detail(responseJson.data.id);
                     // let payment_link = responseJson.data.payment_link
                     // this.payment_response(responseJson, 'PaymentWeb', { payment_link: payment_link, data: responseJson.data });
@@ -166,6 +170,12 @@ class PayByUssd extends React.Component {
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
                 <View style={[{}, styles.backHeaderRowView]}>
+                <Spinner
+                    visible={this.state.spinner}
+                    textContent={'Please Wait...'}
+                    textStyle={{ color: '#fff' }}
+                    color={'#fff'}
+                />
                     <TouchableOpacity
                         onPress={() => this.props.navigation.goBack()}
                     >

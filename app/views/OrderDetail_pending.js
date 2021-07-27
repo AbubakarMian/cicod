@@ -8,7 +8,7 @@ import CheckBox from 'react-native-check-box';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER, ORDER_RELOAD } from '../redux/constants/index';
 import { Constants } from './Constant';
 
 var { width, height } = Dimensions.get('window');
@@ -18,7 +18,7 @@ class OrderDetail_pending extends React.Component {
         super(props);
         this.state = {
             Spinner: false,
-            order_id: this.props.route.params.id ?? 0,
+            order_id:  0,
             selectedStartDate: null,
             calenderModal: false,
             cicod_order_id: '',
@@ -33,6 +33,7 @@ class OrderDetail_pending extends React.Component {
             supendModal:false,
             bodyOrder:{},
             amount_paid_from_credit_limit: '',
+            order_detail_url:'',
             data: {
 
                 customer: {
@@ -46,8 +47,17 @@ class OrderDetail_pending extends React.Component {
             item: [],
         };
     }
-    componentDidMount() {
+    get_order_detail() {
         let order_id = this.props.route.params.id;
+        let order_detail_url = Constants.orderslist + '/' + order_id
+       
+        if(this.state.order_id == order_id){
+            return;            
+        }
+        this.setState({
+            order_detail_url:order_detail_url,
+            order_id:order_id
+        })
         console.log('KKKKKKKKKKK',order_id)
         this.setState({ Spinner: true })
         let postData = {
@@ -59,7 +69,8 @@ class OrderDetail_pending extends React.Component {
             },
         };
         console.log('urllllllllllll',Constants.orderslist + '/' + order_id)
-        fetch(Constants.orderslist + '/' + order_id, postData)
+       
+        fetch(order_detail_url, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({
@@ -247,7 +258,13 @@ class OrderDetail_pending extends React.Component {
                 // Alert.alert(error.message);
             });
     }
+    go_back_btn(){
+        console.log('go back btn');
+        this.props.setScreenReload({reload:true});
+        this.props.navigation.navigate('Order')
+    }
     render() {
+        this.get_order_detail()
       
         return (
             <View style={{height:height,width:width,backgroundColor:'#fff'}}>
@@ -262,7 +279,7 @@ class OrderDetail_pending extends React.Component {
                     />
                     <TouchableOpacity
                         // onPress={() => this.props.navigation.goBack()}
-                        onPress={() => this.props.navigation.navigate('Order')}
+                        onPress={() => this.go_back_btn()}
                     >
                         <View style={[{alignItems:'center'}, styles.headingRow]}>
                             <Icon name="arrow-left" size={25} color="#929497" />
@@ -545,7 +562,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
-        logoutUser: () => dispatch({ type: LOGOUT_USER })
+        logoutUser: () => dispatch({ type: LOGOUT_USER }),
+        setScreenReload: (value) => dispatch({ type: ORDER_RELOAD, value: value }),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(OrderDetail_pending)
