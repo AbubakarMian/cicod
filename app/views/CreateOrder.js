@@ -305,8 +305,8 @@ class CreateOrder extends React.Component {
                 if (responseJson.status.toUpperCase() === "SUCCESS") {
                     let data = responseJson.data;
                     console.log("##########ddddddddddd",data)
-                    
-                    this.props.navigation.navigate('MakePayment',{data:data})
+                 
+                    this.props.navigation.navigate('PaymentSuccess',{data:data})
                     // this.setState({
                     //     spinner: false,
                     //     order_detail: data,
@@ -348,9 +348,10 @@ class CreateOrder extends React.Component {
                     let payment_link = responseJson.data//Pay Account,ACCOUNT
                     if (this.state.payment_option_selected == 'Pay Account') {
                         // alert(responseJson.message)
-                        console.log("create_order_id payment_link!", responseJson)
+                        console.log("~~~~~~~~~~~create_order_id payment_link!", responseJson.data)
                         this.get_order_detail(responseJson.data.id);
                         
+                        // this.props.navigation.navigate('PaymentCash', { payment_link: payment_link,data:responseJson });
                         // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link,data:responseJson.data });
                     }
                     if(this.state.payment_option_selected == 'Pay Invoice'){

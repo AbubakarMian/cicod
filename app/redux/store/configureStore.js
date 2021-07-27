@@ -8,6 +8,7 @@ import orderDiscountReducer from '../reducers/orderDiscountReducer';
 import deliveryAddressReducer from '../reducers/deliveryAddressReducer';
 import supplierReducer from '../reducers/supplierReducer';
 import currencyReducer from '../reducers/currencyReducer';
+import reloadReducer from '../reducers/reloadReducer';
 const rootReducer = combineReducers({
       userReducer, 
       cartReducer , 
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
       deliveryAddressReducer,
       tabBarReducer,
       supplierReducer,
-      currencyReducer
+      currencyReducer,
+      reloadReducer,
     });
 // const rootReducer = () => combineReducers(
 //     { count: reducer })
