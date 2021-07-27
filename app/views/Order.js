@@ -43,8 +43,6 @@ class Order extends React.Component {
         this.onDateChange = this.onDateChange.bind(this);
     }
     customeList(listType) {
-        
- 
         this.setState({
             is_active_list:listType
         })
@@ -103,6 +101,7 @@ class Order extends React.Component {
         console.log("~~~~~~~~~~~~~~~~~",type)
         this.reload = true;
         const id = item.id
+        console.log('TTTTTTTTTTTT',id)
         if(type=='PENDING'){
            
             this.props.navigation.navigate('OrderDetail_pending', { id })
@@ -200,30 +199,56 @@ class Order extends React.Component {
         })
         this.props.navigation.navigate('CreateOrder', { heading: 'order',customer_name:'' })
     }
+
+    get_searach_by_status(url,filter_concat,active_list){
+        let filter = '';
+        if(active_list != ''){
+            
+            if(active_list == 'PART PAYMENT'){
+                filter = filter + filter_concat+'payment_status=' + active_list
+                
+             }else if(active_list == 'ACCOUNT') {
+                filter = filter + filter_concat+'payment_mode=' + active_list
+             }
+             else  {
+                filter = filter + filter_concat+'order_status=' + active_list
+             }
+        }
+        return filter
+    }
     getOrderList(props){
         console.log('props ---- ',props);
         // return null;
         let _that = props._that;
         let url = Constants.orderslist;
         let filters = [];
+        let filter_concat = '?';
 
         if (_that.props.route == null || _that.props.route.params == null || _that.props.route.params.filters == null) {
             url = Constants.orderslist;
         }
         else if(_that.state.apply_filter){           
             filters = _that.props.route.params.filters;
-            let filter = '?';
+            let filter = filter_concat;
             for (let i = 0; i < filters.length; i++) {
                 // filter = filter +'filter'+ '['+filters[i].key +']' + '=' + filters[i].value;
-                filter = filter +filters[i].key  + '=' + filters[i].value;
-                if (i != filters.length - 1) {
-                    filter = filter + '&';
+                if(filters[i].key == 'order_status'){
+                    filter = _that.get_searach_by_status(url,filter_concat,filters[i].value);
+                    
+                    // _that.customeList(filters[i].value)
                 }
+                else{
+                    filter = filter_concat +filters[i].key  + '=' + filters[i].value;                   
+                }
+                // if (i != filters.length - 1) {
+                //     filter = filter + '&';
+                // }
+                filter_concat = '&';
+                
             }
-            url = (url + filter);
+            url = (url + filter);            
         }
         
-        let filter_concat = '?';
         if(filters.length != 0){
             filter_concat = '&';
         }
@@ -235,19 +260,8 @@ class Order extends React.Component {
         if(_that.state.date_created_timestamp != 'YY-MM-DD'){            
             url = url+filter_concat+'date_created=' + _that.state.date_created_timestamp
         }
-        if(_that.state.is_active_list != ''){
-            
-            if(_that.state.is_active_list == 'PART PAYMENT'){
-                url = url + filter_concat+'payment_status=' + _that.state.is_active_list
-                
-             }else if(_that.state.is_active_list == 'ACCOUNT') {
-                url = url + filter_concat+'payment_mode=' + _that.state.is_active_list
-             }
-             else  {
-                url = url + filter_concat+'order_status=' + _that.state.is_active_list
-             }
-        }
-          
+        let filter = _that.get_searach_by_status(url,filter_concat,_that.state.is_active_list);
+        url = (url + filter);
               
         console.log('reload hata ',_that.reload)
         if (url != _that.state.url_orders || _that.reload) {

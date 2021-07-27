@@ -40,24 +40,19 @@ class DiliveryAddress extends React.Component {
     componentWillUnmount(){
         this.loadDelivery_address = true
     }
-    set_address(rememberIsChecked){
-console.log('set adress 1',rememberIsChecked)
+    set_address(){
+console.log('~~~~~~~~~~~~~~~~~~~set adress 1',this.props.deliveryAddress)
         if(this.props.route.params.address == ''|| this.props.route.params.address == undefined){
             alert('Customer Address not avalible');
             return;
         }
-        let same_as_delivery = false
-        if(rememberIsChecked === true){
-            same_as_delivery = true
-        }
-        else{
-           same_as_delivery = !this.state.rememberIsChecked
-        }
+        let same_as_delivery = !this.props.deliveryAddress.same_as_delivery;
+       
+       
         console.log('set adress same as delivery address 2',same_as_delivery)
 
         if(same_as_delivery){
             console.log('step 3',this.props.route.params.address)
-            this.setState({rememberIsChecked:same_as_delivery})
             console.log("Set")
             this.props.setDeliveryAddress({
                address: this.props.route.params.address,
@@ -67,7 +62,6 @@ console.log('set adress 1',rememberIsChecked)
            })
         }
         else{
-            this.setState({rememberIsChecked:same_as_delivery})
              console.log("Set")
              this.props.setDeliveryAddress({
                 address: '',
@@ -102,6 +96,7 @@ console.log('set adress 1',rememberIsChecked)
         fetch(Constants.customerdelivery + '?customer_id='+this.props.customer.id, postData) //+ this.props.customer.id
             .then(response => response.json())
             .then(async responseJson => {
+                console.log('all address',responseJson)
                 this.setState({
                     spinner: false,
                 });
@@ -118,7 +113,7 @@ console.log('set adress 1',rememberIsChecked)
                         label: x.house_no + ',' + x.street + ',' + x.state.name + ',' + x.country.name, 
                         value: x.house_no + ',' + x.street + ',' + x.state.name + ',' + x.country.name,
                     }
-                    if(x.is_default && selected_address != null){
+                    if(x.is_default ){
                         default_address = address_item
                     }
                     console.log('selected address  respone !!!!!!', this.props.deliveryAddress);
@@ -131,15 +126,18 @@ console.log('set adress 1',rememberIsChecked)
                     await this.setState({
                         addressarr: addressarr,
                     });
-                    if(this.props.same_as_delivery){
-                        this.set_address(true);
+                    // if(this.props.same_as_delivery){
+                    //     this.set_address();
+                    // }
+                    if(!this.props.deliveryAddress.same_as_delivery){
+                        if(selected_address != null){
+                            this.selectAddress(selected_address)
+                        }
+                        else if(default_address!=null && selected_address == null){
+                            this.selectAddress(default_address)
+                        }
                     }
-                    else if(selected_address != null){
-                        this.selectAddress(selected_address)
-                    }
-                    else if(default_address!=null){
-                        this.selectAddress(default_address)
-                    }
+                    
                     
                 } else {
                     let message = responseJson.message;
@@ -176,7 +174,7 @@ console.log('set adress 1',rememberIsChecked)
     }
     render() {
         this.getDeliveryAddress()
-        {console.log("QQQQQQQQQQQQ",this.props.route.params)}
+        {console.log("this.props.deliveryAddress",this.props.deliveryAddress)}
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />

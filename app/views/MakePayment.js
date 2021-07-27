@@ -39,22 +39,23 @@ class MakePayment extends React.Component {
         if (await this.state.spinner) {
             return;
         }
-        // let pending_order_res = this.state.pending_order_res
-        // console.log('pending_order_res.data.payment_link',pending_order_res)
-        // if(pending_order_res != null ){    
-        //     this.setState({
-        //         data:pending_order_res.data
-        //     });    
-        //     this.payment_response(pending_order_res, 
-        //     'PaymentWeb', { 
-        //         payment_link: pending_order_res.data.payment_link,
-        //         amount_payable: pending_order_res.data.amount,
-        //          data: pending_order_res.data });
-        //     return;
-        // }
-        await this.setState({ spinner: true })
-        let bodyOrder = this.props.route.params.bodyOrder;
-        bodyOrder.payment_mode = payment_mode;
+        console.log("EEEEEEEEEEEEEEEE",this.props.route.params.pending_order_res)
+        await this.setState({ spinner: false })
+        console.log('AAAAAAAAAAAAAAAAAAAAAAAAA',this.props.route.params)
+        if(this.props.route.params.pending_order_res != undefined){
+           console.log('RRRRRRRR',this.props.route.params.pending_order_res.data.id)
+    
+            this.props.navigation.navigate(navigateScreen,{
+                        bodyOrder:this.props.route.params.bodyOrder,
+                        amount_payable:this.props.route.params.amount_payable,
+                        data: this.props.route.params.pending_order_res,
+                        order_id: this.props.route.params.pending_order_res.data.id,
+            })   
+            return;         
+        }
+        else{
+            let bodyOrder = this.props.route.params.bodyOrder;
+             bodyOrder.payment_mode = payment_mode;
       
         let postData = {
             method: 'POST',
@@ -74,7 +75,7 @@ class MakePayment extends React.Component {
                 if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 }
-                else if (responseJson.status.toUpperCase() === 'SUCCESS') {
+                else if (responseJson.status === 'success') {
                     console.log('navigate to ', navigateScreen)
                     console.log('reerere to ', responseJson)
                     let payment_link = responseJson.data.payment_link
@@ -82,9 +83,11 @@ class MakePayment extends React.Component {
                         {
                             // bodyOrder: bodyOrder,
                             data: responseJson.data,
+                            
                             amount_payable: this.props.route.params.amount_payable,
                             payment_link: payment_link,
                             payment_mode: payment_mode,
+                            order_id: responseJson.data.id,
                         });
                 }
                 else {
@@ -97,9 +100,8 @@ class MakePayment extends React.Component {
                 console.log("Api call error", error);
                 // Alert.alert(error.message);
             });
-
-        // this.props.navigation.navigate(navigateScreen, { bodyOrder: bodyOrder, amount_payable: this.props.route.params.amount_payable });
-    }
+        }
+  }
 
     unauthorizedLogout() {
         Alert.alert('Error', Constants.UnauthorizedErrorMsg)
@@ -178,25 +180,22 @@ class MakePayment extends React.Component {
 
     payByCash(){
         this.setState({spinner:false})
-        if(this.props.route.params.pending_order_res == undefined){
-            this.setPaymentMode('CASH', 'PayByCash')
-        }
-        else{
+        this.setPaymentMode('CASH', 'PayByCash')
+        // if(this.props.route.params.pending_order_res == undefined){
+        //     this.setPaymentMode('CASH', 'PayByCash')
+        // }
+        // else{
             
-            this.props.navigation.navigate('PayByCash', {
-                bodyOrder: this.props.route.params.bodyOrder,
-                amount_payable: this.props.route.params.amount_payable,
-                // pending_order_res: this.props.route.params.pending_order_res,
-                payment_link: this.props.route.params.pending_order_res.data.payment_link,
-                payment_mode:  'CASH',
-                data:this.props.route.params.pending_order_res.data
-            })
+        //     this.props.navigation.navigate('PayByCash', {
+        //         bodyOrder: this.props.route.params.bodyOrder,
+        //         amount_payable: this.props.route.params.amount_payable,
+        //         // pending_order_res: this.props.route.params.pending_order_res,
+        //         payment_link: this.props.route.params.pending_order_res.data.payment_link,
+        //         payment_mode:  'CASH',
+        //         data:this.props.route.params.pending_order_res.data
+        //     })
 
-            // data: responseJson.data,
-                            // amount_payable: this.props.route.params.amount_payable,
-                            // payment_link: payment_link,
-                            // payment_mode: payment_mode,
-        }
+        // }
         
     }
 
@@ -240,14 +239,20 @@ class MakePayment extends React.Component {
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity
-                                onPress={()=>
-                                    this.props.navigation.navigate('PayByPos',{
-                                    bodyOrder:this.props.route.params.bodyOrder,
-                                    amount_payable:this.props.route.params.amount_payable,
-                                    // pending_order_res:this.props.route.params.pending_order_res,
-                                    data:this.props.route.params.pending_order_res.data,
-                            })}
-                                // onPress={() => this.setPaymentMode('POS', 'PayByPos')}
+                            //     onPress={()=>
+                            //         // console.log("pppppppppp",this.props.route.params)
+                                    
+                            //         this.props.navigation.navigate('PayByPos',{
+                            //         bodyOrder:this.props.route.params.bodyOrder,
+                            //         amount_payable:this.props.route.params.amount_payable,
+                            //         // pending_order_res:this.props.route.params.pending_order_res,
+                            //         // data: this.props.route.params.pending_order_res.data,
+                            //         data: this.props.route.params.pending_order_res,
+                                  
+                                    
+                            // })
+                        // }
+                                onPress={() => this.setPaymentMode('POS', 'PayByPos')}
                                 style={[{}, styles.cardTouch]}
                             >
                                 <View>
@@ -261,12 +266,15 @@ class MakePayment extends React.Component {
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity
-                                onPress={() => this.props.navigation.navigate('PayByUssd', {
+                                onPress={()=>
+                                    // console.log("RRRRRRRRRRRRRRRR",this.props.route.params)
+                                    () => this.props.navigation.navigate('PayByUssd', {
                                     bodyOrder: this.props.route.params.bodyOrder,
                                     amount_payable: this.props.route.params.amount_payable,
                                     data: this.props.route.params.pending_order_res,
                                     payment_mode:  'USSD',
-                                })}
+                                })
+                            }
                                 // onPress={() => this.setPaymentMode('USSD', 'PayByUssd')}
                                 style={[{}, styles.cardTouch]}
                             >

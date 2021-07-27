@@ -180,7 +180,7 @@ class PayByCash extends React.Component {
             // return;
         // }
         this.makePaymentFun(this.props.route.params.payment_mode);
-        this.props.navigation.navigate('PaymentSuccess                                                                                                                                                                                                                                                                                                                                                                           ',{data:this.props.route.params.data})
+        this.props.navigation.navigate('PaymentCash                                                                                                                                                                                                                                                                                                                                                                          ',{data:this.props.route.params.data})
         return;
             // this.makePaymentFun(this.props.route.params.payment_mode);
             

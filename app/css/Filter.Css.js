@@ -12,7 +12,10 @@ export default StyleSheet.create({
      alignSelf:'center',
      backgroundColor:'#F0F0F0',
      flex:1,
-     flexDirection:'column'
+     flexDirection:'column',
+     alignSelf:'center',
+     justifyContent:'center',
+     alignItems:'center'
  },
  mainRow:{
      flexDirection:'row',

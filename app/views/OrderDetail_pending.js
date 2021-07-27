@@ -48,6 +48,7 @@ class OrderDetail_pending extends React.Component {
     }
     componentDidMount() {
         let order_id = this.props.route.params.id;
+        console.log('KKKKKKKKKKK',order_id)
         this.setState({ Spinner: true })
         let postData = {
             method: 'GET',
@@ -166,6 +167,7 @@ class OrderDetail_pending extends React.Component {
         let payment_mode = bodyOrder.payment_mode;
         let amount_payable = bodyOrder.amount; // amount_payable not available
         let order_id = order_id; // this.props.route.params.id
+        console.log('CCCCCCCCCCCCCCCC',this.state.pending_order_res)
         this.props.navigation.navigate('MakePayment',{
             bodyOrder,
             payment_mode,

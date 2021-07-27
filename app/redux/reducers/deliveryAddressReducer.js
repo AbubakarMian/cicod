@@ -8,7 +8,7 @@ const initialState = {
     selected_address_id:0
 }
 const deliveryAddressReducer = (state = initialState, action) => {
-
+console.log('redcer 111 ',action);
 
     switch (action.type) {
 
@@ -34,7 +34,7 @@ const deliveryAddressReducer = (state = initialState, action) => {
                     type: 'PICKUP',
                 }
             }
-
+            break;
         default:
             return state;
     }

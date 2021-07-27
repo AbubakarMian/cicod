@@ -4,8 +4,6 @@ const initialState = {
     discount_type: '',
 }
 const orderDiscountReducer = (state = initialState, action) => {
-
-
     switch (action.type) {
 
         case SET_DISCOUNT:

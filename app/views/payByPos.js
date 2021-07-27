@@ -19,7 +19,7 @@ class PayByPOS extends React.Component {
         this.state = {
             order_detail: null,
             payment_link: null,
-            order_id:0
+            order_id:this.props.route.params.order_id ?? 0
         }
     }
 
@@ -39,6 +39,7 @@ class PayByPOS extends React.Component {
     }
 
     get_order_detail() {
+    
         let postData = {
             method: 'GET',
             headers: {
@@ -48,7 +49,9 @@ class PayByPOS extends React.Component {
             },
         };
         console.log('~~~~~~~~~~~~~~~',this.props.route.params.data)
-        let order_id = this.props.route.params.data.id;
+        let order_id = this.props.route.params.order_id;
+        console.log('%%%%%%%%%%%%',order_id)
+     
         let url = Constants.orderslist + '/' + order_id
         console.log('---- body params list @@@@@@!!!!!!!!!!!!!!', this.props.route.params);
         console.log('order url detail ', url);
@@ -57,17 +60,17 @@ class PayByPOS extends React.Component {
             .then(response => response.json())
             .then(async responseJson => {
                 console.log("order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
-                if (responseJson.status.toUpperCase() === "SUCCESS") {
+                if (responseJson.status === "success") {
                     let data = responseJson.data;
                     this.setState({
                         spinner: false,
                         order_detail: data,
-                        order_id:order_id
+                        order_id:this.props.route.params.order_id
                     })
                     // let payment_link = responseJson.data.payment_link
                     // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
                 } else {
-                    this.setState({ spinner: false })
+                    this. setState({ spinner: false })
                     let message = responseJson.message
                     console.log('some error',responseJson)
                 }
@@ -82,8 +85,11 @@ class PayByPOS extends React.Component {
      pay(_that) {
         _that = _that._that;
         let params = _that.props.route.params;
-        let order = {};
-        if(_that.state.order_detail == null || params.data.id != _that.state.order_id){
+        let order = {}; 
+        console.log('_that.state.order_detail',_that.state.order_detail)
+        console.log('params.order_id',params.order_id)
+        console.log('_that.state.order_id',_that.state.order_id)
+        if( _that.state.order_detail == null || params.order_id != _that.state.order_id){
             order = _that.get_order_detail();
             return null;
         }        

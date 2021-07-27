@@ -31,7 +31,8 @@ class OrderFilter extends React.Component {
       paymentdate: 'YY-MM-DD',
       isDatePickerVisible: false,
       setDatePickerVisibility: false,
-      modal_date_type:''
+      modal_date_type:'',
+      active_list:'',
     };
   }
   componentDidMount() {
@@ -167,6 +168,7 @@ class OrderFilter extends React.Component {
     // })
   }
   orderStatus(text) {
+    this.setState({active_list:text})
     // this.upsert_filters({ key: 'is_active', value: text })
     this.upsert_filters({ key: 'order_status', value: text })
     // let filters = this.state.filters;
@@ -177,6 +179,7 @@ class OrderFilter extends React.Component {
   }
   applyFilter = () => {
     console.log('this.state.filters', this.state.filters);
+    console.log('user user user', this.props.user.access_token);
     let filters = this.state.filters 
     this.setState({
       filters:[]
@@ -230,7 +233,7 @@ class OrderFilter extends React.Component {
 
     let filters = this.state.filters;
     if (this.state.modal_date_type == 'order') {
-      this.upsert_filters({ key: 'date_created', value: newdate })
+      this.upsert_filters({ key: 'order_date', value: newdate })
       // filters.push({ key: 'date_created', value: newdate });
       this.setState({
         orderdate: newdate,
@@ -301,41 +304,42 @@ class OrderFilter extends React.Component {
             <View>
               <ScrollView
                 horizontal={true}
-                style={{ paddingHorizontal: 40 }}
+                style={{}}
               >
-                <View style={[{ paddingRight: 20 }, styles.mainRow]}>
-                  <View style={[{ marginRight: 10 }]}>
+                <View style={[{  }, styles.mainRow]}>
+                  <View style={[{ }]}>
                     <TouchableOpacity
                       onPress={() => this.orderStatus('')}
                     >
-                      <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>All</Text>
+                      <Text style={[{ color: this.state.active_list==''? '#000' : '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>All</Text>
                     </TouchableOpacity>
                   </View>
                   <View style={[{}]}>
                     <TouchableOpacity
-                      onPress={() => this.orderStatus('PENDING')}
+                      onPress={() => this.orderStatus('pending')}
                     >
-                      <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>PENDING </Text>
+                      <Text style={[{ color: this.state.active_list=='pending'? '#000' :'#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>PENDING </Text>
                     </TouchableOpacity>
                   </View>
                   <View style={[{}]}>
                     <TouchableOpacity
-                      onPress={() => this.orderStatus('PAID')}
+                      onPress={() => this.orderStatus('paid')}
                     >
-                      <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>PAID </Text>
+                      <Text style={[{ color: this.state.active_list=='paid'? '#000' :'#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>PAID </Text>
                     </TouchableOpacity>
                   </View>
                   <View style={[{}]}>
                     <TouchableOpacity
                       onPress={() => this.orderStatus('PART PAYMENT')}
                     >
-                      <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>PART PAYMENT </Text>
+                      <Text style={[{ color:this.state.active_list=='PART PAYMENT'? '#000' : '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>PART PAYMENT </Text>
                     </TouchableOpacity>
                   </View>
                   <View style={[{}]}>
                     <TouchableOpacity
-                      onPress={() => this.orderStatus('PAID FROM CREDIT')}>
-                      <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>PAID FROM CREDIT </Text>
+                      onPress={() => this.orderStatus('ACCOUNT')}>
+                        {/* PAID FROM CREDIT */}
+                      <Text style={[{ color:this.state.active_list=='ACCOUNT'? '#000' : '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>PAID FROM CREDIT </Text>
                     </TouchableOpacity>
                   </View>
                 </View>
