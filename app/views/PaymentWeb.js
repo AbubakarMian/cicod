@@ -6,6 +6,7 @@ import { WebView } from 'react-native-webview';
 import { connect } from 'react-redux';
 import { Constants } from '../views/Constant';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { event } from 'react-native-reanimated';
 
 
 var { width, height } = Dimensions.get('window');
@@ -28,7 +29,8 @@ class PaymentWeb extends React.Component {
             let a = await this.performTimeConsumingTask(); 
              if(this.state.order != null){               
                 console.log('this.state.order.payment_status',this.state.order.payment_status);
-                if(this.state.order.payment_status != 'PENDING'){
+                
+                if(this.state.order.payment_status != 'PENDING' || this.state.order.payment_status == 'cancelled'){
                     this._isMounted = false;
                     // this.props.navigation.navigate('Order');
                     // this.props.navigation.navigate('OrderDetail', { id:this.state.order_id })
@@ -111,7 +113,11 @@ class PaymentWeb extends React.Component {
         this.check();
         console.log('payment web rrrrrrrrrrrrrrrrr')
         return (
-            <WebView source={{ uri: this.props.route.params.payment_link }} />
+            <WebView 
+    
+         
+            
+            source={{ uri: this.props.route.params.payment_link }} />
         )
     }
 }

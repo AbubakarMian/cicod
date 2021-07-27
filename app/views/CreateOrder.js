@@ -122,9 +122,9 @@ class CreateOrder extends React.Component {
             return
         }
         this.setState({ delivery_type_option: type })
-        this.props.setDeliveryAddress({
-            type: type,
-        })
+        // this.props.setDeliveryAddress({
+        //     type: type,
+        // })
         console.log('dilivery type ------', type)
         // this.setState({ is_pickup: !this.state.is_pickup, })
         if (type === 'delivery') {
@@ -305,7 +305,7 @@ class CreateOrder extends React.Component {
                 if (responseJson.status.toUpperCase() === "SUCCESS") {
                     let data = responseJson.data;
                     console.log("##########ddddddddddd",data)
-                   
+                    
                     this.props.navigation.navigate('MakePayment',{data:data})
                     // this.setState({
                     //     spinner: false,
