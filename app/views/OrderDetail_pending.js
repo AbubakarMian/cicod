@@ -207,6 +207,9 @@ class OrderDetail_pending extends React.Component {
                 console.log("order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
                 if (responseJson.status.toUpperCase() === "SUCCESS") {
                     Alert.alert('Message',responseJson.message);
+                    this.props.setScreenReload({
+                        reload:true
+                    })
                     this.props.navigation.navigate('Order')
                     // this.props.navigation.goBack();
                     // let payment_link = responseJson.data.payment_link
@@ -538,7 +541,7 @@ class OrderDetail_pending extends React.Component {
                                 </TouchableOpacity> */}
                                 <TouchableOpacity
                                     onPress={() => this.cancelOrder()}
-                                    style={[{ flexDirection: 'row', marginVertical: 10 },]}>
+                                    style={[{ flexDirection: 'row', marginVertical: 10,paddingBottom:30 },]}>
                                     <Image source={require('../images/ban.png')} style={[{}, styles.banImage]} />
                                     <Text>Cancel</Text>
 
@@ -563,6 +566,7 @@ function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
         logoutUser: () => dispatch({ type: LOGOUT_USER }),
+        setScreenReload: (value) => dispatch({ type: ORDER_RELOAD, value: value }),
         setScreenReload: (value) => dispatch({ type: ORDER_RELOAD, value: value }),
     }
 };

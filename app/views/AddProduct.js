@@ -310,8 +310,6 @@ class AddProduct extends React.Component {
                                                         <Text style={[{}, styles.OrderDetailHeadingRowText]}>{item.name}</Text>
                                                     </View>
                                                 </View>
-
-
                                             </View>
                                             <View style={[{}, styles.orderDetailAmmountRow]}>
                                                 <View style={[{}, styles.orderDetailAmmountColumn]}>

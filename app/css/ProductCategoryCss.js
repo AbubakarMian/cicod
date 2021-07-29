@@ -101,6 +101,7 @@ export default StyleSheet.create({
         paddingHorizontal:15,
         paddingVertical:3,
         borderRadius:100,
+        fontSize:12,
     },
    dotsTouch:{
        

@@ -63,12 +63,13 @@ class Order extends React.Component {
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log("**********************###############", responseJson)
+               
                 if (responseJson.status === 'success') {
                     this.setState({ spinner: false });
                     this.setState({
                         data: responseJson.data
                     });
+                    console.log('~~~~~~~~~~~',responseJson.data)
                     // this.props.navigation.navigate('DrawerNavigation')
                 } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
@@ -95,7 +96,7 @@ class Order extends React.Component {
     itemDetail(item, type) {
         console.log("~~~~~~~~~~~~~~~~~", type)
         const id = item.id
-        console.log('TTTTTTTTTTTT', id)
+
         if (type == 'PENDING') {
 
             this.props.navigation.navigate('OrderDetail_pending', { id })
@@ -210,29 +211,49 @@ class Order extends React.Component {
         }
         return filter
     }
+
+    change_filter_concat(url,filter){
+        
+        if(url.includes('?')){
+            console.log('!!!!!!!!!!~~~~~~~~~~',filter)
+            filter.replace('?','&');
+        }
+        // if( string_include(url,'?')){
+            
+        //     filter = str_replace('?','&');
+        // }
+        return (url + filter);
+    }
     getOrderList(props) {
         console.log('props ---- ', props);
         // return null;
         let _that = props._that;
         let url = Constants.orderslist;
         let filters = [];
-        let filter_concat = '?';
+        let filter_concat = '?'; 
 
         if (_that.props.route == null || _that.props.route.params == null || _that.props.route.params.filters == null) {
             url = Constants.orderslist;
         }
         else if (_that.state.apply_filter) {
+     
             filters = _that.props.route.params.filters;
-            let filter = filter_concat;
-            for (let i = 0; i < filters.length; i++) {
+            
+            let filter = '';
+            
+            for (let i = 0; i < filters.length; i++) {   
+                console.log('~~~~~~~~~~~~~~!!!!!!!!!!!',filters.length)             
                 // filter = filter +'filter'+ '['+filters[i].key +']' + '=' + filters[i].value;
                 if (filters[i].key == 'order_status') {
+                    console.log('url A '+i,url);
                     filter = _that.get_searach_by_status(url, filter_concat, filters[i].value);
+                    console.log('url B '+i,url);
+                    console.log('url filter '+i,filter);
 
                     // _that.customeList(filters[i].value)
                 }
                 else {
-                    filter = filter_concat + filters[i].key + '=' + filters[i].value;
+                    filter = filter+filter_concat + filters[i].key + '=' + filters[i].value;
                 }
                 // if (i != filters.length - 1) {
                 //     filter = filter + '&';
@@ -240,12 +261,19 @@ class Order extends React.Component {
                 filter_concat = '&';
 
             }
-            url = (url + filter);
+            console.log('url 1',url)
+            // url =  _that.change_filter_concat(url,filter);
+            url =   (url + filter);
+            console.log('url 2',url)
+
+            
         }
 
-        if (filters.length != 0) {
-            filter_concat = '&';
-        }
+            console.log('url 3',url)
+
+        // if (filters.length != 0) {
+        //     filter_concat = '&';
+        // }
         if (_that.state.search_order != '') {
             url = url + filter_concat + 'order_id=' + _that.state.search_order
             filter_concat = '&';
@@ -253,10 +281,14 @@ class Order extends React.Component {
 
         if (_that.state.date_created_timestamp != 'YY-MM-DD') {
             url = url + filter_concat + 'date_created=' + _that.state.date_created_timestamp
+            filter_concat = '&';
         }
+        console.log('url 4',url)
         let filter = _that.get_searach_by_status(url, filter_concat, _that.state.is_active_list);
-        url = (url + filter);
-
+        filter_concat = '&';
+        // url =  _that.change_filter_concat(url,filter);
+        url = (url + filter);;
+        console.log('url 5',url)
         console.log('reload hata ', _that.reload)
         if (url != _that.state.url_orders || _that.props.reload.order ) {
 
@@ -334,6 +366,11 @@ class Order extends React.Component {
                                             <Text style={[{ borderRadius: 50, paddingHorizontal: 5, textAlign: 'center', backgroundColor: '#DAF8EC', color: '#26C281', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
                                                 {item.order_status}
                                             </Text>
+                                            :(item.order_status == 'CANCELLED') ?
+                                            <Text style={[{ borderRadius: 50, paddingHorizontal: 5, textAlign: 'center', backgroundColor: '#E6E6E6', color: '#929497', width: width / 4, alignSelf: 'flex-end',fontSize:12 }, styles.detailColumn2text]}>
+                                                {item.order_status}
+                                            </Text>
+                                            
                                             : (item.order_status == 'PART PAYMENT') ?
                                                 <Text style={[{ borderRadius: 50, paddingHorizontal: 5, textAlign: 'center', backgroundColor: '#E6E6E6', color: '#929497', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
                                                     {item.order_status}
@@ -351,7 +388,7 @@ class Order extends React.Component {
 
     render() {
         return (
-            <View style={{ width: width, height: height, position: 'relative', backgroundColor: '##F0F0F0', flex: 1 }}>
+            <View style={{ width: width, height: height, position: 'relative', backgroundColor: '#F0F0F0', flex: 1 }}>
                 <View style={{ height: height / 3.1 }}>
                     <Header navigation={this.props.navigation} />
                     <Spinner
