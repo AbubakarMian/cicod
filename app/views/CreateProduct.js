@@ -238,6 +238,7 @@ class CreateProduct extends React.Component {
                     this.setState({ spinner: false })
                     if (responseJson.status === "success") {
                         Alert.alert('MESSAGE', responseJson.message)
+                        
                         let customer_id = responseJson.data.id;
                         this.createCustomerDelivery(customer_id);
                     }   else if(responseJson.status == 401){
@@ -330,6 +331,9 @@ class CreateProduct extends React.Component {
                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                     {this.state.categoryarr.length < 1 ? null :
                                         <DropDownPicker
+                                        scrollViewProps={{
+                                            persistentScrollbar: true,
+                                        }}
                                             items={this.state.categoryarr}
                                             containerStyle={{ height: 50, width: width - 35, marginTop: 15,alignSelf:'center' }}
                                             style={{ backgroundColor: '#fff' }}
@@ -459,6 +463,9 @@ class CreateProduct extends React.Component {
                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                   
                                         <DropDownPicker
+                                         scrollViewProps={{
+                                            persistentScrollbar: true,
+                                        }}
                                         placeholder="VAT"
                                     items={[
                                         {label: 'Yes', value: 1},

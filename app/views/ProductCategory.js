@@ -256,7 +256,7 @@ class ProductCategory extends React.Component {
                                 </Menu>
                                 {(item.is_active == true) ?
                                     <Text style={[{}, styles.actionText]}>ACTIVE</Text> :
-                                    <Text style={[{}, styles.inactiveActionText]}>INACTIVE</Text>}
+                                    <Text style={[{}, styles.inactiveActionText]}>SUSPENDED</Text>}
                             </View>
                         </View>
                         // </TouchableOpacity>
