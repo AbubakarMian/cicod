@@ -9,7 +9,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Header from '../views/Header';
 import { connect } from 'react-redux';
 import ImagePicker from 'react-native-image-crop-picker';
-import { SET_USER, LOGOUT_USER, UpdateTabbar } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER, UpdateTabbar,ORDER_RELOAD, PRODUCT_RELOAD } from '../redux/constants/index';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -42,12 +42,15 @@ class Products extends React.Component {
         console.log("~~~~~~~~~~~~~~~~~~~~*************",this.props.user.access_token)
         const that = this;
         setTimeout(function () {
+            
             that.getCategoryList()
         }, 700);
     }
   
 
     async getData(url) {
+        
+      
         this.setState({ spinner: true })
            console.log('search url ',url)
            console.log('token ',this.props.user.access_token)
@@ -156,7 +159,7 @@ class Products extends React.Component {
 
      listProducts(props){
         let _that = props._that;
-        let url = '';
+        let url = Constants.productslist;
         if (_that.props.route == null || _that.props.route.params == null || _that.props.route.params.filters == null) {
             url = Constants.productslist;
         }
@@ -171,7 +174,12 @@ class Products extends React.Component {
             }
             url = (Constants.productslist + filter);
         }
-        if(url != _that.state.url_products){
+        console.log('reloaded 1',_that.props.reload.product)
+        if(url != _that.state.url_products || _that.props.reload.product){
+            console.log('reloaded',_that.props.reload.product)
+            _that.props.setScreenReload({
+                reload:false
+            })
              _that.getData(url);
             _that.setState({
                 url_products:url
@@ -179,9 +187,20 @@ class Products extends React.Component {
         }
         console.log('url_products ',url);
         // return null;
-        
+        if (_that.state.data.length < 1) {
+            return (
+                <View style={{ height: height / 1.75, position: 'relative', flexDirection: 'column', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F0F0F0', width: width - 20, padding: 10, borderRadius: 10, marginBottom: 5 }}>
+                    <Image
+                        source={require('../images/Untitled-1.png')}
+                    />
+                    <Text style={{ color: '#929497', fontSize: 20, fontWeight: 'bold', fontFamily: 'Open Sans' }}>No order found</Text>
+                </View>
+            )
+        }
+        else{
         return (
             <View>
+                
             <FlatList
                         style={{}}
                         data={_that.state.data}
@@ -237,6 +256,7 @@ class Products extends React.Component {
                     />
                     </View>
         );
+        }
     }
 
     render() {
@@ -340,7 +360,8 @@ class Products extends React.Component {
 function mapStateToProps(state) {
     return {
         user: state.userReducer,
-        tabBar: state.tabBarReducer
+        tabBar: state.tabBarReducer,        
+        reload: state.reloadReducer
     }
 };
 function mapDispatchToProps(dispatch) {
@@ -348,6 +369,7 @@ function mapDispatchToProps(dispatch) {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
         logoutUser: () => dispatch({ type: LOGOUT_USER }),
         setTabBar: (value) => dispatch({ type: UpdateTabbar, value: value }),
+        setScreenReload: (value) => dispatch({ type: PRODUCT_RELOAD, value: value }),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Products)

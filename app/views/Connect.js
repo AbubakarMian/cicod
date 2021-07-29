@@ -105,7 +105,7 @@ class Connect extends React.Component {
                     this.setState({
                         received_arr: responseJson.data
                     })
-                    console.log('response json received!!!!', responseJson);
+                    
                 } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 }
