@@ -42,10 +42,8 @@ class ConnectView extends React.Component {
         console.log('props !!!!!!!!!!!!!!!!!!!!!', this.props.route.params.item);
         // let pro_url = Constants.products + '/' + this.props.route.params.prod_id
         // this.getProductDetail(pro_url)
-        // let buyer_name = this.props.route.params.item.buyer_name;
-        // let url = Constants.searchMerchant + '?merchantId=' + buyer_name;
-        let buyer_id = this.props.route.params.item.buyer_id;
-        let url = Constants.searchMerchant + '?merchantId=' + buyer_id;
+        let buyer_name = this.props.route.params.item.buyer_name;
+        let url = Constants.searchMerchant + '?merchantId=' + buyer_name;
         console.log('url @@@@@@@@@@ !!!!!!!!!!!!!!!!!!!!!', url);
         this.getBuyer(url);
     }

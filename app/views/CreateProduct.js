@@ -12,7 +12,7 @@ import { Constants } from '../views/Constant';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import SearchBar from 'react-native-search-bar';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER,PRODUCT_RELOAD } from '../redux/constants/index';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Tooltip from 'react-native-walkthrough-tooltip';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -132,8 +132,6 @@ class CreateProduct extends React.Component {
         this.props.navigation.navigate('Login');
     }
     updateProduct() {
-
-
         this.setState({ spinner: true })
 
         if (this.state.name === '' || this.state.price === '') {
@@ -173,6 +171,9 @@ class CreateProduct extends React.Component {
                     this.setState({ spinner: false })
                     if (responseJson.status === "success") {
                         Alert.alert('MESSAGE', responseJson.message)
+                        await this.props.setScreenReload({
+                            reload:true
+                        })
                         this.props.navigation.navigate('Products', { seller_id: 0 })
                     }   else if(responseJson.status == 401){
                         this.unauthorizedLogout();
@@ -191,10 +192,7 @@ class CreateProduct extends React.Component {
 
     }
     createProduct() {
-
-
         this.setState({ spinner: true })
-
         if (this.state.name === '' || this.state.price === '') {
             this.setState({ spinner: false })
             Alert.alert("Warning", "Product name and Price are required")
@@ -205,8 +203,6 @@ class CreateProduct extends React.Component {
             return; 
         }
         else {
-
-
             let postData = {
                 method: 'POST',
                 headers: {
@@ -236,11 +232,15 @@ class CreateProduct extends React.Component {
                     console.log(" create customer response !!!!!!!!!!!", responseJson)
 
                     this.setState({ spinner: false })
+                    this.props.setScreenReload({
+                        reload:true
+                    })
                     if (responseJson.status === "success") {
                         Alert.alert('MESSAGE', responseJson.message)
                         
                         let customer_id = responseJson.data.id;
-                        this.createCustomerDelivery(customer_id);
+                        this.props.navigation.navigate('Products', { seller_id: 0 })
+                        // this.createCustomerDelivery(customer_id);
                     }   else if(responseJson.status == 401){
                         this.unauthorizedLogout();
                     }
@@ -271,12 +271,12 @@ class CreateProduct extends React.Component {
             })
           });
     }
-    onSaveFun(){
+     onSaveFun(){
         if(this.props.route.params.action == "update"){
-            this.updateProduct();
+             this.updateProduct();
         }else{
-            this.createProduct();
-        }
+             this.createProduct();
+        }        
     }
 
     setPrice(text){ 
@@ -670,13 +670,15 @@ class CreateProduct extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        user: state.userReducer
+        user: state.userReducer,
+        reload: state.reloadReducer
     }
 };
 function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
-        logoutUser: () => dispatch({ type: LOGOUT_USER })
+        logoutUser: () => dispatch({ type: LOGOUT_USER }),
+        setScreenReload: (value) => dispatch({ type: PRODUCT_RELOAD, value: value }),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CreateProduct)

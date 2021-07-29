@@ -366,7 +366,7 @@ class ProductFilter extends React.Component {
             <View style={[{ flex: 1, paddingVertical: 10 }]}>
               <Text style={{ color: '#929497', fontWeight: 'bold' }}>Created Date</Text>
               <TouchableOpacity
-             onPress={() => this.setState({isDatePickerVisible:true, modal_date_type:'created_at'})}
+             onPress={() => this.setState({isDatePickerVisible:true, modal_date_type:'date_created'})}
               >
                 <View style={{ backgroundColor: '#fff', flexDirection: 'row',alignItems:'center',justifyContent:'center', marginRight: 10, padding: 10, marginVertical: 10 }}>
                   <Image
@@ -413,9 +413,9 @@ class ProductFilter extends React.Component {
         </View>
         <Text style={[{ color: '#929497', fontWeight: 'bold', fontSize: 20, marginVertical: 10 }]}>Status</Text>
         <View>
-          <ScrollView
+          {/* <ScrollView
             horizontal={true}
-          >
+          > */}
             <View style={[{ paddingRight: 20 }, styles.mainRow]}>
               <View style={[{ marginRight: 10 }]}>
                 <TouchableOpacity onPress={() => this.activeSet(1)}>
@@ -432,7 +432,7 @@ class ProductFilter extends React.Component {
 
 
             </View>
-          </ScrollView>
+          {/* </ScrollView> */}
         </View>
 
         <TouchableOpacity

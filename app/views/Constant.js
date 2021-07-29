@@ -8,6 +8,7 @@ export const Constants = {
   login: `${auth_url}/sso/auth/login`,
   changePassword: `${auth_url}/user/password_update`,
   products: `${base_url}/products`,
+  update_product_category: `${base_url}/categories`,
   customerlist: `${base_url}/customers`,
   customerdelivery: `${base_url}/customer-delivery-address`,
   productslist: `${base_url}/products`,
@@ -33,7 +34,7 @@ export const Constants = {
   ussd_codes: `${base_url}/ussd-codes`,
   reset_password: `${auth_url}/sso/auth/forgot_password`,
   currency: `${base_url}/currency`,
-
+  
 };
 
 

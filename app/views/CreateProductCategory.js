@@ -8,10 +8,11 @@ import Header from '../views/Header';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Constants } from '../views/Constant';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER, PRODUCT_RELOAD } from '../redux/constants/index';
 import DropDownPicker from 'react-native-dropdown-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import CheckBox from 'react-native-check-box';
+import axios from 'axios';
 const { width, height } = Dimensions.get('window')
 
 class CreateProductCategory extends React.Component {
@@ -43,6 +44,7 @@ class CreateProductCategory extends React.Component {
 
     createCategory() {
         this.setState({ spinner: true })
+        let _that = this
 
         if (this.state.name === '') {
             this.setState({ spinner: false })
@@ -50,49 +52,72 @@ class CreateProductCategory extends React.Component {
             return;
         }
         else {
+            let url=Constants.update_product_category+'/'+this.state.id;
+            let token=this.props.user.access_token;
+            console.log('EEEEEEEEEEE',url)    
+            console.log('cccccccccc',token)
 
-
-            let postData = {
-                method: (this.state.id == 0)?'POST' :'PUT',
+            let body = {
+                category_id: this.state.category_id,
+                name: this.state.name,//required
+                description: this.state.description,
+                image: this.state.prod_image,
+                on_webshop: this.state.add_weshop, //Boolean             
+            }
+            let myheader =  {
                 headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
-                    'Authorization': this.props.user.access_token,
-                },
-                body: JSON.stringify({
-                    category_id: this.state.category_id,
-                    name: this.state.name,//required
-                    description: this.state.description,
-                    image: this.state.prod_image,
-                    on_webshop: this.state.add_weshop, //Boolean 
-                })
-            };
-            // let url =  Constants.productcategorylist '/'this.stat
-            fetch(Constants.productcategorylist, postData)
-                .then(response => response.json())
-                .then(async responseJson => {
-                    console.log(" create customer response !!!!!!!!!!!", responseJson)
-
-                    this.setState({ spinner: false })
-                    if (responseJson.status === "success") {
-                        Alert.alert('MESSAGE', responseJson.message)
-                        this.props.navigation.navigate('ProductCategory')
-                        // let customer_id = responseJson.data.id;
-                        // this.createCustomerDelivery(customer_id);
-                    } else if (responseJson.status == 401) {
-                        this.unauthorizedLogout();
-                    }
-                    else {
-                        let message = responseJson.message
-                        Alert.alert('Error', message)
-                    }
+                  Accept: 'application/json',
+                  'Content-Type': 'application/json',
+                  'Authorization': token,
                 }
-                )
-                .catch((error) => {
-                    console.log("Api call error", error);
-                    // Alert.alert(error.message);
-                });
-        }
+              }
+            if(this.state.id == 0){
+                axios.post(url,
+                    body,
+                    myheader                  
+                  )
+                  .then(function (response) {         
+                    _that.setState({ spinner: false })       
+                  console.log('axiso response',response.data);                    
+                  if (response.status === 'success') {
+                   console.log('GGGGGGGGGGG',response.data)  
+                   _that.props.setScreenReload({
+                       reload:true
+                   })
+                   _that.props.navigation.navigate('Products');                
+                  }                   
+                  })
+                  .catch(function (error) {
+                    _that.setState({ spinner: false })
+                  console.log(error);
+                  });
+                }               
+            else{
+                axios.put(url,
+                    body,
+                   myheader
+                  
+                  )
+                  .then(function (response) {
+                
+                  console.log('axiso response',response.data);
+                  _that.setState({ spinner: false })
+                  if (response.status === 'success') {
+                   console.log('GGGGGGGGGGG',response.data)
+                   _that.props.setScreenReload({
+                       reload:true
+                   })
+                   _that.props.navigation.navigate('Products');
+                  
+                  } 
+                  
+                  })
+                  .catch(function (error) {
+                    _that.setState({ spinner: false }) 
+                  console.log(error);
+                  });
+                }   
+            }                          
     }
 
     
@@ -115,6 +140,7 @@ class CreateProductCategory extends React.Component {
         fetch(Constants.productcategorylist, postData)
             .then(response => response.json())
             .then(async responseJson => {
+                console.log('$$$$$$$$$$$$$',responseJson)
                 this.setState({ spinner: false });
                 if (responseJson.status === 'success') {
 
@@ -253,7 +279,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
-        logoutUser: () => dispatch({ type: LOGOUT_USER })
+        logoutUser: () => dispatch({ type: LOGOUT_USER }),
+        setScreenReload: (value) => dispatch({ type: ORDER_RELOAD, value: value }),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CreateProductCategory)
