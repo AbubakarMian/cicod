@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, TouchableOpacity, Dimensions, ScrollView, Alert  } from 'react-native';
+import { View, TouchableOpacity, Dimensions, ScrollView, Alert,Image } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 import styles from '../css/UserCss';
 import fontStyles from '../css/FontCss'
@@ -110,16 +110,26 @@ class User extends React.Component {
                 <ScrollView>
                     <View>
                         <View style={[{}, styles.contentContainer]}>
-                            <Text style={[{}, styles.userInfoLable]}>First Name</Text>
-                            <Text style={[{color:'#4E4D4D',marginBottom:10}, fontStyles.normal15]}>{this.state.first_name}</Text>
-                            <Text style={[{}, styles.userInfoLable]}>Last Name</Text>
-                            <Text style={[{color:'#4E4D4D',marginBottom:10}, fontStyles.normal15]}>{this.state.last_name ?? this.state.first_name}</Text>
+                            <View style={{ flexDirection: 'row', width: width }}>
+                                <View style={{ flex: 1 }}>
+                                    <Text style={[{}, styles.userInfoLable]}>First Name</Text>
+                                    <Text style={[{ color: '#4E4D4D', marginBottom: 10 }, fontStyles.normal15]}>{this.state.first_name}</Text>
+                                    <Text style={[{}, styles.userInfoLable]}>Last Name</Text>
+                                    <Text style={[{ color: '#4E4D4D', marginBottom: 10 }, fontStyles.normal15]}>{this.state.last_name ?? this.state.first_name}</Text>
+                                </View>
+                                <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
+                                    <Image
+                                        style={{ height: 50, width: 50 }}
+                                        source={require('../images/profilepic.png')}
+                                    />
+                                </View>
+                            </View>
                             <Text style={[{}, styles.userInfoLable]}>Email</Text>
-                            <Text style={[{color:'#4E4D4D',marginBottom:10}, fontStyles.normal15]}>{this.state.email}</Text>
+                            <Text style={[{ color: '#4E4D4D', marginBottom: 10 }, fontStyles.normal15]}>{this.state.email}</Text>
                             <Text style={[{}, styles.userInfoLable]}>Phone Number</Text>
-                            <Text style={[{color:'#4E4D4D',marginBottom:10}, fontStyles.normal15]}>{this.state.phone}</Text>
+                            <Text style={[{ color: '#4E4D4D', marginBottom: 10 }, fontStyles.normal15]}>{this.state.phone}</Text>
                             <Text style={[{}, styles.userInfoLable]}>Role</Text>
-                            <Text style={[{color:'#4E4D4D',marginBottom:10}, fontStyles.normal15]}>{this.state.role}</Text>
+                            <Text style={[{ color: '#4E4D4D', marginBottom: 10 }, fontStyles.normal15]}>{this.state.role}</Text>
                             <TouchableOpacity
                                 onPress={() => this.props.navigation.navigate('ChangePassword')}
                                 style={[{}, styles.changePasswordView]}>
@@ -135,10 +145,10 @@ class User extends React.Component {
                             <Text style={[{}, styles.logoutText]}>Logout</Text>
                         </TouchableOpacity>
                         <Text
-                            style={[{alignSelf:'center'}, styles.bottomDescText]}
+                            style={[{ alignSelf: 'center' }, styles.bottomDescText]}
                             numberOfLines={2}
                         >CICOD Customer Order Management Mobile App Is a product of Crown Interactive</Text>
-                        <Text style={[{alignSelf:'center'}, styles.bottomVersioncText]}>Version 1.0</Text>
+                        <Text style={[{ alignSelf: 'center' }, styles.bottomVersioncText]}>Version 1.0</Text>
                     </View>
                 </ScrollView>
             </View>

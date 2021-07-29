@@ -541,7 +541,7 @@ class OrderDetail_pending extends React.Component {
                                 </TouchableOpacity> */}
                                 <TouchableOpacity
                                     onPress={() => this.cancelOrder()}
-                                    style={[{ flexDirection: 'row', marginVertical: 10 },]}>
+                                    style={[{ flexDirection: 'row', marginVertical: 10,paddingBottom:30 },]}>
                                     <Image source={require('../images/ban.png')} style={[{}, styles.banImage]} />
                                     <Text>Cancel</Text>
 
