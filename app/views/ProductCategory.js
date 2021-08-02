@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { Constants } from '../views/Constant';
 import Header from '../views/Header';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER,PRODUCT_CATEGORY_RELOAD } from '../redux/constants/index';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {
     Menu,
@@ -48,13 +48,14 @@ class ProductCategory extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
+        console.log('url',url,'token',this.props.user.access_token)
         await fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({ spinner: false });
                 console.log('responseJson responseJson category !!!!!!', responseJson);
                 if (responseJson.status === 'success') {
-
+ 
                     this.setState({
                         categoryarr: responseJson.data,
                     });
@@ -121,6 +122,12 @@ class ProductCategory extends React.Component {
     }
 
     render() {
+        if(this.props.reload.product_category){
+            this.getCategoryList(Constants.productcategorylist);
+            this.props.setScreenReload({
+                reload:false
+            })
+        }
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
@@ -217,7 +224,10 @@ class ProductCategory extends React.Component {
                         //     onHideUnderlay={separators.unhighlight}>
                         <View style={[{}, styles.listContainer]}>
                             <View style={[{ flex: 1, justifyContent: 'center', alignItems: 'center' }, styles.listImageView]}>
-                                <Image source={require('../images/product_cat_icon.png')} />
+                                {(item.image!=null)?
+                                <Image source={{uri:item.image}} /> 
+                                :<Image source={require('../images/product_cat_icon.png')} />}
+                                
                             </View>
                             <View style={[{ flex: 6 }, styles.listDescView]}>
                                 <Text style={[{}, styles.listDescBoldText]}>{item.name}</Text>
@@ -282,13 +292,15 @@ class ProductCategory extends React.Component {
 }
 function mapStateToProps(state) {
     return {
-        user: state.userReducer
+        user: state.userReducer,
+        reload: state.reloadReducer
     }
 };
 function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
-        logoutUser: () => dispatch({ type: LOGOUT_USER })
+        logoutUser: () => dispatch({ type: LOGOUT_USER }),
+        setScreenReload: (value) => dispatch({ type: PRODUCT_CATEGORY_RELOAD, value: value }),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ProductCategory)

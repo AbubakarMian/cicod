@@ -49,17 +49,20 @@ class User extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
+        console.log(this.props.user.access_token)
+        console.log('url',Constants.marchantDetail)
         fetch(Constants.marchantDetail, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log('responseJson @@@@@@@@###########', responseJson)
-                console.log('Constants.marchantDetail @@@@@@@@###########', Constants.marchantDetail)
-                console.log('this.props.user.access_token@@@@@@@@###########', this.props.user.access_token)
+                // console.log('!!!!!!!!!responseJson @@@@@@@@###########', responseJson.data)
+                // console.log('Constants.marchantDetail @@@@@@@@###########', Constants.marchantDetail)
+                // console.log('this.props.user.access_token@@@@@@@@###########', this.props.user.access_token)
                 this.setState({
                     spinner: false,
                 });
                 if (responseJson.status === 'SUCCESS') {
                     let merchant_contact = responseJson.merchant
+                    console.log('~~~~~~~~~~',responseJson.merchant.contact)
                     this.setState({
                         email: merchant_contact.email,
                         first_name: merchant_contact.companyName, //contactPerson

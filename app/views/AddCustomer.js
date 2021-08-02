@@ -49,9 +49,17 @@ class AddCustomer extends React.Component {
         this.props.navigation.navigate('Login');
     }
     getCustomers(search_text) {
-        if(search_text == ''){
-            return;
-        }
+        let param='first_name';
+        // if(search_text == ''){
+        //     return;
+        // }
+        // if(search_text.test(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)==0){
+        //     para='email';
+        //     param='first_name';
+        //     return;
+        // }else{
+        //     param='phone'
+        // }
 
         this.setState({ spinner: true })
         let postData = {
@@ -62,13 +70,16 @@ class AddCustomer extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
-        fetch(Constants.customerlist + '?first_name=' + search_text, postData)
+        console.log('url~~~~~~~~',Constants.customerlist + '?'+param+'=' + search_text)
+        console.log('TTTTTTTTT',this.props.user.access_token)
+        fetch(Constants.customerlist  + '?'+param+'=' + search_text, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({
                     spinner: false,
                 });
                 if (responseJson.status === 'success') {
+                    console.log('KKKKKKKKK',responseJson)
                     this.setState({
                         customerData: responseJson.data
                     })
