@@ -489,9 +489,11 @@ class CreateProduct extends React.Component {
                                >
                                    {(this.state.prod_image != '') ?
                                 <Image
+                                    style={{height:50,width:50}}
                                     source={{uri:this.state.prod_image}}
                                 />
                             : <Image
+                            style={{height:50,width:50}}
                             source={require('../images/redPlus.png')}
                         />
                             }

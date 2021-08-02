@@ -38,7 +38,7 @@ export default class ResetPassword extends React.Component {
                 confirmPassword: "Crown123!\"#$%&}~"
             })
         };
-        let myurl = Constants.reset_password+'/'+this.state.email;
+        let myurl ='https://api.cicodsaasstaging.com/sso/auth/password_reset'+'/'+this.state.email;// Constants.reset_password
         console.log('myurlmyurlmyurlmyurlmyurlmyurl',myurl);
         fetch(myurl, postData)
             .then(response => response.text())

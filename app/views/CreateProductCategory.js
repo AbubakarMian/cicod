@@ -8,7 +8,7 @@ import Header from '../views/Header';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Constants } from '../views/Constant';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER, PRODUCT_RELOAD } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER, PRODUCT_RELOAD, PRODUCT_CATEGORY_RELOAD } from '../redux/constants/index';
 import DropDownPicker from 'react-native-dropdown-picker';
 import ImagePicker from 'react-native-image-crop-picker';
 import CheckBox from 'react-native-check-box';
@@ -25,18 +25,18 @@ class CreateProductCategory extends React.Component {
             category_id: 0,
             name: '',
             description: '',
-            prod_image: '',
-            id:0
+            prod_image: {},
+            id: 0
         }
     }
 
     componentDidMount() {
-        console.log('sdf sdf sfd sf',this.props.route.params)
-        if(this.props.route.params.screen =='update'){
+        console.log('sdf sdf sfd sf', this.props.route.params)
+        if (this.props.route.params.screen == 'update') {
             this.setState({
                 name: this.props.route.params.items.name,
                 description: this.props.route.params.items.description,
-                id:this.props.route.params.items.id
+                id: this.props.route.params.items.id
             })
         }
         this.getCategoryList();
@@ -52,75 +52,92 @@ class CreateProductCategory extends React.Component {
             return;
         }
         else {
-            let url=Constants.update_product_category+'/'+this.state.id;
-            let token=this.props.user.access_token;
-            console.log('EEEEEEEEEEE',url)    
-            console.log('cccccccccc',token)
-
-            let body = {
-                category_id: this.state.category_id,
-                name: this.state.name,//required
-                description: this.state.description,
-                image: this.state.prod_image,
-                on_webshop: this.state.add_weshop, //Boolean             
+            let token = this.props.user.access_token;
+            // console.log('EEEEEEEEEEE', url)
+            console.log('cccccccccc', token)
+         
+            var formData = new FormData();
+              formData.append('category_id',this.state.category_id);  
+              formData.append('name',this.state.name);  
+              formData.append('description',this.state.description);  
+              formData.append('image',{
+              uri: this.state.prod_image.path,
+                    type: 'multipart/form-data',
+                    name: `image.jpg`,
+                 
             }
-            let myheader =  {
+              );  
+              formData.append('on_webshop',this.state.add_weshop);  
+            // let body = {
+            //     category_id: this.state.category_id,
+            //     name: this.state.name,//required
+            //     description: this.state.description,
+            //     image: this.state.prod_image,
+            //     on_webshop: this.state.add_weshop, //Boolean             
+            // }
+            console.log('~~~~~~~~~~~~body',formData)
+            let myheader = {
                 headers: {
-                  Accept: 'application/json',
-                  'Content-Type': 'application/json',
-                  'Authorization': token,
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': token,
                 }
-              }
-            if(this.state.id == 0){
+            }
+            if (this.state.id == 0) {
+                let url = Constants.update_product_category;
+                console.log('url',url,'!!!! token : ',this.props.user.access_token)
                 axios.post(url,
-                    body,
-                    myheader                  
-                  )
-                  .then(function (response) {         
-                    _that.setState({ spinner: false })       
-                  console.log('axiso response',response.data);                    
-                  if (response.status === 'success') {
-                   console.log('GGGGGGGGGGG',response.data)  
-                   _that.props.setScreenReload({
-                       reload:true
-                   })
-                   _that.props.navigation.navigate('Products');                
-                  }                   
-                  })
-                  .catch(function (error) {
-                    _that.setState({ spinner: false })
-                  console.log(error);
-                  });
-                }               
-            else{
+                    formData,
+                    myheader
+                )
+                    .then(function (response) {
+                        _that.setState({ spinner: false })
+                        console.log('axiso response 1111111', response.data);
+                        if (response.data.status === 'success') {
+                            console.log('GGGGGGGGGGG', response.data)
+                            Alert.alert('Request Successful')
+                            _that.props.setScreenReload({
+                                reload: true
+                            })
+                            _that.props.navigation.navigate('ProductCategory');
+                        }
+                    })
+                    .catch(function (error) {
+                        _that.setState({ spinner: false })
+                        console.log(error);
+                    });
+            }
+            else {
+                let url = Constants.update_product_category + '/' + this.state.id;
+
                 axios.put(url,
-                    body,
-                   myheader
-                  
-                  )
-                  .then(function (response) {
-                
-                  console.log('axiso response',response.data);
-                  _that.setState({ spinner: false })
-                  if (response.status === 'success') {
-                   console.log('GGGGGGGGGGG',response.data)
-                   _that.props.setScreenReload({
-                       reload:true
-                   })
-                   _that.props.navigation.navigate('Products');
-                  
-                  } 
-                  
-                  })
-                  .catch(function (error) {
-                    _that.setState({ spinner: false }) 
-                  console.log(error);
-                  });
-                }   
-            }                          
+                     formData,
+                    myheader
+
+                )
+                    .then(function (response) {
+
+                        console.log('axiso response 2222222', response.data);
+                        _that.setState({ spinner: false })
+                        if (response.data.status === 'success') {
+                            console.log('GGGGGGGGGGG', response.data)
+                            _that.props.setScreenReload({
+                                reload: true
+                            })
+                            _that.props.navigation.navigate('ProductCategory');
+
+                        }
+
+                    })
+                    .catch(function (error) {
+                        _that.setState({ spinner: false })
+                        console.log(error);
+                    });
+            }
+        }
     }
 
-    
+
     unauthorizedLogout() {
         Alert.alert('Error', Constants.UnauthorizedErrorMsg)
         this.props.logoutUser();
@@ -140,7 +157,7 @@ class CreateProductCategory extends React.Component {
         fetch(Constants.productcategorylist, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log('$$$$$$$$$$$$$',responseJson)
+                console.log('$$$$$$$$$$$$$', responseJson)
                 this.setState({ spinner: false });
                 if (responseJson.status === 'success') {
 
@@ -172,7 +189,7 @@ class CreateProductCategory extends React.Component {
         }).then(image => {
             console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@', image);
             this.setState({
-                prod_image: image.path
+                prod_image: image
             })
         });
     }
@@ -198,13 +215,13 @@ class CreateProductCategory extends React.Component {
                 <View style={[{}, styles.mainContentView]}>
                     <DropDownPicker
                         items={this.state.categoryarr}
-                        containerStyle={{ height: 60, width: width - 40, alignSelf: 'center' }}
+                        containerStyle={{ height: 70, width: width - 40, alignSelf: 'center' }}
                         style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
                         itemStyle={{
-                            justifyContent: 'flex-start', width: width - 50, height: 30
+                            justifyContent: 'flex-start', width: width - 50, height: 40
                         }}
                         placeholder="Product Category "
-                        dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
+                        dropDownStyle={{ height: 120, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                         labelStyle={{ color: '#A9A9A9' }}
                         onChangeItem={item => this.setState({ category_id: item.value })}  //this.onSelectCountry(item.value)}
                     />
@@ -246,12 +263,13 @@ class CreateProductCategory extends React.Component {
                             <TouchableOpacity
                                 onPress={() => this.imageUpload()}
                             >
-                                {(this.state.prod_image != '') ?
+                                {(this.state.prod_image == '') ?
                                     <Image
                                         source={require('../images/redPlus.png')}
                                     />
                                     : <Image
-                                        source={require('../images/redPlus.png')}
+                                    style={{height:width/6,width:width/6}}
+                                        source={{uri:this.state.prod_image.path}}
                                     />
                                 }
                             </TouchableOpacity>
@@ -280,7 +298,7 @@ function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
         logoutUser: () => dispatch({ type: LOGOUT_USER }),
-        setScreenReload: (value) => dispatch({ type: ORDER_RELOAD, value: value }),
+        setScreenReload: (value) => dispatch({ type: PRODUCT_CATEGORY_RELOAD, value: value }),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CreateProductCategory)
