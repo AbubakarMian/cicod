@@ -393,6 +393,7 @@ class OrderDetail_pending extends React.Component {
                                             <Text style={[{ borderRadius: 50, paddingHorizontal: 5, backgroundColor: '#E6E6E6', color: '#929497', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
                                                 {this.state.order_status}
                                             </Text>
+                                            
                                             : null}
                             </View>
                         </View>
@@ -456,6 +457,7 @@ class OrderDetail_pending extends React.Component {
                                 <Text style={[{ fontWeight: 'bold' }, styles.detailInvoiceDarkGraytext]}>{"PCIN  "+this.state.data.cicod_order_id}</Text>
                             </View>
                         </View>
+                        <View style={{borderBottomWidth:1,borderBottomColor:'#e6e6e6'}}>
                         <FlatList
                         data={this.state.item}
                         ItemSeparatorComponent={
@@ -470,23 +472,25 @@ class OrderDetail_pending extends React.Component {
                             ))
                         }
                         renderItem={({ item, index, separators }) => (
+                            
                             <View style={{}, styles.invoiceRow}>
                                 <View style={{ flexDirection: 'column', width: width - 50 }}>
                                     <Text style={[{}, styles.detailInvoiceLable]}>{item.name}</Text>
                                     {/* <Text style={{ color: '#929497', fontSize: 12 }}>LAGOS- Palms</Text> */}
-                                    <View style={{ flexDirection: 'row' }}>
+                                    <View style={{ flexDirection: 'row',position:'relative' }}>
                                         <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>Unit Price: </Text>
-                                        <Text style={{ fontSize: 13, color: '#929497',  }}>{item.price} </Text>
+                                        <Text style={{ fontSize: 13, color: '#929497', textAlign: 'right', }}>{item.price} </Text>
                                         <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>QTY: </Text>
-                                        <Text style={{ fontSize: 13, color: '#929497', marginRight: width / 4 }}>{item.quantity} </Text>
-                                        <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end' }}>{this.props.currency.currency+" "+ this.state.total_amount}</Text>
+                                        <Text style={{ fontSize: 13, color: '#929497', marginRight: width / 4,textAlign: 'right', }}>{item.quantity} </Text>
+                                        <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end',position:'absolute',right:5 }}>{this.props.currency.currency+" "+ this.state.total_amount}</Text>
                                    
                                     </View>
                                 </View>
-                            </View>
-
+                           
+                           </View>
                         )}
                        />
+                       </View>
                        {/* this.props.currency.currency */}
                         <View style={{ alignSelf: 'flex-end', marginRight: 20, marginVertical: 20, flexDirection: 'row' }}>
                         

@@ -227,20 +227,18 @@ class OrderDetail extends React.Component {
                             </View>
                             <View style={[{}, styles.detailColumn2]}>
 
-                                {(this.state.order_status == 'PENDING') ?
-                                    <Text style={[{ borderRadius: 50, paddingHorizontal: 5, backgroundColor: '#FFF3DB', color: '#FDB72B', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
+                       
+
+                                    <Text style={[{backgroundColor:this.state.order_status=='PENDING'?'#FFF3DB': 
+                                    this.state.order_status=='CANCELLED'? '#FFF3DB':
+                                    this.state.order_status=='PAID'? '#DAF8EC':
+                                    this.state.order_status=='PART PAYMENT'? '#E6E6E6'
+                                    :null},styles.orderStatusText]}>
+                                       
                                         {this.state.order_status}
-                                    </Text>
-                                    : (this.state.order_status == 'PAID') ?
-                                        <Text style={[{ borderRadius: 50, paddingHorizontal: 5, backgroundColor: '#DAF8EC', color: '#26C281', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
-                                            {this.state.order_status}
-                                        </Text>
-                                        : (this.state.order_status == 'PART PAYMENT') ?
-                                            <Text style={[{ borderRadius: 50, paddingHorizontal: 5, backgroundColor: '#E6E6E6', color: '#929497', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
-                                                {this.state.order_status}
-                                            </Text>
-                                            : null}
-                            </View>
+                                    </Text>      
+                      
+                        </View>
                         </View>
                         <View style={{}, styles.detailRow}>
                             <View style={[{}, styles.detailColumn1]}>

@@ -166,7 +166,7 @@ export default StyleSheet.create({
     modalBackGround: {
         height: height,
         backgroundColor: '#00000057',
-        opacity: 0.7,
+     
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',
@@ -174,18 +174,21 @@ export default StyleSheet.create({
     },
     suspendTouch: {
         alignSelf: 'baseline',
+        alignItems:'center',
         zIndex: 999,
         backgroundColor: '#fff',
         width: width,
-        borderTopLeftRadius: 50,
-        borderTopRightRadius: 50,
+        borderTopLeftRadius: 15,
+        borderTopRightRadius: 15,
         paddingHorizontal: 30,
         paddingTop: 20,
         flexDirection: 'row',
         paddingBottom: 50,
         alignSelf: 'baseline',
         position: 'absolute',
-        bottom: 10
+        bottom: 10,
+        opacity:1,
+        height:height/6
     },
     banImage: {
         zIndex: 999,

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Input, InputGroup, List, ListItem } from 'native-base';
-import { View, TouchableOpacity, Image, Dimensions, TouchableHighlight, Alert, Touchable, FlatList, ScrollView } from 'react-native';
+import { View, TouchableOpacity, Image, Dimensions, TouchableHighlight, Alert, Touchable, FlatList, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { Text, TextInput, Modal } from 'react-native-paper';
 import fontStyles from '../css/FontCss'
 import styles from '../css/BuyersViewCss';
@@ -524,7 +524,7 @@ class BuyersView extends React.Component {
 
                     transparent={true}
                 >
-                    <TouchableHighlight
+                    <TouchableOpacity
                         onPress={() => this.setState({ supendModal: false })}
                     >
                         <View style={[{}, styles.modalBackGround]}>
@@ -532,10 +532,10 @@ class BuyersView extends React.Component {
                                 onPress={() => this.suspendAction(this.state.items)}
                                 style={[{}, styles.suspendTouch]}>
                                 <Image source={require('../images/ban.png')} style={[{}, styles.banImage]} />
-                                <Text style={{}}>Suspend</Text>
+                                <Text style={{}}>Cancle</Text>
                             </TouchableOpacity>
                         </View>
-                    </TouchableHighlight>
+                    </TouchableOpacity>
 
                 </Modal>
                 {/* MoreDetail Modal */}

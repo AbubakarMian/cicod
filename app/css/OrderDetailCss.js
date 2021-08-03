@@ -105,7 +105,13 @@ export default StyleSheet.create({
         
         paddingVertical:10
     },
-
+    orderStatusText:{
+        borderRadius: 50, 
+        color: '#FDB72B', 
+        width: width / 4.8, 
+        alignSelf: 'flex-end',
+        textAlign:'center'
+    }
 
 
 })

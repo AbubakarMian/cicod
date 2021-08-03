@@ -311,35 +311,35 @@ class OrderFilter extends React.Component {
                     <TouchableOpacity
                       onPress={() => this.orderStatus('')}
                     >
-                      <Text style={[{ color: this.state.active_list==''? '#000' : '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>All</Text>
+                      <Text style={[{marginRight:5, color: this.state.active_list==''? '#000' : '#929497', borderRadius: 50, backgroundColor:this.state.active_list==''?'#fff': '#E6E6E6', paddingHorizontal: 5 }]}>All</Text>
                     </TouchableOpacity>
                   </View>
                   <View style={[{}]}>
                     <TouchableOpacity
                       onPress={() => this.orderStatus('pending')}
                     >
-                      <Text style={[{ color: this.state.active_list=='pending'? '#000' :'#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>PENDING </Text>
+                      <Text style={[{marginRight:5, color: this.state.active_list=='pending'? '#000' :'#929497', borderRadius: 50, backgroundColor: this.state.active_list=='pending'?'#fff': '#E6E6E6', paddingHorizontal: 5 }]}>PENDING </Text>
                     </TouchableOpacity>
                   </View>
                   <View style={[{}]}>
                     <TouchableOpacity
                       onPress={() => this.orderStatus('paid')}
                     >
-                      <Text style={[{ color: this.state.active_list=='paid'? '#000' :'#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>PAID </Text>
+                      <Text style={[{marginRight:5, color: this.state.active_list=='paid'? '#000' :'#929497', borderRadius: 50, backgroundColor: this.state.active_list=='paid'?'#fff': '#E6E6E6', paddingHorizontal: 5 }]}>PAID </Text>
                     </TouchableOpacity>
                   </View>
                   <View style={[{}]}>
                     <TouchableOpacity
                       onPress={() => this.orderStatus('PART PAYMENT')}
                     >
-                      <Text style={[{ color:this.state.active_list=='PART PAYMENT'? '#000' : '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>PART PAYMENT </Text>
+                      <Text style={[{marginRight:5, color:this.state.active_list=='PART PAYMENT'? '#000' : '#929497', borderRadius: 50, backgroundColor: this.state.active_list=='PART PAYMENT'?'#fff': '#E6E6E6', paddingHorizontal: 5 }]}>PART PAYMENT </Text>
                     </TouchableOpacity>
                   </View>
                   <View style={[{}]}>
                     <TouchableOpacity
                       onPress={() => this.orderStatus('ACCOUNT')}>
                         {/* PAID FROM CREDIT */}
-                      <Text style={[{ color:this.state.active_list=='ACCOUNT'? '#000' : '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>PAID FROM CREDIT </Text>
+                      <Text style={[{ color:this.state.active_list=='ACCOUNT'? '#000' : '#929497', borderRadius: 50, backgroundColor: this.state.active_list=='ACCOUNT'?'#fff': '#E6E6E6', paddingHorizontal: 5 }]}>PAID FROM CREDIT </Text>
                     </TouchableOpacity>
                   </View>
                 </View>
@@ -393,7 +393,7 @@ class OrderFilter extends React.Component {
               </View>
             </View>
             <Text style={[{ color: '#929497', fontWeight: 'bold', fontSize: 15, marginVertical: 10 }]}>Delivery Type</Text>
-            <View>
+            <View style={{}}>
               <View style={[{ paddingRight: 20 }, styles.mainRow]}>
                 <View style={[{ marginRight: 10 }]}>
                   <TouchableOpacity
@@ -409,7 +409,7 @@ class OrderFilter extends React.Component {
                 </View>
               </View>
             </View>
-            <View style={{ width: width - 20, backgroundColor: '#fff', paddingTop: 30,paddingBottom:120,borderRadius:10 }}>
+            <View style={{ width: width - 20, backgroundColor: '#fff',paddingBottom:120,borderRadius:10,marginTop:30 }}>
               {/* {this.state.orderchannel_arr.length < 1 ? null : */}
               <DropDownPicker
                  scrollViewProps={{
@@ -419,7 +419,7 @@ class OrderFilter extends React.Component {
               bottomOffset={200}
                 items={this.state.orderchannel_arr}
                 containerStyle={{ height: 50, width: width - 25, marginTop: 15, }}
-                style={{ backgroundColor: '#fff' }}
+                style={{ backgroundColor: '#fff',borderWidth:0,borderBottomWidth:1 }}
                 itemStyle={{
                   justifyContent: 'flex-start',
                 }}
@@ -440,7 +440,7 @@ class OrderFilter extends React.Component {
                   items={this.state.paymentmode_arr}
                   autoScrollToDefaultValue={true}
                   containerStyle={{ height: 50, width: width - 25, marginTop: 15, }}
-                  style={{ backgroundColor: '#fff' }}
+                  style={{ backgroundColor: '#fff',borderWidth:0,borderBottomWidth:1  }}
                   itemStyle={{
                     justifyContent: 'flex-start',
                   }}
@@ -459,7 +459,7 @@ class OrderFilter extends React.Component {
                   items={this.state.createdby_arr}
                   autoScrollToDefaultValue={true}
                   containerStyle={{ height: 50, width: width - 25, marginTop: 15 }}
-                  style={{ backgroundColor: '#fff' }}
+                  style={{ backgroundColor: '#fff',borderWidth:0,borderBottomWidth:1  }}
                   itemStyle={{
                     justifyContent: 'flex-start',
                   }}

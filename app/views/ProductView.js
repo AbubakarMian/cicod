@@ -118,7 +118,7 @@ class ProductView extends React.Component {
                 pro_url:pro_url
             })
         }
-        
+        console.log('***********',_that.state.prodDetail)
 
         return(
             <View style={[{}, styles.mainView]}>
@@ -221,7 +221,8 @@ class ProductView extends React.Component {
                     onPress={() => _that.setState({ productImageModal: true })}
                 >
                     <Image
-                        style={[{}, styles.productImage]}
+                        // style={[{}, styles.productImage]}
+                        style={{height:50,width:50}}
                         // source={require('../images/juice.png')} />
                         source={{ uri: _that.state.prodDetail.image }} />
                 </TouchableOpacity>
@@ -244,6 +245,7 @@ class ProductView extends React.Component {
                         <Image
                             style={{ height: height / 2, width: width / 1.3 }}
                             // source={require('../images/juice.png')}
+                            
                             source={{ uri: _that.state.prodDetail.image }}
                         />
                     </View>
