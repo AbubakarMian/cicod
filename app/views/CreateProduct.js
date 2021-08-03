@@ -382,8 +382,8 @@ class CreateProduct extends React.Component {
                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                     <TextInput
                                         label="Product Code"
-                                        style={{ backgroundColor: 'transparent', }}
-                                        width={width - 50}
+                                        style={{ backgroundColor: 'transparent',marginRight:5 }}
+                                        width={width/2 -20}
                                         alignSelf={'center'}
                                         color={'#000'}
                                         value={this.state.code}
@@ -394,8 +394,9 @@ class CreateProduct extends React.Component {
                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                     <TextInput
                                         label="Price (.00)"
-                                        style={{ backgroundColor: 'transparent', }}
-                                        width={width - 50}
+                                        style={{ backgroundColor: 'transparent',marginLeft:5 }}
+                                        width={width/2 -20}
+                                        
                                         alignSelf={'center'}
                                         color={'#000'}
                                         value={this.state.price}
@@ -406,12 +407,12 @@ class CreateProduct extends React.Component {
 
                                 </View>
                             </View>
-                            <View style={[{}, styles.formRowView]}>
+                            <View style={[{marginBottom:10}, styles.formRowView]}>
                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                     <TextInput
                                         label="Reservation (Days)"
-                                        style={{ backgroundColor: 'transparent', }}
-                                        width={width - 50}
+                                        style={{ backgroundColor: 'transparent',marginRight:5 }}
+                                        width={width/2 -20}
                                         alignSelf={'center'}
                                         color={'#000'}
                                         onChangeText={text => this.setState({ reservation_day: text })}
@@ -422,8 +423,8 @@ class CreateProduct extends React.Component {
                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                     <TextInput
                                         label="Quantity"
-                                        style={{ backgroundColor: 'transparent', }}
-                                        width={width - 50}
+                                        style={{ backgroundColor: 'transparent',marginLeft:5 }}
+                                        width={width/2 -20}
                                         alignSelf={'center'}
                                         color={'#000'}
                                         value={this.state.quantity}
@@ -444,6 +445,9 @@ class CreateProduct extends React.Component {
                                         }}
                                         isChecked={this.state.is_web_shop}
                                         rightText={"Add to Webshop"}
+                                        rightTextStyle={{color:'#4E4D4D'}}
+                                        checkedCheckBoxColor={'#4E4D4D'}
+                                        checkBoxColor={'#4E4D4D'}
                                     />
                                 </View>
                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
@@ -456,6 +460,9 @@ class CreateProduct extends React.Component {
                                         }}
                                         isChecked={this.state.is_qty_limit}
                                         rightText={"No Quantity Limit?"}
+                                        rightTextStyle={{color:'#4E4D4D'}}
+                                        checkedCheckBoxColor={'#4E4D4D'}
+                                        checkBoxColor={'#4E4D4D'}
                                     />
                                 </View>
                             </View>

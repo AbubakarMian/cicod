@@ -58,8 +58,7 @@ class Supplier extends React.Component {
 
 
     getSuppliersList(url) {
-
-        console.log('get Suppliers List');
+        console.log('get Suppliers List',url);
         this.setState({ spinner: true })
         let postData = {
             method: 'GET',
@@ -109,7 +108,7 @@ class Supplier extends React.Component {
                     textStyle={{ color: '#fff' }}
                     color={'#fff'}
                 />
-                <View style={{ flexDirection: 'row', marginVertical: 10, alignContent: 'center', alignItems: 'center', width: width - 20, alignSelf: 'center' }}>
+                <View style={{ flexDirection: 'row', marginTop: 10, marginBottom:5, alignContent: 'center', alignItems: 'center', width: width - 20, alignSelf: 'center' }}>
                     <TouchableOpacity
                         // onPress={() => this.props.navigation.navigate('Home')}
                         onPress={() => this.props.navigation.goBack()}
@@ -117,7 +116,7 @@ class Supplier extends React.Component {
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
                     <View>
-                        <Text style={{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 20 }}>SUPPLIER</Text>
+                        <Text style={[{ color: '#2F2E7C', marginHorizontal: 20 },fontStyles.normal15]}>SUPPLIERS</Text>
                     </View>
                     <TouchableOpacity
                         onPress={() => this.props.navigation.navigate('AddSuppliers')}
@@ -223,7 +222,11 @@ class Supplier extends React.Component {
                                                 />
                                                 <View style={{ flexDirection: 'column', marginLeft: 5 }}>
                                                     <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.buyer_name}</Text>
-                                                    <Text style={[{ color: '#929497' }, fontStyles.normal12]}>{item.seller_name}</Text>
+                                                    <View style={{flexDirection:'row'}}>
+                                                    <Text style={[{color:'#929497',marginRight:5},fontStyles.normal12]}>Product Category:</Text>
+                                                    <Text style={[{ color: '#929497' }, fontStyles.bold13]}>{item.no_of_products
+                                                    }</Text>
+                                                </View>
                                                 </View>
                                             </View>
 

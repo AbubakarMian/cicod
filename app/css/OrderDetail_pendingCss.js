@@ -112,8 +112,7 @@ export default StyleSheet.create({
         color:'#4E4D4D'
     },
     invoiceRow: {
-        borderBottomWidth: 2,
-        borderBottomColor: '#E6E6E6',
+      
         flexDirection: 'row',
         width:width-50,
         marginHorizontal:50,

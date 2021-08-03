@@ -277,7 +277,7 @@ class Connect extends React.Component {
                         />
                     </View> */}
                     <Searchbar
-                        placeholder="Search a products"
+                        placeholder="Merchant Domain Name"
                         iconColor="#B1272C"
                         // onChangeText={text => this.setState({ search_text: text })}
                         style={{ width: width / 1.2, alignSelf: 'center', marginTop: 10, elevation: 0, borderWidth: 1, borderColor: '#D8DCDE' }}
@@ -292,7 +292,7 @@ class Connect extends React.Component {
                 <ScrollView>
                     {(this.state.merchant_id == 0) ?
 
-                        <View style={[{}, styles.deatilcontentView]}>
+                        <View style={[{alignSelf:'center',marginTop:height/10}, styles.deatilcontentView]}>
                             <Icon
                                 name="briefcase"
                                 size={80}
@@ -574,8 +574,8 @@ class Connect extends React.Component {
                             // onPress={() => this.props.navigation.navigate('Home')}
                             onPress={() => this.props.navigation.goBack()}
                             style={[{ flexDirection: 'row', alignItems: 'center', marginLeft: 5, marginVertical: 10 }]}>
-                            <Icon name="arrow-left" size={25} color="#929497" />
-                            <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>CONNECT</Text>
+                            <Icon name="arrow-left" size={20} color="#929497" />
+                            <Text style={[{ color: '#2F2E7C',marginLeft:10},fontStyles.normal15]}>CONNECT</Text>
                         </TouchableOpacity>
                     </View>
                     <View style={[{}, styles.tabView]}>

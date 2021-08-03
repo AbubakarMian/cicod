@@ -40,9 +40,6 @@ export default StyleSheet.create({
     },
     formRowView:{
         flexDirection:'row',
-        
-        
-
     },
     formColumn:{
         flex:1,

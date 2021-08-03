@@ -34,7 +34,7 @@ class Order extends React.Component {
             setDatePickerVisibility: false,
             date_range: null,
             url_orders: '',
-            date_created_timestamp: 'YY-MM-DD',
+            date_created_timestamp: 'Today',//YY-MM-DD
             apply_filter: false,
             search_order_text: '',
             reload:0
@@ -177,7 +177,7 @@ class Order extends React.Component {
     apply_filters() {
         this.setState({
             apply_filter: true,
-            date_created_timestamp: 'YY-MM-DD',
+            date_created_timestamp: 'Today',//YY-MM-DD
             search_order: '',
             search_order_text: ''
         });
@@ -279,7 +279,7 @@ class Order extends React.Component {
             filter_concat = '&';
         }
 
-        if (_that.state.date_created_timestamp != 'YY-MM-DD') {
+        if (_that.state.date_created_timestamp != 'Today') {//YY-MM-DD
             url = url + filter_concat + 'date_created=' + _that.state.date_created_timestamp
             filter_concat = '&';
         }

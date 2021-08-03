@@ -48,11 +48,11 @@ export default StyleSheet.create({
     },
     tabView:{
         backgroundColor:'#fff',
-        paddingVertical:2,
+        paddingVertical:4,
         width:width-20,
         display:'flex',
         alignSelf:'center',
-        paddingHorizontal:2,
+        paddingHorizontal:4,
         flexDirection:'row',
         borderRadius:50
     },
@@ -82,7 +82,7 @@ export default StyleSheet.create({
     },
     contentView:{
         backgroundColor:'#fff',
-        marginTop:20,
+        marginTop:10,
         paddingVertical:30,
         width:width-20,
         alignSelf:'center',

@@ -403,7 +403,7 @@ class Dashboard extends React.Component {
                                 <View style={{ flexDirection: 'row', marginBottom: 3, marginTop: 10, width: width / 1.5, position: 'relative' }}>
                                     <Text style={[{ color: '#707070' }]}>Target: {this.props.currency.currency}  {this.state.target.sales_target_amount}</Text>
                                     <Text style={[{ position: 'absolute', right: 0 }, styles.bannerpercentText]}>
-                                        {this.state.target.percentage}%
+                                        {parseFloat(this.state.target.percentage+'').toFixed(2)}%
                               </Text>
                                 </View>
                                 <Progress.Bar color="#B1272C" backgroundColor="#fff" progress={0.00} width={200} />

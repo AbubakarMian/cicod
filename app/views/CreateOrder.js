@@ -610,7 +610,7 @@ class CreateOrder extends React.Component {
                                             <View style={[{}, styles.OrderDetailDataCOntainer]}>
                                                 <View style={[{}, styles.OrderDetailDataCOntainerRow]}>
                                                     <View>
-                                                        <Text style={[{}, styles.OrderDetailDataCOntainerHeadingText]}>{item.name}  {item.quantity} PACK</Text>
+                                                        <Text style={[{width:width/1.5}, styles.OrderDetailDataCOntainerHeadingText]}>{item.name}  {item.quantity} PACK</Text>
                                                         <Text style={[{}, styles.OrderDetailHeadingRowText]}>{item.category}</Text>
                                                     </View>
 
