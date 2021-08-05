@@ -114,9 +114,6 @@ class PaymentWeb extends React.Component {
         console.log('payment web rrrrrrrrrrrrrrrrr')
         return (
             <WebView 
-    
-         
-            
             source={{ uri: this.props.route.params.payment_link }} />
         )
     }
