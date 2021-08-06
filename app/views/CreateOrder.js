@@ -513,7 +513,7 @@ class CreateOrder extends React.Component {
                                 <TouchableOpacity
                                     onPress={() => this.setState({ suppliereModal: true })}
                                 >
-                                    <Text style={[{}, styles.customerTitleRowchangesupplierText]}>Change Supplier</Text>
+                                    <Text style={[{}, styles.customerTitleRowchangesupplierText]}>Select Supplier</Text>
                                 </TouchableOpacity>
                             </View>
                             : null}

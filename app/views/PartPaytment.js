@@ -27,7 +27,7 @@ class PartPaytment extends React.Component {
             order_detail: null,
             payment_link: null,
             order_id:0,
-            amount_to_pay_now:this.props.route.params.amount_payable,
+            amount_to_pay_now:0,//this.props.route.params.amount_payable
             total_amount:this.props.route.params.amount_payable,
             balance_amount:0,
             payment_option_selected :'fixed_amount',
@@ -257,7 +257,9 @@ class PartPaytment extends React.Component {
         this.get_payable_amount('0')
     }
     get_payable_amount(amount_to_pay_now){//part_amount_request
-        console.log('~~~~~~~',amount_to_pay_now)        
+        console.log('~~~~~~~',amount_to_pay_now)  
+        
+        let total_amount = this.state.total_amount      
         let part_amount_request = this.state.part_amount_request
         // this.setState({total_amount:amount_to_pay_now})
         if(amount_to_pay_now == ''){
@@ -269,18 +271,18 @@ class PartPaytment extends React.Component {
             amount_to_pay_now.includes("-") ||
             amount_to_pay_now.includes(" ") ||
             amount_to_pay_now.includes("..")
-            // this.state.amount_payable<this.state.amount_to_pay_now
+            // ||this.state.amount_payable<this.state.amount_to_pay_now
+            ||parseFloat( amount_to_pay_now)>=parseFloat(this.state.total_amount)
             ){
             // part_amount_request = 0
             this.get_payable_amount(part_amount_request)
             return;
         }
-        if(this.state.amount_to_pay_now>this.state.total_amount){
+        if(amount_to_pay_now>this.state.total_amount){
             this.setState({total_amount:this.props.route.params.amount_payable})
             Alert.alert("Your amount is exceeding")
             return;
         }
-        let total_amount = this.state.total_amount
         let balance_amount = 0
         console.log('amount_to_pay_now',amount_to_pay_now)
         console.log('total_amount',total_amount)

@@ -6,6 +6,7 @@ import styles from '../css/PayByCashCss';
 import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
+import Spinner from 'react-native-loading-spinner-overlay';
 import CheckBox from 'react-native-check-box';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import SearchBar from 'react-native-search-bar';
@@ -22,7 +23,8 @@ class PayByCash extends React.Component {
             order_id:0,
             amount_returned:'0',
             amount:0,
-            cashCollected:''
+            cashCollected:'',
+            spinner:false,
         }
     }
     componentDidMount(){
@@ -30,6 +32,7 @@ class PayByCash extends React.Component {
     }
     
     get_order_detail() {
+        this.setState({ spinner: true })
         let order_id = this.props.route.params.data.id;     
 
         let postData = {
@@ -50,7 +53,8 @@ class PayByCash extends React.Component {
             .then(response => response.json())
             .then(async responseJson => {
                 console.log("order response response Json responseJson responseJson!!!!!!!!!!!", responseJson.status)
-                if (responseJson.status==="success") {
+                this.setState({ spinner: false })
+                if (responseJson.status =="success" || responseJson.status =="SUCCESS") {
                     let data = responseJson.data;
                     data.payment_status = 'success';
                     this.props.navigation.navigate('PaymentSuccess', { data:responseJson.data})
@@ -66,6 +70,7 @@ class PayByCash extends React.Component {
             }
             )
             .catch((error) => {
+                this.setState({ spinner: false })
                 console.log("Api call error", error);
                 // Alert.alert(error.message);
             });
@@ -124,6 +129,7 @@ class PayByCash extends React.Component {
             }
             )
             .catch((error) => {
+                this.setState({ spinner: false })
                 console.log("Api call error", error);
             });
     }
@@ -247,6 +253,12 @@ class PayByCash extends React.Component {
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
+                <Spinner
+                        visible={this.state.spinner}
+                        textContent={'Please Wait...'}
+                        textStyle={{ color: '#fff' }}
+                        color={'#fff'}
+                    />
                 <View style={[{}, styles.backHeaderRowView]}>
                     <TouchableOpacity
                         onPress={() => this.props.navigation.goBack()}

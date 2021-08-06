@@ -27,10 +27,12 @@ class PaymentWeb extends React.Component {
             this.get_order_detail();//return;
             console.log('timer while',this.state.order)
             let a = await this.performTimeConsumingTask(); 
-             if(this.state.order != null){               
+             if(this.state.order != null){ 
+                 console.log('payment order if');              
                 console.log('this.state.order.payment_status',this.state.order.payment_status);
                 
-                if(this.state.order.payment_status != 'PENDING' || this.state.order.payment_status == 'cancelled'){
+                if(this.state.order.payment_status == 'PAID' || this.state.order.payment_status == 'cancelled'){
+                    // if(this.state.order.payment_status != 'PENDING' || this.state.order.payment_status == 'cancelled'){
                     this._isMounted = false;
                     // this.props.navigation.navigate('Order');
                     // this.props.navigation.navigate('OrderDetail', { id:this.state.order_id })
@@ -62,12 +64,12 @@ class PaymentWeb extends React.Component {
         //  console.log(' webthis.props.route.params.data web',this.props.route.params)
         //  return
         let order_id = this.props.route.params.data.id;
-        if(this.state.order_id == order_id){
-            return;
+        if(this.state.order_id != order_id){
+            this.setState({
+                order_id:order_id
+            })
         }
-        this.setState({
-            order_id:order_id
-        })
+        
         let postData = {
             method: 'GET',
             headers: {
@@ -79,7 +81,7 @@ class PaymentWeb extends React.Component {
         
         let url = Constants.orderslist + '/' + order_id
         console.log('---- body params list @@@@@@!!!!!!!!!!!!!!', this.props.route.params);
-        console.log('order url detail ', url);
+        console.log('*****************order url detail ', url);
         console.log('order postData ', postData);
         fetch(url, postData)
             .then(response => response.json())
@@ -88,10 +90,18 @@ class PaymentWeb extends React.Component {
                 
                 if (responseJson.status.toUpperCase() === "SUCCESS") {
                     let data = responseJson.data;
+                    if(this.state.order == null){
+                        this.setState({
+                            order: data,
+                        })
+                    }
                     // return data
-                    this.setState({
-                        order: data,
-                    })
+                    else if( data.payment_status != this.state.order.payment_status){
+                        this.setState({
+                            order: data,
+                        })
+                    }
+                    
                 } else {
                     // this.setState({ spinner: false })
                     let message = responseJson.message
@@ -110,6 +120,7 @@ class PaymentWeb extends React.Component {
     }
 
     render() {
+        console.log('*************',Constants.orderslist + '/' + this.state.order_id)
         this.check();
         console.log('payment web rrrrrrrrrrrrrrrrr')
         return (

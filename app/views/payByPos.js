@@ -85,6 +85,7 @@ class PayByPOS extends React.Component {
      pay(_that) {
         _that = _that._that;
         let params = _that.props.route.params;
+        let amount_payable =  params.amount_payable
         let order = {}; 
         console.log('_that.state.order_detail',_that.state.order_detail)
         console.log('params.order_id',params.order_id)
@@ -112,7 +113,7 @@ class PayByPOS extends React.Component {
                         <View style={[{}, styles.contentContainer]}>
                             <Image style={{ height: 60, width: 40 }} source={require('../images/pos-terminal.png')} />
                             <Text style={[{}, styles.collectText]}>Collect the sum of</Text>
-                            <Text style={[{}, styles.payText]}>{_that.props.currency.currency+" "+order.amount}</Text>
+                            <Text style={[{}, styles.payText]}>{_that.props.currency.currency+" "+amount_payable}</Text>
                             <View style={{ flexDirection: 'row' }}>
                                 <Text style={[{}, styles.cashText]}>for CICOD ORDER ID </Text>
                                 <Text style={[{ fontWeight: 'bold' }, styles.cashText]}> {order.cicod_order_id}</Text>

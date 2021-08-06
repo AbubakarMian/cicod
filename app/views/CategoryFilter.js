@@ -91,6 +91,13 @@ class CategoryFilter extends React.Component {
       filters: filters
     })
   }
+  onCategoryText(text) {
+    let filters = this.state.filters; 
+    filters.push({ key: 'search', value: text });
+    this.setState({
+      filters: filters
+    })
+  }
   activeSet(value) {
     let filters = this.state.filters;
     filters.push({ key: 'is_active', value: value })
@@ -164,36 +171,33 @@ class CategoryFilter extends React.Component {
           </TouchableOpacity>
           <Text onPress={() => { this.setState({ filters: [] }) }} style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20, top: 20 }]}>Clear Filter</Text>
         </View>
-        <View style={{ backgroundColor: '#fff' }}>
+        <View style={{ backgroundColor: '#fff',borderRadius:5, }}>
           <View style={{ width: width - 20, backgroundColor: '#fff', paddingVertical: 10, marginTop: 20, zIndex: 9999 }}>
 
             <View style={{ marginHorizontal: 5, flexDirection: 'row', position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
-              {this.state.createdby_arr.length < 1 ? null :
-                // <DropDownPicker
-                //   zIndex={4000} zIndexInverse={6000} 
-                //   items={this.state.createdby_arr}
-                //   containerStyle={{ height: 50, width: width  - 50, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5,zIndex:99999999 }}
-                //   style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
-                //   itemStyle={{
-                //     justifyContent: 'flex-start', 
-                //   }}
-                //   placeholder="Created By"
-                //   dropDownStyle={{  borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1,zIndex:9999999999 }}
-                //   labelStyle={{ color: '#A9A9A9' }}
-                //   onChangeItem={item => this.onCreatedByText(item.value)}
-                // />
+             
+            </View>
+            {/* <View style={{ marginHorizontal: 5, flexDirection: 'row', position: 'relative', alignItems: 'center', justifyContent: 'center' }}> */}
 
+             
+
+            {/* </View> */}
+
+          </View>
+         
+               {this.state.categoryarr.length < 1 ? null :
+               
                 <DropDownPicker
-                  items={this.state.createdby_arr}
+                  items={this.state.categoryarr}
                   controller={instance => this.controller = instance}
                   onChangeList={(items, callback) => {
                     this.setState({
                       items // items: items
                     }, callback);
                   }}
-                  containerStyle={{ height: 50, width: width - 50, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5, zIndex: 99999999 }}
-                  placeholder="Created By"
-                  containerStyle={{ height: 50, width: width - 50, }}
+                  containerStyle={{ height: 50, width: width - 20, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5, zIndex: 99999999 }}
+                  placeholder="Catagory"
+                  containerStyle={{ height: 50, width: width - 20, }}
                   style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, zIndex: 9999 }}
                   itemStyle={{
                     justifyContent: 'flex-start',
@@ -202,59 +206,69 @@ class CategoryFilter extends React.Component {
                   labelStyle={{ color: '#A9A9A9' }}
 
                   defaultValue={this.state.value}
-                  onChangeItem={item => this.onCreatedByText(item.value)}
+                  onChangeItem={item => this.onCategoryText(item.value)}
+                  
+              
+             
+                
                 />
 
               }
-            </View>
-            <View style={{ marginHorizontal: 5, flexDirection: 'row', position: 'relative', alignItems: 'center', justifyContent: 'center' }}>
+               {this.state.createdby_arr.length < 1 ? null :
+               
+               <DropDownPicker
+                 items={this.state.createdby_arr}
+                 controller={instance => this.controller = instance}
+                 onChangeList={(items, callback) => {
+                   this.setState({
+                     items // items: items
+                   }, callback);
+                 }}
+                 containerStyle={{ height: 50, width: width - 20, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5, zIndex: 99999999 }}
+                 placeholder="Created By"
+                 containerStyle={{ height: 50, width: width - 20, }}
+                 style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, zIndex: 9999 }}
+                 itemStyle={{
+                   justifyContent: 'flex-start',
+                 }}
+                 dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
+                 labelStyle={{ color: '#A9A9A9' }}
 
-              {this.state.categoryarr.length < 1 ? null :
-                // <DropDownPicker
-                //   zIndex={4000} zIndexInverse={6000}
-                //   items={this.state.categoryarr}
-                //   containerStyle={{ height: 50, width: width - 50, marginTop: 15, alignSelf: 'center', borderBottomWidth: 0.5 }}
-                //   style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
-                //   itemStyle={{
-                //     justifyContent: 'flex-start',
-                //   }}
-                //   placeholder="Catagory"
-                //   dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
-                //   labelStyle={{ color: '#A9A9A9' }}
-                //   onChangeItem={item => this.onCategoryText(item.value)}
-                // />
+                 defaultValue={this.state.value}
+                 onChangeItem={item => this.onCreatedByText(item.value)}
+               />
 
-                <DropDownPicker
-                  items={this.state.categoryarr}
-                  placeholder="Catagory"
+             }
+          {/* {this.state.categoryarr.length < 1 ? null :
+            
+
+            <DropDownPicker
+              items={this.state.categoryarr}
+              placeholder="Catagory"
 
 
-                  containerStyle={{ height: 50, width: width - 50, }}
-                  style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
-                  itemStyle={{
-                    justifyContent: 'flex-start',
-                  }}
-                  dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
-                  labelStyle={{ color: '#A9A9A9' }}
+              containerStyle={{ height: 50, width: width - 20, }}
+              style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
+              itemStyle={{
+                justifyContent: 'flex-start',
+              }}
+              dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
+              labelStyle={{ color: '#A9A9A9' }}
 
-                  controller={instance => this.controller = instance}
-                  onChangeList={(items, callback) => {
-                    this.setState({
-                      items // items: items
-                    }, callback);
-                  }}
+              controller={instance => this.controller = instance}
+              onChangeList={(items, callback) => {
+                this.setState({
+                   items: items //items
+                }, callback);
+              }}
 
-                  defaultValue={this.state.value}
-                  onChangeItem={item => this.setState({
-                    value: item.value
-                  })}
-                />
-              }
-
-            </View>
-
-          </View>
-          <View style={[{ flexDirection: 'row', width: width - 20, alignSelf: 'center', zIndex: -0.999 }]}>
+              defaultValue={this.state.value}
+              onChangeItem={item => this.setState({
+                value: item.value
+              })}
+            />
+          } */}
+          <View style={[{ flexDirection: 'row', width: width - 50, alignSelf: 'center', zIndex: -0.999 }]}>
             <View style={[{ flex: 1, paddingVertical: 10 }]}>
               <Text style={{ color: '#929497', fontWeight: 'bold' }}>Created Date</Text>
               <TouchableOpacity

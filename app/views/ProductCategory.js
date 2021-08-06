@@ -203,6 +203,7 @@ class ProductCategory extends React.Component {
                     </TouchableOpacity>
                 </View> */}
                 <View style={{ borderBottomWidth: 1, width: width - 20, alignSelf: 'center', borderBottomColor: '#E6E6E6', marginVertical: 10 }}></View>
+                {(this.state.categoryarr>0)?
                 <FlatList
                     ItemSeparatorComponent={
                         Platform.OS !== 'android' &&
@@ -272,6 +273,14 @@ class ProductCategory extends React.Component {
                         // </TouchableOpacity>
                     )}
                 />
+                :
+                <View style={{ height: height / 1.75, position: 'relative', flexDirection: 'column', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F0F0F0', width: width - 20, padding: 10, borderRadius: 10, marginBottom: 5 }}>
+                <Image
+                    source={require('../images/Untitled-1.png')}
+                />
+                <Text style={{ color: '#929497', fontSize: 20, fontWeight: 'bold', fontFamily: 'Open Sans' }}>No Category found</Text>
+            </View>
+                }
             </View>
         )
     }

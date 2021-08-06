@@ -49,7 +49,7 @@ class CreateProduct extends React.Component {
             image: '',
             toolTipVisible:false,
             c:'',
-            prod_image:''
+            prod_image:null
         }
     }
 
@@ -58,22 +58,7 @@ class CreateProduct extends React.Component {
         this.getCategoryList()
         console.log('product detail peops @@@@@@@@!!!!!!!!!!!!!!', this.props.route.params);
         // return
-        if(this.props.route.params.action == "update"){
-            console.log('sdkf hsjkdhfjkshgkfdgs djgjsgdfjgsdf',this.props.route.params.prodDetail);
-            this.setState({
-                prod_id: this.props.route.params.prodDetail.id,
-                category_id: this.props.route.params.prodDetail.category,
-                name: this.props.route.params.prodDetail.name,
-                quantity: this.props.route.params.prodDetail.quantity+'',
-                code: this.props.route.params.prodDetail.code,
-                price: this.props.route.params.prodDetail.price+'',
-                description: this.props.route.params.prodDetail.description,
-                is_qty_limit: (this.props.route.params.prodDetail.no_qty_limit == false) ? 0:1,
-                validity: this.props.route.params.prodDetail.validity,
-                has_vat: this.props.route.params.prodDetail.has_vat,
-            })
-
-        }
+        
     }
 
     getCategoryList() {
@@ -203,27 +188,51 @@ class CreateProduct extends React.Component {
             return; 
         }
         else {
+            var formData=new FormData();
+            formData.append('image',{
+                uri: this.state.prod_image,
+                type: 'multipart/form-data',
+                name: `image.jpg`,
+            });
+            formData.append('category_id',this.state.category_id);
+            formData.append('name',this.state.name);
+            formData.append('quantity',this.state.quantity);
+            formData.append('code',this.state.code);
+            formData.append('price',this.state.price);
+            formData.append('description',this.state.description);
+            formData.append('validity',this.state.validity);
+            formData.append('no_qty_limit',this.state.is_qty_limit);
+            formData.append('has_vat',this.state.state_id);
+            formData.append('on_webshop',this.state.is_web_shop);
             let postData = {
                 method: 'POST',
                 headers: {
                     Accept: 'application/json',
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'multipart/form-data',
                     'Authorization': this.props.user.access_token,
                 },
-                body: JSON.stringify({
-                    category_id: 0,
-                    name: this.state.name,//required
-                    quantity: this.state.quantity,//sandbox
-                    code: this.state.code,
-                    price: this.state.price,// required
-                    description: this.state.description,
-                    validity: this.state.validity,
-                    no_qty_limit: this.state.is_qty_limit, //Boolean 
-                    has_vat: this.state.state_id, //Boolean 
-                    image: this.state.image,
-                    on_webshop: this.state.is_web_shop, //Boolean 
-                })
+                body:formData,
+                // body: JSON.stringify({
+                //     category_id: 0,
+                //     name: this.state.name,//required
+                //     quantity: this.state.quantity,//sandbox
+                //     code: this.state.code,
+                //     price: this.state.price,// required
+                //     description: this.state.description,
+                //     validity: this.state.validity,
+                //     no_qty_limit: this.state.is_qty_limit, //Boolean 
+                //     has_vat: this.state.state_id, //Boolean 
+                //     image:{
+                //         uri: this.state.prod_image,
+                //         type: 'multipart/form-data',
+                //         name: `image.jpg`,
+                //     },
+                //     on_webshop: this.state.is_web_shop, //Boolean 
+                // }),
+                
             };
+            console.log('###########',postData)
+           
             console.log('Constants.productslist url ', Constants.productslist);
             console.log('Constants.productslist post data ', postData);
             fetch(Constants.productslist, postData)
@@ -289,7 +298,29 @@ class CreateProduct extends React.Component {
         }
     }
 
+    getProduct(){
+        if(this.props.route.params.action == "update" && this.props.route.params.prodDetail.id != this.state.prod_id){
+            console.log('sdkf hsjkdhfjkshgkfdgs djgjsgdfjgsdf',this.props.route.params.prodDetail);
+            this.setState({
+                prod_id: this.props.route.params.prodDetail.id,
+                category_id: this.props.route.params.prodDetail.category,
+                name: this.props.route.params.prodDetail.name,
+                quantity: this.props.route.params.prodDetail.quantity+'',
+                code: this.props.route.params.prodDetail.code,
+                price: this.props.route.params.prodDetail.price+'',
+                description: this.props.route.params.prodDetail.description,
+                is_qty_limit: (this.props.route.params.prodDetail.no_qty_limit == false) ? 0:1,
+                validity: this.props.route.params.prodDetail.validity,
+                has_vat: this.props.route.params.prodDetail.has_vat,
+                prod_image:this.props.route.params.prodDetail.image,
+            })
+
+        }
+    }
+
     render() {
+
+        this.getProduct();
         console.log('this.state.price',this.state.categoryarr)
         var radio_props_dilvery = [
             { label: 'Dilivery', value: 0 },
@@ -494,7 +525,7 @@ class CreateProduct extends React.Component {
                                <TouchableOpacity
                                onPress={()=> this.imageUpload()}
                                >
-                                   {(this.state.prod_image != '') ?
+                                   {(this.state.prod_image != '' || this.state.prod_image != null) ?
                                 <Image
                                     style={{height:50,width:50}}
                                     source={{uri:this.state.prod_image}}
@@ -642,7 +673,7 @@ class CreateProduct extends React.Component {
                                     <TouchableOpacity
                                     onPress={()=> this.imageUpload()}
                                     >
-                                        {(this.state.prod_image != '') ?
+                                        {(this.state.prod_image != null || this.state.prod_image !='') ?
                                         <Image
                                             source={{uri:this.state.prod_image}}
                                         />

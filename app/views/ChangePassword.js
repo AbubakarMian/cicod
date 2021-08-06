@@ -51,7 +51,7 @@ class ChangePassword extends React.Component {
                 if (responseJson.status === "SUCCESS") {
 
                     this.setState({ spinner: false })
-
+                    Alert.alert("Your password has been changed successfully!");
                     this.props.navigation.navigate('Home')
                 } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
