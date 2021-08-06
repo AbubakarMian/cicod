@@ -193,6 +193,7 @@ class Supplier extends React.Component {
                 <View style={{ borderWidth: 0.25, borderColor: '#929497', width: width - 20, alignSelf: 'center', marginVertical: 5 }}></View>
 
                 <ScrollView>
+                    {(this.state.data.length>0)?
                     <FlatList
                         data={this.state.data}
                         ItemSeparatorComponent={
@@ -247,6 +248,14 @@ class Supplier extends React.Component {
                             </TouchableOpacity>
                         )}
                     />
+                    :
+                    <View style={{ height: height / 1.75, position: 'relative', flexDirection: 'column', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F0F0F0', width: width - 20, padding: 10, borderRadius: 10, marginBottom: 5 }}>
+                    <Image
+                        source={require('../images/Untitled-1.png')}
+                    />
+                    <Text style={{ color: '#929497', fontSize: 20, fontWeight: 'bold', fontFamily: 'Open Sans' }}>No Supplier found</Text>
+                </View>
+                    }
                 </ScrollView>
 
             </View>

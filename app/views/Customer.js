@@ -152,49 +152,60 @@ class Customer extends React.Component {
                     ></Searchbar>
                 <View style={[{borderBottomColor:'#E6E6E6',borderBottomWidth:0.5,width:width-20,alignSelf:'center',marginTop:10,marginBottom:10}]}></View>
                 <ScrollView>
-                    <FlatList
-                        data={this.state.data}
-                        ItemSeparatorComponent={
-                            Platform.OS !== 'android' &&
-                            (({ highlighted }) => (
-                                <View
-                                    style={[
-                                        style.separator,
-                                        highlighted && { marginLeft: 0 }
-                                    ]}
-                                />
-                            ))
-                        }
-                        renderItem={({ item, index, separators }) => (
-                            <TouchableOpacity
-                                key={item.key}
-                                onPress={(() => this.customerDetails(item))}//=>this.props.navigation.navigate('CustomersDetal')
-                                onShowUnderlay={separators.highlight}
-                                onHideUnderlay={separators.unhighlight}>
-                                <View style={{ position: 'relative', alignSelf: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 5 }}>
-                                    <View style={[{ flexDirection: 'row' }]}>
-                                        <Image
-                                            style={[{ height: 50, width: 50, marginRight: 5 }]}
-                                            source={require('../images/customer/usericon.png')}
-                                        />
-                                    </View>
-                                    <View style={{ position: 'relative', flex: 3 }}>
-                                        <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.first_name + ' ' + item.last_name}</Text>
-                                        <View style={{ flexDirection: 'row', }}>
+                    {(this.state.data)?
+                     <FlatList
+                     data={this.state.data}
+                     ItemSeparatorComponent={
+                         Platform.OS !== 'android' &&
+                         (({ highlighted }) => (
+                             <View
+                                 style={[
+                                     style.separator,
+                                     highlighted && { marginLeft: 0 }
+                                 ]}
+                             />
+                         ))
+                     }
+                     renderItem={({ item, index, separators }) => (
+                         <TouchableOpacity
+                             key={item.key}
+                             onPress={(() => this.customerDetails(item))}//=>this.props.navigation.navigate('CustomersDetal')
+                             onShowUnderlay={separators.highlight}
+                             onHideUnderlay={separators.unhighlight}>
+                             <View style={{ position: 'relative', alignSelf: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 5 }}>
+                                 <View style={[{ flexDirection: 'row' }]}>
+                                     <Image
+                                         style={[{ height: 50, width: 50, marginRight: 5 }]}
+                                         source={require('../images/customer/usericon.png')}
+                                     />
+                                 </View>
+                                 <View style={{ position: 'relative', flex: 3 }}>
+                                     <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.first_name + ' ' + item.last_name}</Text>
+                                     <View style={{ flexDirection: 'row', }}>
 
-                                            <Text
-                                                numberOfLines={3}
+                                         <Text
+                                             numberOfLines={3}
 
-                                                style={[{ color: '#929497', width: width / 1.8 }, fontStyles.normal12]}>{item.email + '.' + item.phone}</Text>
-                                            <View style={[{ position: 'absolute', right: 0, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
-                                                <Text style={[{ color: '#26C281' }]}>{(item.is_active) ? 'ACTIVE' : 'IN ACTIVE'}</Text>
-                                            </View>
-                                        </View>
-                                    </View>
-                                </View>
-                            </TouchableOpacity>
-                        )}
-                    />
+                                             style={[{ color: '#929497', width: width / 1.8 }, fontStyles.normal12]}>{item.email + '.' + item.phone}</Text>
+                                         <View style={[{ position: 'absolute', right: 0, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                                             <Text style={[{ color: '#26C281' }]}>{(item.is_active) ? 'ACTIVE' : 'IN ACTIVE'}</Text>
+                                         </View>
+                                     </View>
+                                 </View>
+                             </View>
+                         </TouchableOpacity>
+                     )}
+                 />
+                    
+                :
+                <View style={{ height: height / 1.75, position: 'relative', flexDirection: 'column', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F0F0F0', width: width - 20, padding: 10, borderRadius: 10, marginBottom: 5 }}>
+                <Image
+                    source={require('../images/Untitled-1.png')}
+                />
+                <Text style={{ color: '#929497', fontSize: 20, fontWeight: 'bold', fontFamily: 'Open Sans' }}>No Customer found</Text>
+            </View>
+                    }
+                    
                 </ScrollView>
             </View>
         )

@@ -176,9 +176,17 @@ class OrderDetail_pending extends React.Component {
     pay(){
         let bodyOrder = this.state.bodyOrder;
         let payment_mode = bodyOrder.payment_mode;
-        let amount_payable = bodyOrder.amount; // amount_payable not available
+        let amount_payable = 0;
+        // console.log('CCCCCCCCCCCCCCCC',this.state.pending_order_res.data.balance_part_payment[0])
+        // return;
+        if(this.state.pending_order_res.data.balance_part_payment.length == 0 ){
+            amount_payable = this.state.bodyOrder.amount; // amount_payable not available,bodyOrder.amount
+        }
+        else{
+            amount_payable = this.state.pending_order_res.data.balance_part_payment[0].amount; // amount_payable not available,bodyOrder.amount
+        }
         let order_id = order_id; // this.props.route.params.id
-        console.log('CCCCCCCCCCCCCCCC',this.state.pending_order_res)
+        
         this.props.navigation.navigate('MakePayment',{
             bodyOrder,
             payment_mode,

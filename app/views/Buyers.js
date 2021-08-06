@@ -208,6 +208,7 @@ class Buyers extends React.Component {
 
         return (
             <View>
+                {(_that.state.data.length>0)?
                 <FlatList
                     data={_that.state.data}
                     ItemSeparatorComponent={
@@ -286,6 +287,14 @@ class Buyers extends React.Component {
                         </TouchableOpacity>
                     )}
                 />
+            :
+            <View style={{ height: height / 1.75, position: 'relative', flexDirection: 'column', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F0F0F0', width: width - 20, padding: 10, borderRadius: 10, marginBottom: 5 }}>
+            <Image
+                source={require('../images/Untitled-1.png')}
+            />
+            <Text style={{ color: '#929497', fontSize: 20, fontWeight: 'bold', fontFamily: 'Open Sans' }}>No Buyer found</Text>
+        </View>
+            }
             </View>
         );
     }

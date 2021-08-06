@@ -382,6 +382,7 @@ class Connect extends React.Component {
                     ></Searchbar>
                     <View style={{ borderBottomWidth: 1, marginVertical: 15, width: width - 20, alignSelf: 'center', borderBottomColor: '#E6E6E6' }}></View>
                     <View style={[{}, styles.recievedList]}>
+                       {(this.state.received_arr.length>0)?
                         <FlatList
                             ItemSeparatorComponent={
                                 Platform.OS !== 'android' &&
@@ -459,6 +460,14 @@ class Connect extends React.Component {
                                 </TouchableOpacity>
                             )}
                         />
+                        :
+                        <View style={{ height: height / 1.75, position: 'relative', flexDirection: 'column', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F0F0F0', width: width - 20, padding: 10, borderRadius: 10, marginBottom: 5 }}>
+                        <Image
+                        source={require('../images/Untitled-1.png')}
+                         />
+                    <Text style={{ color: '#929497', fontSize: 20, fontWeight: 'bold', fontFamily: 'Open Sans' }}>No Product found</Text>
+                </View>
+                        }
                     </View>
                 </View>
             </ScrollView>
@@ -486,6 +495,7 @@ class Connect extends React.Component {
                 ></Searchbar>
                 <View style={{ borderBottomWidth: 1, marginVertical: 10, width: width - 20, alignSelf: 'center', borderBottomColor: '#E6E6E6' }}></View>
                 <View style={[{}, styles.recievedList]}>
+                   {(this.state.send_arr.length>0)?
                     <FlatList
                         ItemSeparatorComponent={
                             Platform.OS !== 'android' &&
@@ -541,6 +551,15 @@ class Connect extends React.Component {
                             </TouchableOpacity>
                         )}
                     />
+                    :
+                    <View style={{ height: height / 1.75, position: 'relative', flexDirection: 'column', alignSelf: 'center', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F0F0F0', width: width - 20, padding: 10, borderRadius: 10, marginBottom: 5 }}>
+                    <Image
+                        source={require('../images/Untitled-1.png')}
+                    />
+                    <Text style={{ color: '#929497', fontSize: 20, fontWeight: 'bold', fontFamily: 'Open Sans' }}>No Product found</Text>
+                </View>
+                    }
+
                 </View>
             </View>
         );

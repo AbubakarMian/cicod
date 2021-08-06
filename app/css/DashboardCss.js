@@ -57,46 +57,51 @@ export default StyleSheet.create({
     recardtext:{
         backgroundColor:'#FFE5E5',
         paddingHorizontal:10,
+        paddingVertical:5,
         textAlign:'center',
         borderRadius:50,
         color:'#B1272C',
-        width:width/8,
-        height:width/8,
+        width:50,
+        // height:width/8,
         textAlignVertical:'center',
-        fontSize:8
+        fontSize:10
     },
     greencardtext:{
         backgroundColor:'#DFFCEB',
         paddingHorizontal:10,
+        paddingVertical:5,
         textAlign:'center',
         borderRadius:50,
         color:'#18A757',
-        width:width/8,
-        height:width/8,
+        width:50,
+        // height:width/8,
         textAlignVertical:'center',
-        fontSize:8
+        fontSize:10
     },
     bluecardtext:{
         backgroundColor:'#ACABCB',
         paddingHorizontal:10,
+        paddingVertical:5,
         textAlign:'center',
         borderRadius:50,
         color:'#2F2E7C',
-        width:width/8,
-        height:width/8,
+        width:50,
+        // height:width/8,
         textAlignVertical:'center',
-        fontSize:8
+        fontSize:10
     },
     yellowcardtext:{
         backgroundColor:'#FFF3DB',
+   
         paddingHorizontal:10,
+        paddingVertical:5,
         textAlign:'center',
         borderRadius:50,
         color:'#FDB72B',
-        width:width/8,
-        height:width/8,
+        width:50,
+        // height:width/8,
         textAlignVertical:'center',
-        fontSize:8
+        fontSize:10
     },
 
     bannerView: {
@@ -125,7 +130,7 @@ export default StyleSheet.create({
         color: '#B1272C',
         borderColor: '#B1272C',
         borderWidth: 1,
-        width: 50,
+        width: 65,
         backgroundColor: '#FFE5E5',
         borderRadius: 50,
         paddingHorizontal: 10,

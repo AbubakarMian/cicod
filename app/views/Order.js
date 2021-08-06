@@ -58,19 +58,16 @@ class Order extends React.Component {
                 'Content-Type': 'application/json',
                 Authorization: this.props.user.access_token,
             },
-
         };
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-               
+                console.log('~~~~~~~~~~~',responseJson)
+                this.setState({ spinner: false });
                 if (responseJson.status === 'success') {
-                    this.setState({ spinner: false });
                     this.setState({
                         data: responseJson.data
                     });
-                    console.log('~~~~~~~~~~~',responseJson.data)
-                    // this.props.navigation.navigate('DrawerNavigation')
                 } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 }
@@ -78,10 +75,11 @@ class Order extends React.Component {
                     let message = responseJson.message
                     Alert.alert('Error', message)
                 }
-
+            }).catch(function(error){
+                this.setState({spinner:false})
+                Alert.alert(error)
             })
     }
-
     unauthorizedLogout() {
         Alert.alert('Error', Constants.UnauthorizedErrorMsg)
         this.props.logoutUser();
@@ -356,7 +354,12 @@ class Order extends React.Component {
                                     </View>
                                 </View>
                                 <View style={{ flex: 1, alignItems: 'flex-end', flexDirection: 'column' }}>
-                                    <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>N{item.amount}</Text>
+                                    {(item.balance_part_payment>0)?
+                                     <Text style={[{ color: '#4E4D4D',marginRight:10 }, fontStyles.bold15]}>N{item.balance_part_payment.amount}</Text>
+                                    :
+                                    <Text style={[{ color: '#4E4D4D',marginRight:10 }, fontStyles.bold15]}>N{item.amount}</Text>
+                                    }
+                                    
 
                                     {(item.order_status == 'PENDING') ?
                                         <Text style={[{ borderRadius: 50, paddingHorizontal: 5, textAlign: 'center', backgroundColor: '#FFF3DB', color: '#FDB72B', width: width / 5, alignSelf: 'flex-end' }, styles.detailColumn2text]}>
@@ -387,6 +390,7 @@ class Order extends React.Component {
 
 
     render() {
+        console.log(this.props.user)
         return (
             <View style={{ width: width, height: height, position: 'relative', backgroundColor: '#F0F0F0', flex: 1 }}>
                 <View style={{ height: height / 3.1 }}>

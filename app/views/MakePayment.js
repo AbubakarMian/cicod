@@ -45,7 +45,7 @@ class MakePayment extends React.Component {
         if(this.props.route.params.pending_order_res != undefined){
            console.log('RRRRRRRR',this.props.route.params.pending_order_res.data.id)
             console.log('FFFFFFFFFFF',navigateScreen)
-            return;
+            // return;
             this.props.navigation.navigate(navigateScreen,{
                         bodyOrder:this.props.route.params.bodyOrder,
                         amount_payable:this.props.route.params.amount_payable,
@@ -138,6 +138,7 @@ class MakePayment extends React.Component {
             body: JSON.stringify(bodyOrder)
         };
         console.log('222222222222 makePaymentFun body params l!!', postData);
+        console.log('~~~~~~~~~~~~~~~~~~UUUUUUUUUUUUUUUUU',Constants.orderslist)
         fetch(Constants.orderslist, postData)
             .then(response => response.json())
             .then(async responseJson => {
@@ -184,7 +185,7 @@ class MakePayment extends React.Component {
     
         this.setState({spinner:false})
      
-        this.setPaymentMode('CASH', 'PayByCash')
+        // this.setPaymentMode('CASH', 'PayByCash')
         if(this.props.route.params.pending_order_res == undefined){
             this.setPaymentMode('CASH', 'PayByCash')
         }
