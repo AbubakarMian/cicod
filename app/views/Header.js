@@ -42,9 +42,9 @@ export default class Headet extends React.Component {
                  />
               </View>
               <View style={{flex:1,alignItems:'flex-end',position:'absolute',right:10,top:10, flexDirection:'row',}}>
-                  <Image 
+                  {/* <Image 
                   source={require('../images/bellIcon.png')}
-                  />
+                  /> */}
                   {/* <Text style={{backgroundColor:'#B1272C',color:'#fff',paddingHorizontal:12,paddingVertical:4,borderRadius:50}}>3</Text> */}
               </View>
             </View>

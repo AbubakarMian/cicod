@@ -411,11 +411,9 @@ class ProductFilter extends React.Component {
             </View>
           </View>
         </View>
-        <Text style={[{ color: '#929497', fontWeight: 'bold', fontSize: 20, marginVertical: 10 }]}>Status</Text>
-        <View>
-          {/* <ScrollView
-            horizontal={true}
-          > */}
+        {/* <Text style={[{ color: '#929497', fontWeight: 'bold', fontSize: 20, marginVertical: 10 }]}>Status</Text> */}
+        {/* <View>
+         
             <View style={[{ paddingRight: 20 }, styles.mainRow]}>
               <View style={[{ marginRight: 10 }]}>
                 <TouchableOpacity onPress={() => this.activeSet(1)}>
@@ -432,8 +430,8 @@ class ProductFilter extends React.Component {
 
 
             </View>
-          {/* </ScrollView> */}
-        </View>
+          
+        </View> */}
 
         <TouchableOpacity
           onPress={()=>this.applyFilter()}
