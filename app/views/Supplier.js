@@ -118,14 +118,14 @@ class Supplier extends React.Component {
                     <View>
                         <Text style={[{ color: '#2F2E7C', marginHorizontal: 20 },fontStyles.normal15]}>SUPPLIERS</Text>
                     </View>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         onPress={() => this.props.navigation.navigate('AddSuppliers')}
                         style={{ position: 'absolute', right: 0 }}>
                         <Image
                             style={{height:30,width:30}}
                             source={require('../images/products/circlePlus.png')}
                         />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
                 {/* <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', paddingHorizontal: 10, borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
                     <Image

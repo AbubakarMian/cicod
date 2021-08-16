@@ -360,7 +360,7 @@ class CreateProduct extends React.Component {
                         <View style={[{}, styles.productDetailContainerView]}>
                             <View style={[{}, styles.formRowView]}>
                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
-                                    {this.state.categoryarr.length < 1 ? null :
+                                    {/* {this.state.categoryarr.length < 1 ? null :
                                         <DropDownPicker
                                         scrollViewProps={{
                                             persistentScrollbar: true,
@@ -375,7 +375,7 @@ class CreateProduct extends React.Component {
                                             dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
                                             labelStyle={{ color: '#A9A9A9' }}
                                             onChangeItem={item => this.onCategoryText(item.value)}
-                                        />}
+                                        />} */}
                                 </View>
                             </View>
 

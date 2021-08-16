@@ -413,7 +413,7 @@ class Dashboard extends React.Component {
                                         
                               
                                 </View>
-                                <Progress.Bar color="#B1272C" backgroundColor="#fff" progress={0.00} width={200} />
+                                {/* <Progress.Bar color="#B1272C" backgroundColor="#fff" progress={0.00} width={200} /> */}
                             </View>
                             <View style={[{}, styles.bannerImagetView]}>
                                 <Image
