@@ -40,13 +40,15 @@ export default StyleSheet.create({
         paddingHorizontal:15,
     },
     formRow:{
-        flexDirection:'row'
+        flexDirection:'row',
+        flex:1
     },
     formColumn:{
         flex:1,
         position:'relative',
         flexDirection:'row',
         alignItems:'center',
+        borderBottomWidth:0.5,
     },
     gownIcon:{
         position:'absolute',

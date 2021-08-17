@@ -24,7 +24,14 @@ class OrderFilter extends React.Component {
       categoryarr: [],
       createdby_arr: [],
       paymentmode_arr: [],
-      orderchannel_arr: [],
+      // orderchannel_arr: [{'all':'All'},{'pending':'PENDING'}],
+      orderchannel_arr: [
+        {'label':'All','value':''},
+        {'label':'pending','value':'pending'},
+        {'label':'PAID','value':'paid'},
+        {'label':'PART PAYMENT','value':'PART PAYMENT'},
+        {'label':'PAID FROM CREDIT','value':'ACCOUNT'},
+      ],
       category_name: '',
       spinner: false,
       orderdate: 'YY-MM-DD',
@@ -168,6 +175,7 @@ class OrderFilter extends React.Component {
     // })
   }
   orderStatus(text) {
+    console.log('@@@@@@@@@@@',text)
     this.setState({active_list:text})
     // this.upsert_filters({ key: 'is_active', value: text })
     this.upsert_filters({ key: 'order_status', value: text })
@@ -293,15 +301,15 @@ class OrderFilter extends React.Component {
                 </TouchableOpacity>
                 <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>FILTER</Text>
               </View>
-              <TouchableOpacity style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20, top: 20 }]}
+              <TouchableOpacity style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 10, top: 15 }]}
                   onPress={() => this.clear_filter()}
                 >
-                  <Text style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20, top: 20 }]}>Clear Filter</Text>
+                  <Text style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 0, top: 0 }]}>Clear Filter</Text>
                 </TouchableOpacity>
               
             </View>
-            <Text style={[{ color: '#929497', fontWeight: 'bold', fontSize: 20, marginVertical: 10 }]}>Status</Text>
-            <View>
+            {/* <Text style={[{ color: '#929497', fontWeight: 'bold', fontSize: 20, marginVertical: 10 }]}>Status</Text> */}
+            {/* <View>
               <ScrollView
                 horizontal={true}
                 style={{}}
@@ -338,13 +346,13 @@ class OrderFilter extends React.Component {
                   <View style={[{}]}>
                     <TouchableOpacity
                       onPress={() => this.orderStatus('ACCOUNT')}>
-                        {/* PAID FROM CREDIT */}
+                     
                       <Text style={[{ color:this.state.active_list=='ACCOUNT'? '#000' : '#929497', borderRadius: 50, backgroundColor: this.state.active_list=='ACCOUNT'?'#fff': '#E6E6E6', paddingHorizontal: 5 }]}>PAID FROM CREDIT </Text>
                     </TouchableOpacity>
                   </View>
                 </View>
               </ScrollView>
-            </View>
+            </View> */}
             <View style={[{ flexDirection: 'row' }]}>
               <View style={[{ flex: 1, paddingVertical: 10 }]}>
                 <Text style={{ color: '#929497', fontWeight: 'bold' }}>Order Date</Text>
@@ -409,8 +417,8 @@ class OrderFilter extends React.Component {
                 </View>
               </View>
             </View>
-            <View style={{ width: width - 20, backgroundColor: '#fff',paddingBottom:120,borderRadius:10,marginTop:30 }}>
-              {/* {this.state.orderchannel_arr.length < 1 ? null : */}
+            {/* <View style={{ width: width - 20, backgroundColor: '#fff',paddingBottom:120,borderRadius:10,marginTop:30 }}> */}
+              {this.state.orderchannel_arr.length < 1 ? null :
               <DropDownPicker
                  scrollViewProps={{
                   persistentScrollbar: true,
@@ -418,6 +426,16 @@ class OrderFilter extends React.Component {
               dropDownDirection="AUTO"
               bottomOffset={200}
                 items={this.state.orderchannel_arr}
+                // items={
+                //   [
+                //     {'label':'All','value':''},
+                //     {'label':'pending','value':'pending'},
+                //     {'label':'PAID','value':'paid'},
+                //     {'label':'PART PAYMENT','value':'PART PAYMENT'},
+                //     {'label':'PAID FROM CREDIT','value':'ACCOUNT'},
+                //   ]
+                // }
+                //{this.state.orderchannel_arr}
                 containerStyle={{ height: 50, width: width - 25, marginTop: 15, }}
                 style={{ backgroundColor: '#fff',borderWidth:0,borderBottomWidth:1 }}
                 itemStyle={{
@@ -426,29 +444,30 @@ class OrderFilter extends React.Component {
                 placeholder="Order channel"
                 dropDownStyle={{height:120, backgroundColor: '#fff', zIndex: 0.999, marginBottom: 10 }}
                 labelStyle={{ color: '#A9A9A9' }}
-                onChangeItem={item => this.onorderChannelText(item.value)}
+                onChangeItem={item => this.orderStatus(item.value)}
               />
-              {/* } */}
+               } 
 
               {this.state.paymentmode_arr.length < 1 ? null :
-                <DropDownPicker
-                scrollViewProps={{
-                  persistentScrollbar: true,
-              }}
-              dropDownDirection="AUTO"
-              bottomOffset={200}
-                  items={this.state.paymentmode_arr}
-                  autoScrollToDefaultValue={true}
-                  containerStyle={{ height: 50, width: width - 25, marginTop: 15, }}
-                  style={{ backgroundColor: '#fff',borderWidth:0,borderBottomWidth:1  }}
-                  itemStyle={{
-                    justifyContent: 'flex-start',
-                  }}
-                  placeholder="Payment Mode"
-                  dropDownStyle={{height:120, backgroundColor: '#fff', zIndex: 0.999, marginBottom: 10 }}
-                  labelStyle={{ color: '#A9A9A9' }}
-                  onChangeItem={item => this.onPaymentmodeText(item.value)}
-                />}
+               <DropDownPicker
+               scrollViewProps={{
+                 persistentScrollbar: true,
+             }}
+             dropDownDirection="AUTO"
+             bottomOffset={200}
+                 items={this.state.createdby_arr}
+                 autoScrollToDefaultValue={true}
+                 containerStyle={{ height: 50, width: width - 25, marginTop: 15 }}
+                 style={{ backgroundColor: '#fff',borderWidth:0,borderBottomWidth:1  }}
+                 itemStyle={{
+                   justifyContent: 'flex-start',
+                 }}
+                 placeholder="Created By"
+                 dropDownStyle={{height:120, backgroundColor: '#fff', zIndex: 0.999, }}
+                 labelStyle={{ color: '#A9A9A9' }}
+                 onChangeItem={item => this.onCreatedByText(item.value ?? '')}
+                 // 
+               />}
               {this.state.createdby_arr.length < 1 ? null :
                 <DropDownPicker
                 scrollViewProps={{
@@ -469,7 +488,7 @@ class OrderFilter extends React.Component {
                   onChangeItem={item => this.onCreatedByText(item.value ?? '')}
                   // 
                 />}
-            </View>
+           
             <TouchableOpacity
               onPress={() => this.applyFilter()}
               style={{ width: width / 1.5, alignSelf: 'center', zIndex: -0.9999, backgroundColor: '#B1272C', justifyContent: 'center', alignItems: 'center', paddingVertical: 15, borderRadius: 50, marginTop: 10 }}
