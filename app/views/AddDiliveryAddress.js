@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, Dimensions, Image, Alert, Platform, TouchableOpacity, FlatList } from 'react-native'
+import { View, ImageBackground, ScrollView,Modal, Dimensions, Image, Alert, Platform, TouchableOpacity, FlatList } from 'react-native'
 import styles from '../css/AddDiliveryAddressCss'
 import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -34,9 +34,12 @@ class AddDiliveryAddress extends React.Component {
             street: '',
             landmark: '',
             is_default: false,
-            setCountry:false,
+            setCountry:true,
             setStates:false,
             setRegion:false,
+            countryModal:false,
+            stateModal:false,
+            regionModal:false,
         }
 
     }
@@ -155,12 +158,18 @@ class AddDiliveryAddress extends React.Component {
     }
 
     onSelectCountry(item) {
+        this.setState({
+            setCountry:true,
+            setStates:false,
+            setRegion:false,
+            })
         console.log('country Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item)
         this.setState({
             spinner:true,
             country_id: item.value,
             country_name: item.label,
             setCountry:false,
+            countryModal:false,
         })
         let statesUrl = Constants.stateslist + '?country_id=' + item.value;
         console.log('statesUrl !!!!!!!!!!!!!!@@@@@@@@@@@@@', statesUrl)
@@ -169,12 +178,18 @@ class AddDiliveryAddress extends React.Component {
 
     }
     onSelectState(item) {
+        // this.setState({
+        //     setCountry:false,
+        //     setStates:true,
+        //     setRegion:false,
+        //    })
         console.log('state Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item)
         this.setState({
             spinner:true,
             state_id: item.value,
-            state_name: item.lable,
-            setStates:false
+            state_name: item.label,
+            setStates:false,
+            stateModal:false
         });
         let lgasUrl = Constants.lgaslist + '?state_id=' + item.value;
         console.log('lgasUrl !!!!!!!!!!!!!!@@@@@@@@@@@@@', lgasUrl)
@@ -186,8 +201,9 @@ class AddDiliveryAddress extends React.Component {
         this.setState({
             spinner:true,
             lgas_id: item.value,
-            lgas_name: item.lable,
-            setRegion:false
+            lgas_name: item.label,
+            setRegion:false,
+            regionModal:false,
         });
         this.setState({spinner:false})
     }
@@ -262,7 +278,22 @@ class AddDiliveryAddress extends React.Component {
                 // Alert.alert(error.message);
             });
     }
-
+get_state(){
+    if(this.state.country_name!=''){
+       this.setState({stateModal:true})
+    }else{
+        Alert.alert("Select Country first")
+    }
+    
+}
+get_region(){
+    if(this.state.state_name ==''){
+        Alert.alert("Select State first")
+     }else{
+         
+         this.setState({regionModal:true})
+     }
+}
     render() {
 
         return (
@@ -318,7 +349,18 @@ class AddDiliveryAddress extends React.Component {
                                     />
                                     <View style={[{}, styles.formRow]}>
                                         <View style={[{}, styles.formColumn]}>
-                                            <DropDownPicker
+                                            <TouchableOpacity
+                                            onPress={()=>this.setState({countryModal:true})}
+                                            style={{padding:10,borderBottomWidth:1,borderBottomColor:'#aaaa'}}
+                                            >
+                                            {(this.state.country_name=='')?
+                                             <Text style={{color:'#929497'}}>Country *</Text>
+                                             :<Text style={{color:'#929497'}}>{this.state.country_name}</Text>
+                                            }
+                                            </TouchableOpacity>
+                                            
+                                           
+                                            {/* <DropDownPicker
                                                 onOpen={()=>
                                                 this.setState({
                                                     setCountry:true,
@@ -344,14 +386,22 @@ class AddDiliveryAddress extends React.Component {
                                                 dropDownStyle={{ height: height/4, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectCountry(item)}
-                                            />
+                                            /> */}
                                         </View>
 
                                     </View>
                                     <View style={[{ flexDirection: 'row', alignSelf: 'center' }]}>
                                         <View style={{flex:1}}>
-
-                                            <DropDownPicker
+                                        <TouchableOpacity
+                                            onPress={()=>this.get_state()}
+                                            style={{padding:10,borderBottomWidth:1,borderBottomColor:'#aaaa'}}
+                                            >
+                                            {(this.state.state_name=='')?
+                                             <Text style={{color:'#929497'}}>State *</Text>
+                                             :<Text style={{color:'#929497'}}>{this.state.state_name}</Text>
+                                            }
+                                            </TouchableOpacity>
+                                            {/* <DropDownPicker
                                                onOpen={()=>
                                             this.setState({
                                                  setCountry:false,
@@ -376,11 +426,19 @@ class AddDiliveryAddress extends React.Component {
                                                 dropDownStyle={{ height:120, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectState(item)}
-                                            />
+                                            /> */}
                                         </View>
                                         <View style={{flex:1}}>
-
-                                            <DropDownPicker
+                                        <TouchableOpacity
+                                            onPress={()=>this.get_region()}
+                                            style={{padding:10,borderBottomWidth:1,marginLeft:5, borderBottomColor:'#aaaa'}}
+                                            >
+                                            {(this.state.lgas_name=='')?
+                                             <Text style={{color:'#929497'}}>Region *</Text>
+                                             :<Text style={{color:'#929497'}}>{this.state.lgas_name}</Text>
+                                            }
+                                            </TouchableOpacity>
+                                            {/* <DropDownPicker
                                                 onOpen={()=>
                                                 this.setState({
                                                     setCountry:false,
@@ -406,7 +464,7 @@ class AddDiliveryAddress extends React.Component {
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectLgas(item)}
                                                 
-                                            />
+                                            /> */}
                                         </View>
                                     </View>
                                     <View style={{ zIndex: -0.999, marginVertical:20 }}>
@@ -438,6 +496,129 @@ class AddDiliveryAddress extends React.Component {
                             </TouchableOpacity>
                     </View>
                 </ScrollView>
+                <Modal
+                visible={this.state.countryModal}
+                transparent={true}
+                >
+                 <View 
+                 style={{height:height,width:width, justifyContent:'center',backgroundColor:'#000f',opacity:0.8, alignItems:'center',}}
+                 >
+                 <View
+                 style={{maxHeight:height/1.5,width:width/1.5,backgroundColor:'white',opacity:1,paddingHorizontal:5,borderRadius:5,paddingVertical:5}}
+                 >
+                 
+                 <FlatList
+                    ItemSeparatorComponent={
+                        Platform.OS !== 'android' &&
+                        (({ highlighted }) => (
+                        <View
+                            style={[
+                            style.separator,
+                            highlighted && { marginLeft: 0,height:height/3 }
+                            ]}
+                        />
+                        ))
+                    }
+                    data={this.state.countries_arr}//[{ title: 'Title Text', key: 'item1' }]
+                    renderItem={({ item, index, separators }) => (
+                        <TouchableOpacity
+                        key={item.key}
+                        style={{marginBottom:2,paddingBottom:5,paddingHorizontal:5,backgroundColor:'#fff',borderRadius:2}}
+                        onPress={() => this.onSelectCountry(item)}
+                        onShowUnderlay={separators.highlight}
+                        onHideUnderlay={separators.unhighlight}>
+                        <View style={{ backgroundColor: 'white',padding:5,marginHorizontal:10,justifyContent:'center',width:width,borderRadius:10 }}>
+                            <Text>{item.label}</Text>
+                        </View>
+                        </TouchableOpacity>
+                    )}
+                    />
+
+                 </View>
+                 </View>
+                </Modal>
+                <Modal
+                visible={this.state.stateModal}
+                transparent={true}
+                >
+                 <View 
+                 style={{height:height,width:width, justifyContent:'center',backgroundColor:'#000f',opacity:0.8, alignItems:'center'}}
+                 >
+                 <View
+                 style={{maxHeight:height/1.5,width:width/1.5,backgroundColor:'white',opacity:1,paddingHorizontal:5,borderRadius:5,paddingVertical:5}}
+                 >
+                 
+                 <FlatList
+                    ItemSeparatorComponent={
+                        Platform.OS !== 'android' &&
+                        (({ highlighted }) => (
+                        <View
+                            style={[
+                            style.separator,
+                            highlighted && { marginLeft: 0,height:height/3 }
+                            ]}
+                        />
+                        ))
+                    }
+                    data={this.state.states_arr}//[{ title: 'Title Text', key: 'item1' }]
+                    renderItem={({ item, index, separators }) => (
+                        <TouchableOpacity
+                        key={item.key}
+                        style={{marginBottom:1,paddingBottom:5,paddingHorizontal:5,backgroundColor:'#fff',borderRadius:2}}
+                        onPress={() => this.onSelectState(item)}
+                        onShowUnderlay={separators.highlight}
+                        onHideUnderlay={separators.unhighlight}>
+                        <View style={{ backgroundColor: 'white',padding:5,marginHorizontal:10,justifyContent:'center',width:width,borderRadius:10 }}>
+                            <Text>{item.label}</Text>
+                        </View>
+                        </TouchableOpacity>
+                    )}
+                    />
+
+                 </View>
+                 </View>
+                </Modal>
+                <Modal
+                visible={this.state.regionModal}
+                transparent={true}
+                >
+                 <View 
+                 style={{height:height,width:width, justifyContent:'center',backgroundColor:'#000f',opacity:0.8, alignItems:'center'}}
+                 >
+                 <View
+                 style={{maxHeight:height/1.5,width:width/1.5,backgroundColor:'white',opacity:1,paddingHorizontal:5,borderRadius:5,paddingVertical:5}}
+                 >
+                 
+                 <FlatList
+                    ItemSeparatorComponent={
+                        Platform.OS !== 'android' &&
+                        (({ highlighted }) => (
+                        <View
+                            style={[
+                            style.separator,
+                            highlighted && { marginLeft: 0,height:height/3 }
+                            ]}
+                        />
+                        ))
+                    }
+                    data={this.state.lgas_arr}//[{ title: 'Title Text', key: 'item1' }]
+                    renderItem={({ item, index, separators }) => (
+                        <TouchableOpacity
+                        key={item.key}
+                        style={{marginBottom:1,paddingBottom:5,paddingHorizontal:5,backgroundColor:'#fff',borderRadius:2}}
+                        onPress={() => this.onSelectLgas(item)}
+                        onShowUnderlay={separators.highlight}
+                        onHideUnderlay={separators.unhighlight}>
+                        <View style={{ backgroundColor: 'white',padding:5,marginHorizontal:10,justifyContent:'center',width:width,borderRadius:10 }}>
+                            <Text>{item.label}</Text>
+                        </View>
+                        </TouchableOpacity>
+                    )}
+                    />
+
+                 </View>
+                 </View>
+                </Modal>
             </View>
         );
     }

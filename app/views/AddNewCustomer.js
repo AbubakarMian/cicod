@@ -45,6 +45,12 @@ class AddNewCustomer extends React.Component {
             street: '',
             landmark: '',
             email: '',
+            country_name:'',
+            state_name:'',
+            lgas_name:'',
+            countryModal:false,
+            stateModal:false,
+            regionModal:false,
 
         }
 
@@ -59,9 +65,7 @@ class AddNewCustomer extends React.Component {
         this.props.logoutUser();
         this.props.navigation.navigate('Login');
     }
-    ceateCustomer() {
-
-
+    ceateCustomer() {         
         if (this.state.first_name === '' && this.state.last_name === '') {
             Alert.alert("Warning", "First name and Last Name are required")
             return;
@@ -91,7 +95,7 @@ class AddNewCustomer extends React.Component {
                 email: this.state.email,
                 phone: this.state.phone_number,
                 country_id: this.state.country_id, // required
-                state_id: this.state.delivery_state_id, // required state_id
+                state_id: this.state.state_id, // required state_id
                 lga_id: this.state.lgas_id,
                 house_no: this.state.house_no,
                 street: this.state.street,
@@ -205,6 +209,7 @@ class AddNewCustomer extends React.Component {
     }
 
     getStateList(url) {
+        console.log('~~~~~~~~~~~~~~~~~~~~~~~~')
         this.setState({ spinner: true })
         let postData = {
             method: 'GET',
@@ -277,27 +282,52 @@ class AddNewCustomer extends React.Component {
     onSelectCountry(item) {
         console.log('country Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item)
         this.setState({
-            country_id: item
+            spinner:true,
+            country_id: item.value,
+            country_name: item.label,
+            setCountry:true,
+            countryModal:false,
+            setStates:false,
+            setRegion:false,
         })
-        let statesUrl = Constants.stateslist + '?country_id=' + item;
+
+
+        console.log('country Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item)
+   
+
+
+        let statesUrl = Constants.stateslist + '?country_id=' + item.value;
         console.log('statesUrl !!!!!!!!!!!!!!@@@@@@@@@@@@@', statesUrl)
         this.getStateList(statesUrl);
+        
 
     }
-    // onSelectState(item) {
-    //     console.log('state Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item)
-    //     this.setState({
-    //         state_id: item
-    //     });
-    //     let lgasUrl = Constants.lgaslist + '?state_id=' + item;
-    //     console.log('lgasUrl !!!!!!!!!!!!!!@@@@@@@@@@@@@', lgasUrl)
-    //     this.getLgaList(lgasUrl);
+    onSelectState(item) {
+        console.log('state Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item)
+        this.setState({
+            spinner:true,
+            state_id: item.value,
+            state_name: item.label,
+            setStates:false,
+            stateModal:false
+        });
+        let lgasUrl = Constants.lgaslist + '?state_id=' + item.value;
+        console.log('lgasUrl !!!!!!!!!!!!!!@@@@@@@@@@@@@', lgasUrl)
+        this.getLgaList(lgasUrl);
 
-    // }
+    }
     onSelectLgas(item) {
         this.setState({
             lgas_id: item
         });
+        this.setState({
+            spinner:true,
+            lgas_id: item.value,
+            lgas_name: item.label,
+            setRegion:false,
+            regionModal:false,
+        });
+        this.setState({spinner:false})
     }
     onDeliverySelectCountry(item) {
         console.log('country Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item)
@@ -324,9 +354,25 @@ class AddNewCustomer extends React.Component {
             delivery_lgas_id: item
         });
     }
+    get_state(){
+        if(this.state.country_name!=''){
+           this.setState({stateModal:true})
+        }else{
+            Alert.alert("Select Country first")
+        }
+        
+    }
+    get_region(){
+        if(this.state.state_name ==''){
+            Alert.alert("Select State first")
+         }else{
+             
+             this.setState({regionModal:true})
+         }
+    }
     // customerlist
     render() {
-        console.log('countries_arr countries_arr countries_arr', this.state.countries_arr)
+        // console.log('countries_arr countries_arr countries_arr', this.state.countries_arr)
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
@@ -422,10 +468,18 @@ class AddNewCustomer extends React.Component {
                                 onChangeText={text => this.setState({ landmark: text })}
                             />
                             <View style={[{}, styles.formRow]}>
-                                <View style={[{ justifyContent: 'center', alignItems: 'center', paddingTop: 10 }, styles.formColumn]}>
+                                <View style={[{  alignItems: 'center', paddingTop: 10,marginRight:3 }, styles.formColumn]}>
 
-
-                                    {this.state.countries_arr.length < 1 ? null :
+                                <TouchableOpacity
+                                    onPress={()=>this.setState({countryModal:true})}
+                                    style={{padding:10,}}
+                                    >
+                                    {(this.state.country_name=='')?
+                                        <Text style={{color:'#929497'}}>Country *</Text>
+                                        :<Text style={{color:'#929497'}}>{this.state.country_name}</Text>
+                                    }
+                                </TouchableOpacity>
+                                    {/* {this.state.countries_arr.length < 1 ? null :
                                         <DropDownPicker
                                             items={this.state.countries_arr}
                                             containerStyle={{ height: 50, width: width / 2 - 10, }}
@@ -439,12 +493,21 @@ class AddNewCustomer extends React.Component {
                                             onChangeItem={item => this.onSelectCountry(item.value)}  //this.onSelectCountry(item.value)}
 
 
-                                        />}
+                                        />
+                                        } */}
                                 </View>
-                                <View style={[{ justifyContent: 'center', alignItems: 'center', paddingTop: 10 }, styles.formColumn]}>
-
-                                    {this.state.states_arr.length < 1 ? null :
-                                        <DropDownPicker
+                                <View style={[{ alignItems: 'center', paddingTop: 10,marginLeft:3 }, styles.formColumn]}>
+                                <TouchableOpacity
+                                onPress={()=>this.get_state()}
+                                style={{padding:10,}}
+                                >
+                                {(this.state.state_name=='')?
+                                    <Text style={{color:'#929497'}}>State *</Text>
+                                    :<Text style={{color:'#929497'}}>{this.state.state_name}</Text>
+                                }
+                                </TouchableOpacity>
+                                    {/* {this.state.states_arr.length < 1 ? null : */}
+                                        {/* <DropDownPicker
                                             items={this.state.states_arr}
                                             itemStyle={{
                                                 justifyContent: 'flex-start', zIndex: 0.999
@@ -455,18 +518,19 @@ class AddNewCustomer extends React.Component {
                                             dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                                             labelStyle={{ color: '#A9A9A9' }}
                                             onChangeItem={item => this.onDeliverySelectState(item.value)}
-                                        />}
+                                        /> */}
+                                        {/* } */}
                                 </View>
                             </View>
                             <View style={[{ marginTop: 10, }, styles.formRow]}>
-                                <View style={[{ justifyContent: 'center', alignItems: 'center', paddingTop: 10 }, styles.formColumn]}>
+                                {/* <View style={[{ alignItems: 'center', paddingTop: 10,width:width/2 }]}> */}
                                     {/* <TextInput
                                         placeholder="LGA*"
                                     />
                                     <Icon
                                         style={[{}, styles.gownIcon]}
                                         name="caret-down" /> */}
-                                    {this.state.lgas_arr.length < 1 ? null :
+                                    {/* {this.state.lgas_arr.length < 1 ? null :
                                         <DropDownPicker
                                             items={this.state.lgas_arr}
                                             placeholder="LGA *"
@@ -480,11 +544,20 @@ class AddNewCustomer extends React.Component {
                                             dropDownStyle={{ zIndex: 99999999, height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                                             labelStyle={{ color: '#A9A9A9' }}
                                             onChangeItem={item => this.onSelectLgas(item.value)}
-                                        />}
-                                </View>
-                                <View style={[{}, styles.formColumn]}>
+                                        />} */}
+                                         <TouchableOpacity
+                                            onPress={()=>this.get_region()}
+                                            style={{padding:10,paddingLeft:0, marginRight:5,width:width/2-30,borderBottomWidth:1, borderBottomColor:'#aaaa'}}
+                                            >
+                                            {(this.state.lgas_name=='')?
+                                             <Text style={{color:'#929497'}}>Region *</Text>
+                                             :<Text style={{color:'#929497'}}>{this.state.lgas_name}</Text>
+                                            }
+                                            </TouchableOpacity>
+                                {/* </View> */}
+                                {/* <View style={[{}, styles.formColumn]}>
 
-                                </View>
+                                </View> */}
                             </View>
                             <View style={[{ zIndex: -0.99999 }, styles.formRow]}>
                                 <View style={[{ zIndex: -0.99999 }, styles.formColumn]}>
@@ -649,7 +722,129 @@ class AddNewCustomer extends React.Component {
                     </View>
                 </ScrollView>
 
+                <Modal
+                visible={this.state.countryModal}
+                transparent={true}
+                >
+                 <View 
+                 style={{height:height,width:width, justifyContent:'center',backgroundColor:'#000f',opacity:0.8, alignItems:'center',}}
+                 >
+                 <View
+                 style={{maxHeight:height/1.5,width:width/1.5,backgroundColor:'white',opacity:1,paddingHorizontal:5,borderRadius:5,paddingVertical:5}}
+                 >
+                 
+                 <FlatList
+                    ItemSeparatorComponent={
+                        Platform.OS !== 'android' &&
+                        (({ highlighted }) => (
+                        <View
+                            style={[
+                            style.separator,
+                            highlighted && { marginLeft: 0,height:height/3 }
+                            ]}
+                        />
+                        ))
+                    }
+                    data={this.state.countries_arr}//[{ title: 'Title Text', key: 'item1' }]
+                    renderItem={({ item, index, separators }) => (
+                        <TouchableOpacity
+                        key={item.key}
+                        style={{marginBottom:2,paddingBottom:5,paddingHorizontal:5,backgroundColor:'#fff',borderRadius:2}}
+                        onPress={() => this.onSelectCountry(item)}
+                        onShowUnderlay={separators.highlight}
+                        onHideUnderlay={separators.unhighlight}>
+                        <View style={{ backgroundColor: 'white',padding:5,marginHorizontal:10,justifyContent:'center',width:width,borderRadius:10 }}>
+                            <Text>{item.label}</Text>
+                        </View>
+                        </TouchableOpacity>
+                    )}
+                    />
 
+                 </View>
+                 </View>
+                </Modal>
+                <Modal
+                visible={this.state.stateModal}
+                transparent={true}
+                >
+                 <View 
+                 style={{height:height,width:width, justifyContent:'center',backgroundColor:'#000f',opacity:0.8, alignItems:'center'}}
+                 >
+                 <View
+                 style={{maxHeight:height/1.5,width:width/1.5,backgroundColor:'white',opacity:1,paddingHorizontal:5,borderRadius:5,paddingVertical:5}}
+                 >
+                 
+                 <FlatList
+                    ItemSeparatorComponent={
+                        Platform.OS !== 'android' &&
+                        (({ highlighted }) => (
+                        <View
+                            style={[
+                            style.separator,
+                            highlighted && { marginLeft: 0,height:height/3 }
+                            ]}
+                        />
+                        ))
+                    }
+                    data={this.state.states_arr}//[{ title: 'Title Text', key: 'item1' }]
+                    renderItem={({ item, index, separators }) => (
+                        <TouchableOpacity
+                        key={item.key}
+                        style={{marginBottom:1,paddingBottom:5,paddingHorizontal:5,backgroundColor:'#fff',borderRadius:2}}
+                        onPress={() => this.onSelectState(item)}
+                        onShowUnderlay={separators.highlight}
+                        onHideUnderlay={separators.unhighlight}>
+                        <View style={{ backgroundColor: 'white',padding:5,marginHorizontal:10,justifyContent:'center',width:width,borderRadius:10 }}>
+                            <Text>{item.label}</Text>
+                        </View>
+                        </TouchableOpacity>
+                    )}
+                    />
+
+                 </View>
+                 </View>
+                </Modal>
+                <Modal
+                visible={this.state.regionModal}
+                transparent={true}
+                >
+                 <View 
+                 style={{height:height,width:width, justifyContent:'center',backgroundColor:'#000f',opacity:0.8, alignItems:'center'}}
+                 >
+                 <View
+                 style={{maxHeight:height/1.5,width:width/1.5,backgroundColor:'white',opacity:1,paddingHorizontal:5,borderRadius:5,paddingVertical:5}}
+                 >
+                 
+                 <FlatList
+                    ItemSeparatorComponent={
+                        Platform.OS !== 'android' &&
+                        (({ highlighted }) => (
+                        <View
+                            style={[
+                            style.separator,
+                            highlighted && { marginLeft: 0,height:height/3 }
+                            ]}
+                        />
+                        ))
+                    }
+                    data={this.state.lgas_arr}//[{ title: 'Title Text', key: 'item1' }]
+                    renderItem={({ item, index, separators }) => (
+                        <TouchableOpacity
+                        key={item.key}
+                        style={{marginBottom:1,paddingBottom:5,paddingHorizontal:5,backgroundColor:'#fff',borderRadius:2}}
+                        onPress={() => this.onSelectLgas(item)}
+                        onShowUnderlay={separators.highlight}
+                        onHideUnderlay={separators.unhighlight}>
+                        <View style={{ backgroundColor: 'white',padding:5,marginHorizontal:10,justifyContent:'center',width:width,borderRadius:10 }}>
+                            <Text>{item.label}</Text>
+                        </View>
+                        </TouchableOpacity>
+                    )}
+                    />
+
+                 </View>
+                 </View>
+                </Modal>
 
             </View>
         )
