@@ -8,9 +8,10 @@ import CheckBox from 'react-native-check-box';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER,FORMAT_CURRENCY,SET_CURRENCY } from '../redux/constants/index';
 import { Constants } from './Constant';
 
+import {get_formated_amount} from '../redux/reducers/currencyReducer';
 var { width, height } = Dimensions.get('window');
 
 class OrderDetail extends React.Component {
@@ -74,6 +75,7 @@ class OrderDetail extends React.Component {
                     for (let i = 0; product_items.length > i; i++) {
                         total_ammount = total_ammount + (product_items[i].price * product_items[i].quantity);
                     }
+                    total_ammount.replace(/\B(?=(\d{1})+(?!\d))/g, ",")
                     this.setState({
                         data: responseJson.data,
                         cicod_order_id: responseJson.data.cicod_order_id,
@@ -334,7 +336,9 @@ class OrderDetail extends React.Component {
                         <View style={{ alignSelf: 'flex-end', marginRight: 20, marginVertical: 20, flexDirection: 'row' }}>
                             <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>Total:  </Text>
                             <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>
-                                {this.props.currency.currency+' '+this.state.total_amount}</Text>
+                                {/* {this.props.currency.currency+' '+this.state.total_amount} */}
+                                {this.props.currency.currency+this.state.total_amount.replace(/\B(?=(\d{1})+(?!\d))/g, ",")}
+                                </Text>
                         </View>
 
                     </View>
@@ -353,7 +357,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
-        logoutUser: () => dispatch({ type: LOGOUT_USER })
+        logoutUser: () => dispatch({ type: LOGOUT_USER }),
+        setCurrency: (value) => dispatch({ type: SET_CURRENCY, value: value }),
+        formateCurrency: (value) => dispatch({ type: FORMAT_CURRENCY, value: value }),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(OrderDetail)

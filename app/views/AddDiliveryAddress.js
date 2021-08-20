@@ -262,7 +262,7 @@ class AddDiliveryAddress extends React.Component {
                 if (responseJson.status === "success") {
                     let address = this.state.house_no + ',' + this.state.street + ',' + this.state.landmark + ',' + this.state.state_name + ',' + this.state.country_name;
                     
-                    address = address.replace('undefined','');
+                    address = address.replace('undefined,','');
                     await this.props.setDeliveryAddress({
                         address: address,
                         type: 'delivery',
