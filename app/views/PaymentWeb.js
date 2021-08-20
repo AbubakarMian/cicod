@@ -31,7 +31,7 @@ class PaymentWeb extends React.Component {
                  console.log('payment order if');              
                 console.log('this.state.order.payment_status',this.state.order.payment_status);
                 
-                if(this.state.order.payment_status == 'PAID' || this.state.order.payment_status == 'cancelled'){
+                if(this.state.order.payment_status == 'PAID' || this.state.order.payment_status == 'PART PAYMENT' || this.state.order.payment_status == 'cancelled'){
                     // if(this.state.order.payment_status != 'PENDING' || this.state.order.payment_status == 'cancelled'){
                     this._isMounted = false;
                     // this.props.navigation.navigate('Order');

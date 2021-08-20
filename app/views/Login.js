@@ -7,11 +7,12 @@ import CheckBox from 'react-native-check-box';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER,CLEAR_ORDER,RESET,SET_CURRENCY } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER,CLEAR_ORDER,RESET,SET_CURRENCY,FORMAT_CURRENCY } from '../redux/constants/index';
 import { Constants } from '../views/Constant';
 import { Text, TextInput, Modal } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import {get_formated_amount} from '../redux/reducers/currencyReducer';
 
 var { width, height } = Dimensions.get('window');
 
@@ -54,6 +55,10 @@ class Login extends React.Component {
     }
     login() {
         console.log("Login Login Login ")
+        
+        let c = get_formated_amount(2432643543654)
+        console.log('WWWWWWWWW',c+this.props.currency.currency)
+        // console.log(this.props. FORMAT_CURRENCY.amount)
         this.resetReducer();
         if (this.state.tenantId === '') {
             alert("Domain required")
@@ -136,6 +141,11 @@ class Login extends React.Component {
     }
 
     setCurrency(user_token){
+        this.props.setCurrency({
+            currency: 'N',
+        });
+
+        console.log('!!!!!!!!!')
         let postData = {
             method: 'GET',
             headers: {
@@ -147,7 +157,7 @@ class Login extends React.Component {
         fetch(Constants.currency, postData)
                 .then(response => response.json())
                 .then(async responseJson => {
-                    console.log("response Json currency!!!!!!!!!!!", responseJson)
+                    console.log("response Json currency!!!!!!!!!!!", Constants.currency)
                     console.log("responseJson.data.symbol Json currency!!!!!!!!!!!", responseJson.data.symbol)
                     if ((responseJson.status).toUpperCase() === "SUCCESS") {
                         this.props.setCurrency({
@@ -289,13 +299,15 @@ class Login extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        user: state.userReducer
+        user: state.userReducer,
+        currency: state.currencyReducer,
     }
 };
 function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
         setCurrency: (value) => dispatch({ type: SET_CURRENCY, value: value }),
+        formateCurrency: (value) => dispatch({ type: FORMAT_CURRENCY, value: value }),
         logoutUser: () => dispatch({ type: LOGOUT_USER }),
         emptyOrder: () => dispatch({ type: CLEAR_ORDER }),
         resetDeliveryAddress: () => dispatch({ type: RESET}),
