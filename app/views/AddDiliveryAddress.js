@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView,Modal, Dimensions, Image, Alert, Platform, TouchableOpacity, FlatList } from 'react-native'
+import { View, ImageBackground, ScrollView, Dimensions,TouchableWithoutFeedback, Image, Alert, Platform, TouchableOpacity, FlatList } from 'react-native'
 import styles from '../css/AddDiliveryAddressCss'
 import fontStyles from '../css/FontCss'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -10,6 +10,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { Constants } from '../views/Constant';
 import { connect } from 'react-redux';
 import { Text, TextInput } from 'react-native-paper';
+import Modal from 'react-native-modal';
 import { SET_USER, LOGOUT_USER, SET_DELIVERY_ADDRESS } from '../redux/constants/index';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 
@@ -53,7 +54,7 @@ class AddDiliveryAddress extends React.Component {
     }
 
     getCountryList() {
-        this.setState({ spinner: true })
+        this.setState({ spinner: true,states_arr:'' })
         let postData = {
             method: 'GET',
             headers: {
@@ -160,8 +161,11 @@ class AddDiliveryAddress extends React.Component {
     onSelectCountry(item) {
         this.setState({
             setCountry:true,
-            setStates:false,
+            setStates:true,
             setRegion:false,
+            state_name:'',
+            lgas_name:'',
+
             })
         console.log('country Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item)
         this.setState({
@@ -178,11 +182,12 @@ class AddDiliveryAddress extends React.Component {
 
     }
     onSelectState(item) {
-        // this.setState({
-        //     setCountry:false,
-        //     setStates:true,
-        //     setRegion:false,
-        //    })
+        this.setState({
+            setCountry:false,
+            setStates:true,
+            setRegion:false,
+            lgas_name:'',
+           })
         console.log('state Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item)
         this.setState({
             spinner:true,
@@ -497,14 +502,20 @@ get_region(){
                     </View>
                 </ScrollView>
                 <Modal
-                visible={this.state.countryModal}
-                transparent={true}
+                    animationType="fade"
+                    visible={this.state.countryModal}
+                    transparent={true}
+                    hasBackdrop={true}
+                    onBackdropPress={()=>this.setState({countryModal:false})}
+                    deviceHeight={height}
+                    deviceWidth={width}
+                    justifyContent={'center'}
+                    alignItems={'center'}
+                    backgroundColor={'#000'}
+                    opacity={0.8}
                 >
-                 <View 
-                 style={{height:height,width:width, justifyContent:'center',backgroundColor:'#000f',opacity:0.8, alignItems:'center',}}
-                 >
                  <View
-                 style={{maxHeight:height/1.5,width:width/1.5,backgroundColor:'white',opacity:1,paddingHorizontal:5,borderRadius:5,paddingVertical:5}}
+                 style={{maxHeight:height/1.5,width:width/1.5,backgroundColor:'white',zIndex:9999, opacity:1,paddingHorizontal:5,borderRadius:5,paddingVertical:5}}
                  >
                  
                  <FlatList
@@ -535,15 +546,22 @@ get_region(){
                     />
 
                  </View>
-                 </View>
+
                 </Modal>
                 <Modal
+                animationType="fade"
                 visible={this.state.stateModal}
                 transparent={true}
+                hasBackdrop={true}
+                onBackdropPress={()=>this.setState({stateModal:false})}
+                deviceHeight={height}
+                deviceWidth={width}
+                justifyContent={'center'}
+                alignItems={'center'}
+                backgroundColor={'#000'}
+                opacity={0.8}
                 >
-                 <View 
-                 style={{height:height,width:width, justifyContent:'center',backgroundColor:'#000f',opacity:0.8, alignItems:'center'}}
-                 >
+                
                  <View
                  style={{maxHeight:height/1.5,width:width/1.5,backgroundColor:'white',opacity:1,paddingHorizontal:5,borderRadius:5,paddingVertical:5}}
                  >
@@ -576,15 +594,22 @@ get_region(){
                     />
 
                  </View>
-                 </View>
+               
                 </Modal>
                 <Modal
+                animationType="fade"
                 visible={this.state.regionModal}
                 transparent={true}
+                hasBackdrop={true}
+                onBackdropPress={()=>this.setState({regionModal:false})}
+                deviceHeight={height}
+                deviceWidth={width}
+                justifyContent={'center'}
+                alignItems={'center'}
+                backgroundColor={'#000'}
+                opacity={0.8}
                 >
-                 <View 
-                 style={{height:height,width:width, justifyContent:'center',backgroundColor:'#000f',opacity:0.8, alignItems:'center'}}
-                 >
+               
                  <View
                  style={{maxHeight:height/1.5,width:width/1.5,backgroundColor:'white',opacity:1,paddingHorizontal:5,borderRadius:5,paddingVertical:5}}
                  >
@@ -617,7 +642,7 @@ get_region(){
                     />
 
                  </View>
-                 </View>
+             
                 </Modal>
             </View>
         );

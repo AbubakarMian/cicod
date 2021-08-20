@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, TouchableHighlight, FlatList, Alert, Dimensions, Image, Platform, TouchableOpacity, Modal, } from 'react-native'
+import { View, ImageBackground, TouchableHighlight,TouchableWithoutFeedback, FlatList, Alert, Dimensions, Image, Platform, TouchableOpacity,  Touchable, } from 'react-native'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 import CheckBox from 'react-native-check-box';
@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import { Constants } from '../views/Constant';
 import { Text, TextInput } from 'react-native-paper';
+import Modal from 'react-native-modal';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 class AddNewCustomer extends React.Component {
@@ -289,6 +290,8 @@ class AddNewCustomer extends React.Component {
             countryModal:false,
             setStates:false,
             setRegion:false,
+            state_name:'',
+            lgas_name:'',
         })
 
 
@@ -309,7 +312,8 @@ class AddNewCustomer extends React.Component {
             state_id: item.value,
             state_name: item.label,
             setStates:false,
-            stateModal:false
+            stateModal:false,
+            lgas_name:'',
         });
         let lgasUrl = Constants.lgaslist + '?state_id=' + item.value;
         console.log('lgasUrl !!!!!!!!!!!!!!@@@@@@@@@@@@@', lgasUrl)
@@ -723,14 +727,21 @@ class AddNewCustomer extends React.Component {
                 </ScrollView>
 
                 <Modal
+                animationType="fade"
                 visible={this.state.countryModal}
                 transparent={true}
+                hasBackdrop={true}
+                onBackdropPress={()=>this.setState({countryModal:false})}
+                deviceHeight={height}
+                deviceWidth={width}
+                justifyContent={'center'}
+                alignItems={'center'}
+                backgroundColor={'#000'}
+                opacity={0.8}
                 >
-                 <View 
-                 style={{height:height,width:width, justifyContent:'center',backgroundColor:'#000f',opacity:0.8, alignItems:'center',}}
-                 >
+                
                  <View
-                 style={{maxHeight:height/1.5,width:width/1.5,backgroundColor:'white',opacity:1,paddingHorizontal:5,borderRadius:5,paddingVertical:5}}
+                 style={{maxHeight:height/1.5,width:width/1.5,alignSelf:'center', backgroundColor:'#e6e6e6',opacity:1,paddingHorizontal:5,borderRadius:5,paddingVertical:5}}
                  >
                  
                  <FlatList
@@ -749,11 +760,11 @@ class AddNewCustomer extends React.Component {
                     renderItem={({ item, index, separators }) => (
                         <TouchableOpacity
                         key={item.key}
-                        style={{marginBottom:2,paddingBottom:5,paddingHorizontal:5,backgroundColor:'#fff',borderRadius:2}}
+                        style={{marginBottom:2,paddingBottom:5,paddingHorizontal:5,backgroundColor:'#fff',alignSelf:'center', borderRadius:2}}
                         onPress={() => this.onSelectCountry(item)}
                         onShowUnderlay={separators.highlight}
                         onHideUnderlay={separators.unhighlight}>
-                        <View style={{ backgroundColor: 'white',padding:5,marginHorizontal:10,justifyContent:'center',width:width,borderRadius:10 }}>
+                        <View style={{ backgroundColor: 'white',padding:5,marginHorizontal:10,justifyContent:'center',width:width/1.5, borderRadius:10 }}>
                             <Text>{item.label}</Text>
                         </View>
                         </TouchableOpacity>
@@ -761,15 +772,22 @@ class AddNewCustomer extends React.Component {
                     />
 
                  </View>
-                 </View>
+         
                 </Modal>
                 <Modal
+                animationType="fade"
                 visible={this.state.stateModal}
                 transparent={true}
+                hasBackdrop={true}
+                onBackdropPress={()=>this.setState({stateModal:false})}
+                deviceHeight={height}
+                deviceWidth={width}
+                justifyContent={'center'}
+                alignItems={'center'}
+                backgroundColor={'#000'}
+                opacity={0.8}
                 >
-                 <View 
-                 style={{height:height,width:width, justifyContent:'center',backgroundColor:'#000f',opacity:0.8, alignItems:'center'}}
-                 >
+               
                  <View
                  style={{maxHeight:height/1.5,width:width/1.5,backgroundColor:'white',opacity:1,paddingHorizontal:5,borderRadius:5,paddingVertical:5}}
                  >
@@ -802,15 +820,20 @@ class AddNewCustomer extends React.Component {
                     />
 
                  </View>
-                 </View>
                 </Modal>
                 <Modal
+                animationType="fade"
                 visible={this.state.regionModal}
                 transparent={true}
+                hasBackdrop={true}
+                onBackdropPress={()=>this.setState({regionModal:false})}
+                deviceHeight={height}
+                deviceWidth={width}
+                justifyContent={'center'}
+                alignItems={'center'}
+                backgroundColor={'#000'}
+                opacity={0.8}
                 >
-                 <View 
-                 style={{height:height,width:width, justifyContent:'center',backgroundColor:'#000f',opacity:0.8, alignItems:'center'}}
-                 >
                  <View
                  style={{maxHeight:height/1.5,width:width/1.5,backgroundColor:'white',opacity:1,paddingHorizontal:5,borderRadius:5,paddingVertical:5}}
                  >
@@ -842,7 +865,6 @@ class AddNewCustomer extends React.Component {
                     )}
                     />
 
-                 </View>
                  </View>
                 </Modal>
 
