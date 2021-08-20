@@ -213,7 +213,7 @@ class CreateProductCategory extends React.Component {
                     <Text style={[{ color: '#2F2E7C', fontWeight: '700', marginLeft: 10 }, fontStyles.normal15]}>CREATE PRODUCT CATEGORY</Text>
                 </View>
                 <View style={[{}, styles.mainContentView]}>
-                    <DropDownPicker
+                    {/* <DropDownPicker
                         items={this.state.categoryarr}
                         containerStyle={{ height: 70, width: width - 40, alignSelf: 'center' }}
                         style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
@@ -224,7 +224,7 @@ class CreateProductCategory extends React.Component {
                         dropDownStyle={{ height: 120, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                         labelStyle={{ color: '#A9A9A9' }}
                         onChangeItem={item => this.setState({ category_id: item.value })}  //this.onSelectCountry(item.value)}
-                    />
+                    /> */}
                     <View style={[{},]}>
                         <TextInput
                             onChangeText={text => this.setState({ name: text })}
