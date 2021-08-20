@@ -9,6 +9,8 @@ const currencyReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_CURRENCY:
 
+            update_state(action.value.currency);
+
             return {
                 ...state,
                 currency: action.value.currency,
@@ -36,10 +38,14 @@ const currencyReducer = (state = initialState, action) => {
     }
 }
 
+function update_state(currency){
+    initialState.currency = currency
+}
+
 export function get_formated_amount(amount){
     amount = amount +'';
     console.log('ám amount',amount)
-    amount.replace(/\B(?=(\d{1})+(?!\d))/g, ",");
+    amount = initialState.currency+amount.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return amount;
 }
 export default currencyReducer;

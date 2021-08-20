@@ -75,7 +75,7 @@ class OrderDetail extends React.Component {
                     for (let i = 0; product_items.length > i; i++) {
                         total_ammount = total_ammount + (product_items[i].price * product_items[i].quantity);
                     }
-                    total_ammount.replace(/\B(?=(\d{1})+(?!\d))/g, ",")
+                    
                     this.setState({
                         data: responseJson.data,
                         cicod_order_id: responseJson.data.cicod_order_id,
@@ -336,8 +336,9 @@ class OrderDetail extends React.Component {
                         <View style={{ alignSelf: 'flex-end', marginRight: 20, marginVertical: 20, flexDirection: 'row' }}>
                             <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>Total:  </Text>
                             <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>
-                                {/* {this.props.currency.currency+' '+this.state.total_amount} */}
-                                {this.props.currency.currency+this.state.total_amount.replace(/\B(?=(\d{1})+(?!\d))/g, ",")}
+                                {get_formated_amount(this.state.total_amount)}
+                                {/* this.state.total_amount */}
+                        
                                 </Text>
                         </View>
 
