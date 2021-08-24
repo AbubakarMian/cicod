@@ -75,7 +75,7 @@ class OrderDetail extends React.Component {
                     for (let i = 0; product_items.length > i; i++) {
                         total_ammount = total_ammount + (product_items[i].price * product_items[i].quantity);
                     }
-                    total_ammount.replace(/\B(?=(\d{1})+(?!\d))/g, ",")
+                    // total_ammount.replace(/\B(?=(\d{1})+(?!\d))/g, ",")
                     this.setState({
                         data: responseJson.data,
                         cicod_order_id: responseJson.data.cicod_order_id,

@@ -59,7 +59,8 @@ class Order extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
-        fetch(url, postData)
+        // fetch('https://com.cicodsaasstaging.com/com/api/orders?search='+this.state.search_order_text, postData)//url
+        fetch(url,postData)//url
             .then(response => response.json())
             .then(async responseJson => {
                 console.log('~~~~~~~~~~~',responseJson)
@@ -274,6 +275,7 @@ class Order extends React.Component {
         // }
         if (_that.state.search_order != '') {
             url = url + filter_concat + 'order_id=' + _that.state.search_order
+            // url = url + filter_concat + 'search=' + _that.state.search_order
             filter_concat = '&';
         }
 

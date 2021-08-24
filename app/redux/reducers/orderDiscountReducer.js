@@ -7,7 +7,6 @@ const orderDiscountReducer = (state = initialState, action) => {
     switch (action.type) {
 
         case SET_DISCOUNT:
-
             return {
                 ...state,
                 discount_amount: action.value.discount_amount,

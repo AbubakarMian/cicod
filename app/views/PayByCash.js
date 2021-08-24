@@ -180,6 +180,7 @@ class PayByCash extends React.Component {
             Alert.alert('Alert','Insufficient Cash Collection')
             return;
         }
+     
         console.log("~~~~~~~~~~~~~~~",this.props.route.params.data)
         // if(this.props.route.params.pending_order_res != undefined){
             // console.log('in if this.props.route.params.data.id',this.props.route.params.pending_order_res.data.id)
