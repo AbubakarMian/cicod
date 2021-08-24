@@ -265,6 +265,15 @@ class PartPaytment extends React.Component {
         if(amount_to_pay_now == ''){
             amount_to_pay_now = '0';
         }
+        else if(amount_to_pay_now.length > 1){
+            // console.log('amount_to_pay_now else',amount_to_pay_now);
+            // console.log('char at',amount_to_pay_now.charAt(0) == '0')
+            if(amount_to_pay_now.charAt(0)+'' == '0'){
+                amount_to_pay_now = amount_to_pay_now.substring(1, (amount_to_pay_now.length));
+                console.log('amount_to_pay_nowamount_to_pay_now',amount_to_pay_now);
+            }
+        }
+        
         
         if( amount_to_pay_now.split(".").length > 2 || 
             amount_to_pay_now.includes(",") ||

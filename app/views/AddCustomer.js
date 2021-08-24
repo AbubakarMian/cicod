@@ -72,7 +72,7 @@ class AddCustomer extends React.Component {
         };
         console.log('url~~~~~~~~',Constants.customerlist + '?'+param+'=' + search_text)
         console.log('TTTTTTTTT',this.props.user.access_token)
-        fetch(Constants.customerlist  + '?'+param+'=' + search_text, postData)
+        fetch(Constants.customerlist  + '?search=' + search_text, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({

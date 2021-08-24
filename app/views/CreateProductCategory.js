@@ -78,8 +78,8 @@ class CreateProductCategory extends React.Component {
             console.log('~~~~~~~~~~~~body',formData)
             let myheader = {
                 headers: {
-                    Accept: 'application/json',
-                    'Content-Type': 'application/json',
+                    // Accept: 'application/json',
+                    // 'Content-Type': 'application/json',
                     'Authorization': token,
                 }
             }
