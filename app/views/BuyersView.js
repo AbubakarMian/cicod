@@ -27,6 +27,7 @@ class BuyersView extends React.Component {
     }
 
     componentDidMount() {
+        console.log("item sds........sdsd..",this.props.route.params.items)
         this.setState({
             items: this.props.route.params.items,
             spinner: false,
@@ -111,8 +112,8 @@ class BuyersView extends React.Component {
     }
     viewProducts() {
         console.log('seller_id seller_id seller_id !!!!!!!!!!!', this.state.items.seller_id)
-        let buyer_id = this.state.items.seller_id
-        this.props.navigation.navigate('Products', { seller_id: buyer_id })
+        let buyer_id = this.state.items.buyer_id
+        this.props.navigation.navigate('BuyersProducts', { buyer_id })
     }
 
     suspendBuyer(buyer_id) {
@@ -532,7 +533,7 @@ class BuyersView extends React.Component {
                                 onPress={() => this.suspendAction(this.state.items)}
                                 style={[{}, styles.suspendTouch]}>
                                 <Image source={require('../images/ban.png')} style={[{}, styles.banImage]} />
-                                <Text style={{}}>Cancle</Text>
+                                <Text style={{}}>Cancel</Text>
                             </TouchableOpacity>
                         </View>
                     </TouchableOpacity>

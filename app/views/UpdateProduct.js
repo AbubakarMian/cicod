@@ -29,6 +29,7 @@ class UpdateProduct extends React.Component {
             is_default: false,
             categories: [],
             products: [],
+            item:{}
         }
 
     }
@@ -36,7 +37,8 @@ class UpdateProduct extends React.Component {
 
     componentDidMount() {
         this.setState({
-            buyer_detail: this.props.route.params.buyer_detail
+            buyer_detail: this.props.route.params.buyer_detail,
+            item: this.props.route.params.item,
         })
         console.log('buyer_detail', this.props.route.params.buyer_detail);
         this.getData(Constants.products);
@@ -160,7 +162,7 @@ class UpdateProduct extends React.Component {
         let products = this.state.products;
 
         let postData = {
-            method: 'PUT',
+            method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
@@ -176,8 +178,9 @@ class UpdateProduct extends React.Component {
             })
         };
         let buyer_id = this.state.buyer_detail.buyer_id;
-        console.log('buyer_id ', Constants.updateBuyerProduct + '?id=' + buyer_id);
-        fetch(Constants.updateBuyerProduct + '?id=' + buyer_id, postData)
+        console.log(this.state.item)
+        console.log('buyer_id ', Constants.approve_request + '?id=' + this.state.item.buyer_id);
+        fetch(this.props.route.params.screen == 'buyer'?Constants.approve_request + '?id=' + this.state.item.id:"", postData)
             .then(response => response.json())
             .then(async responseJson => {
                 console.log('update products access data ', postData)
@@ -185,8 +188,8 @@ class UpdateProduct extends React.Component {
                 this.setState({ spinner: false })
                 if (responseJson.success) {
                     Alert.alert('Message',responseJson.data.message)
-                    // this.props.navigation.navigate('Home')
-                    this.props.navigation.goBack();
+                     this.props.navigation.navigate('Connect')
+                   // this.props.navigation.goBack();
                 } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 }
@@ -365,7 +368,7 @@ class UpdateProduct extends React.Component {
 
                 <Modal
                     visible={this.state.updateProductModal}
-                    transparent={true}
+                    //transparent={true}
                 >
                     <TouchableOpacity
                         onPress={() => this.setState({ updateProductModal: false })}

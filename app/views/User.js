@@ -62,11 +62,11 @@ class User extends React.Component {
                 });
                 if (responseJson.status === 'SUCCESS') {
                     let merchant_contact = responseJson.merchant
-                    console.log('~~~~~~~~~~',responseJson.merchant.contact)
+                    console.log('~~~~~~~~~~',responseJson.merchant)
                     this.setState({
                         email: merchant_contact.email,
                         first_name: merchant_contact.companyName, //contactPerson
-                        phone: merchant_contact.phone,
+                        phone: merchant_contact.businessPhone,
                         role: merchant_contact.customerCategory,
                     })
 
