@@ -43,6 +43,10 @@ class CreateProductCategory extends React.Component {
     }
 
     createCategory() {
+        if(this.state.prod_image.path=='' || this.state.prod_image.path==null){
+            Alert.alert("Warning", "Category Image is required");
+            return;
+        }
         this.setState({ spinner: true })
         let _that = this
 
@@ -57,9 +61,10 @@ class CreateProductCategory extends React.Component {
             console.log('cccccccccc', token)
          
             var formData = new FormData();
-              formData.append('category_id',this.state.category_id);  
+            //   formData.append('category_id',this.state.category_id);  
               formData.append('name',this.state.name);  
               formData.append('description',this.state.description);  
+             
               formData.append('image',{
               uri: this.state.prod_image.path,
                     type: 'multipart/form-data',
@@ -67,6 +72,7 @@ class CreateProductCategory extends React.Component {
                  
             }
               );  
+            
               formData.append('on_webshop',this.state.add_weshop);  
             // let body = {
             //     category_id: this.state.category_id,
@@ -78,8 +84,8 @@ class CreateProductCategory extends React.Component {
             console.log('~~~~~~~~~~~~body',formData)
             let myheader = {
                 headers: {
-                    // Accept: 'application/json',
-                    // 'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
                     'Authorization': token,
                 }
             }
@@ -101,6 +107,9 @@ class CreateProductCategory extends React.Component {
                             })
                             _that.props.navigation.navigate('ProductCategory');
                         }
+                        else{
+                            Alert.alert(response.data.message);
+                        }
                     })
                     .catch(function (error) {
                         _that.setState({ spinner: false })
@@ -109,6 +118,7 @@ class CreateProductCategory extends React.Component {
             }
             else {
                 let url = Constants.update_product_category + '/' + this.state.id;
+                console.log('~~~~~~~~~~',url)
 
                 axios.put(url,
                      formData,
@@ -127,11 +137,15 @@ class CreateProductCategory extends React.Component {
                             _that.props.navigation.navigate('ProductCategory');
 
                         }
+                        else{
+                            Alert.alert(responseJson.response.message);
+                        }
 
                     })
                     .catch(function (error) {
                         _that.setState({ spinner: false })
                         console.log(error);
+                        Alert.alert(error);
                     });
             }
         }

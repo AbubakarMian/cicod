@@ -9,7 +9,7 @@ import Header from '../views/Header';
 import { Constants } from '../views/Constant';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER,PRODUCT_RELOAD } from '../redux/constants/index';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 class ProductView extends React.Component {
@@ -94,7 +94,11 @@ class ProductView extends React.Component {
                 });
                 console.log('response json suspend product  !!!!!!!!!!!!!!!!!!', responseJson);
                 if (responseJson.status === "success" || responseJson.success === true) {
+                    let _that=this;
                     Alert.alert('Message', responseJson.message);
+                    _that.props.setScreenReload({
+                        reload:true
+                    })
                     this.props.navigation.navigate('Products');
                 } else {
                     let message = responseJson.message;
@@ -298,13 +302,15 @@ class ProductView extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        user: state.userReducer
+        user: state.userReducer,
+        reload: state.reloadReducer
     }
 };
 function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
-        logoutUser: () => dispatch({ type: LOGOUT_USER })
+        logoutUser: () => dispatch({ type: LOGOUT_USER }),
+        setScreenReload: (value) => dispatch({ type: PRODUCT_RELOAD, value: value }),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ProductView)

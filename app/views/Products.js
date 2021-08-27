@@ -9,7 +9,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Header from '../views/Header';
 import { connect } from 'react-redux';
 import ImagePicker from 'react-native-image-crop-picker';
-import { SET_USER, LOGOUT_USER, UpdateTabbar,ORDER_RELOAD, PRODUCT_RELOAD } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER, UpdateTabbar, PRODUCT_RELOAD } from '../redux/constants/index';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 import DropDownPicker from 'react-native-dropdown-picker';

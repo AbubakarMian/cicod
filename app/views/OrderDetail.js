@@ -232,7 +232,7 @@ class OrderDetail extends React.Component {
                        
 
                                     <Text style={[{backgroundColor:this.state.order_status=='PENDING'?'#FFF3DB': 
-                                    this.state.order_status=='CANCELLED'? '#FFF3DB':
+                                    this.state.order_status=='CANCELLED'? '#D8D8D8':
                                     this.state.order_status=='PAID'? '#DAF8EC':
                                     this.state.order_status=='PART PAYMENT'? '#E6E6E6'
                                     :null},styles.orderStatusText]}>
@@ -247,7 +247,7 @@ class OrderDetail extends React.Component {
                                 <Text style={[{}, styles.detailColumn1text]}>Payment Status</Text>
                             </View>
                             <View style={[{}, styles.detailColumn2]}>
-                                <Text style={[{}, styles.detailColumn2text]}>{this.state.data.payment_status ?? '--'}</Text>
+                                <Text style={[{color: '#FDB72B'}, styles.orderStatusText]}>{this.state.data.payment_status ?? '--'}</Text>
                             </View>
                         </View>
                         <View style={{}, styles.detailRow}>
@@ -324,8 +324,8 @@ class OrderDetail extends React.Component {
                                         <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>Unit Price: </Text>
                                         <Text style={{ fontSize: 13, color: '#929497', marginRight: 20 }}>{item.price} </Text>
                                         <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>QTY: </Text>
-                                        <Text style={{ fontSize: 13, color: '#929497', marginRight: width / 4 }}>{item.quantity} </Text>
-                                        <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end' }}>
+                                        <Text style={{  fontSize: 13, color: '#929497', marginRight: width / 4 }}>{item.quantity} </Text>
+                                        <Text style={{ position:'absolute',right:20,fontSize: 13, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end' }}>
                                             {this.props.currency.currency+' '+(item.quantity*item.price)} </Text>
                                     </View>
                                 </View>
@@ -336,8 +336,8 @@ class OrderDetail extends React.Component {
                         <View style={{ alignSelf: 'flex-end', marginRight: 20, marginVertical: 20, flexDirection: 'row' }}>
                             <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>Total:  </Text>
                             <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>
-                                {/* {this.props.currency.currency+' '+this.state.total_amount} */}
-                                {this.props.currency.currency+this.state.total_amount.replace(/\B(?=(\d{1})+(?!\d))/g, ",")}
+                                {this.props.currency.currency+get_formated_amount(this.state.total_amount)}
+                                {/* {this.props.currency.currency+this.state.total_amount.replace(/\B(?=(\d{1})+(?!\d))/g, ",")} */}
                                 </Text>
                         </View>
 

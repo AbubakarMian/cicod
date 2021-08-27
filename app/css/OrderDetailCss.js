@@ -72,7 +72,7 @@ export default StyleSheet.create({
     },
     detailColumn1text: {
         color: "#aaa",
-        fontSize:13
+        fontSize:13,fontWeight:'bold',
     },
     detailInvoiceGraytext: {
         color: "#aaa",
@@ -87,6 +87,7 @@ export default StyleSheet.create({
     detailInvoiceLable:{
       color:'#4E4D4D',
       fontSize:15,
+      position:'relative',
       
     },
     detailColumn2text: {
@@ -107,10 +108,10 @@ export default StyleSheet.create({
     },
     orderStatusText:{
         borderRadius: 50, 
-        color: '#FDB72B', 
         width: width / 4.8, 
         alignSelf: 'flex-end',
-        textAlign:'center'
+        textAlign:'center',
+        fontSize:13,
     }
 
 

@@ -37,9 +37,11 @@ const currencyReducer = (state = initialState, action) => {
 }
 
 export function get_formated_amount(amount){
-    amount = amount +'';
+    amount = amount;
+    
+    amount.toString().replace(/\B(?=(\d{0})+(?!\d))/g, ",");
+    // amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     console.log('ám amount',amount)
-    amount.replace(/\B(?=(\d{1})+(?!\d))/g, ",");
     return amount;
 }
 export default currencyReducer;

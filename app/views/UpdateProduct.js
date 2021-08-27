@@ -160,7 +160,7 @@ class UpdateProduct extends React.Component {
         let products = this.state.products;
 
         let postData = {
-            method: 'PUT',
+            method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
@@ -177,6 +177,8 @@ class UpdateProduct extends React.Component {
         };
         let buyer_id = this.state.buyer_detail.buyer_id;
         console.log('buyer_id ', Constants.updateBuyerProduct + '?id=' + buyer_id);
+        console.log('**********',Constants.updateBuyerProduct + '?id=' + buyer_id)
+     
         fetch(Constants.updateBuyerProduct + '?id=' + buyer_id, postData)
             .then(response => response.json())
             .then(async responseJson => {

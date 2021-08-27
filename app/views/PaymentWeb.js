@@ -18,7 +18,8 @@ class PaymentWeb extends React.Component {
         this.state = {
             order_id:0,
             timer:3,
-            order:null
+            order:null,
+            part_payment_status:''
         }  
     }
 
@@ -31,7 +32,7 @@ class PaymentWeb extends React.Component {
                  console.log('payment order if');              
                 console.log('this.state.order.payment_status',this.state.order.payment_status);
                 
-                if(this.state.order.payment_status == 'PAID' || this.state.order.payment_status == 'PART PAYMENT' || this.state.order.payment_status == 'cancelled'){
+                if(this.state.order.payment_status == 'PAID' || this.state.order.payment_status == this.state.part_payment_status || this.state.order.payment_status == 'cancelled'){
                     // if(this.state.order.payment_status != 'PENDING' || this.state.order.payment_status == 'cancelled'){
                     this._isMounted = false;
                     // this.props.navigation.navigate('Order');
@@ -91,8 +92,13 @@ class PaymentWeb extends React.Component {
                 if (responseJson.status.toUpperCase() === "SUCCESS") {
                     let data = responseJson.data;
                     if(this.state.order == null){
+                        let check_status = 'PART PAYMENT';
+                        if(data.payment_status == 'PART PAYMENT'){
+                            check_status = '';
+                        } 
                         this.setState({
                             order: data,
+                            part_payment_status:check_status
                         })
                     }
                     // return data
@@ -122,7 +128,7 @@ class PaymentWeb extends React.Component {
     render() {
         console.log('*************',Constants.orderslist + '/' + this.state.order_id)
         this.check();
-        console.log('payment web rrrrrrrrrrrrrrrrr')
+        console.log('payment web rrrrrrrrrrrrrrrrr',this.props.route.params.payment_link)
         return (
             <WebView 
             source={{ uri: this.props.route.params.payment_link }} />
