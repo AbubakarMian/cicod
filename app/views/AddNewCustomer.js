@@ -116,6 +116,37 @@ class AddNewCustomer extends React.Component {
                 if (responseJson.status === "success") {
                     Alert.alert('MESSAGE', responseJson.message)
                     let customer_id = responseJson.data.id;
+                    this.setState({
+         
+                        spinner: false,
+                        countries_arr: [],
+                        states_arr: [],
+                        lgas_arr: [],
+                        lgas_id: 0,
+                        delivery_lgas_id: 0,
+                        state_id: 0,
+                        delivery_state_id: 0,
+                        country_id: 0,
+                        delivery_country_id: 0,
+                        delivery_house_no: '',
+                        delivery_street: '',
+                        delivery_landmark: '',
+                        is_default: false,
+                        isFreeDelivery: false,
+                        isFreeVAT: false,
+                        first_name: '',
+                        last_name: '',
+                        customer_code: '',
+                        phone_number: '',
+                        house_no: '',
+                        street: '',
+                        landmark: '',
+                        email: '',
+                        country_name:'',
+                        state_name:'',
+                        lgas_name:'',
+                     
+                    })
                     this.createCustomerDelivery(customer_id);
                 } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
@@ -407,6 +438,7 @@ class AddNewCustomer extends React.Component {
                                 alignSelf={'center'}
                                 color={'#000'}
                                 onChangeText={text => this.setState({ first_name: text })}
+                                value={this.state.first_name}
                             />
                             <TextInput
                                 label="Last Name*"
@@ -415,6 +447,7 @@ class AddNewCustomer extends React.Component {
                                 alignSelf={'center'}
                                 color={'#000'}
                                 onChangeText={text => this.setState({ last_name: text })}
+                                value={this.state.last_name}
                             />
                             <TextInput
                                 label="Customer Code"
@@ -423,6 +456,7 @@ class AddNewCustomer extends React.Component {
                                 alignSelf={'center'}
                                 color={'#000'}
                                 onChangeText={text => this.setState({ customer_code: text })}
+                                value={this.state.customer_code}
                             />
                             <TextInput
                                 label="Email"
@@ -431,6 +465,7 @@ class AddNewCustomer extends React.Component {
                                 alignSelf={'center'}
                                 color={'#000'}
                                 onChangeText={text => this.setState({ email: text })}
+                                value={this.state.email}
                             />
                             <View style={{ flexDirection: 'row' }}>
                                 <View style={{ flex: 1, }}>
@@ -442,6 +477,7 @@ class AddNewCustomer extends React.Component {
                                         width={width / 2 - 20}
                                         alignSelf={'center'}
                                         color={'#000'}
+                                        value={this.state.phone_number}
                                     />
                                 </View>
                                 <View style={{ flex: 1, marginHorizontal: 5 }}>
@@ -452,6 +488,7 @@ class AddNewCustomer extends React.Component {
                                         width={width / 2 - 20}
                                         alignSelf={'center'}
                                         color={'#000'}
+                                        value={this.state.house_no}
                                     />
                                 </View>
                             </View>
@@ -462,6 +499,7 @@ class AddNewCustomer extends React.Component {
                                 alignSelf={'center'}
                                 color={'#000'}
                                 onChangeText={text => this.setState({ street: text })}
+                                value={this.state.street}
                             />
                             <TextInput
                                 label="Landmark"
@@ -470,6 +508,7 @@ class AddNewCustomer extends React.Component {
                                 alignSelf={'center'}
                                 color={'#000'}
                                 onChangeText={text => this.setState({ landmark: text })}
+                                value={this.state.landmark}
                             />
                             <View style={[{}, styles.formRow]}>
                                 <View style={[{  alignItems: 'center', paddingTop: 10,marginRight:3 }, styles.formColumn]}>
