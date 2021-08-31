@@ -183,11 +183,11 @@ class CreateProduct extends React.Component {
             Alert.alert("Warning", "Product name and Price are required")
             return;
         }
-        // else if(this.state.category_id == 0){
-        //     this.setState({ spinner: false })
-        //     Alert.alert("Warning", "Category is required")
-        //     return; 
-        // }
+        else if(this.state.category_id == 0){
+            this.setState({ spinner: false })
+            Alert.alert("Warning", "Category is required")
+            return; 
+        }
         else {
             var formData=new FormData();
             formData.append('image',{
@@ -195,7 +195,7 @@ class CreateProduct extends React.Component {
                 type: 'multipart/form-data',
                 name: `image.jpg`,
             });
-            // formData.append('category_id',this.state.category_id);
+            formData.append('category_id',this.state.category_id);
             formData.append('name',this.state.name);
             formData.append('quantity',this.state.quantity);
             formData.append('code',this.state.code);
@@ -361,7 +361,7 @@ class CreateProduct extends React.Component {
                         <View style={[{}, styles.productDetailContainerView]}>
                             <View style={[{}, styles.formRowView]}>
                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
-                                    {/* {this.state.categoryarr.length < 1 ? null :
+                                    {this.state.categoryarr.length < 1 ? null :
                                         <DropDownPicker
                                         scrollViewProps={{
                                             persistentScrollbar: true,
@@ -376,7 +376,7 @@ class CreateProduct extends React.Component {
                                             dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
                                             labelStyle={{ color: '#A9A9A9' }}
                                             onChangeItem={item => this.onCategoryText(item.value)}
-                                        />} */}
+                                        />}
                                 </View>
                             </View>
 
