@@ -53,7 +53,8 @@ class AddProduct extends React.Component {
         };
         //Constants.productslist + '?is_active=1&search=' + this.state.search_product
         // let search_url =  '?is_active=1&search=' + this.state.search_product + '&category_id=' + this.state.category_id
-        let search_url = Constants.productslist + '?is_active=1&search=' + search_product + '&category_id=' + category_id
+        let category_search = (category_id == 0 || category_id == '' )?'' : '&category_id=' + category_id;
+        let search_url = Constants.productslist + '?is_active=1&search=' + search_product + category_search;
         console.log('search url ', search_url);
         console.log('postData ', postData);
         fetch(search_url, postData)

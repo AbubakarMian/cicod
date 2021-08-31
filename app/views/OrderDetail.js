@@ -19,7 +19,7 @@ class OrderDetail extends React.Component {
         super(props);
         this.state = {
             Spinner: false,
-            order_id: this.props.route.params.id ?? 0,
+            order_id: 0,
             selectedStartDate: null,
             calenderModal: false,
             cicod_order_id: '',
@@ -33,21 +33,21 @@ class OrderDetail extends React.Component {
             total_amount: 0,
             amount_paid_from_credit_limit: '',
             data: {
-
                 customer: {
                     name: '',
                     phone: '',
                     address: '',
                     email: '',
                 },
-
             },
             item: [],
         };
     }
     componentDidMount() {
-        let order_id = this.props.route.params.id;
-        this.setState({ Spinner: true })
+        
+    }
+    get_order_detail(order_id){
+        this.setState({ Spinner: true,order_id:order_id })
         let postData = {
             method: 'GET',
             headers: {
@@ -65,7 +65,7 @@ class OrderDetail extends React.Component {
                 console.log('data data data res res res ', responseJson.data)
                 if (responseJson.status === 'success') {
                     if (responseJson.message == "Order not found") {
-                        this.props.navigation.goBack();
+                        // this.props.navigation.goBack();
                         Alert.alert('Message', responseJson.message)
                         return
                     }
@@ -138,6 +138,9 @@ class OrderDetail extends React.Component {
 
     }
     render() {
+        if (this.state.order_id != this.props.route.params.id){
+                this.get_order_detail(this.props.route.params.id)
+        }
         return (
             <ScrollView>
                 <View style={[{}, styles.mainView]}>

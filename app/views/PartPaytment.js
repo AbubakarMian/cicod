@@ -287,21 +287,28 @@ class PartPaytment extends React.Component {
             this.get_payable_amount(part_amount_request)
             return;
         }
-        if(amount_to_pay_now>this.state.total_amount){
-            this.setState({total_amount:this.props.route.params.amount_payable})
-            Alert.alert("Your amount is exceeding")
-            return;
-        }
+        // if(amount_to_pay_now>this.state.total_amount){
+        //     this.setState({total_amount:this.props.route.params.amount_payable})
+        //     Alert.alert("Your amount is exceeding")
+        //     return;
+        // }
         let balance_amount = 0
         console.log('amount_to_pay_now',amount_to_pay_now)
+        console.log('part_amount_request',this.state.part_amount_request)
         console.log('total_amount',total_amount)
-        if(amount_to_pay_now >= total_amount && this.state.payment_option_selected =='fixed_amount'){
+        if(parseFloat( amount_to_pay_now) >= total_amount && this.state.payment_option_selected =='fixed_amount'){
+            console.log('if 1 amount_to_pay_now',amount_to_pay_now)
+            console.log('if 1 total_amount',total_amount)
             amount_to_pay_now = part_amount_request;
         }
         else if(amount_to_pay_now > 99 && this.state.payment_option_selected !='fixed_amount'){
+            console.log('if 2')
+
             amount_to_pay_now = this.state.part_amount_request;
         }
+        console.log('amount_to_pay_now A',amount_to_pay_now);
         let req_amount = amount_to_pay_now
+        console.log('req_amount B',req_amount);
         if(this.state.payment_option_selected == 'fixed_amount'){
             // amount_to_pay_now = this.state.amount_to_pay_now
             balance_amount = total_amount - amount_to_pay_now
@@ -312,6 +319,12 @@ class PartPaytment extends React.Component {
             balance_amount = total_amount - amount_to_pay_now
             // part_payment_percent = total_amount
         }
+
+        console.log('req_amount A',req_amount);
+        
+        // if(req_amount+'' == '0'){
+        //     req_amount = '';
+        // }
             this.setState({
                 amount_to_pay_now:amount_to_pay_now,
                 balance_amount:balance_amount,
@@ -396,14 +409,14 @@ class PartPaytment extends React.Component {
                 />
                 {/* <Text style={{color:'#929497',fontSize:8,marginLeft:10,marginTop:10}}>Amount of pay</Text>                     */}
                 <TextInput
-                        label="Amount of pay"
+                        label={(_that.state.payment_option_selected == 'fixed_amount')?"Amount of pay":"Percentage"}
                         style={{ backgroundColor: 'transparent', }}
                         width={width - 50}
                         alignSelf={'center'}
                         color={'#000'}
                         keyboardType={'numeric'}
                         onChangeText={amount_to_pay_now => _that.get_payable_amount(amount_to_pay_now)}
-                        value={_that.state.part_amount_request}
+                        value={_that.state.part_amount_request=='0'?'':_that.state.part_amount_request}
                     />
                     <Text style={[{color:'#929497',alignSelf:'center',marginTop:20},fontStyles.normal15]}>Amount to pay now</Text>
                     <View style={[{backgroundColor:'#FFF4F4'},styles.balanceView]}>

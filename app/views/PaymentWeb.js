@@ -41,7 +41,7 @@ class PaymentWeb extends React.Component {
                     break;
                 }
              }
-             if(this.timer > 300){
+             if(this.timer > 1000){
                 this._isMounted = false;
             }
             let t = this.state.timer + 3
