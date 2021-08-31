@@ -133,7 +133,7 @@ export default StyleSheet.create({
     suspendmodalBackGround: {
         height: height,
         backgroundColor: '#00000057',
-        opacity: 0.7,
+        // opacity: 0.7,
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',
