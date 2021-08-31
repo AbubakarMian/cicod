@@ -9,14 +9,14 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Header from '../views/Header';
 import { connect } from 'react-redux';
 import ImagePicker from 'react-native-image-crop-picker';
-import { SET_USER, LOGOUT_USER, UpdateTabbar, PRODUCT_RELOAD } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER, UpdateTabbar,ORDER_RELOAD, PRODUCT_RELOAD } from '../redux/constants/index';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Constants } from '../views/Constant';
 import TabNav from '../views/TabsNav';
 import { nativeViewProps } from 'react-native-gesture-handler/lib/typescript/handlers/NativeViewGestureHandler';
-class Products extends React.Component {
+class BuyerProducts extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -39,6 +39,7 @@ class Products extends React.Component {
         });
     }
     async componentDidMount() {
+        console.log("items.....sd",this.props.route.params.buyer_id)
         console.log("~~~~~~~~~~~~~~~~~~~~*************",this.props.user.access_token)
         const that = this;
         setTimeout(function () {
@@ -233,7 +234,7 @@ class Products extends React.Component {
                                             :
                                             <Image
                                                 style={[{ height: 50, width: 50 }]}
-                                                source={{ uri: item.image }}
+                                                source={{ uri: item.image_url }}
                                             />}
                                     </View>
                                     <View style={{ position: 'relative', flex: 3, marginLeft: 10 }}>
@@ -280,7 +281,7 @@ class Products extends React.Component {
                 <Header navigation={this.props.navigation} />
                 <View style={{ flexDirection: 'row', paddingHorizontal: 10, alignItems: 'center', justifyContent: 'center' }}>
                     <View style={{ flex: 1 }}>
-                        <Text style={[{ color: '#2F2E7C', fontWeight: '700' }, fontStyles.normal15]}>Products</Text>
+                        <Text style={[{ color: '#2F2E7C', fontWeight: '700' }, fontStyles.normal15]}>Products- Welldone</Text>
                     </View>
                     <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
                         <TouchableOpacity
@@ -372,4 +373,4 @@ function mapDispatchToProps(dispatch) {
         setScreenReload: (value) => dispatch({ type: PRODUCT_RELOAD, value: value }),
     }
 };
-export default connect(mapStateToProps, mapDispatchToProps)(Products)
+export default connect(mapStateToProps, mapDispatchToProps)(BuyerProducts)

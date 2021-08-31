@@ -139,11 +139,13 @@ export default StyleSheet.create({
 
     },
     modalMainContainer:{
-        height:height,
-        width:width,alignItems:'center',
-        justifyContent:'center',
-        backgroundColor:'#fff',
-        opacity:0.6
+        // height:height,
+       // width:width,
+    //    width:width-20,
+    //     alignItems:'center',
+    //     justifyContent:'center',
+    //     backgroundColor:'#fff',
+        //opacity:0.6
 },
 
     modalTextRowView:{

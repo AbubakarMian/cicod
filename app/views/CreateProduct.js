@@ -182,11 +182,12 @@ class CreateProduct extends React.Component {
             this.setState({ spinner: false })
             Alert.alert("Warning", "Product name and Price are required")
             return;
-        }else if(this.state.category_id == 0){
-            this.setState({ spinner: false })
-            Alert.alert("Warning", "Category is required")
-            return; 
         }
+        // else if(this.state.category_id == 0){
+        //     this.setState({ spinner: false })
+        //     Alert.alert("Warning", "Category is required")
+        //     return; 
+        // }
         else {
             var formData=new FormData();
             formData.append('image',{
@@ -194,7 +195,7 @@ class CreateProduct extends React.Component {
                 type: 'multipart/form-data',
                 name: `image.jpg`,
             });
-            formData.append('category_id',this.state.category_id);
+            // formData.append('category_id',this.state.category_id);
             formData.append('name',this.state.name);
             formData.append('quantity',this.state.quantity);
             formData.append('code',this.state.code);

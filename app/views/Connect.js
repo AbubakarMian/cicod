@@ -225,16 +225,24 @@ class Connect extends React.Component {
             .then(async responseJson => {
                 console.log(" response Json responseJson responseJson!!!!!!!!!!!", responseJson)
                 this.setState({ spinner: false })
-
+console.log("working ere")
                 if (responseJson.success === "true") {
                     let res = responseJson.data.message;
+                    console.log("nope")
                     Alert.alert('Message', res);
+                    console.log("testing ere")
+                    this.setState({merchant_id:0})
+                    this.getSendConnect(Constants.connectsentrequest)
                 } else if (responseJson.status == 401) {
+                    console.log("resds")
                     this.unauthorizedLogout();
                 }
                 else {
                     let message = responseJson.data.message
+                    console.log("miow")
                     Alert.alert('Message', message)
+                    this.setState({merchant_id:0})
+                    this.getSendConnect(Constants.connectsentrequest)
                 }
 
             }
@@ -363,7 +371,7 @@ class Connect extends React.Component {
 
     approveConnect(item){
         if(item.status != 'APPROVED'){
-            this.props.navigation.navigate('ConnectView',{item:item})
+            this.props.navigation.replace('ConnectView',{item:item})
         }        
     }
 
@@ -424,7 +432,7 @@ class Connect extends React.Component {
                                 <TouchableOpacity
                                     key={item.key}
                                    
-                                    onPress={() => this.approveConnect(item)}
+                                    onPress={() =>(item.status == 'PENDING')? this.approveConnect(item):console.log("nothing happen")}
                                     onShowUnderlay={separators.highlight}
                                     onHideUnderlay={separators.unhighlight}>
                                     <View style={[{}, styles.flatCardView]}>
@@ -454,7 +462,12 @@ class Connect extends React.Component {
                                                 <View style={[{ position: 'absolute', right: 10, bottom: 10, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
                                                     <Text style={[{ color: '#26C281' }]}>APPROVED</Text>
                                                 </View>
-                                                : null
+                                                :  <View style={[{ position: 'absolute', right: 10, bottom: 10, backgroundColor: '#FFF4F4', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                                                <Text style={[{ color: '#B1272C' }]}>REJECTED</Text>
+                                            </View>
+                                        }
+                                        {
+
                                         }
                                     </View>
                                 </TouchableOpacity>
@@ -514,7 +527,7 @@ class Connect extends React.Component {
                             
                             <TouchableOpacity
                                 key={item.key}
-                                onPress={() => this.sentConnect(item)}
+                              //  onPress={() => this.sentConnect(item)}
                                 // onPress={() => this.props.navigation.navigate('ConnectView',{item:item})}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
@@ -545,7 +558,9 @@ class Connect extends React.Component {
                                             <View style={[{ position: 'absolute', right: 10, bottom: 10, backgroundColor: '#DAF8EC', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
                                                 <Text style={[{ color: '#26C281' }]}>APPROVED</Text>
                                             </View>
-                                            : null
+                                            : <View style={[{ position: 'absolute', right: 10, bottom: 10, backgroundColor: '#FFF4F4', marginLeft: 10, paddingHorizontal: 10, borderRadius: 50 }]}>
+                                            <Text style={[{ color: '#B1272C' }]}>REJECTED</Text>
+                                        </View>
                                     }
                                 </View>
                             </TouchableOpacity>
@@ -572,6 +587,7 @@ class Connect extends React.Component {
             return this.recievedView();
         }
         else if (this.state.tabViewIndex == 3) {
+           
             return this.sentView();
         }
     }
@@ -582,6 +598,7 @@ class Connect extends React.Component {
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
                 <Spinner
+                cancelable={true}
                     visible={this.state.spinner}
                     textContent={'Please Wait...'}
                     textStyle={{ color: '#fff' }}
@@ -608,7 +625,7 @@ class Connect extends React.Component {
                             style={{ flex: 1, backgroundColor: this.state.tabViewIndex === 2 ? '#FFF4F4' : '#fff', borderRadius: 50, paddingVertical: 5 }}
                             onPress={() => { this.setState({ tabViewIndex: 2 }) }}
                         >
-                            <Text style={{ color: this.state.tabViewIndex === 2 ? '#B1272C' : '#4E4D4D', fontWeight: 'bold', textAlign: 'center' }}>Recieved</Text>
+                            <Text style={{ color: this.state.tabViewIndex === 2 ? '#B1272C' : '#4E4D4D', fontWeight: 'bold', textAlign: 'center' }}>Received</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={{ flex: 1, backgroundColor: this.state.tabViewIndex === 3 ? '#FFF4F4' : '#fff', borderRadius: 50, paddingVertical: 5 }}

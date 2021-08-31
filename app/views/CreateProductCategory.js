@@ -31,19 +31,59 @@ class CreateProductCategory extends React.Component {
     }
 
     componentDidMount() {
+        if(this.props.route.params.items.image!=null){
+
+        }
         console.log('sdf sdf sfd sf', this.props.route.params)
         if (this.props.route.params.screen == 'update') {
             this.setState({
                 name: this.props.route.params.items.name,
                 description: this.props.route.params.items.description,
-                id: this.props.route.params.items.id
+                id: this.props.route.params.items.id,
+                
             })
         }
         this.getCategoryList();
     }
+    setImage(props){
+        
+        let _that = props._that;
+        console.log('~~~~~~~~~~~********************',_that.props.route.params.items.image)
+        console.log('~~~~~~~~~~~******************** _that.state.prod_image',_that.state.prod_image.path == null)
+        console.log('~~~~~~~~~~~******************** _that.state.prod_image',_that.state.prod_image)
+        if(_that.state.prod_image.path == null && _that.props.route.params.items.image != null){
+            let img_url=_that.state.prod_image;
+            img_url.path=_that.props.route.params.items.image;
+            
+            _that.setState({prod_image:img_url})
+            return(
+                <Image
+                    style={{height:width/6,width:width/6}}
+                    source={{uri:_that.props.route.params.items.image}}
+                />
+            )
+        }
+        else if(_that.state.prod_image.path != null){
+          return(
+            <Image
+                style={{height:width/6,width:width/6}}
+                source={{uri:_that.state.prod_image.path}}
+            />
+          )
+        }
+        else{
+            return(
+                <Image
+                style={{height:width/6,width:width/6}}
+                source={require('../images/redPlus.png')}
+            />
+            )
+        }
+
+    }
 
     createCategory() {
-        if(this.state.prod_image.path=='' || this.state.prod_image.path==null){
+        if(this.state.prod_image.path==''){
             Alert.alert("Warning", "Category Image is required");
             return;
         }
@@ -277,15 +317,9 @@ class CreateProductCategory extends React.Component {
                             <TouchableOpacity
                                 onPress={() => this.imageUpload()}
                             >
-                                {(this.state.prod_image == '') ?
-                                    <Image
-                                        source={require('../images/redPlus.png')}
-                                    />
-                                    : <Image
-                                    style={{height:width/6,width:width/6}}
-                                        source={{uri:this.state.prod_image.path}}
-                                    />
-                                }
+                                <this.setImage _that={this}/>
+                               
+                               
                             </TouchableOpacity>
                         </View>
 
