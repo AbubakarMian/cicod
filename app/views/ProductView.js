@@ -226,7 +226,7 @@ class ProductView extends React.Component {
                 >
                     <Image
                         // style={[{}, styles.productImage]}
-                        style={{height:50,width:50}}
+                        style={{height:60,width:60,marginLeft:10}}
                         // source={require('../images/juice.png')} />
                         source={{ uri: _that.state.prodDetail.image }} />
                 </TouchableOpacity>

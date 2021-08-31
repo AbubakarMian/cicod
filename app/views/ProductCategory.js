@@ -225,9 +225,10 @@ class ProductCategory extends React.Component {
                         //     onHideUnderlay={separators.unhighlight}>
                         <View style={[{}, styles.listContainer]}>
                             <View style={[{ flex: 1, justifyContent: 'center', alignItems: 'center' }, styles.listImageView]}>
-                                {(item.image!=null)?
-                                <Image source={{uri:item.image}} /> 
-                                :<Image source={require('../images/product_cat_icon.png')} />}
+                                {(item.image==null)?
+                                 <Image source={require('../images/product_cat_icon.png')} />
+                                :
+                                <Image style={{height:30,width:30}} source={{uri:item.image}} />}
                                 
                             </View>
                             <View style={[{ flex: 6 }, styles.listDescView]}>

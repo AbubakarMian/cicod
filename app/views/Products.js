@@ -233,7 +233,7 @@ class Products extends React.Component {
                                             :
                                             <Image
                                                 style={[{ height: 50, width: 50 }]}
-                                                source={{ uri: item.image_url }}
+                                                source={{ uri: item.image }}
                                             />}
                                     </View>
                                     <View style={{ position: 'relative', flex: 3, marginLeft: 10 }}>

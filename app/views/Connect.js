@@ -625,7 +625,7 @@ console.log("working ere")
                             style={{ flex: 1, backgroundColor: this.state.tabViewIndex === 2 ? '#FFF4F4' : '#fff', borderRadius: 50, paddingVertical: 5 }}
                             onPress={() => { this.setState({ tabViewIndex: 2 }) }}
                         >
-                            <Text style={{ color: this.state.tabViewIndex === 2 ? '#B1272C' : '#4E4D4D', fontWeight: 'bold', textAlign: 'center' }}>Recieved</Text>
+                            <Text style={{ color: this.state.tabViewIndex === 2 ? '#B1272C' : '#4E4D4D', fontWeight: 'bold', textAlign: 'center' }}>Received</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
                             style={{ flex: 1, backgroundColor: this.state.tabViewIndex === 3 ? '#FFF4F4' : '#fff', borderRadius: 50, paddingVertical: 5 }}
