@@ -97,7 +97,7 @@ class Connect extends React.Component {
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log('response json received!!!!', responseJson);
+                console.log('@@@@@@@@...#####$$$$$response json received!!!!', responseJson);
                 this.setState({
                     spinner: false
                 });
@@ -137,7 +137,7 @@ class Connect extends React.Component {
                 this.setState({
                     spinner: false,
                 });
-                console.log('responseJson sent conet ', responseJson)
+                console.log('##responseJson sent conet @@@', responseJson)
                 if (responseJson.success === true) {
                     this.setState({
                         send_arr: responseJson.data
@@ -231,7 +231,7 @@ console.log("working ere")
                     console.log("nope")
                     Alert.alert('Message', res);
                     console.log("testing ere")
-                    this.setState({merchant_id:0})
+                    this.setState({merchant_id:0,search_text:''})
                     this.getSendConnect(Constants.connectsentrequest)
                 } else if (responseJson.status == 401) {
                     console.log("resds")
@@ -241,7 +241,7 @@ console.log("working ere")
                     let message = responseJson.data.message
                     console.log("miow")
                     Alert.alert('Message', message)
-                    this.setState({merchant_id:0})
+                    this.setState({merchant_id:0,search_text:''})
                     this.getSendConnect(Constants.connectsentrequest)
                 }
 
@@ -285,11 +285,12 @@ console.log("working ere")
                         />
                     </View> */}
                     <Searchbar
-                        placeholder="Merchant Domain Name"
+                        placeholder="Merchant Domain"
                         iconColor="#B1272C"
                         // onChangeText={text => this.setState({ search_text: text })}
                         style={{ width: width / 1.2, alignSelf: 'center', marginTop: 10, elevation: 0, borderWidth: 1, borderColor: '#D8DCDE' }}
                         onSubmitEditing={() => this.getMerchant()}
+                        value={this.state.search_text}
                         onChangeText={text => this.setState({ search_text: text })}
                     //update
                     ></Searchbar>
@@ -380,8 +381,9 @@ console.log("working ere")
             <ScrollView>
                 <View>                    
                     <Searchbar
-                        placeholder="Search a products"
+                        placeholder="Search a Merchants"
                         iconColor="#929497"
+                        value={this.state.product_text}
                         style={{ width: width - 20, alignSelf: 'center', marginTop: 10, elevation: 0, borderWidth: 1, borderColor: '#D8DCDE' }}
                         onChangeText={text => this.setState({ product_text: text })}
                         onSubmitEditing={() => this.getProduct('receive')}
@@ -431,7 +433,7 @@ console.log("working ere")
                                 // </TouchableOpacity>                                 
                                 <TouchableOpacity
                                     key={item.key}
-                                   
+                                   disabled={item.status == 'PENDING'? false:true}
                                     onPress={() =>(item.status == 'PENDING')? this.approveConnect(item):console.log("nothing happen")}
                                     onShowUnderlay={separators.highlight}
                                     onHideUnderlay={separators.unhighlight}>
@@ -498,7 +500,7 @@ console.log("working ere")
             <View>
 
                 <Searchbar
-                    placeholder="Search a products"
+                    placeholder="Search a Merchants"
                     iconColor="#929497"
                     style={{ width: width - 20, alignSelf: 'center', marginTop: 10, marginBottom: 5, elevation: 0, borderWidth: 1, borderColor: '#D8DCDE' }}
                     onChangeText={text => this.setState({ product_text: text })}
@@ -525,12 +527,12 @@ console.log("working ere")
                         data={this.state.send_arr}
                         renderItem={({ item, index, separators }) => (
                             
-                            <TouchableOpacity
-                                key={item.key}
-                              //  onPress={() => this.sentConnect(item)}
-                                // onPress={() => this.props.navigation.navigate('ConnectView',{item:item})}
-                                onShowUnderlay={separators.highlight}
-                                onHideUnderlay={separators.unhighlight}>
+                            // <TouchableOpacity
+                            //     key={item.key}
+                            //   //  onPress={() => this.sentConnect(item)}
+                            //     // onPress={() => this.props.navigation.navigate('ConnectView',{item:item})}
+                            //     onShowUnderlay={separators.highlight}
+                            //     onHideUnderlay={separators.unhighlight}>
                                 <View style={[{}, styles.flatCardView]}>
                                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                                         <Image
@@ -538,7 +540,7 @@ console.log("working ere")
                                             source={require('../images/bage.png')} />
                                     </View>
                                     <View style={{ flex: 5, flexDirection: 'column' }}>
-                                        <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.buyer_name}</Text>
+                                        <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.seller_name}</Text>
                                         <View style={{ flexDirection: 'row' }}>
                                             <Text style={[{ color: '#929497' }, fontStyles.bold13]}>{item.buyer_id}  </Text>
                                             <Text style={[{ color: '#929497' }, fontStyles.normal12]}>{this.timeConvertion(item.time_requested)}</Text>
@@ -563,7 +565,7 @@ console.log("working ere")
                                         </View>
                                     }
                                 </View>
-                            </TouchableOpacity>
+                            // </TouchableOpacity>
                         )}
                     />
                     :

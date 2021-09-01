@@ -62,7 +62,7 @@ class OrderDetail extends React.Component {
                 this.setState({
                     Spinner: false,
                 });
-                console.log('data data data res res res ', responseJson.data)
+                console.log('@@@@....@@@@@@@@@@@@@data data data res res res ', Constants.orderslist + '/' + order_id,responseJson.data)
                 if (responseJson.status === 'success') {
                     if (responseJson.message == "Order not found") {
                         this.props.navigation.goBack();
@@ -337,7 +337,8 @@ class OrderDetail extends React.Component {
                             <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>Total:  </Text>
                             <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>
                                 {/* {this.props.currency.currency+' '+this.state.total_amount} */}
-                                {this.props.currency.currency+this.state.total_amount.replace(/\B(?=(\d{1})+(?!\d))/g, ",")}
+                                {/* {this.props.currency.currency+this.state.total_amount.replace(/\B(?=(\d{1})+(?!\d))/g, ",")}
+                               */}
                                 </Text>
                         </View>
 

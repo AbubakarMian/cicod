@@ -222,7 +222,7 @@ class Supplier extends React.Component {
                                                     source={require('../images/supplier/bage.png')}
                                                 />
                                                 <View style={{ flexDirection: 'column', marginLeft: 5 }}>
-                                                    <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.buyer_name}</Text>
+                                                    <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.seller_name}</Text>
                                                     <View style={{flexDirection:'row'}}>
                                                     <Text style={[{color:'#929497',marginRight:5},fontStyles.normal12]}>Product Category:</Text>
                                                     <Text style={[{ color: '#929497' }, fontStyles.bold13]}>{item.no_of_products
