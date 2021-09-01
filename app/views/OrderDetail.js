@@ -62,7 +62,7 @@ class OrderDetail extends React.Component {
                 this.setState({
                     Spinner: false,
                 });
-                console.log('data data data res res res ', responseJson.data)
+                console.log('@@@@....@@@@@@@@@@@@@data data data res res res ', Constants.orderslist + '/' + order_id,responseJson.data)
                 if (responseJson.status === 'success') {
                     if (responseJson.message == "Order not found") {
                         // this.props.navigation.goBack();
