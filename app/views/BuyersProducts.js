@@ -14,7 +14,7 @@ const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Constants } from '../views/Constant';
-import TabNav from '../views/TabsNav';
+import NavBack from "./Components/NavBack";
 import { nativeViewProps } from 'react-native-gesture-handler/lib/typescript/handlers/NativeViewGestureHandler';
 class BuyerProducts extends React.Component {
     constructor(props) {
@@ -42,10 +42,7 @@ class BuyerProducts extends React.Component {
         console.log("items.....sd",this.props.route.params.buyer_id)
         console.log("~~~~~~~~~~~~~~~~~~~~*************",this.props.user.access_token)
         const that = this;
-        setTimeout(function () {
-            
-            that.getCategoryList()
-        }, 700);
+       
     }
   
 
@@ -160,22 +157,22 @@ class BuyerProducts extends React.Component {
 
      listProducts(props){
         let _that = props._that;
-        let url = Constants.productslist;
-        if (_that.props.route == null || _that.props.route.params == null || _that.props.route.params.filters == null) {
-            url = Constants.productslist;
-        }
-        else{
-            let filters = _that.props.route.params.filters;
-            let filter = '?';
-            for (let i = 0; i < filters.length; i++) {
-                filter = filter + filters[i].key + '=' + filters[i].value;
-                if (i != filters.length - 1) {
-                    filter = filter + '&';
-                }
-            }
-            url = (Constants.productslist + filter);
-        }
-        console.log('reloaded 1',_that.props.reload.product)
+        let url = `${Constants.approved_buyer_products}?id=${_that.props.route.params.items.buyer_id}&sort=-id`;
+        // if (_that.props.route == null || _that.props.route.params == null || _that.props.route.params.filters == null) {
+        //     url = Constants.productslist;
+        // }
+        // else{
+        //     let filters = _that.props.route.params.filters;
+        //     let filter = '?';
+        //     for (let i = 0; i < filters.length; i++) {
+        //         filter = filter + filters[i].key + '=' + filters[i].value;
+        //         if (i != filters.length - 1) {
+        //             filter = filter + '&';
+        //         }
+        //     }
+        //     url = (Constants.productslist + filter);
+        // }
+        // console.log('reloaded 1',_that.props.reload.product)
         if(url != _that.state.url_products || _that.props.reload.product){
             console.log('reloaded',_that.props.reload.product)
             _that.props.setScreenReload({
@@ -261,10 +258,11 @@ class BuyerProducts extends React.Component {
     }
 
     render() {
-        console.log('categoryarr categoryarr categoryarr', this.props);
+        console.log('categoryarr categoryarr categoryarr', this.props.route.params);
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
-
+        const {items}= this.props.route.params;
+        console.log("sdoooo.....",items)
         return (
             <View style={{width:width,
                 backgroundColor:'#F0F0F0',
@@ -279,26 +277,8 @@ class BuyerProducts extends React.Component {
                     color={'#fff'}
                 />
                 <Header navigation={this.props.navigation} />
-                <View style={{ flexDirection: 'row', paddingHorizontal: 10, alignItems: 'center', justifyContent: 'center' }}>
-                    <View style={{ flex: 1 }}>
-                        <Text style={[{ color: '#2F2E7C', fontWeight: '700' }, fontStyles.normal15]}>Products- Welldone</Text>
-                    </View>
-                    <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-                        <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate('ProductCategory')}
-                        >
-                            <Text style={{ fontSize: 12, color: '#B1272C', marginRight: 10 }}>View Product Category</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate('CreateProduct', { action: 'create', prodDetail: null })}
-                        >
-                            <Image
-                                style={{ height: 30, width: 30 }}
-                                source={require('../images/products/circlePlus.png')}
-                            />
-                        </TouchableOpacity>
-                    </View>
-                </View>
+              <NavBack title={`Products - ${items.buyer_name}`} onClick={()=>this.props.navigation.goBack()} />
+           
                 <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
                     <Searchbar
                         placeholder="Search product, Price and code"
@@ -327,24 +307,7 @@ class BuyerProducts extends React.Component {
 
                 </View>
                 <View style={[{}, styles.formRowView]}>
-                    <View style={[{ position: 'relative', }, styles.formColumn]}>
-                        <DropDownPicker
-                            scrollViewProps={{
-                                persistentScrollbar: true,
-                            }}
-                            dropDownDirection="AUTO"
-                            bottomOffset={200}
-                            
-                            items={this.state.categoryarr}
-                            placeholder="Product Category"
-                            containerStyle={{ height: 50, marginTop: 5, width: width - 20, alignSelf: 'center' }}
-                            style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
-                            dropDownStyle={{ height: 160, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
-                            labelStyle={{ color: '#A9A9A9' }}
-                            onChangeItem={item => this.onCategoryText(item.value)}
-                        />
-                    </View>
-                    <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#E6E6E6', width: width - 20, alignSelf: 'center', marginVertical: 10 }}></View>
+                  <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#E6E6E6', width: width - 20, alignSelf: 'center', marginVertical: 10 }}></View>
                 </View>
                 {/* <ScrollView></ScrollView> */}
                 <ScrollView
@@ -353,7 +316,7 @@ class BuyerProducts extends React.Component {
                 >
                     <this.listProducts _that={this}/>                    
                </ScrollView>
-                <TabNav style={{ position: 'absolute', bottom: 0 }} screen={'product'} props={this.props} />
+              
             </View>
         )
     }

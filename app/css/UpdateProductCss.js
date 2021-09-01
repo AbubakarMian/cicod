@@ -127,22 +127,26 @@ export default StyleSheet.create({
     },
     //updateProductModal
     modalCOntainer:{
+       
+        marginTop:100,
         width:width-20,
-        height:height/2+50,
-        paddingVertical:20,
         justifyContent:'center',
         alignItems:'center',
         backgroundColor:'#fff',
-        alignSelf:'center',
+        // alignSelf:'center',
         borderWidth:0.5,
         borderRadius:5,
+        height:height/2+50,
 
     },
     modalMainContainer:{
+        //height:height/2+50,
+        paddingVertical:20,
+        
         // height:height,
        // width:width,
     //    width:width-20,
-    //     alignItems:'center',
+        alignItems:'center',
     //     justifyContent:'center',
     //     backgroundColor:'#fff',
         //opacity:0.6
