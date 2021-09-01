@@ -25,28 +25,104 @@ class CreateProductCategory extends React.Component {
             category_id: 0,
             name: '',
             description: '',
-            prod_image: {},
-            id: 0
+            prod_image: this.props.route.params.items.image??'',
+            id: 0,
+            product_category:this.props.route.params.items??{
+                id:0,
+                name:'',
+                description:'',
+            },
+            screen:''
         }
     }
-
-    componentDidMount() {
-        console.log('sdf sdf sfd sf', this.props.route.params)
-        if (this.props.route.params.screen == 'update') {
-            this.setState({
-                name: this.props.route.params.items.name,
-                description: this.props.route.params.items.description,
-                id: this.props.route.params.items.id
-            })
+    
+    get_edit_product_category(){
+    // console.log('mmmmmmmmmmmmmmmm',this.props.route.params.items)
+    if(this.props.route.params.items.id == 0 ){ // && this.state.screen != 'update'
+        if(this.state.id == 0){
+            return;
         }
-        this.getCategoryList();
+        this.setState({            
+            product_category:{
+                id:0,
+                name:'',
+                description:'',
+            },
+            screen : 'new'
+        })
+    }
+    else{
+        if(this.state.id != this.props.route.params.items.id){
+            return;
+        }
+        this.setState({
+            product_category:this.props.route.params.items,
+            screen : 'update',
+            // id:this.props.route.params.items.id
+        })
+    }
+    // this.props.route.params.screen == 'update'
+    console.log('product ', this.state.product_category)
+    // if () {
+    //     this.setState({
+    //         name: this.props.route.params.items.name,
+    //         description: this.props.route.params.items.description,
+    //         id: this.props.route.params.items.id,
+            
+    //     })
+    // }
+    this.getCategoryList();
+}
+
+
+    setImage(props){
+        
+        let _that = props._that;
+        // console.log('~~~~~~~~~~~********************',_that.props.route.params.items.image)
+        // console.log('~~~~~~~~~~~******************** _that.state.prod_image',_that.state.prod_image.path == null)
+        // console.log('~~~~~~~~~~~******************** _that.state.prod_image',_that.state.prod_image)
+        
+        if(_that.state.prod_image.path == null && _that.state.prod_image.image != null){
+            let img_url=_that.state.prod_image;
+            img_url.path=_that.props.route.params.items.image;
+            
+            _that.setState({prod_image:img_url})
+            return(
+                <Image
+                    style={{height:width/6,width:width/6}}
+                    source={{uri:_that.props.route.params.items.image}}
+                />
+            )
+        }
+        else if(_that.state.prod_image != null){
+          return(
+            <Image
+                style={{height:width/6,width:width/6}}
+                source={{uri:_that.state.prod_image}}
+            />
+          )
+        }
+        else{
+            return(
+                <Image
+                style={{height:width/6,width:width/6}}
+                source={require('../images/redPlus.png')}
+            />
+            )
+        }
+
     }
 
     createCategory() {
+        console.log('this.state.product_category',this.state.product_category);
+        if(this.state.prod_image.path==''){
+            Alert.alert("Warning", "Category Image is required");
+            return;
+        }
         this.setState({ spinner: true })
         let _that = this
 
-        if (this.state.name === '') {
+        if (this.state.product_category.name === '') {
             this.setState({ spinner: false })
             Alert.alert("Warning", "Category name is required")
             return;
@@ -57,17 +133,19 @@ class CreateProductCategory extends React.Component {
             console.log('cccccccccc', token)
          
             var formData = new FormData();
-              formData.append('category_id',this.state.category_id);  
-              formData.append('name',this.state.name);  
-              formData.append('description',this.state.description);  
+            //   formData.append('category_id',this.state.category_id);  
+              formData.append('name',this.state.product_category.name);  
+              formData.append('description',this.state.product_category.description);  
+             
               formData.append('image',{
-              uri: this.state.prod_image.path,
+              uri: this.state.prod_image,
                     type: 'multipart/form-data',
                     name: `image.jpg`,
                  
             }
               );  
-              formData.append('on_webshop',this.state.add_weshop);  
+            
+              formData.append('on_webshop',this.state.product_category.add_weshop);  
             // let body = {
             //     category_id: this.state.category_id,
             //     name: this.state.name,//required
@@ -75,11 +153,11 @@ class CreateProductCategory extends React.Component {
             //     image: this.state.prod_image,
             //     on_webshop: this.state.add_weshop, //Boolean             
             // }
-            console.log('~~~~~~~~~~~~body',formData)
+            console.log('222222222222222~~~~~~~~~~~~body',formData)
             let myheader = {
                 headers: {
-                    // Accept: 'application/json',
-                    // 'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
                     'Authorization': token,
                 }
             }
@@ -101,6 +179,9 @@ class CreateProductCategory extends React.Component {
                             })
                             _that.props.navigation.navigate('ProductCategory');
                         }
+                        else{
+                            Alert.alert(response.data.message);
+                        }
                     })
                     .catch(function (error) {
                         _that.setState({ spinner: false })
@@ -109,6 +190,7 @@ class CreateProductCategory extends React.Component {
             }
             else {
                 let url = Constants.update_product_category + '/' + this.state.id;
+                console.log('~~~~~~~~~~',url)
 
                 axios.put(url,
                      formData,
@@ -127,11 +209,15 @@ class CreateProductCategory extends React.Component {
                             _that.props.navigation.navigate('ProductCategory');
 
                         }
+                        else{
+                            Alert.alert(responseJson.response.message);
+                        }
 
                     })
                     .catch(function (error) {
                         _that.setState({ spinner: false })
                         console.log(error);
+                        Alert.alert(error);
                     });
             }
         }
@@ -189,11 +275,24 @@ class CreateProductCategory extends React.Component {
         }).then(image => {
             console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@', image);
             this.setState({
-                prod_image: image
+                prod_image: image.path
             })
         });
     }
+    setName(text){
+        let product_category = this.state.product_category;
+        console.log('text name',text);
+        product_category.name = text;
+        this.setState({ product_category:product_category} )
+    }
+    
+    setDescription(text){
+        let product_category = this.state.product_category;
+        product_category.description = text;
+        this.setState({ product_category:product_category} )
+    }
     render() {
+        this.get_edit_product_category();
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
@@ -227,22 +326,24 @@ class CreateProductCategory extends React.Component {
                     /> */}
                     <View style={[{},]}>
                         <TextInput
-                            onChangeText={text => this.setState({ name: text })}
+                            // onChangeText={text => this.setState({ product_category:{...this.state.product_category,name:text}  })}
+                            onChangeText={text => this.setName(text)}
+                            // onChangeText={(text) => this.setState({newNote: {...this.state.newNote,description: text}})}
                             label="Name*"
                             style={{ backgroundColor: 'transparent', borderColor: '#CFCFCF' }}
                             width={width - 50}
                             alignSelf={'center'}
                             color={'#000'}
-                            value={this.state.name}
+                            value={this.state.product_category.name}
                         />
                         <TextInput
-                            onChangeText={text => this.setState({ description: text })}
+                            onChangeText={text => this.setDescription(text)  }
                             label="Description"
                             style={{ backgroundColor: 'transparent', borderColor: '#CFCFCF' }}
                             width={width - 50}
                             alignSelf={'center'}
                             color={'#000'}
-                            value={this.state.description}
+                            value={this.state.product_category.description}
                         />
                         <CheckBox
                             style={[{ width: width / 2, alignSelf: 'flex-start', marginVertical: 10, alignItems: 'center' },]}
@@ -263,15 +364,9 @@ class CreateProductCategory extends React.Component {
                             <TouchableOpacity
                                 onPress={() => this.imageUpload()}
                             >
-                                {(this.state.prod_image == '') ?
-                                    <Image
-                                        source={require('../images/redPlus.png')}
-                                    />
-                                    : <Image
-                                    style={{height:width/6,width:width/6}}
-                                        source={{uri:this.state.prod_image.path}}
-                                    />
-                                }
+                                <this.setImage _that={this}/>
+                               
+                               
                             </TouchableOpacity>
                         </View>
 

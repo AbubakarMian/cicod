@@ -192,7 +192,7 @@ class ApplyDiscount extends React.Component {
                             color={'#000'}
                             keyboardType='numeric'
                             onChangeText={text => this.setDiscountAmount(text)}
-                            value={this.props.orderDiscountReducer.discount_amount+""}
+                            value={this.props.orderDiscountReducer.discount_amount+"" == "0"?'':this.props.orderDiscountReducer.discount_amount}
                         />
                     </View>
                 </View>

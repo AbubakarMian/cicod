@@ -322,7 +322,7 @@ class BuyersView extends React.Component {
                                     <Text style={[{}, styles.darkGrayBoldText]}>{this.state.items.seller_name}</Text>
                                     <Text style={[{}, styles.lightGrayText]}>{this.state.items.seller_id}</Text>
                                 </View>}
-                            <TouchableOpacity
+                          { this.props.route.params.heading != "SUPPLIERS" &&(  <TouchableOpacity
                                 onPress={() => this.setState({ supendModal: true })}
                                 style={[{}, styles.iconRight]}
                             >
@@ -333,7 +333,7 @@ class BuyersView extends React.Component {
                                     color={'#929497'}
                                 />
                             </TouchableOpacity>
-
+                          )}
 
                         </View>
                         <View style={[{ borderWidth: 0.2, width: width - 30, marginVertical: 10, alignSelf: 'center' }]}></View>
@@ -397,7 +397,7 @@ class BuyersView extends React.Component {
                             </View>
 
                         </View>
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             onPress={() => this.setState({ moreDeatailMOdal: true })}
                             style={[{}, styles.moreTOuct]}>
                             <Text style={[{ marginRight: 10 }, styles.lightGrayText]}>More Details</Text>
@@ -406,7 +406,7 @@ class BuyersView extends React.Component {
                                 color={'#B1272C'}
                                 size={15}
                             />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
 
                     </View>
                     {/* <View style={[{}, styles.searRowView]}>
@@ -585,6 +585,7 @@ class BuyersView extends React.Component {
                         onPress={() => this.setState({ supendModal: false })}
                     >
                         <View style={[{}, styles.modalBackGround]}>
+                            <TouchableWithoutFeedback>
                             <View style={styles.suspendModal}>
                             <TouchableOpacity
                                 onPress={() => this.suspendAction(this.state.items)}
@@ -593,13 +594,14 @@ class BuyersView extends React.Component {
                                 <Text style={{}}> {this.state.items.is_active?'Suspend':"Unsuspend"}</Text>
                             </TouchableOpacity>
                             {/* <View style={{marginTop:5}} /> */}
-                            <TouchableOpacity
+                            {/* <TouchableOpacity
                                 onPress={() => this.setState({suspendModal:false})}
                                 style={[{}, styles.suspendTouch]}>
                                 <Image source={require('../images/redCross.png')} style={[{width:20,height:20}, styles.banImage]} />
                                 <Text style={{}}> Cancel</Text>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
                             </View>
+                            </TouchableWithoutFeedback>
                         </View>
                     </TouchableOpacity>
 

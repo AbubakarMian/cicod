@@ -18,9 +18,9 @@ class ChangePassword extends React.Component {
         super(props);
         this.state = {
             isChecked: false,
-            current_password: 'Sandbox@123',
-            new_password: '123456',
-            confirm_password: '1234567',
+            current_password: '',
+            new_password: '',
+            confirm_password: '',
             spinner: false,
             is_secure: false,
 
@@ -28,6 +28,11 @@ class ChangePassword extends React.Component {
     }
 
     changePasswordFun() {
+        if(this.state.current_password=='' || this.state.current_password=='' || this.state.new_password=='' || this.state.new_password==null || this.state.confirm_password=='' ||this.state.confirm_password==null){
+           Alert.alert('All fields are required!');
+           return;
+        }
+
         console.log('Constants.changePassword', Constants.changePassword)
 
         this.setState({ spinner: true })

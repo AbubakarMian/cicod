@@ -269,7 +269,7 @@ class UpdateProduct extends React.Component {
             .then(async responseJson => {
                 console.log('update products access data ', postData)
                 console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&update products access respones ', responseJson)
-                this.setState({ spinner: false })
+                this.setState({ spinner: false,updateProductModal:false })
                 if (responseJson.success) {
                     Alert.alert('Message',responseJson.data.message)
                     if (this.props.route.params.screen=="buyer") {
@@ -507,8 +507,8 @@ class UpdateProduct extends React.Component {
                     //transparent={true}
                     transparent={true}
                 >
-                    <TouchableOpacity
-                        onPress={() => this.setState({ updateProductModal: false ,products:[],categories:[]})}
+                    <View
+                       // onPress={() => this.setState({ updateProductModal: false ,products:[],categories:[]})}
                         style={[{}, styles.modalMainContainer]}>
                         <View style={[{}, styles.modalCOntainer]}>
                             <Image source={require('../images/bluequesmark.png')} />
@@ -534,7 +534,7 @@ class UpdateProduct extends React.Component {
                                 <Text style={{ color: '#929497' }}>Cancel</Text>
                             </TouchableOpacity>
                         </View>
-                    </TouchableOpacity>
+                    </View>
                 </SuspendModal>
             </View>
         )

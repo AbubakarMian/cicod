@@ -82,7 +82,7 @@ class ProductCategory extends React.Component {
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({ spinner: false });
-                console.log('responseJson responseJson', responseJson);
+                console.log('~~~~~~~~~~~~~ responseJson responseJson', responseJson);
                 if (responseJson.status === 'success') {
 
                     Alert.alert('Message', responseJson.message)
@@ -203,7 +203,7 @@ class ProductCategory extends React.Component {
                     </TouchableOpacity>
                 </View> */}
                 <View style={{ borderBottomWidth: 1, width: width - 20, alignSelf: 'center', borderBottomColor: '#E6E6E6', marginVertical: 10 }}></View>
-                {(this.state.categoryarr>0)?
+                {(this.state.categoryarr.length>0)?
                 <FlatList
                     ItemSeparatorComponent={
                         Platform.OS !== 'android' &&
@@ -225,9 +225,10 @@ class ProductCategory extends React.Component {
                         //     onHideUnderlay={separators.unhighlight}>
                         <View style={[{}, styles.listContainer]}>
                             <View style={[{ flex: 1, justifyContent: 'center', alignItems: 'center' }, styles.listImageView]}>
-                                {(item.image!=null)?
-                                <Image source={{uri:item.image}} /> 
-                                :<Image source={require('../images/product_cat_icon.png')} />}
+                                {(item.image==null)?
+                                 <Image source={require('../images/product_cat_icon.png')} />
+                                :
+                                <Image style={{height:30,width:30}} source={{uri:item.image}} />}
                                 
                             </View>
                             <View style={[{ flex: 6 }, styles.listDescView]}>
