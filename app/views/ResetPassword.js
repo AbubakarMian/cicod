@@ -119,7 +119,7 @@ export default class ResetPassword extends React.Component {
                 <TouchableOpacity
                     onPress={() => this.ressetPassword()}
                     style={[{}, styles.btnContinuueView]}>
-                    <Text style={{ color: '#FFFFFF' }}>Resent Password</Text>
+                    <Text style={{ color: '#FFFFFF' }}>Reset Password</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => this.props.navigation.navigate('Login')}

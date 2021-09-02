@@ -39,6 +39,7 @@ export const Constants = {
   ussd_codes: `${base_url}/ussd-codes`,
   reset_password: `${auth_url}/sso/auth/forgot_password`,
   currency: `${base_url}/currency`,
+  get_attribute: `${base_url}/product-attributes`,
   
 };
 
