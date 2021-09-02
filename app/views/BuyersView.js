@@ -1,6 +1,6 @@
 import React from 'react';
 import { Container, Input, InputGroup, List, ListItem } from 'native-base';
-import { View, TouchableOpacity, Image, Dimensions, TouchableHighlight, Alert, Touchable, FlatList, ScrollView, TouchableWithoutFeedback } from 'react-native';
+import { View,Modal as SuspendModal, TouchableOpacity, Image, Dimensions, TouchableHighlight, Alert, Touchable, FlatList, ScrollView, TouchableWithoutFeedback } from 'react-native';
 import { Text, TextInput, Modal } from 'react-native-paper';
 import fontStyles from '../css/FontCss'
 import styles from '../css/BuyersViewCss';
@@ -28,17 +28,56 @@ class BuyersView extends React.Component {
 
     componentDidMount() {
         console.log("item sds........sdsd..",this.props.route.params.items)
-        this.setState({
-            items: this.props.route.params.items,
-            spinner: false,
-        })
-        if (this.props.route.params.heading == "SUPPLIER") {
+        // this.setState({
+        //     items: this.props.route.params.items,
+        //     spinner: false,
+        // })
+        if (this.props.route.params.heading == "SUPPLIERS") {
+            const url=`${Constants.viewSuplier}?id=${this.props.route.params.items.seller_id}`;
+
+            this.getData(url)
             this.getSellerOrderHistory();
 
         } else {
-
+            const url=`${Constants.viewBuyer}?id=${this.props.route.params.items.buyer_id}`;
+            this.getData(url)
             this.getBuyerOrderHistory()
         }
+    }
+
+
+    getData(url) {
+        this.setState({ spinner: true })
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            },
+        };
+       
+        fetch(url, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+
+                this.setState({
+                    spinner: false
+                });
+                console.log("@@@@seer...##",responseJson)
+                if (responseJson.success) {
+                    console.log('data data data res res res ', responseJson)
+                    this.setState({
+                        items: responseJson.data
+                    });
+            } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
+                    Alert.alert('Error', message)
+                }
+            })
     }
 
     getSellerOrderHistory() {
@@ -51,7 +90,7 @@ class BuyersView extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
-        let orderListUrl = Constants.orderslist + '?id=' + this.props.route.params.items.seller_id + '&sort=-id';
+        let orderListUrl = Constants.sellerOrderHistory + '?id=' + this.props.route.params.items.seller_id + '&sort=-id';
 
         fetch(orderListUrl, postData)
             .then(response => response.json())
@@ -113,7 +152,7 @@ class BuyersView extends React.Component {
     viewProducts() {
         console.log('seller_id seller_id seller_id !!!!!!!!!!!', this.state.items.seller_id)
         let buyer_id = this.state.items.buyer_id
-        this.props.navigation.navigate('BuyersProducts', { buyer_id })
+        this.props.navigation.navigate('BuyersProducts', { items:  this.state.items})
     }
 
     suspendBuyer(buyer_id) {
@@ -129,7 +168,7 @@ class BuyersView extends React.Component {
         fetch(Constants.suspendBuyer + '?id=' + buyer_id, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log('buyer un suspend Request !!!!!!!!!!', responseJson)
+                console.log('@@@##$$$$$ sspend Request !!!!!!!!!!', responseJson)
                 this.setState({
                     spinner: false,
                 });
@@ -143,6 +182,7 @@ class BuyersView extends React.Component {
                     this.unauthorizedLogout();
                 }
                 else {
+
                     let message = responseJson.message
                     Alert.alert('Error', message)
                 }
@@ -162,7 +202,7 @@ class BuyersView extends React.Component {
         fetch(Constants.unsuspendBuyer + '?id=' + buyer_id, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log('buyer un suspend Request !!!!!!!!!!', responseJson)
+                console.log('buyer unsuspend Request !!!!!!!!!!', responseJson)
                 this.setState({
                     spinner: false,
                 });
@@ -194,7 +234,7 @@ class BuyersView extends React.Component {
 
         this.setState({ supendModal: false })
 
-        if (this.props.route.params.heading == "SUPPLIER") {
+        if (this.props.route.params.heading == "SUPPLIERS") {
             if (item.is_active) {
                 // suspend
                 this.suspendSeller(item.seller_id);
@@ -204,6 +244,7 @@ class BuyersView extends React.Component {
                 this.unsuspendSeller(item.seller_id);
             }
         } else {
+            console.log("itxz@@@@@...###",item)
             if (item.is_active) {
                 // suspend
                 this.suspendBuyer(item.buyer_id);
@@ -217,7 +258,7 @@ class BuyersView extends React.Component {
     }
     search() {
 
-        if (this.props.route.params.heading == "SUPPLIER") {
+        if (this.props.route.params.heading == "SUPPLIERS") {
             let search_url = Constants.buyerlist + '?filter[buyer_name]=' + this.state.search_buyers;
             this.getSellerOrderHistory();
             //merchant_id
@@ -255,16 +296,18 @@ class BuyersView extends React.Component {
                     color={'#fff'}
                 />
                 <ScrollView>
-                    <View style={[{}, styles.backRowView]}>
-                        <TouchableOpacity
+                <TouchableOpacity
                             onPress={() => this.props.navigation.goBack()}
                         >
+                    <View style={[{}, styles.backRowView]}>
+                       
                             <Icon name="arrow-left" size={25} color={'#929497'} />
-                        </TouchableOpacity>
+                       
                         <View style={[{}, styles.backRowHeadingView]}>
                             <Text style={[{}, styles.backRowHeadingText]}>{this.props.route.params.heading}</Text>
                         </View>
                     </View>
+                    </TouchableOpacity>
                     <View style={{ backgroundColor: '#fff' }}>
                         <View style={[{}, styles.productDetailContainerView]}>
                             <Image 
@@ -326,8 +369,8 @@ class BuyersView extends React.Component {
                             <View style={[{}, styles.columnView]}>
                                 {(this.props.route.params.heading == 'BUYERS') ?
                                     <TouchableOpacity
-                                        onPress={() => this.props.navigation.navigate('UpdateProduct', {fetch_action:'updateproduct', 
-                                        buyer_detail: this.state.items })}
+                                        onPress={() => this.props.navigation.replace('UpdateProduct', {fetch_action:'updateproduct', 
+                                        buyer_detail: this.state.items,screen:'updateproduct' ,item:this.state.items})}
                                         style={[{}, styles.redTouch]}
                                     >
 
@@ -384,6 +427,7 @@ class BuyersView extends React.Component {
                         </TouchableOpacity>
 
                     </View> */}
+                    {this.state.orderList.length>0?<View>
                     <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
 
                         <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
@@ -483,7 +527,7 @@ class BuyersView extends React.Component {
                             }
                             data={this.state.orderList}
                             renderItem={({ item, index, separators }) => (
-                                <TouchableHighlight
+                                <TouchableOpacity
                                     key={item.key}
                                     onPress={() => this.itemDetail(item)}
                                     onShowUnderlay={separators.highlight}
@@ -515,34 +559,56 @@ class BuyersView extends React.Component {
                                         </View>
                                         <Text style={[{}, styles.lightGrayText]}>{item.date_created}</Text>
                                     </View>
-                                </TouchableHighlight>
+                                </TouchableOpacity>
                             )}
                         />
                     </ScrollView>
-                </ScrollView>
-                <Modal
-                    visible={this.state.supendModal}
+                </View>:
 
+                <View style={{flex:1,justifyContent:"center",alignItems:"center",paddingTop:40}}>
+                   <View style={{flexDirection:"row"}}>
+
+                   <Image
+                                style={{height:60,width:60}}
+                                source={require('../images/Untitled-1.png')}
+                            />
+                   </View>
+                    <Text style={{letterSpacing:2,fontWeight:"bold",fontSize:16}}>No Order</Text>
+                    </View>}
+                </ScrollView>
+                <SuspendModal
+                    visible={this.state.supendModal}
+                    onRequestClose={() => this.setState({ supendModal: false })}     
                     transparent={true}
                 >
                     <TouchableOpacity
                         onPress={() => this.setState({ supendModal: false })}
                     >
                         <View style={[{}, styles.modalBackGround]}>
+                            <View style={styles.suspendModal}>
                             <TouchableOpacity
                                 onPress={() => this.suspendAction(this.state.items)}
                                 style={[{}, styles.suspendTouch]}>
                                 <Image source={require('../images/ban.png')} style={[{}, styles.banImage]} />
-                                <Text style={{}}>Cancel</Text>
+                                <Text style={{}}> {this.state.items.is_active?'Suspend':"Unsuspend"}</Text>
                             </TouchableOpacity>
+                            {/* <View style={{marginTop:5}} /> */}
+                            <TouchableOpacity
+                                onPress={() => this.setState({suspendModal:false})}
+                                style={[{}, styles.suspendTouch]}>
+                                <Image source={require('../images/redCross.png')} style={[{width:20,height:20}, styles.banImage]} />
+                                <Text style={{}}> Cancel</Text>
+                            </TouchableOpacity>
+                            </View>
                         </View>
                     </TouchableOpacity>
 
-                </Modal>
+                </SuspendModal>
                 {/* MoreDetail Modal */}
-                <Modal
+                <SuspendModal
                     visible={this.state.moreDeatailMOdal}
                     transparent={true}
+                    onRequestClose={() => this.setState({ moreDeatailMOdal: false })}
                 >
                     <View style={[{}, styles.modalBackGround]}>
                         <View style={[{}, styles.moreDetailModalContentContainer]}>
@@ -583,7 +649,7 @@ class BuyersView extends React.Component {
                             </View>
                         </View>
                     </View>
-                </Modal>
+                </SuspendModal>
             </View>
         );
 

@@ -19,6 +19,8 @@ export const Constants = {
   productcategorylist: `${base_url}/categories`,
   supplierlist: `${base_url}/value-chain/suppliers`,
   buyerlist: `${base_url}/value-chain/buyers`,
+  viewBuyer: `${base_url}/value-chain/view-buyer`,
+  viewSuplier: `${base_url}/value-chain/view-supplier`,
   stateslist: `${base_url}/states`,
   countrieslist: `${base_url}/countries`,
   lgaslist: `${base_url}/lgas`,
@@ -33,9 +35,11 @@ export const Constants = {
   updateBuyerProduct: `${base_url}/value-chain/update-buyer-products`,
   decline_request: `${base_url}/value-chain/reject-request`,
   approve_request: `${base_url}/value-chain/approve-request`,
+  approved_buyer_products: `${base_url}/value-chain/approved-buyer-products`,
   ussd_codes: `${base_url}/ussd-codes`,
   reset_password: `${auth_url}/sso/auth/forgot_password`,
   currency: `${base_url}/currency`,
+  get_attribute: `${base_url}/product-attributes`,
   
 };
 

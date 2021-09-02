@@ -102,9 +102,8 @@ export default StyleSheet.create({
         borderRadius:100
     },
     toolTipMainView:{
-      
+
       alignSelf:'center',
-     
       justifyContent:'center',
       paddingVertical:10,
       paddingHorizontal:20,
@@ -113,8 +112,9 @@ export default StyleSheet.create({
         alignSelf:'center',
         backgroundColor:'#B1272C',
         borderRadius:100,
-        paddingHorizontal:10,
-        paddingVertical:3,
+        paddingHorizontal:30,
+        paddingVertical:10,
+        marginVertical:10,
     }
     
 })

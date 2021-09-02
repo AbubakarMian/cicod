@@ -9,6 +9,7 @@ import Header from '../views/Header';
 import { Constants } from '../views/Constant';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
+import NavBack from "./Components/NavBack";
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
@@ -42,8 +43,8 @@ class ConnectView extends React.Component {
         console.log('props !!!!!!!!!!!!!!!!!!!!!', this.props.route.params.item);
         // let pro_url = Constants.products + '/' + this.props.route.params.prod_id
         // this.getProductDetail(pro_url)
-        let buyer_name = this.props.route.params.item.buyer_name;
-        let url = Constants.searchMerchant + '?merchantId=' + buyer_name;
+        let buyer_id = this.props.route.params.item.buyer_id;
+        let url = Constants.searchMerchant + '?cicodNumber=' + buyer_id;
         console.log('url @@@@@@@@@@ !!!!!!!!!!!!!!!!!!!!!', url);
         this.getBuyer(url);
     }
@@ -247,16 +248,7 @@ class ConnectView extends React.Component {
                     textStyle={{ color: '#fff' }}
                     color={'#fff'}
                 />
-                <View style={[{}, styles.backHeaderRowView]}>
-                    <TouchableOpacity
-                        onPress={() => this.props.navigation.goBack()}
-                    >
-                        <Icon name="arrow-left" size={25} color="#929497" />
-                    </TouchableOpacity>
-                    <View style={[{}, styles.backHeadingView]}>
-                        <Text style={[{}, styles.backHeadingText]}>Connect</Text>
-                    </View>
-                </View>
+                <NavBack title="CONNECT" onClick={()=> this.props.navigation.goBack()} />
                 <View style={[{}, styles.productDeatailContainer]}>
                     <View style={[{}, styles.productDeatailHeaderRow]}>
 
