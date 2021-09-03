@@ -127,14 +127,15 @@ class CreateProduct extends React.Component {
         else {
             var formData=new FormData();
             
-            // if(this.state.prod_image!='' || this.state.prod_image!=null){
+            if(this.state.prod_image != '' || this.state.prod_image != null){
+                console.log('image image image',this.state.prod_image)
                 formData.append('image',{
                                 uri: this.state.prod_image,
                                 type: 'multipart/form-data',
                                 name: `image.jpg`,
                             });
-            // }
-            
+            }
+           
             formData.append('category_id',this.state.category_id);
             formData.append('name',this.state.name);
             formData.append('quantity',this.state.quantity);
