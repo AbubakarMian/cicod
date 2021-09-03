@@ -235,7 +235,7 @@ class ProductCategory extends React.Component {
                                 <Text style={[{}, styles.listDescBoldText]}>{item.name}</Text>
                                 <Text style={[{}, styles.listDescNormalText]}>{item.description}</Text>
                             </View>
-                            <View style={[{ flex: 2, justifyContent: 'flex-end', alignItems: 'flex-end' }, styles.listActionView]}>
+                            <View style={[{ flex: 2.5, justifyContent: 'flex-end', alignItems: 'flex-end' }, styles.listActionView]}>
                                 <Menu>
                                     {/* <MenuTrigger text='. . .' customStyles={{}} /> */}
                                     <MenuTrigger style={styles.trigger}>
@@ -268,7 +268,7 @@ class ProductCategory extends React.Component {
                                 </Menu>
                                 {(item.is_active == true) ?
                                     <Text style={[{}, styles.actionText]}>ACTIVE</Text> :
-                                    <Text style={[{}, styles.inactiveActionText]}>SUSPENDED</Text>}
+                                    <Text style={[{textAlign:'center'}, styles.inactiveActionText]}>SUSPENDED</Text>}
                             </View>
                         </View>
                         // </TouchableOpacity>

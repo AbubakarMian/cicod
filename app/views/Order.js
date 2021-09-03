@@ -37,7 +37,8 @@ class Order extends React.Component {
             date_created_timestamp: 'Today',//YY-MM-DD
             apply_filter: false,
             search_order_text: '',
-            reload:0
+            reload:0,
+            isFetching: false,
 
         };
         this.onDateChange = this.onDateChange.bind(this);
@@ -48,7 +49,24 @@ class Order extends React.Component {
         })
         return;
     }
+    onRefresh(){
+        this.setState({isFetching: true})
+        // if(this.state.isFetching==true){
+            console.log('222222222222',this.state.isFetching)
+           this.orderList(this.state.url_orders) 
+           return;
+        // }
+        console.log('333333333333',this.state.isFetching)
+        // _that.setState({
+        //     url_orders: url,
+        // })
+    }
     orderList(url) {
+        let _that=this;
+        if(_that.state.isFetching==true){
+            _that.setState({isFetching:false})
+        }
+        
         console.log('access token', this.props.user.access_token)
         this.setState({ spinner: true }) //,apply_filter:false
         let postData = {
@@ -64,7 +82,7 @@ class Order extends React.Component {
             .then(response => response.json())
             .then(async responseJson => {
                 console.log('~~~~~~~~~~~',responseJson)
-                this.setState({ spinner: false });
+                this.setState({ spinner: false});
                 if (responseJson.status === 'success') {
                     this.setState({
                         data: responseJson.data
@@ -77,7 +95,7 @@ class Order extends React.Component {
                     Alert.alert('Error', message)
                 }
             }).catch(function(error){
-                this.setState({spinner:false})
+                this.setState({spinner:false,})
                 Alert.alert(error)
             })
     }
@@ -302,6 +320,9 @@ class Order extends React.Component {
                 url_orders: url,
             })
         }
+        // _that.setState({
+        //     url_orders: url,
+        // })
         console.log('url hit', url);
         console.log(' will data !!!!!!!!!!!!!', _that.state.data.length);
 
@@ -319,6 +340,8 @@ class Order extends React.Component {
             return (
                 <FlatList
                     data={_that.state.data}
+                    onRefresh={() => _that.onRefresh()}
+                    refreshing={false}
                     ItemSeparatorComponent={
                         Platform.OS !== 'android' &&
                         (({ highlighted }) => (

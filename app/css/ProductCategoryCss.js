@@ -98,10 +98,12 @@ export default StyleSheet.create({
     inactiveActionText:{
         backgroundColor:'#E6E6E6',
         color:'#FFFFFF',
-        paddingHorizontal:15,
+        paddingHorizontal:5,
         paddingVertical:3,
         borderRadius:100,
         fontSize:12,
+        textAlign:'center',
+        // width:120,
     },
    dotsTouch:{
        
