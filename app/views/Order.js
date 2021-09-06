@@ -380,9 +380,9 @@ class Order extends React.Component {
                                 </View>
                                 <View style={{ flex: 1, alignItems: 'flex-end', flexDirection: 'column' }}>
                                     {(item.balance_part_payment>0)?
-                                     <Text style={[{ color: '#4E4D4D',marginRight:10 }, fontStyles.bold15]}>N{item.balance_part_payment.amount}</Text>
+                                     <Text style={[{ color: '#4E4D4D',marginRight:10 }, fontStyles.bold15]}>{_that.props.currency.currency} {item.balance_part_payment.amount}</Text>
                                     :
-                                    <Text style={[{ color: '#4E4D4D',marginRight:10 }, fontStyles.bold15]}>N{item.amount}</Text>
+                                    <Text style={[{ color: '#4E4D4D',marginRight:10 }, fontStyles.bold15]}>{_that.props.currency.currency} {item.amount}</Text>
                                     }
                                     
 
@@ -567,7 +567,8 @@ class Order extends React.Component {
 function mapStateToProps(state) {
     return {
         user: state.userReducer,
-        reload: state.reloadReducer
+        reload: state.reloadReducer,
+        currency: state.currencyReducer,
     }
 };
 function mapDispatchToProps(dispatch) {

@@ -43,7 +43,7 @@ class MakePayment extends React.Component {
         await this.setState({ spinner: false })
         console.log('AAAAAAAAAAAAAAAAAAAAAAAAA',this.props.route.params)
         if(this.props.route.params.pending_order_res != undefined){
-           console.log('RRRRRRRR',this.props.route.params.pending_order_res.data.id)
+           console.log('****************RRRRRRRR',this.props.route.params.pending_order_res.data)
             console.log('FFFFFFFFFFF',navigateScreen)
             // return;
             this.props.navigation.navigate(navigateScreen,{
