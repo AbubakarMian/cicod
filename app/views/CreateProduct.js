@@ -210,13 +210,17 @@ class CreateProduct extends React.Component {
             Alert.alert("Warning", "Category is required")
             return; 
         }
-        else {
+        else {            
             var formData=new FormData();
+            if(this.state.prod_image!=null && this.state.prod_image!=''){
             formData.append('image',{
                 uri: this.state.prod_image,
                 type: 'multipart/form-data',
                 name: `image.jpg`,
             });
+            }
+
+            
             formData.append('category_id',this.state.category_id);
             formData.append('name',this.state.name);
             formData.append('quantity',this.state.quantity);

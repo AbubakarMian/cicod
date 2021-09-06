@@ -955,6 +955,7 @@ class CreateOrder extends React.Component {
                 <Modal
                     visible={this.state.ConfirmationPayInvoice}
                 >
+                    {console.log(this.props.user)}
                     <View
                         style={{ alignSelf: 'center', backgroundColor: '#fff', width: width - 50, justifyContent: 'center', alignItems: 'center', paddingVertical: 20, borderRadius: 10, flexDirection: 'column' }}
                     >
