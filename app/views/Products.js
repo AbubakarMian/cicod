@@ -29,9 +29,24 @@ class Products extends React.Component {
             prod_image: '',
             reload: true,
             filters:[],
-            url_products:''
+            url_products:'',
+            isFetching: false,
         };
         this.onDateChange = this.onDateChange.bind(this);
+    }
+    onRefresh(){
+        console.log('222222222222',this.state.isFetching)
+        this.setState({isFetching: true})
+        // if(this.state.isFetching==true){
+           
+            // let search_url = Constants.productslist + '?search=' + this.state.search_product;
+        this.getData(this.state.url_products);
+           return;
+        // }
+        console.log('333333333333',this.state.isFetching)
+        // _that.setState({
+        //     url_orders: url,
+        // })
     }
     onDateChange(date) {
         this.setState({
@@ -49,6 +64,10 @@ class Products extends React.Component {
   
 
     async getData(url) {
+        let _that=this;
+        if(_that.state.isFetching==true){
+            _that.setState({isFetching:false})
+        }
         
       
         this.setState({ spinner: true })
@@ -202,9 +221,11 @@ class Products extends React.Component {
             <View>
                 
             <FlatList
+            onRefresh={() => _that.onRefresh()}
+            refreshing={_that.state.isFetching}
                         style={{}}
                         data={_that.state.data}
-
+                        
                         ItemSeparatorComponent={
                             Platform.OS !== 'android' &&
                             (({ highlighted }) => (

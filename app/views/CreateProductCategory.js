@@ -25,12 +25,13 @@ class CreateProductCategory extends React.Component {
             category_id: 0,
             name: '',
             description: '',
-            prod_image: this.props.route.params.items.image??'',
+            prod_image: this.props.route.params.items?this.props.route.params.items.image:'',
             id: 0,
             product_category:this.props.route.params.items??{
                 id:0,
                 name:'',
                 description:'',
+                prod_image:''
             },
             screen:''
         }
@@ -38,7 +39,7 @@ class CreateProductCategory extends React.Component {
     
     get_edit_product_category(){
     // console.log('mmmmmmmmmmmmmmmm',this.props.route.params.items)
-    if(this.props.route.params.items.id == 0 ){ // && this.state.screen != 'update'
+    if(this.props.route.params.items == null ){ // && this.state.screen != 'update'
         if(this.state.id == 0){
             return;
         }
@@ -47,6 +48,7 @@ class CreateProductCategory extends React.Component {
                 id:0,
                 name:'',
                 description:'',
+                image:''
             },
             screen : 'new'
         })
@@ -78,27 +80,14 @@ class CreateProductCategory extends React.Component {
     setImage(props){
         
         let _that = props._that;
-        // console.log('~~~~~~~~~~~********************',_that.props.route.params.items.image)
-        // console.log('~~~~~~~~~~~******************** _that.state.prod_image',_that.state.prod_image.path == null)
-        // console.log('~~~~~~~~~~~******************** _that.state.prod_image',_that.state.prod_image)
-        
-        if(_that.state.prod_image.path == null && _that.state.prod_image.image != null){
-            let img_url=_that.state.prod_image;
-            img_url.path=_that.props.route.params.items.image;
-            
-            _that.setState({prod_image:img_url})
-            return(
-                <Image
-                    style={{height:width/6,width:width/6}}
-                    source={{uri:_that.props.route.params.items.image}}
-                />
-            )
-        }
-        else if(_that.state.prod_image != null){
+        // console.log('~~~~~~~~~~~********************',_that.state.prod_image.path)
+        // // console.log('~~~~~~~~~~~******************** _that.state.prod_image',_that.state.prod_image.path == null)
+        console.log('~~~~~~~~~~~******************** _that.state._that.state.product_category',_that.state.product_category)
+        if(_that.state.product_category.image != '' || _that.state.product_category.image != null){
           return(
             <Image
                 style={{height:width/6,width:width/6}}
-                source={{uri:_that.state.prod_image}}
+                source={{uri:_that.state.product_category.image}}
             />
           )
         }
@@ -274,8 +263,11 @@ class CreateProductCategory extends React.Component {
             size: 1000000
         }).then(image => {
             console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@', image);
+            let product_category = this.state.product_category
+            product_category.image = image.path
             this.setState({
-                prod_image: image.path
+                prod_image: image.path,
+                product_category:product_category
             })
         });
     }
@@ -364,7 +356,14 @@ class CreateProductCategory extends React.Component {
                             <TouchableOpacity
                                 onPress={() => this.imageUpload()}
                             >
-                                <this.setImage _that={this}/>
+                                <View style={{
+                                    borderWidth:0.5,
+                                    borderColor:'#aaa',
+                                    height:width/6,width:width/6
+                                }}>
+                                    <this.setImage _that={this}/>
+                                </View>
+                                
                                
                                
                             </TouchableOpacity>

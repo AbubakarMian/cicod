@@ -255,6 +255,7 @@ class Dashboard extends React.Component {
                     color={'#fff'}
                 /> */}
                 <DateTimePickerModal
+                    themeVariant={'light'}
                     isVisible={this.state.isDatePickerVisible}
                     mode="date"
                     date={new Date()} 
@@ -304,7 +305,7 @@ class Dashboard extends React.Component {
                                     style={{height:40,width:40}}
                                         source={require('../images/dashboard/greenbage.png')}
                                     />
-                                    <Text style={{ color: '#B1272C', fontSize: 10, fontFamily: 'Open Sans' }}>Paid Orders</Text>
+                                    <Text style={{ color: '#18A757', fontSize: 10, fontFamily: 'Open Sans' }}>Paid Orders</Text>
                                     <Text style={{ fontSize: 16, fontFamily: 'Open Sans', fontWeight: 'bold', color: '#4E4D4D' }}>{this.props.currency.currency}{this.state.paidOrder.amount}</Text>
                                     <Text style={[{}, styles.greencardtext]}>{this.state.paidOrder.count}</Text>
                                 </View>
@@ -438,6 +439,8 @@ class Dashboard extends React.Component {
                             <View style={{ width: width, height: height / 2, justifyContent: 'center', alignItems: 'center', transparent: false, backgroundColor: '#fff' }}>
                                 <CalendarPicker
                                     onDateChange={this.setDate}
+                                    selectedDayColor={'#000'}
+                                    selectedDayTextColor={'#eeee'}
                                     startDate={''}
                                 />
                             </View>

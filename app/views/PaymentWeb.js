@@ -19,36 +19,47 @@ class PaymentWeb extends React.Component {
             order_id:0,
             timer:3,
             order:null,
-            part_payment_status:''
+            part_payment_status:'',
+            interval_id:0
         }  
     }
 
-     async check() {
-         while(this._isMounted){
+     async check(order) {
+        //  while(this._isMounted){
             this.get_order_detail();//return;
             console.log('timer while',this.state.order)
-            let a = await this.performTimeConsumingTask(); 
+            // let a = await this.performTimeConsumingTask(); 
              if(this.state.order != null){ 
                  console.log('payment order if');              
-                console.log('this.state.order.payment_status',this.state.order.payment_status);
+                console.log('order.payment_status',order.payment_status);
                 
-                if(this.state.order.payment_status == 'PAID' || this.state.order.payment_status == this.state.part_payment_status || this.state.order.payment_status == 'cancelled'){
-                    // if(this.state.order.payment_status != 'PENDING' || this.state.order.payment_status == 'cancelled'){
+                if(order.payment_status == 'PAID' || order.payment_status == this.state.part_payment_status || order.payment_status == 'cancelled'){
+                    // if(order.payment_status != 'PENDING' || this.state.order.payment_status == 'cancelled'){
                     this._isMounted = false;
                     // this.props.navigation.navigate('Order');
                     // this.props.navigation.navigate('OrderDetail', { id:this.state.order_id })
-                    this.props.navigation.navigate('PaymentSuccess', { data:this.state.order})
-                    break;
+                    
+                    try {
+                        // setInterval(() => {
+                            this.props.navigation.navigate('PaymentSuccess', { data:this.state.order})
+                        // }, 50000);
+                   
+                    } catch (error) {
+                        console.log('interval error',error)
+                    }
+                    
+                    
+                    // break;
                 }
              }
-             if(this.timer > 1000){
-                this._isMounted = false;
-            }
-            let t = this.state.timer + 3
-            this.setState({
-                timer:t
-            })            
-         }       
+            //  if(this.timer > 1000){
+            //     this._isMounted = false;
+            // }
+            // let t = this.state.timer + 3
+            // this.setState({
+            //     timer:t
+            // })            
+        //  }       
          return;
       }
       
@@ -66,7 +77,7 @@ class PaymentWeb extends React.Component {
         //  return
         let order_id = this.props.route.params.data.id;
         if(this.state.order_id != order_id){
-            this.setState({
+             this.setState({
                 order_id:order_id
             })
         }
@@ -103,9 +114,12 @@ class PaymentWeb extends React.Component {
                     }
                     // return data
                     else if( data.payment_status != this.state.order.payment_status){
+                        clearInterval(this.state.interval_id);
                         this.setState({
                             order: data,
                         })
+                        this.check(data);
+                        
                     }
                     
                 } else {
@@ -126,8 +140,25 @@ class PaymentWeb extends React.Component {
     }
 
     render() {
+
+        if(this.state.order_id != this.props.route.params.data.id){
+            console.log('AAAAAAAAAAAAAA',this.state.order_id)
+            console.log('BBBBBBBBBBBBBB',this.props.route.params.data.id)
+            this.setState({
+                order_id:this.props.route.params.data.id
+            })
+            let interval_id = setInterval(() => {
+                this.get_order_detail();
+                // this.props.navigation.navigate('PaymentSuccess', { data:this.state.order})
+            }, 3000);
+            this.setState({
+                interval_id:interval_id
+            })
+        }
+        console.log('AAAAAAAAAAAAAA',this.state.order_id)
+            console.log('BBBBBBBBBBBBBB',this.props.route.params.data.id)
         console.log('*************',Constants.orderslist + '/' + this.state.order_id)
-        this.check();
+        // this.check();
         console.log('payment web rrrrrrrrrrrrrrrrr',this.props.route.params.payment_link)
         return (
             <WebView 

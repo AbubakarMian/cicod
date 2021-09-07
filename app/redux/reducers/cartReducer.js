@@ -21,8 +21,11 @@ const cartReducer = (state = initialState, action) => {
                 let item = cart[i];
                 console.log('cart item -------------',cart[i]);
                 if (item.id == action.value.id && !product_found) {
-                    let updated_purchased_quantity = cart[i].purchased_quantity + 1
-                    cart[i].purchased_quantity = updated_purchased_quantity
+                    // let updated_purchased_quantity = cart[i].purchased_quantity //+ 1
+                    // let updated_purchased_quantity = action.value.purchased_quantity //+ 1
+                    // cart[i].purchased_quantity = updated_purchased_quantity
+                    cart[i] = action.value
+
                     product_found = true;
                     break;
                 }

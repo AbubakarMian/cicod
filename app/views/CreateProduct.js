@@ -125,8 +125,28 @@ class CreateProduct extends React.Component {
             return;
         }
         else {
-
-
+            var formData=new FormData();
+            
+            if(this.state.prod_image != '' || this.state.prod_image != null){
+                console.log('image image image',this.state.prod_image)
+                formData.append('image',{
+                                uri: this.state.prod_image,
+                                type: 'multipart/form-data',
+                                name: `image.jpg`,
+                            });
+            }
+           
+            formData.append('category_id',this.state.category_id);
+            formData.append('name',this.state.name);
+            formData.append('quantity',this.state.quantity);
+            formData.append('code',this.state.code);
+            formData.append('price',this.state.price);
+            formData.append('description',this.state.description);
+            formData.append('validity',this.state.validity);
+            formData.append('no_qty_limit',this.state.is_qty_limit);
+            formData.append('has_vat',this.state.state_id);
+            formData.append('on_webshop',this.state.is_web_shop);
+            
             let postData = {
                 method: 'PUT',
                 headers: {
@@ -134,19 +154,20 @@ class CreateProduct extends React.Component {
                     'Content-Type': 'application/json',
                     'Authorization': this.props.user.access_token,
                 },
-                body: JSON.stringify({
-                    category_id: this.state.category_id,
-                    name: this.state.name,//required
-                    quantity: this.state.quantity,//sandbox
-                    code: this.state.code,
-                    price: this.state.price,// required
-                    description: this.state.description,
-                    validity: this.state.validity,
-                    no_qty_limit: this.state.is_qty_limit, //Boolean 
-                    has_vat: this.state.state_id, //Boolean 
-                    image: this.state.image,
-                    on_webshop: this.state.is_web_shop, //Boolean 
-                })
+                body:formData
+                // body: JSON.stringify({
+                //     category_id: this.state.category_id,
+                //     name: this.state.name,//required
+                //     quantity: this.state.quantity,//sandbox
+                //     code: this.state.code,
+                //     price: this.state.price,// required
+                //     description: this.state.description,
+                //     validity: this.state.validity,
+                //     no_qty_limit: this.state.is_qty_limit, //Boolean 
+                //     has_vat: this.state.state_id, //Boolean 
+                //     image: this.state.image,
+                //     on_webshop: this.state.is_web_shop, //Boolean 
+                // })
             };
             fetch(Constants.productslist+"/"+this.state.prod_id, postData)
                 .then(response => response.json())
@@ -170,6 +191,7 @@ class CreateProduct extends React.Component {
                 }
                 )
                 .catch((error) => {
+                    this.setState({ spinner: false })
                     console.log("Api call error", error);
                     // Alert.alert(error.message);
                 });
@@ -188,13 +210,17 @@ class CreateProduct extends React.Component {
             Alert.alert("Warning", "Category is required")
             return; 
         }
-        else {
+        else {            
             var formData=new FormData();
+            if(this.state.prod_image!=null && this.state.prod_image!=''){
             formData.append('image',{
                 uri: this.state.prod_image,
                 type: 'multipart/form-data',
                 name: `image.jpg`,
             });
+            }
+
+            
             formData.append('category_id',this.state.category_id);
             formData.append('name',this.state.name);
             formData.append('quantity',this.state.quantity);
@@ -261,6 +287,7 @@ class CreateProduct extends React.Component {
                 }
                 )
                 .catch((error) => {
+                    this.setState({ spinner: false })
                     console.log("Api call error", error);
                     // Alert.alert(error.message);
                 });

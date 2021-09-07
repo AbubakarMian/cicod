@@ -264,6 +264,7 @@ class AddProduct extends React.Component {
                 this.setState({
                     data: data
                 });
+                // this.props.cartReducer(data[index]);
 
                 console.log('cart : ', this.props.cart);
             }
@@ -386,7 +387,7 @@ class AddProduct extends React.Component {
                                             </View>
                                             <View style={[{}, styles.orderDetailAmmountRow]}>
                                                 <View style={[{}, styles.orderDetailAmmountColumn]}>
-                                                    <Text style={[{}, styles.orderDetailAmmountColumnGaryBolText]}>N{item.price}</Text>
+                                                    <Text style={[{}, styles.orderDetailAmmountColumnGaryBolText]}>{this.props.currency.currency} {item.price}</Text>
                                                 </View>
                                                 <View style={[{}, styles.orderDetailAmmountColumn]}>
 
@@ -441,7 +442,8 @@ class AddProduct extends React.Component {
 function mapStateToProps(state) {
     return {
         user: state.userReducer,
-        cart: state.cartReducer
+        cart: state.cartReducer,
+        currency: state.currencyReducer,
     }
 };
 function mapDispatchToProps(dispatch) {

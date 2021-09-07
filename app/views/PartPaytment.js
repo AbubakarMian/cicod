@@ -94,8 +94,13 @@ class PartPaytment extends React.Component {
           return;
         }
         let order = await this.state.order
-        console.log('order',order)
+  
+
         let bodyOrder = this.get_body_order();
+        console.log('RRRRRRRRRRRRRRRRRR bodyOrder',JSON.stringify(bodyOrder))
+        console.log('RRRRRRRRRRRRRRRRRR payment_mode',payment_mode)
+        console.log('RRRRRRRRRRRRRRRRRR amount_payable',amount_payable)
+        console.log('RRRRRRRRRRRRRRRRRR',order)
         this.props.navigation.navigate('MakePayment', { bodyOrder: bodyOrder,
             payment_mode: this.state.payment_mode ,
             amount_payable: bodyOrder.part_payment_amount,
@@ -149,7 +154,7 @@ class PartPaytment extends React.Component {
             },
             body: JSON.stringify(bodyOrder)
         };
-        console.log('---- update postData params list @@@@@@!!!!!!!!!!!!!!', postData);
+        console.log('*****************---- update postData params list @@@@@@!!!!!!!!!!!!!!', JSON.stringify(bodyOrder));
         // https://com.cicodsaasstaging.com/com/api/orders/948?action=send_invoice
         let url = Constants.orderslist +'/'+this.state.order.id+'?action=send_invoice'
         fetch(Constants.orderslist, postData)
@@ -478,6 +483,7 @@ class PartPaytment extends React.Component {
             transparent={true}
             
         >
+            {console.log(_that.props.user)}
             <TouchableOpacity
                 onPress={() => _that.setState({ calenderModal: false })}
             >
