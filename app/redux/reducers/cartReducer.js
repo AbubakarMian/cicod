@@ -90,11 +90,12 @@ function updateCart (){
     let has_vat = false;
     for(let i=0;i<cart.length;i++){
         total_price = total_price + (cart[i].purchased_quantity * cart[i].price);
-        vat_amount = vat_amount + (cart[i].purchased_quantity *cart[i].vat_amount);
+        vat_amount = vat_amount + (cart[i].purchased_quantity *(cart[i].vat_amount==null?0:cart[i].vat_amount));
         vat_percent = cart[i].vat_percent; // amount is single percent cant be added multiple times
         has_vat = cart[i].has_vat; // amount is single percent cant be added multiple times
 
     }
+    console.log("tessss@3",cart)
     total_price = parseFloat(total_price).toFixed(2);
     let tax = vat_amount;//parseFloat(total_price*0.075).toFixed(2);
     initialState.cart_detail.total_price = total_price;
@@ -104,5 +105,5 @@ function updateCart (){
     initialState.cart_detail.has_vat = has_vat;
     console.log('total_price',total_price)
     console.log('tax',tax)
-    console.log('total_price+tax',(initialState.cart_detail.total_price_with_tax))
+    console.log('total_price+tax###',(initialState.cart_detail.total_price_with_tax))
 }

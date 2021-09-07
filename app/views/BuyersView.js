@@ -281,7 +281,7 @@ class BuyersView extends React.Component {
                 id:this.state.items.seller_id,
                 name:this.state.items.seller_name
             })
-        this.props.navigation.navigate('CreateOrder', { heading: 'supplier' })
+        this.props.navigation.navigate('CreateOrder', { heading: 'supplier',screen_name:"buy" ,item:this.state.items})
     }
     render() {
         console.log(' this state  this state items', this.state.items)

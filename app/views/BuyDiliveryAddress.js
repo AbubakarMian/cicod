@@ -255,7 +255,7 @@ class BuyDiliveryAddress extends React.Component {
                                             <Text style={{color:'#929497'}}>Country *</Text>
                                             :<Text style={{color:'#929497'}}>{this.state.country_name}</Text>
                                         }
-                                            {/* <DropDownPicker
+                                            <DropDownPicker
                                                 placeholder="Country *"
                                                 items={this.state.countries_arr}
                                                 autoScrollToDefaultValue={true}
@@ -264,16 +264,20 @@ class BuyDiliveryAddress extends React.Component {
                                                 itemStyle={{
                                                     justifyContent: 'flex-start',
                                                 }}
-                                                dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
+                                                // searchable={true}
+                                                searchablePlaceholder="Search country"
+                                                dropDownStyle={{ height: 300, overflow:"scroll", backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectCountry(item)}
-                                            /> */}
+                                            />
                                         </View>
 
                                     </View>
                                     <View style={[{}, styles.formColumn]}>
 
                                         <DropDownPicker
+                                        zIndex={1000}
+                                        disabled={this.state.country_name==""?true:false}
                                             placeholder="States *"
                                             items={this.state.states_arr}
                                             items={this.state.states_arr}
@@ -283,13 +287,14 @@ class BuyDiliveryAddress extends React.Component {
                                             itemStyle={{
                                                 justifyContent: 'flex-start',
                                             }}
-                                            dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
+                                            dropDownStyle={{ height: 180, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
                                             labelStyle={{ color: '#A9A9A9' }}
                                             onChangeItem={item => this.onSelectState(item)}
                                         />
                                     </View>
                                     <View style={[{ marginHorizontal: 10 }, styles.formColumn]}>
                                         <TextInput
+                                        disabled={this.state.state_id==0?true:false}
                                             label="Address*"
                                             style={{ backgroundColor: 'transparent', }}
                                             width={width - 50}

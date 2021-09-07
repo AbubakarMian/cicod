@@ -34,7 +34,68 @@ class AddProduct extends React.Component {
     }
 
     componentDidMount() {
+    
+        console.log("sellers s@@@##",this.props.route.params.item)
+        if(this.props.route.params.heading=="supplier"){
+            this.getSellersProducts(Constants.sellerProductList+'?id='+this.props.route.params.item.seller_id);
+        }
         this.getCategoryList();
+        // this.getSellersProducts();
+    }
+
+    getSellersProducts(url){
+        this.setState({ spinner: true })
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            },
+        };
+        //Constants.productslist + '?is_active=1&search=' + this.state.search_product
+        // let search_url =  '?is_active=1&search=' + this.state.search_product + '&category_id=' + this.state.category_id
+      
+        console.log('sllerszX@@##$$ ', url);
+        fetch(url, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                this.setState({
+                    spinner: false
+                });
+                console.log('@@@@....sellers Products!! !!!!!!!!', responseJson)
+                if (responseJson.success) {
+
+                    let cart_data = this.props.cart.cart;
+                    console.log('cart data : ', cart_data);
+                    let data = responseJson.data;
+                    for (let i = 0; i < data.length; i++) {
+                        let product_found = false;
+                        for (let c = 0; c < cart_data.length; c++) {
+                            console.log('asd');
+                            if (cart_data[c].id == data[i].id) {
+                                data[i].purchased_quantity = cart_data[c].purchased_quantity;
+                                data[i].is_added = true;
+                                product_found = true;
+                            }
+                        }
+                        if (!product_found) {
+                            data[i].purchased_quantity = 0;
+                            data[i].is_added = false;
+                        }
+
+                    }
+                    this.setState({
+                        data: data
+                    })
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
+                    Alert.alert('Error', message)
+                }
+            })
     }
 
     getProductList(search_product, category_id) {
@@ -114,11 +175,11 @@ class AddProduct extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
-        fetch(Constants.productcategorylist, postData)
+        fetch(this.props.route.params.heading=="supplier"? Constants.sellerProductCategoryList+'?id='+this.props.route.params.item.seller_id:Constants.productcategorylist, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({ spinner: false });
-                if (responseJson.status === 'success') {
+                if (responseJson.success|| responseJson.status === 'success') {
 
                     let res = responseJson.data;
                     let categoryarr = res.map((x, key) => { return { label: x.name, value: x.id } });
@@ -142,7 +203,13 @@ class AddProduct extends React.Component {
         this.setState({
             category_id: category_id
         })
-        this.getProductList(this.state.search_product, category_id);
+        if(this.props.route.params.heading=="supplier"){
+            const url=`${Constants}`
+            this.getSellersProducts(Constants.sellerProductList+'?id='+this.props.route.params.item.seller_id)+'&filter[category_id]='+category_id;
+        } else {
+            this.getProductList(this.state.search_product, category_id);
+        }
+        
     }
 
     async addProduct(index) {
@@ -153,7 +220,12 @@ class AddProduct extends React.Component {
         } else {
 
             for(let i = 0 ; i < data.length; i++){
+                
                 if(data[i].purchased_quantity > 0){
+                    if(data[i].minimum_order > data[i].purchased_quantity){
+                        Alert.alert("Info!",`${data[i].name} purchased quantity less than minimum order ${data[i].minimum_order}`)
+                        continue;
+                    }
                     await this.props.cartReducer(data[i]);
                 }
             }            
@@ -252,7 +324,7 @@ class AddProduct extends React.Component {
                             placeholder="Search Product"
                             iconColor="#929497"
                             style={{ width: width - 20, alignSelf: 'center', marginTop: 10, marginBottom: 5, elevation: 0, fontSize: 14, color: '#D5D5D5', borderColor: '#D8DCDE' }}
-                            onSubmitEditing={() => this.getProductList(this.state.search_product, this.state.category_id)}
+                            onSubmitEditing={() =>this.getProductList(this.state.search_product, this.state.category_id)}
                             onChangeText={text => this.setState({ search_product: text })}
                         //update
                         ></Searchbar>

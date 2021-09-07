@@ -14,6 +14,10 @@ import { SET_USER, SET_CUSTOMER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART, 
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SearchBar from 'react-native-search-bar';
+import NoCustomer from './Components/CreateOrder/NoCustomer';
+import CustomerDetail from './Components/CreateOrder/CustomerDetail';
+import NoOrderDetail from './Components/CreateOrder/NoOrderDetail';
+import OrderDetail from './Components/CreateOrder/OrderDetail';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 class CreateOrder extends React.Component {
@@ -28,6 +32,7 @@ class CreateOrder extends React.Component {
             customer_country: this.props.customer.country,
             customer_state: this.props.customer.state,
             customer_lga: this.props.customer.lga,
+            customer:{},
             cart_arr: this.props.cart.cart ?? [],
             limit_cart_arr: [],
             cart_detail: this.props.cart.cart_detail,
@@ -38,6 +43,7 @@ class CreateOrder extends React.Component {
             suppliereModal: false,
             search_supplier: '',
             supplierlist: [],
+            supplier:{},
             address_backgound: '',
             deliveryType: '',
             show_part_payment: false,
@@ -57,14 +63,74 @@ class CreateOrder extends React.Component {
         this.props.emptyOrder();
     }
     async componentDidMount() {
-     
-        console.log(' create order !!!! !!!!!!!!', this.props.user);
+        if(this.props.route.params.heading == 'supplier'){
+            console.log("sellers detailsss",this.props.route.params.item)
+            //getSellers
+            this.setState({supplier:this.props.route.params.item});
+            this.getSellersCustomers();
+        }
+        //console.log(' create order !!!! !!!!!!!!', this.props.user);"buyer_id": "10608"
         this.getSuppliersList(Constants.supplierlist);
+    }
+
+    getSellersCustomers(){
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': this.props.user.access_token
+            },
+        };
+        this.setState({spinner:true})
+        // let order_id = this.props.route.params.data.id;
+        let url = Constants.seller_customer_details + '?id=' + this.props.route.params.item.seller_id
+        // //console.log('---- body params list @@@@@@!!!!!!!!!!!!!!', this.props.route.params);
+        //console.log('order url detail ', url);
+        //console.log('order postData ', postData);
+        fetch(url, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                //console.log("Suppliers ##@@@@%^^&", responseJson)
+                if (responseJson.success) {
+                    let data = responseJson.data;
+                    //console.log("##########ddddddddddd",data)
+                   // this.setState({ spinner: false })
+                   // this.props.navigation.navigate('PaymentSuccess',{data:data})
+                  
+                    this.setState({
+                        customer:data,
+                        customer_email:data.customer_email,
+                        customer_phone:data.customer_phone,
+                        customer_name:data.customer_name,
+                       
+
+                        spinner: false,
+                      
+                    })
+                    // let payment_link = responseJson.data.payment_link
+                    // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
+                } else {
+                    this.setState({ spinner: false })
+                    let message = responseJson.message
+                    //console.log('some error',responseJson)
+                }
+            }
+            )
+            .catch((error) => {
+                //console.log("Api call error", error);
+                // Alert.alert(error.message);
+            });
     }
 
     componentWillReceiveProps() {
      
-      
+        if(this.props.route.params.heading == 'supplier'){
+            console.log("sellers detailsss",this.props.route.params.item)
+            //getSellers
+            this.setState({supplier:this.props.route.params.item});
+            this.getSellersCustomers();
+        }
         this.setState({
             customer_name: this.props.customer.name,
             customer_email: this.props.customer.email,
@@ -77,8 +143,8 @@ class CreateOrder extends React.Component {
         let url = Constants.supplierlist + 'filter[seller_name]=' + this.state.search_supplier;
         this.getSuppliersList(url);
     }
-    async counterFun(action, index) {
-
+     counterFun=async(action, index)=>{
+//console.log("###$$$$@",action,index,this.state.cart_arr)
         let data = this.state.cart_arr;
         if (action == 'add') {
 
@@ -96,7 +162,7 @@ class CreateOrder extends React.Component {
                     limit_cart_arr: cart_arr
                 });
 
-                console.log('cart : ', this.props.cart);
+                //console.log('cart : ', this.props.cart);
             }
         }
         else {
@@ -108,7 +174,7 @@ class CreateOrder extends React.Component {
                 this.setState({
                     data: data
                 })
-                console.log(' remove from cart cart : ', this.props.cart);
+                //console.log(' remove from cart cart : ', this.props.cart);
             }
         }
 
@@ -117,15 +183,23 @@ class CreateOrder extends React.Component {
     }
 
     DeliveryType(type) {
-        if (this.props.customer.name == '') {
+        if (this.props.route.params.heading=='supplier') {
+            if (this.state.customer_name == '') {
+                alert('NO CUSTOMER FOUND');
+            }
+        }else{
+            if (this.props.customer.name == '') {
             alert('ADD CUSTOMER FIRST');
             return
         }
+        }
+
+        
         this.setState({ delivery_type_option: type })
         // this.props.setDeliveryAddress({
         //     type: type,
         // })
-        console.log('dilivery type ------', type)
+        //console.log('dilivery type ------', type)
         // this.setState({ is_pickup: !this.state.is_pickup, })
         if (type === 'delivery') {
             this.setState({ deliveryType: 'delivery' })
@@ -135,9 +209,9 @@ class CreateOrder extends React.Component {
         }//return;
         if (type == 'delivery') {
             if (this.props.route.params.screen_name == 'buy') {
-                this.props.navigation.navigate('BuyDiliveryAddress', { type, address: this.props.customer.address,address_id:this.props.deliveryAddress.selected_address_id })
+                this.props.navigation.navigate('BuyDiliveryAddress', { type, address: this.state.customer.address,address_id:this.props.deliveryAddress.selected_address_id })
             } else {
-                console.log("RRRRRRRRRR",this.props.deliveryAddress.selected_address_id)
+                //console.log("RRRRRRRRRR",this.props.deliveryAddress.selected_address_id)
                
                 this.props.navigation.navigate('DiliveryAddress', { type, address: this.props.customer.address,address_id:this.props.deliveryAddress.selected_address_id})
             }
@@ -181,7 +255,7 @@ class CreateOrder extends React.Component {
             pay_button_lable: pay_button_lable
         })
     }
-    removeProduct(id) {
+    removeProduct=(id)=> {
         this.props.removeProductFromCart(id);
     }
 
@@ -225,8 +299,8 @@ class CreateOrder extends React.Component {
         // if(cart.length<1){
         //     alert('Add products to cart')
         // }
-        console.log('dilevery_type', dilevery_type);
-        console.log('this.props.deliveryAddress.type this.props.deliveryAddress.type', this.props.deliveryAddress);
+        //console.log('dilevery_type', dilevery_type);
+        //console.log('this.props.deliveryAddress.type this.props.deliveryAddress.type', this.props.deliveryAddress);
         let discounted_price = 0
         let discounted_percentage = 0
         let amount_payable = this.state.amount_payable
@@ -239,9 +313,36 @@ class CreateOrder extends React.Component {
         //     discounted_price = this.props.orderDiscountReducer.discount_amount;
         //     amount_payable = (this.state.cart_detail.total_price_with_tax - this.props.orderDiscountReducer.discount_amount) ?? 0;
         // }
+
+        console.log("Limit cart @@###$$$$",cart)
         
 
-        let bodyOrder = {
+        let bodyOrder = 
+        
+        //if it is supplier add merchant id
+        this.props.route.params.heading='supplier'?
+        {
+            customer_name: this.state.customer_name,//this.state.customer_name,//required
+            customer_phone: this.state.customer_phone, //this.state.customer_phone,//required
+            customer_email: this.state.customer_email,//this.state.customer_email,
+            products: cart, //required this.state.limit_cart_arr
+            delivery_type: this.props.deliveryAddress.type,//dilevery_type,?? 'PICKUP'
+            delivery_address: this.props.deliveryAddress.address ?? '',
+            payment_mode: this.state.payment_mode, //required
+            country_id: this.props.deliveryAddress.country_id,
+            state_id: this.props.deliveryAddress.state_id,
+            lga_id: this.state.customer_lga,
+            note: this.props.notes.notes ?? '',
+            discount_amount: discounted_price,
+            merchant_id:this.props.route.params.item.buyer_id,
+            discount_percent: discounted_percentage,
+            accept_multiple_part_payment: this.state.show_part_payment,
+            // part_payment_balance_due_date: this.state.part_payment_balance_due_date,
+            // part_payment_percent: this.state.part_payment_percent,
+            // part_payment_amount: this.state.part_payment_amount,
+
+        } :
+        {
             customer_name: this.state.customer_name,//this.state.customer_name,//required
             customer_phone: this.state.customer_phone, //this.state.customer_phone,//required
             customer_email: this.state.customer_email,//this.state.customer_email,
@@ -267,7 +368,7 @@ class CreateOrder extends React.Component {
         //     ConfirmationPayInvoice: false
         // })
         if (this.state.goto_payment_screen == '') {//show_part_payment
-            console.log('step  1 ')
+            //console.log('step  1 ')
             await this.create_order_id(Constants.orderslist, bodyOrder)
 
         }
@@ -278,7 +379,7 @@ class CreateOrder extends React.Component {
                 payment_mode: this.state.payment_mode,
                 amount_payable: this.state.amount_payable,
             });
-            console.log('step  2 ')
+            //console.log('step  2 ')
             return;
         }
     }
@@ -295,16 +396,16 @@ class CreateOrder extends React.Component {
 
         // let order_id = this.props.route.params.data.id;
         let url = Constants.orderslist + '/' + order_id
-        // console.log('---- body params list @@@@@@!!!!!!!!!!!!!!', this.props.route.params);
-        console.log('order url detail ', url);
-        console.log('order postData ', postData);
+        // //console.log('---- body params list @@@@@@!!!!!!!!!!!!!!', this.props.route.params);
+        //console.log('order url detail ', url);
+        //console.log('order postData ', postData);
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log("get_order_detail order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
+                //console.log("get_order_detail order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
                 if (responseJson.status.toUpperCase() === "SUCCESS") {
                     let data = responseJson.data;
-                    console.log("##########ddddddddddd",data)
+                    //console.log("##########ddddddddddd",data)
                  
                     this.props.navigation.navigate('PaymentSuccess',{data:data})
                     // this.setState({
@@ -317,19 +418,19 @@ class CreateOrder extends React.Component {
                 } else {
                     this.setState({ spinner: false })
                     let message = responseJson.message
-                    console.log('some error',responseJson)
+                    //console.log('some error',responseJson)
                 }
             }
             )
             .catch((error) => {
-                console.log("Api call error", error);
+                //console.log("Api call error", error);
                 // Alert.alert(error.message);
             });
     }
 
     create_order_id(url, bodyOrder) {
 
-        console.log('create_order_id', bodyOrder);
+        //console.log('create_order_id', bodyOrder);
         let postData = {
             method: 'POST',
             headers: {
@@ -348,7 +449,7 @@ class CreateOrder extends React.Component {
                     let payment_link = responseJson.data//Pay Account,ACCOUNT
                     if (this.state.payment_option_selected == 'Pay Account') {
                         // alert(responseJson.message)
-                        console.log("~~~~~~~~~~~create_order_id payment_link!", responseJson.data)
+                        //console.log("~~~~~~~~~~~create_order_id payment_link!", responseJson.data)
                         this.get_order_detail(responseJson.data.id);
                         
                         // this.props.navigation.navigate('PaymentCash', { payment_link: payment_link,data:responseJson });
@@ -369,13 +470,13 @@ class CreateOrder extends React.Component {
             }
             )
             .catch((error) => {
-                console.log("Api call error", error);
+                //console.log("Api call error", error);
                 // Alert.alert(error.message);
             });
     }
 
     getSuppliersList(url) {
-        console.log('get Suppliers List');
+        //console.log('get Suppliers List');
         this.setState({ spinner: true })
         let postData = {
             method: 'GET',
@@ -388,7 +489,7 @@ class CreateOrder extends React.Component {
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log('suppliers responseJson @@@@@@@@@@@@@@@@@@@', responseJson);
+                //console.log('suppliers responseJson @@@@@@@@@@@@@@@@@@@', responseJson);
                 this.setState({
                     spinner: false,
                 });
@@ -442,7 +543,7 @@ class CreateOrder extends React.Component {
 
     }
     render() {
-        console.log(' supplierlist @@@@@@@@@@@@@@@ supplierlist  !!!!!!!!!!!!!!', this.props.supplier);
+        //console.log(' supplierlist @@@@@@@@@@@@@@@ supplierlist  !!!!!!!!!!!!!!', this.props.supplier);
         var radio_props_dilvery = [
             { label: 'Delivery', value: 0 },
 
@@ -450,18 +551,25 @@ class CreateOrder extends React.Component {
         var radio_props_pickup = [
             { label: 'Pickup', value: 1 },
         ];
-        var radio_props_payment = [
+        var radio_props_payment = this.props.route.params.heading=='supplier' ?[
+            { label: 'Pay Now', value: 0 },
+            { label: 'Pay Account', value: 1 },
+            { label: 'Pay Invoice', value: 2 },
+            //{ label: 'Part Payment', value: 3 },
+        ]:[
             { label: 'Pay Now', value: 0 },
             { label: 'Pay Account', value: 1 },
             { label: 'Pay Invoice', value: 2 },
             { label: 'Part Payment', value: 3 },
         ];
+        console.log("amount Payable@@@",this.props.orderDiscountReducer.discount_type)
         var amount_payable = 0; //this.props.currency.currency + " "
         if(this.props.orderDiscountReducer.discount_type == 'percentage'){
             amount_payable = this.state.cart_detail.total_price_with_tax - 
                 (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01).toFixed(2);
         }
         else{ //'value'
+            console.log("ewee@##",this.state.cart_detail.total_price_with_tax )
             amount_payable = (this.state.cart_detail.total_price_with_tax - this.props.orderDiscountReducer.discount_amount).toFixed(2)
         }
 
@@ -493,6 +601,7 @@ class CreateOrder extends React.Component {
                             <View style={[{}, styles.backHeadingView]}>
                                 <Text style={[{}, styles.backHeadingText]}>CREATE ORDER</Text>
                             </View>
+                            
                             <View style={[{}, styles.backHeadingCloseView]}>
                                 <Icon name="times" size={20} color="#929497" />
                                 <TouchableOpacity
@@ -520,46 +629,25 @@ class CreateOrder extends React.Component {
                         <View style={[{}, styles.customerContainerView]}>
 
                             <Text style={[{ color: '#929497', textAlign: 'left', alignSelf: 'flex-start', marginLeft: 10 }, fontStyles.bold15]}>Customer Details</Text>
-                            <TouchableOpacity style={[{}, styles.customerContaineraddBtnView]}
-                                onPress={() => this.props.navigation.navigate('AddCustomer')}
-                            >
-                                <Icon name="plus-circle" size={20} color={'#fff'} />
-                                <Text style={[{}, styles.customerContaineraddBtnText]}>Add</Text>
-                            </TouchableOpacity>
+                           {this.props.route.params.screen_name != 'buy' &&(
+                               <TouchableOpacity style={[{}, styles.customerContaineraddBtnView]}
+                               onPress={() => this.props.navigation.navigate('AddCustomer')}
+                           >
+                               <Icon name="plus-circle" size={20} color={'#fff'} />
+                               <Text style={[{}, styles.customerContaineraddBtnText]}>Add</Text>
+                           </TouchableOpacity>
+                           )}  
                             <View style={{ borderBottomWidth: 0.5, width: width - 20, alignSelf: 'center', marginVertical: 5, borderColor: '#E6E6E6' }}></View>
                             
-                            {(this.props.customer.name == '' || this.props.customer.name == undefined) ?
-                                <View style={[{}, styles.customerContainerView]}>
-                                    <Icon name="user-circle" size={50} color="#D8D8D8" />
-                                    <Text style={[{}, styles.customerContainerheading]}>No Customer added</Text>
-                                    <Text style={[{}, styles.customerContainerText]}>add customer</Text>
-                                </View>
-                                : <View style={[{}, styles.userDEtailCOntainer]}>
-                                    <View style={[{}, styles.userDEtailCOntainerIconView]}>
-                                        <Icon
-                                            name="user-circle"
-                                            color="#D8D8D8"
-                                            size={20}
-                                        />
-                                        <Text style={[{}, styles.userDEtailCOntainerText]}>{this.props.customer.name}</Text>
-                                    </View>
-                                    <View style={[{}, styles.userDEtailCOntainerIconView]}>
-                                        <Text style={[{}, styles.usetDetailLableText]}>Email: </Text>
-                                        <Text style={[{}, styles.usetDetailInfoText]}>{this.props.customer.email}</Text>
-                                    </View>
-                                    <View style={[{}, styles.userDEtailCOntainerIconView]}>
-                                        <Text style={[{}, styles.usetDetailLableText]}>Phone: </Text>
-                                        <Text style={[{}, styles.usetDetailInfoText]}>{this.props.customer.phone}</Text>
-                                    </View>
-                                    <View style={[{}, styles.downIconView]}>
-                                        <Icon name="angle-down"
-                                            size={20}
-                                            color={'#929497'} />
-                                    </View>
-                                </View>}
+                            { this.props.route.params.heading=="supplier"&&<CustomerDetail isSupplier={true} customer={this.state.customer} name={this.state.customer_name} email={this.state.customer_email} phone={this.state.customer_phone} /> } 
+                               { this.props.route.params.heading!="supplier" &&(( this.props.customer.name == '' || this.props.customer.name == undefined) ?<NoCustomer />
+:<CustomerDetail name={this.props.customer.name} email={this.props.customer.email} phone={this.props.customer.phone} />
+                               )}
+                                
+                                                              
                         </View>
                         <TouchableOpacity
-                            onPress={() => this.props.navigation.navigate('AddProduct')}
+                            onPress={() => this.props.navigation.navigate('AddProduct',{heading:"supplier",item:this.state.supplier})}
                         >
                             <View style={[{}, styles.customerContaineraddProductView]}>
 
@@ -583,75 +671,9 @@ class CreateOrder extends React.Component {
                                 <Text style={[{}, styles.OrderDetailNormalgRowText]}>Clear Order</Text>
                             </TouchableOpacity>
                             {(this.state.cart_arr.length == 0) ?
-                                <View style={[{}, styles.cartSlashView]}>
-                                    <Image
-                                        style={{ height: width / 3, width: width / 3 }}
-                                        source={require('../images/cartSlash.png')}
-                                    />
-                                    <Text style={[{}, styles.cartSlashheadingText]}>No product added</Text>
-                                    <Text style={[{}, styles.cartSlashNormalText]}>Add a product</Text>
-                                </View>
-                                :
-                                <FlatList
-                                    data={this.state.cart_arr}
-                                    ItemSeparatorComponent={
-                                        Platform.OS !== 'android' &&
-                                        (({ highlighted }) => (
-                                            <View
-                                                style={[
-                                                    style.separator,
-                                                    highlighted && { marginLeft: 0 }
-                                                ]}
-                                            />
-                                        ))
-                                    }
-                                    renderItem={({ item, index, separators }) => (
-                                        <View style={[{ flexDirection: 'column' }]}>
-                                            <View style={[{}, styles.OrderDetailDataCOntainer]}>
-                                                <View style={[{}, styles.OrderDetailDataCOntainerRow]}>
-                                                    <View>
-                                                        <Text style={[{width:width/1.5}, styles.OrderDetailDataCOntainerHeadingText]}>{item.name}  {item.quantity} PACK</Text>
-                                                        <Text style={[{}, styles.OrderDetailHeadingRowText]}>{item.category}</Text>
-                                                    </View>
-
-                                                    <View style={[{}, styles.OrderDetailDataCOntainerCounterView]}>
-                                                        <TouchableOpacity style={[{}, styles.iconView]}
-                                                            onPress={() => this.counterFun('sub', index)}
-                                                        >
-                                                            <Icon name="minus" />
-                                                        </TouchableOpacity>
-                                                        <View style={[{}, styles.iconView]}>
-                                                            <Text>{item.purchased_quantity}</Text>
-                                                        </View>
-                                                        <TouchableOpacity style={[{}, styles.iconView]}
-                                                            onPress={() => this.counterFun('add', index)}
-                                                        >
-                                                            <Icon name="plus"
-                                                                color="#B1272C"
-                                                            />
-                                                        </TouchableOpacity>
-                                                    </View>
-
-                                                </View>
-
-                                            </View>
-                                            <View style={[{}, styles.orderDetailAmmountRow]}>
-                                                <View style={[{}, styles.orderDetailAmmountColumn]}>
-                                                    <Text style={[{}, styles.orderDetailAmmountColumnGaryBolText]}>
-                                                        {this.props.currency.currency + " " + item.price}</Text>
-                                                </View>
-                                                <View style={[{}, styles.orderDetailAmmountColumn]}>
-                                                    <TouchableOpacity
-                                                        style={[{ alignSelf: 'flex-end' }]}
-                                                        onPress={() => this.removeProduct(index)}
-                                                    >
-                                                        <Text style={[{}, styles.orderDetailAmmountColumnRedText]}>Remove</Text>
-                                                    </TouchableOpacity>
-                                                </View>
-                                            </View>
-                                        </View>
-                                    )}
-                                />
+                                <NoOrderDetail />
+                                : <OrderDetail currency={this.props.currency.currency} carts={this.state.cart_arr} counterFun={this.counterFun} removeProduct={this.removeProduct}  />
+                               
                             }
                         </View>
                         <View style={[{}, styles.diliveryTypeContainerView]}>
@@ -809,21 +831,24 @@ class CreateOrder extends React.Component {
                                     ))
                                 }
                             </View>
-                            <View style={[{}, styles.paymentCheckboxView]}>
-                                <CheckBox
-                                    style={{ width: width / 1.5, alignSelf: 'center', alignItems: 'center' }}
-                                    onClick={() => {
-                                        this.setState({
-                                            show_part_payment: !this.state.show_part_payment
-                                        })
-                                    }}
-                                    isChecked={this.state.show_part_payment}
-                                    rightText={"Accept multiple part payment"}
-                                    rightTextStyle={{ color: '#4E4D4D', fontSize: 13, fontFamily: 'Open Sans' }}
-                                    checkBoxColor={'#929497'}
-                                />
+                            {this.props.route.params.screen_name!="buy" &&(
+                                 <View style={[{}, styles.paymentCheckboxView]}>
+                                 <CheckBox
+                                     style={{ width: width / 1.5, alignSelf: 'center', alignItems: 'center' }}
+                                     onClick={() => {
+                                         this.setState({
+                                             show_part_payment: !this.state.show_part_payment
+                                         })
+                                     }}
+                                     isChecked={this.state.show_part_payment}
+                                     rightText={"Accept multiple part payment"}
+                                     rightTextStyle={{ color: '#4E4D4D', fontSize: 13, fontFamily: 'Open Sans' }}
+                                     checkBoxColor={'#929497'}
+                                 />
+                             </View>
+                        
+                            )}
                             </View>
-                        </View>
                         <View style={{ backgroundColor: '#fff', width: width - 20, alignSelf: 'center', marginTop: 10, borderRadius: 10, paddingBottom: 10 }}>
                             <View style={[{ borderBottomWidth: 0.25 }, styles.subTotleRowView]}>
 
@@ -843,6 +868,7 @@ class CreateOrder extends React.Component {
                                         <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.tax ?? 0}</Text>
                                         : null}
                                         <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " +parseFloat(this.state.amount_payable+'').toFixed(2)}</Text>
+                                
                                 </View>
                             </View>
                             <View style={{ flexDirection: 'row', width: width - 50, alignSelf: 'center', marginVertical: 10 }}>
