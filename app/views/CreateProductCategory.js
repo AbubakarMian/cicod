@@ -38,7 +38,6 @@ class CreateProductCategory extends React.Component {
     }
     
     get_edit_product_category(){
-    // console.log('mmmmmmmmmmmmmmmm',this.props.route.params.items)
     if(this.props.route.params.items == null ){ // && this.state.screen != 'update'
         if(this.state.id == 0){
             return;
@@ -48,46 +47,36 @@ class CreateProductCategory extends React.Component {
                 id:0,
                 name:'',
                 description:'',
-                image:''
+                prod_image:''
             },
             screen : 'new'
         })
     }
     else{
-        if(this.state.id != this.props.route.params.items.id){
+        if(this.state.id == this.props.route.params.items.id){
             return;
         }
+        let product_category = this.props.route.params.items;
+        product_category.prod_image = this.props.route.params.items.image;
+        console.log('edit prodcat',product_category);
         this.setState({
-            product_category:this.props.route.params.items,
+            product_category:product_category,
             screen : 'update',
-            // id:this.props.route.params.items.id
+            id:this.props.route.params.items.id
         })
     }
-    // this.props.route.params.screen == 'update'
-    console.log('product ', this.state.product_category)
-    // if () {
-    //     this.setState({
-    //         name: this.props.route.params.items.name,
-    //         description: this.props.route.params.items.description,
-    //         id: this.props.route.params.items.id,
-            
-    //     })
-    // }
     this.getCategoryList();
 }
 
 
-    setImage(props){
-        
+    setImage(props){        
         let _that = props._that;
-        // console.log('~~~~~~~~~~~********************',_that.state.prod_image.path)
-        // // console.log('~~~~~~~~~~~******************** _that.state.prod_image',_that.state.prod_image.path == null)
         console.log('~~~~~~~~~~~******************** _that.state._that.state.product_category',_that.state.product_category)
-        if(_that.state.product_category.image != '' || _that.state.product_category.image != null){
+        if(_that.state.product_category.prod_image != ''){
           return(
             <Image
                 style={{height:width/6,width:width/6}}
-                source={{uri:_that.state.product_category.image}}
+                source={{uri:_that.state.product_category.prod_image}}
             />
           )
         }
@@ -118,11 +107,9 @@ class CreateProductCategory extends React.Component {
         }
         else {
             let token = this.props.user.access_token;
-            // console.log('EEEEEEEEEEE', url)
             console.log('cccccccccc', token)
          
             var formData = new FormData();
-            //   formData.append('category_id',this.state.category_id);  
               formData.append('name',this.state.product_category.name);  
               formData.append('description',this.state.product_category.description);  
              
@@ -134,15 +121,8 @@ class CreateProductCategory extends React.Component {
             }
               );  
             
-              formData.append('on_webshop',this.state.product_category.add_weshop);  
-            // let body = {
-            //     category_id: this.state.category_id,
-            //     name: this.state.name,//required
-            //     description: this.state.description,
-            //     image: this.state.prod_image,
-            //     on_webshop: this.state.add_weshop, //Boolean             
-            // }
-            console.log('222222222222222~~~~~~~~~~~~body',formData)
+            formData.append('on_webshop',this.state.product_category.add_weshop);  
+            console.log('222222222222222~~~~~~~~~~~~body formdata',formData)
             let myheader = {
                 headers: {
                     Accept: 'application/json',
@@ -264,7 +244,7 @@ class CreateProductCategory extends React.Component {
         }).then(image => {
             console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@', image);
             let product_category = this.state.product_category
-            product_category.image = image.path
+            product_category.prod_image = image.path
             this.setState({
                 prod_image: image.path,
                 product_category:product_category
@@ -304,23 +284,9 @@ class CreateProductCategory extends React.Component {
                     <Text style={[{ color: '#2F2E7C', fontWeight: '700', marginLeft: 10 }, fontStyles.normal15]}>CREATE PRODUCT CATEGORY</Text>
                 </View>
                 <View style={[{}, styles.mainContentView]}>
-                    {/* <DropDownPicker
-                        items={this.state.categoryarr}
-                        containerStyle={{ height: 70, width: width - 40, alignSelf: 'center' }}
-                        style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
-                        itemStyle={{
-                            justifyContent: 'flex-start', width: width - 50, height: 40
-                        }}
-                        placeholder="Product Category "
-                        dropDownStyle={{ height: 120, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
-                        labelStyle={{ color: '#A9A9A9' }}
-                        onChangeItem={item => this.setState({ category_id: item.value })}  //this.onSelectCountry(item.value)}
-                    /> */}
                     <View style={[{},]}>
                         <TextInput
-                            // onChangeText={text => this.setState({ product_category:{...this.state.product_category,name:text}  })}
                             onChangeText={text => this.setName(text)}
-                            // onChangeText={(text) => this.setState({newNote: {...this.state.newNote,description: text}})}
                             label="Name*"
                             style={{ backgroundColor: 'transparent', borderColor: '#CFCFCF' }}
                             width={width - 50}
