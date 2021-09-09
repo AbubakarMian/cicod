@@ -65,7 +65,7 @@ class CreateProductCategory extends React.Component {
             id:this.props.route.params.items.id
         })
     }
-    this.getCategoryList();
+    // this.getCategoryList();
 }
 
 
@@ -93,7 +93,8 @@ class CreateProductCategory extends React.Component {
 
     createCategory() {
         console.log('this.state.product_category',this.state.product_category);
-        if(this.state.prod_image.path==''){
+        // if(this.state.prod_image.path==''){
+        if(this.state.product_category.prod_image==''){
             Alert.alert("Warning", "Category Image is required");
             return;
         }
@@ -114,15 +115,22 @@ class CreateProductCategory extends React.Component {
               formData.append('description',this.state.product_category.description);  
              
               formData.append('image',{
-              uri: this.state.prod_image,
+              uri: this.state.product_category.prod_image,
                     type: 'multipart/form-data',
                     name: `image.jpg`,
                  
             }
               );  
             
-            formData.append('on_webshop',this.state.product_category.add_weshop);  
+            formData.append('on_webshop',this.state.add_weshop);  
             console.log('222222222222222~~~~~~~~~~~~body formdata',formData)
+            console.log('222222222222222~~~~~~~~~~~~body formdata image',{
+                uri: this.state.product_category.prod_image,
+                      type: 'multipart/form-data',
+                      name: `image.jpg`,
+                   
+              })
+            // return;
             let myheader = {
                 headers: {
                     Accept: 'application/json',
@@ -159,7 +167,7 @@ class CreateProductCategory extends React.Component {
             }
             else {
                 let url = Constants.update_product_category + '/' + this.state.id;
-                console.log('~~~~~~~~~~',url)
+                console.log('~~~~~~~~~~ update category',url)
 
                 axios.put(url,
                      formData,
@@ -281,7 +289,8 @@ class CreateProductCategory extends React.Component {
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
-                    <Text style={[{ color: '#2F2E7C', fontWeight: '700', marginLeft: 10 }, fontStyles.normal15]}>CREATE PRODUCT CATEGORY</Text>
+                    <Text style={[{ color: '#2F2E7C', fontWeight: '700', marginLeft: 10 }, fontStyles.normal15]}>
+                        {this.props.route.params.items == null?'CREATE':'EDIT'} PRODUCT CATEGORY</Text>
                 </View>
                 <View style={[{}, styles.mainContentView]}>
                     <View style={[{},]}>

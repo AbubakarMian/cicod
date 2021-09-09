@@ -31,6 +31,7 @@ class OrderDetail extends React.Component {
             created_by: '',
             payment_date: '',
             total_amount: 0,
+            currency: '',
             amount_paid_from_credit_limit: '',
             data: {
                 customer: {
@@ -63,6 +64,7 @@ class OrderDetail extends React.Component {
                     Spinner: false,
                 });
                 console.log('~~~~~~~~~~@@@@....@@@@@@@@@@@@@data data data res res res ', Constants.orderslist + '/' + order_id,responseJson.data)
+                console.log('data data data res res res  order detail', responseJson.data)
                 if (responseJson.status === 'success') {
                     if (responseJson.message == "Order not found") {
                         // this.props.navigation.goBack();
@@ -86,6 +88,7 @@ class OrderDetail extends React.Component {
                         ticket_id: responseJson.data.ticket_id,
                         created_by: responseJson.data.created_by,
                         payment_date: responseJson.data.payment_date,
+                        currency: responseJson.data.currency,
                         item: product_items,
                         total_amount: total_ammount,
                         amount_paid_from_credit_limit: responseJson.data.amount_paid_from_credit_limit,
@@ -329,7 +332,7 @@ class OrderDetail extends React.Component {
                                         <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>QTY: </Text>
                                         <Text style={{  fontSize: 13, color: '#929497', marginRight: width / 4 }}>{item.quantity} </Text>
                                         <Text style={{ position:'absolute',right:20,fontSize: 13, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end' }}>
-                                            {this.props.currency.currency+' '+(item.quantity*item.price)} </Text>
+                                            {this.state.currency+' '+(item.quantity*item.price)} </Text>
                                     </View>
                                 </View>
                             </View>
@@ -339,8 +342,7 @@ class OrderDetail extends React.Component {
                         <View style={{ alignSelf: 'flex-end', marginRight: 20, marginVertical: 20, flexDirection: 'row' }}>
                             <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>Total:  </Text>
                             <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>
-                                {this.props.currency.currency+get_formated_amount(this.state.total_amount)}
-                                {/* {this.props.currency.currency+this.state.total_amount.replace(/\B(?=(\d{1})+(?!\d))/g, ",")} */}
+                                {this.state.currency+get_formated_amount(this.state.total_amount)}
                                 </Text>
                         </View>
 
