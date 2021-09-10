@@ -65,13 +65,24 @@ class CategoryFilter extends React.Component {
 
           let res = responseJson.data;
           console.log('all cats',res);
-          let categoryarr = res.map((x, key) => { return { label: x.name, value: x.name } });
-          let createdby_arr = res.map((x, key) => { return { label: x.created_by, value: x.created_by } });
-          console.log('category !!!!!!', categoryarr);
-          console.log('createdby_arr  !!!!!!', createdby_arr);
+          // let categoryarr = res.map((x, key) => { return { label: x.name, value: x.name } });
+
+          let createdby_arr = [];
+          for(let i =0;i<res.length;i++){
+            let x = res[i];
+            upsert(createdby_arr,
+              { key:x.created_by,label: x.created_by, value: x.created_by });
+          }
+
+
+          // let createdby_arr = res.map((x, key) => { 
+          //   return { label: x.created_by, value: x.created_by } 
+          // });
+          // console.log('category !!!!!!', categoryarr);
+          // console.log('createdby_arr  !!!!!!', createdby_arr);
           this.setState({
             createdby_arr: createdby_arr,
-            categoryarr: categoryarr,
+            // categoryarr: categoryarr,
           });
         } else {
           let message = JSON.stringify(responseJson.error.message)
@@ -215,7 +226,7 @@ console.log('new date_filter_option ',this.state.date_filter_option)
 
           </View>
          
-               {this.state.categoryarr.length < 1 ? null :
+               {/* {this.state.categoryarr.length < 1 ? null :
                
                 <DropDownPicker
                   items={this.state.categoryarr}
@@ -243,10 +254,13 @@ console.log('new date_filter_option ',this.state.date_filter_option)
                 
                 />
 
-              }
+              } */}
                {this.state.createdby_arr.length < 1 ? null :
                
                <DropDownPicker
+               scrollViewProps={{
+                persistentScrollbar: true,
+            }}
                  items={this.state.createdby_arr}
                  controller={instance => this.controller = instance}
                  onChangeList={(items, callback) => {
@@ -261,7 +275,7 @@ console.log('new date_filter_option ',this.state.date_filter_option)
                  itemStyle={{
                    justifyContent: 'flex-start',
                  }}
-                 dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
+                 dropDownStyle={{ height: 120, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                  labelStyle={{ color: '#A9A9A9' }}
 
                  defaultValue={this.state.value}
