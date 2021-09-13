@@ -55,6 +55,11 @@ class CreateProduct extends React.Component {
             attributeModal: false,
             attributes: [],
             variations: [],
+            selected_variation:{
+                    title: '', 
+                    key: '',
+                    selected_attributes:[]            
+            }
         }
     }
 
@@ -66,20 +71,25 @@ class CreateProduct extends React.Component {
     add_new_variation() {
         console.log('********** add_new_variation')
         let variations = this.state.variations;
-        variations.push({ title: 'Title Text', key: 'item'+(variations.length+1) });
+        variations.push({ title: 'Title Text', 
+        key: 'item'+(variations.length+1) ,
+        selected_attributes:[]
+    });
         this.setState({
             variations:variations
         })
     }
 
-    show_attribute_list() {
+    show_attribute_list(variation) {
         console.log('********** attributes')
+        console.log('********** selected variation',variation)
         this.setState({
-            attributeModal: true
+            attributeModal: true,
+            selected_variation:variation            
         });
         
     }
-    getCategoryList() {return;
+    getCategoryList() {
         this.setState({ spinner: true })
         let postData = {
             method: 'GET',
@@ -394,9 +404,11 @@ class CreateProduct extends React.Component {
     update_selected_attribute(item,index){
         let attributes = this.state.attributes;
         
-        let selected_attributes = attributes[index].selected_attributes;
-        // let value_exist = false;
-        // let at_index = 0;
+        // let selected_attributes = attributes[index].selected_attributes;
+        
+        let selected_variation = this.state.selected_variation
+        let selected_attributes = selected_variation.selected_attributes 
+
         let index_found = selected_attributes.indexOf(item.id);
         
         if (index_found > -1) {
@@ -410,9 +422,12 @@ class CreateProduct extends React.Component {
         console.log('attributes index_found',index_found);
         // return
         attributes[index].selected_attributes = selected_attributes
+        // let selected_variation = this.state.selected_variation
+        selected_variation.selected_attributes = selected_attributes
 
         this.setState({
-            attributes:attributes
+            attributes:attributes,
+            selected_variation:selected_variation
         })
 
         // for(let i =0 ; i<selected_attributes.length ; i++){
@@ -428,11 +443,11 @@ class CreateProduct extends React.Component {
     }
     Attributes_list(props){
         let _that = props.that;
-        let attribute_item = props.item;
-        let selected_attributes = attribute_item.selected_attributes;
+        let attribute_item = props.item;        
+        let selected_attributes = _that.state.selected_variation.selected_attributes;
         let index_attribute = props.index;
         
-        console.log('item_values3333333333333333333333333333333333333333333333333333',attribute_item);
+        console.log('item_values3333333333333333333333333333333333333333333333333333 attributesattributesattributes',_that.state.attributes);
         console.log('item_values3333333333333333333333333333333333333333333333333333 index',index_attribute);
         console.log('item_values3333333333333333333333333333333333333333333333333333 attribute_item.selected_attributes',selected_attributes);
 
@@ -466,7 +481,8 @@ class CreateProduct extends React.Component {
                         //     add_variation: !_that.state.add_variation
                         // })
                     }}
-                    isChecked={ _that.state.attributes[index_attribute].selected_attributes.indexOf(item.id) > -1}
+                    // isChecked={ _that.state.attributes[index_attribute].selected_attributes.indexOf(item.id) > -1}
+                    isChecked={selected_attributes.indexOf(item.id) > -1}
                     rightText={item.value}
                 />
             </View> 
@@ -577,7 +593,8 @@ class CreateProduct extends React.Component {
                                             dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
                                             labelStyle={{ color: '#A9A9A9' }}
                                             onChangeItem={item => this.onCategoryText(item.value)}
-                                        />}
+                                        />
+                                    }
                                 </View>
                             </View>
 
@@ -787,7 +804,7 @@ class CreateProduct extends React.Component {
                                                             <View style={[{}, styles.formRowView]}>
                                                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                                                     <TouchableOpacity
-                                                                        onPress={() => this.show_attribute_list() }
+                                                                        onPress={() => this.show_attribute_list(item) }
                                                                         style={[{ position: 'relative' }, styles.formColumn]}>
                                                                         <Text
 
@@ -797,16 +814,6 @@ class CreateProduct extends React.Component {
                                                                         </Text>
 
                                                                     </TouchableOpacity>
-                                                                    {/* <TextInput
-                                                label="Attribute"
-                                                style={{ backgroundColor: 'transparent', }}
-                                                width={width - 50}
-                                                alignSelf={'center'}
-                                                color={'#000'}
-                                            />
-                                            <Icon
-                                                style={[{}, styles.rightIcon]}
-                                                name="caret-down" /> */}
                                                                 </View>
                                                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                                                     <TextInput
@@ -935,7 +942,7 @@ class CreateProduct extends React.Component {
                                 <TouchableHighlight
                                     key={item.key}
                                     // onPress={() => this.setState({attributeModal:false})}
-                                    onPress={() => console.log(item)}
+                                    onPress={() => console.log('~~~~~~~~~~~~~~~~~~~list item',item)}
                                     onShowUnderlay={separators.highlight}
                                     onHideUnderlay={separators.unhighlight}>
                                         <View>
