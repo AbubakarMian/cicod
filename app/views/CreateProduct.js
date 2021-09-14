@@ -76,11 +76,16 @@ class CreateProduct extends React.Component {
         console.log('********** add_new_variation')
         let variations = this.state.variations;
         variations.push(
-            { title: 'Title Text', 
-            key: 'item'+(variations.length+1) ,
-            selected_attributes:[],
-            price:0
-    });
+            { 
+                title: 'Title Text', 
+                key: 'item'+(variations.length+1) ,
+                selected_attributes:[],
+                price:0,
+                is_same_price:false,
+                quantity:0,
+                no_quantity_limit:false
+            }
+        );
         this.setState({
             variations:variations
         })
@@ -264,7 +269,7 @@ class CreateProduct extends React.Component {
 
     }
     createProduct() {
-        
+        console.log('this.variations ',this.state.variations);
         return;
         this.setState({ spinner: true })
         if (this.state.name === '' || this.state.price === '') {
@@ -392,10 +397,34 @@ class CreateProduct extends React.Component {
             // Alert.alert('Warning','Value can not be negative')
         }
     }
+    setVariationSamePrice(index){
+        let variations = this.state.variations;
+            variations[index].is_same_price = !variations[index].is_same_price;
+            this.setState({
+                variations: variations
+            })
+    }
+    setVariationNoQuantityLimit(index){
+        let variations = this.state.variations;
+            variations[index].no_quantity_limit = !variations[index].no_quantity_limit;
+            this.setState({
+                variations: variations
+            })
+    }
+    setVariationQuantity(index,text){
+        let variations = this.state.variations;
+            variations[index].quantity = text;
+            this.setState({
+                variations: variations
+            })
+    }
 
     setVariationPrice(index,text) {
         console.log(' text @@@@@@@@@ variation', text)
-        if (text > -1 && !NaN(text)){
+        // if(NaN(text)){
+        //     alert(text+' is not a number');
+        // }
+        if (text > -1 ){
             let variations = this.state.variations;
             variations[index].price = text;
             this.setState({
@@ -404,6 +433,7 @@ class CreateProduct extends React.Component {
             // Alert.alert('Warning','Value can not be negative')
         }
     }
+
 
     getProduct() {
         if (this.props.route.params.action == "update" && this.props.route.params.prodDetail.id != this.state.prod_id) {
@@ -853,11 +883,9 @@ class CreateProduct extends React.Component {
                                                                     <CheckBox
                                                                         style={[{ width: width / 2, }, styles.cheBox]}
                                                                         onClick={() => {
-                                                                            this.setState({
-                                                                                isChecked: !this.state.isChecked
-                                                                            })
+                                                                           this.setVariationSamePrice(index)
                                                                         }}
-                                                                        isChecked={this.state.isChecked}
+                                                                        isChecked={item.is_same_price}
                                                                         rightText={"Same Price"}
                                                                     />
                                                                 </View>
@@ -870,17 +898,18 @@ class CreateProduct extends React.Component {
                                                                         width={width - 50}
                                                                         alignSelf={'center'}
                                                                         color={'#000'}
+                                                                        onChangeText={(text)=>this.setVariationQuantity(index,text)}
+                                                                        value={item.quantity}
+                                                                        keyboardType={"numeric"}
                                                                     />
                                                                 </View>
                                                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                                                     <CheckBox
                                                                         style={[{ width: width / 2, }, styles.cheBox]}
                                                                         onClick={() => {
-                                                                            this.setState({
-                                                                                isChecked: !this.state.isChecked
-                                                                            })
+                                                                            this.setVariationNoQuantityLimit(index)
                                                                         }}
-                                                                        isChecked={this.state.isChecked}
+                                                                        isChecked={item.no_quantity_limit}
                                                                         rightText={"No Quantity Limit?"}
                                                                     />
                                                                 </View>
@@ -902,7 +931,6 @@ class CreateProduct extends React.Component {
                                                                     />
                                                                 }
                                                             </TouchableOpacity>
-
                                                         </View>
                                                     </View>
                                                 </TouchableHighlight>
