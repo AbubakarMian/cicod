@@ -31,7 +31,8 @@ class CreateProductCategory extends React.Component {
                 id:0,
                 name:'',
                 description:'',
-                prod_image:''
+                prod_image:'',
+                on_webshop:false
             },
             screen:''
         }
@@ -47,7 +48,8 @@ class CreateProductCategory extends React.Component {
                 id:0,
                 name:'',
                 description:'',
-                prod_image:''
+                prod_image:'',
+                on_webshop:false
             },
             screen : 'new'
         })
@@ -114,16 +116,19 @@ class CreateProductCategory extends React.Component {
               formData.append('name',this.state.product_category.name);  
               formData.append('description',this.state.product_category.description);  
              
-              formData.append('image',{
-              uri: this.state.product_category.prod_image,
-                    type: 'multipart/form-data',
-                    name: `image.jpg`,
+            //   formData.append('image',{
+            //     uri: this.state.product_category.prod_image,
+            //         type: 'multipart/form-data',
+            //         name: `image.jpg`,
                  
-            }
-              );  
+            //     }
+            //   );
             
-            formData.append('on_webshop',this.state.add_weshop);  
+            // formData.append('on_webshop',this.state.add_weshop);  
+            formData.append('on_webshop',this.state.product_category.on_webshop ? 1 : 0);  
             console.log('222222222222222~~~~~~~~~~~~body formdata',formData)
+            console.log('222222222222222~~~~~~~~~~~~body this.state.product_category.on_webshop',this.state.product_category.on_webshop)
+            // return
             console.log('222222222222222~~~~~~~~~~~~body formdata image',{
                 uri: this.state.product_category.prod_image,
                       type: 'multipart/form-data',
@@ -187,7 +192,7 @@ class CreateProductCategory extends React.Component {
 
                         }
                         else{
-                            Alert.alert(responseJson.response.message);
+                            Alert.alert(response.response.message);
                         }
 
                     })
@@ -271,6 +276,13 @@ class CreateProductCategory extends React.Component {
         product_category.description = text;
         this.setState({ product_category:product_category} )
     }
+    change_on_webshop(){
+        let product_category = this.state.product_category
+        product_category.on_webshop = !product_category.on_webshop
+        this.setState({
+            product_category:product_category
+        })
+    }
     render() {
         this.get_edit_product_category();
         return (
@@ -315,11 +327,9 @@ class CreateProductCategory extends React.Component {
                         <CheckBox
                             style={[{ width: width / 2, alignSelf: 'flex-start', marginVertical: 10, alignItems: 'center' },]}
                             onClick={() => {
-                                this.setState({
-                                    add_weshop: !this.state.add_weshop
-                                })
+                                this.change_on_webshop()
                             }}
-                            isChecked={this.state.add_weshop}
+                            isChecked={this.state.product_category.on_webshop}
                             rightText={"Add to Webshop"}
                             rightTextStyle={{ color: '#4E4D4D', fontSize: 13, fontFamily: 'Open Sans' }}
                             checkBoxColor={'#929497'}

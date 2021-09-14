@@ -75,9 +75,11 @@ class CreateProduct extends React.Component {
     add_new_variation() {
         console.log('********** add_new_variation')
         let variations = this.state.variations;
-        variations.push({ title: 'Title Text', 
-        key: 'item'+(variations.length+1) ,
-        selected_attributes:[]
+        variations.push(
+            { title: 'Title Text', 
+            key: 'item'+(variations.length+1) ,
+            selected_attributes:[],
+            price:0
     });
         this.setState({
             variations:variations
@@ -391,6 +393,18 @@ class CreateProduct extends React.Component {
         }
     }
 
+    setVariationPrice(index,text) {
+        console.log(' text @@@@@@@@@ variation', text)
+        if (text > -1 && !NaN(text)){
+            let variations = this.state.variations;
+            variations[index].price = text;
+            this.setState({
+                variations: variations
+            })
+            // Alert.alert('Warning','Value can not be negative')
+        }
+    }
+
     getProduct() {
         if (this.props.route.params.action == "update" && this.props.route.params.prodDetail.id != this.state.prod_id) {
             console.log('sdkf hsjkdhfjkshgkfdgs djgjsgdfjgsdf', this.props.route.params.prodDetail);
@@ -559,19 +573,6 @@ class CreateProduct extends React.Component {
 
         this.getProduct();
         console.log('this.state.price', this.state.categoryarr)
-        var radio_props_dilvery = [
-            { label: 'Dilivery', value: 0 },
-
-        ];
-        var radio_props_pickup = [
-            { label: 'Pickup', value: 1 },
-        ];
-        var radio_props_payment = [
-            { label: 'Pay Now', value: 0 },
-            { label: 'Pay Acount', value: 1 },
-            { label: 'Pay Invoice', value: 2 },
-            { label: 'Part Payment', value: 3 },
-        ];
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
@@ -826,10 +827,8 @@ class CreateProduct extends React.Component {
                                                                         onPress={() => this.show_attribute_list(item) }
                                                                         style={[{ position: 'relative' }, styles.formColumn]}>
                                                                         <Text
-
                                                                             style={[{}, styles.redTouchText]}>
                                                                             + Attribute
-
                                                                         </Text>
 
                                                                     </TouchableOpacity>
@@ -837,10 +836,13 @@ class CreateProduct extends React.Component {
                                                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                                                     <TextInput
                                                                         label="Price (.00)"
+                                                                        keyboardType='numeric'
                                                                         style={{ backgroundColor: 'transparent', }}
                                                                         width={width - 50}
                                                                         alignSelf={'center'}
                                                                         color={'#000'}
+                                                                        value={item.price}
+                                                                        onChangeText={text => this.setVariationPrice(index,text)}
                                                                     />
                                                                 </View>
                                                             </View>
@@ -856,7 +858,7 @@ class CreateProduct extends React.Component {
                                                                             })
                                                                         }}
                                                                         isChecked={this.state.isChecked}
-                                                                        rightText={"same price"}
+                                                                        rightText={"Same Price"}
                                                                     />
                                                                 </View>
                                                             </View>
