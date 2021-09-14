@@ -48,16 +48,21 @@ class CreateProduct extends React.Component {
             add_variation: false,
             validity: 0,
             has_vat: 0,
+            variation_index_selected: 0,
             image: '',
             toolTipVisible: false,
             c: '',
             prod_image: null,
             attributeModal: false,
+            attributes_set: false,
             attributes: [],
             variations: [],
             selected_variation:{
-                    title: '', 
                     key: '',
+                    quentity:0,
+                    price: 0,
+                    same_price:false,
+                    no_qty_limit:false, 
                     selected_attributes:[]            
             }
         }
@@ -65,7 +70,6 @@ class CreateProduct extends React.Component {
 
     componentDidMount() {
         this.getCategoryList()
-        this.get_attributes_list()
         // console.log('product detail peops @@@@@@@@!!!!!!!!!!!!!!', this.props.route.params);
     }
     add_new_variation() {
@@ -170,7 +174,8 @@ class CreateProduct extends React.Component {
                     // console.log('requried_formatrequried_formatrequried_formatrequried_formatrequried_format',requried_format[2]);
                     
                     this.setState({
-                        attributes: requried_format
+                        attributes: requried_format,
+                        attributes_set:true
                     });
                 } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
@@ -257,6 +262,8 @@ class CreateProduct extends React.Component {
 
     }
     createProduct() {
+        
+        return;
         this.setState({ spinner: true })
         if (this.state.name === '' || this.state.price === '') {
             this.setState({ spinner: false })
@@ -336,6 +343,9 @@ class CreateProduct extends React.Component {
     add_variation(){
         let add_variation = !this.state.add_variation
         let variations = this.state.variations;
+        if(!this.state.attributes_set){            
+            this.get_attributes_list()
+        }
         if(add_variation){
             this.add_new_variation();
         }
@@ -429,7 +439,7 @@ class CreateProduct extends React.Component {
             attributes:attributes,
             selected_variation:selected_variation
         })
-
+        
         // for(let i =0 ; i<selected_attributes.length ; i++){
         //     if(selected_attributes[i] == item.value.id){
         //         value_exist = true;
@@ -446,10 +456,19 @@ class CreateProduct extends React.Component {
         let attribute_item = props.item;        
         let selected_attributes = _that.state.selected_variation.selected_attributes;
         let index_attribute = props.index;
+
+        this.setState({
+            variation_index_selected:index_attribute
+        })
         
         console.log('item_values3333333333333333333333333333333333333333333333333333 attributesattributesattributes',_that.state.attributes);
         console.log('item_values3333333333333333333333333333333333333333333333333333 index',index_attribute);
         console.log('item_values3333333333333333333333333333333333333333333333333333 attribute_item.selected_attributes',selected_attributes);
+
+        // let selected_variation=_that.state.selected_variation;
+        // selected_variation.price=50,
+        // selected_variation.selected_attributes=selected_attributes;
+        // console.log('@@@@@@@@@@@@@@@@@@',selected_variation)
 
         return(
             <FlatList

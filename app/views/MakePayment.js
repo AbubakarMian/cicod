@@ -87,6 +87,7 @@ class MakePayment extends React.Component {
                             
                             amount_payable: this.props.route.params.amount_payable,
                             payment_link: payment_link,
+
                             payment_mode: payment_mode,
                             order_id: responseJson.data.id,
                         });
@@ -117,7 +118,8 @@ class MakePayment extends React.Component {
         let pending_order_res = this.state.pending_order_res 
         console.log('pending_order_res.data.payment_link 121212121212',pending_order_res);
         
-        if(pending_order_res != null ){            
+        if(pending_order_res != null ){    
+            console.log('~~~~~~~~~~~')        
             this.payment_response(pending_order_res, 
             'PaymentWeb', { payment_link: pending_order_res.data.payment_link, data: pending_order_res.data });
             return;
@@ -137,7 +139,7 @@ class MakePayment extends React.Component {
             },
             body: JSON.stringify(bodyOrder)
         };
-        console.log('222222222222 makePaymentFun body params l!!', postData);
+        console.log('*****************', postData);
         console.log('~~~~~~~~~~~~~~~~~~UUUUUUUUUUUUUUUUU',Constants.orderslist)
         fetch(Constants.orderslist, postData)
             .then(response => response.json())
