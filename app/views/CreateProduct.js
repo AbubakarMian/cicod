@@ -63,7 +63,8 @@ class CreateProduct extends React.Component {
                     price: 0,
                     same_price:false,
                     no_qty_limit:false, 
-                    selected_attributes:[]            
+                    selected_attributes:[],
+                    image:null,            
             }
         }
     }
@@ -83,7 +84,8 @@ class CreateProduct extends React.Component {
                 price:0,
                 is_same_price:false,
                 quantity:0,
-                no_quantity_limit:false
+                no_quantity_limit:false,
+                image:null
             }
         );
         this.setState({
@@ -215,19 +217,18 @@ class CreateProduct extends React.Component {
         }
         else {
             var formData = new FormData();
-            formData.append('category_id', 5);//this.state.category_id
-            formData.append('name', 'product name');//this.state.name
-            formData.append('quantity', 25);//this.state.quantity
-            formData.append('price', 500);//this.state.price
-            formData.append('description', "this.state.description");
-            // if(this.state.prod_image != '' || this.state.prod_image != null){
-            //     console.log('**********AAAAAAAAAA')
+            formData.append('category_id', this.state.category_id);
+            formData.append('name', this.state.name);
+            formData.append('quantity', this.state.quantity);
+            formData.append('price', this.state.price);
+            formData.append('description', this.state.description);
+            if(this.state.prod_image != '' || this.state.prod_image != null){
             formData.append('image', {
                 uri: this.state.prod_image,
                 type: 'multipart/form-data',
                 name: `image.jpg`,
             });
-            console.log('%%%%%%%%%%%', formData)
+        }
             let postData = {
                 method: 'PUT',
                 headers: {
@@ -270,14 +271,13 @@ class CreateProduct extends React.Component {
     }
     createProduct() {
         console.log('this.variations ',this.state.variations);
-        return;
         this.setState({ spinner: true })
-        if (this.state.name === '' || this.state.price === '') {
+        if (this.state.name === '' || this.state.price === '' ) {
             this.setState({ spinner: false })
             Alert.alert("Warning", "Product name and Price are required")
             return;
         }
-        else if (this.state.category_id == 0) {
+        else if (this.state.category_id == 0 ) {
             this.setState({ spinner: false })
             Alert.alert("Warning", "Category is required")
             return;
@@ -300,7 +300,56 @@ class CreateProduct extends React.Component {
             formData.append('validity', this.state.validity);
             formData.append('no_qty_limit', this.state.is_qty_limit);
             formData.append('has_vat', this.state.state_id);
-            formData.append('on_webshop', this.state.is_web_shop);
+            formData.append('on_webshop', this.state.is_web_shop?1:0); 
+
+            // formData.append('variations', this.state.variations);
+            let variations = [];
+            let all_variations =this.state.variations;
+            for(let i =0;i<all_variations.length;i++){
+                let sel_attr = all_variations[i];
+                let variation = {
+                    'attributes[]':sel_attr.selected_attributes,
+                    quantity :sel_attr.quantity,
+                    no_qty_limit :sel_attr.no_quantity_limit,
+                    price :sel_attr.price,
+                }
+                if(sel_attr.image != null){
+                    // variation.image = {
+                    //     uri: sel_attr.image,
+                    //     type: 'multipart/form-data',
+                    //     name: `image.jpg`,
+                    // };
+                }
+                // variations.push(variation);
+                console.log('sel_attr',sel_attr)
+                console.log('sel_attr.image',sel_attr.image)
+                
+                formData.append('variation[0][image]', {
+                        uri: sel_attr.image,
+                        type: 'multipart/form-data',
+                        name: `image.jpg`,
+                    } ); // 22,1   sel_attr.selected_attributes[0]
+                formData.append('variation[0][attributes[0]]', 22 ); // 22,1   sel_attr.selected_attributes[0]
+                // formData.append('variation[0][attributes[]]', 22 ); // 22,1   sel_attr.selected_attributes[0]
+                // formData.append('variation[0][attribute[]]', 22); // 22,1
+                formData.append('variation[0][quantity]', 5);//sel_attr.quantity
+                // formData.append('variations[0][no_quantity_limit]', );sel_attr.no_quantity_limit
+                formData.append('variation[0][price]', 5);//sel_attr.price
+            }
+            // formData.append('variations[]', variations);
+
+            let js_data = {
+                category_id:'27',//this.state.category_id,
+                name: 'asd111',//this.state.name,
+
+            }
+            // selected_attributes:[],
+            //     price:0,
+            //     is_same_price:false,
+            //     quantity:0,
+            //     no_quantity_limit:false
+
+            // [{attributes: [attributes_id_array], quantity: quantity, no_qty_limit: no_qty_limit, price: price, image: image}]
             let postData = {
                 method: 'POST',
                 headers: {
@@ -309,13 +358,15 @@ class CreateProduct extends React.Component {
                     'Authorization': this.props.user.access_token,
                 },
                 body: formData,
+                // body: JSON.stringify(js_data),
             };
+            console.log('###########', js_data)
             console.log('###########', postData)
 
             console.log('Constants.productslist url ', Constants.productslist);
             console.log('Constants.productslist post data ', postData);
             fetch(Constants.productslist, postData)
-                .then(response => response.json())
+                .then(response => response.text())
                 .then(async responseJson => {
                     console.log(" create customer response !!!!!!!!!!!", responseJson)
 
@@ -334,7 +385,8 @@ class CreateProduct extends React.Component {
                     }
                     else {
                         let message = responseJson.message
-                        Alert.alert('Error', message)
+                        console.log('Error send req', responseJson)
+                        Alert.alert('Error', responseJson)
                     }
                 }
                 )
@@ -433,8 +485,32 @@ class CreateProduct extends React.Component {
             // Alert.alert('Warning','Value can not be negative')
         }
     }
+    async setVariationImage(index){
+        console.log('iiiiiiiiiiiiiiiiiiiiiiiiii',index)
+            let image=null;
+            // console.log('vvvvvvvvvvvvvv',variations)
+            await ImagePicker.openPicker({
+                width: 300,
+                height: 400,
+                cropping: true,
+                size: 1000000
+            }).then(image => {
+                console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@', image);
+                // this.setState({
+                //     prod_image: image.path
+                // })
+                
+                let variations = this.state.variations;
+                variations[index].image = image.path;
+                this.setState({
+                    variations: variations
+                })
+            });
+        
+            console.log('###############',variations)
 
-
+    }
+  
     getProduct() {
         if (this.props.route.params.action == "update" && this.props.route.params.prodDetail.id != this.state.prod_id) {
             console.log('sdkf hsjkdhfjkshgkfdgs djgjsgdfjgsdf', this.props.route.params.prodDetail);
@@ -501,9 +577,9 @@ class CreateProduct extends React.Component {
         let selected_attributes = _that.state.selected_variation.selected_attributes;
         let index_attribute = props.index;
 
-        this.setState({
-            variation_index_selected:index_attribute
-        })
+        // _that.setState({
+        //     variation_index_selected:index_attribute
+        // })
         
         console.log('item_values3333333333333333333333333333333333333333333333333333 attributesattributesattributes',_that.state.attributes);
         console.log('item_values3333333333333333333333333333333333333333333333333333 index',index_attribute);
@@ -600,7 +676,7 @@ class CreateProduct extends React.Component {
     }
 
     render() {
-
+        console.log('~~~~~~~~~~~~~~~~~~~~~~',this.state.variations)
         this.getProduct();
         console.log('this.state.price', this.state.categoryarr)
         return (
@@ -916,20 +992,21 @@ class CreateProduct extends React.Component {
                                                             </View>
                                                             <Text style={[{}, styles.productImageLable]}>Images</Text>
                                                             <TouchableOpacity
-                                                                onPress={() => this.imageUpload()}
+                                                                onPress={() => this.setVariationImage(index)}
                                                                 style={[{ position: 'relative', width: width / 4 }]}>
-
+                                                               
                                                                 {/* {(this.state.prod_image != null || this.state.prod_image !='') ? */}
-                                                                {(this.state.prod_image == null || this.state.prod_image == '') ?
+                                                                
+                                                                {(item.image == null || item.image == '') ?
                                                                     <Image
                                                                         style={{ height: 60, width: 30 }}
                                                                         source={require('../images/redPlus.png')}
                                                                     /> :
                                                                     <Image
                                                                         style={{ height: 60, width: 30 }}
-                                                                        source={{ uri: this.state.prod_image }}
+                                                                        source={{ uri: item.image }}
                                                                     />
-                                                                }
+                                                                } 
                                                             </TouchableOpacity>
                                                         </View>
                                                     </View>
