@@ -48,38 +48,61 @@ class CreateProduct extends React.Component {
             add_variation: false,
             validity: 0,
             has_vat: 0,
+            variation_index_selected: 0,
             image: '',
             toolTipVisible: false,
             c: '',
             prod_image: null,
             attributeModal: false,
+            attributes_set: false,
             attributes: [],
             variations: [],
+            selected_variation:{
+                    key: '',
+                    quentity:0,
+                    price: 0,
+                    same_price:false,
+                    no_qty_limit:false, 
+                    selected_attributes:[],
+                    image:null,            
+            }
         }
     }
 
     componentDidMount() {
         this.getCategoryList()
-        this.get_attributes_list()
         // console.log('product detail peops @@@@@@@@!!!!!!!!!!!!!!', this.props.route.params);
     }
     add_new_variation() {
         console.log('********** add_new_variation')
         let variations = this.state.variations;
-        variations.push({ title: 'Title Text', key: 'item'+(variations.length+1) });
+        variations.push(
+            { 
+                title: 'Title Text', 
+                key: 'item'+(variations.length+1) ,
+                selected_attributes:[],
+                price:0,
+                is_same_price:false,
+                quantity:0,
+                no_quantity_limit:false,
+                image:null
+            }
+        );
         this.setState({
             variations:variations
         })
     }
 
-    show_attribute_list() {
+    show_attribute_list(variation) {
         console.log('********** attributes')
+        console.log('********** selected variation',variation)
         this.setState({
-            attributeModal: true
+            attributeModal: true,
+            selected_variation:variation            
         });
         
     }
-    getCategoryList() {return;
+    getCategoryList() {
         this.setState({ spinner: true })
         let postData = {
             method: 'GET',
@@ -160,7 +183,8 @@ class CreateProduct extends React.Component {
                     // console.log('requried_formatrequried_formatrequried_formatrequried_formatrequried_format',requried_format[2]);
                     
                     this.setState({
-                        attributes: requried_format
+                        attributes: requried_format,
+                        attributes_set:true
                     });
                 } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
@@ -193,19 +217,18 @@ class CreateProduct extends React.Component {
         }
         else {
             var formData = new FormData();
-            formData.append('category_id', 5);//this.state.category_id
-            formData.append('name', 'product name');//this.state.name
-            formData.append('quantity', 25);//this.state.quantity
-            formData.append('price', 500);//this.state.price
-            formData.append('description', "this.state.description");
-            // if(this.state.prod_image != '' || this.state.prod_image != null){
-            //     console.log('**********AAAAAAAAAA')
+            formData.append('category_id', this.state.category_id);
+            formData.append('name', this.state.name);
+            formData.append('quantity', this.state.quantity);
+            formData.append('price', this.state.price);
+            formData.append('description', this.state.description);
+            if(this.state.prod_image != '' || this.state.prod_image != null){
             formData.append('image', {
                 uri: this.state.prod_image,
                 type: 'multipart/form-data',
                 name: `image.jpg`,
             });
-            console.log('%%%%%%%%%%%', formData)
+        }
             let postData = {
                 method: 'PUT',
                 headers: {
@@ -247,13 +270,14 @@ class CreateProduct extends React.Component {
 
     }
     createProduct() {
+        console.log('this.variations ',this.state.variations);
         this.setState({ spinner: true })
-        if (this.state.name === '' || this.state.price === '') {
+        if (this.state.name === '' || this.state.price === '' ) {
             this.setState({ spinner: false })
             Alert.alert("Warning", "Product name and Price are required")
             return;
         }
-        else if (this.state.category_id == 0) {
+        else if (this.state.category_id == 0 ) {
             this.setState({ spinner: false })
             Alert.alert("Warning", "Category is required")
             return;
@@ -276,7 +300,56 @@ class CreateProduct extends React.Component {
             formData.append('validity', this.state.validity);
             formData.append('no_qty_limit', this.state.is_qty_limit);
             formData.append('has_vat', this.state.state_id);
-            formData.append('on_webshop', this.state.is_web_shop);
+            formData.append('on_webshop', this.state.is_web_shop?1:0); 
+
+            // formData.append('variations', this.state.variations);
+            let variations = [];
+            let all_variations =this.state.variations;
+            for(let i =0;i<all_variations.length;i++){
+                let sel_attr = all_variations[i];
+                let variation = {
+                    'attributes[]':sel_attr.selected_attributes,
+                    quantity :sel_attr.quantity,
+                    no_qty_limit :sel_attr.no_quantity_limit,
+                    price :sel_attr.price,
+                }
+                if(sel_attr.image != null){
+                    // variation.image = {
+                    //     uri: sel_attr.image,
+                    //     type: 'multipart/form-data',
+                    //     name: `image.jpg`,
+                    // };
+                }
+                // variations.push(variation);
+                console.log('sel_attr',sel_attr)
+                console.log('sel_attr.image',sel_attr.image)
+                
+                formData.append('variation[0][image]', {
+                        uri: sel_attr.image,
+                        type: 'multipart/form-data',
+                        name: `image.jpg`,
+                    } ); // 22,1   sel_attr.selected_attributes[0]
+                formData.append('variation[0][attributes[0]]', 22 ); // 22,1   sel_attr.selected_attributes[0]
+                // formData.append('variation[0][attributes[]]', 22 ); // 22,1   sel_attr.selected_attributes[0]
+                // formData.append('variation[0][attribute[]]', 22); // 22,1
+                formData.append('variation[0][quantity]', 5);//sel_attr.quantity
+                // formData.append('variations[0][no_quantity_limit]', );sel_attr.no_quantity_limit
+                formData.append('variation[0][price]', 5);//sel_attr.price
+            }
+            // formData.append('variations[]', variations);
+
+            let js_data = {
+                category_id:'27',//this.state.category_id,
+                name: 'asd111',//this.state.name,
+
+            }
+            // selected_attributes:[],
+            //     price:0,
+            //     is_same_price:false,
+            //     quantity:0,
+            //     no_quantity_limit:false
+
+            // [{attributes: [attributes_id_array], quantity: quantity, no_qty_limit: no_qty_limit, price: price, image: image}]
             let postData = {
                 method: 'POST',
                 headers: {
@@ -285,13 +358,15 @@ class CreateProduct extends React.Component {
                     'Authorization': this.props.user.access_token,
                 },
                 body: formData,
+                // body: JSON.stringify(js_data),
             };
+            console.log('###########', js_data)
             console.log('###########', postData)
 
             console.log('Constants.productslist url ', Constants.productslist);
             console.log('Constants.productslist post data ', postData);
             fetch(Constants.productslist, postData)
-                .then(response => response.json())
+                .then(response => response.text())
                 .then(async responseJson => {
                     console.log(" create customer response !!!!!!!!!!!", responseJson)
 
@@ -310,7 +385,8 @@ class CreateProduct extends React.Component {
                     }
                     else {
                         let message = responseJson.message
-                        Alert.alert('Error', message)
+                        console.log('Error send req', responseJson)
+                        Alert.alert('Error', responseJson)
                     }
                 }
                 )
@@ -326,6 +402,9 @@ class CreateProduct extends React.Component {
     add_variation(){
         let add_variation = !this.state.add_variation
         let variations = this.state.variations;
+        if(!this.state.attributes_set){            
+            this.get_attributes_list()
+        }
         if(add_variation){
             this.add_new_variation();
         }
@@ -370,7 +449,68 @@ class CreateProduct extends React.Component {
             // Alert.alert('Warning','Value can not be negative')
         }
     }
+    setVariationSamePrice(index){
+        let variations = this.state.variations;
+            variations[index].is_same_price = !variations[index].is_same_price;
+            this.setState({
+                variations: variations
+            })
+    }
+    setVariationNoQuantityLimit(index){
+        let variations = this.state.variations;
+            variations[index].no_quantity_limit = !variations[index].no_quantity_limit;
+            this.setState({
+                variations: variations
+            })
+    }
+    setVariationQuantity(index,text){
+        let variations = this.state.variations;
+            variations[index].quantity = text;
+            this.setState({
+                variations: variations
+            })
+    }
 
+    setVariationPrice(index,text) {
+        console.log(' text @@@@@@@@@ variation', text)
+        // if(NaN(text)){
+        //     alert(text+' is not a number');
+        // }
+        if (text > -1 ){
+            let variations = this.state.variations;
+            variations[index].price = text;
+            this.setState({
+                variations: variations
+            })
+            // Alert.alert('Warning','Value can not be negative')
+        }
+    }
+    async setVariationImage(index){
+        console.log('iiiiiiiiiiiiiiiiiiiiiiiiii',index)
+            let image=null;
+            // console.log('vvvvvvvvvvvvvv',variations)
+            await ImagePicker.openPicker({
+                width: 300,
+                height: 400,
+                cropping: true,
+                size: 1000000
+            }).then(image => {
+                console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@', image);
+                // this.setState({
+                //     prod_image: image.path
+                // })
+                
+                let variations = this.state.variations;
+                variations[index].image = image.path;
+                this.setState({
+                    variations: variations
+                })
+            });
+        
+            console.log('###############',variations)
+
+    }
+  
     getProduct() {
         if (this.props.route.params.action == "update" && this.props.route.params.prodDetail.id != this.state.prod_id) {
             console.log('sdkf hsjkdhfjkshgkfdgs djgjsgdfjgsdf', this.props.route.params.prodDetail);
@@ -394,9 +534,11 @@ class CreateProduct extends React.Component {
     update_selected_attribute(item,index){
         let attributes = this.state.attributes;
         
-        let selected_attributes = attributes[index].selected_attributes;
-        // let value_exist = false;
-        // let at_index = 0;
+        // let selected_attributes = attributes[index].selected_attributes;
+        
+        let selected_variation = this.state.selected_variation
+        let selected_attributes = selected_variation.selected_attributes 
+
         let index_found = selected_attributes.indexOf(item.id);
         
         if (index_found > -1) {
@@ -410,11 +552,14 @@ class CreateProduct extends React.Component {
         console.log('attributes index_found',index_found);
         // return
         attributes[index].selected_attributes = selected_attributes
+        // let selected_variation = this.state.selected_variation
+        selected_variation.selected_attributes = selected_attributes
 
         this.setState({
-            attributes:attributes
+            attributes:attributes,
+            selected_variation:selected_variation
         })
-
+        
         // for(let i =0 ; i<selected_attributes.length ; i++){
         //     if(selected_attributes[i] == item.value.id){
         //         value_exist = true;
@@ -428,13 +573,22 @@ class CreateProduct extends React.Component {
     }
     Attributes_list(props){
         let _that = props.that;
-        let attribute_item = props.item;
-        let selected_attributes = attribute_item.selected_attributes;
+        let attribute_item = props.item;        
+        let selected_attributes = _that.state.selected_variation.selected_attributes;
         let index_attribute = props.index;
+
+        // _that.setState({
+        //     variation_index_selected:index_attribute
+        // })
         
-        console.log('item_values3333333333333333333333333333333333333333333333333333',attribute_item);
+        console.log('item_values3333333333333333333333333333333333333333333333333333 attributesattributesattributes',_that.state.attributes);
         console.log('item_values3333333333333333333333333333333333333333333333333333 index',index_attribute);
         console.log('item_values3333333333333333333333333333333333333333333333333333 attribute_item.selected_attributes',selected_attributes);
+
+        // let selected_variation=_that.state.selected_variation;
+        // selected_variation.price=50,
+        // selected_variation.selected_attributes=selected_attributes;
+        // console.log('@@@@@@@@@@@@@@@@@@',selected_variation)
 
         return(
             <FlatList
@@ -466,7 +620,8 @@ class CreateProduct extends React.Component {
                         //     add_variation: !_that.state.add_variation
                         // })
                     }}
-                    isChecked={ _that.state.attributes[index_attribute].selected_attributes.indexOf(item.id) > -1}
+                    // isChecked={ _that.state.attributes[index_attribute].selected_attributes.indexOf(item.id) > -1}
+                    isChecked={selected_attributes.indexOf(item.id) > -1}
                     rightText={item.value}
                 />
             </View> 
@@ -521,22 +676,9 @@ class CreateProduct extends React.Component {
     }
 
     render() {
-
+        console.log('~~~~~~~~~~~~~~~~~~~~~~',this.state.variations)
         this.getProduct();
         console.log('this.state.price', this.state.categoryarr)
-        var radio_props_dilvery = [
-            { label: 'Dilivery', value: 0 },
-
-        ];
-        var radio_props_pickup = [
-            { label: 'Pickup', value: 1 },
-        ];
-        var radio_props_payment = [
-            { label: 'Pay Now', value: 0 },
-            { label: 'Pay Acount', value: 1 },
-            { label: 'Pay Invoice', value: 2 },
-            { label: 'Part Payment', value: 3 },
-        ];
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
@@ -577,7 +719,8 @@ class CreateProduct extends React.Component {
                                             dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
                                             labelStyle={{ color: '#A9A9A9' }}
                                             onChangeItem={item => this.onCategoryText(item.value)}
-                                        />}
+                                        />
+                                    }
                                 </View>
                             </View>
 
@@ -787,34 +930,25 @@ class CreateProduct extends React.Component {
                                                             <View style={[{}, styles.formRowView]}>
                                                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                                                     <TouchableOpacity
-                                                                        onPress={() => this.show_attribute_list() }
+                                                                        onPress={() => this.show_attribute_list(item) }
                                                                         style={[{ position: 'relative' }, styles.formColumn]}>
                                                                         <Text
-
                                                                             style={[{}, styles.redTouchText]}>
                                                                             + Attribute
-
                                                                         </Text>
 
                                                                     </TouchableOpacity>
-                                                                    {/* <TextInput
-                                                label="Attribute"
-                                                style={{ backgroundColor: 'transparent', }}
-                                                width={width - 50}
-                                                alignSelf={'center'}
-                                                color={'#000'}
-                                            />
-                                            <Icon
-                                                style={[{}, styles.rightIcon]}
-                                                name="caret-down" /> */}
                                                                 </View>
                                                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                                                     <TextInput
                                                                         label="Price (.00)"
+                                                                        keyboardType='numeric'
                                                                         style={{ backgroundColor: 'transparent', }}
                                                                         width={width - 50}
                                                                         alignSelf={'center'}
                                                                         color={'#000'}
+                                                                        value={item.price}
+                                                                        onChangeText={text => this.setVariationPrice(index,text)}
                                                                     />
                                                                 </View>
                                                             </View>
@@ -825,12 +959,10 @@ class CreateProduct extends React.Component {
                                                                     <CheckBox
                                                                         style={[{ width: width / 2, }, styles.cheBox]}
                                                                         onClick={() => {
-                                                                            this.setState({
-                                                                                isChecked: !this.state.isChecked
-                                                                            })
+                                                                           this.setVariationSamePrice(index)
                                                                         }}
-                                                                        isChecked={this.state.isChecked}
-                                                                        rightText={"same price"}
+                                                                        isChecked={item.is_same_price}
+                                                                        rightText={"Same Price"}
                                                                     />
                                                                 </View>
                                                             </View>
@@ -842,39 +974,40 @@ class CreateProduct extends React.Component {
                                                                         width={width - 50}
                                                                         alignSelf={'center'}
                                                                         color={'#000'}
+                                                                        onChangeText={(text)=>this.setVariationQuantity(index,text)}
+                                                                        value={item.quantity}
+                                                                        keyboardType={"numeric"}
                                                                     />
                                                                 </View>
                                                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                                                     <CheckBox
                                                                         style={[{ width: width / 2, }, styles.cheBox]}
                                                                         onClick={() => {
-                                                                            this.setState({
-                                                                                isChecked: !this.state.isChecked
-                                                                            })
+                                                                            this.setVariationNoQuantityLimit(index)
                                                                         }}
-                                                                        isChecked={this.state.isChecked}
+                                                                        isChecked={item.no_quantity_limit}
                                                                         rightText={"No Quantity Limit?"}
                                                                     />
                                                                 </View>
                                                             </View>
                                                             <Text style={[{}, styles.productImageLable]}>Images</Text>
                                                             <TouchableOpacity
-                                                                onPress={() => this.imageUpload()}
+                                                                onPress={() => this.setVariationImage(index)}
                                                                 style={[{ position: 'relative', width: width / 4 }]}>
-
+                                                               
                                                                 {/* {(this.state.prod_image != null || this.state.prod_image !='') ? */}
-                                                                {(this.state.prod_image == null || this.state.prod_image == '') ?
+                                                                
+                                                                {(item.image == null || item.image == '') ?
                                                                     <Image
                                                                         style={{ height: 60, width: 30 }}
                                                                         source={require('../images/redPlus.png')}
                                                                     /> :
                                                                     <Image
                                                                         style={{ height: 60, width: 30 }}
-                                                                        source={{ uri: this.state.prod_image }}
+                                                                        source={{ uri: item.image }}
                                                                     />
-                                                                }
+                                                                } 
                                                             </TouchableOpacity>
-
                                                         </View>
                                                     </View>
                                                 </TouchableHighlight>
@@ -935,7 +1068,7 @@ class CreateProduct extends React.Component {
                                 <TouchableHighlight
                                     key={item.key}
                                     // onPress={() => this.setState({attributeModal:false})}
-                                    onPress={() => console.log(item)}
+                                    onPress={() => console.log('~~~~~~~~~~~~~~~~~~~list item',item)}
                                     onShowUnderlay={separators.highlight}
                                     onHideUnderlay={separators.unhighlight}>
                                         <View>
