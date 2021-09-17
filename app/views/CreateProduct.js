@@ -24,6 +24,7 @@ import {
     MenuOption,
     MenuTrigger,
 } from 'react-native-popup-menu';
+import { serialize } from 'object-to-formdata';
 
 const { width, height } = Dimensions.get('window')
 
@@ -71,9 +72,10 @@ class CreateProduct extends React.Component {
 
     componentDidMount() {
         this.getCategoryList()
-        // console.log('product detail peops @@@@@@@@!!!!!!!!!!!!!!', this.props.route.params);
+        console.log('product detail peops @@@@@@@@!!!!!!!!!!!!!!', this.props.route.params);
     }
     add_new_variation() {
+        
         console.log('********** add_new_variation')
         let variations = this.state.variations;
         variations.push(
@@ -291,58 +293,112 @@ class CreateProduct extends React.Component {
                     name: `image.jpg`,
                 });
             }
-            formData.append('category_id', this.state.category_id);
-            formData.append('name', this.state.name);
-            formData.append('quantity', this.state.quantity);
-            formData.append('code', this.state.code);
-            formData.append('price', this.state.price);
-            formData.append('description', this.state.description);
-            formData.append('validity', this.state.validity);
-            formData.append('no_qty_limit', this.state.is_qty_limit);
-            formData.append('has_vat', this.state.state_id);
-            formData.append('on_webshop', this.state.is_web_shop?1:0); 
-
-            // formData.append('variations', this.state.variations);
-            let variations = [];
+            // formData.append('category_id', this.state.category_id);
+            // formData.append('name', this.state.name);
+            // formData.append('quantity', this.state.quantity);
+            // formData.append('code', this.state.code);
+            // formData.append('price', this.state.price);
+            // formData.append('description', this.state.description);
+            // formData.append('validity', this.state.validity);
+            // formData.append('no_qty_limit', this.state.is_qty_limit);
+            // formData.append('has_vat', this.state.state_id);
+            // formData.append('on_webshop', this.state.is_web_shop?1:0); 
+            // formData.append('category_id', 27);
+            // formData.append('quantity', 5);
+            // formData.append('price', 5);
+            // formData.append('description', 'des');
+            // formData.append('name', 'de'+Math.random(3));
             let all_variations =this.state.variations;
+            let variations_form =[];
             for(let i =0;i<all_variations.length;i++){
                 let sel_attr = all_variations[i];
-                let variation = {
-                    'attributes[]':sel_attr.selected_attributes,
-                    quantity :sel_attr.quantity,
-                    no_qty_limit :sel_attr.no_quantity_limit,
-                    price :sel_attr.price,
-                }
+                let attributes_variation = sel_attr.selected_attributes;
                 if(sel_attr.image != null){
-                    // variation.image = {
-                    //     uri: sel_attr.image,
-                    //     type: 'multipart/form-data',
-                    //     name: `image.jpg`,
-                    // };
+                    variations_form.push( {
+                        attributes:sel_attr.selected_attributes,
+                        quantity:sel_attr.quantity,
+                        price:sel_attr.price,
+                        image:{
+                            uri: sel_attr.image,
+                            type: 'multipart/form-data',
+                            name: `image.jpg`,
+                        } 
+                    });   
+                }else{
+                    variations_form.push( {
+                        attributes:sel_attr.selected_attributes,
+                        quantity:sel_attr.quantity,
+                        price:sel_attr.price,
+                        no_qty_limit:sel_attr.no_quantity_limit,
+                    });
                 }
+                // this.setState({variations:all_variaitons})
                 // variations.push(variation);
-                console.log('sel_attr',sel_attr)
-                console.log('sel_attr.image',sel_attr.image)
+                // console.log('sel_attr',sel_attr)
+                // console.log('sel_attr.image',sel_attr.image)
                 
-                formData.append('variation[0][image]', {
-                        uri: sel_attr.image,
-                        type: 'multipart/form-data',
-                        name: `image.jpg`,
-                    } ); // 22,1   sel_attr.selected_attributes[0]
-                formData.append('variation[0][attributes[0]]', 22 ); // 22,1   sel_attr.selected_attributes[0]
-                // formData.append('variation[0][attributes[]]', 22 ); // 22,1   sel_attr.selected_attributes[0]
-                // formData.append('variation[0][attribute[]]', 22); // 22,1
-                formData.append('variation[0][quantity]', 5);//sel_attr.quantity
+                // formData.append('variations[0][image]', {
+                //         uri: sel_attr.image,
+                //         type: 'multipart/form-data',
+                //         name: `image.jpg`,
+                //     } ); 
+                // formData.append('variations[0][attributes[0]]', 22 ); // 22,1   sel_attr.selected_attributes[0]
+                // formData.append('variations[0][attributes[0]]', 22 ); // 22,1   sel_attr.selected_attributes[0]
+                // formData.append('variations[0][quantity]', 5);//sel_attr.quantity
                 // formData.append('variations[0][no_quantity_limit]', );sel_attr.no_quantity_limit
-                formData.append('variation[0][price]', 5);//sel_attr.price
+                // formData.append('variations[0][price]', 5);//sel_attr.price
+
+
+                // formData.append('variations[]', JSON.stringify({
+                //     'attributes[]':22,
+                //     quantity:5,
+                //     price:5,
+                // }));//sel_attr.price
             }
+            let createing_data =  {
+                name:this.state.name,
+                quantity:this.state.quantity,
+                code:this.state.code,
+                price:this.state.price,
+                description:this.state.description,
+                validity:this.state.validity,
+                no_qty_limit:this.state.is_qty_limit,
+                has_vat:this.state.state_id,
+                on_webshop:this.state.is_web_shop?1:0,
+                category_id:this.state.category_id,
+                image: {
+                    uri: this.state.prod_image,
+                    type: 'multipart/form-data',
+                    name: `image.jpg`,
+                },
+                variations:variations_form
+                // variations:variations_form
+                // variations:[
+                //     {
+                //         attributes:[1], // 
+                //         price:11,//all_variations[0].price,
+                //         quantity:11,//all_variations[0].quantity,
+                //          image: {
+                //             uri: all_variations[0].image,
+                //             type: 'multipart/form-data',
+                //             name: `image.jpg`,
+                //         }                        
+                //     }
+                // ]
+            };
+            console.log('sssssssssssssssssscreateing data',JSON.stringify(createing_data));
+            // console.log('~~~~~~~~~~~~~~~createing data',variations[0]);
+
+            let serformData = serialize(
+                createing_data,
+                {indices: true},
+                formData
+              );
+
+              
+
             // formData.append('variations[]', variations);
 
-            let js_data = {
-                category_id:'27',//this.state.category_id,
-                name: 'asd111',//this.state.name,
-
-            }
             // selected_attributes:[],
             //     price:0,
             //     is_same_price:false,
@@ -357,14 +413,12 @@ class CreateProduct extends React.Component {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': this.props.user.access_token,
                 },
-                body: formData,
-                // body: JSON.stringify(js_data),
+                body: serformData,
+                // body: formData,
             };
-            console.log('###########', js_data)
-            console.log('###########', postData)
 
             console.log('Constants.productslist url ', Constants.productslist);
-            console.log('Constants.productslist post data ', postData);
+            console.log('########### postData', JSON.stringify(postData))
             fetch(Constants.productslist, postData)
                 .then(response => response.text())
                 .then(async responseJson => {
@@ -399,11 +453,13 @@ class CreateProduct extends React.Component {
 
     }
 
+
     add_variation(){
         let add_variation = !this.state.add_variation
         let variations = this.state.variations;
         if(!this.state.attributes_set){            
             this.get_attributes_list()
+            this.setState({attributes_set:true})
         }
         if(add_variation){
             this.add_new_variation();
@@ -452,13 +508,21 @@ class CreateProduct extends React.Component {
     setVariationSamePrice(index){
         let variations = this.state.variations;
             variations[index].is_same_price = !variations[index].is_same_price;
+            if(variations[index].is_same_price){
+                variations[index].price = this.state.price+'';                
+            }
             this.setState({
                 variations: variations
             })
+           
     }
     setVariationNoQuantityLimit(index){
         let variations = this.state.variations;
             variations[index].no_quantity_limit = !variations[index].no_quantity_limit;
+            if(variations[index].no_quantity_limit ){
+                variations[index].quantity = '0';
+            }
+           
             this.setState({
                 variations: variations
             })
@@ -503,7 +567,8 @@ class CreateProduct extends React.Component {
                 let variations = this.state.variations;
                 variations[index].image = image.path;
                 this.setState({
-                    variations: variations
+                    variations: variations,
+                    test_img: image,
                 })
             });
         
@@ -511,9 +576,12 @@ class CreateProduct extends React.Component {
 
     }
   
-    getProduct() {
+    async getProduct() {
+        
         if (this.props.route.params.action == "update" && this.props.route.params.prodDetail.id != this.state.prod_id) {
+            // await this.get_attributes_list()
             console.log('sdkf hsjkdhfjkshgkfdgs djgjsgdfjgsdf', this.props.route.params.prodDetail);
+            let pre_product = this.props.route.params.prodDetail;
             this.setState({
                 prod_id: this.props.route.params.prodDetail.id,
                 category_id: this.props.route.params.prodDetail.category,
@@ -527,6 +595,40 @@ class CreateProduct extends React.Component {
                 has_vat: this.props.route.params.prodDetail.has_vat,
                 prod_image: this.props.route.params.prodDetail.image,
             })
+            if(this.props.route.params.prodDetail.variations.length>0){
+                let variation_pre=[];
+                variation_pre=this.state.variations;
+                let data=pre_product.variations;
+                for(let i=0;i<data.length;i++){
+                   
+                    variation_pre.push(
+                        {
+                            // attributes:[15,16,17,22],
+                            selected_attributes:[15,16,17,22],
+                            price:data[i].price,
+                            quantity:data[i].quantity,
+                            is_same_price:data[i].price == pre_product.price ,
+                            no_quantity_limit:data[i].no_qty_limit ,
+                        }
+                    );
+                    if(i ==0 ){
+                        this.setState({
+                            selected_variation:variation_pre[0]            
+                        });
+                    }
+                }
+               
+                console.log('9999999999999999999',JSON.stringify(this.props.route.params.prodDetail.variations))
+                console.log('9999999999999999999 variation_pre',JSON.stringify(variation_pre))
+                this.setState({add_variation:true,variations:variation_pre})
+
+            }
+            let aaa=1;
+            if(aaa==1){
+                this.get_attributes_list()
+    
+               
+            }
 
         }
     }
@@ -539,7 +641,7 @@ class CreateProduct extends React.Component {
         let selected_variation = this.state.selected_variation
         let selected_attributes = selected_variation.selected_attributes 
 
-        let index_found = selected_attributes.indexOf(item.id);
+        // let index_found = selected_attributes.indexOf(item.id);
         
         if (index_found > -1) {
             selected_attributes.splice(index_found, 1);
@@ -630,49 +732,7 @@ class CreateProduct extends React.Component {
   )}
 />
         )
-        return (<View>
-        <Text style={{ backgroundColor: 'white',width:width/1.5,padding:10,justifyContent:'center',alignSelf:'center'}}>{item.key} asddddddddddddddddddddddddddddd</Text>
-        <Text style={{fontSize:15,fontWeight:'bold',marginBottom:15}}>{item.value[0].value}</Text>
-        <CheckBox
-                                            style={[{marginLeft:30 }, styles.cheBox]}
-                                            onClick={() => {
-                                                console.log('item',item)
-                                            }}
-                                            isChecked={true}
-                                            rightText={item.name}
-                                        /> 
-        </View>
-        )
-        return(
-            <View style={{ backgroundColor: 'white',width:width/1.5,padding:10,justifyContent:'center',alignSelf:'center'}}>
-
-                    <Text style={{fontSize:15,fontWeight:'bold',marginBottom:15}}>{item.key} sadasdasdasdasdsa</Text>
-                    <Text style={{fontSize:15,fontWeight:'bold',marginBottom:15}}>{item.key} sadasdasdasdasdsa</Text>
-                    <Text style={{fontSize:15,fontWeight:'bold',marginBottom:15}}>{item.key} sadasdasdasdasdsa</Text>
-                                        {
-                                            item.value.map((values,index)=>{
-                                                return(
-                                            <View style={{flexDirection:'column',}}>
-                                                <Text>{values.value}esadsadsad</Text>
-                                        <CheckBox
-                                            style={[{marginLeft:30 }, styles.cheBox]}
-                                            onClick={() => {
-                                                that.setState({
-                                                    add_variation:true
-                                                })
-                                            }}
-                                            isChecked={true}
-                                            // rightText={values.value}
-                                        /> 
-                                    </View>
-                                                )
-                                            })
-                                        }
-                                        
-                                        
-            )                                        
-        </View>
-        );
+        
     }
 
     render() {
@@ -922,7 +982,7 @@ class CreateProduct extends React.Component {
                                             renderItem={({ item, index, separators }) => (
                                                 <TouchableHighlight
                                                     key={item.key}
-                                                    onPress={() => console.log(item)}
+                                                    // onPress={() => console.log(item)}
                                                     onShowUnderlay={separators.highlight}
                                                     onHideUnderlay={separators.unhighlight}>
                                                     <View style={{ backgroundColor: 'white' }}>
@@ -947,8 +1007,9 @@ class CreateProduct extends React.Component {
                                                                         width={width - 50}
                                                                         alignSelf={'center'}
                                                                         color={'#000'}
-                                                                        value={item.price}
+                                                                        value={item.price+''}
                                                                         onChangeText={text => this.setVariationPrice(index,text)}
+                                                                        disabled={item.is_same_price}
                                                                     />
                                                                 </View>
                                                             </View>
@@ -961,7 +1022,7 @@ class CreateProduct extends React.Component {
                                                                         onClick={() => {
                                                                            this.setVariationSamePrice(index)
                                                                         }}
-                                                                        isChecked={item.is_same_price}
+                                                                        isChecked={ item.is_same_price}
                                                                         rightText={"Same Price"}
                                                                     />
                                                                 </View>
@@ -975,8 +1036,9 @@ class CreateProduct extends React.Component {
                                                                         alignSelf={'center'}
                                                                         color={'#000'}
                                                                         onChangeText={(text)=>this.setVariationQuantity(index,text)}
-                                                                        value={item.quantity}
+                                                                        value={item.quantity+''}
                                                                         keyboardType={"numeric"}
+                                                                        disabled={item.no_quantity_limit}
                                                                     />
                                                                 </View>
                                                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
