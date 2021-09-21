@@ -53,10 +53,15 @@ class Dashboard extends React.Component {
         console.log('this.props.user.access_token',this.props.user.access_token);
         this.getDashboardData(Constants.dashboard);
     }
+    toCommas(value) {
+        console.log('my val',value)
+        return '111,222,333';
+        return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
     getDashboardData(url){
         this.props.setTabBar({ tab_name: 'dashboard' })
         this.setState({ spinner: true })
-        let postData = {
+        let postData = {   
             method: 'GET',
             headers: {
                 Accept: 'application/json',
@@ -84,20 +89,28 @@ class Dashboard extends React.Component {
                     var graph_total_orders_data = [];
                     var graph_lable = [];
                     for (var i = 0; i < total_orders.length; i++) {
+                        console.log('MMMMMMMMMMMMMMMMMMM',total_orders[i].amount)
                         let amount = parseInt(total_orders[i].amount);
+                        // let amount = parseInt(123456789);
+                        
+                        // graph_total_orders_data.push(amount/1000);
                         graph_total_orders_data.push(amount);
                         graph_lable.push(total_orders[i].year);
                     }
+                    
                     var total_pending_orders = responseJson.data.graph.pending_orders;
                     var graph_total_pending_orders_data = [];
                     var graph_total_pending_orders_label = [];
-
                     for (var i = 0; i < total_pending_orders.length; i++) {
                         let amount = parseInt(total_pending_orders[i].amount);
-                        graph_total_pending_orders_data.push(amount);
+                       
+                        // graph_total_pending_orders_data.push((amount / 1000));
+                        graph_total_pending_orders_data.push((amount));
+                        // graph_total_pending_orders_data.push(135.123);
                         graph_total_pending_orders_label.push(total_pending_orders[i].year);
                     }
-                    console.log('graph_total_pending_orders_data',graph_total_pending_orders_data);
+                    // console.log('graph_total_pending_orders_data',graph_total_pending_orders_data);
+                    console.log('graph_total_orders_datagraph_total_orders_datagraph_total_orders_data',graph_total_orders_data);
                     let total_orders_data = this.getGraphData(graph_lable, graph_total_orders_data);
 
                     let total_orders_pending_data = this.getGraphData(graph_total_pending_orders_label, graph_total_pending_orders_data);
@@ -169,9 +182,8 @@ class Dashboard extends React.Component {
         let data = {
             labels: graph_lable,
             datasets: graphdata,
-            // legend: ["Rainy Days"]
         };
-        console.log('getGraphData', data);
+        
         // data = {
         //     labels: ["January", "February", "March", "April", "May", "June"],
         //     datasets: [
@@ -351,28 +363,34 @@ class Dashboard extends React.Component {
                             </View>
                             
                             {(this.state.graph_data.length == 0) ? null :
+                                <ScrollView
+                                horizontal={true}
+                                >
                                 <LineChart
+                                  
                                     data={this.state.graph_data}
-                                    width={Dimensions.get("window").width-40} // from react-native
-                                    height={height / 3}
-                                    paddingLeft={10}
-                                    style={{ paddingHorizontal: 20, alignSelf: 'center',justifyContent:'center',borderWidth:20,borderColor:'#fff' }}
+                                    width={Dimensions.get("window").width+50} // from react-native
+                                    height={height/3}
+                                    // paddingLeft={10}
+                                    style={{ paddingHorizontal: -20, borderColor:'#fff' }}
                                     alignSelf={'center'}
                                     alignItems={'center'}
                                     justifyContent={'center'}
-                                    yAxisLabel="N25M"
-                                    yAxisSuffix=""
+                                    // yAxisLabel="N25M"
+                                    // yAxisSuffix=""
                                     getDotColor={true}
                                     withInnerLines={false}
-
-                                    yAxisInterval={1} // optional, defaults to 1
+                                    formatYLabel= {(value)=>value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}
+                                    // formatYLabel={(value)=>{ this.toCommas('1233545')}}
+                                    // yAxisLabel={'$'}  value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                                    // yAxisSuffix={' k'}
+                                    yAxisInterval={0} // optional, defaults to 1
                                     chartConfig={{
-                                        backgroundColor: "#fff",
-                                        marginLeft: 10,
-
+                                        backgroundColor: "#000",
+                                        marginLeft: -20,
                                         backgroundGradientFrom: "#fff",
                                         backgroundGradientTo: "#fff",
-                                        decimalPlaces: 2, // optional, defaults to 2dp
+                                        decimalPlaces: 0, // optional, defaults to 2dp
                                         color: (opacity = 1) => `rgba(177, 39, 44, ${opacity})`,
                                         // color: (opacity = 1) => `rgba(225, 225, 225, 1)`,
                                         // labelColor: (opacity = 1) => `rgba(177, 39, 44, ${opacity})`,
@@ -395,6 +413,7 @@ class Dashboard extends React.Component {
                                         borderRadius: 16
                                     }}
                                 />
+                                </ScrollView>
                             }
                         </View> 
                         <View style={[{}, styles.bannerView]}>
