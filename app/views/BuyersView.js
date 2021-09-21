@@ -10,19 +10,38 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { Constants } from './Constant';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER,SET_SUPPLIER } from '../redux/constants/index';
-
+import NumberFormat from 'react-number-format';
 
 var { width, height } = Dimensions.get('window');
 class BuyersView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            filter:'',
             spinner: true,
+            spinnerOder:true,
             supendModal: false,
             moreDeatailMOdal: false,
             items: {},
             orderList: [],
-            search_order: ''
+            search_order: '',
+            is_active_list:""
+        }
+    }
+
+    componentWillReceiveProps(){
+        console.log("inew@..",this.props.route.params.items)
+        if (this.props.route.params.heading == "SUPPLIERS") {
+            const url=`${Constants.viewSuplier}?id=${this.props.route.params.items.seller_id}`;
+
+            this.getData(url)
+            const sellerurl=Constants.sellerOrderHistory + '?id=' + this.props.route.params.items.seller_id + '&sort=-id';
+            this.getSellerOrderHistory(sellerurl);
+
+        } else {
+            const url=`${Constants.viewBuyer}?id=${this.props.route.params.items.buyer_id}`;
+            this.getData(url)
+            this.getBuyerOrderHistory()
         }
     }
 
@@ -36,7 +55,8 @@ class BuyersView extends React.Component {
             const url=`${Constants.viewSuplier}?id=${this.props.route.params.items.seller_id}`;
 
             this.getData(url)
-            this.getSellerOrderHistory();
+            const sellerurl=Constants.sellerOrderHistory + '?id=' + this.props.route.params.items.seller_id + '&sort=-id';
+            this.getSellerOrderHistory(sellerurl);
 
         } else {
             const url=`${Constants.viewBuyer}?id=${this.props.route.params.items.buyer_id}`;
@@ -80,8 +100,8 @@ class BuyersView extends React.Component {
             })
     }
 
-    getSellerOrderHistory() {
-        this.setState({ spinner: true })
+    getSellerOrderHistory(url) {
+        this.setState({ spinnerOder: true })
         let postData = {
             method: 'GET',
             headers: {
@@ -90,15 +110,17 @@ class BuyersView extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
-        let orderListUrl = Constants.sellerOrderHistory + '?id=' + this.props.route.params.items.seller_id + '&sort=-id';
-
-        fetch(orderListUrl, postData)
+       // let orderListUrl = Constants.sellerOrderHistory + '?id=' + this.props.route.params.items.seller_id + '&sort=-id';
+console.log("ressss@###",url,postData)
+        fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
+                console.log("order##$$@@!",responseJson)
                 this.setState({
-                    spinner: false
+                    spinnerOder: false
                 });
-                if (responseJson.status === 'success') {
+                console.log("order##$$@@!",responseJson)
+                if (responseJson.success) {
                     console.log('data data data res res res ', responseJson)
                     this.setState({
                         orderList: responseJson.data
@@ -107,6 +129,7 @@ class BuyersView extends React.Component {
                     this.unauthorizedLogout();
                 }
                 else {
+                    console.log("error@@!!!$",)
                     let message = responseJson.message
                     Alert.alert('Error', message)
                 }
@@ -118,7 +141,7 @@ class BuyersView extends React.Component {
         this.props.navigation.navigate('Login');
     }
     getBuyerOrderHistory() {
-        this.setState({ spinner: true })
+        this.setState({ spinnerOder: true })
         let postData = {
             method: 'GET',
             headers: {
@@ -133,7 +156,7 @@ class BuyersView extends React.Component {
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({
-                    spinner: false
+                    spinnerOder: false
                 });
                 if (responseJson.status === 'success') {
                     console.log('data data data res res res ', responseJson)
@@ -152,7 +175,7 @@ class BuyersView extends React.Component {
     viewProducts() {
         console.log('seller_id seller_id seller_id !!!!!!!!!!!', this.state.items.seller_id)
         let buyer_id = this.state.items.buyer_id
-        this.props.navigation.navigate('BuyersProducts', { items:  this.state.items})
+        this.props.navigation.navigate('BuyersProducts', { items:  this.state.items,heading:this.props.route.params.heading})
     }
 
     suspendBuyer(buyer_id) {
@@ -165,7 +188,8 @@ class BuyersView extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
-        fetch(Constants.suspendBuyer + '?id=' + buyer_id, postData)
+        console.log("suspeB@",Constants.suspendBuyer + '?id=DiageoPlc' + buyer_id)
+        fetch(Constants.suspendBuyer + '?id=DiageoPlc' , postData)
             .then(response => response.json())
             .then(async responseJson => {
                 console.log('@@@##$$$$$ sspend Request !!!!!!!!!!', responseJson)
@@ -259,8 +283,10 @@ class BuyersView extends React.Component {
     search() {
 
         if (this.props.route.params.heading == "SUPPLIERS") {
-            let search_url = Constants.buyerlist + '?filter[buyer_name]=' + this.state.search_buyers;
-            this.getSellerOrderHistory();
+           // let search_url = Constants.buyerlist + '?filter[order_id]=' + this.state.search_buyers;
+            const sellerurl=Constants.sellerOrderHistory + '?id=' + this.props.route.params.items.seller_id + '&sort=-id&filter[order_id]='+this.state.search_order;
+          
+            this.getSellerOrderHistory(sellerurl);
             //merchant_id
         } else {
             this.getBuyerOrderHistory()
@@ -273,15 +299,34 @@ class BuyersView extends React.Component {
     itemDetail(item) {
         const id = item.id
         console.log("item_id item_id item_id item_id ", id)
-        this.props.navigation.navigate('OrderDetail', { id })
+        if (this.props.route.params.heading == "SUPPLIERS") {
+            this.props.navigation.navigate('OrderDetailValueChain', { order_id:item.order_id,item,seller_Id:this.props.route.params.items.seller_id,seller:this.props.route.params.items,heading:"SUPPLIERS"})
+        } else {
+            this.props.navigation.navigate('OrderDetail', { id }) 
+        }
+        
     }
 
+    filterOrder(filter){
+        this.setState({is_active_list:filter})
+        if (this.props.route.params.heading == "SUPPLIERS") {
+            // let search_url = Constants.buyerlist + '?filter[order_id]=' + this.state.search_buyers;
+            let sellerurl;
+            sellerurl= filter=="all"?Constants.sellerOrderHistory + '?id=' + this.props.route.params.items.seller_id + '&sort=-id':Constants.sellerOrderHistory + '?id=' + this.props.route.params.items.seller_id + '&sort=-id&filter[order_status]='+filter;
+            
+           
+             this.getSellerOrderHistory(sellerurl);
+             //merchant_id
+         } else {
+             this.getBuyerOrderHistory()
+         }
+    }
     createOrderFun(){
             this.props.setSupplier({
                 id:this.state.items.seller_id,
                 name:this.state.items.seller_name
             })
-        this.props.navigation.navigate('CreateOrder', { heading: 'supplier',screen_name:"buy" ,item:this.state.items})
+        this.props.navigation.replace('CreateOrderValueChain', { heading: 'supplier',screen_name:"buy" ,item:this.state.items})
     }
     render() {
         console.log(' this state  this state items', this.state.items)
@@ -291,6 +336,12 @@ class BuyersView extends React.Component {
                 <Header navigation={this.props.navigation} />
                 <Spinner
                     visible={this.state.spinner}
+                    textContent={'Please Wait...'}
+                    textStyle={{ color: '#fff' }}
+                    color={'#fff'}
+                />
+                <Spinner
+                    visible={this.state.spinnerOder}
                     textContent={'Please Wait...'}
                     textStyle={{ color: '#fff' }}
                     color={'#fff'}
@@ -316,12 +367,13 @@ class BuyersView extends React.Component {
                             {(this.props.route.params.heading == 'BUYERS') ?
                                 <View>
                                     <Text style={[{textAlign:'center'}, styles.darkGrayBoldText]}>{this.state.items.buyer_name}</Text>
-                                    <Text style={[{textAlign:'center'}, styles.lightGrayText]}>{this.state.items.buyer_id}</Text>
                                 </View>
                                 : <View>
                                     <Text style={[{}, styles.darkGrayBoldText]}>{this.state.items.seller_name}</Text>
-                                    <Text style={[{}, styles.lightGrayText]}>{this.state.items.seller_id}</Text>
+                                    {/* <Text style={[{}, styles.lightGrayText]}>{this.state.items.seller_id}</Text> */}
                                 </View>}
+                                    <Text style={[{textAlign:'center',alignSelf:"center"}, styles.lightGrayText]}>{(this.props.route.params.heading == 'BUYERS') ?this.state.items.buyer_id:this.state.items.seller_id}</Text>
+
                           { this.props.route.params.heading != "SUPPLIERS" &&(  <TouchableOpacity
                                 onPress={() => this.setState({ supendModal: true })}
                                 style={[{}, styles.iconRight]}
@@ -351,7 +403,7 @@ class BuyersView extends React.Component {
                             </View>
                             <View style={[{}, styles.columnView]}>
                                 <Text style={[{}, styles.lightGrayText]}>Values of orders</Text>
-                                <Text style={[{}, styles.darkGrayBoldText]}>N {this.state.items.value_of_orders}</Text>
+                                <Text style={[{}, styles.darkGrayBoldText]}> <NumberFormat decimalScale={2} renderText={(value, props) => <Text style={styles.darkGrayBoldText} {...props}>{value}</Text>} value={this.state.items.value_of_orders} displayType={'text'} thousandSeparator={true}  prefix={"N"}/> </Text>
                             </View>
                         </View>
                         {(this.props.route.params.heading == 'BUYERS') ?
@@ -425,12 +477,12 @@ class BuyersView extends React.Component {
 
                                 source={require('../images/Order/settingicon.png')} />
                         </TouchableOpacity>
-
+                  width-80
                     </View> */}
-                    {this.state.orderList.length>0?<View>
+                    {this.state.orderList.length>0 || this.state.is_active_list!=""?<View>
                     <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
 
-                        <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 80 }}>
+                        <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 25 }}>
                             <Image
                                 style={{height:20,width:20}}
                                 source={require('../images/products/searchicon.png')}
@@ -438,6 +490,7 @@ class BuyersView extends React.Component {
                             <TextInput
                                 label="Search order ID, amount, ticket Id"
                                 // selectionColor={'#fff'}
+                                value={this.state.search_order}
                                 style={{ backgroundColor: 'transparent', }}
                                 width={width - 50}
                                 alignSelf={'center'}
@@ -446,7 +499,7 @@ class BuyersView extends React.Component {
                                 onSubmitEditing={() => this.search()}
                             />
                         </View>
-
+{/* 
                         <TouchableOpacity
                             style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
                         // onPress={() => this.props.navigation.navigate('ProductFilter')}
@@ -455,7 +508,7 @@ class BuyersView extends React.Component {
                                 style={{height:50,width:50}}
                                 source={require('../images/Order/settingicon.png')}
                             />
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
 
                     </View>
                     <Text style={[{}, styles.historyHeadingText]}>ORDER HISTORY</Text>
@@ -471,46 +524,51 @@ class BuyersView extends React.Component {
                     >
 
                         <TouchableOpacity
-                            onPress={() => this.customeList("")}
+                             onPress={() => this.filterOrder("all")}
                         >
                             <Text style={{
-                                color: this.state.is_active_list === 'all' ? '#000' : '#e2e2e2',
+                                color: this.state.is_active_list === 'all' ? '#B1272C' : '#e2e2e2',
                                 fontWeight: 'bold', backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
                             }}>ALL</Text>
                         </TouchableOpacity >
                         <TouchableOpacity
-                            onPress={() => this.customeList("pending")}
+                             onPress={() => this.filterOrder("PENDING")}
                         >
                             <Text style={{
-                                color: this.state.is_active_list === 'pending' ? '#000' : '#e2e2e2',
+                                color: this.state.is_active_list === 'PENDING' ? '#B1272C' : '#e2e2e2',
                                 backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
                             }}>PENDING</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            onPress={() => this.customeList("paid")}
+                           onPress={() => this.filterOrder("PAID")}
                         >
                             <Text style={{
-                                color: this.state.is_active_list === 'paid' ? '#000' : '#e2e2e2',
+                                color: this.state.is_active_list === 'PAID' ? '#B1272C' : '#e2e2e2',
                                 backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
                             }}>PAID</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity
-                            onPress={() => this.customeList("partPayment")}
+{this.props.route.params.heading != "SUPPLIERS" &&(
+    <>
+ <TouchableOpacity
+                             //onPress={() => this.filterOrder("partPayment")}
                         >
                             <Text style={{
-                                color: this.state.is_active_list === 'partPayment' ? '#000' : '#e2e2e2',
+                                color: this.state.is_active_list === 'partPayment' ? '#B1272C' : '#e2e2e2',
                                 backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
                             }}>PART PAYMENT</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            onPress={() => this.customeList("paidFromCredit")}
+                            // onPress={() => this.filterOrder("paidFromCredit")}
                         >
                             <Text style={{
-                                color: this.state.is_active_list === 'paidFromCredit' ? '#000' : '#e2e2e2',
+                                color: this.state.is_active_list === 'paidFromCredit' ? '#B1272C' : '#e2e2e2',
                                 backgroundColor: '#E6E6E6', marginRight: 5, paddingHorizontal: 10, borderRadius: 50, backgroundColor: '#fff', fontSize: 15
                             }}>PAID FROM CREDIT</Text>
                         </TouchableOpacity>
 
+    </>
+)}
+                       
                     </ScrollView>
                     <ScrollView style={{ paddingBottom: 50, marginBottom: 20 }}>
                         <FlatList
@@ -539,11 +597,11 @@ class BuyersView extends React.Component {
                                                 style={{height:35,width:35}}
                                                 source={require('../images/Order/bage.png')} />
                                             <View style={{ flexDirection: 'column' }}>
-                                                <Text style={[{}, styles.darkGrayBoldText]}>{item.cicod_order_id}</Text>
-                                                <Text style={[{}, styles.lightGrayText]}>{item.description}</Text>
+                                                <Text style={[{}, styles.darkGrayBoldText]}>{this.props.route.params.heading == "SUPPLIERS"?item.order_id:item.cicod_order_id}</Text>
+                                                <Text style={[{fontSize:11}, styles.lightGrayText]}>{item.description}</Text>
                                             </View>
                                             <View style={[{}, styles.actionContainer]}>
-                                                <Text style={[{}, styles.darkGrayBoldText]}>N{item.amount}</Text>
+                                                <Text style={[{}, styles.darkGrayBoldText]}>{item.currency}{ item.amount}</Text>
                                                 {(item.order_status == "PAID") ?
                                                     <View style={[{}, styles.greenView]}>
                                                         <Text style={[{}, styles.greenText]}>{item.order_status}</Text>
@@ -557,7 +615,7 @@ class BuyersView extends React.Component {
                                                         </View>}
                                             </View>
                                         </View>
-                                        <Text style={[{}, styles.lightGrayText]}>{item.date_created}</Text>
+                                        <Text style={[{}, styles.lightGrayText]}>{this.props.route.params.heading == "SUPPLIERS"? item.create_time:item.date_created}</Text>
                                     </View>
                                 </TouchableOpacity>
                             )}

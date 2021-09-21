@@ -32,11 +32,11 @@ const CustomerDetail=({name,email,phone,isSupplier=false,customer={}})=>(
         </View> */}
             </>
         )}
-        <View style={[{}, styles.downIconView]}>
+        {/* <View style={[{}, styles.downIconView]}>
             <Icon name="angle-down"
                 size={20}
                 color={'#929497'} />
-        </View>
+        </View> */}
     </View>
 )
 

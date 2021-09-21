@@ -21,7 +21,7 @@ export default class SplashScreen extends React.Component {
             </View>
             <View style={{ alignItems: 'center', position: 'absolute', bottom: 0, alignSelf: 'center', marginBottom:height/4 }}>
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Login')}
+                onPress={() => this.props.navigation.replace('Login')}
               >
                 <View style={{ width: width / 2, alignItems: 'center', borderWidth: 1, borderColor: '#B1272C', backgroundColor:'#FFF4F4', borderRadius: 50, paddingVertical: 10 }}>
                   <Text style={{ color: '#B1272C' }}>Login</Text>

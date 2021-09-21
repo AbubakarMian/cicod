@@ -11,7 +11,7 @@ import { Constants } from '../views/Constant';
 import SearchBar from 'react-native-search-bar';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER, PRODUCT_FILTERS } from '../redux/constants/index';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 class Filter extends React.Component {
@@ -24,6 +24,8 @@ class Filter extends React.Component {
       categoryarr: [],
       category_name: '',
       spinner: false,
+      active:false,
+      inactive:false
     };
   }
   componentDidMount() {
@@ -72,10 +74,20 @@ class Filter extends React.Component {
   activeSet(value) {
     let filters = this.state.filters;
     filters.push({ key: 'is_active', value: value })
-    this.setState({
-      filters: filters
-    })
-    console.log('filters !!!!!!', filters);
+    if (value==0) {
+      this.setState({
+        inactive:!this.state.inactive,
+        filters: filters
+      })
+    }else{
+      this.setState({
+        active:!this.state.active,
+        filters: filters
+      })
+    }
+    
+    
+    console.log('filters !!!!!!', this.state);
   }
 
   onCategoryText(text) {
@@ -89,6 +101,7 @@ class Filter extends React.Component {
 
   applyFilter = () => {
     console.log('this.state.filters', this.state.filters);
+    this.props.productFilter(this.state.filters,)
     this.props.navigation.navigate(this.props.route.params.screen, { filters: this.state.filters });
   }
 
@@ -145,19 +158,19 @@ class Filter extends React.Component {
             <View style={[{ paddingRight: 30, marginTop: 5 }, styles.mainRow]}>
               <View style={[{ marginRight: 10 }]}>
                 <TouchableOpacity onPress={() => this.activeSet(1)}>
-                  <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>ACTIVE </Text>
+                  <Text style={[{ color:this.state.active?"#fff": '#929497', borderRadius: 50, backgroundColor: this.state.active?'green':'#E6E6E6', paddingHorizontal: 5 }]}>ACTIVE </Text>
                 </TouchableOpacity>
               </View>
               <View style={[{}]}>
                 <TouchableOpacity onPress={() => this.activeSet(0)}>
-                  <Text style={[{ color: '#929497', borderRadius: 50, backgroundColor: '#E6E6E6', paddingHorizontal: 5 }]}>IN ACTIVE </Text>
+                  <Text style={[{ color: this.state.inactive?'#fff':'#929497', borderRadius: 50, backgroundColor: this.state.inactive?'green':'#E6E6E6', paddingHorizontal: 5 }]}>IN ACTIVE </Text>
                 </TouchableOpacity>
               </View>
             </View>
           </View>
         </View>
         <TouchableOpacity
-          onPress={this.applyFilter}
+          onPress={()=>this.applyFilter()}
           style={{ width: width / 1.2, alignSelf: 'center', backgroundColor: '#B1272C', justifyContent: 'center', alignItems: 'center', paddingVertical: 15, borderRadius: 50, marginTop: 30 }}
         >
           <Text style={{ color: '#fff', fontWeight: 'bold' }}>Apply</Text>
@@ -175,6 +188,7 @@ function mapDispatchToProps(dispatch) {
   return {
     setUser: (value) => dispatch({ type: SET_USER, value: value }),
     logoutUser: () => dispatch({ type: LOGOUT_USER }),
+    productFilter:(value)=>dispatch({type:PRODUCT_FILTERS,value})
   }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Filter)

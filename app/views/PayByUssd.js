@@ -125,7 +125,7 @@ class PayByUssd extends React.Component {
 
     pay_redirect_detail() {
         if(this.state.ussd_code_selected==null){
-            Alert.alert("Pleas select the Bank")
+            Alert.alert("Please select the Bank")
         }
         else{
         this.makePaymentFun(this.props.route.params.payment_mode);

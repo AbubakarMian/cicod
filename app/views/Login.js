@@ -120,7 +120,7 @@ class Login extends React.Component {
 
                         this.setCurrency(user_token);
                         console.log('get user !!!!!!!!!!!!!!!!', this.props.user)
-                        this.props.navigation.navigate('Home')
+                        this.props.navigation.replace('Home')
                     } else {
                         this.setState({ Spinner: false })
                         // this.setState({ Spinner: false })
@@ -142,7 +142,7 @@ class Login extends React.Component {
 
     setCurrency(user_token){
         this.props.setCurrency({
-            currency: 'N',
+            currency: '₦',
         });
 
         console.log('!!!!!!!!!')

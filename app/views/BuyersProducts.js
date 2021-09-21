@@ -85,7 +85,14 @@ class BuyerProducts extends React.Component {
     }
 
     search() {
-        let search_url = Constants.productslist + '?search=' + this.state.search_product;
+        let search_url ;
+        if (this.props.route.params.heading=="SUPPLIERS") {
+            search_url = this.state.url_products + '&filter[name]=' + this.state.search_product;
+        } else {
+            search_url = this.state.url_products + '?search=' + this.state.search_product;
+        }
+        console.log("searult@@",search_url)
+       
         this.getData(search_url);
 
     }
@@ -144,7 +151,7 @@ class BuyerProducts extends React.Component {
 
     onCategoryText(category_id) {
         console.log(' category ID search !!!!!!!!!!!!!!!@@@@@@@@@@@@@@', category_id)
-        let url = Constants.productslist + '?category_id=' + category_id;
+        let url = this.state.url_products + '?category_id=' + category_id;
         this.getData(url);
     }
 
@@ -157,7 +164,13 @@ class BuyerProducts extends React.Component {
 
      listProducts(props){
         let _that = props._that;
-        let url = `${Constants.approved_buyer_products}?id=${_that.props.route.params.items.buyer_id}&sort=-id`;
+        let url;
+        if(_that.props.route.params.heading=="SUPPLIERS"){
+            url=Constants.sellerProductList+'?id='+_that.props.route.params.items.seller_id;
+        }else{
+        url= `${Constants.approved_buyer_products}?id=${_that.props.route.params.items.buyer_id}&sort=-id`;
+
+        }
         // if (_that.props.route == null || _that.props.route.params == null || _that.props.route.params.filters == null) {
         //     url = Constants.productslist;
         // }
@@ -218,7 +231,7 @@ class BuyerProducts extends React.Component {
                         renderItem={({ item, index, separators }) => (
                             <TouchableOpacity
                                 key={item.key}
-                                onPress={() => _that.props.navigation.navigate('ProductView', { prod_id: item.id })}
+                                onPress={() => _that.props.navigation.navigate('ProductView', { item,prod_id: item.id,heading:_that.props.route.params.heading||'BUYERS' })}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
                                 <View style={{ zIndex: -0.999, position: 'relative', alignSelf: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 5 }}>

@@ -24,8 +24,14 @@ class PayByPOS extends React.Component {
     }
 
     press_confirm() {
-        // let payment_link = this.state.payment_link;
+        if (this.props.route.params.heading=="supplier") {
+        this.props.navigation.navigate('OrderDetailValueChain', { order_id:this.props.route.params.order_id,seller_Id:this.props.route.params.seller_id,heading:"SUPPLIERS" })
+            
+        } else {
         this.props.navigation.navigate('OrderDetail',{id:this.state.order_id})
+            
+        }
+        // let payment_link = this.state.payment_link;
 
         // console.log('param',this.props.route.params.payment_link);
         // if (this.props.route.params.payment_link == null) {
@@ -45,14 +51,17 @@ class PayByPOS extends React.Component {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': this.props.user.access_token
+                Authorization: this.props.user.access_token
             },
         };
-        console.log('~~~~~~~~~~~~~~~',this.props.route.params.data)
+        console.log('~~~~~~~~~~~~~~~',this.props.route.params)
         let order_id = this.props.route.params.order_id;
         console.log('%%%%%%%%%%%%',order_id)
-     
-        let url = Constants.orderslist + '/' + order_id
+        const url=this.props.route.params.heading=="supplier"?`
+        ${Constants.viewSellerOrder}?id=${this.props.route.params.seller_id}&orderId=${ this.props.route.params.data.cicod_order_id}&expand=customer,customerOrderItems`:
+        Constants.orderslist + '/' + order_id;
+        
+        //let url = Constants.orderslist + '/' + order_id
         console.log('---- body params list @@@@@@!!!!!!!!!!!!!!', this.props.route.params);
         console.log('order url detail ', url);
         console.log('order postData ', postData);
@@ -77,8 +86,9 @@ class PayByPOS extends React.Component {
             }
             )
             .catch((error) => {
-                console.log("Api call error", error);
-                // Alert.alert(error.message);
+                // this.setState({ spinner: false })
+                // console.log("Api call error", error);
+                // Alert.alert("Error","Oops!!! Error in server");
             });
     }
 

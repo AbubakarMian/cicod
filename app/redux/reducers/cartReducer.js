@@ -1,4 +1,4 @@
-import { REMOVE_FROM_CART, ADD_TO_PRODUCT, REMOVE_PRODUCT_FORM_CART,CLEAR_ORDER ,UPDATE_CART} from '../constants';
+import { REMOVE_FROM_CART, ADD_TO_PRODUCT, REMOVE_PRODUCT_FORM_CART,CLEAR_ORDER,CLEAR_CART ,UPDATE_CART} from '../constants';
 const initialState = {
     cart: [],
     cart_detail:{
@@ -76,6 +76,8 @@ const cartReducer = (state = initialState, action) => {
             updateCart();
             return { ...state, cart };
             break;
+            case CLEAR_CART:
+                return { ...state, cart:[],cart_detail:{} }; 
         case UPDATE_CART:
             updateCart();
             return { state };

@@ -34,7 +34,69 @@ class AddProduct extends React.Component {
     }
 
     componentDidMount() {
+    
+        console.log("sellers s@@@##",this.props.route.params.item)
+       
+const url =
+            this.getSellersProducts(Constants.sellerProductList+'?id='+this.props.route.params.item.seller_id);
+        
         this.getCategoryList();
+        // this.getSellersProducts();
+    }
+
+    getSellersProducts(url){
+        this.setState({ spinner: true })
+        let postData = {
+            method: 'GET',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                Authorization: this.props.user.access_token,
+            },
+        };
+        //Constants.productslist + '?is_active=1&search=' + this.state.search_product
+        // let search_url =  '?is_active=1&search=' + this.state.search_product + '&category_id=' + this.state.category_id
+      
+        console.log('sllerszX@@##$$ ', url);
+        fetch(url, postData)
+            .then(response => response.json())
+            .then(async responseJson => {
+                this.setState({
+                    spinner: false
+                });
+                console.log('@@@@....sellers Products!! !!!!!!!!', responseJson)
+                if (responseJson.success) {
+
+                    let cart_data = this.props.cart.cart;
+                    console.log('cart data : ', cart_data);
+                    let data = responseJson.data;
+                    for (let i = 0; i < data.length; i++) {
+                        let product_found = false;
+                        for (let c = 0; c < cart_data.length; c++) {
+                            console.log('asd');
+                            if (cart_data[c].id == data[i].id) {
+                                data[i].purchased_quantity = cart_data[c].purchased_quantity;
+                                data[i].is_added = true;
+                                product_found = true;
+                            }
+                        }
+                        if (!product_found) {
+                            data[i].purchased_quantity = 0;
+                            data[i].is_added = false;
+                        }
+
+                    }
+                    this.setState({
+                        data: data
+                    })
+                } else if (responseJson.status == 401) {
+                    this.unauthorizedLogout();
+                }
+                else {
+                    let message = responseJson.message
+                    Alert.alert('Error', message)
+                }
+            })
     }
 
     getProductList(search_product, category_id) {
@@ -114,17 +176,18 @@ class AddProduct extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
-        fetch(Constants.productcategorylist, postData)
+        fetch(this.props.route.params.heading=="supplier"? Constants.sellerProductCategoryList+'?id='+this.props.route.params.item.seller_id:Constants.productcategorylist, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({ spinner: false });
-                if (responseJson.status === 'success') {
+                if (responseJson.success|| responseJson.status === 'success') {
 
                     let res = responseJson.data;
                     let categoryarr = res.map((x, key) => { return { label: x.name, value: x.id } });
                     console.log('categoryarr !!!!!!!!!!!!!!!!!!', categoryarr);
+                   const newCat=[{label:"All",value:"all"},...categoryarr]
                     this.setState({
-                        categoryarr: categoryarr,
+                        categoryarr: newCat,
                     });
                 } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
@@ -142,7 +205,20 @@ class AddProduct extends React.Component {
         this.setState({
             category_id: category_id
         })
-        this.getProductList(this.state.search_product, category_id);
+        
+           
+            this.getSellersProducts(category_id=="all"?Constants.sellerProductList+'?id='+this.props.route.params.item.seller_id:Constants.sellerProductList+'?id='+this.props.route.params.item.seller_id+'&filter[category_id]='+category_id);
+      
+        
+    }
+
+    doneCart(){
+        let data = this.state.data;
+        if (data.length== 0 ) {// && data[index].purchased_quantity == 0  this.props.cart.cart.length 
+            Alert.alert('Error ', 'Cart is empty')
+            return; 
+        }
+        this.props.navigation.navigate('CreateOrderValueChain', { screen: 'active' })
     }
 
     async addProduct(index) {
@@ -153,12 +229,17 @@ class AddProduct extends React.Component {
         } else {
 
             for(let i = 0 ; i < data.length; i++){
+                
                 if(data[i].purchased_quantity > 0){
+                    if(data[i].minimum_order > data[i].purchased_quantity){
+                        Alert.alert("Info!",`${data[i].name} purchased quantity less than minimum order ${data[i].minimum_order}`)
+                        continue;
+                    }
                     await this.props.cartReducer(data[i]);
                 }
             }            
             console.log('aadded cart',data[index])
-            this.props.navigation.navigate('CreateOrder', { screen: 'active' });
+            // this.props.navigation.navigate('CreateOrder', { screen: 'active' });
         }
     }
     catelog_count(){
@@ -188,10 +269,18 @@ class AddProduct extends React.Component {
                 // await this.props.cartReducer(data[index]);
                 data[index].purchased_quantity = updated_purchased_quantity;
                 console.log('here in else condition !!!!!!!!! after : ', data[index].purchased_quantity);
-
+                if(data[index].minimum_order > data[index].purchased_quantity){
+                    Alert.alert("Info!",`${data[index].name} purchased quantity less than minimum order ${data[i].minimum_order}`)
+                   return
+                }
+               
                 this.setState({
                     data: data
+                },()=>{
+                    this.props.cartReducer(data[index]);
                 });
+
+           
                 // this.props.cartReducer(data[index]);
 
                 console.log('cart : ', this.props.cart);
@@ -211,6 +300,15 @@ class AddProduct extends React.Component {
         }
     }
 
+
+    searchProduct(){
+        if (this.state.category_id==0) {
+            this.getSellersProducts(Constants.sellerProductList+'?id='+this.props.route.params.item.seller_id+'&filter[name]='+this.state.search_product);
+        } else {
+            this.getSellersProducts(this.state.category_id=="all"?Constants.sellerProductList+'?id='+this.props.route.params.item.seller_id+'&filter[name]='+this.state.search_product:Constants.sellerProductList+'?id='+this.props.route.params.item.seller_id+'&filter[category_id]='+category_id+'&filter[name]='+this.state.search_product);
+            // category_id=="all"?Constants.sellerProductList+'?id='+this.props.route.params.item.seller_id+'&filter[name]='+this.state.search_product:Constants.sellerProductList+'?id='+this.props.route.params.item.seller_id+'&filter[category_id]='+category_id+'&filter[name]='+this.state.search_product);
+        }
+    }
     render() {
         var radio_props_dilvery = [
             { label: 'Dilivery', value: 0 },
@@ -253,7 +351,7 @@ class AddProduct extends React.Component {
                             placeholder="Search Product"
                             iconColor="#929497"
                             style={{ width: width - 20, alignSelf: 'center', marginTop: 10, marginBottom: 5, elevation: 0, fontSize: 14, color: '#D5D5D5', borderColor: '#D8DCDE' }}
-                            onSubmitEditing={() => this.getProductList(this.state.search_product, this.state.category_id)}
+                            onSubmitEditing={() =>this.searchProduct()}
                             onChangeText={text => this.setState({ search_product: text })}
                         //update
                         ></Searchbar>
@@ -284,9 +382,18 @@ class AddProduct extends React.Component {
                         <View style={{ borderBottomWidth: 0.5, borderBottomColor: '#E6E6E6', width: width - 20, alignSelf: 'center', marginBottom: 10 }}></View>
                         <View style={[{ zIndex: -0.9999 }, styles.OrderDetailContainer]}>
 
-                            <View style={[{}, styles.OrderDetailHeadingRow]}>
+                            <View style={[ styles.OrderDetailHeadingRow,{justifyContent:"space-between",right:20}]}>
+                                <View style={{flexDirection:"row"}}>
                                 <Text style={[{}, styles.OrderDetailHeadingRowText]}>Product Catalog</Text>
                                 <Text style={[{}, styles.OrderDetailNotificationText]}>{this.catelog_count()}</Text>
+                                </View>
+                                <TouchableOpacity
+                                                       onPress={() => this.doneCart()}
+                                                       style={{ flexDirection: 'row', backgroundColor: '#B1272C', marginRight:30, paddingHorizontal: 10, borderRadius: 100, paddingVertical: 2, width: width / 6, alignItems: 'center' ,justifyContent:"center"}}
+                                                   >
+                                                       <Icon name="plus-circle" color={'#fff'} />
+                                                       <Text style={{ color: '#fff', marginLeft: 5 ,fontSize:12}}>Done</Text>
+                                                   </TouchableOpacity>
                             </View>
 
                             {(this.state.data.length != 0) ?
@@ -315,36 +422,48 @@ class AddProduct extends React.Component {
                                             </View>
                                             <View style={[{}, styles.orderDetailAmmountRow]}>
                                                 <View style={[{}, styles.orderDetailAmmountColumn]}>
-                                                    <Text style={[{}, styles.orderDetailAmmountColumnGaryBolText]}>{this.props.currency.currency} {item.price}</Text>
+                                                    <Text style={[{}, styles.orderDetailAmmountColumnGaryBolText]}>{item.currency} {item.price}</Text>
                                                 </View>
-                                                <View style={[{}, styles.orderDetailAmmountColumn]}>
+                                               { item.is_active? (
+                                                   <View style={[{}, styles.orderDetailAmmountColumn]}>
 
-                                                    <View style={[{}, styles.OrderDetailDataCOntainerCounterView]}>
-                                                        <TouchableOpacity
-                                                            onPress={() => this.counterFun('sub', index)}
-                                                            style={[{}, styles.iconView]}>
-                                                            <Icon name="minus" />
-                                                        </TouchableOpacity>
-                                                        <View style={[{}, styles.iconView]}>
-                                                            <Text>{item.purchased_quantity}</Text>
-                                                        </View>
-                                                        <TouchableOpacity style={[{}, styles.iconView]}
-                                                            onPress={() => this.counterFun('add', index)}
-                                                        >
-                                                            <Icon name="plus"
-                                                                color="#B1272C"
-                                                            />
-                                                        </TouchableOpacity>
-                                                    </View>
-                                                    <TouchableOpacity
-                                                        onPress={() => this.addProduct(index)}
-                                                        style={{ flexDirection: 'row', backgroundColor: '#B1272C', position: 'absolute', right: 10, paddingHorizontal: 10, borderRadius: 100, paddingVertical: 2, width: width / 6, alignItems: 'center' }}
-                                                    >
-                                                        <Icon name="plus-circle" color={'#fff'} />
-                                                        <Text style={{ color: '#fff', marginLeft: 5 }}>Add</Text>
-                                                    </TouchableOpacity>
-                                                </View>
+                                                   <View style={[styles.OrderDetailDataCOntainerCounterView,{right:10,}]}>
+                                                       <TouchableOpacity
+                                                           onPress={() => this.counterFun('sub', index)}
+                                                           style={[{}, styles.iconView]}>
+                                                           <Icon name="minus" />
+                                                       </TouchableOpacity>
+                                                       <View style={[{}, styles.iconView]}>
+                                                           <Text>{item.purchased_quantity}</Text>
+                                                       </View>
+                                                       <TouchableOpacity style={[{}, styles.iconView]}
+                                                           onPress={() => this.counterFun('add', index)}
+                                                       >
+                                                           <Icon name="plus"
+                                                               color="#B1272C"
+                                                           />
+                                                       </TouchableOpacity>
+                                                   </View>
+                                                   {/* <TouchableOpacity
+                                                       onPress={() => this.addProduct(index)}
+                                                       style={{ flexDirection: 'row', backgroundColor: '#B1272C', position: 'absolute', right: 10, paddingHorizontal: 10, borderRadius: 100, paddingVertical: 2, width: width / 6, alignItems: 'center' }}
+                                                   >
+                                                       <Icon name="plus-circle" color={'#fff'} />
+                                                       <Text style={{ color: '#fff', marginLeft: 5 }}>Add</Text>
+                                                   </TouchableOpacity> */}
+                                               </View>
+                                          
+                                               ):(
+                                                <View
+                                               
+                                                style={{  backgroundColor: '#FFF4F4',justifyContent:'center', right: 10,  borderRadius: 60, width: width / 6, alignItems: 'center' }}
+                                            >
+                                              
+                                                <Text style={{ color: '#B1272C', fontSize:7 }}>INACTIVE</Text>
                                             </View>
+                                               )}
+                                               
+                                                 </View>
 
                                         </View>
                                     )}

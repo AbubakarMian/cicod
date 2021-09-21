@@ -103,6 +103,7 @@ class Supplier extends React.Component {
             <View style={{ height: height, width: width, position: 'relative', backgroundColor: '#F0F0F0', }}>
                 <Header navigation={this.props.navigation} />
                 <Spinner
+                cancelable={true}
                     visible={this.state.spinner}
                     textContent={'Please Wait...'}
                     textStyle={{ color: '#fff' }}

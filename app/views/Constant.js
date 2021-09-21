@@ -14,7 +14,8 @@ export const Constants = {
   customerdelivery: `${base_url}/customer-delivery-address`,
   productslist: `${base_url}/products`,
   orderslist: `${base_url}/orders`,
-  sellerOrderHistory: `${base_url}/seller-order-history`,
+  sellerOrderHistory: `${base_url}/value-chain/seller-order-history`,
+  viewSellerOrder: `${base_url}/value-chain/view-seller-order`,
   sellerProductList: `${base_url}/value-chain/seller-products`,
   sellerProductCategoryList: `${base_url}/value-chain/seller-product-categories`,
   productcategorylist: `${base_url}/categories`,
@@ -24,6 +25,8 @@ export const Constants = {
   viewSuplier: `${base_url}/value-chain/view-supplier`,
   stateslist: `${base_url}/states`,
   countrieslist: `${base_url}/countries`,
+  deliveryCountriesList: `${base_url}/delivery-countries`,
+
   lgaslist: `${base_url}/lgas`,
   dashboard: `${base_url}/dashboard`,
   marchantDetail: `${auth_url}/sso/auth/merchant_details`,

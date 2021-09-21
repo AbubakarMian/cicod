@@ -74,9 +74,11 @@ class BuyDiliveryAddress extends React.Component {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
                 Authorization: this.props.user.access_token,
+                'Tenant-ID': this.props.route.params.item.seller_name.toLowerCase()
             },
         };
-        fetch(Constants.countrieslist, postData)
+        console.log("postDate#2",postData,Constants.deliveryCountriesList)
+        fetch(Constants.deliveryCountriesList, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 console.log('responseJson', responseJson);
@@ -264,9 +266,9 @@ class BuyDiliveryAddress extends React.Component {
                                                 itemStyle={{
                                                     justifyContent: 'flex-start',
                                                 }}
-                                                // searchable={true}
+                                                searchable={true}
                                                 searchablePlaceholder="Search country"
-                                                dropDownStyle={{ height: 300, overflow:"scroll", backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
+                                                dropDownStyle={{zIndex:10000, height: 600, overflow:"scroll", backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectCountry(item)}
                                             />

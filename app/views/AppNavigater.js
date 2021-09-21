@@ -55,6 +55,9 @@ import More from '../views/More';
 import PartPaytment from './PartPaytment';
 import PaymentSuccess from './PaymentSuccess';
 import BuyersProducts from './BuyersProducts';
+import CreateOrderValueChain from './CreateOrderValueChain';
+import AddProductValueChain from './AddProductValueChain';
+import OrderDetailValueChain from './OrderDetailValueChain';
 
 const Stack = createStackNavigator();
 
@@ -90,9 +93,11 @@ export default class AppNavigater extends React.Component {
           </Stack.Screen> */}
           <Stack.Screen name="Order" component={Order} options={{ headerShown: false }} />
           <Stack.Screen name="OrderDetail" component={OrderDetail} options={{ headerShown: false }} />
+          <Stack.Screen name="OrderDetailValueChain" component={OrderDetailValueChain} options={{ headerShown: false }} />
           <Stack.Screen name="OrderDetail_pending" component={OrderDetail_pending} options={{ headerShown: false }} />
           <Stack.Screen name="OrderFilter" component={OrderFilter} options={{ headerShown: false }} />
           <Stack.Screen name="CreateOrder" component={CreateOrder} options={{ headerShown: false }} />
+          <Stack.Screen name="CreateOrderValueChain" component={CreateOrderValueChain} options={{ headerShown: false }} />
           <Stack.Screen name="MakePayment" component={MakePayment} options={{ headerShown: false }} />
           <Stack.Screen name="Customer" component={Customer} options={{ headerShown: false }} />
           <Stack.Screen name="CustomersDetal" component={CustomersDetal} options={{ headerShown: false }} />
@@ -110,6 +115,7 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="PayByCash" component={PayByCash} options={{ headerShown: false }} />
           <Stack.Screen name="PayByUssd" component={PayByUssd} options={{ headerShown: false }} />
           <Stack.Screen name="AddProduct" component={AddProduct} options={{ headerShown: false }} />
+          <Stack.Screen name="AddProductValueChain" component={AddProductValueChain} options={{ headerShown: false }} />
           <Stack.Screen name="ApplyDiscount" component={ApplyDiscount} options={{ headerShown: false }} />
           <Stack.Screen name="AddNote" component={AddNote} options={{ headerShown: false }} />
           <Stack.Screen name="EnableProduct" component={EnableProduct} options={{ headerShown: false }} />
