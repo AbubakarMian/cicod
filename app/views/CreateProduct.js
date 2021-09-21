@@ -219,10 +219,10 @@ class CreateProduct extends React.Component {
         }
         else {
             var formData = new FormData();
-            formData.append('category_id', this.state.category_id);
+            formData.append('category_id', 3);//this.state.category_id
             formData.append('name', this.state.name);
-            formData.append('quantity', this.state.quantity);
-            formData.append('price', this.state.price);
+            formData.append('quantity', this.state.quantity);//
+            formData.append('price', this.state.price);//
             formData.append('description', this.state.description);
             if(this.state.prod_image != '' || this.state.prod_image != null){
             formData.append('image', {
@@ -240,6 +240,7 @@ class CreateProduct extends React.Component {
                 },
                 body: formData
             };
+            console.log('FFFFFFFFFFFFFFFFFFFF',formData)
             console.log('*********', Constants.productslist + "/" + this.state.prod_id)
             fetch(Constants.productslist + "/" + this.state.prod_id, postData)
 
@@ -293,6 +294,7 @@ class CreateProduct extends React.Component {
                     name: `image.jpg`,
                 });
             }
+            
             // formData.append('category_id', this.state.category_id);
             // formData.append('name', this.state.name);
             // formData.append('quantity', this.state.quantity);
@@ -303,11 +305,6 @@ class CreateProduct extends React.Component {
             // formData.append('no_qty_limit', this.state.is_qty_limit);
             // formData.append('has_vat', this.state.state_id);
             // formData.append('on_webshop', this.state.is_web_shop?1:0); 
-            // formData.append('category_id', 27);
-            // formData.append('quantity', 5);
-            // formData.append('price', 5);
-            // formData.append('description', 'des');
-            // formData.append('name', 'de'+Math.random(3));
             let all_variations =this.state.variations;
             let variations_form =[];
             for(let i =0;i<all_variations.length;i++){
@@ -318,6 +315,8 @@ class CreateProduct extends React.Component {
                         attributes:sel_attr.selected_attributes,
                         quantity:sel_attr.quantity,
                         price:sel_attr.price,
+                        no_qty_limit:sel_attr.no_quantity_limit,
+                       
                         image:{
                             uri: sel_attr.image,
                             type: 'multipart/form-data',
@@ -355,6 +354,7 @@ class CreateProduct extends React.Component {
                 //     price:5,
                 // }));//sel_attr.price
             }
+            console.log('AAAAAAAAAAAAAAAAA',variations_form)
             let createing_data =  {
                 name:this.state.name,
                 quantity:this.state.quantity,
@@ -387,6 +387,7 @@ class CreateProduct extends React.Component {
                 // ]
             };
             console.log('sssssssssssssssssscreateing data',JSON.stringify(createing_data));
+
             // console.log('~~~~~~~~~~~~~~~createing data',variations[0]);
 
             let serformData = serialize(
@@ -420,7 +421,7 @@ class CreateProduct extends React.Component {
             console.log('Constants.productslist url ', Constants.productslist);
             console.log('########### postData', JSON.stringify(postData))
             fetch(Constants.productslist, postData)
-                .then(response => response.text())
+                .then(response => response.json())
                 .then(async responseJson => {
                     console.log(" create customer response !!!!!!!!!!!", responseJson)
 
@@ -452,8 +453,6 @@ class CreateProduct extends React.Component {
         }
 
     }
-
-
     add_variation(){
         let add_variation = !this.state.add_variation
         let variations = this.state.variations;
@@ -586,9 +585,9 @@ class CreateProduct extends React.Component {
                 prod_id: this.props.route.params.prodDetail.id,
                 category_id: this.props.route.params.prodDetail.category,
                 name: this.props.route.params.prodDetail.name,
-                quantity: this.props.route.params.prodDetail.quantity + '',
+                quantity: this.props.route.params.prodDetail.quantity ,
                 code: this.props.route.params.prodDetail.code,
-                price: this.props.route.params.prodDetail.price + '',
+                price: this.props.route.params.prodDetail.price,
                 description: this.props.route.params.prodDetail.description,
                 is_qty_limit: (this.props.route.params.prodDetail.no_qty_limit == false) ? 0 : 1,
                 validity: this.props.route.params.prodDetail.validity,
@@ -641,7 +640,7 @@ class CreateProduct extends React.Component {
         let selected_variation = this.state.selected_variation
         let selected_attributes = selected_variation.selected_attributes 
 
-        // let index_found = selected_attributes.indexOf(item.id);
+        let index_found = selected_attributes.indexOf(item.id);
         
         if (index_found > -1) {
             selected_attributes.splice(index_found, 1);
