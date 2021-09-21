@@ -371,7 +371,7 @@ class Dashboard extends React.Component {
                                     data={this.state.graph_data}
                                     width={Dimensions.get("window").width+50} // from react-native
                                     height={height/3}
-                                    // paddingLeft={10}
+                                    // paddingLeft={10}//////////////
                                     style={{ paddingHorizontal: -20, borderColor:'#fff' }}
                                     alignSelf={'center'}
                                     alignItems={'center'}
