@@ -134,13 +134,10 @@ class ProductCategory extends React.Component {
             // suspend
             url = Constants.productcategorylist + '/' + item.id + '?action=suspend'
             await this.categoryStatusUpdate(url);
-            // await this.getCategoryList(Constants.productcategorylist);
-
         } else {
             // unsuspend
             url = Constants.productcategorylist + '/' + item.id + '?action=unsuspend'
             await this.categoryStatusUpdate(url);
-            // await this.getCategoryList(Constants.productcategorylist);
         }
     }
     search() {
