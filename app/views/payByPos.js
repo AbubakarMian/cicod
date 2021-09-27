@@ -69,7 +69,7 @@ class PayByPOS extends React.Component {
             .then(response => response.json())
             .then(async responseJson => {
                 console.log("order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
-                if (responseJson.status === "success") {
+                if (responseJson.status === "success" || responseJson.success) {
                     let data = responseJson.data;
                     this.setState({
                         spinner: false,
@@ -85,15 +85,15 @@ class PayByPOS extends React.Component {
                 }
             }
             )
-            .catch((error) => {
-                // this.setState({ spinner: false })
-                // console.log("Api call error", error);
-                // Alert.alert("Error","Oops!!! Error in server");
-            });
+            // .catch((error) => {
+            //     // this.setState({ spinner: false })
+            //     console.log("Api call error", error);                                                                                                                                                                       
+            //     // Alert.alert("Error","Oops!!! Error in server");
+            // });
     }
 
      pay(_that) {
-        _that = _that._that;
+        _that = _that._that;                                                                                                                                                                
         let params = _that.props.route.params;
         let amount_payable =  params.amount_payable
         let order = {}; 

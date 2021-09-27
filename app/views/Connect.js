@@ -30,7 +30,8 @@ class Connect extends React.Component {
             merchant_name: '',
             date_joined: '',
             is_active_tab: 'connect',
-            product_text: ''
+            product_text: '',
+            isFound:null
         }
     }
 
@@ -62,7 +63,7 @@ class Connect extends React.Component {
             if(this.state.product_text==''){
                 url = Constants.connectreceivedrequest;
             } else {
-                url = Constants.connectreceivedrequest + '?filter[buyer_name]=' + this.state.product_text;
+                url = Constants.connectreceivedrequest + '&filter[buyer_name]=' + this.state.product_text;
             }
             
             console.log('**************1',url)
@@ -72,7 +73,7 @@ class Connect extends React.Component {
                 url = Constants.connectsentrequest;
             }
             else{
-                url = Constants.connectsentrequest + '?filter[seller_name]=' + this.state.product_text;
+                url = Constants.connectsentrequest + '&filter[seller_name]=' + this.state.product_text;
             }
             // url = Constants.connectsentrequest + '?filter[seller_name]=' + this.state.product_text;
             // console.log('**************1',this.state.product_text)
@@ -178,6 +179,7 @@ class Connect extends React.Component {
                 if (responseJson.success === true) {
                     let merchatnt_detail = responseJson.data
                     this.setState({
+                        isFound:true,
                         area: merchatnt_detail.area,
                         business_sector: merchatnt_detail.business_sector,
                         business_type: merchatnt_detail.business_type,
@@ -189,6 +191,7 @@ class Connect extends React.Component {
                     this.unauthorizedLogout();
                 }
                 else {
+                    this.setState({isFound:false,merchant_id:0})
                     let show_msg=true;
                     let message = responseJson.data.message
                     if(message.includes('No records found for')){
@@ -202,6 +205,8 @@ class Connect extends React.Component {
                     }
                 }
 
+            }).catch(error=>{
+                console.log("jewC")
             })
 
     }
@@ -291,7 +296,7 @@ console.log("working ere")
                         style={{ width: width / 1.2, alignSelf: 'center', marginTop: 10, elevation: 0, borderWidth: 1, borderColor: '#D8DCDE' }}
                         onSubmitEditing={() => this.getMerchant()}
                         value={this.state.search_text}
-                        onChangeText={text => this.setState({ search_text: text })}
+                        onChangeText={text => this.setState({ search_text: text,isFound:null })}
                     //update
                     ></Searchbar>
 
@@ -299,7 +304,7 @@ console.log("working ere")
                 </View>
 
                 <ScrollView>
-                    {(this.state.merchant_id == 0) ?
+                    {(this.state.isFound === false) &&
 
                         <View style={[{alignSelf:'center',marginTop:height/10}, styles.deatilcontentView]}>
                             <Icon
@@ -310,7 +315,8 @@ console.log("working ere")
                             <Text style={[{ fontSize: 20, color: '#929497', fontWeight: 'bold', fontFamily: 'Open Sans' }]}>No Merchant</Text>
                             <Text style={[{ color: '#929497' }, fontStyles.normal15]}>Search for a merchant</Text>
                         </View>
-                        :
+    }
+                        {(this.state.merchant_id != 0) &&
                         <View style={[{}, styles.detailContentView]}>
                             <Image source={require('../images/bage.png')} />
                             <Text style={[{}, styles.customerNameText]}>{this.state.merchant_name}</Text>
@@ -376,6 +382,20 @@ console.log("working ere")
         }        
     }
 
+     onChangeTextRecieved=(text)=>{
+        this.setState({ product_text: text })
+      //  alert(this.state.product_text)
+        console.log("goi",this.state.product_text)
+        // if (this.state.product_text=="") {
+        //     this.getProduct("receive")
+        // }
+    }
+    onChangeTextPressed=(text)=>{
+       
+        alert(this.state.product_text)
+        
+    }
+
     recievedView() {
         return (            
             <ScrollView>
@@ -383,9 +403,11 @@ console.log("working ere")
                     <Searchbar
                         placeholder="Search a Merchants"
                         iconColor="#929497"
+                        
                         value={this.state.product_text}
+                        onClear={this.onChangeTextPressed}
                         style={{ width: width - 20, alignSelf: 'center', marginTop: 10, elevation: 0, borderWidth: 1, borderColor: '#D8DCDE' }}
-                        onChangeText={text => this.setState({ product_text: text })}
+                        onChangeText={this.onChangeTextRecieved}
                         onSubmitEditing={() => this.getProduct('receive')}
                     //update
 
@@ -633,7 +655,7 @@ console.log("working ere")
                             style={{ flex: 1, backgroundColor: this.state.tabViewIndex === 3 ? '#FFF4F4' : '#fff', borderRadius: 50, paddingVertical: 5 }}
                             onPress={() => { this.setState({ tabViewIndex: 3 }) }}
                         >
-                            <Text style={{ color: this.state.tabViewIndex === 3 ? '#B1272C' : '#4E4D4D', textAlign: 'center' }}>Sent</Text>
+                            <Text style={{ color: this.state.tabViewIndex === 3 ? '#B1272C' : '#4E4D4D', textAlign: 'center',fontWeight: 'bold' }}>Sent</Text>
                         </TouchableOpacity>
                     </View>
 

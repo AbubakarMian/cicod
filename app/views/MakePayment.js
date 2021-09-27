@@ -325,11 +325,12 @@ console.log("here")
                             <TouchableOpacity
                                 onPress={
                                     // () => console.log("RRRRRRRRRRRRRRRR",this.props.route.params.bodyOrder)
-                                    () => this.props.navigation.navigate('PayByUssd', {
+                                    () => this.props.navigation.navigate(this.props.route.params.heading=='supplier'?'PayByUssdValueChain':'PayByUssd', {
                                     bodyOrder: this.props.route.params.bodyOrder,
                                     amount_payable: this.props.route.params.amount_payable,
                                     data: this.props.route.params.pending_order_res,
                                     payment_mode:'USSD',
+                                    item:this.props.route.params.item,
                                 })
                             }
                                 // onPress={() => this.setPaymentMode('USSD', 'PayByUssd')}

@@ -10,6 +10,7 @@ import { Constants } from './Constant';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { SET_USER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART } from '../redux/constants/index';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 var { width, height } = Dimensions.get('window');
@@ -25,6 +26,7 @@ class User extends React.Component {
             email: '',
             phone: '',
             role: '',
+            user:''
 
         }
     }
@@ -35,7 +37,8 @@ class User extends React.Component {
     }
 
 
-    componentDidMount() {
+    async componentDidMount() {
+       
         this.getUserDetail();
     }
 
@@ -85,10 +88,11 @@ class User extends React.Component {
         this.props.logoutUser();
         this.props.navigation.navigate('Login');
     }
-    logout_user() {
+   async logout_user() {
 
         this.props.logoutUser();
-        this.props.navigation.navigate('Login');
+        await AsyncStorage.removeItem("User");
+        this.props.navigation.replace('Login');
     }
 
     render() {

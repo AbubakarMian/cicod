@@ -615,7 +615,7 @@ console.log("ressss@###",url,postData)
                                                         </View>}
                                             </View>
                                         </View>
-                                        <Text style={[{}, styles.lightGrayText]}>{this.props.route.params.heading == "SUPPLIERS"? item.create_time:item.date_created}</Text>
+                                        <Text style={[ styles.lightGrayText,{fontSize:12,paddingTop:7}]}>Created At: {this.props.route.params.heading == "SUPPLIERS"? item.create_time:item.date_created}</Text>
                                     </View>
                                 </TouchableOpacity>
                             )}

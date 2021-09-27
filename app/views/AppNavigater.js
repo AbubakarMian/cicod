@@ -58,6 +58,9 @@ import BuyersProducts from './BuyersProducts';
 import CreateOrderValueChain from './CreateOrderValueChain';
 import AddProductValueChain from './AddProductValueChain';
 import OrderDetailValueChain from './OrderDetailValueChain';
+import PayByUssdValueChain from './PayByUssdValueChain';
+import BuyDiliveryAddressValueChain from './BuyDiliveryAddressValueChain';
+import BarcodeScannerView from './BarcodeScannerView';
 
 const Stack = createStackNavigator();
 
@@ -72,6 +75,7 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="ResetPassword" component={ResetPassword} options={{ headerShown: false }} />
           <Stack.Screen name="PaymentWeb" component={PaymentWeb} options={{ headerShown: false }} />
           <Stack.Screen name="BuyDiliveryAddress" component={BuyDiliveryAddress} options={{ headerShown: false }} />
+          <Stack.Screen name="BuyDiliveryAddressValueChain" component={BuyDiliveryAddressValueChain} options={{ headerShown: false }} />
 
           
           <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
@@ -114,6 +118,7 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="PayByPos" component={PayByPos} options={{ headerShown: false }} />
           <Stack.Screen name="PayByCash" component={PayByCash} options={{ headerShown: false }} />
           <Stack.Screen name="PayByUssd" component={PayByUssd} options={{ headerShown: false }} />
+          <Stack.Screen name="PayByUssdValueChain" component={PayByUssdValueChain} options={{ headerShown: false }} />
           <Stack.Screen name="AddProduct" component={AddProduct} options={{ headerShown: false }} />
           <Stack.Screen name="AddProductValueChain" component={AddProductValueChain} options={{ headerShown: false }} />
           <Stack.Screen name="ApplyDiscount" component={ApplyDiscount} options={{ headerShown: false }} />
@@ -124,6 +129,7 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="ProductView" component={ProductView} options={{ headerShown: false }} />
           <Stack.Screen name="UpdateProduct" component={UpdateProduct} options={{ headerShown: false }} />
           <Stack.Screen name="CreateProduct" component={CreateProduct} options={{ headerShown: false }} />
+          <Stack.Screen name="BarcodeScannerView" component={BarcodeScannerView} options={{ headerShown: false }} />
           <Stack.Screen name="BuyersView" component={BuyersView} options={{ headerShown: false }} />
           <Stack.Screen name="BuyersProducts" component={BuyersProducts} options={{ headerShown: false }} />
           <Stack.Screen name="ProductCategory" component={ProductCategory} options={{ headerShown: false }} />

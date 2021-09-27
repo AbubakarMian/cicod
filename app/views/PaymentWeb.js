@@ -168,7 +168,7 @@ class PaymentWeb extends React.Component {
                 
             }}
             onNavigationStateChange={({url,canGoBack})=>{
-                if (this.state.server_url+'?paymentStatus=success&orderId='+this.props.route.params.data.cicod_order_id ||this.props.route.params.data==url) {
+                if (this.state.server_url+'?paymentStatus=success&orderId='+this.props.route.params.data.cicod_order_id==url ||this.state.server_url+'?paymentStatus=success&orderId='+this.props.route.params.data.order_id==url) {
                     //success
                     console.log("successs")
                     if (this.props.route.params.heading=="supplier") {
@@ -180,20 +180,21 @@ class PaymentWeb extends React.Component {
                      
                     }
                       
-                } else if (this.state.server_url+'?paymentStatus=fail&orderId='+this.props.route.params.data.cicod_order_id||this.props.route.params.data.order_id==url) {
+                } else if (this.state.server_url+'?paymentStatus=fail&orderId='+this.props.route.params.data.cicod_order_id==url||this.state.server_url+'?paymentStatus=fail&orderId='+this.props.route.params.data.order_id==url) {
                     console.log("failed")
                     //failed
                 }
                 else {
+                    // this.props.navigation.goBack()
                     console.log("noting")
-                    if (this.props.route.params.heading=="supplier") {
-                        //if supplier
-                        this.props.navigation.navigate('PaymentSuccess', { heading:"supplier",seller_id:this.props.route.params.seller_id, order_id:this.props.route.params.data.cicod_order_id||this.props.route.params.data.order_id})
+                    // if (this.props.route.params.heading=="supplier") {
+                    //     //if supplier
+                    //     this.props.navigation.navigate('PaymentSuccess', { heading:"supplier",seller_id:this.props.route.params.seller_id, order_id:this.props.route.params.data.cicod_order_id||this.props.route.params.data.order_id})
                      
-                    } else {
-                        this.props.navigation.navigate('PaymentSuccess', { heading:"buyer", order_id:this.props.route.params.data.id})
+                    // } else {
+                    //     this.props.navigation.navigate('PaymentSuccess', { heading:"buyer", order_id:this.props.route.params.data.id})
                      
-                    }
+                    // }
                 }
                 console.log("#@@@$$###Onnaoff",url)
             }}

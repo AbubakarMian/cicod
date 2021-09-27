@@ -34,7 +34,7 @@ class AddProduct extends React.Component {
     }
 
     componentDidMount() {
-    
+    console.log("oun#$")
         console.log("sellers s@@@##",this.props.route.params.item)
        
 const url =
@@ -255,13 +255,13 @@ const url =
         // })
         return count;
     }
-    async counterFun(action, index) {
+     counterFun=async(action, index)=> {
 
         let data = this.state.data;
         if (action == 'add') {
 
             let updated_purchased_quantity = data[index].purchased_quantity + 1;
-            if (updated_purchased_quantity > data[index].quantity && !data[index].no_qty_limit) {
+            if (updated_purchased_quantity > data[index].qnty && !data[index].no_qty_limit) {
                 alert('Out of stock');
             }
             else {
@@ -273,13 +273,19 @@ const url =
                     Alert.alert("Info!",`${data[index].name} purchased quantity less than minimum order ${data[i].minimum_order}`)
                    return
                 }
+                
                
+                // this.setState({
+                //     data: data
+                // },()=>{
+                //     this.props.cartReducer(data[index]);
+                // });
+
+                
                 this.setState({
                     data: data
-                },()=>{
-                    this.props.cartReducer(data[index]);
                 });
-
+                await this.props.cartReducer(data[index]);
            
                 // this.props.cartReducer(data[index]);
 
@@ -415,8 +421,8 @@ const url =
                                             <View style={[{}, styles.OrderDetailDataCOntainer]}>
                                                 <View style={[{}, styles.OrderDetailDataCOntainerRow]}>
                                                     <View>
-                                                        <Text style={[{}, styles.OrderDetailDataCOntainerHeadingText]}>{item.name} {item.no_qty_limit?'':item.quantity}PACK</Text>
-                                                        <Text style={[{}, styles.OrderDetailHeadingRowText]}>{item.name}</Text>
+                                                        <Text style={[{}, styles.OrderDetailDataCOntainerHeadingText]}>{item.name} </Text>
+                                                        <Text style={[{}, styles.OrderDetailHeadingRowText]}>{item.name}  {item.no_qty_limit?'':'| Qty: '+item.qnty}</Text>
                                                     </View>
                                                 </View>
                                             </View>
@@ -427,7 +433,7 @@ const url =
                                                { item.is_active? (
                                                    <View style={[{}, styles.orderDetailAmmountColumn]}>
 
-                                                   <View style={[styles.OrderDetailDataCOntainerCounterView,{right:10,}]}>
+                                                   <View style={[styles.OrderDetailDataCOntainerCounterView,{right:20,}]}>
                                                        <TouchableOpacity
                                                            onPress={() => this.counterFun('sub', index)}
                                                            style={[{}, styles.iconView]}>

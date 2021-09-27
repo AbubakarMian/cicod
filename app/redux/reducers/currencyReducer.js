@@ -1,6 +1,6 @@
 import { SET_CURRENCY,FORMAT_CURRENCY,RESET} from '../constants';
 const initialState = {
-    currency:'Initital val',
+    currency:'₦',
     amount:'0'
 }
 const currencyReducer = (state = initialState, action) => {

@@ -68,7 +68,7 @@ class OrderDetail extends React.Component {
         // }
         //let order_id = order_id; // this.props.route.params.id
         console.log("#$$getr",this.props.route.params.seller)
-        this.props.navigation.navigate('MakePayment',{
+        this.props.navigation.replace('MakePayment',{
             heading:"supplier",
             item:this.props.route.params.seller,
             bodyOrder,
@@ -213,7 +213,7 @@ class OrderDetail extends React.Component {
                         textStyle={{ color: '#fff' }}
                         color={'#fff'}
                     />
-                    <NavBack title="ORDER DETAILdS" onClick={()=>this.props.navigation.goBack()} />
+                    <NavBack title="ORDER DETAIL" onClick={()=>this.props.navigation.goBack()} />
                     
 
                     <OrderDetailSection pay={this.pay} total_amount={this.state.total_amount} currency={this.state.currency} data={this.state.item} amount_paid_from_credit_limit={this.state.data.amount_paid_from_credit_limit} delivery_address={this.state.data.delivery_address} ticket_id={this.state.data.ticket_id} payment_status={this.state.data.payment_status} order_status={this.state.order_status} payment_mode={this.state.payment_mode } customer_email={this.state.data.customer.customer_email} customer_address={this.state.data.customer.customer_address} customer_phone={this.state.data.customer.customer_phone} order_id={this.state.data.order_id} resendRecipt={this.ReciptResend} customer_name={this.state.data.customer.customer_name}  />

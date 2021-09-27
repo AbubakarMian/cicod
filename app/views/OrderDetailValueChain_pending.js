@@ -237,7 +237,7 @@ class OrderDetail_pending extends React.Component {
     send_order_confirmation(){
         let url=Constants.orderslist+"/"+this.state.order_id+"?action=send_invoice";
         console.log()
-          let postData = {
+          let postData = {          
             method: 'GET',
             headers: {
                 Accept: 'application/json',

@@ -114,7 +114,9 @@ class Login extends React.Component {
                             lastname: responseJson.user.lastname,
                             email: responseJson.user.email,
                             phone: responseJson.user.phone,
-                            access_token: user_token
+                            access_token: user_token,
+                            kciInfo:responseJson.user.kciInfo,
+                            tenantId:this.state.tenantId
                         });
                         this.setState({ Spinner: false })
 

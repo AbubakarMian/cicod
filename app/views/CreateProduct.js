@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground,TouchableHighlight, ScrollView,Alert,  Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import { View,Modal, ImageBackground,TouchableHighlight,TouchableWithoutFeedback, ScrollView,Alert,  Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
 import {   Text, TextInput} from 'react-native-paper';
 import splashImg from '../images/splash.jpg';
 import styles from '../css/CreateProductCss';
@@ -29,6 +29,7 @@ class CreateProduct extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            imageModal:false,
             prod_id: 0,
             value: 0,
             isChecked: false,
@@ -61,6 +62,12 @@ class CreateProduct extends React.Component {
         
     }
 
+    componentDidUpdate(prevProps){
+        console.log("oprs$",prevProps.barcode,"ne2@",this.props.barcode)
+        if (prevProps.barcode.code!==this.props.barcode.code) {
+            this.setState({code:this.props.barcode.code})
+        }
+    }
     getCategoryList() {
         this.setState({ spinner: true })
         let postData = {
@@ -304,6 +311,22 @@ class CreateProduct extends React.Component {
           }).then(image => {
             console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@',image);
             this.setState({
+                imageModal:false,
+                prod_image:image.path
+            })
+          });
+    }
+
+    imageUploadCamera(){
+        ImagePicker.openCamera({
+            width: 300,
+            height: 400,
+            cropping: true,
+            size:1000000
+          }).then(image => {
+            console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@',image);
+            this.setState({
+                imageModal:false,
                 prod_image:image.path
             })
           });
@@ -437,7 +460,13 @@ class CreateProduct extends React.Component {
 
                                 </View>
                             </View>
-                            <View style={[{}, styles.formRowView]}>
+                            <View style={[ styles.formRowView,{alignItems:"center"}]}>
+                                <TouchableOpacity onPress={()=>this.props.navigation.navigate("BarcodeScannerView")} style={{marginTop:20}}>
+                                <Image
+                            style={{height:30,width:30}}
+                            source={require('../images/barcode-scanner.png')}
+                        />
+                                </TouchableOpacity>
                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                     <TextInput
                                         label="Product Code"
@@ -550,20 +579,34 @@ class CreateProduct extends React.Component {
                             </View>
                             <View style={[{}, styles.addImageView]}>
                                 <Text style={[{}, styles.addImageLableText]}>Image</Text>
+                                <TouchableOpacity
+                                style={{marginBottom:10}}
+                               onPress={()=> this.setState({imageModal:true})}
+                               >
+                                <Image
+                            style={{height:50,width:50}}
+                            source={require('../images/redPlus.png')}
+                        />
+                        </TouchableOpacity>
                                <TouchableOpacity
-                               onPress={()=> this.imageUpload()}
+                              // onPress={()=> this.imageUpload()}
                                >
                                    {(this.state.prod_image != '' || this.state.prod_image != null) ?
                                 <Image
                                     style={{height:50,width:50}}
                                     source={{uri:this.state.prod_image}}
                                 />
-                            : <Image
+                            : 
+                            <View style={{flex:1}} >
+                                <Icon name="photo" />
+                                <Image
                             style={{height:50,width:50}}
                             source={require('../images/redPlus.png')}
                         />
+                        </View>
                             }
                                 </TouchableOpacity>
+                                
                             </View>
                         </View>
                         <View style={[{ marginTop: 10 }, styles.productDetailContainerView]}>
@@ -689,7 +732,7 @@ class CreateProduct extends React.Component {
                                     <View>
                                         <Text style={[{}, styles.productImageLable]}>Images</Text>
                                         <View style={[{ position: 'relative', width: width / 4 }]}>
-                                            <TouchableOpacity style={[{}, styles.productImageCross]}>
+                                            <TouchableOpacity onPress={()=>this.setState({imageModal:true})} style={[{}, styles.productImageCross]}>
                                                 <Image source={require('../images/productCross.png')} />
                                             </TouchableOpacity>
                                             {/* <Image
@@ -699,7 +742,7 @@ class CreateProduct extends React.Component {
                                     <View style={[{}, styles.addImageView]}>
                                         <Text style={[{}, styles.addImageLableText]}>Image</Text>
                                     <TouchableOpacity
-                                    onPress={()=> this.imageUpload()}
+                                    onPress={()=> this.setState({imageModal:true})}
                                     >
                                         {(this.state.prod_image != null || this.state.prod_image !='') ?
                                         <Image
@@ -730,6 +773,55 @@ class CreateProduct extends React.Component {
                         </TouchableOpacity>
 
                     </View>
+
+                    <Modal
+                    visible={this.state.imageModal}
+                    onRequestClose={() => this.setState({ imageModal: false })}     
+                    transparent={true}
+                >
+                    <TouchableOpacity
+                        onPress={() => this.setState({ imageModal: false })}
+                    >
+                        <View style={[{}, styles.modalBackGround]}>
+                            <TouchableWithoutFeedback>
+                            <View style={styles.suspendModal}>
+                                <View style={{alignItems:"center",flexDirection:"row"}} >
+                                <Image
+                                style={{height:20,width:20}}
+                                    source={require('../images/gallery.png')}
+                                />
+                                <TouchableOpacity
+                                onPress={() =>  this.imageUpload()}
+                                style={[{marginLeft:7}, styles.suspendTouch]}>
+                                
+                                <Text style={{color:"#808080"}}>Choose from Gallery</Text>
+                            </TouchableOpacity>
+                                </View>
+                                <View style={{alignItems:"center",flexDirection:"row"}} >
+                                <Image
+                                style={{height:20,width:20}}
+                                    source={require('../images/camera.png')}
+                                />
+                            <TouchableOpacity
+                                onPress={() => this.imageUploadCamera()}
+                                style={[{marginLeft:7}, styles.suspendTouch]}>
+                                
+                                <Text style={{color:"#808080"}}>Use Camera</Text>
+                            </TouchableOpacity>
+                            </View>
+                            {/* <View style={{marginTop:5}} /> */}
+                            {/* <TouchableOpacity
+                                onPress={() => this.setState({suspendModal:false})}
+                                style={[{}, styles.suspendTouch]}>
+                                <Image source={require('../images/redCross.png')} style={[{width:20,height:20}, styles.banImage]} />
+                                <Text style={{}}> Cancel</Text>
+                            </TouchableOpacity> */}
+                            </View>
+                            </TouchableWithoutFeedback>
+                        </View>
+                    </TouchableOpacity>
+
+                </Modal>
                 </ScrollView>
             </View>
         )
@@ -739,7 +831,8 @@ class CreateProduct extends React.Component {
 function mapStateToProps(state) {
     return {
         user: state.userReducer,
-        reload: state.reloadReducer
+        reload: state.reloadReducer,
+        barcode:state.barcodeReducer,
     }
 };
 function mapDispatchToProps(dispatch) {

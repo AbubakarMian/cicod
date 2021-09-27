@@ -139,7 +139,7 @@ export default StyleSheet.create({
         width: width / 4.8, 
         alignSelf: 'flex-end',
         textAlign:'center',
-        fontSize:13,
+        fontSize:13,         
     }
 
 

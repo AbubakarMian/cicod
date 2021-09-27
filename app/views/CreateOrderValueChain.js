@@ -10,7 +10,7 @@ import CheckBox from 'react-native-check-box';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Constants } from './Constant';
 import { connect } from 'react-redux';
-import { SET_USER, SET_CUSTOMER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART,CLEAR_CART, REMOVE_PRODUCT_FORM_CART, CLEAR_ORDER, SET_DELIVERY_ADDRESS } from '../redux/constants/index';
+import { SET_USER, SET_CUSTOMER,SET_SUPPLIER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART,CLEAR_CART, REMOVE_PRODUCT_FORM_CART, CLEAR_ORDER, SET_DELIVERY_ADDRESS, REMOVE_DELIVERY_FEE_TO_COST, RESET } from '../redux/constants/index';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SearchBar from 'react-native-search-bar';
@@ -18,6 +18,7 @@ import NoCustomer from './Components/CreateOrder/NoCustomer';
 import CustomerDetail from './Components/CreateOrder/CustomerDetail';
 import NoOrderDetail from './Components/CreateOrder/NoOrderDetail';
 import OrderDetail from './Components/CreateOrder/OrderDetail';
+import _ from 'lodash'
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 class CreateOrder extends React.Component {
@@ -59,21 +60,30 @@ class CreateOrder extends React.Component {
             
         }
     }
+
+    // componentWillUnmount(){
+    //     this.clearOrder()
+    // }
     clearOrder() {
+        console.log("unmount#@@$")
         this.props.emptyOrder();
+        this.props.resetDelivery();
     }
     async componentDidMount() {
-        if(this.props.route.params.heading == 'supplier'){
-            console.log("sellers detailsss",this.props.route.params.item)
+        // this.props.emptyOrder();
+        
+            console.log("dele#$",this.props.delivery,this.props.cart.cart_detail)
             //getSellers
             this.setState({supplier:this.props.route.params.item});
-            this.getSellersCustomers();
-        }
+        let url = Constants.seller_customer_details + '?id=' + this.props.supplier.id
+
+            this.getSellersCustomers(url);
+        
         //console.log(' create order !!!! !!!!!!!!', this.props.user);"buyer_id": "10608"
         this.getSuppliersList(Constants.supplierlist);
     }
 
-    getSellersCustomers(){
+    getSellersCustomers(url){
         let postData = {
             method: 'GET',
             headers: {
@@ -84,10 +94,11 @@ class CreateOrder extends React.Component {
         };
         this.setState({spinner:true})
         // let order_id = this.props.route.params.data.id;
-        let url = Constants.seller_customer_details + '?id=' + this.props.route.params.item.seller_id
+        //let url = Constants.seller_customer_details + '?id=' + this.props.route.params.item.seller_id
         // //console.log('---- body params list @@@@@@!!!!!!!!!!!!!!', this.props.route.params);
         //console.log('order url detail ', url);
         //console.log('order postData ', postData);
+        console.log("fors",url)
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
@@ -123,21 +134,31 @@ class CreateOrder extends React.Component {
             });
     }
 
-    componentWillReceiveProps() {
-     
-        if(this.props.route.params.heading == 'supplier'){
-            console.log("sellers detailsss",this.props.route.params.item)
-            //getSellers
-            this.setState({supplier:this.props.route.params.item});
-            this.getSellersCustomers();
+    componentDidUpdate(prevProps){
+        if (!_.isEqual(prevProps.supplier,this.props.supplier)) {
+            let url = Constants.seller_customer_details + '?id=' + this.props.supplier.id
+
+            this.getSellersCustomers(url);
         }
-        this.setState({
-            customer_name: this.props.customer.name,
-            customer_email: this.props.customer.email,
-            customer_phone: this.props.customer.phone,
-        })
-    
+        console.log("catrUp",this.props.cart.cart_detail)
+        // if(prevProps.cartReducer)
     }
+
+    // componentWillReceiveProps() {
+     
+    //     if(this.props.route.params.heading == 'supplier'){
+    //         console.log("sellers detailsss",this.props.route.params.item)
+    //         //getSellers
+    //         this.setState({supplier:this.props.route.params.item});
+    //         this.getSellersCustomers();
+    //     }
+    //     this.setState({
+    //         customer_name: this.props.customer.name,
+    //         customer_email: this.props.customer.email,
+    //         customer_phone: this.props.customer.phone,
+    //     })
+    
+    // }
 
     searchSupplier() {
         let url = Constants.supplierlist + 'filter[seller_name]=' + this.state.search_supplier;
@@ -194,6 +215,11 @@ class CreateOrder extends React.Component {
         }
         }
 
+        if(!this.state.cart_detail.total_price || this.state.cart_detail.total_price==0 ){
+            Alert.alert("Info","Please Select Products.")
+            return;
+        }
+
         
         this.setState({ delivery_type_option: type })
         // this.props.setDeliveryAddress({
@@ -208,19 +234,21 @@ class CreateOrder extends React.Component {
             this.setState({ deliveryType: 'pickup' })
         }//return;
         if (type == 'delivery') {
-            if (this.props.route.params.screen_name == 'buy') {
-                this.props.navigation.navigate('BuyDiliveryAddress', { item:this.props.route.params.item,type, address: this.state.customer.address,address_id:this.props.deliveryAddress.selected_address_id })
-            } else {
-                //console.log("RRRRRRRRRR",this.props.deliveryAddress.selected_address_id)
+            
+                this.props.navigation.navigate('BuyDiliveryAddressValueChain', { item:this.props.route.params.item,type, address: this.state.customer.address,address_id:this.props.deliveryAddress.selected_address_id })
+            // } else {
+            //     //console.log("RRRRRRRRRR",this.props.deliveryAddress.selected_address_id)
                
-                this.props.navigation.navigate('DiliveryAddress', { type, address: this.props.customer.address,address_id:this.props.deliveryAddress.selected_address_id})
-            }
+            //     this.props.navigation.navigate('DiliveryAddress', { type, address: this.props.customer.address,address_id:this.props.deliveryAddress.selected_address_id})
+            // }
         }
         else { // pickup
             this.props.setDeliveryAddress({
                 address: '',
                 type: 'pickup',
             })
+            this.props.removeDeliveryCost()
+            this.props.resetDelivery();
         }
     }
 
@@ -513,8 +541,12 @@ class CreateOrder extends React.Component {
     supplierModalFun(item) {
         this.setState({
             suppliereModal: false
+        });
+        this.props.setSupplier({
+            id:item.seller_id,
+            name:item.seller_name
         })
-        this.props.navigation.navigate('BuyersView', { items: item, heading: 'SUPPLIERS' })
+       // this.props.navigation.navigate('BuyersView', { items: item, heading: 'SUPPLIERS' })
     }
 
     setDate(date) {
@@ -560,7 +592,7 @@ class CreateOrder extends React.Component {
                 (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01).toFixed(2);
         }
         else{ //'value'
-            console.log("ewee@##",this.state.cart_detail.total_price_with_tax )
+            console.log("ewee@##",this.state.cart_detail.total_price_with_tax,"dff",this.props.cart.cart_detail.total_price_with_tax )
             amount_payable = (this.state.cart_detail.total_price_with_tax - this.props.orderDiscountReducer.discount_amount).toFixed(2)
         }
 
@@ -843,14 +875,23 @@ class CreateOrder extends React.Component {
                                         : null
                                     }
 
+                                {this.props.delivery.country_id!=0 ? 
+                                     <Text style={[{}, styles.subTotleColumn1Text]}>Delivery Fee:</Text>
+                                     : null
+                                    }
                                     <Text style={[{}, styles.subTotleColumn1Text]}>TOTAL:</Text>
 
                                 </View>
                                 <View style={[{}, styles.subTotleColumn2View]}>
                                     <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.total_price ?? 0}</Text>
                                     {this.state.cart_detail.has_vat ?
-                                        <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.tax ?? 0}</Text>
+                                        <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.tax.toFixed(2) ?? 0}</Text>
                                         : null}
+
+{this.props.delivery.country_id!=0 ? 
+                                     <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency+" "+this.props.delivery.delivery_fee}</Text>
+                                     : null
+                                    }
                                         <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " +parseFloat(this.state.amount_payable+'').toFixed(2)}</Text>
                                 
                                 </View>
@@ -863,11 +904,11 @@ class CreateOrder extends React.Component {
                                         discount_amount: this.props.orderDiscountReducer.discount_amount
                                     })}
                                 >
-                                    <View style={{ flexDirection: 'row' }}>
+                                    {/* <View style={{ flexDirection: 'row' }}>
                                         <Image source={require('../images/icon15.png')}
                                             style={{ height: 20, width: 20 }} />
                                         <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Apply Discount</Text>
-                                    </View>
+                                    </View> */}
                                 </TouchableOpacity>
                                 {/* <TouchableOpacity
                                     style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}
@@ -1011,6 +1052,7 @@ function mapStateToProps(state) {
         orderDiscountReducer: state.orderDiscountReducer,
         supplier: state.supplierReducer,
         currency: state.currencyReducer,
+        delivery:state.deliveryAddressReducer
     }
 };
 function mapDispatchToProps(dispatch) {
@@ -1022,9 +1064,12 @@ function mapDispatchToProps(dispatch) {
         removeFromCart: (value) => dispatch({ type: REMOVE_FROM_CART, value: value }),
         removeProductFromCart: (value) => dispatch({ type: REMOVE_PRODUCT_FORM_CART, value: value }),
         setDeliveryAddress: (value) => dispatch({ type: SET_DELIVERY_ADDRESS, value: value }),
-        setCustomer: (value) => dispatch({ type: SET_CUSTOMER, value: value }),
+        setCustomer: (value) => dispatch({ type: SET_CUSTOMER,SET_SUPPLIER, value: value }),
         setSupplier: (value) => dispatch({ type: SET_SUPPLIER, value: value }),
         clearCart: () => dispatch({ type: CLEAR_CART }),
+        removeDeliveryCost: () => dispatch({ type: REMOVE_DELIVERY_FEE_TO_COST }),
+        resetDelivery: () => dispatch({ type: RESET }),
+
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CreateOrder)

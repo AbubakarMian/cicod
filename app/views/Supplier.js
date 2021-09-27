@@ -1,6 +1,6 @@
 import React from 'react'
 import { View, TouchableHighlight, FlatList, Dimensions, Image, Platform,  Alert ,TouchableOpacity, ScrollView, } from 'react-native'
-import { Text, TextInput,Searchbar } from 'react-native-paper';
+import { Text, TextInput,Searchbar, Chip } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss';
 import fontStyles from '../css/FontCss'
@@ -13,10 +13,13 @@ const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Constants } from '../views/Constant';
+import _ from 'lodash'
+import NavBack from './Components/NavBack';
 class Supplier extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            search_product:"",
             selectedStartDate: null,
             calenderModal: false,
             spinner: false,
@@ -40,20 +43,28 @@ class Supplier extends React.Component {
         this.props.logoutUser();
         this.props.navigation.navigate('Login');
     }
-    componentWillReceiveProps() {
-        console.log('this.props.route', this.props.route.params.filters);
+    componentDidUpdate(prevProps) {
+        console.log('ui#$', this.props.filters.filters,"prev",prevProps.filters.filters);
+        
         // console.log('this.props.route',this.props.route.params);
         // this.getData(Constants.productslist);
-        let filters = this.props.route.params.filters;
+        if(!_.isEqual(prevProps.filters.filters,this.props.filters.filters)){
+        if (this.props.filters.filters.length>0) {
+            
+        
+        let filters =this.props.filters.filters;
         let filter = '?';
         for (let i = 0; i < filters.length; i++) {
-            filter = filter + filters[i].key + '=' + filters[i].value;
+            filter = filter +"filter[" +filters[i].key +"]"+ '=' + filters[i].value;
             if (i != filters.length - 1) {
                 filter = filter + '&';
             }
         }
-
         this.getSuppliersList(Constants.supplierlist + filter);
+    }
+}
+
+        
     }
 
 
@@ -71,7 +82,7 @@ class Supplier extends React.Component {
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log('responseJson', responseJson);
+                console.log('responseJsonE#', responseJson);
                 this.setState({
                     spinner: false,
                 });
@@ -95,6 +106,32 @@ class Supplier extends React.Component {
         console.log('items !!!!!!!!!!!!', items);
         this.props.navigation.navigate('BuyersView', { items: items, heading: 'SUPPLIERS' })
     }
+
+    categoryItem(item){
+        if(item.product_categories!==""){
+            const catArr=item.product_categories.split(",");
+            console.log("productCa$#",catArr)
+          return  catArr.map(elem=>{
+               return (
+                   <Chip style={{height:20,alignItems:"center"}} textStyle={{fontSize:10}}>{elem}</Chip>
+               )
+            })
+        }
+        
+    }
+
+    search(){
+        if(this.state.search_product!=""){
+        const url=`${Constants.supplierlist}?filter[seller_name]=${this.state.search_product}`
+        this.getSuppliersList(url)
+        }else{
+            const url=`${Constants.supplierlist}`
+        this.getSuppliersList(url)
+        }
+    }
+    handleKeyPress=()=>{
+        alert(this.state.search_product)
+    }
     render() {
 
         const { selectedStartDate } = this.state;
@@ -109,25 +146,7 @@ class Supplier extends React.Component {
                     textStyle={{ color: '#fff' }}
                     color={'#fff'}
                 />
-                <View style={{ flexDirection: 'row', marginTop: 10, marginBottom:5, alignContent: 'center', alignItems: 'center', width: width - 20, alignSelf: 'center' }}>
-                    <TouchableOpacity
-                        // onPress={() => this.props.navigation.navigate('Home')}
-                        onPress={() => this.props.navigation.goBack()}
-                    >
-                        <Icon name="arrow-left" size={25} color="#929497" />
-                    </TouchableOpacity>
-                    <View>
-                        <Text style={[{ color: '#2F2E7C', marginHorizontal: 20 },fontStyles.normal15]}>SUPPLIERS</Text>
-                    </View>
-                    {/* <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('AddSuppliers')}
-                        style={{ position: 'absolute', right: 0 }}>
-                        <Image
-                            style={{height:30,width:30}}
-                            source={require('../images/products/circlePlus.png')}
-                        />
-                    </TouchableOpacity> */}
-                </View>
+                 <NavBack title="SUPPLIERS" onClick={()=>this.props.navigation.goBack()} />
                 {/* <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', paddingHorizontal: 10, borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
                     <Image
                         source={require('../images/products/searchicon.png')}
@@ -171,7 +190,11 @@ class Supplier extends React.Component {
                         />
                     </View> */}
                      <Searchbar
+                     onIconPress={() => this.search()}
+                     
+                     //onKeyPress={this.handleKeyPress}
                     placeholder="Search supplier"
+                    value={this.state.search_product}
                     style={[{color:'#D8D8D8'},fontStyles.normal14]}
                     iconColor="#929497"
                     style={{width:width/1.3,alignSelf:'center', marginTop:10,marginBottom:5,elevation:0,borderColor:'#D8DCDE'}}
@@ -215,7 +238,8 @@ class Supplier extends React.Component {
                                 onPress={() => this.supliersDetail(item)}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
-                                <View style={{ position: 'relative', alignSelf: 'center', alignItems: 'center', flexDirection: 'row', backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 10 }}>
+                                    <View style={{ backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 10 }}>
+                                <View style={{ position: 'relative', alignSelf: 'center', alignItems: 'center', flexDirection: 'row',}}>
                                     <View style={{ flex: 1 }}>
                                         <View style={{ flexDirection: 'column' }}>
                                             <View style={{ flexDirection: 'row' }}>
@@ -225,9 +249,8 @@ class Supplier extends React.Component {
                                                 <View style={{ flexDirection: 'column', marginLeft: 5 }}>
                                                     <Text style={[{ color: '#4E4D4D' }, fontStyles.bold15]}>{item.seller_name}</Text>
                                                     <View style={{flexDirection:'row'}}>
-                                                    <Text style={[{color:'#929497',marginRight:5},fontStyles.normal12]}>Product Category:</Text>
-                                                    <Text style={[{ color: '#929497' }, fontStyles.bold13]}>{item.no_of_products
-                                                    }</Text>
+                                                       
+                                                   
                                                 </View>
                                                 </View>
                                             </View>
@@ -245,6 +268,13 @@ class Supplier extends React.Component {
                                             </View>
                                         }
                                     </View>
+                                    
+                                </View>
+                                <View style={{flexDirection:"row",marginTop:5,flex:1}}>
+                                    <Text style={{fontSize:11,fontWeight:"bold",marginRight:5}}>Category:</Text>
+                                {this.categoryItem(item)}
+                                </View>
+                               
                                 </View>
                             </TouchableOpacity>
                         )}
@@ -266,7 +296,8 @@ class Supplier extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        user: state.userReducer
+        user: state.userReducer,
+        filters:state.productFilterReducer
     }
 };
 function mapDispatchToProps(dispatch) {
