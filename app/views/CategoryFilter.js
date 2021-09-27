@@ -57,6 +57,7 @@ class CategoryFilter extends React.Component {
       },
 
     };
+    console.log('$$$$$$$$$$$$',Constants.productcategorylist)
     fetch(Constants.productcategorylist, postData)
       .then(response => response.json())
       .then(async responseJson => {
@@ -145,8 +146,13 @@ class CategoryFilter extends React.Component {
     var month = date.getUTCMonth() + 1; //months from 1-12
     var day = date.getUTCDate();
     var year = date.getUTCFullYear();
-
-    let newdate = day + "/" + month + "/" + year;
+    if(day<10){
+      day="0"+day;
+    }
+    if(month<10){
+      month="0"+month;
+    }
+    let newdate = year + "-" + month + "-" + day;
 console.log('new date',newdate)
 console.log('new date_filter_option ',this.state.date_filter_option)
     // let filters = this.state.filters;
