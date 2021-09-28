@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, TouchableHighlight, FlatList, Dimensions, Alert, Image, Platform, TouchableOpacity, ScrollView, } from 'react-native'
+import { View, TouchableHighlight, FlatList, Dimensions, Alert, Image, Platform, TouchableOpacity, ScrollView, } from 'react-native';
+import Modal from 'react-native-modal';
 import { Text, TextInput, Searchbar } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss';
@@ -15,6 +16,8 @@ const isAndroid = Platform.OS == 'android'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Constants } from '../views/Constant';
 import TabNav from '../views/TabsNav';
+// import Modal from 'react-native-modal';
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { nativeViewProps } from 'react-native-gesture-handler/lib/typescript/handlers/NativeViewGestureHandler';
 class Products extends React.Component {
     constructor(props) {
@@ -374,6 +377,20 @@ class Products extends React.Component {
                     <this.listProducts _that={this}/>                    
                </ScrollView>
                 <TabNav style={{ position: 'absolute', bottom: 0 }} screen={'product'} props={this.props} />
+                {/* <Modal
+                 animationType="fade"
+                 visible={true}//this.state.regionModal
+                 transparent={true}
+                 hasBackdrop={true}
+                 deviceHeight={height}
+                 deviceWidth={width}
+                 ba
+                 justifyContent={'flex-end'}
+                 alignItems={'flex-end'}
+                 backgroundColor={'#000'}
+                 opacity={0.8}
+                > */}
+                
             </View>
         )
     }
