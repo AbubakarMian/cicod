@@ -32,6 +32,9 @@ class CreateProduct extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            galler_cameraModa:false,
+            galler_cameraAttriModa:false,
+            selected_index:0,
             prod_id: 0,
             value: 0,
             isChecked: false,
@@ -473,8 +476,22 @@ class CreateProduct extends React.Component {
             variations:variations
         })
     }
-
-    imageUpload() {
+    my_camera(){
+        this.setState({galler_cameraModa:false})
+        ImagePicker.openCamera({
+            width: 300,
+            height: 400,
+            cropping: true,
+            size: 1000000
+        }).then(image => {
+            console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@', image);
+            this.setState({
+                prod_image: image.path
+            })
+        });
+    }
+    my_gallery(){
+        this.setState({galler_cameraModa:false})
         ImagePicker.openPicker({
             width: 300,
             height: 400,
@@ -486,6 +503,9 @@ class CreateProduct extends React.Component {
                 prod_image: image.path
             })
         });
+    }
+    imageUpload() {
+        
     }
     onSaveFun() {
         if (this.props.route.params.action == "update") {
@@ -548,29 +568,58 @@ class CreateProduct extends React.Component {
             // Alert.alert('Warning','Value can not be negative')
         }
     }
-    async setVariationImage(index){
-        console.log('iiiiiiiiiiiiiiiiiiiiiiiiii',index)
+    onpen_attribute_image_modal(index){
+        this.setState({galler_cameraAttriModa:true,selected_index:index})
+        
+
+    }
+    async setVariationImage(type){
+        let index=this.state.selected_index;
+        console.log('iiiiiiiiiiiiiiiiiiiiiiiiii',index,'rrrrrrrrrr',type )
             let image=null;
             // console.log('vvvvvvvvvvvvvv',variations)
-            await ImagePicker.openPicker({
-                width: 300,
-                height: 400,
-                cropping: true,
-                size: 1000000
-            }).then(image => {
-                console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@', image);
-                // this.setState({
-                //     prod_image: image.path
-                // })
-                
-                let variations = this.state.variations;
-                variations[index].image = image.path;
-                this.setState({
-                    variations: variations,
-                    test_img: image,
-                })
-            });
-        
+            if(type=='camera'){
+                await ImagePicker.openCamera({
+                    width: 300,
+                    height: 400,
+                    cropping: true,
+                    size: 1000000
+                }).then(image => {
+                    console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@', image);
+                    // this.setState({
+                    //     prod_image: image.path
+                    // })
+                    
+                    let variations = this.state.variations;
+                    variations[index].image = image.path;
+                    this.setState({
+                        variations: variations,
+                        test_img: image,
+                    })
+                });
+            }else if(type=='gallery'){
+                await ImagePicker.openPicker({
+                    width: 300,
+                    height: 400,
+                    cropping: true,
+                    size: 1000000
+                }).then(image => {
+                    console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@', image);
+                    // this.setState({
+                    //     prod_image: image.path
+                    // })
+                    
+                    let variations = this.state.variations;
+                    variations[index].image = image.path;
+                    this.setState({
+                        variations: variations,
+                        test_img: image,
+                    })
+                });
+            }
+            
+           
+            this.setState({galler_cameraAttriModa:false})
             console.log('###############',variations)
 
     }
@@ -927,7 +976,7 @@ class CreateProduct extends React.Component {
                             <View style={[{}, styles.addImageView]}>
                                 <Text style={[{}, styles.addImageLableText]}>Image</Text>
                                 <TouchableOpacity
-                                    onPress={() => this.imageUpload()}
+                                    onPress={() => this.setState({galler_cameraModa:true})}
                                 >
                                     {(this.state.prod_image != '' || this.state.prod_image != null) ?
                                         <Image
@@ -1053,7 +1102,9 @@ class CreateProduct extends React.Component {
                                                             </View>
                                                             <Text style={[{}, styles.productImageLable]}>Images</Text>
                                                             <TouchableOpacity
-                                                                onPress={() => this.setVariationImage(index)}
+                                                                onPress={() => this.onpen_attribute_image_modal(index)}
+                                                                // onPress={() => this.setVariationImage(index)}
+
                                                                 style={[{ position: 'relative', width: width / 4 }]}>
                                                                
                                                                 {/* {(this.state.prod_image != null || this.state.prod_image !='') ? */}
@@ -1142,6 +1193,80 @@ class CreateProduct extends React.Component {
                             )}
                         />
                     </View>
+                </Modal>
+                <Modal
+                isVisible={this.state.galler_cameraModa}
+                // onBackdropPress={() => this.whats_app_Modal_Press()}
+                onBackdropPress={() => console.log('*********************************')}
+                backdropColor={'#000'}
+                opacity={0.8}
+                position={'relative'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                >
+                <View
+                style={{backgroundColor:'#fff',padding:20,width:width,position:'absolute',left:-20,bottom:-20,alignSelf:'flex-start',flexDirection:'row',alignItems:'center',justifyContent:'center'}}
+                >
+                    <TouchableOpacity
+                    onPress={()=>this.my_gallery()}
+                           style={{marginHorizontal:30}}
+                           >
+                               <Icon
+                               name="image"
+                               size={30}
+                               color={'#000'}
+                               />
+                           </TouchableOpacity>
+                           <TouchableOpacity
+                           onPress={()=>this.my_camera()}
+                           style={{marginHorizontal:30}}
+                           >
+                               <Icon
+                               name="camera"
+                               size={30}
+                               color={'#000'}
+                               />
+                           </TouchableOpacity>
+
+                </View>
+
+                </Modal>
+                <Modal
+                isVisible={this.state.galler_cameraAttriModa}
+                // onBackdropPress={() => this.whats_app_Modal_Press()}
+                onBackdropPress={() => this.setState({galler_cameraAttriModa:false})}
+                backdropColor={'#000'}
+                opacity={0.8}
+                position={'relative'}
+                justifyContent={'center'}
+                alignItems={'center'}
+                >
+                <View
+                style={{backgroundColor:'#fff',opacity:1,zIndex:0.999999,borderTopRightRadius:8,borderTopLeftRadius:8, padding:20,paddingBottom:50, width:width,position:'absolute',left:-20,bottom:-20,alignSelf:'flex-start',flexDirection:'row',alignItems:'center',justifyContent:'center'}}
+                >
+                    <TouchableOpacity
+                    onPress={()=>this.setVariationImage('gallery')}
+                           style={{marginHorizontal:30}}
+                           >
+                               <Icon
+                               name="image"
+                               size={50}
+                               color={'#000'}
+                               />
+                           </TouchableOpacity>
+                           <TouchableOpacity
+                           onPress={()=>this.setVariationImage('camera')}
+                           style={{marginHorizontal:30}}
+                           >
+                               <Icon
+                               name="camera"
+                               size={50}
+                               color={'#000'}
+                               />
+                           </TouchableOpacity>
+
+                </View>
+
                 </Modal>
             </View>
         )
