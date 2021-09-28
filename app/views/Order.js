@@ -481,6 +481,7 @@ class Order extends React.Component {
                                 style={{ width: width / 1.3, alignSelf: 'center', position: 'absolute', left: 0, marginTop: 10, marginBottom: 5, elevation: 0, borderColor: '#D8DCDE' }}
                                 onChangeText={text => this.setState({ search_order_text: text })}
                                 value={this.state.search_order_text}
+                                onIconPress={()=>this.setState({text:''})}
                                 onSubmitEditing={(text) => this.search(text)}
                             //update
                             ></Searchbar>

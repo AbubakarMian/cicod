@@ -214,11 +214,11 @@ class OrderDetail_pending extends React.Component {
             .then(response => response.json())
             .then(async responseJson => {
                 console.log("order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
-                if (responseJson.status.toUpperCase() === "SUCCESS") {
+                if (responseJson.status == "success") {
                     Alert.alert('Message',responseJson.message);
-                    this.props.setScreenReload({
-                        reload:true
-                    })
+                    // this.props.setScreenReload({
+                    //     reload:true
+                    // })
                     this.props.navigation.navigate('Order')
                     // this.props.navigation.goBack();
                     // let payment_link = responseJson.data.payment_link
@@ -226,13 +226,14 @@ class OrderDetail_pending extends React.Component {
                 } else {
                     this.setState({ spinner: false })
                     let message = responseJson.message
+                    Alert.alert(message);
                     console.log('some error', responseJson)
                 }
             }
             )
             .catch((error) => {
                 console.log("Api call error", error);
-                // Alert.alert(error.message);
+                Alert.alert(error.message);
             });
     }
     send_order_confirmation(){
