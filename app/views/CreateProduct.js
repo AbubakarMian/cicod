@@ -222,7 +222,7 @@ class CreateProduct extends React.Component {
         }
         else {
             var formData = new FormData();
-            formData.append('category_id', 3);//this.state.category_id
+            formData.append('category_id', this.state.category_id);//this.state.category_id
             formData.append('name', this.state.name);
             formData.append('quantity', this.state.quantity);//
             formData.append('price', this.state.price);//
@@ -283,11 +283,11 @@ class CreateProduct extends React.Component {
             Alert.alert("Warning", "Product name and Price are required")
             return;
         }
-        else if (this.state.category_id == 0 ) {
-            this.setState({ spinner: false })
-            Alert.alert("Warning", "Category is required")
-            return;
-        }
+        // else if (this.state.category_id == 0 ) {
+        //     this.setState({ spinner: false })
+        //     Alert.alert("Warning", "Category is required")
+        //     return;
+        // }
         else {
             var formData = new FormData();
             if (this.state.prod_image != null && this.state.prod_image != '') {
@@ -485,20 +485,30 @@ class CreateProduct extends React.Component {
             size: 1000000
         }).then(image => {
             console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@', image);
+            if(image.size>1024){
+                Alert.alert("Max size 1MB")
+                return
+             }
             this.setState({
                 prod_image: image.path
             })
         });
     }
     my_gallery(){
+        
         this.setState({galler_cameraModa:false})
         ImagePicker.openPicker({
             width: 300,
             height: 400,
             cropping: true,
             size: 1000000
+            
         }).then(image => {
             console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@', image);
+            if(image.size>1024){
+               Alert.alert("Max size 1MB")
+               return
+            }
             this.setState({
                 prod_image: image.path
             })
@@ -586,6 +596,10 @@ class CreateProduct extends React.Component {
                     size: 1000000
                 }).then(image => {
                     console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@', image);
+                    if(image.size>1024){
+                        Alert.alert("Max size 1MB")
+                        return
+                     }
                     // this.setState({
                     //     prod_image: image.path
                     // })
@@ -605,6 +619,10 @@ class CreateProduct extends React.Component {
                     size: 1000000
                 }).then(image => {
                     console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@', image);
+                    if(image.size>1024){
+                        Alert.alert("Max size 1MB")
+                        return
+                     }
                     // this.setState({
                     //     prod_image: image.path
                     // })
