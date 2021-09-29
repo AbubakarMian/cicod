@@ -184,7 +184,9 @@ class ProductView extends React.Component {
                         </View>
                         <View style={[{}, styles.descColumn]}>
                             <Text style={[{}, styles.lightGrayTex]}>Price</Text>
-                            <Text style={[{}, styles.darkGarayText]}>N{_that.state.prodDetail.price}</Text>
+                            <Text style={[{}, styles.darkGarayText]}>
+                            
+                                {_that.state.prodDetail.currency+_that.state.prodDetail.price}</Text>
 
                         </View>
                     </View>
