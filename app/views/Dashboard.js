@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, TouchableHighlight, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback, Alert } from 'react-native'
+import { View, ImageBackground,DatePickerAndroidDateSetAction, TouchableHighlight, Dimensions, Image, Platform, TouchableOpacity, ScrollView, TouchableNativeFeedback, Alert } from 'react-native'
 import { Text, TextInput, Modal } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss';
@@ -367,7 +367,7 @@ class Dashboard extends React.Component {
                                 horizontal={true}
                                 >
                                 <LineChart
-                                  
+                                    
                                     data={this.state.graph_data}
                                     width={Dimensions.get("window").width+50} // from react-native
                                     height={height/3}
@@ -376,6 +376,7 @@ class Dashboard extends React.Component {
                                     alignSelf={'center'}
                                     alignItems={'center'}
                                     justifyContent={'center'}
+                                    
                                     // yAxisLabel="N25M"
                                     // yAxisSuffix=""
                                     getDotColor={true}
@@ -401,8 +402,8 @@ class Dashboard extends React.Component {
                                         
                                         },
                                         propsForDots: {
-                                            r: "6",
-                                            strokeWidth: "2",
+                                            r: "3",
+                                            strokeWidth: "1",
                                             stroke: "#000",
                                             // fill:'red',//transparent
                                             // fillOpacity:0.7
@@ -412,6 +413,7 @@ class Dashboard extends React.Component {
                                         marginVertical: 8,
                                         borderRadius: 16
                                     }}
+                                   
                                 />
                                 </ScrollView>
                             }
