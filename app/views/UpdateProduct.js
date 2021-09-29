@@ -496,11 +496,13 @@ class UpdateProduct extends React.Component {
                     <Text style={{ color: '#fff' }}>Update Product Access</Text>}
                 </TouchableOpacity>
 
-                <SuspendModal
+                <Modal
+                onDismiss={() => this.setState({ updateProductModal: false ,products:[],categories:[]})}
                     visible={this.state.updateProductModal}
                     onRequestClose={() => this.setState({ updateProductModal: false ,products:[],categories:[]})}
                     //transparent={true}
                     transparent={true}
+                    dismissable={true}
                 >
                     <View
                        // onPress={() => this.setState({ updateProductModal: false ,products:[],categories:[]})}
@@ -530,7 +532,7 @@ class UpdateProduct extends React.Component {
                             </TouchableOpacity>
                         </View>
                     </View>
-                </SuspendModal>
+                </Modal>
             </View>
         )
     }

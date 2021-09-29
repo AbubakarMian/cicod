@@ -7,7 +7,7 @@ import fontStyles from '../css/FontCss'
 import Header from '../views/Header';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER, SET_SUPPLIER } from '../redux/constants/index';
 import Spinner from 'react-native-loading-spinner-overlay';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
@@ -61,6 +61,8 @@ class Supplier extends React.Component {
             }
         }
         this.getSuppliersList(Constants.supplierlist + filter);
+    }else{
+        this.getSuppliersList(Constants.supplierlist);
     }
 }
 
@@ -104,7 +106,22 @@ class Supplier extends React.Component {
 
     supliersDetail(items) {
         console.log('items !!!!!!!!!!!!', items);
+        if(typeof this.props.route.params.heading !==undefined){
+        if ( this.props.route.params.heading=="buy") {
+            this.props.setSupplier({
+                id:items.seller_id,
+                name:items.seller_name
+            })
+        this.props.navigation.navigate('CreateOrderValueChain', { heading: 'supplier',screen_name:"buy" ,item:items})
+        } else {
         this.props.navigation.navigate('BuyersView', { items: items, heading: 'SUPPLIERS' })
+            
+        }
+    }else{
+        this.props.navigation.navigate('BuyersView', { items: items, heading: 'SUPPLIERS' })
+
+    }
+        
     }
 
     categoryItem(item){
@@ -113,7 +130,7 @@ class Supplier extends React.Component {
             console.log("productCa$#",catArr)
           return  catArr.map(elem=>{
                return (
-                   <Chip style={{height:20,alignItems:"center"}} textStyle={{fontSize:10}}>{elem}</Chip>
+                   <Chip style={{height:20,alignItems:"center",marginRight:2}} textStyle={{fontSize:10}}>{elem}</Chip>
                )
             })
         }
@@ -146,7 +163,7 @@ class Supplier extends React.Component {
                     textStyle={{ color: '#fff' }}
                     color={'#fff'}
                 />
-                 <NavBack title="SUPPLIERS" onClick={()=>this.props.navigation.goBack()} />
+                 <NavBack title={ this.props.route.params.heading=="buy"?"Choose Supplier To Buy From":"SUPPLIERS"} onClick={()=>this.props.navigation.goBack()} />
                 {/* <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', paddingHorizontal: 10, borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
                     <Image
                         source={require('../images/products/searchicon.png')}
@@ -238,7 +255,7 @@ class Supplier extends React.Component {
                                 onPress={() => this.supliersDetail(item)}
                                 onShowUnderlay={separators.highlight}
                                 onHideUnderlay={separators.unhighlight}>
-                                    <View style={{ backgroundColor: 'white', width: width - 20, padding: 10, borderRadius: 10, marginTop: 10 }}>
+                                    <View style={{ backgroundColor: 'white', width: width - 9, padding: 10, borderRadius: 10, marginTop: 10 }}>
                                 <View style={{ position: 'relative', alignSelf: 'center', alignItems: 'center', flexDirection: 'row',}}>
                                     <View style={{ flex: 1 }}>
                                         <View style={{ flexDirection: 'column' }}>
@@ -271,7 +288,7 @@ class Supplier extends React.Component {
                                     
                                 </View>
                                 <View style={{flexDirection:"row",marginTop:5,flex:1}}>
-                                    <Text style={{fontSize:11,fontWeight:"bold",marginRight:5}}>Category:</Text>
+                                    <Text style={{fontSize:11,fontWeight:"bold",marginRight:5}}>Categories:</Text>
                                 {this.categoryItem(item)}
                                 </View>
                                
@@ -303,7 +320,8 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
-        logoutUser: () => dispatch({ type: LOGOUT_USER })
+        logoutUser: () => dispatch({ type: LOGOUT_USER }),
+        setSupplier: (value) => dispatch({ type: SET_SUPPLIER, value: value }),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Supplier)

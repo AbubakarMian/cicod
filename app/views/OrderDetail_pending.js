@@ -30,6 +30,7 @@ class OrderDetail_pending extends React.Component {
             created_by: '',
             payment_date: '',
             total_amount: 0,
+            currency: '',
             supendModal:false,
             bodyOrder:{},
             amount_paid_from_credit_limit: '',
@@ -76,7 +77,7 @@ class OrderDetail_pending extends React.Component {
                 this.setState({
                     Spinner: false,
                 });
-                console.log('data data data res res res ', responseJson.data)
+                console.log('data data data res res res  order detail', responseJson.data)
                 if (responseJson.status === 'success') {
                     if (responseJson.message == "Order not found") {
                         // this.props.navigation.goBack();
@@ -91,7 +92,6 @@ class OrderDetail_pending extends React.Component {
                         total_ammount = total_ammount + (product_items[i].price * product_items[i].quantity);
                     }
                     let resdata = responseJson.data;
-                    console.log("%%%~~~!!!!!!!#@",resdata)
                     this.setState({
                         pending_order_res: responseJson,
                         data: resdata,
@@ -103,6 +103,7 @@ class OrderDetail_pending extends React.Component {
                         ticket_id: resdata.ticket_id,
                         created_by: resdata.created_by,
                         payment_date: resdata.payment_date,
+                        currency: resdata.currency,
                         item: product_items,
                         total_amount: total_ammount,
                         amount_paid_from_credit_limit: resdata.amount_paid_from_credit_limit,
@@ -213,11 +214,11 @@ class OrderDetail_pending extends React.Component {
             .then(response => response.json())
             .then(async responseJson => {
                 console.log("order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
-                if (responseJson.status.toUpperCase() === "SUCCESS") {
+                if (responseJson.status == "success") {
                     Alert.alert('Message',responseJson.message);
-                    this.props.setScreenReload({
-                        reload:true
-                    })
+                    // this.props.setScreenReload({
+                    //     reload:true
+                    // })
                     this.props.navigation.navigate('Order')
                     // this.props.navigation.goBack();
                     // let payment_link = responseJson.data.payment_link
@@ -225,13 +226,14 @@ class OrderDetail_pending extends React.Component {
                 } else {
                     this.setState({ spinner: false })
                     let message = responseJson.message
+                    Alert.alert(message);
                     console.log('some error', responseJson)
                 }
             }
             )
             .catch((error) => {
                 console.log("Api call error", error);
-                // Alert.alert(error.message);
+                Alert.alert(error.message);
             });
     }
     send_order_confirmation(){
@@ -490,7 +492,7 @@ class OrderDetail_pending extends React.Component {
                                         <Text style={{ fontSize: 13, color: '#929497', textAlign: 'right', }}>{item.price} </Text>
                                         <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>QTY: </Text>
                                         <Text style={{ fontSize: 13, color: '#929497', marginRight: width / 4,textAlign: 'right', }}>{item.quantity} </Text>
-                                        <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end',position:'absolute',right:5 }}>{this.props.currency.currency+" "+ this.state.total_amount}</Text>
+                                        <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end',position:'absolute',right:5 }}>{this.state.currency+" "+ this.state.total_amount}</Text>
                                    
                                     </View>
                                 </View>
@@ -499,11 +501,10 @@ class OrderDetail_pending extends React.Component {
                         )}
                        />
                        </View>
-                       {/* this.props.currency.currency */}
                         <View style={{ alignSelf: 'flex-end', marginRight: 20, marginVertical: 20, flexDirection: 'row' }}>
                         
                             <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>Total:  </Text>
-                            <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}> {this.props.currency.currency +" "+ this.state.total_amount}</Text>
+                            <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}> {this.state.currency +" "+ this.state.total_amount}</Text>
                         </View>
                         <View style={[{flexDirection:'row',width:width-20,alignSelf:'center'}]}>
                         <TouchableOpacity

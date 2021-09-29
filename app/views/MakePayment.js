@@ -106,6 +106,7 @@ class MakePayment extends React.Component {
                             data: responseJson.data,
                             amount_payable: this.props.route.params.amount_payable,
                             payment_link: payment_link,
+
                             payment_mode: payment_mode,
                             order_id: responseJson.data.id,
                     }:{
@@ -183,7 +184,7 @@ console.log("here")
             },
             body: JSON.stringify(bodyOrder)
         };
-        console.log('222222222222 makePaymentFun body params l!!', postData);
+        console.log('*****************', postData);
         console.log('~~~~~~~~~~~~~~~~~~UUUUUUUUUUUUUUUUU',Constants.orderslist)
         fetch(Constants.orderslist, postData)
             .then(response => response.json())

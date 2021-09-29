@@ -260,7 +260,7 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
               </TouchableOpacity>
               <TouchableOpacity
                 style={{ flex: 1 }}
-                onPress={() => this.props.navigation.navigate('CreateOrder', { screen_name: 'buy' })}
+                onPress={() => this.props.navigation.navigate('Supplier', { heading: 'buy' })}
 
               >
                 <View style={[{
@@ -279,7 +279,7 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
             <View style={[{ flexDirection: 'row', alignSelf: 'center', width: width - 20, alignSelf: 'center', marginTop: 20, alignItems: 'center', justifyContent: 'center', paddingRight: 10 }]}>
               <TouchableOpacity
                 style={{ flex: 1 }}
-                onPress={() => this.props.navigation.navigate('Supplier')}
+                onPress={() => this.props.navigation.navigate('Supplier',{heading:"supplier"})}
               >
                 <View style={[{
                   flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,

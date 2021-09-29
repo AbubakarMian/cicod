@@ -85,7 +85,7 @@ class Products extends React.Component {
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log('~~~~~~~~~~~~~~~~~~responseJson.responseJson responseJson responseJson @@@@@@@', responseJson);
+                // console.log('~~~~~~~~~~~~~~~~~~responseJson.responseJson responseJson responseJson @@@@@@@', responseJson);
                 // console.log('responseJson.postData', postData);
                 this.setState({
                     spinner: false,

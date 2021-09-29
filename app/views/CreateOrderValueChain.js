@@ -463,7 +463,7 @@ class CreateOrder extends React.Component {
                 if (responseJson.status === "success") {
                     // alert(responseJson.message)
                    // this.props.clearCart();
-                   this.clearOrder()
+                   this.clearOrder();
                     let payment_link = responseJson.data//Pay Account,ACCOUNT
                     if (this.state.payment_option_selected == 'Pay Account') {
                         // alert(responseJson.message)
@@ -513,9 +513,18 @@ class CreateOrder extends React.Component {
                     spinner: false,
                 });
                 if (responseJson.success === true) {
+                    let supplierlist=[];
+                    console.log("correct#$",responseJson.data);
 
+                    for (let index = 0; index < responseJson.data; index++) {
+                       if (responseJson.data[index].seller_id==this.props.supplier.id) {
+                           continue
+                       }
+                       supplierlist.push(responseJson.data[index])
+                        
+                    }
                     this.setState({
-                        supplierlist: responseJson.data
+                        supplierlist
                     })
                 } else {
                     console.log('errorrrrr', responseJson);

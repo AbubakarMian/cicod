@@ -31,14 +31,14 @@ class CreateProductCategory extends React.Component {
                 id:0,
                 name:'',
                 description:'',
-                prod_image:''
+                prod_image:'',
+                on_webshop:false
             },
             screen:''
         }
     }
     
     get_edit_product_category(){
-    // console.log('mmmmmmmmmmmmmmmm',this.props.route.params.items)
     if(this.props.route.params.items == null ){ // && this.state.screen != 'update'
         if(this.state.id == 0){
             return;
@@ -48,46 +48,37 @@ class CreateProductCategory extends React.Component {
                 id:0,
                 name:'',
                 description:'',
-                image:''
+                prod_image:'',
+                on_webshop:false
             },
             screen : 'new'
         })
     }
     else{
-        if(this.state.id != this.props.route.params.items.id){
+        if(this.state.id == this.props.route.params.items.id){
             return;
         }
+        let product_category = this.props.route.params.items;
+        product_category.prod_image = this.props.route.params.items.image;
+        console.log('edit prodcat',product_category);
         this.setState({
-            product_category:this.props.route.params.items,
+            product_category:product_category,
             screen : 'update',
-            // id:this.props.route.params.items.id
+            id:this.props.route.params.items.id
         })
     }
-    // this.props.route.params.screen == 'update'
-    console.log('product ', this.state.product_category)
-    // if () {
-    //     this.setState({
-    //         name: this.props.route.params.items.name,
-    //         description: this.props.route.params.items.description,
-    //         id: this.props.route.params.items.id,
-            
-    //     })
-    // }
-    this.getCategoryList();
+    // this.getCategoryList();
 }
 
 
-    setImage(props){
-        
+    setImage(props){        
         let _that = props._that;
-        // console.log('~~~~~~~~~~~********************',_that.state.prod_image.path)
-        // // console.log('~~~~~~~~~~~******************** _that.state.prod_image',_that.state.prod_image.path == null)
         console.log('~~~~~~~~~~~******************** _that.state._that.state.product_category',_that.state.product_category)
-        if(_that.state.product_category.image != '' || _that.state.product_category.image != null){
+        if(_that.state.product_category.prod_image != ''){
           return(
             <Image
                 style={{height:width/6,width:width/6}}
-                source={{uri:_that.state.product_category.image}}
+                source={{uri:_that.state.product_category.prod_image}}
             />
           )
         }
@@ -104,7 +95,8 @@ class CreateProductCategory extends React.Component {
 
     createCategory() {
         console.log('this.state.product_category',this.state.product_category);
-        if(this.state.prod_image.path==''){
+        // if(this.state.prod_image.path==''){
+        if(this.state.product_category.prod_image==''){
             Alert.alert("Warning", "Category Image is required");
             return;
         }
@@ -118,31 +110,32 @@ class CreateProductCategory extends React.Component {
         }
         else {
             let token = this.props.user.access_token;
-            // console.log('EEEEEEEEEEE', url)
             console.log('cccccccccc', token)
          
             var formData = new FormData();
-            //   formData.append('category_id',this.state.category_id);  
               formData.append('name',this.state.product_category.name);  
               formData.append('description',this.state.product_category.description);  
              
-              formData.append('image',{
-              uri: this.state.prod_image,
-                    type: 'multipart/form-data',
-                    name: `image.jpg`,
+            //   formData.append('image',{
+            //     uri: this.state.product_category.prod_image,
+            //         type: 'multipart/form-data',
+            //         name: `image.jpg`,
                  
-            }
-              );  
+            //     }
+            //   );
             
-              formData.append('on_webshop',this.state.product_category.add_weshop);  
-            // let body = {
-            //     category_id: this.state.category_id,
-            //     name: this.state.name,//required
-            //     description: this.state.description,
-            //     image: this.state.prod_image,
-            //     on_webshop: this.state.add_weshop, //Boolean             
-            // }
-            console.log('222222222222222~~~~~~~~~~~~body',formData)
+            // formData.append('on_webshop',this.state.add_weshop);  
+            formData.append('on_webshop',this.state.product_category.on_webshop ? 1 : 0);  
+            console.log('222222222222222~~~~~~~~~~~~body formdata',formData)
+            console.log('222222222222222~~~~~~~~~~~~body this.state.product_category.on_webshop',this.state.product_category.on_webshop)
+            // return
+            console.log('222222222222222~~~~~~~~~~~~body formdata image',{
+                uri: this.state.product_category.prod_image,
+                      type: 'multipart/form-data',
+                      name: `image.jpg`,
+                   
+              })
+            // return;
             let myheader = {
                 headers: {
                     Accept: 'application/json',
@@ -179,7 +172,7 @@ class CreateProductCategory extends React.Component {
             }
             else {
                 let url = Constants.update_product_category + '/' + this.state.id;
-                console.log('~~~~~~~~~~',url)
+                console.log('~~~~~~~~~~ update category',url)
 
                 axios.put(url,
                      formData,
@@ -199,7 +192,7 @@ class CreateProductCategory extends React.Component {
 
                         }
                         else{
-                            Alert.alert(responseJson.response.message);
+                            Alert.alert(response.response.message);
                         }
 
                     })
@@ -264,7 +257,7 @@ class CreateProductCategory extends React.Component {
         }).then(image => {
             console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@', image);
             let product_category = this.state.product_category
-            product_category.image = image.path
+            product_category.prod_image = image.path
             this.setState({
                 prod_image: image.path,
                 product_category:product_category
@@ -282,6 +275,13 @@ class CreateProductCategory extends React.Component {
         let product_category = this.state.product_category;
         product_category.description = text;
         this.setState({ product_category:product_category} )
+    }
+    change_on_webshop(){
+        let product_category = this.state.product_category
+        product_category.on_webshop = !product_category.on_webshop
+        this.setState({
+            product_category:product_category
+        })
     }
     render() {
         this.get_edit_product_category();
@@ -301,26 +301,13 @@ class CreateProductCategory extends React.Component {
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
-                    <Text style={[{ color: '#2F2E7C', fontWeight: '700', marginLeft: 10 }, fontStyles.normal15]}>CREATE PRODUCT CATEGORY</Text>
+                    <Text style={[{ color: '#2F2E7C', fontWeight: '700', marginLeft: 10 }, fontStyles.normal15]}>
+                        {this.props.route.params.items == null?'CREATE':'EDIT'} PRODUCT CATEGORY</Text>
                 </View>
                 <View style={[{}, styles.mainContentView]}>
-                    {/* <DropDownPicker
-                        items={this.state.categoryarr}
-                        containerStyle={{ height: 70, width: width - 40, alignSelf: 'center' }}
-                        style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
-                        itemStyle={{
-                            justifyContent: 'flex-start', width: width - 50, height: 40
-                        }}
-                        placeholder="Product Category "
-                        dropDownStyle={{ height: 120, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
-                        labelStyle={{ color: '#A9A9A9' }}
-                        onChangeItem={item => this.setState({ category_id: item.value })}  //this.onSelectCountry(item.value)}
-                    /> */}
                     <View style={[{},]}>
                         <TextInput
-                            // onChangeText={text => this.setState({ product_category:{...this.state.product_category,name:text}  })}
                             onChangeText={text => this.setName(text)}
-                            // onChangeText={(text) => this.setState({newNote: {...this.state.newNote,description: text}})}
                             label="Name*"
                             style={{ backgroundColor: 'transparent', borderColor: '#CFCFCF' }}
                             width={width - 50}
@@ -340,11 +327,9 @@ class CreateProductCategory extends React.Component {
                         <CheckBox
                             style={[{ width: width / 2, alignSelf: 'flex-start', marginVertical: 10, alignItems: 'center' },]}
                             onClick={() => {
-                                this.setState({
-                                    add_weshop: !this.state.add_weshop
-                                })
+                                this.change_on_webshop()
                             }}
-                            isChecked={this.state.add_weshop}
+                            isChecked={this.state.product_category.on_webshop}
                             rightText={"Add to Webshop"}
                             rightTextStyle={{ color: '#4E4D4D', fontSize: 13, fontFamily: 'Open Sans' }}
                             checkBoxColor={'#929497'}

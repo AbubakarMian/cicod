@@ -181,10 +181,31 @@ class PaymentWeb extends React.Component {
                     }
                       
                 } else if (this.state.server_url+'?paymentStatus=fail&orderId='+this.props.route.params.data.cicod_order_id==url||this.state.server_url+'?paymentStatus=fail&orderId='+this.props.route.params.data.order_id==url) {
-                    console.log("failed")
+                    if (this.props.route.params.heading=="supplier") {
+                        this.props.navigation.replace('OrderDetailValueChain', { order_id:this.props.route.params.data.cicod_order_id,seller_Id:this.props.route.params.seller_id,heading:"SUPPLIERS" })
+                    } else {
+                        this.props.navigation.replace('OrderDetail', { id:this.props.route.params.data.id})
+                    }
                     //failed
                 }
+               
                 else {
+                    let explodeArr=[]
+                    explodeArr=url.split("?");
+console.log("ecff13",explodeArr)
+                    if(explodeArr.length >1 ){
+                        if (explodeArr[1].includes("cancelled")) {
+                            
+                        
+                        console.log("cancelld")
+                        if (this.props.route.params.heading=="supplier") {
+                            this.props.navigation.replace('OrderDetailValueChain', { order_id:this.props.route.params.data.cicod_order_id,seller_Id:this.props.route.params.seller_id,heading:"SUPPLIERS" })
+                        } else {
+                            this.props.navigation.replace('OrderDetail', { id:this.props.route.params.data.id})
+                        }
+                    }
+                        //_that.props.route.params.heading=="supplier"?_that.props.navigation.navigate('OrderDetailValueChain', { order_id:_that.props.route.params.order_id,seller_Id:_that.props.route.params.seller_id,heading:"SUPPLIERS" }):_that.props.navigation.navigate('OrderDetail', { id:order.id })
+                    }
                     // this.props.navigation.goBack()
                     console.log("noting")
                     // if (this.props.route.params.heading=="supplier") {

@@ -81,7 +81,7 @@ class Order extends React.Component {
         fetch(url,postData)//url
             .then(response => response.json())
             .then(async responseJson => {
-                console.log('~~~~~~~~~~~',responseJson)
+                console.log('~~~~~~~~~~~ orders list ',responseJson)
                 this.setState({ spinner: false});
                 if (responseJson.status === 'success') {
                     this.setState({
@@ -212,7 +212,7 @@ class Order extends React.Component {
         this.props.navigation.navigate('CreateOrder', { heading: 'order', customer_name: '' })
     }
 
-    get_searach_by_status(url, filter_concat, active_list) {
+    get_searach_by_status(filter_concat, active_list) {
         let filter = '';
         if (active_list != '') {
 
@@ -263,7 +263,7 @@ class Order extends React.Component {
                 // filter = filter +'filter'+ '['+filters[i].key +']' + '=' + filters[i].value;
                 if (filters[i].key == 'order_status') {
                     console.log('url A '+i,url);
-                    filter = _that.get_searach_by_status(url, filter_concat, filters[i].value);
+                    filter = _that.get_searach_by_status( filter_concat, filters[i].value);
                     console.log('url B '+i,url);
                     console.log('url filter '+i,filter);
 
@@ -302,7 +302,7 @@ class Order extends React.Component {
             filter_concat = '&';
         }
         console.log('url 4',url)
-        let filter = _that.get_searach_by_status(url, filter_concat, _that.state.is_active_list);
+        let filter = _that.get_searach_by_status(filter_concat, _that.state.is_active_list);
         filter_concat = '&';
         // url =  _that.change_filter_concat(url,filter);
         url = (url + filter);;
@@ -380,9 +380,9 @@ class Order extends React.Component {
                                 </View>
                                 <View style={{ flex: 1, alignItems: 'flex-end', flexDirection: 'column' }}>
                                     {(item.balance_part_payment>0)?
-                                     <Text style={[{ color: '#4E4D4D',marginRight:10 }, fontStyles.bold15]}>{_that.props.currency.currency} {item.balance_part_payment.amount}</Text>
+                                     <Text style={[{ color: '#4E4D4D',marginRight:10 }, fontStyles.bold15]}>{item.currency} {item.balance_part_payment.amount}</Text>
                                     :
-                                    <Text style={[{ color: '#4E4D4D',marginRight:10 }, fontStyles.bold15]}>{_that.props.currency.currency} {item.amount}</Text>
+                                    <Text style={[{ color: '#4E4D4D',marginRight:10 }, fontStyles.bold15]}>{item.currency} {item.amount}</Text>
                                     }
                                     
 
@@ -481,6 +481,7 @@ class Order extends React.Component {
                                 style={{ width: width / 1.3, alignSelf: 'center', position: 'absolute', left: 0, marginTop: 10, marginBottom: 5, elevation: 0, borderColor: '#D8DCDE' }}
                                 onChangeText={text => this.setState({ search_order_text: text })}
                                 value={this.state.search_order_text}
+                                onIconPress={()=>this.setState({text:''})}
                                 onSubmitEditing={(text) => this.search(text)}
                             //update
                             ></Searchbar>

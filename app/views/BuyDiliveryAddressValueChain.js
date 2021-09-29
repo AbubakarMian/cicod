@@ -239,6 +239,11 @@ class BuyDiliveryAddressValueChain extends React.Component {
 
             return ;
         }
+        if (this.state.address=="") {
+            Alert.alert('Error ', 'Address is required');
+
+            return ;
+        }
 
         this.setState({ spinner: true })
         let postData = {

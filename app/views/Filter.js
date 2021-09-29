@@ -29,8 +29,27 @@ class Filter extends React.Component {
     };
   }
   componentDidMount() {
+    this.setFilter();
     this.getCategoryList();
     console.log('screen Props !!!!!!!!!!!!', this.props.route.params.screen)
+  }
+  setFilter(){
+    if (this.props.filters.filters.length>0) {
+      for (let index = 0; index < this.props.filters.filters.length; index++) {
+        const filter = this.props.filters.filters[index];
+        console.log("eke#00le",filter)
+        if (filter.key=="is_active" && filter.value==0) {
+          this.setState({active:0})
+          break;
+        }
+
+        if (filter.key=="is_active" && filter.value==1) {
+          this.setState({active:1})
+          break;
+        }
+        
+      }
+    }
   }
   getCategoryList() {
     this.setState({ spinner: true })
@@ -112,6 +131,12 @@ class Filter extends React.Component {
     this.props.productFilter(this.state.filters,)
     this.props.navigation.navigate(this.props.route.params.screen, { filters: this.state.filters });
   }
+  clearFilter(){
+    this.setState({active:null,filters: []})
+
+    this.props.productFilter(this.state.filters)
+    this.props.navigation.goBack();
+  }
 
   render() {
     console.log(' categoryarr categoryarr ', this.state.categoryarr)
@@ -124,7 +149,7 @@ class Filter extends React.Component {
           textStyle={{ color: '#fff' }}
           color={'#fff'}
         />
-        <View style={[{}, styles.mainRow]}>
+        <View style={[{marginTop:10}, styles.mainRow]}>
 
           <View style={[{ flexDirection: 'row', alignItems: 'center' }]}>
             <TouchableOpacity
@@ -140,7 +165,7 @@ class Filter extends React.Component {
 
           </View>
          
-          <Text onPress={() => this.setState({active:null})} style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20 }]}>Clear Filter</Text>
+          <Text onPress={() => this.clearFilter()} style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20 }]}>Clear Filter</Text>
          
         </View>
         {/* <View style={{paddingVertical:10,backgroundColor:'#fff',borderTopLeftRadius:10,borderTopRightRadius:10,marginTop:10}}></View>  */}
@@ -191,7 +216,8 @@ class Filter extends React.Component {
 }
 function mapStateToProps(state) {
   return {
-    user: state.userReducer
+    user: state.userReducer,
+    filters:state.productFilterReducer
   }
 };
 function mapDispatchToProps(dispatch) {

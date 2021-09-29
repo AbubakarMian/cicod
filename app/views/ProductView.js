@@ -144,6 +144,7 @@ class ProductView extends React.Component {
         console.log('***********',_that.state.prodDetail)
 
         return(
+            
             <View style={[{}, styles.mainView]}>
                 <Header navigation={_that.props.navigation} />
                 <Spinner

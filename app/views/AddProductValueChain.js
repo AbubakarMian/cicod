@@ -417,12 +417,12 @@ const url =
                                         ))
                                     }
                                     renderItem={({ item, index, separators }) => (
-                                        <View style={[{ flexDirection: 'column', marginBottom: 20 }]}>
+                                        <View style={[{ flexDirection: 'column', marginBottom: 20,borderBottomWidth:1,borderBottomColor: '#DCDCDC',paddingBottom:7}]}>
                                             <View style={[{}, styles.OrderDetailDataCOntainer]}>
                                                 <View style={[{}, styles.OrderDetailDataCOntainerRow]}>
                                                     <View>
                                                         <Text style={[{}, styles.OrderDetailDataCOntainerHeadingText]}>{item.name} </Text>
-                                                        <Text style={[{}, styles.OrderDetailHeadingRowText]}>{item.name}  {item.no_qty_limit?'':'| Qty: '+item.qnty}</Text>
+                                                        <Text style={[ styles.OrderDetailHeadingRowText,{fontSize:11}]}>{item.name}  {item.no_qty_limit?'Qty: No Limit':'| Qty: '+item.qnty}</Text>
                                                     </View>
                                                 </View>
                                             </View>
