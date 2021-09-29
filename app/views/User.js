@@ -26,7 +26,7 @@ class User extends React.Component {
             email: '',
             phone: '',
             role: '',
-            user:''
+         
 
         }
     }

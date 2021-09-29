@@ -109,15 +109,15 @@ class Login extends React.Component {
                     console.log("response Json responseJson responseJson!!!!!!!!!!!", responseJson)
                     if (responseJson.status === "SUCCESS") {
                         let user_token = 'Bearer ' + responseJson.token;
-                        this.props.setUser({
-                            firstname: responseJson.user.firstname,
-                            lastname: responseJson.user.lastname,
-                            email: responseJson.user.email,
-                            phone: responseJson.user.phone,
-                            access_token: user_token,
-                            kciInfo:responseJson.user.kciInfo,
-                            tenantId:this.state.tenantId
-                        });
+                            this.props.setUser({
+                                firstname: responseJson.user.firstname,
+                                lastname: responseJson.user.lastname,
+                                email: responseJson.user.email,
+                                phone: responseJson.user.phone,
+                                access_token: user_token,
+                                kciInfo:responseJson.user.kciInfo,
+                                tenantId:this.state.tenantId
+                            });
                         this.setState({ Spinner: false })
 
                         this.setCurrency(user_token);
