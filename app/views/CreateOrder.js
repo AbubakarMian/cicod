@@ -329,7 +329,7 @@ class CreateOrder extends React.Component {
 
     create_order_id(url, bodyOrder) {
 
-        console.log('create_order_id', bodyOrder);
+        console.log('*******************create_order_id', bodyOrder);
         let postData = {
             method: 'POST',
             headers: {

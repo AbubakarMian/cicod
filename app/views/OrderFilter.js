@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER,ORDER_RELOAD } from '../redux/constants/index';
 import { connect } from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -192,6 +192,9 @@ class OrderFilter extends React.Component {
     this.setState({
       filters:[]
     })
+  //   this.props.setScreenReload({
+  //     reload:true
+  // })
     this.props.navigation.navigate('Order', { filters:filters });
   }
 
@@ -455,14 +458,14 @@ class OrderFilter extends React.Component {
              }}
              dropDownDirection="AUTO"
              bottomOffset={200}
-                 items={this.state.createdby_arr}
+                 items={this.state.paymentmode_arr}
                  autoScrollToDefaultValue={true}
                  containerStyle={{ height: 50, width: width - 25, marginTop: 15 }}
                  style={{ backgroundColor: '#fff',borderWidth:0,borderBottomWidth:1  }}
                  itemStyle={{
                    justifyContent: 'flex-start',
                  }}
-                 placeholder="Created By"
+                 placeholder="Payment Mode"
                  dropDownStyle={{height:120, backgroundColor: '#fff', zIndex: 0.999, }}
                  labelStyle={{ color: '#A9A9A9' }}
                  onChangeItem={item => this.onCreatedByText(item.value ?? '')}
@@ -505,13 +508,15 @@ class OrderFilter extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    user: state.userReducer
+    user: state.userReducer,
+    reload: state.reloadReducer,
   }
 };
 function mapDispatchToProps(dispatch) {
   return {
     setUser: (value) => dispatch({ type: SET_USER, value: value }),
-    logoutUser: () => dispatch({ type: LOGOUT_USER })
+    logoutUser: () => dispatch({ type: LOGOUT_USER }),
+    setScreenReload: (value) => dispatch({ type: ORDER_RELOAD, value: value }),
   }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(OrderFilter)
