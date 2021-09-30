@@ -14,6 +14,30 @@ export default StyleSheet.create({
         flex: 1,
         flexDirection: 'column'
     },
+    btnContinuueView: {
+        backgroundColor: '#B1272C',
+        borderRadius: 50,
+        width: width/4,
+        flex:1.1,
+        paddingVertical: 15,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10,
+        marginHorizontal:10
+    },
+    btnSend:{
+        backgroundColor: '#fff',
+        borderWidth:0.5,
+        borderColor:'#B1272C',
+        borderRadius: 50,
+        width: width/4,
+        flex:2.4,
+        marginHorizontal:10,
+        paddingVertical: 15,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 10,
+    },
     headingRow: {
         flexDirection: 'row',
         width: width - 20,
@@ -90,6 +114,9 @@ export default StyleSheet.create({
       position:'relative',
       
     },
+    priceLabel:{
+        fontSize: 13, color: '#929497', marginRight: 20 
+    },
     detailColumn2text: {
         textAlign: 'right',
         fontSize:13,
@@ -107,11 +134,12 @@ export default StyleSheet.create({
         paddingVertical:10
     },
     orderStatusText:{
+        // color:"#ffffff",
         borderRadius: 50, 
         width: width / 4.8, 
         alignSelf: 'flex-end',
         textAlign:'center',
-        fontSize:13,
+        fontSize:13,         
     }
 
 

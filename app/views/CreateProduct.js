@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, TouchableHighlight, ScrollView, Alert, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
-import { Text, TextInput } from 'react-native-paper';
+import { View,Modal as OtherModal, ImageBackground,TouchableHighlight,TouchableWithoutFeedback, ScrollView,Alert, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import {   Text, TextInput} from 'react-native-paper';
 import splashImg from '../images/splash.jpg';
 import styles from '../css/CreateProductCss';
 import fontStyles from '../css/FontCss'
@@ -11,7 +11,7 @@ import CheckBox from 'react-native-check-box';
 import { Constants } from '../views/Constant';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import SearchBar from 'react-native-search-bar';
-import Modal from 'react-native-modal';
+ import Modal from 'react-native-modal';
 import { connect } from 'react-redux';
 import { SET_USER, LOGOUT_USER, PRODUCT_RELOAD } from '../redux/constants/index';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -32,6 +32,7 @@ class CreateProduct extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            imageModal:false,
             galler_cameraModa:false,
             galler_cameraAttriModa:false,
             selected_index:0,
@@ -98,6 +99,12 @@ class CreateProduct extends React.Component {
         })
     }
 
+    componentDidUpdate(prevProps){
+        console.log("oprs$",prevProps.barcode,"ne2@",this.props.barcode)
+        if (prevProps.barcode.code!==this.props.barcode.code) {
+            this.setState({code:this.props.barcode.code})
+        }
+    }
     show_attribute_list(variation) {
         console.log('********** attributes')
         console.log('********** selected variation',variation)
@@ -510,7 +517,23 @@ class CreateProduct extends React.Component {
                return
             }
             this.setState({
-                prod_image: image.path
+                imageModal:false,
+                prod_image:image.path
+            })
+          });
+    }
+
+    imageUploadCamera(){
+        ImagePicker.openCamera({
+            width: 300,
+            height: 400,
+            cropping: true,
+            size:1000000
+          }).then(image => {
+            console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@',image);
+            this.setState({
+                imageModal:false,
+                prod_image:image.path
             })
         });
     }
@@ -880,7 +903,13 @@ class CreateProduct extends React.Component {
 
                                 </View>
                             </View>
-                            <View style={[{}, styles.formRowView]}>
+                            <View style={[ styles.formRowView,{alignItems:"center"}]}>
+                                <TouchableOpacity onPress={()=>this.props.navigation.navigate("BarcodeScannerView")} style={{marginTop:20}}>
+                                <Image
+                            style={{height:30,width:30}}
+                            source={require('../images/barcode-scanner.png')}
+                        />
+                                </TouchableOpacity>
                                 <View style={[{ position: 'relative' }, styles.formColumn]}>
                                     <TextInput
                                         label="Product Code"
@@ -994,19 +1023,33 @@ class CreateProduct extends React.Component {
                             <View style={[{}, styles.addImageView]}>
                                 <Text style={[{}, styles.addImageLableText]}>Image</Text>
                                 <TouchableOpacity
-                                    onPress={() => this.setState({galler_cameraModa:true})}
-                                >
-                                    {(this.state.prod_image != '' || this.state.prod_image != null) ?
-                                        <Image
-                                            style={{ height: 50, width: 50 }}
-                                            source={{ uri: this.state.prod_image }}
-                                        />
-                                        : <Image
-                                            style={{ height: 50, width: 50 }}
-                                            source={require('../images/redPlus.png')}
-                                        />
-                                    }
+                                style={{marginBottom:10}}
+                               onPress={()=> this.setState({imageModal:true})}
+                               >
+                                <Image
+                            style={{height:50,width:50}}
+                            source={require('../images/redPlus.png')}
+                        />
+                        </TouchableOpacity>
+                               <TouchableOpacity
+                              // onPress={()=> this.imageUpload()}
+                               >
+                                   {(this.state.prod_image != '' || this.state.prod_image != null) ?
+                                <Image
+                                    style={{height:50,width:50}}
+                                    source={{uri:this.state.prod_image}}
+                                />
+                            : 
+                            <View style={{flex:1}} >
+                                <Icon name="photo" />
+                                <Image
+                            style={{height:50,width:50}}
+                            source={require('../images/redPlus.png')}
+                        />
+                        </View>
+                            }
                                 </TouchableOpacity>
+                                
                             </View>
                         </View>
                         <View style={[{ marginTop: 10 }, styles.productDetailContainerView]}>
@@ -1164,6 +1207,55 @@ class CreateProduct extends React.Component {
                         </TouchableOpacity>
 
                     </View>
+
+                    <OtherModal
+                    visible={this.state.imageModal}
+                    onRequestClose={() => this.setState({ imageModal: false })}     
+                    transparent={true}
+                >
+                    <TouchableOpacity
+                        onPress={() => this.setState({ imageModal: false })}
+                    >
+                        <View style={[{}, styles.modalBackGround]}>
+                            <TouchableWithoutFeedback>
+                            <View style={styles.suspendModal}>
+                                <View style={{alignItems:"center",flexDirection:"row"}} >
+                                <Image
+                                style={{height:20,width:20}}
+                                    source={require('../images/gallery.png')}
+                                />
+                                <TouchableOpacity
+                                onPress={() =>  this.imageUpload()}
+                                style={[{marginLeft:7}, styles.suspendTouch]}>
+                                
+                                <Text style={{color:"#808080"}}>Choose from Gallery</Text>
+                            </TouchableOpacity>
+                                </View>
+                                <View style={{alignItems:"center",flexDirection:"row"}} >
+                                <Image
+                                style={{height:20,width:20}}
+                                    source={require('../images/camera.png')}
+                                />
+                            <TouchableOpacity
+                                onPress={() => this.imageUploadCamera()}
+                                style={[{marginLeft:7}, styles.suspendTouch]}>
+                                
+                                <Text style={{color:"#808080"}}>Use Camera</Text>
+                            </TouchableOpacity>
+                            </View>
+                            {/* <View style={{marginTop:5}} /> */}
+                            {/* <TouchableOpacity
+                                onPress={() => this.setState({suspendModal:false})}
+                                style={[{}, styles.suspendTouch]}>
+                                <Image source={require('../images/redCross.png')} style={[{width:20,height:20}, styles.banImage]} />
+                                <Text style={{}}> Cancel</Text>
+                            </TouchableOpacity> */}
+                            </View>
+                            </TouchableWithoutFeedback>
+                        </View>
+                    </TouchableOpacity>
+
+                </OtherModal>
                 </ScrollView>
                 <Modal
                     animationType="fade"
@@ -1294,7 +1386,8 @@ class CreateProduct extends React.Component {
 function mapStateToProps(state) {
     return {
         user: state.userReducer,
-        reload: state.reloadReducer
+        reload: state.reloadReducer,
+        barcode:state.barcodeReducer,
     }
 };
 function mapDispatchToProps(dispatch) {

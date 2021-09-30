@@ -1,10 +1,12 @@
-import { REMOVE_FROM_CART, ADD_TO_PRODUCT, REMOVE_PRODUCT_FORM_CART,CLEAR_ORDER ,UPDATE_CART} from '../constants';
+import {REMOVE_DELIVERY_FEE_TO_COST, ADD_DELIVERY_FEE_TO_COST,REMOVE_FROM_CART, ADD_TO_PRODUCT, REMOVE_PRODUCT_FORM_CART,CLEAR_ORDER,CLEAR_CART ,UPDATE_CART} from '../constants';
 const initialState = {
     cart: [],
     cart_detail:{
         total_price:0,
         tax:0,
         total_price_with_tax:0,
+        delivery_fee:0,
+       // total_price_with_tax_delivery:0,
         vat_amount:0,
         vat_percent:0,
         has_vat:false,
@@ -13,7 +15,9 @@ const initialState = {
 const cartReducer = (state = initialState, action) => {
 
     switch (action.type) {
+        
         case ADD_TO_PRODUCT:
+            console.log("reopx")
             let product_found = false;
             let cart = state.cart;
             let i = 0;
@@ -34,8 +38,25 @@ const cartReducer = (state = initialState, action) => {
                 cart.push(action.value)
             }
             updateCart();
-            return { ...state, cart };
+            return { ...state ,cart};
 
+            break;
+          
+            case ADD_DELIVERY_FEE_TO_COST:
+                console.log("feeReu#",action.value,initialState.cart_detail.total_price_with_tax)
+                const total=parseFloat(state.cart_detail.total_price_with_tax)+parseFloat(action.value);
+                console.log("add#E",total)
+                state.cart_detail.delivery_fee=action.value;
+                updateCart();
+               // initialState.cart_detail.total_price_with_tax+=parseFloat(action.value)
+                return {...state,delivery_fee:0}
+            break;
+            case REMOVE_DELIVERY_FEE_TO_COST:
+                
+                state.cart_detail.delivery_fee=0;
+                updateCart();
+               // initialState.cart_detail.total_price_with_tax+=parseFloat(action.value)
+                return {...state,delivery_fee:0}
             break;
         case REMOVE_FROM_CART:
             cart = state.cart;
@@ -71,11 +92,24 @@ const cartReducer = (state = initialState, action) => {
             break;
         case CLEAR_ORDER:
             cart = state.cart;
+            state.cart_detail.delivery_fee=0;
+            state.cart_detail={
+                total_price:0,
+                tax:0,
+                total_price_with_tax:0,
+                delivery_fee:0,
+               // total_price_with_tax_delivery:0,
+                vat_amount:0,
+                vat_percent:0,
+                has_vat:false,
+            }
             cart.splice(0);
            
             updateCart();
             return { ...state, cart };
             break;
+            case CLEAR_CART:
+                return { ...state, cart:[],cart_detail:{} }; 
         case UPDATE_CART:
             updateCart();
             return { state };
@@ -93,19 +127,20 @@ function updateCart (){
     let has_vat = false;
     for(let i=0;i<cart.length;i++){
         total_price = total_price + (cart[i].purchased_quantity * cart[i].price);
-        vat_amount = vat_amount + (cart[i].purchased_quantity *cart[i].vat_amount);
+        vat_amount = vat_amount + (cart[i].purchased_quantity *(cart[i].vat_amount==null?0:cart[i].vat_amount));
         vat_percent = cart[i].vat_percent; // amount is single percent cant be added multiple times
         has_vat = cart[i].has_vat; // amount is single percent cant be added multiple times
 
     }
+    console.log("tessss@3",cart)
     total_price = parseFloat(total_price).toFixed(2);
     let tax = vat_amount;//parseFloat(total_price*0.075).toFixed(2);
     initialState.cart_detail.total_price = total_price;
     initialState.cart_detail.tax = tax;
-    initialState.cart_detail.total_price_with_tax = (parseFloat(total_price)+parseFloat(tax)).toFixed(2);
+    initialState.cart_detail.total_price_with_tax = (parseFloat(total_price)+parseFloat(tax)+parseFloat(initialState.cart_detail.delivery_fee)).toFixed(2);
     initialState.cart_detail.vat_percent = vat_percent;
     initialState.cart_detail.has_vat = has_vat;
     console.log('total_price',total_price)
     console.log('tax',tax)
-    console.log('total_price+tax',(initialState.cart_detail.total_price_with_tax))
+    console.log('total_price+tax###',(initialState.cart_detail.total_price_with_tax))
 }

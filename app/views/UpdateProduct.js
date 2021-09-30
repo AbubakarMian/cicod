@@ -11,6 +11,7 @@ import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import CheckBox from 'react-native-check-box';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import { Constants } from './Constant';
+import NavBack from './Components/NavBack'
 import Spinner from 'react-native-loading-spinner-overlay';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
@@ -41,6 +42,7 @@ class UpdateProduct extends React.Component {
             buyer_detail: this.props.route.params.buyer_detail,
             item: this.props.route.params.item,
         })
+        console.log("reduxVComdid",this.props.productFilter)
         console.log('buyer_detail', this.props.route.params.buyer_detail);
         this.getData(Constants.products);
     }
@@ -55,9 +57,10 @@ class UpdateProduct extends React.Component {
         });
 
         console.log('this.props.route', this.props.route.params.filters);
-        // console.log('this.props.route',this.props.route.params);
-        // this.getData(Constants.productslist);
-        let filters = this.props.route.params.filters;
+        console.log("recentNewRed",this.props.productFilter)
+        console.log('this.props.route',this.props.route.params);
+        //this.getData(Constants.productslist);
+        let filters = this.props.productFilter.filters;
         let filter = '?';
         for (let i = 0; i < filters.length; i++) {
             filter = filter + filters[i].key + '=' + filters[i].value;
@@ -70,6 +73,7 @@ class UpdateProduct extends React.Component {
     }
 
     getData(url) {
+        console.log("NewUrl",url)
         let token = this.props.user.access_token;
         let data_arr = [];
         this.setState({ spinner: true })
@@ -269,9 +273,9 @@ class UpdateProduct extends React.Component {
             .then(async responseJson => {
                 console.log('update products access data ', postData)
                 console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&update products access respones ', responseJson)
-                this.setState({ spinner: false })
+                this.setState({ spinner: false,updateProductModal:false })
                 if (responseJson.success) {
-                    Alert.alert('Message',responseJson.data.message)
+                    Alert.alert('Message',"Action is successfull")
                     if (this.props.route.params.screen=="buyer") {
                         this.props.navigation.navigate('Connect')
                     } else {
@@ -416,17 +420,8 @@ class UpdateProduct extends React.Component {
                     color={'#fff'}
                 />
                 <Header navigation={this.props.navigation} />
-                <View style={[{}, styles.backHeaderRowView]}>
-                    <TouchableOpacity
-                        // onPress={() => this.props.navigation.navigate('Buyers')}
-                        onPress={() => this.props.navigation.goBack()}
-                    >
-                        <Icon name="arrow-left" size={25} color="#929497" />
-                    </TouchableOpacity>
-                    <View style={[{}, styles.backHeadingView]}>
-                        <Text style={[{}, styles.backHeadingText]}> {(this.props.route.params.screen == 'buyer') ? "CONNECT":"UPDATE PRODUCTS"} - {this.state.buyer_detail.buyer_name}</Text>
-                    </View>
-                </View>
+                
+                <NavBack title={(this.props.route.params.screen == 'buyer') ? "CONNECT"+this.state.buyer_detail.buyer_name:"UPDATE PRODUCTS"+this.state.buyer_detail.buyer_name } onClick={() => this.props.navigation.goBack()} />
                 <View style={[{}, styles.headingDescView]}>
                     <Text style={[{}, styles.headingDescText]}>Select Product category or products you want Merchant to have access to</Text>
                 </View>
@@ -501,14 +496,16 @@ class UpdateProduct extends React.Component {
                     <Text style={{ color: '#fff' }}>Update Product Access</Text>}
                 </TouchableOpacity>
 
-                <SuspendModal
+                <Modal
+                onDismiss={() => this.setState({ updateProductModal: false ,products:[],categories:[]})}
                     visible={this.state.updateProductModal}
                     onRequestClose={() => this.setState({ updateProductModal: false ,products:[],categories:[]})}
                     //transparent={true}
                     transparent={true}
+                    dismissable={true}
                 >
-                    <TouchableOpacity
-                        onPress={() => this.setState({ updateProductModal: false ,products:[],categories:[]})}
+                    <View
+                       // onPress={() => this.setState({ updateProductModal: false ,products:[],categories:[]})}
                         style={[{}, styles.modalMainContainer]}>
                         <View style={[{}, styles.modalCOntainer]}>
                             <Image source={require('../images/bluequesmark.png')} />
@@ -534,15 +531,16 @@ class UpdateProduct extends React.Component {
                                 <Text style={{ color: '#929497' }}>Cancel</Text>
                             </TouchableOpacity>
                         </View>
-                    </TouchableOpacity>
-                </SuspendModal>
+                    </View>
+                </Modal>
             </View>
         )
     }
 }
 function mapStateToProps(state) {
     return {
-        user: state.userReducer
+        user: state.userReducer,
+        productFilter:state.productFilterReducer
     }
 };
 function mapDispatchToProps(dispatch) {

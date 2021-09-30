@@ -77,6 +77,33 @@ export default StyleSheet.create({
         justifyContent:'center',
         alignItems:'center'
     },
+    modalBackGround: {
+        height: height,
+        backgroundColor: '#00000057',
+     flexDirection:'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        zIndex: -0.999
+    },
+    suspendModal:{
+        //alignSelf: 'baseline',
+        alignItems:"flex-start",
+        zIndex: 999,
+        justifyContent:'center',
+        justifyContent:"space-between",
+        backgroundColor: '#fff',
+        width: width,
+        borderTopLeftRadius: 15,
+        borderTopRightRadius: 15,
+        paddingHorizontal: 30,
+        paddingTop: 30,
+        paddingBottom:30,
+        position: 'absolute',
+        bottom: 0,
+        opacity:1,
+        height:height/6
+    },
     productImageLable:{
         color:'#4E4D4D',
         fontWeight:'bold'

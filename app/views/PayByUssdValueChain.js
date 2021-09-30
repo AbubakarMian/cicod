@@ -28,7 +28,7 @@ class PayByUssd extends React.Component {
     }
 
     componentDidMount() {
-        // console.log('~~~~~~~~~~~', this.props.route.params.data.id)
+         console.log('~~~~~~~~~~~', this.props.route.params)
         // this.setState({
         //     order_id:
         // })
@@ -47,7 +47,8 @@ class PayByUssd extends React.Component {
         };
 
         // let order_id = this.props.route.params.data.id;
-        let url = Constants.orderslist + '/' + order_id
+                    url=`${Constants.viewSellerOrder}?id=${this.props.route.params.item.seller_id}&orderId=${order_id}&&expand=customer,customerOrderItems`;
+
         console.log('---- body params list @@@@@@!!!!!!!!!!!!!!', this.props.route.params);
         console.log('order url detail ', url);
         console.log('order postData ', postData);
@@ -55,9 +56,9 @@ class PayByUssd extends React.Component {
             .then(response => response.json())
             .then(async responseJson => {
                 console.log("order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
-                if (responseJson.status.toUpperCase() === "SUCCESS") {
+                if (responseJson.success) {
                     console.log('##########',responseJson.data.id)
-                    this.props.navigation.navigate('OrderDetail', { id: responseJson.data.id })
+                    this.props.navigation.navigate('OrderDetailValueChain', { seller:this.props.route.params.item, order_id,seller_Id:this.props.route.params.item.seller_id,heading:"SUPPLIERS"})
                     // let payment_link = responseJson.data.payment_link
                     // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
                 } else {
@@ -80,8 +81,8 @@ class PayByUssd extends React.Component {
             return;
         }
         if(this.props.route.params.data != undefined){
-            console.log('in if this.props.route.params.data.id',this.props.route.params.data.data.id)
-            this.props.navigation.navigate('OrderDetail',{id:this.props.route.params.data.data.id})
+            console.log('in if this.props.route.params.data.id',this.props.route.params)
+            this.props.navigation.navigate('OrderDetailValueChain',{order_id:this.props.route.params.data.data.order_id,seller_Id:this.props.route.params.item.seller_id,heading:"SUPPLIERS"})
             return;
         }
         await this.setState({ spinner: true })
@@ -92,7 +93,8 @@ class PayByUssd extends React.Component {
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': this.props.user.access_token
+                'SSO-Authorization': this.props.user.access_token,
+                'Tenant-ID': this.props.route.params.item.seller_name.toLowerCase()
             },
             body: JSON.stringify(bodyOrder)
         };
@@ -102,9 +104,9 @@ class PayByUssd extends React.Component {
             .then(async responseJson => {
                 this.setState({ spinner: false })
                 console.log('all response ', responseJson);
-                if (responseJson.status === "success") {
+                if (responseJson.status === "success"||responseJson.success) {
    
-                    this.get_order_detail(responseJson.data.id);
+                    this.get_order_detail(responseJson.data.cicod_order_id);
                     // let payment_link = responseJson.data.payment_link
                     // this.payment_response(responseJson, 'PaymentWeb', { payment_link: payment_link, data: responseJson.data });
 
@@ -182,7 +184,7 @@ class PayByUssd extends React.Component {
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>
                     <View style={[{}, styles.backHeadingView]}>
-                        <Text style={[{}, styles.backHeadingText]}>MAKE PAYMENT</Text>
+                        <Text style={[{}, styles.backHeadingText]}>MAKE PAYMENT Valuechan</Text>
                     </View>
                 </View>
                 <View>

@@ -253,7 +253,7 @@ class Buyers extends React.Component {
                                                         <Icon name="ellipsis-h" color={'#929497'} size={20} />
                                                     </MenuTrigger>
                                                     <MenuOptions>
-                                                        <MenuOption onSelect={() => _that.props.navigation.navigate('UpdateProduct', { buyer_detail: item })} >
+                                                        <MenuOption onSelect={() => _that.props.navigation.navigate('UpdateProduct', { buyer_detail: item ,fetch_action:'updateproduct',screen:'updateproduct' ,item:item})} >
                                                             <View style={{ flexDirection: 'row' }}>
                                                                 <Image
                                                                     source={require('../images/update.png')}

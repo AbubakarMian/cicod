@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, Dimensions, Image, Platform, Alert, TouchableOpacity, ScrollView } from 'react-native'
+import { View, ImageBackground, Dimensions, Image, Platform, Alert, TouchableOpacity, ScrollView,Linking } from 'react-native'
 import { Text, TextInput } from 'react-native-paper';
 import splashImg from '../images/splash.jpg';
 import styles from '../css/HomeCss';
@@ -9,6 +9,7 @@ import Header from '../views/Header';
 import { connect } from 'react-redux';
 import { SET_USER,SET_CUSTOMER, LOGOUT_USER,CLEAR_ORDER } from '../redux/constants/index';
 import { Constants } from '../views/Constant';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 class Home extends React.Component {
@@ -17,13 +18,54 @@ class Home extends React.Component {
     super(props);
     this.state = {
       spinner: false,
-      avatar: ''
+      avatar: '',
+      tenantId:"",
+      user:{
+        kciInfo:{
+          kciUpdates:[
+            {
+              dayRemaining:0,
+
+            }
+          ]
+        }
+      }
     }
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+   
+    console.log("he#@",this.props.user.kciInfo)
+    console.log("ojk@#",this.props.user.tenantId)
+    this.getAsyncData()
     if (this.props.user.avatar == '') {
       this.getUserDetail();
+    }
+  }
+
+  
+
+  async getAsyncData(){
+    this.setState({ spinner: true })
+    let user=await AsyncStorage.getItem('User');
+    let me=JSON.parse(user)
+    this.setState({tenantId:me.tenantId,user:me,spinner:false})
+    
+    if(this.props.user.firstname=="Guest"){
+      console.log("rwewe#")
+      this.props.setUser({
+        firstname: me.firstname,
+        lastname: me.lastname,
+        email: me.email,
+        phone: me.phone,
+        access_token: me.access_token,
+        kciInfo:me.kciInfo,
+        tenantId:me.tenantId,
+        id:me.id
+    });
+    }
+    else{
+      console.log("noth",me,"ff",this.props.user.access_token)
     }
   }
 
@@ -80,6 +122,7 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
 }
 
   render() {
+    console.log("josE#",this.state.user.kciInfo.kciUpdates[0].dayRemaining)
     return (
       <View style={{ height: height, width: width, alignItems: 'center', position: 'relative', backgroundColor: '#F0F0F0' }}>
         <Header navigation={this.props.navigation} />
@@ -106,6 +149,28 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
                 </TouchableOpacity>
               </View>
             </View>
+
+            { this.state.user.kciInfo.showWarning &&(
+              <View style={{backgroundColor:"#a4272d",padding:10,borderRadius:10,flexDirection:"row"}}>
+             {this.state.user.kciInfo.kciUpdates[0].dayRemaining==0?(
+               <>
+               <Text style={{color:"#ffffff"}}>Your subscription has Expired!  </Text>
+              <TouchableOpacity  onPress={()=>{
+                Linking.openURL(`https://${this.state.tenantId.toLowerCase()}.${Constants.renewalLink}`)
+              }} >
+                <Text style={{color:"#ffffff"}}>
+               Click to renew
+                </Text>
+              
+                </TouchableOpacity>
+               </>
+             ):(
+              <Text style={{color:"#ffffff"}}>{this.state.user.kciInfo.kciUpdates[0].dayRemaining} days remaining before expiry!  </Text>
+             )}
+              
+              </View>
+            )}
+            
 
             <View style={[{ flexDirection: 'row', alignSelf: 'center', width: width - 20, alignSelf: 'center', marginTop: 20, alignItems: 'center', justifyContent: 'center', paddingRight: 10 }]}>
               <TouchableOpacity
@@ -195,7 +260,7 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
               </TouchableOpacity>
               <TouchableOpacity
                 style={{ flex: 1 }}
-                onPress={() => this.props.navigation.navigate('CreateOrder', { screen_name: 'buy' })}
+                onPress={() => this.props.navigation.navigate('Supplier', { heading: 'buy' })}
 
               >
                 <View style={[{
@@ -214,7 +279,7 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
             <View style={[{ flexDirection: 'row', alignSelf: 'center', width: width - 20, alignSelf: 'center', marginTop: 20, alignItems: 'center', justifyContent: 'center', paddingRight: 10 }]}>
               <TouchableOpacity
                 style={{ flex: 1 }}
-                onPress={() => this.props.navigation.navigate('Supplier')}
+                onPress={() => this.props.navigation.navigate('Supplier',{heading:"supplier"})}
               >
                 <View style={[{
                   flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,

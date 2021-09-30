@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Dimensions, Image, Platform, Alert,TextInput, TouchableOpacity } from 'react-native'
+import { View, Dimensions, Image, Platform, Alert,TextInput, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
 import { Text,  Modal } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/ConnectViewCss';
@@ -169,6 +169,11 @@ class ConnectView extends React.Component {
     }
 
     declineRequest(){
+
+        if(this.state.comment.trim()==''){
+            Alert.alert("Info","Please provide reason for decline!")
+            return;
+        }
     this.setState({ spinner: true })
 
     let url = Constants.decline_request+'?id='+this.props.route.params.item.id
@@ -370,7 +375,9 @@ class ConnectView extends React.Component {
                     <TouchableOpacity
                        onPress={()=>this.setState({decline_modal:false})}
                     >
+                       
                         <View style={[ styles.suspendmodalBackGround]}>
+                        <TouchableWithoutFeedback>
                            <View style={{backgroundColor:'#fff',paddingVertical:30,paddingHorizontal:30,width:width-50, borderRadius:5,justifyContent:'center',alignItems:'center'}}>
                            <Image
                            style={{height:100,width:100}}
@@ -403,6 +410,7 @@ class ConnectView extends React.Component {
                               <Text style={[{color:'#929497'},fontStyles.normal15]}>Cancle</Text>
                           </TouchableOpacity>
                            </View>
+                           </TouchableWithoutFeedback>
                         </View>
 
                     </TouchableOpacity>
