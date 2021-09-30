@@ -55,7 +55,9 @@ export default class SplashScreen extends React.Component {
                   <Text style={{ color: '#B1272C' }}>Login</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity style={{ marginTop: 10 }}>
+              <TouchableOpacity 
+              onPress={()=>this.props.navigation.navigate('Register')}
+              style={{ marginTop: 10 }}>
                 <Text style={{ color: '#487AE0' }}>Register</Text>
               </TouchableOpacity>
               {/* <View>
