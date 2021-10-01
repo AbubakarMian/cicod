@@ -11,7 +11,7 @@ import { connect } from 'react-redux';
 import NavBack from './Components/NavBack'
 import { SET_USER, LOGOUT_USER,FORMAT_CURRENCY,SET_CURRENCY } from '../redux/constants/index';
 import { Constants } from './Constant';
-import NumberFormat from 'react-number-format';
+// import NumberFormat from 'react-number-format';
 import { } from '../redux/reducers/currencyReducer';
 import OrderDetailSection from './Components/Order/OrderDetailSection';
 var { width, height } = Dimensions.get('window');
