@@ -16,6 +16,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { color } from 'react-native-reanimated';
 import {upsert} from '../Common'; 
+import { set } from 'lodash';
 
 
 const { width, height } = Dimensions.get('window')
@@ -28,6 +29,7 @@ class CategoryFilter extends React.Component {
       data: [],
       filters: [],
       createdby_arr: [],
+      backup_createdby_arr:[],
       categoryarr: [],
       category_name: '',
       spinner: false,
@@ -83,6 +85,7 @@ class CategoryFilter extends React.Component {
           // console.log('createdby_arr  !!!!!!', createdby_arr);
           this.setState({
             createdby_arr: createdby_arr,
+            backup_createdby_arr:createdby_arr
             // categoryarr: categoryarr,
           });
         } else {
@@ -180,7 +183,26 @@ console.log('new date_filter_option ',this.state.date_filter_option)
       isDatePickerVisible: !this.state.isDatePickerVisible
     })
   }
-
+clear_filter(){
+  console.log('1111111111',this.state.filters)
+  this.setState({ 
+    data: [],
+      filters: [],
+      createdby_arr: [],
+      categoryarr: [],
+      category_name: '',
+      spinner: false,
+      date: '',
+      date_filter_option:'',
+      date_updated:'',
+   })
+ 
+  console.log('2222222222',this.state.filters)
+  let _that=this;
+  setTimeout(() => {
+    _that.setState({createdby_arr:_that.state.backup_createdby_arr})
+  }, 300);
+}
   render() {
     if(this.props.reload.product_category_filter){      
       this.props.setScreenFilterReload({
@@ -216,7 +238,13 @@ console.log('new date_filter_option ',this.state.date_filter_option)
             <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>FILTER</Text>
 
           </TouchableOpacity>
-          <Text onPress={() => { this.setState({ filters: [] }) }} style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20, top: 20 }]}>Clear Filter</Text>
+          <TouchableOpacity
+          style={{position: 'absolute', right: 20, top: 20}}
+          onPress={() => this.clear_filter()}
+          >
+          <Text  style={[{ color: '#929497', fontWeight: 'bold', }]}>Clear Filter</Text>
+          </TouchableOpacity>
+          
         </View>
         <View style={{ backgroundColor: '#fff',borderRadius:5, }}>
           <View style={{ width: width - 20, backgroundColor: '#fff', paddingVertical: 10, marginTop: 20, zIndex: 9999 }}>

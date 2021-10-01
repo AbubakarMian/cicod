@@ -15,7 +15,7 @@ import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { color } from 'react-native-reanimated';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-
+import {upsert} from '../Common'; 
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 
@@ -25,6 +25,8 @@ class ProductFilter extends React.Component {
     this.state = {
       data: [],
       filters: [],
+      backup_categoryarr:[],
+      backup_createdby_arr:[],
       categoryarr: [],
       createdby_arr: [],
       category_name: '',
@@ -37,7 +39,7 @@ class ProductFilter extends React.Component {
     };
   }
   async componentDidMount() {
-
+  
     await this.getCategoryList();
     const that = this;
     setTimeout(function(){ 
@@ -74,6 +76,25 @@ class ProductFilter extends React.Component {
       })
 
   }
+clear_filter(){
+  this,this.setState({
+    data: [],
+      filters: [],
+      categoryarr: [],
+      createdby_arr: [],
+      category_name: '',
+      spinner: false,
+      created_at: 'YY-MM-DD',
+      updated_at: 'YY-MM-DD',
+      isDatePickerVisible: false,
+      setDatePickerVisibility: false,
+      modal_date_type:''
+  })
+  let _that=this;
+  setTimeout(() => {
+    _that.setState({categoryarr:_that.state.backup_categoryarr,createdby_arr:_that.state.backup_createdby_arr})
+  }, 300);
+}
 
   getProductList(url) {
 
@@ -97,10 +118,19 @@ class ProductFilter extends React.Component {
         if (responseJson.status === 'success') {
 
           let res = responseJson.data;
-          let createdby_arr = res.map((x, key) => { return { label: x.created_by, value: x.created_by } });
+          // let createdby_arr = res.map((x, key) => { return { label: x.created_by, value: x.created_by } });
+          
+          let createdby_arr = [];
+          for(let i =0;i<res.length;i++){
+            let x = res[i];
+            upsert(createdby_arr,
+              { key:x.created_by,label: x.created_by, value: x.created_by });
+          }
+
           console.log('createdby_arr createdby_arr !!!!!!', createdby_arr);
           this.setState({
             createdby_arr: createdby_arr,
+            backup_createdby_arr:createdby_arr,
           });
 
 
@@ -161,6 +191,7 @@ class ProductFilter extends React.Component {
           console.log('category !!!!!!', responseJson.data);
           this.setState({
             categoryarr: categoryarr,
+            backup_categoryarr:categoryarr,
           });
         } else {
           let message = JSON.stringify(responseJson.error.message)
@@ -304,8 +335,13 @@ class ProductFilter extends React.Component {
             <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>FILTER</Text>
 
           </TouchableOpacity>
-          <Text onPress={() => { this.setState({ filters: [] }) }} style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20, top: 20 }]}>Clear Filter</Text>
-        </View>
+          <TouchableOpacity
+          onPress={() => this.clear_filter()}
+          style={{position: 'absolute', right: 20, top: 20 }}
+          >
+          <Text  style={[{ color: '#929497', fontWeight: 'bold', }]}>Clear Filter</Text>
+          </TouchableOpacity>
+          </View>
         <View style={{ width: width - 20, alignSelf: 'center', backgroundColor: '#fff', borderRadius: 10, padding: 10 }}>
           <View style={{ width: width - 20, backgroundColor: '#fff',zIndex:0.999, paddingVertical: 10, marginTop: 20, }}>
             <View style={{ borderBottomWidth: 1, borderBottomColor: '#E6E6E6', marginHorizontal: 5, flexDirection: 'row', position: 'relative' }}>
@@ -315,6 +351,7 @@ class ProductFilter extends React.Component {
                 width={width - 50}
                 alignSelf={'center'}
                 color={'#000'}
+                
               />
               <View style={{ position: 'absolute', right: 10, bottom: 10 }}>
 
