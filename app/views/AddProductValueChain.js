@@ -11,7 +11,7 @@ import CheckBox from 'react-native-check-box';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import { Constants } from '../views/Constant';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER, ADD_TO_PRODUCT_CHAIN, REMOVE_FROM_CART, REMOVE_FROM_CART_CHAIN } from '../redux/constants/index';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 const { width, height } = Dimensions.get('window')
@@ -495,15 +495,15 @@ const url =
 function mapStateToProps(state) {
     return {
         user: state.userReducer,
-        cart: state.cartReducer,
+        cart: state.cartChainReducer,
         currency: state.currencyReducer,
     }
 };
 function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
-        cartReducer: (value) => dispatch({ type: ADD_TO_PRODUCT, value: value }),
-        removeFromCart: (value) => dispatch({ type: REMOVE_FROM_CART, value: value }),
+        cartReducer: (value) => dispatch({ type: ADD_TO_PRODUCT_CHAIN, value: value }),
+        removeFromCart: (value) => dispatch({ type: REMOVE_FROM_CART_CHAIN, value: value }),
         logoutUser: () => dispatch({ type: LOGOUT_USER })
     }
 };

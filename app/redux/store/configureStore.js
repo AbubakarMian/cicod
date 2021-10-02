@@ -11,6 +11,7 @@ import currencyReducer from '../reducers/currencyReducer';
 import reloadReducer from '../reducers/reloadReducer';
 import productFilterReducer from "../reducers/productFilterReducer";
 import barcodeReducer from '../reducers/barcodeReducer';
+import cartChainReducer from '../reducers/cartChainReducer';
 const rootReducer = combineReducers({
       userReducer, 
       cartReducer , 
@@ -23,7 +24,8 @@ const rootReducer = combineReducers({
       currencyReducer,
       reloadReducer,
       productFilterReducer,
-      barcodeReducer
+      barcodeReducer,
+      cartChainReducer
     });
 // const rootReducer = () => combineReducers(
 //     { count: reducer })

@@ -1,4 +1,4 @@
-import { RESET, SET_CUSTOMER } from '../constants';
+import { RESET, RESET_DELIVERY, SET_CUSTOMER } from '../constants';
 const initialState = {
     id: 0,
     name: '',
@@ -29,7 +29,7 @@ const initialState = {
             }
 
             break;
-        case RESET :
+        case RESET_DELIVERY :
         return {
             ...state,
             id: 0,

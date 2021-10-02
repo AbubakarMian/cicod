@@ -5,7 +5,7 @@ import styles from '../css/MoreCss';
 import { WebView } from 'react-native-webview';
 import { connect } from 'react-redux';
 import { Constants } from '../views/Constant';
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER, CLEAR_ORDER_CHAIN, RESET, RESET_DELIVERY, REMOVE_DELIVERY_FEE_TO_COST } from '../redux/constants/index';
 import { event } from 'react-native-reanimated';
 
 
@@ -141,6 +141,12 @@ class PaymentWeb extends React.Component {
         console.log('componentWillUnmount')
     }
 
+    componentDidMount(){
+        this.props.emptyOrder();
+        this.props.removeDeliveryCost()
+        // this.props.removeDeliveryCost
+
+    }
     render() {
 
         // if(this.state.order_id != this.props.route.params.data.id){
@@ -173,10 +179,10 @@ class PaymentWeb extends React.Component {
                     console.log("successs")
                     if (this.props.route.params.heading=="supplier") {
                         //if supplier
-                        this.props.navigation.navigate('PaymentSuccess', { heading:"supplier",seller_id:this.props.route.params.seller_id, order_id:this.props.route.params.data.cicod_order_id||this.props.route.params.data.order_id})
+                        this.props.navigation.replace('PaymentSuccess', { heading:"supplier",seller_id:this.props.route.params.seller_id, order_id:this.props.route.params.data.cicod_order_id||this.props.route.params.data.order_id})
                      
                     } else {
-                        this.props.navigation.navigate('PaymentSuccess', { heading:"buyer", order_id:this.props.route.params.data.id})
+                        this.props.navigation.replace('PaymentSuccess', { heading:"buyer", order_id:this.props.route.params.data.id})
                      
                     }
                       
@@ -234,6 +240,10 @@ function mapDispatchToProps(dispatch) {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
         logoutUser: () => dispatch({ type: LOGOUT_USER }),
         clearCart: () => dispatch({ type: CLEAR_CART}),
+        removeDeliveryCost: () => dispatch({ type: REMOVE_DELIVERY_FEE_TO_COST }),
+        resetDelivery: () => dispatch({ type: RESET_DELIVERY }),
+        resetDeliveryAddress: () => dispatch({ type: RESET }),
+        emptyOrder: () => dispatch({ type: CLEAR_ORDER_CHAIN }),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(PaymentWeb)

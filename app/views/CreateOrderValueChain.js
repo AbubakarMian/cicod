@@ -10,7 +10,7 @@ import CheckBox from 'react-native-check-box';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Constants } from './Constant';
 import { connect } from 'react-redux';
-import { SET_USER, SET_CUSTOMER,SET_SUPPLIER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART,CLEAR_CART, REMOVE_PRODUCT_FORM_CART, CLEAR_ORDER, SET_DELIVERY_ADDRESS, REMOVE_DELIVERY_FEE_TO_COST, RESET } from '../redux/constants/index';
+import { SET_USER, SET_CUSTOMER,SET_SUPPLIER, LOGOUT_USER, ADD_TO_PRODUCT_CHAIN, REMOVE_FROM_CART_CHAIN,CLEAR_CART, REMOVE_PRODUCT_FORM_CART, CLEAR_ORDER, SET_DELIVERY_ADDRESS, REMOVE_DELIVERY_FEE_TO_COST, RESET, REMOVE_PRODUCT_FORM_CART_CHAIN, CLEAR_ORDER_CHAIN, RESET_DELIVERY } from '../redux/constants/index';
 import RadioForm, { RadioButton, RadioButtonInput, RadioButtonLabel } from 'react-native-simple-radio-button';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import SearchBar from 'react-native-search-bar';
@@ -21,7 +21,7 @@ import OrderDetail from './Components/CreateOrder/OrderDetail';
 import _ from 'lodash'
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
-class CreateOrder extends React.Component {
+class CreateOrderValueChain extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -68,11 +68,14 @@ class CreateOrder extends React.Component {
         console.log("unmount#@@$")
         this.props.emptyOrder();
         this.props.resetDelivery();
+        this.props.resetDeliveryAddress();
+
     }
     async componentDidMount() {
+        console.log("heress#",this.props.cart.cart_detail)
         // this.props.emptyOrder();
         
-            console.log("dele#$",this.props.delivery,this.props.cart.cart_detail)
+         //   console.log("dele#$",this.props.delivery,this.props.cart.cart_detail)
             //getSellers
             this.setState({supplier:this.props.route.params.item});
         let url = Constants.seller_customer_details + '?id=' + this.props.supplier.id
@@ -134,13 +137,42 @@ class CreateOrder extends React.Component {
             });
     }
 
-    componentDidUpdate(prevProps){
+    componentDidUpdate(prevProps,prevState){
+     //   console.log("dui@E",this.props.cart,"fuhs#",prevProps.cart)
         if (!_.isEqual(prevProps.supplier,this.props.supplier)) {
             let url = Constants.seller_customer_details + '?id=' + this.props.supplier.id
 
             this.getSellersCustomers(url);
         }
-        console.log("catrUp",this.props.cart.cart_detail)
+       // console.log("yb#",prevState.cart_arr,"oune",this.state.cart_arr)
+       // if (!_.isEqual(prevState.cart_arr,this.state.cart_arr)) {
+            console.log("oladx")
+            console.log("ewee@##",prevProps.cart.cart_detail.total_price_with_tax,"dff",this.props.cart.cart_detail.total_price_with_tax )
+            if(prevProps.cart.cart_detail.total_price_with_tax!=this.props.cart.cart_detail.total_price_with_tax ){
+
+            
+            var amount_payable = 0; //this.props.currency.currency + " "
+            if(this.props.orderDiscountReducer.discount_type == 'percentage'){
+                amount_payable = this.props.cart.cart_detail.total_price_with_tax  - 
+                    (this.props.cart.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01).toFixed(2);
+            }
+            else{ //'value'
+               
+                amount_payable = (this.props.cart.cart_detail.total_price_with_tax - this.props.orderDiscountReducer.discount_amount).toFixed(2)
+            }
+    
+           
+                this.setState({
+                    cart_detail:this.props.cart.cart_detail,
+                    amount_payable:amount_payable
+                })
+            
+            }
+        //}
+        console.log("ou#$",prevProps.cart.cart_detail.total_price_with_tax)
+
+        console.log("ewee@##",this.state.cart_detail.total_price_with_tax,"dff",this.props.cart.cart_detail.total_price_with_tax )
+
         // if(prevProps.cartReducer)
     }
 
@@ -174,7 +206,7 @@ class CreateOrder extends React.Component {
                 alert('Out of stock');
             }
             else {
-                await this.props.cartReducer(data[index]);
+               
                 data[index].purchased_quantity = updated_purchased_quantity;
                 let res = data;
                 let cart_arr = res.map((x, key) => { return { id: x.id, quantity: x.purchased_quantity } });
@@ -182,6 +214,7 @@ class CreateOrder extends React.Component {
                     cart_arr: data,
                     limit_cart_arr: cart_arr
                 });
+                await this.props.cartReducer(data[index]);
 
                 //console.log('cart : ', this.props.cart);
             }
@@ -192,6 +225,7 @@ class CreateOrder extends React.Component {
             if (data[index].purchased_quantity > 0) {
                 await this.props.removeFromCart(data[index]);
                 data[index].purchased_quantity = updated_purchased_quantity;
+                
                 this.setState({
                     data: data
                 })
@@ -249,6 +283,7 @@ class CreateOrder extends React.Component {
             })
             this.props.removeDeliveryCost()
             this.props.resetDelivery();
+            this.props.resetDeliveryAddress()
         }
     }
 
@@ -595,22 +630,7 @@ class CreateOrder extends React.Component {
             { label: 'Part Payment', value: 3 },
         ];
         console.log("amount Payable@@@",this.props.orderDiscountReducer.discount_type)
-        var amount_payable = 0; //this.props.currency.currency + " "
-        if(this.props.orderDiscountReducer.discount_type == 'percentage'){
-            amount_payable = this.state.cart_detail.total_price_with_tax - 
-                (this.state.cart_detail.total_price_with_tax * this.props.orderDiscountReducer.discount_amount * 0.01).toFixed(2);
-        }
-        else{ //'value'
-            console.log("ewee@##",this.state.cart_detail.total_price_with_tax,"dff",this.props.cart.cart_detail.total_price_with_tax )
-            amount_payable = (this.state.cart_detail.total_price_with_tax - this.props.orderDiscountReducer.discount_amount).toFixed(2)
-        }
-
-        if(this.state.amount_payable != amount_payable){
-            this.setState({
-                amount_payable:amount_payable
-            })
-            
-        }
+       
 
         return (
             <View style={[{}, styles.mainView]}>
@@ -1055,7 +1075,7 @@ function mapStateToProps(state) {
     return {
         user: state.userReducer,
         customer: state.customReducer,
-        cart: state.cartReducer,
+        cart: state.cartChainReducer,
         notes: state.orderNotesReducer,
         deliveryAddress: state.deliveryAddressReducer,
         orderDiscountReducer: state.orderDiscountReducer,
@@ -1068,17 +1088,18 @@ function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
         logoutUser: () => dispatch({ type: LOGOUT_USER }),
-        emptyOrder: () => dispatch({ type: CLEAR_ORDER }),
-        cartReducer: (value) => dispatch({ type: ADD_TO_PRODUCT, value: value }),
-        removeFromCart: (value) => dispatch({ type: REMOVE_FROM_CART, value: value }),
-        removeProductFromCart: (value) => dispatch({ type: REMOVE_PRODUCT_FORM_CART, value: value }),
+        emptyOrder: () => dispatch({ type: CLEAR_ORDER_CHAIN }),
+        cartReducer: (value) => dispatch({ type: ADD_TO_PRODUCT_CHAIN, value: value }),
+        removeFromCart: (value) => dispatch({ type: REMOVE_FROM_CART_CHAIN, value: value }),
+        removeProductFromCart: (value) => dispatch({ type: REMOVE_PRODUCT_FORM_CART_CHAIN, value: value }),
         setDeliveryAddress: (value) => dispatch({ type: SET_DELIVERY_ADDRESS, value: value }),
         setCustomer: (value) => dispatch({ type: SET_CUSTOMER,SET_SUPPLIER, value: value }),
         setSupplier: (value) => dispatch({ type: SET_SUPPLIER, value: value }),
         clearCart: () => dispatch({ type: CLEAR_CART }),
         removeDeliveryCost: () => dispatch({ type: REMOVE_DELIVERY_FEE_TO_COST }),
-        resetDelivery: () => dispatch({ type: RESET }),
+        resetDelivery: () => dispatch({ type: RESET_DELIVERY }),
+        resetDeliveryAddress: () => dispatch({ type: RESET }),
 
     }
 };
-export default connect(mapStateToProps, mapDispatchToProps)(CreateOrder)
+export default connect(mapStateToProps, mapDispatchToProps)(CreateOrderValueChain)

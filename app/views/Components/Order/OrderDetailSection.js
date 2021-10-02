@@ -9,7 +9,7 @@ import NumberFormat from 'react-number-format';
 
 var { width, height } = Dimensions.get('window');
 
-const OrderDetailSection=({order_id,resendRecipt=f=>f,pay=f=>f,send_order_confirmation=f=>f,customer_address,customer_email,customer_name,customer_phone,order_status,payment_mode,payment_status,delivery_address,delivery_type,payment_date,ticket_id,amount_paid_from_credit_limit,total_amount,currency,data})=>(
+const OrderDetailSection=({delivery_amount=0, order_id,resendRecipt=f=>f,pay=f=>f,send_order_confirmation=f=>f,customer_address,customer_email,customer_name,customer_phone,order_status,payment_mode,payment_status,delivery_address,delivery_type,payment_date,ticket_id,amount_paid_from_credit_limit,total_amount,currency,data})=>(
 <>
 
 
@@ -84,14 +84,7 @@ const OrderDetailSection=({order_id,resendRecipt=f=>f,pay=f=>f,send_order_confir
                                 <Text style={[{}, styles.detailColumn2text]}>{customer_phone ?? 0}</Text>
                             </View>
                         </View>
-                        <View style={{}, styles.detailRow}>
-                            <View style={[{}, styles.detailColumn1]}>
-                                <Text style={[{}, styles.detailColumn1text]}>Delivery Type</Text>
-                            </View>
-                            <View style={[{}, styles.detailColumn2]}>
-                                <Text style={[{}, styles.detailColumn2text]}>{delivery_type ?? '--'}</Text>
-                            </View>
-                        </View>
+                        
                         <View style={{}, styles.detailRow}>
                             <View style={[{}, styles.detailColumn1]}>
                                 <Text style={[{}, styles.detailColumn1text]}>Order Channel</Text>
@@ -124,6 +117,17 @@ const OrderDetailSection=({order_id,resendRecipt=f=>f,pay=f=>f,send_order_confir
                                 <Text style={[{}, styles.detailColumn2text]}>{payment_mode ?? '--'}</Text>
                             </View>
                         </View>
+                        <View style={{}, styles.detailRow}>
+                            <View style={[{}, styles.detailColumn1]}>
+                                <Text style={[{}, styles.detailColumn1text]}>Delivery Type</Text>
+                            </View>
+                            <View style={[{}, styles.detailColumn2]}>
+                                <Text style={[{}, styles.detailColumn2text]}>{delivery_type=="DELIVERY" ?'DELIVERY': 'PICKUP'}</Text>
+                            </View>
+                        </View>
+
+                       
+
                         <View style={{}, styles.detailRow}>
                             <View style={[{}, styles.detailColumn1]}>
                                 <Text style={[{}, styles.detailColumn1text]}>Order Status</Text>
@@ -253,7 +257,43 @@ const OrderDetailSection=({order_id,resendRecipt=f=>f,pay=f=>f,send_order_confir
 
                         )}
                        />
+                        {delivery_type=="DELIVERY" ? (
+                        <View>
                         <View style={{ alignSelf: 'flex-end', marginRight: 20, marginVertical: 20, flexDirection: 'row' }}>
+                            <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>Sub Total:  </Text>
+                            <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>
+                                
+                                <NumberFormat decimalScale={2} renderText={(value, props) => <Text {...props}>{value}</Text>} value={total_amount} displayType={'text'} thousandSeparator={true}  prefix={currency}/>
+{/*                                     
+                                {currency+ total_amount} */}
+                                {/* {this.props.currency.currency+total_amount.replace(/\B(?=(\d{1})+(?!\d))/g, ",")} */}
+                                </Text>
+                        </View>
+                        <View style={{ alignSelf: 'flex-end', marginRight: 20, marginVertical: 20, flexDirection: 'row' }}>
+                            <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>Delivery Fee:  </Text>
+                            <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>
+                                
+                                <NumberFormat decimalScale={2} renderText={(value, props) => <Text {...props}>{value}</Text>} value={delivery_amount} displayType={'text'} thousandSeparator={true}  prefix={currency}/>
+{/*                                     
+                                {currency+ total_amount} */}
+                                {/* {this.props.currency.currency+total_amount.replace(/\B(?=(\d{1})+(?!\d))/g, ",")} */}
+                                </Text>
+                        </View>
+
+                        <View style={{ alignSelf: 'flex-end', marginRight: 20, marginVertical: 20, flexDirection: 'row' }}>
+                            <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>Total:  </Text>
+                            <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>
+                                
+                                <NumberFormat decimalScale={2} renderText={(value, props) => <Text {...props}>{value}</Text>} value={parseFloat(total_amount)+parseFloat(delivery_amount)} displayType={'text'} thousandSeparator={true}  prefix={currency}/>
+{/*                                     
+                                {currency+ total_amount} */}
+                                {/* {this.props.currency.currency+total_amount.replace(/\B(?=(\d{1})+(?!\d))/g, ",")} */}
+                                </Text>
+                        </View>
+
+                        </View>
+                        ):
+                            <View style={{ alignSelf: 'flex-end', marginRight: 20, marginVertical: 20, flexDirection: 'row' }}>
                             <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>Total:  </Text>
                             <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>
                                 
@@ -263,6 +303,9 @@ const OrderDetailSection=({order_id,resendRecipt=f=>f,pay=f=>f,send_order_confir
                                 {/* {this.props.currency.currency+total_amount.replace(/\B(?=(\d{1})+(?!\d))/g, ",")} */}
                                 </Text>
                         </View>
+                        }
+
+                        
 
                     </View>
                     <View style={[{},styles.noteView]}>
