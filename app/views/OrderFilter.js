@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
 
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER,ORDER_RELOAD } from '../redux/constants/index';
 import { connect } from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -18,20 +18,23 @@ class OrderFilter extends React.Component {
 
   constructor(props) {
     super(props);
+    let backup_orderchannel_arr = [
+      {'label':'All','value':''},
+      {'label':'pending','value':'pending'},
+      {'label':'PAID','value':'paid'},
+      {'label':'PART PAYMENT','value':'PART PAYMENT'},
+      {'label':'PAID FROM CREDIT','value':'ACCOUNT'},
+    ];
     this.state = {
       data: [],
       filters: [],
-      categoryarr: [],
-      createdby_arr: [],
+      createdby_arr: [],      
+      backup_createdby_arr: [],
+      backup_paymentmode_arr: [],
       paymentmode_arr: [],
       // orderchannel_arr: [{'all':'All'},{'pending':'PENDING'}],
-      orderchannel_arr: [
-        {'label':'All','value':''},
-        {'label':'pending','value':'pending'},
-        {'label':'PAID','value':'paid'},
-        {'label':'PART PAYMENT','value':'PART PAYMENT'},
-        {'label':'PAID FROM CREDIT','value':'ACCOUNT'},
-      ],
+      backup_orderchannel_arr:backup_orderchannel_arr,
+      orderchannel_arr: backup_orderchannel_arr,
       category_name: '',
       spinner: false,
       orderdate: 'YY-MM-DD',
@@ -41,6 +44,7 @@ class OrderFilter extends React.Component {
       modal_date_type:'',
       active_list:'',
     };
+    
   }
   componentDidMount() {
     this.orderList();
@@ -83,6 +87,8 @@ class OrderFilter extends React.Component {
           this.setState({
             createdby_arr: createdby_arr,
             paymentmode_arr: paymentmode_arr,
+            backup_createdby_arr: createdby_arr,
+            backup_paymentmode_arr: paymentmode_arr,
           });
           
           // this.props.navigation.navigate('DrawerNavigation')
@@ -192,6 +198,9 @@ class OrderFilter extends React.Component {
     this.setState({
       filters:[]
     })
+  //   this.props.setScreenReload({
+  //     reload:true
+  // })
     this.props.navigation.navigate('Order', { filters:filters });
   }
 
@@ -270,7 +279,32 @@ class OrderFilter extends React.Component {
     })
   }
   clear_filter(){
-
+    console.log('11111111111',this.state.filters)
+    this.setState({
+      data: [],
+      filters: [],
+      createdby_arr: [],//this.state.backup_createdby_arr,
+      paymentmode_arr: [],//this.state.paymentmode_arr,
+      // orderchannel_arr: [{'all':'All'},{'pending':'PENDING'}],
+      orderchannel_arr: [],
+      category_name: '',
+      spinner: false,
+      orderdate: 'YY-MM-DD',
+      paymentdate: 'YY-MM-DD',
+      isDatePickerVisible: false,
+      setDatePickerVisibility: false,
+      modal_date_type:'',
+      active_list:'',
+    })
+    let _that = this;
+    setTimeout(() => {
+      _that.setState({        
+        createdby_arr: _that.state.backup_createdby_arr,
+        paymentmode_arr: _that.state.backup_paymentmode_arr,
+        orderchannel_arr: _that.state.backup_orderchannel_arr,
+      })
+    }, 300);
+    console.log('22222222222',this.state.filters)
   }
   render() {
     return (
@@ -304,7 +338,7 @@ class OrderFilter extends React.Component {
               <TouchableOpacity style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 10, top: 15 }]}
                   onPress={() => this.clear_filter()}
                 >
-                  <Text style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 0, top: 0 }]}>Clear Filter</Text>
+                  <Text style={[{ color: '#929497', fontWeight: 'bold', }]}>Clear Filter</Text>
                 </TouchableOpacity>
               
             </View>
@@ -455,14 +489,14 @@ class OrderFilter extends React.Component {
              }}
              dropDownDirection="AUTO"
              bottomOffset={200}
-                 items={this.state.createdby_arr}
+                 items={this.state.paymentmode_arr}
                  autoScrollToDefaultValue={true}
                  containerStyle={{ height: 50, width: width - 25, marginTop: 15 }}
                  style={{ backgroundColor: '#fff',borderWidth:0,borderBottomWidth:1  }}
                  itemStyle={{
                    justifyContent: 'flex-start',
                  }}
-                 placeholder="Created By"
+                 placeholder="Payment Mode"
                  dropDownStyle={{height:120, backgroundColor: '#fff', zIndex: 0.999, }}
                  labelStyle={{ color: '#A9A9A9' }}
                  onChangeItem={item => this.onCreatedByText(item.value ?? '')}
@@ -482,10 +516,10 @@ class OrderFilter extends React.Component {
                   itemStyle={{
                     justifyContent: 'flex-start',
                   }}
-                  placeholder="Created By"
+                  placeholder="Created By"                  
                   dropDownStyle={{height:120, backgroundColor: '#fff', zIndex: 0.999, }}
                   labelStyle={{ color: '#A9A9A9' }}
-                  onChangeItem={item => this.onCreatedByText(item.value ?? '')}
+                  onChangeItem={item => this.onCreatedByText(item.value ?? '')}                  
                   // 
                 />}
            
@@ -505,13 +539,15 @@ class OrderFilter extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    user: state.userReducer
+    user: state.userReducer,
+    reload: state.reloadReducer,
   }
 };
 function mapDispatchToProps(dispatch) {
   return {
     setUser: (value) => dispatch({ type: SET_USER, value: value }),
-    logoutUser: () => dispatch({ type: LOGOUT_USER })
+    logoutUser: () => dispatch({ type: LOGOUT_USER }),
+    setScreenReload: (value) => dispatch({ type: ORDER_RELOAD, value: value }),
   }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(OrderFilter)

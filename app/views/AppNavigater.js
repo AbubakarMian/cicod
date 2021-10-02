@@ -61,6 +61,7 @@ import OrderDetailValueChain from './OrderDetailValueChain';
 import PayByUssdValueChain from './PayByUssdValueChain';
 import BuyDiliveryAddressValueChain from './BuyDiliveryAddressValueChain';
 import BarcodeScannerView from './BarcodeScannerView';
+import Register from './Register';
 
 const Stack = createStackNavigator();
 
@@ -142,6 +143,7 @@ export default class AppNavigater extends React.Component {
           <Stack.Screen name="More" component={More} options={{ headerShown: false }} />
           <Stack.Screen name="PartPaytment" component={PartPaytment} options={{ headerShown: false }} />
           <Stack.Screen name="PaymentSuccess" component={PaymentSuccess} options={{ headerShown: false }} />
+          <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     );

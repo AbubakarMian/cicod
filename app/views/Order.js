@@ -39,13 +39,15 @@ class Order extends React.Component {
             search_order_text: '',
             reload:0,
             isFetching: false,
+            apply_screen_filters:false
 
         };
         this.onDateChange = this.onDateChange.bind(this);
     }
     customeList(listType) {
         this.setState({
-            is_active_list: listType
+            is_active_list: listType,
+            apply_screen_filters:true,
         })
         return;
     }
@@ -130,7 +132,7 @@ class Order extends React.Component {
         })
     }
 
-    setDate = (date) => {
+    setDate (date) {
         var month = date.getUTCMonth() + 1; //months from 1-12
         var day = date.getUTCDate();
         var year = date.getUTCFullYear();
@@ -150,6 +152,7 @@ class Order extends React.Component {
 
         this.setState({
             isDatePickerVisible: false,
+            apply_screen_filters:true,
             date: newdate,
             date_created_timestamp: newdate
         })
@@ -164,7 +167,8 @@ class Order extends React.Component {
     search(text) {
         this.setState({
             search_order: text.nativeEvent.text,
-            apply_filter: false
+            apply_filter: false,
+            apply_screen_filters:true,
         })
     }
 
@@ -196,7 +200,9 @@ class Order extends React.Component {
             apply_filter: true,
             date_created_timestamp: 'Today',//YY-MM-DD
             search_order: '',
-            search_order_text: ''
+            search_order_text: '',
+            is_active_list: '',            
+            apply_screen_filters:false,
         });
         this.props.navigation.navigate('OrderFilter');
     }
@@ -252,7 +258,7 @@ class Order extends React.Component {
         if (_that.props.route == null || _that.props.route.params == null || _that.props.route.params.filters == null) {
             url = Constants.orderslist;
         }
-        else if (_that.state.apply_filter) {
+        else if (_that.state.apply_filter && !_that.state.apply_screen_filters) {
      
             filters = _that.props.route.params.filters;
             
@@ -291,13 +297,13 @@ class Order extends React.Component {
         // if (filters.length != 0) {
         //     filter_concat = '&';
         // }
-        if (_that.state.search_order != '') {
+        if (_that.state.search_order != '' && _that.state.apply_screen_filters) {
             url = url + filter_concat + 'order_id=' + _that.state.search_order
             // url = url + filter_concat + 'search=' + _that.state.search_order
             filter_concat = '&';
         }
 
-        if (_that.state.date_created_timestamp != 'Today') {//YY-MM-DD
+        if (_that.state.date_created_timestamp != 'Today' && _that.state.apply_screen_filters) {//YY-MM-DD
             url = url + filter_concat + 'date_created=' + _that.state.date_created_timestamp
             filter_concat = '&';
         }
@@ -430,7 +436,7 @@ class Order extends React.Component {
                         isVisible={this.state.isDatePickerVisible}
                         mode="date"
                         date={new Date()}
-                        onConfirm={this.setDate}
+                        onConfirm={(date)=>this.setDate(date)}
                         onCancel={this.hideDatePicker}
                     />
 
@@ -479,9 +485,9 @@ class Order extends React.Component {
                                 style={[{ color: '#D8D8D8' }, fontStyles.normal14]}
                                 iconColor="#929497"
                                 style={{ width: width / 1.3, alignSelf: 'center', position: 'absolute', left: 0, marginTop: 10, marginBottom: 5, elevation: 0, borderColor: '#D8DCDE' }}
-                                onChangeText={text => this.setState({ search_order_text: text })}
+                                onChangeText={text => this.setState({ apply_screen_filters:true,search_order_text: text })}
                                 value={this.state.search_order_text}
-                                onIconPress={()=>this.setState({text:''})}
+                                onIconPress={()=>this.setState({apply_screen_filters:true,text:''})}
                                 onSubmitEditing={(text) => this.search(text)}
                             //update
                             ></Searchbar>
