@@ -24,7 +24,12 @@ export default class ResetPassword extends React.Component {
         if(this.state.email == ''){
             Alert.alert('Message','Email is required')
         }
+        let valid_email=/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+        if(!this.state.email.match(valid_email)){
+            Alert.alert('Error','Invalid Email')
+            return
 
+        }
         let postData = {
             method: 'PUT',
             headers: {
@@ -41,8 +46,9 @@ export default class ResetPassword extends React.Component {
         let myurl ='https://api.cicodsaasstaging.com/sso/auth/password_reset'+'/'+this.state.email;// Constants.reset_password
         console.log('myurlmyurlmyurlmyurlmyurlmyurl',myurl);
         fetch(myurl, postData)
-            .then(response => response.text())
+            .then(response => response.json())
             .then(async responseJson => {
+                this.setState({ Spinner: false })
                 console.log("response Json responseJson responseJson!!!!!!!!!!!", responseJson)
                 if (responseJson.status === "SUCCESS") {
                     this.props.setUser({
@@ -52,7 +58,7 @@ export default class ResetPassword extends React.Component {
                         phone: responseJson.user.phone,
                         access_token: 'Bearer ' + responseJson.token
                     });
-                    this.setState({ Spinner: false })
+                    
 
 
                     console.log('get user !!!!!!!!!!!!!!!!', this.props.user)
@@ -60,7 +66,7 @@ export default class ResetPassword extends React.Component {
                 } else {
                     this.setState({ Spinner: false })
                     // this.setState({ Spinner: false })
-                    let message = responseJson.status
+                    let message = responseJson.error
                     if (message == '') {
                         message = 'Server responded with error contact admin'
                     }

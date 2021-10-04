@@ -327,12 +327,18 @@ class OrderDetail extends React.Component {
                                     <Text style={[{}, styles.detailInvoiceLable]}>{item.name}</Text>
                                     {/* <Text style={{ color: '#929497', fontSize: 12 }}>LAGOS- Palms</Text> */}
                                     <View style={{ flexDirection: 'row' }}>
-                                        <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>Unit Price: </Text>
+                                      <View style={{flex:2,flexDirection:'row'}}>
+                                      <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>Unit Price: </Text>
                                         <Text style={{ fontSize: 13, color: '#929497', marginRight: 20 }}>{item.price} </Text>
-                                        <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>QTY: </Text>
-                                        <Text style={{  fontSize: 13, color: '#929497', marginRight: width / 4 }}>{item.quantity} </Text>
+                                      </View>
+                                      <View style={{flex:2,flexDirection:'row'}}>
+                                      <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>QTY: </Text>
+                                        <Text style={{  fontSize: 13, color: '#929497', marginRight: width / 4 }}>{item.quantity} </Text>    
+                                      </View>  
+                                        <View style={{flex:1}}>
                                         <Text style={{ position:'absolute',right:20,fontSize: 13, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end' }}>
                                             {this.state.currency+' '+(item.quantity*item.price)} </Text>
+                                        </View>
                                     </View>
                                 </View>
                             </View>
