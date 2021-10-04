@@ -115,7 +115,7 @@ console.log("#$dtr",this.props.route.params)
             />
             </View>
                 <Text style={[{color:'#4E4D4D',marginTop:20},fontStyles.bold25]}>Payment Successful</Text>
-                <Text style={[{color:'#929497'},fontStyles.normal15]}>Your payment of {order.currency+" "+order.amount} was successful</Text>
+                <Text style={[{color:'#929497'},fontStyles.normal15]}>Your payment of{order.currency} {parseFloat(+order.amount)+ parseFloat(order.delivery_type=='DELIVERY'?parseFloat(order.delivery_amount):0)} was successful</Text>
                 <TouchableOpacity
                 onPress={()=>{_that.props.clearCart({reload:true}),_that.props.route.params.heading=="supplier"?_that.props.navigation.navigate('OrderDetailValueChain', { order_id:_that.props.route.params.order_id,seller_Id:_that.props.route.params.seller_id,heading:"SUPPLIERS" }):_that.props.navigation.navigate('OrderDetail', { id:order.id })}}
                 style={[{},styles.touchView]}

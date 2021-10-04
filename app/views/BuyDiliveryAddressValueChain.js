@@ -234,12 +234,20 @@ class BuyDiliveryAddressValueChain extends React.Component {
             this.props.navigation.goBack();
             return;
         }
-        if(this.state.country_id == 0 || this.state.state_id == 0){
-            Alert.alert('Error ', 'Country, states and address are required .');
+        if(this.state.country_id == 0 ){
+            Alert.alert('Error ', 'Country is required .');
 
             return ;
         }
-        if (this.state.address=="") {
+        if(this.state.state_id==0){
+            Alert.alert('Error ', 'State is required.');
+
+            return ;
+        }
+        // if (condition) {
+            
+        // }
+        if (this.state.address.trim()=="") {
             Alert.alert('Error ', 'Address is required');
 
             return ;

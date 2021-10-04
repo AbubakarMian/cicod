@@ -170,7 +170,7 @@ class ProductView extends React.Component {
                         <Image
                             style={[{ alignSelf: 'baseline' }]}
                             source={require('../images/ticket.png')} />
-                      <TouchableOpacity
+                    { _that.props.route.params.heading!='SUPPLIERS' &&<TouchableOpacity
                     style={[{}, styles.settingIcon]}
                     onPress={() => _that.setState({ supendModal: true })}
                       >
@@ -180,6 +180,7 @@ class ProductView extends React.Component {
                                 color={'#929497'}
                                 name="ellipsis-h" />
                         </TouchableOpacity>
+    }
                     </View>
                     <Text style={[{color:'#4E4D4D',textAlign:'center'},fontStyles.bold18]}>{ _that.props.route.params.heading=='SUPPLIERS'? _that.state.prodDetail.name :_that.state.prodDetail.name + ' ' + _that.state.prodDetail.quantity}</Text>
                     <Text style={[{color:'#929497',textAlign:'center'}, fontStyles.normal12]}>{_that.state.prodDetail.code}</Text>
@@ -187,7 +188,7 @@ class ProductView extends React.Component {
                     <View style={[{}, styles.descRow]}>
                         <View style={[{}, styles.descColumn]}>
                             <Text style={[{}, styles.lightGrayTex]}>Quantity</Text>
-                            <Text style={[{}, styles.darkGarayText]}>{ _that.props.route.params.heading=='SUPPLIERS'?_that.state.prodDetail.no_qty_limit?'No Qty Limit':_that.state.prodDetail.qnty :_that.state.prodDetail.quantity}</Text>
+                            <Text style={[{}, styles.darkGarayText]}>{ _that.props.route.params.heading=='SUPPLIERS'?_that.state.prodDetail.no_qty_limit?'No Qty Limit':_that.state.prodDetail.qnty : _that.state.prodDetail.no_qty_limit?'No Qty Limit':_that.state.prodDetail.quantity}</Text>
                         </View>
                         {_that.props.route.params.heading!='SUPPLIERS' &&(
                             <>
