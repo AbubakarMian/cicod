@@ -89,7 +89,7 @@ class OrderDetail_pending extends React.Component {
                     let product_items = responseJson.data.items;
 
                     for (let i = 0; product_items.length > i; i++) {
-                        total_ammount = total_ammount + (product_items[i].price * product_items[i].quantity);
+                        total_ammount = total_ammount + (parseFloat(product_items[i].price) * parseFloat(product_items[i].quantity));
                     }
                     let resdata = responseJson.data;
                     this.setState({
@@ -488,11 +488,17 @@ class OrderDetail_pending extends React.Component {
                                     <Text style={[{}, styles.detailInvoiceLable]}>{item.name}</Text>
                                     {/* <Text style={{ color: '#929497', fontSize: 12 }}>LAGOS- Palms</Text> */}
                                     <View style={{ flexDirection: 'row',position:'relative' }}>
+                                        <View style={{flex:2,flexDirection:'row'}}>
                                         <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>Unit Price: </Text>
-                                        <Text style={{ fontSize: 13, color: '#929497', textAlign: 'right', }}>{item.price} </Text>
+                                        <Text style={{ fontSize: 13, color: '#929497', }}>{item.price} </Text>
+                                        </View>
+                                        <View style={{flex:2,flexDirection:'row'}}>
                                         <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>QTY: </Text>
-                                        <Text style={{ fontSize: 13, color: '#929497', marginRight: width / 4,textAlign: 'right', }}>{item.quantity} </Text>
-                                        <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end',position:'absolute',right:5 }}>{this.state.currency+" "+ this.state.total_amount}</Text>
+                                        <Text style={{ fontSize: 13, color: '#929497', }}>{item.quantity} </Text>
+                                        </View>
+                                        <View style={{flex:1}}>
+                                        <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end',position:'absolute',right:5 }}>{this.state.currency+' '+(item.quantity*item.price)}</Text>
+                                        </View>
                                    
                                     </View>
                                 </View>
