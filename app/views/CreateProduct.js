@@ -283,8 +283,7 @@ class CreateProduct extends React.Component {
 
     }
     createProduct() {
-        console.log('this.variations ',this.state.variations);
-        this.setState({ spinner: true })
+        // this.setState({ spinner: true })
         if (this.state.name === '' || this.state.price === '' ) {
             this.setState({ spinner: false })
             Alert.alert("Warning", "Product name and Price are required")
@@ -304,17 +303,22 @@ class CreateProduct extends React.Component {
                     name: `image.jpg`,
                 });
             }
-            
-            // formData.append('category_id', this.state.category_id);
-            // formData.append('name', this.state.name);
-            // formData.append('quantity', this.state.quantity);
-            // formData.append('code', this.state.code);
-            // formData.append('price', this.state.price);
-            // formData.append('description', this.state.description);
-            // formData.append('validity', this.state.validity);
-            // formData.append('no_qty_limit', this.state.is_qty_limit);
-            // formData.append('has_vat', this.state.state_id);
-            // formData.append('on_webshop', this.state.is_web_shop?1:0); 
+            formData.append('category_id', this.state.category_id);
+            formData.append('name', this.state.name);
+            formData.append('description', this.state.description);
+            formData.append('code', this.state.code);
+            formData.append('price', this.state.price);
+            formData.append('validity', this.state.validity);
+            formData.append('quantity', this.state.quantity);
+            formData.append('no_qty_limit', this.state.is_qty_limit?1:0);
+            formData.append('has_vat', this.state.has_vat);
+            formData.append('on_webshop', this.state.is_web_shop?1:0); 
+
+
+
+
+
+
             let all_variations =this.state.variations;
             let variations_form =[];
             for(let i =0;i<all_variations.length;i++){
@@ -364,59 +368,7 @@ class CreateProduct extends React.Component {
                 //     price:5,
                 // }));//sel_attr.price
             }
-            console.log('AAAAAAAAAAAAAAAAA',variations_form)
-            let createing_data =  {
-                name:this.state.name,
-                quantity:this.state.quantity,
-                code:this.state.code,
-                price:this.state.price,
-                description:this.state.description,
-                validity:this.state.validity,
-                no_qty_limit:this.state.is_qty_limit,
-                has_vat:this.state.state_id,
-                on_webshop:this.state.is_web_shop?1:0,
-                category_id:this.state.category_id,
-                image: {
-                    uri: this.state.prod_image,
-                    type: 'multipart/form-data',
-                    name: `image.jpg`,
-                },
-                variations:variations_form
-                // variations:variations_form
-                // variations:[
-                //     {
-                //         attributes:[1], // 
-                //         price:11,//all_variations[0].price,
-                //         quantity:11,//all_variations[0].quantity,
-                //          image: {
-                //             uri: all_variations[0].image,
-                //             type: 'multipart/form-data',
-                //             name: `image.jpg`,
-                //         }                        
-                //     }
-                // ]
-            };
-            console.log('sssssssssssssssssscreateing data',JSON.stringify(createing_data));
-
-            // console.log('~~~~~~~~~~~~~~~createing data',variations[0]);
-
-            let serformData = serialize(
-                createing_data,
-                {indices: true},
-                formData
-              );
-
-              
-
-            // formData.append('variations[]', variations);
-
-            // selected_attributes:[],
-            //     price:0,
-            //     is_same_price:false,
-            //     quantity:0,
-            //     no_quantity_limit:false
-
-            // [{attributes: [attributes_id_array], quantity: quantity, no_qty_limit: no_qty_limit, price: price, image: image}]
+            console.log('****************',JSON.stringify(formData))
             let postData = {
                 method: 'POST',
                 headers: {
@@ -424,41 +376,32 @@ class CreateProduct extends React.Component {
                     'Content-Type': 'multipart/form-data',
                     'Authorization': this.props.user.access_token,
                 },
-                body: serformData,
-                // body: formData,
+                body: formData,
             };
-
-            console.log('Constants.productslist url ', Constants.productslist);
-            console.log('########### postData', JSON.stringify(postData))
             fetch(Constants.productslist, postData)
                 .then(response => response.json())
                 .then(async responseJson => {
-                    console.log(" create customer response !!!!!!!!!!!", responseJson)
-
                     this.setState({ spinner: false })
                     this.props.setScreenReload({
                         reload: true
                     })
                     if (responseJson.status === "success") {
                         Alert.alert('MESSAGE', responseJson.message)
-
                         let customer_id = responseJson.data.id;
                         this.props.navigation.navigate('Products', { seller_id: 0 })
-                        // this.createCustomerDelivery(customer_id);
                     } else if (responseJson.status == 401) {
                         this.unauthorizedLogout();
                     }
                     else {
                         let message = responseJson.message
                         console.log('Error send req', responseJson)
-                        Alert.alert('Error', responseJson)
+                        Alert.alert('Error', message)
                     }
                 }
                 )
                 .catch((error) => {
                     this.setState({ spinner: false })
                     console.log("Api call error", error);
-                    // Alert.alert(error.message);
                 });
         }
 
@@ -946,7 +889,7 @@ class CreateProduct extends React.Component {
                                         width={width / 2 - 20}
                                         alignSelf={'center'}
                                         color={'#000'}
-                                        onChangeText={text => this.setState({ reservation_day: text })}
+                                        onChangeText={text => this.setState({ validity: text })}
                                         keyboardType='numeric'
                                     />
 
@@ -959,6 +902,7 @@ class CreateProduct extends React.Component {
                                         alignSelf={'center'}
                                         color={'#000'}
                                         value={this.state.quantity}
+                                        disabled={this.state.no_qty_limit}
                                         keyboardType='numeric'
                                         onChangeText={text => this.setState({ quantity: text })}
                                     />

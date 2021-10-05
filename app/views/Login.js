@@ -23,7 +23,7 @@ class Login extends React.Component {
             Spinner: false,
             tenantId: 'Diageoplc',// rico  //ndanitv
             username: 'diageoplc@sharklasers.com',// rico@yopmail.com  //ndanitv@sharklasers.com
-            password: '@Strat1759',// @Ecomax1759 //@Ecomax1759
+            password: '@Strat1758',// @Ecomax1759 //@Ecomax1759
             isChecked: false,
             hide_password: true,
             domain_text_color: 'black',
