@@ -912,9 +912,9 @@ class CreateOrderValueChain extends React.Component {
 
                                 </View>
                                 <View style={[{}, styles.subTotleColumn2View]}>
-                                    <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.total_price ?? 0}</Text>
+                                    <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.total_price ?? 0.00}</Text>
                                     {this.state.cart_detail.has_vat ?
-                                        <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.tax.toFixed(2) ?? 0}</Text>
+                                        <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.tax.toFixed(2) ?? 0.00}</Text>
                                         : null}
 
 {this.props.delivery.country_id!=0 ? 

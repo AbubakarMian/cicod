@@ -2,10 +2,10 @@ import {REMOVE_DELIVERY_FEE_TO_COST, ADD_DELIVERY_FEE_TO_COST,REMOVE_FROM_CART, 
 const initialState = {
     cart: [],
     cart_detail:{
-        total_price:0,
+        total_price:0.00,
         tax:0,
-        total_price_with_tax:0,
-        delivery_fee:0,
+        total_price_with_tax:0.00,
+        delivery_fee:0.00,
        // total_price_with_tax_delivery:0,
         vat_amount:0,
         vat_percent:0,

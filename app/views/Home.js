@@ -174,6 +174,7 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
 
             <View style={[{ flexDirection: 'row', alignSelf: 'center', width: width - 20, alignSelf: 'center', marginTop: 20, alignItems: 'center', justifyContent: 'center', paddingRight: 10 }]}>
               <TouchableOpacity
+              disabled={ this.state.user.kciInfo.showWarning && this.state.user.kciInfo.kciUpdates[0].dayRemaining==0 ?true:false }
                 style={{ flex: 1 }}
                 onPress={() => this.props.navigation.navigate('Dashboard')}
               >
@@ -190,6 +191,8 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
+              disabled={ this.state.user.kciInfo.showWarning && this.state.user.kciInfo.kciUpdates[0].dayRemaining==0 ?true:false }
+
                 style={{ flex: 1 }}
                 onPress={() => this.createOrder() }
               >
@@ -209,6 +212,8 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
 
             <View style={[{ flexDirection: 'row', alignSelf: 'center', width: width - 20, alignSelf: 'center', marginTop: 20, alignItems: 'center', justifyContent: 'center', paddingRight: 10 }]}>
               <TouchableOpacity
+              disabled={ this.state.user.kciInfo.showWarning && this.state.user.kciInfo.kciUpdates[0].dayRemaining==0 ?true:false }
+
                 style={{ flex: 1 }}
                 onPress={() => this.props.navigation.navigate('Order')}
               >
@@ -225,6 +230,8 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
+              disabled={ this.state.user.kciInfo.showWarning && this.state.user.kciInfo.kciUpdates[0].dayRemaining==0 ?true:false }
+
                 style={{ flex: 1 }}
                 onPress={() => this.props.navigation.navigate('Customer')}
               >
@@ -243,6 +250,8 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
             </View>
             <View style={[{ flexDirection: 'row', alignSelf: 'center', width: width - 20, alignSelf: 'center', marginTop: 20, alignItems: 'center', justifyContent: 'center', paddingRight: 10 }]}>
               <TouchableOpacity
+              disabled={ this.state.user.kciInfo.showWarning && this.state.user.kciInfo.kciUpdates[0].dayRemaining==0 ?true:false }
+
                 style={{ flex: 1 }}
                 onPress={() => this.props.navigation.navigate('Products', { seller_id: 0 })}
               >
@@ -259,6 +268,8 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
+              disabled={ this.state.user.kciInfo.showWarning && this.state.user.kciInfo.kciUpdates[0].dayRemaining==0 ?true:false }
+
                 style={{ flex: 1 }}
                 onPress={() => this.props.navigation.navigate('Supplier', { heading: 'buy' })}
 
@@ -278,6 +289,8 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
             </View>
             <View style={[{ flexDirection: 'row', alignSelf: 'center', width: width - 20, alignSelf: 'center', marginTop: 20, alignItems: 'center', justifyContent: 'center', paddingRight: 10 }]}>
               <TouchableOpacity
+              disabled={ this.state.user.kciInfo.showWarning && this.state.user.kciInfo.kciUpdates[0].dayRemaining==0 ?true:false }
+
                 style={{ flex: 1 }}
                 onPress={() => this.props.navigation.navigate('Supplier',{heading:"supplier"})}
               >
@@ -294,6 +307,8 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
+              disabled={ this.state.user.kciInfo.showWarning && this.state.user.kciInfo.kciUpdates[0].dayRemaining==0 ?true:false }
+
                 style={{ flex: 1 }}
                 onPress={() => this.props.navigation.navigate('Buyers')}
               >
@@ -313,6 +328,8 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
             </View>
             <View style={[{ flexDirection: 'row', alignSelf: 'center', width: width - 20, alignSelf: 'center', marginTop: 20, alignItems: 'center', justifyContent: 'center', paddingRight: 10 }]}>
               <TouchableOpacity
+              disabled={ this.state.user.kciInfo.showWarning && this.state.user.kciInfo.kciUpdates[0].dayRemaining==0 ?true:false }
+
                 style={{ flex: 1 }}
 
                 onPress={() => this.props.navigation.navigate('Connect')}

@@ -838,9 +838,9 @@ class CreateOrder extends React.Component {
 
                                 </View>
                                 <View style={[{}, styles.subTotleColumn2View]}>
-                                    <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.total_price ?? 0}</Text>
+                                    <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.total_price ?? 0.00}</Text>
                                     {this.state.cart_detail.has_vat ?
-                                        <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.tax ?? 0}</Text>
+                                        <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.tax ?? 0.00}</Text>
                                         : null}
                                         <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " +parseFloat(this.state.amount_payable+'').toFixed(2)}</Text>
                                 </View>
