@@ -35,25 +35,25 @@ class CreateProduct extends React.Component {
             imageModal:false,
             galler_cameraModa:false,
             galler_cameraAttriModa:false,
-            selected_index:0,
-            prod_id: 0,
-            value: 0,
+            selected_index:'',
+            prod_id: '',
+            value: '',
             isChecked: false,
             categoryarr: [],
             spinner: false,
-            category_id: 0,
+            category_id: '',
             name: '',
-            quantity: 120,
+            quantity:'',
             code: '',
-            price: 0,
-            reservation_day: 0,
+            price: '',
+            reservation_day: '',
             description: '',
             is_web_shop: false,
-            is_qty_limit: false,
+            no_qty_limit: false,
             add_variation: false,
-            validity: 0,
-            has_vat: 0,
-            variation_index_selected: 0,
+            validity: '',
+            has_vat: '',
+            variation_index_selected: '',
             image: '',
             toolTipVisible: false,
             c: '',
@@ -64,8 +64,8 @@ class CreateProduct extends React.Component {
             variations: [],
             selected_variation:{
                     key: '',
-                    quentity:0,
-                    price: 0,
+                    quentity:'',
+                    price: '',
                     same_price:false,
                     no_qty_limit:false, 
                     selected_attributes:[],
@@ -152,11 +152,16 @@ class CreateProduct extends React.Component {
                     this.unauthorizedLogout();
                 }
                 else {
-                    let message = responseJson.message
+                    let message = responseJson.message                        
+                    console.log("Api call error else", responseJson);
                     Alert.alert('Error', message)
                 }
 
             })
+            .catch((error) => {
+                this.setState({ spinner: false })
+                console.log("Api call error", error);
+            });
 
     }
 
@@ -202,11 +207,16 @@ class CreateProduct extends React.Component {
                     this.unauthorizedLogout();
                 }
                 else {
-                    let message = responseJson.message
+                    let message = responseJson.message                        
+                    console.log("Api call error else", responseJson);
                     Alert.alert('Error', message)
                 }
 
             })
+            .catch((error) => {
+                this.setState({ spinner: false })
+                console.log("Api call error", error);
+            });
             console.log('**************',this.state.attributes)
     }
     onCategoryText(item) {
@@ -229,20 +239,25 @@ class CreateProduct extends React.Component {
         }
         else {
             var formData = new FormData();
-            formData.append('category_id', this.state.category_id);//this.state.category_id
+            if (this.state.prod_image != null && this.state.prod_image != '') {
+                formData.append('image', {
+                    uri: this.state.prod_image,
+                    type: 'multipart/form-data',
+                    name: `image.jpg`,
+                });
+            }
+            formData.append('category_id', this.state.category_id);
             formData.append('name', this.state.name);
-            formData.append('quantity', this.state.quantity);//
-            formData.append('price', this.state.price);//
             formData.append('description', this.state.description);
-            if(this.state.prod_image != '' || this.state.prod_image != null){
-            formData.append('image', {
-                uri: this.state.prod_image,
-                type: 'multipart/form-data',
-                name: `image.jpg`,
-            });
-        }
+            formData.append('code', this.state.code);
+            formData.append('price', );//this.state.price
+            formData.append('validity', 8);//this.state.validity
+            formData.append('quantity', this.state.quantity);
+            formData.append('no_qty_limit', this.state.no_qty_limit);
+            formData.append('has_vat', this.state.has_vat);
+            formData.append('on_webshop', this.state.is_web_shop?1:0); 
             let postData = {
-                method: 'PUT',
+                method: this.state.prod_id == 0 ? 'POST':'PUT',
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'application/json',
@@ -269,7 +284,8 @@ class CreateProduct extends React.Component {
                         this.unauthorizedLogout();
                     }
                     else {
-                        let message = responseJson.message
+                        let message = responseJson.message                        
+                    console.log("Api call error else", responseJson);
                         Alert.alert('Error', message)
                     }
                 }
@@ -282,18 +298,13 @@ class CreateProduct extends React.Component {
         }
 
     }
-    createProduct() {
+    create_or_update_Product() {
         // this.setState({ spinner: true })
         if (this.state.name === '' || this.state.price === '' ) {
             this.setState({ spinner: false })
             Alert.alert("Warning", "Product name and Price are required")
             return;
         }
-        // else if (this.state.category_id == 0 ) {
-        //     this.setState({ spinner: false })
-        //     Alert.alert("Warning", "Category is required")
-        //     return;
-        // }
         else {
             var formData = new FormData();
             if (this.state.prod_image != null && this.state.prod_image != '') {
@@ -303,21 +314,16 @@ class CreateProduct extends React.Component {
                     name: `image.jpg`,
                 });
             }
-            formData.append('category_id', this.state.category_id);
+            formData.append('category_id',this.state.category_id);
             formData.append('name', this.state.name);
             formData.append('description', this.state.description);
             formData.append('code', this.state.code);
             formData.append('price', this.state.price);
             formData.append('validity', this.state.validity);
             formData.append('quantity', this.state.quantity);
-            formData.append('no_qty_limit', this.state.is_qty_limit?1:0);
+            formData.append('no_qty_limit', this.state.no_qty_limit);
             formData.append('has_vat', this.state.has_vat);
             formData.append('on_webshop', this.state.is_web_shop?1:0); 
-
-
-
-
-
 
             let all_variations =this.state.variations;
             let variations_form =[];
@@ -368,9 +374,19 @@ class CreateProduct extends React.Component {
                 //     price:5,
                 // }));//sel_attr.price
             }
-            console.log('****************',JSON.stringify(formData))
+            let url='';
+            let method='';
+            if(this.props.route.params.action == "update" ){
+                url = Constants.productslist + "/" + this.state.prod_id
+                method = 'PUT';
+            }
+            else{
+                url = Constants.productslist;
+                method = 'POST';
+            }
+            
             let postData = {
-                method: 'POST',
+                method: method,
                 headers: {
                     Accept: 'application/json',
                     'Content-Type': 'multipart/form-data',
@@ -378,7 +394,8 @@ class CreateProduct extends React.Component {
                 },
                 body: formData,
             };
-            fetch(Constants.productslist, postData)
+            console.log('****************',JSON.stringify(postData))
+            fetch(url, postData)
                 .then(response => response.json())
                 .then(async responseJson => {
                     this.setState({ spinner: false })
@@ -484,11 +501,7 @@ class CreateProduct extends React.Component {
         
     }
     onSaveFun() {
-        if (this.props.route.params.action == "update") {
-            this.updateProduct();
-        } else {
-            this.createProduct();
-        }
+        this.create_or_update_Product()
     }
 
     setPrice(text) {
@@ -497,6 +510,22 @@ class CreateProduct extends React.Component {
             this.setState({
                 price: text
             })
+            // Alert.alert('Warning','Value can not be negative')
+        }
+    }
+    setValidity(text) {
+        console.log(' text @@@@@@@@@', text);
+        let ex = /^[1-9]\d*$/;
+        if (text.match(ex)) {
+            this.setState({ validity: text })
+            // Alert.alert('Warning','Value can not be negative')
+        }
+    }
+    setQuentity(text) {
+        console.log(' text @@@@@@@@@', text);
+        let ex = /^[1-9]\d*$/;
+        if (text.match(ex)) {
+            this.setState({ quantity: text })
             // Alert.alert('Warning','Value can not be negative')
         }
     }
@@ -622,10 +651,11 @@ class CreateProduct extends React.Component {
                 code: this.props.route.params.prodDetail.code,
                 price: this.props.route.params.prodDetail.price,
                 description: this.props.route.params.prodDetail.description,
-                is_qty_limit: (this.props.route.params.prodDetail.no_qty_limit == false) ? 0 : 1,
+                no_qty_limit: this.props.route.params.prodDetail.no_qty_limit ,
                 validity: this.props.route.params.prodDetail.validity,
                 has_vat: this.props.route.params.prodDetail.has_vat,
                 prod_image: this.props.route.params.prodDetail.image,
+                is_web_shop:this.props.route.params.prodDetail.on_webshop,
             })
             if(this.props.route.params.prodDetail.variations.length>0){
                 let variation_pre=[];
@@ -768,7 +798,7 @@ class CreateProduct extends React.Component {
     }
 
     render() {
-        console.log('~~~~~~~~~~~~~~~~~~~~~~',this.state.variations)
+        console.log('~~~~~~~~~~~~~~~~~~~~~~this.state.no_qty_limit',this.state.no_qty_limit)
         this.getProduct();
         console.log('this.state.price', this.state.categoryarr)
         return (
@@ -877,6 +907,7 @@ class CreateProduct extends React.Component {
                                         // onChangeText={text => this.setState({ price: text })}
                                         onChangeText={text => this.setPrice(text)}
                                         keyboardType='numeric'
+                                        value={this.state.price.toString()}
                                     />
 
                                 </View>
@@ -889,8 +920,9 @@ class CreateProduct extends React.Component {
                                         width={width / 2 - 20}
                                         alignSelf={'center'}
                                         color={'#000'}
-                                        onChangeText={text => this.setState({ validity: text })}
+                                        onChangeText={text => this.setValidity(text)}
                                         keyboardType='numeric'
+                                        value={this.state.validity.toString()}
                                     />
 
                                 </View>
@@ -904,7 +936,9 @@ class CreateProduct extends React.Component {
                                         value={this.state.quantity}
                                         disabled={this.state.no_qty_limit}
                                         keyboardType='numeric'
-                                        onChangeText={text => this.setState({ quantity: text })}
+                                        onChangeText={text => this.setQuentity(text)}
+                                        
+                                        value={this.state.quantity.toString()}
                                     />
 
                                 </View>
@@ -930,10 +964,11 @@ class CreateProduct extends React.Component {
                                         style={[{ width: width / 2, }, styles.cheBox]}
                                         onClick={() => {
                                             this.setState({
-                                                is_qty_limit: !this.state.is_qty_limit
+                                                no_qty_limit: !this.state.no_qty_limit,
+                                                quantity:''
                                             })
                                         }}
-                                        isChecked={this.state.is_qty_limit}
+                                        isChecked={this.state.no_qty_limit}
                                         rightText={"No Quantity Limit?"}
                                         rightTextStyle={{ color: '#4E4D4D' }}
                                         checkedCheckBoxColor={'#4E4D4D'}
