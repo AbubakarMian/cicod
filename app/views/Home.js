@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, Dimensions, Image, Platform, Alert, TouchableOpacity, ScrollView,Linking } from 'react-native'
-import { Text, TextInput } from 'react-native-paper';
+import { BackHandler,View,Share, Modal as OtherModal,TouchableWithoutFeedback,ImageBackground, Dimensions, Image, Platform, Alert, TouchableOpacity, ScrollView,Linking } from 'react-native'
+import { Text, TextInput,Modal } from 'react-native-paper';
 import splashImg from '../images/splash.jpg';
 import styles from '../css/HomeCss';
 import fontStyles from '../css/FontCss'
@@ -16,7 +16,11 @@ class Home extends React.Component {
 
   constructor(props) {
     super(props);
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+
     this.state = {
+      isShopModal:false,
+      closeApp:false,
       spinner: false,
       avatar: '',
       tenantId:"",
@@ -33,9 +37,49 @@ class Home extends React.Component {
     }
   }
 
+  componentWillMount() {
+    BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+}
+
+componentWillUnmount() {
+    BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+}
+
+handleBackButtonClick() {
+   this.setState({closeApp:true})
+    return true;
+}
+
+
+  veiwShop(){
+    Linking.openURL(`https://${this.state.tenantId.toLowerCase()}.${Constants.webshop_url}`)
+    
+  }
+
+  async shareShop(){
+    try {
+      const result=await Share.share({
+        message:`https://${this.state.tenantId.toLowerCase()}.${Constants.webshop_url}`
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+          console.log("hrer#")
+        } else {
+          // shared
+          console.log("shared#")
+        }
+      	} else if (result.action === Share.dismissedAction) {
+        // dismissed
+        console.log("dismissed#")
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  }
   async componentDidMount() {
    
-    console.log("he#@",this.props.user.kciInfo)
+    console.log("he#@",this.props.user)
     console.log("ojk@#",this.props.user.tenantId)
     this.getAsyncData()
     if (this.props.user.avatar == '') {
@@ -143,8 +187,8 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
                 <TouchableOpacity
                   onPress={() => this.props.navigation.navigate('User')}>
                   <Image
-                    style={{ height: 50, width: 50 }}
-                    source={require('../images/profilepic.png')}
+                    style={{ height: 50, width: 50 ,borderRadius:50}}
+                    source={this.state.avatar==''?require('../images/profilepic.png'):{uri:this.state.avatar}}
                   />
                 </TouchableOpacity>
               </View>
@@ -174,6 +218,7 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
 
             <View style={[{ flexDirection: 'row', alignSelf: 'center', width: width - 20, alignSelf: 'center', marginTop: 20, alignItems: 'center', justifyContent: 'center', paddingRight: 10 }]}>
               <TouchableOpacity
+              disabled={ this.state.user.kciInfo.showWarning && this.state.user.kciInfo.kciUpdates[0].dayRemaining==0 ?true:false }
                 style={{ flex: 1 }}
                 onPress={() => this.props.navigation.navigate('Dashboard')}
               >
@@ -190,6 +235,8 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
+              disabled={ this.state.user.kciInfo.showWarning && this.state.user.kciInfo.kciUpdates[0].dayRemaining==0 ?true:false }
+
                 style={{ flex: 1 }}
                 onPress={() => this.createOrder() }
               >
@@ -209,6 +256,8 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
 
             <View style={[{ flexDirection: 'row', alignSelf: 'center', width: width - 20, alignSelf: 'center', marginTop: 20, alignItems: 'center', justifyContent: 'center', paddingRight: 10 }]}>
               <TouchableOpacity
+              disabled={ this.state.user.kciInfo.showWarning && this.state.user.kciInfo.kciUpdates[0].dayRemaining==0 ?true:false }
+
                 style={{ flex: 1 }}
                 onPress={() => this.props.navigation.navigate('Order')}
               >
@@ -225,6 +274,8 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
+              disabled={ this.state.user.kciInfo.showWarning && this.state.user.kciInfo.kciUpdates[0].dayRemaining==0 ?true:false }
+
                 style={{ flex: 1 }}
                 onPress={() => this.props.navigation.navigate('Customer')}
               >
@@ -243,6 +294,8 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
             </View>
             <View style={[{ flexDirection: 'row', alignSelf: 'center', width: width - 20, alignSelf: 'center', marginTop: 20, alignItems: 'center', justifyContent: 'center', paddingRight: 10 }]}>
               <TouchableOpacity
+              disabled={ this.state.user.kciInfo.showWarning && this.state.user.kciInfo.kciUpdates[0].dayRemaining==0 ?true:false }
+
                 style={{ flex: 1 }}
                 onPress={() => this.props.navigation.navigate('Products', { seller_id: 0 })}
               >
@@ -258,7 +311,31 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
                   <Text style={[{}, styles.cardLableText]}>Products</Text>
                 </View>
               </TouchableOpacity>
+
               <TouchableOpacity
+              disabled={ this.state.user.kciInfo.showWarning && this.state.user.kciInfo.kciUpdates[0].dayRemaining==0 ?true:false }
+
+                style={{ flex: 1 }}
+                onPress={() => this.setState({isShopModal:true})}
+
+              >
+                <View style={[{
+                  flexDirection: 'column', width: width / 2 - 20, height: width / 2 - 50,
+                  justifyContent: 'center', alignItems: 'center', marginLeft: 15,
+                  borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
+                }]}>
+                  <Image
+                    style={{ height: width / 6, width: width / 6 }}
+                    source={require('../images/home/webshop.png')}
+                  />
+                  <Text style={[{}, styles.cardLableText]}>Webshop</Text>
+                </View>
+              </TouchableOpacity> 
+
+
+              {/* <TouchableOpacity
+              disabled={ this.state.user.kciInfo.showWarning && this.state.user.kciInfo.kciUpdates[0].dayRemaining==0 ?true:false }
+
                 style={{ flex: 1 }}
                 onPress={() => this.props.navigation.navigate('Supplier', { heading: 'buy' })}
 
@@ -274,10 +351,12 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
                   />
                   <Text style={[{}, styles.cardLableText]}>Buy</Text>
                 </View>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             <View style={[{ flexDirection: 'row', alignSelf: 'center', width: width - 20, alignSelf: 'center', marginTop: 20, alignItems: 'center', justifyContent: 'center', paddingRight: 10 }]}>
               <TouchableOpacity
+              disabled={ this.state.user.kciInfo.showWarning && this.state.user.kciInfo.kciUpdates[0].dayRemaining==0 ?true:false }
+
                 style={{ flex: 1 }}
                 onPress={() => this.props.navigation.navigate('Supplier',{heading:"supplier"})}
               >
@@ -294,6 +373,8 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
+              disabled={ this.state.user.kciInfo.showWarning && this.state.user.kciInfo.kciUpdates[0].dayRemaining==0 ?true:false }
+
                 style={{ flex: 1 }}
                 onPress={() => this.props.navigation.navigate('Buyers')}
               >
@@ -306,13 +387,15 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
                     style={{ height: width / 6, width: width / 6 }}
                     source={require('../images/home/buyers.png')}
                   />
-                  <Text style={[{}, styles.cardLableText]}>Buyers</Text>
+                  <Text style={[{}, styles.cardLableText]}>Resellers</Text>
                 </View>
               </TouchableOpacity>
 
             </View>
             <View style={[{ flexDirection: 'row', alignSelf: 'center', width: width - 20, alignSelf: 'center', marginTop: 20, alignItems: 'center', justifyContent: 'center', paddingRight: 10 }]}>
               <TouchableOpacity
+              disabled={ this.state.user.kciInfo.showWarning && this.state.user.kciInfo.kciUpdates[0].dayRemaining==0 ?true:false }
+
                 style={{ flex: 1 }}
 
                 onPress={() => this.props.navigation.navigate('Connect')}
@@ -332,6 +415,91 @@ this.props.navigation.navigate('CreateOrder', { screen_name: 'sell' })
             </View>
           </View>
         </ScrollView>
+        <OtherModal
+                    visible={this.state.isShopModal}
+                    onRequestClose={() => this.setState({ isShopModal: false })}     
+                    transparent={true}
+                >
+                    <TouchableOpacity
+                        onPress={() => this.setState({ isShopModal: false })}
+                    >
+                        <View style={[{}, styles.modalBackGround]}>
+                            <TouchableWithoutFeedback>
+                            <View style={styles.suspendModal}>
+                                <View style={{alignItems:"center",flexDirection:"row"}} >
+                                <Image
+                                style={{height:20,width:20}}
+                                    source={require('../images/online-shop.png')}
+                                />
+                                <TouchableOpacity
+                                 onPress={() =>  this.veiwShop()}
+                                style={[{marginLeft:7}, styles.suspendTouch]}>
+                                
+                                <Text style={{color:"#808080"}}>View Webshop</Text>
+                            </TouchableOpacity>
+                                </View>
+                                <View style={{alignItems:"center",flexDirection:"row"}} >
+                                <Image
+                                style={{height:20,width:20}}
+                                    source={require('../images/share.png')}
+                                />
+                            <TouchableOpacity
+                                 onPress={() => this.shareShop()}
+                                style={[{marginLeft:7}, styles.suspendTouch]}>
+                                
+                                <Text style={{color:"#808080"}}>Share Webshop</Text>
+                            </TouchableOpacity>
+                            </View>
+                            {/* <View style={{marginTop:5}} /> */}
+                            {/* <TouchableOpacity
+                                onPress={() => this.setState({suspendModal:false})}
+                                style={[{}, styles.suspendTouch]}>
+                                <Image source={require('../images/redCross.png')} style={[{width:20,height:20}, styles.banImage]} />
+                                <Text style={{}}> Cancel</Text>
+                            </TouchableOpacity> */}
+                            </View>
+                            </TouchableWithoutFeedback>
+                        </View>
+                    </TouchableOpacity>
+
+                </OtherModal>
+
+
+                <Modal
+                    visible={this.state.closeApp}
+                    
+                >
+                    {console.log(this.props.user)}
+                    <View
+                        style={{ alignSelf: 'center', backgroundColor: '#fff', width: width - 50, justifyContent: 'center', alignItems: 'center', paddingVertical: 20, borderRadius: 10, flexDirection: 'column' }}
+                    >
+                        <View style={{ flexDirection: 'row', marginBottom: 30 }}>
+                            <Text style={{ color: '#B1272C', fontWeight: 'bold', fontSize: 20 }}>Want to Exit App?</Text>
+                        </View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <View
+                                style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+                            >
+                                <TouchableOpacity
+                                    style={{ backgroundColor: '#fff', paddingVertical: 15, padding: 30, borderRadius: 100, borderWidth: 1, borderColor: '#B1272C' }}
+                                    onPress={() => { this.setState({ closeApp: false }) }}
+                                >
+                                    <Text style={{ color: '#B1272C', paddingHorizontal: 10 }}>No</Text>
+                                </TouchableOpacity>
+                            </View>
+                            <View
+                                style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}
+                            >
+                                <TouchableOpacity
+                                    style={{ backgroundColor: '#B1272C', paddingVertical: 15, padding: 40, borderRadius: 100 }}
+                                    onPress={() => BackHandler.exitApp()}
+                                >
+                                    <Text style={{ color: '#fff', }}>Yes</Text>
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+                </Modal>
       </View>
     )
   }

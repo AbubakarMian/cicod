@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight, Alert, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import {BackHandler, View, ImageBackground, ScrollView, TouchableHighlight, Alert, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
 import { SET_USER, SET_CUSTOMER, LOGOUT_USER, ADD_TO_PRODUCT, CLEAR_CART,REMOVE_FROM_CART, REMOVE_PRODUCT_FORM_CART, CLEAR_ORDER, SET_DELIVERY_ADDRESS,ORDER_RELOAD } from '../redux/constants/index';
 import { Text, TextInput } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
@@ -18,6 +18,8 @@ const isAndroid = Platform.OS == 'android'
 class PaymentSuccess extends React.Component {
     constructor(props) {
         super(props);
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+
         this.state = {
             value: 0,
             order_detail:{},
@@ -25,6 +27,23 @@ class PaymentSuccess extends React.Component {
             payment_status:'',
             // bodyOrder: this.props.route.params.bodyOrder
         }
+    }
+
+
+
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    
+    handleBackButtonClick() {
+       
+            this.props.navigation.replace("Home")
+      
+        return true;
     }
     componentDidMount(){
         this.get_order_detail()
@@ -249,12 +268,12 @@ console.log("#$dtr",this.props.route.params)
                 <Spinner visible={this.state.spinner} />
                 <Header navigation={this.props.navigation} />
                 <View style={[{}, styles.backHeaderRowView]}>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         // onPress={()=>this.props.navigation.navigate('Sell')}
                         onPress={() => this.props.navigation.navigate('CreateOrder')}
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <View style={[{}, styles.backHeadingView]}>
                         <Text style={[{}, styles.backHeadingText]}>MAKE PAYMENT</Text>
                     </View>
