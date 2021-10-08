@@ -512,8 +512,8 @@ class CreateProduct extends React.Component {
             
         }).then(image => {
             console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@', image);
-            if(image.size>1024){
-               Alert.alert("Max size 1MB")
+            if(image.size>5024){
+               Alert.alert("Max size 5MB")
                return
             }
             this.setState({
@@ -851,26 +851,36 @@ class CreateProduct extends React.Component {
                 <ScrollView>
                     <View>
                         <View style={[{}, styles.productDetailContainerView]}>
-                            <View style={[{}, styles.formRowView]}>
-                                <View style={[{ position: 'relative' }, styles.formColumn]}>
+                            <View style={[ styles.formRowView,{alignItems:"center"}]}>
+                                <View style={[ styles.formColumn,{ position: 'relative' }]}>
                                     {this.state.categoryarr.length < 1 ? null :
                                         <DropDownPicker
                                             scrollViewProps={{
                                                 persistentScrollbar: true,
                                             }}
                                             items={this.state.categoryarr}
-                                            containerStyle={{ height: 50, width: width - 35, marginTop: 15, alignSelf: 'center' }}
+                                            containerStyle={{ height: 50, width: width - 90, marginTop: 15, alignSelf: 'center' }}
                                             style={{ backgroundColor: '#fff' }}
                                             itemStyle={{
                                                 justifyContent: 'flex-start', zIndex: 0.99
                                             }}
-                                            placeholder="Catagory"
+                                            placeholder="Category"
                                             dropDownStyle={{ backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 20, opacity: 1 }}
                                             labelStyle={{ color: '#A9A9A9' }}
                                             onChangeItem={item => this.onCategoryText(item.value)}
                                         />
                                     }
+                                     
                                 </View>
+                                
+                                <TouchableOpacity
+                            onPress={() => this.props.navigation.replace('CreateProductCategory', { action: 'create'})}
+                        >
+                            <Image
+                                style={{ height: 30, width: 30 }}
+                                source={require('../images/products/circlePlus.png')}
+                            />
+                        </TouchableOpacity>
                             </View>
 
                             <View style={[{}, styles.formRowView]}>
@@ -1225,7 +1235,7 @@ class CreateProduct extends React.Component {
                                     source={require('../images/gallery.png')}
                                 />
                                 <TouchableOpacity
-                                onPress={() =>  this.imageUpload()}
+                                onPress={() =>  this.my_gallery()}
                                 style={[{marginLeft:7}, styles.suspendTouch]}>
                                 
                                 <Text style={{color:"#808080"}}>Choose from Gallery</Text>

@@ -25,6 +25,7 @@ class User extends React.Component {
             last_name: '',
             email: '',
             phone: '',
+            avatar:'',
             role: '',
          
 
@@ -71,6 +72,7 @@ class User extends React.Component {
                         first_name: merchant_contact.companyName, //contactPerson
                         phone: merchant_contact.businessPhone,
                         role: merchant_contact.customerCategory,
+                        avatar:merchant_contact.logo
                     })
 
                 } else if (responseJson.status == 401) {
@@ -126,8 +128,9 @@ class User extends React.Component {
                                 </View>
                                 <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
                                     <Image
-                                        style={{ height: 50, width: 50 }}
-                                        source={require('../images/profilepic.png')}
+                                        style={{ height: 50, width: 50,borderRadius:50 }}
+                                        source={this.state.avatar==''?require('../images/profilepic.png'):{uri:this.state.avatar}}
+
                                     />
                                 </View>
                             </View>

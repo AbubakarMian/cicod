@@ -39,6 +39,7 @@ class MakePayment extends React.Component {
         if (await this.state.spinner) {
             return;
         }
+        this.props.emptyOrder()
         console.log("EEEEEEEEEEEEEEEE",this.props.route.params.pending_order_res)
         await this.setState({ spinner: false })
         console.log('AAAAAAAAAAAAAAAAAAAAAAAAA',this.props.route.params)
@@ -145,6 +146,7 @@ class MakePayment extends React.Component {
         if (await this.state.spinner) {
             return;
         }
+        this.props.emptyOrder()
 
         let pending_order_res = this.state.pending_order_res 
         console.log('pending_order_res.data.payment_link 121212121212',pending_order_res);
@@ -198,7 +200,7 @@ console.log("here")
                     { "heading":this.props.route.params.heading,seller_id:this.props.route.params.item.seller_id,payment_link: payment_link, data: responseJson.data } :
                     { "heading":this.props.route.params.heading,payment_link: payment_link, data: responseJson.data }
                     this.payment_response(responseJson, 'PaymentWeb',paymentWebParam );
-                    this.props.emptyOrder()
+                    
                 }
                 else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
@@ -267,17 +269,19 @@ console.log("here")
                     textStyle={{ color: '#fff' }}
                     color={'#fff'}
                 />
-                <View style={[{}, styles.backHeaderRowView]}>
-                    <TouchableOpacity
+                 <TouchableOpacity
                         // onPress={()=>this.props.navigation.navigate('Sell')}
                         onPress={() => this.props.navigation.goBack()}
                     >
+                <View style={[{}, styles.backHeaderRowView]}>
+                   
                         <Icon name="arrow-left" size={25} color="#929497" />
-                    </TouchableOpacity>
+                    
                     <View style={[{}, styles.backHeadingView]}>
                         <Text style={[{}, styles.backHeadingText]}>MAKE PAYMENT</Text>
                     </View>
                 </View>
+                </TouchableOpacity>
                 <Text style={[{}, styles.heading]}>Please select preferred payment method</Text>
                 <View>
                     <ScrollView>

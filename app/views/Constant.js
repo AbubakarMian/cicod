@@ -1,8 +1,10 @@
 const auth_url = 'https://api.cicodsaasstaging.com';
 const base_url = 'https://com.cicodsaasstaging.com/com/api';
+const webshop_url='cicodsaasstaging.com/webshop'
 
 const tenantId = 'sandbox';
 export const Constants = {
+  webshop_url,
   renewalLink:"cicodsaasstaging.com/admin/merchant/billing",
   base_url: base_url,
   UnauthorizedErrorMsg : 'Same User can only login in single device at a time',

@@ -3,6 +3,8 @@ import { View, Image, TouchableOpacity, Dimensions, Touchable, ScrollView, } fro
 import { Text, TextInput, Alert } from 'react-native-paper';
 import styles from '../css/MoreCss';
 import { WebView } from 'react-native-webview';
+import Spinner from 'react-native-loading-spinner-overlay';
+
 import { connect } from 'react-redux';
 import { Constants } from '../views/Constant';
 import { SET_USER, LOGOUT_USER, CLEAR_ORDER_CHAIN, RESET, RESET_DELIVERY, REMOVE_DELIVERY_FEE_TO_COST } from '../redux/constants/index';
@@ -16,6 +18,7 @@ class PaymentWeb extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            spinner:true,
             order_id:0,
             timer:3,
             server_url:'https://com.cicodsaasstaging.com/webshop/payment',
@@ -148,6 +151,7 @@ class PaymentWeb extends React.Component {
 
     }
     render() {
+       
 
         // if(this.state.order_id != this.props.route.params.data.id){
         //     console.log('AAAAAAAAAAAAAA',this.state.order_id)
@@ -169,9 +173,14 @@ class PaymentWeb extends React.Component {
         // this.check();
         console.log('payment web rrrrrrrrrrrrrrrrr',this.props.route.params.payment_link)
         return (
+            <>
+             <Spinner visible={this.state.spinner} />
             <WebView 
             onLoadStart={()=>{
                 
+            }}
+            onLoadEnd={()=>{
+                this.setState({spinner:false})
             }}
             onNavigationStateChange={({url,canGoBack})=>{
                 if (this.state.server_url+'?paymentStatus=success&orderId='+this.props.route.params.data.cicod_order_id==url ||this.state.server_url+'?paymentStatus=success&orderId='+this.props.route.params.data.order_id==url) {
@@ -226,6 +235,7 @@ console.log("ecff13",explodeArr)
                 console.log("#@@@$$###Onnaoff",url)
             }}
             source={{ uri: this.props.route.params.payment_link }} />
+            </>
         )
     }
 }

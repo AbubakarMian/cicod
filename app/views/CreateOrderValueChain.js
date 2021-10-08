@@ -19,6 +19,7 @@ import CustomerDetail from './Components/CreateOrder/CustomerDetail';
 import NoOrderDetail from './Components/CreateOrder/NoOrderDetail';
 import OrderDetail from './Components/CreateOrder/OrderDetail';
 import _ from 'lodash'
+import NavBack from './Components/NavBack';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 class CreateOrderValueChain extends React.Component {
@@ -66,6 +67,10 @@ class CreateOrderValueChain extends React.Component {
     // }
     clearOrder() {
         console.log("unmount#@@$")
+        this.setState({
+            cart_detail:this.props.cart.cart_detail,
+            amount_payable:0
+        })
         this.props.emptyOrder();
         this.props.resetDelivery();
         this.props.resetDeliveryAddress();
@@ -108,7 +113,7 @@ class CreateOrderValueChain extends React.Component {
                 //console.log("Suppliers ##@@@@%^^&", responseJson)
                 if (responseJson.success) {
                     let data = responseJson.data;
-                    //console.log("##########ddddddddddd",data)
+                    console.log("##########ddddddddddd",data)
                    // this.setState({ spinner: false })
                    // this.props.navigation.navigate('PaymentSuccess',{data:data})
                   
@@ -148,7 +153,7 @@ class CreateOrderValueChain extends React.Component {
        // if (!_.isEqual(prevState.cart_arr,this.state.cart_arr)) {
             console.log("oladx")
             console.log("ewee@##",prevProps.cart.cart_detail.total_price_with_tax,"dff",this.props.cart.cart_detail.total_price_with_tax )
-            if(prevProps.cart.cart_detail.total_price_with_tax!=this.props.cart.cart_detail.total_price_with_tax ){
+            if((!isNaN(prevProps.cart.cart_detail.total_price_with_tax)&&!isNaN(this.props.cart.cart_detail.total_price_with_tax))&& prevProps.cart.cart_detail.total_price_with_tax!=this.props.cart.cart_detail.total_price_with_tax ){
 
             
             var amount_payable = 0; //this.props.currency.currency + " "
@@ -193,7 +198,9 @@ class CreateOrderValueChain extends React.Component {
     // }
 
     searchSupplier() {
-        let url = Constants.supplierlist + 'filter[seller_name]=' + this.state.search_supplier;
+        let url = Constants.supplierlist + '?filter[seller_name]=' + this.state.search_supplier;
+       
+       console.log("ui$#ui",url)
         this.getSuppliersList(url);
     }
      counterFun=async(action, index)=>{
@@ -499,10 +506,12 @@ class CreateOrderValueChain extends React.Component {
                     // alert(responseJson.message)
                    // this.props.clearCart();
                    this.clearOrder();
+                   console.log("here#$d",responseJson.data);
+                   console.log("ropsx$#",this.props.route.params.item)
                     let payment_link = responseJson.data//Pay Account,ACCOUNT
                     if (this.state.payment_option_selected == 'Pay Account') {
                         // alert(responseJson.message)
-                        this.props.navigation.navigate('PaymentSuccess',{heading:"supplier",order_id:responseJson.data.id})
+                        this.props.navigation.navigate('PaymentSuccess',{heading:"supplier",order_id:responseJson.data.cicod_order_id,seller_id:this.props.route.params.item.seller_id})
                         //console.log("~~~~~~~~~~~create_order_id payment_link!", responseJson.data)
                       //  this.get_order_detail(responseJson.data.id);
                         
@@ -510,7 +519,8 @@ class CreateOrderValueChain extends React.Component {
                         // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link,data:responseJson.data });
                     }
                     if(this.state.payment_option_selected == 'Pay Invoice'){
-                        this.props.navigation.navigate('OrderDetail',{id:responseJson.data.id})
+                        console.log("oprf$3")
+                        this.props.navigation.navigate('OrderDetailValueChain', { order_id:responseJson.data.cicod_order_id,seller_Id:this.props.route.params.item.seller_id,heading:"SUPPLIERS" })
                     }
 
                 }
@@ -549,17 +559,19 @@ class CreateOrderValueChain extends React.Component {
                 });
                 if (responseJson.success === true) {
                     let supplierlist=[];
+                    console.log("pop#4id",this.props.supplier.id)
                     console.log("correct#$",responseJson.data);
 
-                    for (let index = 0; index < responseJson.data; index++) {
-                       if (responseJson.data[index].seller_id==this.props.supplier.id) {
-                           continue
-                       }
-                       supplierlist.push(responseJson.data[index])
+                    // for (let index = 0; index < responseJson.data; index++) {
+                    //    if (responseJson.data[index].seller_id==this.props.supplier.id) {
+                    //        console.log("roieddd")
+                    //        continue
+                    //    }
+                    //    supplierlist.push(responseJson.data[index])
                         
-                    }
+                    // }
                     this.setState({
-                        supplierlist
+                        supplierlist:responseJson.data
                     })
                 } else {
                     console.log('errorrrrr', responseJson);
@@ -644,15 +656,9 @@ class CreateOrderValueChain extends React.Component {
                 <ScrollView>
                     <View style={{ paddingBottom: 20 }}>
                         <View style={[{}, styles.backHeaderRowView]}>
-                            <TouchableOpacity
-                                // onPress={() => this.props.navigation.navigate('Order')}
-                                onPress={() => this.props.navigation.goBack()}
-                            >
-                                <Icon name="arrow-left" size={25} color="#929497" />
-                            </TouchableOpacity>
-                            <View style={[{}, styles.backHeadingView]}>
-                                <Text style={[{}, styles.backHeadingText]}>CREATE ORDER</Text>
-                            </View>
+                           <NavBack title="CREATE ORDER" onClick={()=>this.props.navigation.goBack()} />
+                           
+                            
                             
                             <View style={[{}, styles.backHeadingCloseView]}>
                                 <Icon name="times" size={20} color="#929497" />
@@ -686,7 +692,7 @@ class CreateOrderValueChain extends React.Component {
                             
                             { this.props.route.params.heading=="supplier"&&<CustomerDetail isSupplier={true} customer={this.state.customer} name={this.state.customer_name} email={this.state.customer_email} phone={this.state.customer_phone} /> } 
                                { this.props.route.params.heading!="supplier" &&(( this.props.customer.name == '' || this.props.customer.name == undefined) ?<NoCustomer />
-:<CustomerDetail name={this.props.customer.name} email={this.props.customer.email} phone={this.props.customer.phone} />
+:<CustomerDetail currency={this.props.currency.currency} name={this.props.customer.name} email={this.props.customer.email} phone={this.props.customer.phone} />
                                )}
                                 
                                                               
@@ -912,16 +918,16 @@ class CreateOrderValueChain extends React.Component {
 
                                 </View>
                                 <View style={[{}, styles.subTotleColumn2View]}>
-                                    <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.total_price ?? 0.00}</Text>
+                                    <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.cart.currency} {  parseFloat(this.state.cart_detail.total_price ?? 0.00).toFixed(2)}</Text>
                                     {this.state.cart_detail.has_vat ?
-                                        <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.tax.toFixed(2) ?? 0.00}</Text>
+                                        <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.cart.currency + " " + this.state.cart_detail.tax.toFixed(2) ?? 0.00}</Text>
                                         : null}
 
 {this.props.delivery.country_id!=0 ? 
-                                     <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency+" "+this.props.delivery.delivery_fee}</Text>
+                                     <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.cart.currency+" "+this.props.delivery.delivery_fee}</Text>
                                      : null
                                     }
-                                        <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " +parseFloat(this.state.amount_payable+'').toFixed(2)}</Text>
+                                        <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.cart.currency + " " +parseFloat(this.state.amount_payable+'').toFixed(2)}</Text>
                                 
                                 </View>
                             </View>
@@ -960,6 +966,9 @@ class CreateOrderValueChain extends React.Component {
                 </ScrollView>
                 <Modal
                     visible={this.state.suppliereModal}
+                    onRequestClose={() => this.setState({ suppliereModal: false })}
+                onDismiss={() => this.setState({ suppliereModal: false })}
+                    
                     transparent={true}
                 >
                     <View style={[{}, styles.mainContainer]}>
@@ -1034,6 +1043,7 @@ class CreateOrderValueChain extends React.Component {
                 </Modal>
                 <Modal
                     visible={this.state.ConfirmationPayInvoice}
+                    
                 >
                     {console.log(this.props.user)}
                     <View

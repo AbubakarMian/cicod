@@ -25,7 +25,8 @@ class BuyersView extends React.Component {
             items: {},
             orderList: [],
             search_order: '',
-            is_active_list:""
+            is_active_list:"",
+            isSearch:false
         }
     }
 
@@ -41,7 +42,9 @@ class BuyersView extends React.Component {
         } else {
             const url=`${Constants.viewBuyer}?id=${this.props.route.params.items.buyer_id}`;
             this.getData(url)
-            this.getBuyerOrderHistory()
+        let orderListUrl = Constants.orderslist + '?merchant_id=' + this.props.route.params.items.buyer_id;
+            
+            this.getBuyerOrderHistory(orderListUrl)
         }
     }
 
@@ -61,7 +64,9 @@ class BuyersView extends React.Component {
         } else {
             const url=`${Constants.viewBuyer}?id=${this.props.route.params.items.buyer_id}`;
             this.getData(url)
-            this.getBuyerOrderHistory()
+        let orderListUrl = Constants.orderslist + '?merchant_id=' + this.props.route.params.items.buyer_id;
+            
+            this.getBuyerOrderHistory(orderListUrl)
         }
     }
 
@@ -123,6 +128,7 @@ console.log("ressss@###",url,postData)
                 if (responseJson.success) {
                     console.log('data data data res res res ', responseJson)
                     this.setState({
+                        isSearch:true,
                         orderList: responseJson.data
                     });
                 } else if (responseJson.status == 401) {
@@ -140,7 +146,7 @@ console.log("ressss@###",url,postData)
         this.props.logoutUser();
         this.props.navigation.navigate('Login');
     }
-    getBuyerOrderHistory() {
+    getBuyerOrderHistory(orderListUrl) {
         this.setState({ spinnerOder: true })
         let postData = {
             method: 'GET',
@@ -150,7 +156,7 @@ console.log("ressss@###",url,postData)
                 Authorization: this.props.user.access_token,
             },
         };
-        let orderListUrl = Constants.orderslist + '?merchant_id=' + this.props.route.params.items.buyer_id;
+        // let orderListUrl = Constants.orderslist + '?merchant_id=' + this.props.route.params.items.buyer_id;
         console.log('order list url !!!!!!!!!!', orderListUrl);
         fetch(orderListUrl, postData)
             .then(response => response.json())
@@ -161,7 +167,8 @@ console.log("ressss@###",url,postData)
                 if (responseJson.status === 'success') {
                     console.log('data data data res res res ', responseJson)
                     this.setState({
-                        orderList: responseJson.data
+                        orderList: responseJson.data,
+                        isSearch:true
                     });
                 } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
@@ -289,7 +296,9 @@ console.log("ressss@###",url,postData)
             this.getSellerOrderHistory(sellerurl);
             //merchant_id
         } else {
-            this.getBuyerOrderHistory()
+        let orderListUrl = Constants.orderslist + '?order_id=' + this.state.search_order;
+
+            this.getBuyerOrderHistory(orderListUrl)
         }
 
         // let search_url = Constants.buyerlist + '?filter[buyer_name]=' + this.state.search_buyers;
@@ -300,7 +309,7 @@ console.log("ressss@###",url,postData)
         const id = item.id
         console.log("item_id item_id item_id item_id ", id)
         if (this.props.route.params.heading == "SUPPLIERS") {
-            this.props.navigation.navigate('OrderDetailValueChain', { order_id:item.order_id,item,seller_Id:this.props.route.params.items.seller_id,seller:this.props.route.params.items,heading:"SUPPLIERS"})
+            this.props.navigation.navigate('OrderDetailValueChain', { order_id:item.order_id,item,seller_Id:this.props.route.params.items.seller_id,seller:this.props.route.params.items,heading:"SUPPLIERS",from:'BUYERSVIEW'})
         } else {
             this.props.navigation.navigate('OrderDetail', { id }) 
         }
@@ -318,7 +327,9 @@ console.log("ressss@###",url,postData)
              this.getSellerOrderHistory(sellerurl);
              //merchant_id
          } else {
-             this.getBuyerOrderHistory()
+        let orderListUrl =filter=="all"?Constants.orderslist + '?merchant_id=' + this.props.route.params.items.buyer_id: Constants.orderslist + '?merchant_id=' + this.props.route.params.items.buyer_id+'&payment_status='+filter;
+
+             this.getBuyerOrderHistory(orderListUrl)
          }
     }
     createOrderFun(){
@@ -479,7 +490,7 @@ console.log("ressss@###",url,postData)
                         </TouchableOpacity>
                   width-80
                     </View> */}
-                    {this.state.orderList.length>0 || this.state.is_active_list!=""?<View>
+                    {this.state.orderList.length>0 || this.state.isSearch || this.state.is_active_list!=""?<View>
                     <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
 
                         <View style={{ flexDirection: 'row', backgroundColor: '#fff', alignItems: 'center', height: 50, paddingHorizontal: 10, borderRadius: 5, width: width - 25 }}>
@@ -550,7 +561,7 @@ console.log("ressss@###",url,postData)
 {this.props.route.params.heading != "SUPPLIERS" &&(
     <>
  <TouchableOpacity
-                             //onPress={() => this.filterOrder("partPayment")}
+                             onPress={() => this.filterOrder("partPayment")}
                         >
                             <Text style={{
                                 color: this.state.is_active_list === 'partPayment' ? '#B1272C' : '#e2e2e2',
@@ -558,7 +569,7 @@ console.log("ressss@###",url,postData)
                             }}>PART PAYMENT</Text>
                         </TouchableOpacity>
                         <TouchableOpacity
-                            // onPress={() => this.filterOrder("paidFromCredit")}
+                             onPress={() => this.filterOrder("paidFromCredit")}
                         >
                             <Text style={{
                                 color: this.state.is_active_list === 'paidFromCredit' ? '#B1272C' : '#e2e2e2',
