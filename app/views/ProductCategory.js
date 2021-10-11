@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { Constants } from '../views/Constant';
 import Header from '../views/Header';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER,PRODUCT_CATEGORY_RELOAD } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER,PRODUCT_CATEGORY_RELOAD,PRODUCT_CATEGORY_FILTER_RELOAD } from '../redux/constants/index';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {
     Menu,
@@ -31,13 +31,14 @@ class ProductCategory extends React.Component {
             categoryarr: [],
             spinner: false,
             search_text: '',
+            search_filters:[]
         }
 
     }
     componentDidMount() {
-
         this.getCategoryList(Constants.productcategorylist);
     }
+
     async getCategoryList(url) {
         this.setState({ spinner: true })
         let postData = {
@@ -48,7 +49,7 @@ class ProductCategory extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
-        console.log('url',url,'token',this.props.user.access_token)
+        console.log('url product category',url,'token',this.props.user.access_token)
         await fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
@@ -68,6 +69,30 @@ class ProductCategory extends React.Component {
 
     }
 
+    got_new_filters() {
+        console.log(this.props.user.access_token)
+        console.log('filters',this.props.route.params)
+        if(this.props.route.params == undefined || 
+                this.props.route.params.filters.length == this.state.search_filters.length ){            
+            return false;
+        }
+
+        let filters = this.props.route.params.filters;
+        this.setState({
+            search_filters:this.props.route.params.filters
+        })
+        let filter = '?';
+        for (let i = 0; i < filters.length; i++) {
+            filter = filter + filters[i].key + '=' + filters[i].value;
+            if (i != filters.length - 1) {
+                filter = filter + '&';
+            }
+        }
+        console.log('getCategoryList url @@@@@@@@@@@@!!!!!!!!!!!!', Constants.productcategorylist + filter)
+        this.getCategoryList(Constants.productcategorylist + filter);
+        return true;
+    }
+
     categoryStatusUpdate(url) {
         this.setState({ spinner: true })
         let postData = {
@@ -81,11 +106,13 @@ class ProductCategory extends React.Component {
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                this.setState({ spinner: false });
-                console.log('responseJson responseJson', responseJson);
-                if (responseJson.status === 'success') {
+                Alert.alert('Message', responseJson.message)
+                // this.setState({ spinner: false });
+                console.log('~~~~~~~~~~~~~ responseJson responseJson', responseJson);
+                if (responseJson.status === 'success') {                    
+                    this.getCategoryList(Constants.productcategorylist);
+                    
 
-                    Alert.alert('Message', responseJson.message)
                 } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 }
@@ -107,13 +134,10 @@ class ProductCategory extends React.Component {
             // suspend
             url = Constants.productcategorylist + '/' + item.id + '?action=suspend'
             await this.categoryStatusUpdate(url);
-            await this.getCategoryList(Constants.productcategorylist);
-
         } else {
             // unsuspend
             url = Constants.productcategorylist + '/' + item.id + '?action=unsuspend'
             await this.categoryStatusUpdate(url);
-            await this.getCategoryList(Constants.productcategorylist);
         }
     }
     search() {
@@ -121,13 +145,27 @@ class ProductCategory extends React.Component {
         this.getCategoryList(search_url);
     }
 
+    filterCategory(){
+        this.setState({
+            search_text:'',
+            search_filters:[]
+        })
+        this.props.setScreenFilterReload({
+            reload:true
+        })
+        this.props.navigation.navigate('CategoryFilter', { screen: 'ProductCategory' })
+    }
+
     render() {
         if(this.props.reload.product_category){
-            this.getCategoryList(Constants.productcategorylist);
+            if(!this.got_new_filters()){
+                this.getCategoryList(Constants.productcategorylist);
+            }
             this.props.setScreenReload({
                 reload:false
             })
         }
+        // this.got_new_filters();
         return (
             <View style={[{}, styles.mainView]}>
                 <Header navigation={this.props.navigation} />
@@ -164,7 +202,7 @@ class ProductCategory extends React.Component {
                         <TextInput
                             label="Search a category"
                             // selectionColor={'#fff'}
-
+                            value={this.state.search_text}
                             style={{ backgroundColor: 'transparent', }}
                             width={width - 50}
                             alignSelf={'center'}
@@ -176,7 +214,7 @@ class ProductCategory extends React.Component {
 
                     <TouchableOpacity
                         style={{ position: 'absolute', right: 0, alignSelf: 'center', }}
-                        onPress={() => this.props.navigation.navigate('CategoryFilter', { screen: 'ProductCategory' })}
+                        onPress={() => this.filterCategory()}
                     >
                         <Image
                             style={{ height: 50, width: 50 }}
@@ -203,7 +241,7 @@ class ProductCategory extends React.Component {
                     </TouchableOpacity>
                 </View> */}
                 <View style={{ borderBottomWidth: 1, width: width - 20, alignSelf: 'center', borderBottomColor: '#E6E6E6', marginVertical: 10 }}></View>
-                {(this.state.categoryarr>0)?
+                {(this.state.categoryarr.length>0)?
                 <FlatList
                     ItemSeparatorComponent={
                         Platform.OS !== 'android' &&
@@ -225,16 +263,17 @@ class ProductCategory extends React.Component {
                         //     onHideUnderlay={separators.unhighlight}>
                         <View style={[{}, styles.listContainer]}>
                             <View style={[{ flex: 1, justifyContent: 'center', alignItems: 'center' }, styles.listImageView]}>
-                                {(item.image!=null)?
-                                <Image source={{uri:item.image}} /> 
-                                :<Image source={require('../images/product_cat_icon.png')} />}
+                                {(item.image==null)?
+                                 <Image source={require('../images/product_cat_icon.png')} />
+                                :
+                                <Image style={{height:30,width:30}} source={{uri:item.image}} />}
                                 
                             </View>
                             <View style={[{ flex: 6 }, styles.listDescView]}>
                                 <Text style={[{}, styles.listDescBoldText]}>{item.name}</Text>
                                 <Text style={[{}, styles.listDescNormalText]}>{item.description}</Text>
                             </View>
-                            <View style={[{ flex: 2, justifyContent: 'flex-end', alignItems: 'flex-end' }, styles.listActionView]}>
+                            <View style={[{ flex: 2.5, justifyContent: 'flex-end', alignItems: 'flex-end' }, styles.listActionView]}>
                                 <Menu>
                                     {/* <MenuTrigger text='. . .' customStyles={{}} /> */}
                                     <MenuTrigger style={styles.trigger}>
@@ -267,7 +306,7 @@ class ProductCategory extends React.Component {
                                 </Menu>
                                 {(item.is_active == true) ?
                                     <Text style={[{}, styles.actionText]}>ACTIVE</Text> :
-                                    <Text style={[{}, styles.inactiveActionText]}>SUSPENDED</Text>}
+                                    <Text style={[{textAlign:'center'}, styles.inactiveActionText]}>SUSPENDED</Text>}
                             </View>
                         </View>
                         // </TouchableOpacity>
@@ -284,21 +323,8 @@ class ProductCategory extends React.Component {
             </View>
         )
     }
-
-    async componentWillReceiveProps() {
-        console.log(this.props.user.access_token)
-        let filters = this.props.route.params.filters;
-        let filter = '?';
-        for (let i = 0; i < filters.length; i++) {
-            filter = filter + filters[i].key + '=' + filters[i].value;
-            if (i != filters.length - 1) {
-                filter = filter + '&';
-            }
-        }
-        console.log('getCategoryList url @@@@@@@@@@@@!!!!!!!!!!!!', Constants.productcategorylist + filter)
-        await this.getCategoryList(Constants.productcategorylist + filter);
-    }
 }
+
 function mapStateToProps(state) {
     return {
         user: state.userReducer,
@@ -310,6 +336,7 @@ function mapDispatchToProps(dispatch) {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
         logoutUser: () => dispatch({ type: LOGOUT_USER }),
         setScreenReload: (value) => dispatch({ type: PRODUCT_CATEGORY_RELOAD, value: value }),
+        setScreenFilterReload: (value) => dispatch({ type: PRODUCT_CATEGORY_FILTER_RELOAD, value: value }),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ProductCategory)

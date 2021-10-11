@@ -11,10 +11,13 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { connect } from 'react-redux';
 import { Constants } from '../views/Constant';
 import DropDownPicker from 'react-native-dropdown-picker';
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER,PRODUCT_CATEGORY_RELOAD,PRODUCT_CATEGORY_FILTER_RELOAD } from '../redux/constants/index';
 import Spinner from 'react-native-loading-spinner-overlay';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { color } from 'react-native-reanimated';
+import {upsert} from '../Common'; 
+import { set } from 'lodash';
+
 
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
@@ -26,22 +29,26 @@ class CategoryFilter extends React.Component {
       data: [],
       filters: [],
       createdby_arr: [],
+      backup_createdby_arr:[],
       categoryarr: [],
       category_name: '',
       spinner: false,
       date: '',
+      date_filter_option:'',
+      date_updated:'',
     };
   }
   componentDidMount() {
 
     this.getCategoryList()
-    this.setState({ spinner: true })
+    // this.setState({ spinner: true })
 
 
   }
 
 
   getCategoryList() {
+    // return;
     this.setState({ spinner: true })
     let postData = {
       method: 'GET',
@@ -52,6 +59,7 @@ class CategoryFilter extends React.Component {
       },
 
     };
+    console.log('$$$$$$$$$$$$',Constants.productcategorylist)
     fetch(Constants.productcategorylist, postData)
       .then(response => response.json())
       .then(async responseJson => {
@@ -59,13 +67,26 @@ class CategoryFilter extends React.Component {
         if (responseJson.status === 'success') {
 
           let res = responseJson.data;
-          let categoryarr = res.map((x, key) => { return { label: x.name, value: x.name } });
-          let createdby_arr = res.map((x, key) => { return { label: x.created_by, value: x.created_by } });
-          console.log('category !!!!!!', categoryarr);
-          console.log('createdby_arr  !!!!!!', createdby_arr);
+          console.log('all cats',res);
+          // let categoryarr = res.map((x, key) => { return { label: x.name, value: x.name } });
+
+          let createdby_arr = [];
+          for(let i =0;i<res.length;i++){
+            let x = res[i];
+            upsert(createdby_arr,
+              { key:x.created_by,label: x.created_by, value: x.created_by });
+          }
+
+
+          // let createdby_arr = res.map((x, key) => { 
+          //   return { label: x.created_by, value: x.created_by } 
+          // });
+          // console.log('category !!!!!!', categoryarr);
+          // console.log('createdby_arr  !!!!!!', createdby_arr);
           this.setState({
             createdby_arr: createdby_arr,
-            categoryarr: categoryarr,
+            backup_createdby_arr:createdby_arr
+            // categoryarr: categoryarr,
           });
         } else {
           let message = JSON.stringify(responseJson.error.message)
@@ -78,40 +99,48 @@ class CategoryFilter extends React.Component {
 
 
   onCategoryText(text) {
-    let filters = this.state.filters; 
-    filters.push({ key: 'search', value: text });
+    // let filters = this.state.filters; 
+    // filters.push({ key: 'search', value: text });
+    let filters = upsert(this.state.filters,{ key: 'search', value: text });
     this.setState({
       filters: filters
     })
   }
   onCreatedByText(text) {
-    let filters = this.state.filters; 
-    filters.push({ key: 'created_by', value: text });
+    // let filters = this.state.filters; 
+    // filters.push({ key: 'created_by', value: text });
+    let filters = upsert(this.state.filters,{ key: 'created_by', value: text });
     this.setState({
       filters: filters
     })
   }
   onCategoryText(text) {
-    let filters = this.state.filters; 
-    filters.push({ key: 'search', value: text });
+    // let filters = this.state.filters; 
+    // filters.push({ key: 'search', value: text });
+    let filters = upsert(this.state.filters,{ key: 'search', value: text });
     this.setState({
       filters: filters
     })
   }
-  activeSet(value) {
-    let filters = this.state.filters;
-    filters.push({ key: 'is_active', value: value })
+  activeSet(text) {
+    // let filters = this.state.filters;
+    // filters.push({ key: 'is_active', value: value })
+    let filters = upsert(this.state.filters,{ key: 'is_active', value: text });
     this.setState({
       filters: filters
     })
   }
   applyFilter = () => {
     console.log('this.state.filters', this.state.filters);
+    this.props.setScreenReload({
+      reload:true
+    })
     this.props.navigation.navigate('ProductCategory', { filters: this.state.filters, seller_id: 0 });
   }
 
-  datePickerFun = () => {
+  datePickerFun = (date_filter_option) => {
     this.setState({
+      date_filter_option:date_filter_option,
       isDatePickerVisible: !this.state.isDatePickerVisible
     })
   }
@@ -120,16 +149,32 @@ class CategoryFilter extends React.Component {
     var month = date.getUTCMonth() + 1; //months from 1-12
     var day = date.getUTCDate();
     var year = date.getUTCFullYear();
-
-    let newdate = day + "/" + month + "/" + year;
-
-    let filters = this.state.filters;
-    filters.push({ key: 'date_created', value: date });
-    this.setState({
-      isDatePickerVisible: !this.state.isDatePickerVisible,
-      filters: filters,
-      date: newdate,
-    })
+    if(day<10){
+      day="0"+day;
+    }
+    if(month<10){
+      month="0"+month;
+    }
+    let newdate = year + "-" + month + "-" + day;
+console.log('new date',newdate)
+console.log('new date_filter_option ',this.state.date_filter_option)
+    // let filters = this.state.filters;
+    // filters.push({ key: 'date_created', value: newdate });
+    let filters = upsert(this.state.filters,{ key: this.state.date_filter_option, value: newdate });
+    if(this.state.date_filter_option == 'date_created' ){
+      this.setState({
+        date: newdate,
+        isDatePickerVisible:false,
+        filters: filters,
+      })
+    }
+    else{
+      this.setState({
+        date_updated: newdate,
+        isDatePickerVisible:false,
+        filters: filters,
+      })
+    }
 
   }
   hideDatePicker = () => {
@@ -138,8 +183,32 @@ class CategoryFilter extends React.Component {
       isDatePickerVisible: !this.state.isDatePickerVisible
     })
   }
-
+clear_filter(){
+  console.log('1111111111',this.state.filters)
+  this.setState({ 
+    data: [],
+      filters: [],
+      createdby_arr: [],
+      categoryarr: [],
+      category_name: '',
+      spinner: false,
+      date: '',
+      date_filter_option:'',
+      date_updated:'',
+   })
+ 
+  console.log('2222222222',this.state.filters)
+  let _that=this;
+  setTimeout(() => {
+    _that.setState({createdby_arr:_that.state.backup_createdby_arr})
+  }, 300);
+}
   render() {
+    if(this.props.reload.product_category_filter){      
+      this.props.setScreenFilterReload({
+        reload:false
+    })
+    }
     return (
       <View style={[{}, styles.mainView]}>
         <Header navigation={this.props.navigation} />
@@ -169,7 +238,13 @@ class CategoryFilter extends React.Component {
             <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>FILTER</Text>
 
           </TouchableOpacity>
-          <Text onPress={() => { this.setState({ filters: [] }) }} style={[{ color: '#929497', fontWeight: 'bold', position: 'absolute', right: 20, top: 20 }]}>Clear Filter</Text>
+          <TouchableOpacity
+          style={{position: 'absolute', right: 20, top: 20}}
+          onPress={() => this.clear_filter()}
+          >
+          <Text  style={[{ color: '#929497', fontWeight: 'bold', }]}>Clear Filter</Text>
+          </TouchableOpacity>
+          
         </View>
         <View style={{ backgroundColor: '#fff',borderRadius:5, }}>
           <View style={{ width: width - 20, backgroundColor: '#fff', paddingVertical: 10, marginTop: 20, zIndex: 9999 }}>
@@ -185,7 +260,7 @@ class CategoryFilter extends React.Component {
 
           </View>
          
-               {this.state.categoryarr.length < 1 ? null :
+               {/* {this.state.categoryarr.length < 1 ? null :
                
                 <DropDownPicker
                   items={this.state.categoryarr}
@@ -213,10 +288,13 @@ class CategoryFilter extends React.Component {
                 
                 />
 
-              }
+              } */}
                {this.state.createdby_arr.length < 1 ? null :
                
                <DropDownPicker
+               scrollViewProps={{
+                persistentScrollbar: true,
+            }}
                  items={this.state.createdby_arr}
                  controller={instance => this.controller = instance}
                  onChangeList={(items, callback) => {
@@ -231,7 +309,7 @@ class CategoryFilter extends React.Component {
                  itemStyle={{
                    justifyContent: 'flex-start',
                  }}
-                 dropDownStyle={{ height: 80, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
+                 dropDownStyle={{ height: 120, backgroundColor: '#fff', borderBottomLeftRadius: 20, borderBottomRightRadius: 10, opacity: 1, }}
                  labelStyle={{ color: '#A9A9A9' }}
 
                  defaultValue={this.state.value}
@@ -272,7 +350,7 @@ class CategoryFilter extends React.Component {
             <View style={[{ flex: 1, paddingVertical: 10 }]}>
               <Text style={{ color: '#929497', fontWeight: 'bold' }}>Created Date</Text>
               <TouchableOpacity
-                onPress={() => this.datePickerFun()}>
+                onPress={() => this.datePickerFun('date_created')}>
                 <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginRight: 10, padding: 10, marginVertical: 10, zIndex: -99999999 }}>
                   <Image
                     style={{ height: 20, width: 20 }}
@@ -292,15 +370,13 @@ class CategoryFilter extends React.Component {
             <View style={[{ flex: 1, paddingVertical: 10 }]}>
               <Text style={{ color: '#929497', fontWeight: 'bold', marginLeft: 10 }}>Updated Date</Text>
               <TouchableOpacity
-
-              >
-
+                onPress={() => this.datePickerFun('date_updated')}>
                 <View style={{ backgroundColor: '#fff', flexDirection: 'row', marginLeft: 10, padding: 10, marginVertical: 10 }}>
                   <Image
                     style={{ height: 20, width: 20 }}
                     source={require('../images/calenderIcon.png')}
                   />
-                  <Text style={{ marginLeft: 10, color: '#aaa' }}>DD-MM-YY</Text>
+                  <Text style={{ marginLeft: 10, color: '#aaa' }}>{this.state.date_updated == '' ? 'DD-MM-YY' : this.state.date_updated}</Text>
                 </View>
                 <View style={{ position: 'absolute', right: 20, bottom: 30, alignSelf: 'center' }}>
                   <Icon
@@ -351,13 +427,16 @@ class CategoryFilter extends React.Component {
 
 function mapStateToProps(state) {
   return {
-    user: state.userReducer
+    user: state.userReducer,
+    reload: state.reloadReducer
   }
 };
 function mapDispatchToProps(dispatch) {
   return {
     setUser: (value) => dispatch({ type: SET_USER, value: value }),
-    logoutUser: () => dispatch({ type: LOGOUT_USER })
+    logoutUser: () => dispatch({ type: LOGOUT_USER }),
+    setScreenReload: (value) => dispatch({ type: PRODUCT_CATEGORY_RELOAD, value: value }),
+    setScreenFilterReload: (value) => dispatch({ type: PRODUCT_CATEGORY_FILTER_RELOAD, value: value }),
   }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(CategoryFilter)

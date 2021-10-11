@@ -23,7 +23,8 @@ class Customer extends React.Component {
             calenderModal: false,
             page: 1,
             search_text: '',
-            spinner: false
+            spinner: false,
+            data:[],
         };
         this.onDateChange = this.onDateChange.bind(this);
     }
@@ -152,7 +153,7 @@ class Customer extends React.Component {
                     ></Searchbar>
                 <View style={[{borderBottomColor:'#E6E6E6',borderBottomWidth:0.5,width:width-20,alignSelf:'center',marginTop:10,marginBottom:10}]}></View>
                 <ScrollView>
-                    {(this.state.data)?
+                    {(this.state.data.length>0)?
                      <FlatList
                      data={this.state.data}
                      ItemSeparatorComponent={

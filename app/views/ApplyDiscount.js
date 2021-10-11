@@ -33,29 +33,39 @@ class ApplyDiscount extends React.Component {
 
     setDiscount(discount_amount) {
  
-                
+        if(this.props.orderDiscountReducer.discount_type == this.state.discount_type && this.props.orderDiscountReducer.discount_amount == discount_amount){
+            return;
+        }
+        console.log('discount_amount set discount',discount_amount);
             let discount_type = '';
-            if(discount_amount == 'NaN'){
+            if(isNaN(discount_amount)&&isNaN(parseFloat(discount_amount)) ){//|| discount_amount==0 
                 discount_amount ='0';
             }
             discount_amount = parseFloat(discount_amount)
-            
+            console.log('called set discount',isNaN(55));
+            // return
             if (this.state.value3Index == 0) {
                 discount_type = 'percentage';
-                
-                this.props.setDiscount({
-                    discount_amount: discount_amount,
-                    discount_type: discount_type
-                })
+                if(this.props.orderDiscountReducer.discount_amount != discount_amount){
+                    this.props.setDiscount({
+                        discount_amount: discount_amount,
+                        discount_type: discount_type
+                    })
+                }
             }
             else {
                 discount_type = 'value';
+                if(this.props.orderDiscountReducer.discount_amount != discount_amount){
                 this.props.setDiscount({
                     discount_amount: discount_amount,
                     discount_type: discount_type
                 })
             }
-            this.setState({ discount_amount: discount_amount.toFixed(2) })
+                
+            }
+            if(discount_amount !=this.state.discount_amount){
+                this.setState({ discount_amount: discount_amount.toFixed(2) })
+            }
             console.log(this.state.discount_amount)
     }
 
@@ -64,7 +74,7 @@ class ApplyDiscount extends React.Component {
 
     }
 
-    setDiscountAmount(amount){  
+    setDiscountAmount(amount){ 
         if( amount == '' || 
             amount.split(".").length > 2 || amount.includes(",")||amount.includes("-")||amount.includes(" ")||amount.includes("..")){
             console.log('amount if ',amount)
@@ -72,7 +82,7 @@ class ApplyDiscount extends React.Component {
             amount = '0';
             this.setDiscount('0');
             // return;
-        }
+        } 
         // amount = parseFloat(amount);
         if(this.state.value3Index == 0){
             console.log('percentage');
@@ -96,8 +106,8 @@ class ApplyDiscount extends React.Component {
         // })
     }
     changeDiscountType(index){
-        this.setDiscountAmount('0')
         this.setState({ value3Index: index })
+        this.setDiscountAmount('0')
     }
     render() {
 
@@ -182,7 +192,7 @@ class ApplyDiscount extends React.Component {
                             color={'#000'}
                             keyboardType='numeric'
                             onChangeText={text => this.setDiscountAmount(text)}
-                            value={this.props.orderDiscountReducer.discount_amount+""}
+                            value={this.props.orderDiscountReducer.discount_amount+"" == "0"?'':this.props.orderDiscountReducer.discount_amount}
                         />
                     </View>
                 </View>

@@ -53,7 +53,8 @@ class AddProduct extends React.Component {
         };
         //Constants.productslist + '?is_active=1&search=' + this.state.search_product
         // let search_url =  '?is_active=1&search=' + this.state.search_product + '&category_id=' + this.state.category_id
-        let search_url = Constants.productslist + '?is_active=1&search=' + search_product + '&category_id=' + category_id
+        let category_search = (category_id == 0 || category_id == '' )?'' : '&category_id=' + category_id;
+        let search_url = Constants.productslist + '?is_active=1&search=' + search_product + category_search;
         console.log('search url ', search_url);
         console.log('postData ', postData);
         fetch(search_url, postData)
@@ -191,6 +192,7 @@ class AddProduct extends React.Component {
                 this.setState({
                     data: data
                 });
+                // this.props.cartReducer(data[index]);
 
                 console.log('cart : ', this.props.cart);
             }
@@ -313,7 +315,7 @@ class AddProduct extends React.Component {
                                             </View>
                                             <View style={[{}, styles.orderDetailAmmountRow]}>
                                                 <View style={[{}, styles.orderDetailAmmountColumn]}>
-                                                    <Text style={[{}, styles.orderDetailAmmountColumnGaryBolText]}>N{item.price}</Text>
+                                                    <Text style={[{}, styles.orderDetailAmmountColumnGaryBolText]}>{this.props.currency.currency} {item.price}</Text>
                                                 </View>
                                                 <View style={[{}, styles.orderDetailAmmountColumn]}>
 
@@ -368,7 +370,8 @@ class AddProduct extends React.Component {
 function mapStateToProps(state) {
     return {
         user: state.userReducer,
-        cart: state.cartReducer
+        cart: state.cartReducer,
+        currency: state.currencyReducer,
     }
 };
 function mapDispatchToProps(dispatch) {

@@ -1,6 +1,6 @@
 import { SET_CURRENCY,FORMAT_CURRENCY,RESET} from '../constants';
 const initialState = {
-    currency:'Initital val',
+    currency:'₦',
     amount:'0'
 }
 const currencyReducer = (state = initialState, action) => {
@@ -8,8 +8,6 @@ const currencyReducer = (state = initialState, action) => {
 
     switch (action.type) {
         case SET_CURRENCY:
-
-            update_state(action.value.currency);
 
             return {
                 ...state,
@@ -29,7 +27,7 @@ const currencyReducer = (state = initialState, action) => {
             case RESET:{
                 return{
                     ...state,
-                    currency:'N'
+                    currency:'₦'
                 }
             }
 
@@ -38,14 +36,12 @@ const currencyReducer = (state = initialState, action) => {
     }
 }
 
-function update_state(currency){
-    initialState.currency = currency
-}
-
 export function get_formated_amount(amount){
-    amount = amount +'';
+    amount = amount;
+    
+    amount.toString().replace(/\B(?=(\d{0})+(?!\d))/g, ",");
+    // amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     console.log('ám amount',amount)
-    amount = initialState.currency+amount.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return amount;
 }
 export default currencyReducer;

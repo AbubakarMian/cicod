@@ -21,7 +21,7 @@ class PayByCash extends React.Component {
             order_detail: null,
             payment_link: null,
             order_id:0,
-            amount_returned:'0',
+            amount_returned:'',
             amount:0,
             cashCollected:'',
             spinner:false,
@@ -180,6 +180,7 @@ class PayByCash extends React.Component {
             Alert.alert('Alert','Insufficient Cash Collection')
             return;
         }
+     
         console.log("~~~~~~~~~~~~~~~",this.props.route.params.data)
         // if(this.props.route.params.pending_order_res != undefined){
             // console.log('in if this.props.route.params.data.id',this.props.route.params.pending_order_res.data.id)
@@ -227,6 +228,7 @@ class PayByCash extends React.Component {
                                 />
                             </View>
                             <View style={[{}, styles.inputView]}>
+                                
                                 <TextInput
                                     label={"Change ("+_that.props.currency.currency+")"}
                                     style={{ backgroundColor: 'transparent', }}
@@ -235,7 +237,7 @@ class PayByCash extends React.Component {
                                     // color={'red'}
                                     editable={false} 
                                     // keyboardType={'numeric'}
-                                    value={_that.getChange()}
+                                    value={(_that.getChange()>0)?_that.getChange():''}
                                 />
                             </View>
                             <TouchableOpacity style={[{}, styles.touchView]}

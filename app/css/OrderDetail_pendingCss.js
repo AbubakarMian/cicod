@@ -90,6 +90,14 @@ export default StyleSheet.create({
         color: "#aaa",
         fontSize:13
     },
+    orderStatusText:{
+        // color:"#ffffff",
+        borderRadius: 50, 
+        width: width / 4.8, 
+        alignSelf: 'flex-end',
+        textAlign:'center',
+        fontSize:13,
+    },
     detailInvoiceGraytext: {
         color: "#aaa",
         fontSize:15

@@ -10,6 +10,7 @@ import { Constants } from './Constant';
 import { connect } from 'react-redux';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { SET_USER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART } from '../redux/constants/index';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 var { width, height } = Dimensions.get('window');
@@ -24,7 +25,9 @@ class User extends React.Component {
             last_name: '',
             email: '',
             phone: '',
+            avatar:'',
             role: '',
+         
 
         }
     }
@@ -35,7 +38,8 @@ class User extends React.Component {
     }
 
 
-    componentDidMount() {
+    async componentDidMount() {
+       
         this.getUserDetail();
     }
 
@@ -62,12 +66,13 @@ class User extends React.Component {
                 });
                 if (responseJson.status === 'SUCCESS') {
                     let merchant_contact = responseJson.merchant
-                    console.log('~~~~~~~~~~',responseJson.merchant.contact)
+                    console.log('~~~~~~~~~~',responseJson.merchant)
                     this.setState({
                         email: merchant_contact.email,
                         first_name: merchant_contact.companyName, //contactPerson
-                        phone: merchant_contact.phone,
+                        phone: merchant_contact.businessPhone,
                         role: merchant_contact.customerCategory,
+                        avatar:merchant_contact.logo
                     })
 
                 } else if (responseJson.status == 401) {
@@ -85,10 +90,11 @@ class User extends React.Component {
         this.props.logoutUser();
         this.props.navigation.navigate('Login');
     }
-    logout_user() {
+   async logout_user() {
 
         this.props.logoutUser();
-        this.props.navigation.navigate('Login');
+        await AsyncStorage.removeItem("User");
+        this.props.navigation.replace('Login');
     }
 
     render() {
@@ -122,8 +128,9 @@ class User extends React.Component {
                                 </View>
                                 <View style={{flex:1,justifyContent:'center',alignItems:'center'}}>
                                     <Image
-                                        style={{ height: 50, width: 50 }}
-                                        source={require('../images/profilepic.png')}
+                                        style={{ height: 50, width: 50,borderRadius:50 }}
+                                        source={this.state.avatar==''?require('../images/profilepic.png'):{uri:this.state.avatar}}
+
                                     />
                                 </View>
                             </View>

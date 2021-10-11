@@ -29,7 +29,8 @@ export default StyleSheet.create({
     backRowHeadingText: {
         color: '#2F2E7C',
         fontWeight: 'bold',
-        fontSize: 12
+        fontSize: 14,
+        letterSpacing:1.2
     },
     productDetailContainerView: {
         backgroundColor: '#fff',
@@ -166,29 +167,36 @@ export default StyleSheet.create({
     modalBackGround: {
         height: height,
         backgroundColor: '#00000057',
-     
+     flexDirection:'column',
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',
         zIndex: -0.999
     },
-    suspendTouch: {
-        alignSelf: 'baseline',
+    suspendModal:{
+        //alignSelf: 'baseline',
         alignItems:'center',
         zIndex: 999,
+        justifyContent:'center',
+        //justifyContent:'space-around',
         backgroundColor: '#fff',
         width: width,
         borderTopLeftRadius: 15,
         borderTopRightRadius: 15,
         paddingHorizontal: 30,
-        paddingTop: 20,
+        paddingTop: 60,
+        paddingBottom:30,
+        position: 'absolute',
+        bottom: 0,
+        opacity:1,
+        height:height/6
+    },
+    suspendTouch: {
+       
         flexDirection: 'row',
         paddingBottom: 50,
         alignSelf: 'baseline',
-        position: 'absolute',
-        bottom: 10,
-        opacity:1,
-        height:height/6
+        
     },
     banImage: {
         zIndex: 999,
@@ -205,7 +213,7 @@ export default StyleSheet.create({
         backgroundColor: '#fff',
         paddingVertical: 10,
         position: 'absolute',
-        bottom: 20,
+        bottom: 0,
         width: width,
         borderTopRightRadius: 30,
         paddingHorizontal: 20,

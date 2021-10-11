@@ -329,7 +329,7 @@ class CreateOrder extends React.Component {
 
     create_order_id(url, bodyOrder) {
 
-        console.log('create_order_id', bodyOrder);
+        console.log('*******************create_order_id', bodyOrder);
         let postData = {
             method: 'POST',
             headers: {
@@ -838,9 +838,9 @@ class CreateOrder extends React.Component {
 
                                 </View>
                                 <View style={[{}, styles.subTotleColumn2View]}>
-                                    <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.total_price ?? 0}</Text>
+                                    <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.total_price ?? 0.00}</Text>
                                     {this.state.cart_detail.has_vat ?
-                                        <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.tax ?? 0}</Text>
+                                        <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " + this.state.cart_detail.tax ?? 0.00}</Text>
                                         : null}
                                         <Text style={[{}, styles.subTotleColumn2Text]}>{this.props.currency.currency + " " +parseFloat(this.state.amount_payable+'').toFixed(2)}</Text>
                                 </View>
@@ -955,6 +955,7 @@ class CreateOrder extends React.Component {
                 <Modal
                     visible={this.state.ConfirmationPayInvoice}
                 >
+                    {console.log(this.props.user)}
                     <View
                         style={{ alignSelf: 'center', backgroundColor: '#fff', width: width - 50, justifyContent: 'center', alignItems: 'center', paddingVertical: 20, borderRadius: 10, flexDirection: 'column' }}
                     >

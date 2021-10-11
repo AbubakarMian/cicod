@@ -12,6 +12,8 @@ import { Constants } from '../views/Constant';
 import { Text, TextInput, Modal } from 'react-native-paper';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
+import {get_formated_amount} from '../redux/reducers/currencyReducer';
+
 var { width, height } = Dimensions.get('window');
 
 class Login extends React.Component {
@@ -19,9 +21,9 @@ class Login extends React.Component {
         super(props);
         this.state = {
             Spinner: false,
-            tenantId: 'ndanitv',// rico  
-            username: 'ndanitv@sharklasers.com',// rico@yopmail.com  
-            password: 'Ndanitv@1234567',// @Ecomax1759 
+            tenantId: 'Diageoplc',// rico  //ndanitv
+            username: 'diageoplc@sharklasers.com',// rico@yopmail.com  //ndanitv@sharklasers.com
+            password: '@Strat1758',// @Ecomax1759 //@Ecomax1759
             isChecked: false,
             hide_password: true,
             domain_text_color: 'black',
@@ -53,7 +55,9 @@ class Login extends React.Component {
     }
     login() {
         console.log("Login Login Login ")
-    
+        
+        let c = get_formated_amount(2432643543654)
+        console.log('WWWWWWWWW',c+this.props.currency.currency)
         // console.log(this.props. FORMAT_CURRENCY.amount)
         this.resetReducer();
         if (this.state.tenantId === '') {
@@ -105,18 +109,20 @@ class Login extends React.Component {
                     console.log("response Json responseJson responseJson!!!!!!!!!!!", responseJson)
                     if (responseJson.status === "SUCCESS") {
                         let user_token = 'Bearer ' + responseJson.token;
-                        this.props.setUser({
-                            firstname: responseJson.user.firstname,
-                            lastname: responseJson.user.lastname,
-                            email: responseJson.user.email,
-                            phone: responseJson.user.phone,
-                            access_token: user_token
-                        });
+                            this.props.setUser({
+                                firstname: responseJson.user.firstname,
+                                lastname: responseJson.user.lastname,
+                                email: responseJson.user.email,
+                                phone: responseJson.user.phone,
+                                access_token: user_token,
+                                kciInfo:responseJson.user.kciInfo,
+                                tenantId:this.state.tenantId
+                            });
                         this.setState({ Spinner: false })
 
                         this.setCurrency(user_token);
                         console.log('get user !!!!!!!!!!!!!!!!', this.props.user)
-                        this.props.navigation.navigate('Home')
+                        this.props.navigation.replace('Home')
                     } else {
                         this.setState({ Spinner: false })
                         // this.setState({ Spinner: false })
@@ -137,7 +143,11 @@ class Login extends React.Component {
     }
 
     setCurrency(user_token){
-    
+        this.props.setCurrency({
+            currency: '₦',
+        });
+
+        console.log('!!!!!!!!!')
         let postData = {
             method: 'GET',
             headers: {

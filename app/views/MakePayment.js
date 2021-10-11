@@ -39,34 +39,55 @@ class MakePayment extends React.Component {
         if (await this.state.spinner) {
             return;
         }
+        this.props.emptyOrder()
         console.log("EEEEEEEEEEEEEEEE",this.props.route.params.pending_order_res)
         await this.setState({ spinner: false })
         console.log('AAAAAAAAAAAAAAAAAAAAAAAAA',this.props.route.params)
         if(this.props.route.params.pending_order_res != undefined){
-           console.log('RRRRRRRR',this.props.route.params.pending_order_res.data.id)
+           console.log('****************RRRRRRRR',this.props.route.params.pending_order_res.data)
             console.log('FFFFFFFFFFF',navigateScreen)
             // return;
-            this.props.navigation.navigate(navigateScreen,{
-                        bodyOrder:this.props.route.params.bodyOrder,
-                        amount_payable:this.props.route.params.amount_payable,
-                        data: this.props.route.params.pending_order_res,
-                        order_id: this.props.route.params.pending_order_res.data.id,
-            })   
+            const paramBpdy=this.props.route.params.heading=="supplier"?
+            {
+                heading:"supplier",
+                bodyOrder:this.props.route.params.bodyOrder,
+                amount_payable:this.props.route.params.amount_payable,
+                data: this.props.route.params.pending_order_res,
+                order_id: this.props.route.params.pending_order_res.data.id,
+    }   
+             :{
+                bodyOrder:this.props.route.params.bodyOrder,
+                amount_payable:this.props.route.params.amount_payable,
+                data: this.props.route.params.pending_order_res,
+                order_id: this.props.route.params.pending_order_res.data.id,
+    }
+            this.props.navigation.navigate(navigateScreen,paramBpdy)   
             return;         
         }
         else{
             let bodyOrder = this.props.route.params.bodyOrder;
              bodyOrder.payment_mode = payment_mode;
       
-        let postData = {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': this.props.user.access_token
-            },
-            body: JSON.stringify(bodyOrder)
-        };
+             let postData=  this.props.route.params.heading=="supplier"?
+             {
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'SSO-Authorization': this.props.user.access_token,
+                    'Tenant-ID': this.props.route.params.item.seller_name.toLowerCase()
+                },
+                body: JSON.stringify(bodyOrder)
+            }:{
+                method: 'POST',
+                headers: {
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': this.props.user.access_token,
+                   // 'Tenant-ID': this.props.route.params.item.seller_name.toLowerCase()
+                },
+                body: JSON.stringify(bodyOrder)
+            };
         console.log('1111111111111 setPaymentMode body params list @@@@@@!!!!!!!!!!!!!!', postData);
         fetch(Constants.orderslist, postData)
             .then(response => response.json())
@@ -80,16 +101,26 @@ class MakePayment extends React.Component {
                     console.log('navigate to ', navigateScreen)
                     console.log('reerere to ', responseJson)
                     let payment_link = responseJson.data.payment_link
-                    this.payment_response(responseJson, navigateScreen,
-                        {
-                            // bodyOrder: bodyOrder,
+                    const params= this.props.route.params.heading=="supplier"? {
+                        heading:"supplier",
+                        seller_id:this.props.route.params.item.seller_id,
                             data: responseJson.data,
-                            
+                            amount_payable: this.props.route.params.amount_payable,
+                            payment_link: payment_link,
+
+                            payment_mode: payment_mode,
+                            order_id: responseJson.data.id,
+                    }:{
+                        data: responseJson.data,
+                            heading:"",
+
                             amount_payable: this.props.route.params.amount_payable,
                             payment_link: payment_link,
                             payment_mode: payment_mode,
                             order_id: responseJson.data.id,
-                        });
+                    }
+                    this.payment_response(responseJson, navigateScreen,
+                        params);
                 }
                 else {
                     let message = responseJson.message
@@ -111,33 +142,51 @@ class MakePayment extends React.Component {
     }
 
     async makePaymentFun(payment_mode) { // only for online
+        console.log("TE##@@@@@@",this.props.route.params.item)
         if (await this.state.spinner) {
             return;
         }
+        this.props.emptyOrder()
+
         let pending_order_res = this.state.pending_order_res 
         console.log('pending_order_res.data.payment_link 121212121212',pending_order_res);
         
-        if(pending_order_res != null ){            
-            this.payment_response(pending_order_res, 
-            'PaymentWeb', { payment_link: pending_order_res.data.payment_link, data: pending_order_res.data });
+        if(pending_order_res != null ){ 
+            
+           const params= this.props.route.params.heading=="supplier"?
+           {heading:"supplier", seller_id:this.props.route.params.item.seller_id, payment_link: pending_order_res.data.payment_link, data: pending_order_res.data }:
+           {heading:"buyer" , payment_link: pending_order_res.data.payment_link, data: pending_order_res.data }          
+           console.log("me##@",params) 
+           this.payment_response(pending_order_res, 
+            'PaymentWeb', params);
             return;
         }
-
+console.log("here")
         await this.setState({ spinner: true })
         let bodyOrder = this.props.route.params.bodyOrder;
         bodyOrder.payment_mode = payment_mode;
 
-
-        let postData = {
+        let postData=  this.props.route.params.heading=="supplier"?
+         {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization': this.props.user.access_token
+                'SSO-Authorization': this.props.user.access_token,
+                'Tenant-ID': this.props.route.params.item.seller_name.toLowerCase()
+            },
+            body: JSON.stringify(bodyOrder)
+        }:{
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': this.props.user.access_token,
+               // 'Tenant-ID': this.props.route.params.item.seller_name.toLowerCase()
             },
             body: JSON.stringify(bodyOrder)
         };
-        console.log('222222222222 makePaymentFun body params l!!', postData);
+        console.log('*****************', postData);
         console.log('~~~~~~~~~~~~~~~~~~UUUUUUUUUUUUUUUUU',Constants.orderslist)
         fetch(Constants.orderslist, postData)
             .then(response => response.json())
@@ -147,7 +196,11 @@ class MakePayment extends React.Component {
                 
                 if (responseJson.status === "success") {
                     let payment_link = responseJson.data.payment_link
-                    this.payment_response(responseJson, 'PaymentWeb', { payment_link: payment_link, data: responseJson.data });
+                    const paymentWebParam=this.props.route.params.heading=="supplier"?
+                    { "heading":this.props.route.params.heading,seller_id:this.props.route.params.item.seller_id,payment_link: payment_link, data: responseJson.data } :
+                    { "heading":this.props.route.params.heading,payment_link: payment_link, data: responseJson.data }
+                    this.payment_response(responseJson, 'PaymentWeb',paymentWebParam );
+                    
                 }
                 else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
@@ -166,7 +219,8 @@ class MakePayment extends React.Component {
 
     async payment_response(responseJson, redirect_screen, redirect_body) {
         console.log(" response Json responseJson responseJson!!!!!!!!!!!", responseJson)
-        if (responseJson.status === "success") {
+        console.log("redirecB0#",redirect_body)
+        if (responseJson.status === "success"|| responseJson.success) {
             this.setState({ spinner: false })
             // alert(responseJson.message)
             this.props.navigation.navigate(redirect_screen, redirect_body);
@@ -215,17 +269,19 @@ class MakePayment extends React.Component {
                     textStyle={{ color: '#fff' }}
                     color={'#fff'}
                 />
-                <View style={[{}, styles.backHeaderRowView]}>
-                    <TouchableOpacity
+                 <TouchableOpacity
                         // onPress={()=>this.props.navigation.navigate('Sell')}
                         onPress={() => this.props.navigation.goBack()}
                     >
+                <View style={[{}, styles.backHeaderRowView]}>
+                   
                         <Icon name="arrow-left" size={25} color="#929497" />
-                    </TouchableOpacity>
+                    
                     <View style={[{}, styles.backHeadingView]}>
                         <Text style={[{}, styles.backHeadingText]}>MAKE PAYMENT</Text>
                     </View>
                 </View>
+                </TouchableOpacity>
                 <Text style={[{}, styles.heading]}>Please select preferred payment method</Text>
                 <View>
                     <ScrollView>
@@ -274,11 +330,12 @@ class MakePayment extends React.Component {
                             <TouchableOpacity
                                 onPress={
                                     // () => console.log("RRRRRRRRRRRRRRRR",this.props.route.params.bodyOrder)
-                                    () => this.props.navigation.navigate('PayByUssd', {
+                                    () => this.props.navigation.navigate(this.props.route.params.heading=='supplier'?'PayByUssdValueChain':'PayByUssd', {
                                     bodyOrder: this.props.route.params.bodyOrder,
                                     amount_payable: this.props.route.params.amount_payable,
                                     data: this.props.route.params.pending_order_res,
                                     payment_mode:'USSD',
+                                    item:this.props.route.params.item,
                                 })
                             }
                                 // onPress={() => this.setPaymentMode('USSD', 'PayByUssd')}
@@ -294,7 +351,8 @@ class MakePayment extends React.Component {
                                     <Image source={require('../images/payByUssd.png')} />
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity
+                            {this.props.route.params.heading!="supplier" &&(
+                                <TouchableOpacity
                            
                                 onPress={()=>this.payByCash()}
                                 style={[{}, styles.cardTouch]}
@@ -309,6 +367,8 @@ class MakePayment extends React.Component {
                                     <Image source={require('../images/payByCash.png')} />
                                 </View>
                             </TouchableOpacity>
+                            )}
+                            
                         </View>
                     </ScrollView>
                 </View>

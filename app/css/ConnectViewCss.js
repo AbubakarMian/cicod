@@ -34,12 +34,13 @@ export default StyleSheet.create({
         marginHorizontal:15
     },
     productDeatailContainer:{
-        padding:5,
+        padding:10,
+        // paddingBottom:20,
         backgroundColor:'#fff',
         width:width-10,
         alignSelf:'center',
         borderRadius:10,
-        paddingVertical:10,
+        paddingVertical:20,
         marginHorizontal:10,
         paddingHorizontal:10
     },
@@ -88,7 +89,7 @@ export default StyleSheet.create({
         fontWeight:'bold',
         color:'#4E4D4D',
         // textAlign:'center',
-        paddingHorizontal:100
+        // paddingHorizontal:100
     },
     redTouch:{
         backgroundColor:'#B1272C',
@@ -116,6 +117,7 @@ export default StyleSheet.create({
     },
     descColumn:{
         flex:1,
+        justifyContent:"space-between",
         flexDirection:'row'
     },
     imageHeadingText:{
@@ -133,7 +135,7 @@ export default StyleSheet.create({
     suspendmodalBackGround: {
         height: height,
         backgroundColor: '#00000057',
-        opacity: 0.7,
+        // opacity: 0.7,
         alignItems: 'center',
         justifyContent: 'center',
         position: 'relative',

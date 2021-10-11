@@ -1,6 +1,6 @@
 import React from 'react'
-import { View, ImageBackground, ScrollView, TouchableHighlight, Alert, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
-import { SET_USER, SET_CUSTOMER, LOGOUT_USER, ADD_TO_PRODUCT, REMOVE_FROM_CART, REMOVE_PRODUCT_FORM_CART, CLEAR_ORDER, SET_DELIVERY_ADDRESS,ORDER_RELOAD } from '../redux/constants/index';
+import {BackHandler, View, ImageBackground, ScrollView, TouchableHighlight, Alert, FlatList, Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
+import { SET_USER, SET_CUSTOMER, LOGOUT_USER, ADD_TO_PRODUCT, CLEAR_CART,REMOVE_FROM_CART, REMOVE_PRODUCT_FORM_CART, CLEAR_ORDER, SET_DELIVERY_ADDRESS,ORDER_RELOAD } from '../redux/constants/index';
 import { Text, TextInput } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/PaymentSuccessCss';
@@ -18,15 +18,39 @@ const isAndroid = Platform.OS == 'android'
 class PaymentSuccess extends React.Component {
     constructor(props) {
         super(props);
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
+
         this.state = {
             value: 0,
+            order_detail:{},
             isChecked: false,
             payment_status:'',
             // bodyOrder: this.props.route.params.bodyOrder
         }
     }
+
+
+
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    
+    handleBackButtonClick() {
+       
+            this.props.navigation.replace("Home")
+      
+        return true;
+    }
+    componentDidMount(){
+        this.get_order_detail()
+    }
     
     get_order_detail() {
+        this.setState({spinner:true})
         let postData = {
             method: 'GET',
             headers: {
@@ -35,9 +59,15 @@ class PaymentSuccess extends React.Component {
                 'Authorization': this.props.user.access_token
             },
         };
-
-        let order_id = this.props.route.params.data.id ?? this.props.route.params.order_id;
-        let url = Constants.orderslist + '/' + order_id
+console.log("#$dtr",this.props.route.params)
+        let order_id =this.props.route.params.order_id;
+        let url ;
+        if (this.props.route.params.heading=="supplier") {
+           url=`${Constants.viewSellerOrder}?id=${this.props.route.params.seller_id}&orderId=${this.props.route.params.order_id}&expand=customer,customerOrderItems`;
+        } else {
+            url=Constants.orderslist + '/' + order_id
+        }
+        console.log("@#3$",url)
         console.log('---- body params list @@@@@@!!!!!!!!!!!!!!', this.props.route.params);
         console.log('order url detail ', url);
         console.log('order postData ', postData);
@@ -46,15 +76,24 @@ class PaymentSuccess extends React.Component {
             .then(async responseJson => {
                 console.log("order response response Json responseJson responseJson!!!!!!!!!!!", responseJson)
                 // if (responseJson.status.toUpperCase() === "SUCCESS") {
-                    if (responseJson.status === "success") {
+                    if (responseJson.status === "success"|| responseJson.success) {
                     console.log("~~~~~~~~~~",responseJson)
                     
                         let data = responseJson.data;
-                    this.setState({
-                        spinner: false,
-                        // order_detail: data,
-                        order_id:order_id
-                    })
+                        if (this.props.route.params.heading=="supplier") {
+                            this.setState({
+                                spinner: false,
+                                order_detail: data,
+                                order_id:order_id
+                            })
+                            }else{
+                                this.setState({
+                                    spinner: false,
+                                    order_detail: data,
+                                    order_id:order_id
+                                })
+                            }
+                    
                     // let payment_link = responseJson.data.payment_link
                     // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
                 } else {
@@ -75,9 +114,14 @@ class PaymentSuccess extends React.Component {
         this.props.logoutUser();
         this.props.navigation.navigate('Login');
     }
+
+    navigate(){
+
+    }
     successview(props) {
         let _that = props._that;
-        let order = _that.props.route.params.data;
+        //let order = _that.props.route.params.data;
+        let order = _that.state.order_detail;
         console.log("order @@@@@@@@@@@@~~~~~~~~~~~~~~~~ order",order)
         // if (order.payment_status == 'success') {            
         return (
@@ -90,9 +134,9 @@ class PaymentSuccess extends React.Component {
             />
             </View>
                 <Text style={[{color:'#4E4D4D',marginTop:20},fontStyles.bold25]}>Payment Successful</Text>
-                <Text style={[{color:'#929497'},fontStyles.normal15]}>Your payment of {_that.props.currency.currency+" "+order.amount} was successful</Text>
+                <Text style={[{color:'#929497'},fontStyles.normal15]}>Your payment of{order.currency} {parseFloat(+order.amount)+ parseFloat(order.delivery_type=='DELIVERY'?parseFloat(order.delivery_amount):0)} was successful</Text>
                 <TouchableOpacity
-                onPress={()=>{_that.props.setScreenReload({reload:true}),_that.props.navigation.navigate('OrderDetail', { id:order.id })}}
+                onPress={()=>{_that.props.clearCart({reload:true}),_that.props.route.params.heading=="supplier"?_that.props.navigation.navigate('OrderDetailValueChain', { order_id:_that.props.route.params.order_id,seller_Id:_that.props.route.params.seller_id,heading:"SUPPLIERS" }):_that.props.navigation.navigate('OrderDetail', { id:order.id })}}
                 style={[{},styles.touchView]}
                 >
                     <Text style={[{},styles.touchText]}>View order</Text>
@@ -221,14 +265,15 @@ class PaymentSuccess extends React.Component {
         
         return (
             <View style={[{}, styles.mainView]}>
+                <Spinner visible={this.state.spinner} />
                 <Header navigation={this.props.navigation} />
                 <View style={[{}, styles.backHeaderRowView]}>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         // onPress={()=>this.props.navigation.navigate('Sell')}
                         onPress={() => this.props.navigation.navigate('CreateOrder')}
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                     <View style={[{}, styles.backHeadingView]}>
                         <Text style={[{}, styles.backHeadingText]}>MAKE PAYMENT</Text>
                     </View>
@@ -268,6 +313,8 @@ function mapDispatchToProps(dispatch) {
         setDeliveryAddress: (value) => dispatch({ type: SET_DELIVERY_ADDRESS, value: value }),
         setCustomer: (value) => dispatch({ type: SET_CUSTOMER, value: value }),
         setSupplier: (value) => dispatch({ type: SET_SUPPLIER, value: value }),
+        clearCart: (value) => dispatch({ type: CLEAR_CART, value: value }),
+     
         setScreenReload: (value) => dispatch({ type: ORDER_RELOAD, value: value }),
     }
 };

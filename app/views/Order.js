@@ -37,18 +37,38 @@ class Order extends React.Component {
             date_created_timestamp: 'Today',//YY-MM-DD
             apply_filter: false,
             search_order_text: '',
-            reload:0
+            reload:0,
+            isFetching: false,
+            apply_screen_filters:false
 
         };
         this.onDateChange = this.onDateChange.bind(this);
     }
     customeList(listType) {
         this.setState({
-            is_active_list: listType
+            is_active_list: listType,
+            apply_screen_filters:true,
         })
         return;
     }
+    onRefresh(){
+        this.setState({isFetching: true})
+        // if(this.state.isFetching==true){
+            console.log('222222222222',this.state.isFetching)
+           this.orderList(this.state.url_orders) 
+           return;
+        // }
+        console.log('333333333333',this.state.isFetching)
+        // _that.setState({
+        //     url_orders: url,
+        // })
+    }
     orderList(url) {
+        let _that=this;
+        if(_that.state.isFetching==true){
+            _that.setState({isFetching:false})
+        }
+        
         console.log('access token', this.props.user.access_token)
         this.setState({ spinner: true }) //,apply_filter:false
         let postData = {
@@ -59,11 +79,12 @@ class Order extends React.Component {
                 Authorization: this.props.user.access_token,
             },
         };
-        fetch(url, postData)
+        // fetch('https://com.cicodsaasstaging.com/com/api/orders?search='+this.state.search_order_text, postData)//url
+        fetch(url,postData)//url
             .then(response => response.json())
             .then(async responseJson => {
-                console.log('~~~~~~~~~~~',responseJson)
-                this.setState({ spinner: false });
+                console.log('~~~~~~~~~~~ orders list ',responseJson)
+                this.setState({ spinner: false});
                 if (responseJson.status === 'success') {
                     this.setState({
                         data: responseJson.data
@@ -76,7 +97,7 @@ class Order extends React.Component {
                     Alert.alert('Error', message)
                 }
             }).catch(function(error){
-                this.setState({spinner:false})
+                this.setState({spinner:false,})
                 Alert.alert(error)
             })
     }
@@ -111,7 +132,7 @@ class Order extends React.Component {
         })
     }
 
-    setDate = (date) => {
+    setDate (date) {
         var month = date.getUTCMonth() + 1; //months from 1-12
         var day = date.getUTCDate();
         var year = date.getUTCFullYear();
@@ -131,6 +152,7 @@ class Order extends React.Component {
 
         this.setState({
             isDatePickerVisible: false,
+            apply_screen_filters:true,
             date: newdate,
             date_created_timestamp: newdate
         })
@@ -145,7 +167,8 @@ class Order extends React.Component {
     search(text) {
         this.setState({
             search_order: text.nativeEvent.text,
-            apply_filter: false
+            apply_filter: false,
+            apply_screen_filters:true,
         })
     }
 
@@ -177,7 +200,9 @@ class Order extends React.Component {
             apply_filter: true,
             date_created_timestamp: 'Today',//YY-MM-DD
             search_order: '',
-            search_order_text: ''
+            search_order_text: '',
+            is_active_list: '',            
+            apply_screen_filters:false,
         });
         this.props.navigation.navigate('OrderFilter');
     }
@@ -193,7 +218,7 @@ class Order extends React.Component {
         this.props.navigation.navigate('CreateOrder', { heading: 'order', customer_name: '' })
     }
 
-    get_searach_by_status(url, filter_concat, active_list) {
+    get_searach_by_status(filter_concat, active_list) {
         let filter = '';
         if (active_list != '') {
 
@@ -233,7 +258,7 @@ class Order extends React.Component {
         if (_that.props.route == null || _that.props.route.params == null || _that.props.route.params.filters == null) {
             url = Constants.orderslist;
         }
-        else if (_that.state.apply_filter) {
+        else if (_that.state.apply_filter && !_that.state.apply_screen_filters) {
      
             filters = _that.props.route.params.filters;
             
@@ -244,7 +269,7 @@ class Order extends React.Component {
                 // filter = filter +'filter'+ '['+filters[i].key +']' + '=' + filters[i].value;
                 if (filters[i].key == 'order_status') {
                     console.log('url A '+i,url);
-                    filter = _that.get_searach_by_status(url, filter_concat, filters[i].value);
+                    filter = _that.get_searach_by_status( filter_concat, filters[i].value);
                     console.log('url B '+i,url);
                     console.log('url filter '+i,filter);
 
@@ -272,17 +297,18 @@ class Order extends React.Component {
         // if (filters.length != 0) {
         //     filter_concat = '&';
         // }
-        if (_that.state.search_order != '') {
+        if (_that.state.search_order != '' && _that.state.apply_screen_filters) {
             url = url + filter_concat + 'order_id=' + _that.state.search_order
+            // url = url + filter_concat + 'search=' + _that.state.search_order
             filter_concat = '&';
         }
 
-        if (_that.state.date_created_timestamp != 'Today') {//YY-MM-DD
+        if (_that.state.date_created_timestamp != 'Today' && _that.state.apply_screen_filters) {//YY-MM-DD
             url = url + filter_concat + 'date_created=' + _that.state.date_created_timestamp
             filter_concat = '&';
         }
         console.log('url 4',url)
-        let filter = _that.get_searach_by_status(url, filter_concat, _that.state.is_active_list);
+        let filter = _that.get_searach_by_status(filter_concat, _that.state.is_active_list);
         filter_concat = '&';
         // url =  _that.change_filter_concat(url,filter);
         url = (url + filter);;
@@ -300,6 +326,9 @@ class Order extends React.Component {
                 url_orders: url,
             })
         }
+        // _that.setState({
+        //     url_orders: url,
+        // })
         console.log('url hit', url);
         console.log(' will data !!!!!!!!!!!!!', _that.state.data.length);
 
@@ -317,6 +346,8 @@ class Order extends React.Component {
             return (
                 <FlatList
                     data={_that.state.data}
+                    onRefresh={() => _that.onRefresh()}
+                    refreshing={false}
                     ItemSeparatorComponent={
                         Platform.OS !== 'android' &&
                         (({ highlighted }) => (
@@ -355,9 +386,9 @@ class Order extends React.Component {
                                 </View>
                                 <View style={{ flex: 1, alignItems: 'flex-end', flexDirection: 'column' }}>
                                     {(item.balance_part_payment>0)?
-                                     <Text style={[{ color: '#4E4D4D',marginRight:10 }, fontStyles.bold15]}>N{item.balance_part_payment.amount}</Text>
+                                     <Text style={[{ color: '#4E4D4D',marginRight:10 }, fontStyles.bold15]}>{item.currency} {item.balance_part_payment.amount}</Text>
                                     :
-                                    <Text style={[{ color: '#4E4D4D',marginRight:10 }, fontStyles.bold15]}>N{item.amount}</Text>
+                                    <Text style={[{ color: '#4E4D4D',marginRight:10 }, fontStyles.bold15]}>{item.currency} {item.amount}</Text>
                                     }
                                     
 
@@ -405,7 +436,7 @@ class Order extends React.Component {
                         isVisible={this.state.isDatePickerVisible}
                         mode="date"
                         date={new Date()}
-                        onConfirm={this.setDate}
+                        onConfirm={(date)=>this.setDate(date)}
                         onCancel={this.hideDatePicker}
                     />
 
@@ -454,8 +485,9 @@ class Order extends React.Component {
                                 style={[{ color: '#D8D8D8' }, fontStyles.normal14]}
                                 iconColor="#929497"
                                 style={{ width: width / 1.3, alignSelf: 'center', position: 'absolute', left: 0, marginTop: 10, marginBottom: 5, elevation: 0, borderColor: '#D8DCDE' }}
-                                onChangeText={text => this.setState({ search_order_text: text })}
+                                onChangeText={text => this.setState({ apply_screen_filters:true,search_order_text: text })}
                                 value={this.state.search_order_text}
+                                onIconPress={()=>this.setState({apply_screen_filters:true,text:''})}
                                 onSubmitEditing={(text) => this.search(text)}
                             //update
                             ></Searchbar>
@@ -542,7 +574,8 @@ class Order extends React.Component {
 function mapStateToProps(state) {
     return {
         user: state.userReducer,
-        reload: state.reloadReducer
+        reload: state.reloadReducer,
+        currency: state.currencyReducer,
     }
 };
 function mapDispatchToProps(dispatch) {

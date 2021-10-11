@@ -19,7 +19,7 @@ class OrderDetail extends React.Component {
         super(props);
         this.state = {
             Spinner: false,
-            order_id: this.props.route.params.id ?? 0,
+            order_id: 0,
             selectedStartDate: null,
             calenderModal: false,
             cicod_order_id: '',
@@ -31,23 +31,24 @@ class OrderDetail extends React.Component {
             created_by: '',
             payment_date: '',
             total_amount: 0,
+            currency: '',
             amount_paid_from_credit_limit: '',
             data: {
-
                 customer: {
                     name: '',
                     phone: '',
                     address: '',
                     email: '',
                 },
-
             },
             item: [],
         };
     }
     componentDidMount() {
-        let order_id = this.props.route.params.id;
-        this.setState({ Spinner: true })
+        
+    }
+    get_order_detail(order_id){
+        this.setState({ Spinner: true,order_id:order_id })
         let postData = {
             method: 'GET',
             headers: {
@@ -62,10 +63,11 @@ class OrderDetail extends React.Component {
                 this.setState({
                     Spinner: false,
                 });
-                console.log('data data data res res res ', responseJson.data)
+                console.log('~~~~~~~~~~@@@@....@@@@@@@@@@@@@data data data res res res ', Constants.orderslist + '/' + order_id,responseJson.data)
+                console.log('data data data res res res  order detail', responseJson.data)
                 if (responseJson.status === 'success') {
                     if (responseJson.message == "Order not found") {
-                        this.props.navigation.goBack();
+                        // this.props.navigation.goBack();
                         Alert.alert('Message', responseJson.message)
                         return
                     }
@@ -75,7 +77,7 @@ class OrderDetail extends React.Component {
                     for (let i = 0; product_items.length > i; i++) {
                         total_ammount = total_ammount + (product_items[i].price * product_items[i].quantity);
                     }
-                    
+                    // total_ammount.replace(/\B(?=(\d{1})+(?!\d))/g, ",")
                     this.setState({
                         data: responseJson.data,
                         cicod_order_id: responseJson.data.cicod_order_id,
@@ -86,6 +88,7 @@ class OrderDetail extends React.Component {
                         ticket_id: responseJson.data.ticket_id,
                         created_by: responseJson.data.created_by,
                         payment_date: responseJson.data.payment_date,
+                        currency: responseJson.data.currency,
                         item: product_items,
                         total_amount: total_ammount,
                         amount_paid_from_credit_limit: responseJson.data.amount_paid_from_credit_limit,
@@ -138,6 +141,9 @@ class OrderDetail extends React.Component {
 
     }
     render() {
+        if (this.state.order_id != this.props.route.params.id){
+                this.get_order_detail(this.props.route.params.id)
+        }
         return (
             <ScrollView>
                 <View style={[{}, styles.mainView]}>
@@ -232,7 +238,7 @@ class OrderDetail extends React.Component {
                        
 
                                     <Text style={[{backgroundColor:this.state.order_status=='PENDING'?'#FFF3DB': 
-                                    this.state.order_status=='CANCELLED'? '#FFF3DB':
+                                    this.state.order_status=='CANCELLED'? '#D8D8D8':
                                     this.state.order_status=='PAID'? '#DAF8EC':
                                     this.state.order_status=='PART PAYMENT'? '#E6E6E6'
                                     :null},styles.orderStatusText]}>
@@ -247,7 +253,7 @@ class OrderDetail extends React.Component {
                                 <Text style={[{}, styles.detailColumn1text]}>Payment Status</Text>
                             </View>
                             <View style={[{}, styles.detailColumn2]}>
-                                <Text style={[{}, styles.detailColumn2text]}>{this.state.data.payment_status ?? '--'}</Text>
+                                <Text style={[{color: '#FDB72B'}, styles.orderStatusText]}>{this.state.data.payment_status ?? '--'}</Text>
                             </View>
                         </View>
                         <View style={{}, styles.detailRow}>
@@ -321,12 +327,18 @@ class OrderDetail extends React.Component {
                                     <Text style={[{}, styles.detailInvoiceLable]}>{item.name}</Text>
                                     {/* <Text style={{ color: '#929497', fontSize: 12 }}>LAGOS- Palms</Text> */}
                                     <View style={{ flexDirection: 'row' }}>
-                                        <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>Unit Price: </Text>
+                                      <View style={{flex:2,flexDirection:'row'}}>
+                                      <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>Unit Price: </Text>
                                         <Text style={{ fontSize: 13, color: '#929497', marginRight: 20 }}>{item.price} </Text>
-                                        <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>QTY: </Text>
-                                        <Text style={{ fontSize: 13, color: '#929497', marginRight: width / 4 }}>{item.quantity} </Text>
-                                        <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end' }}>
-                                            {this.props.currency.currency+' '+(item.quantity*item.price)} </Text>
+                                      </View>
+                                      <View style={{flex:2,flexDirection:'row'}}>
+                                      <Text style={{ fontSize: 13, fontWeight: 'bold', color: '#929497' }}>QTY: </Text>
+                                        <Text style={{  fontSize: 13, color: '#929497', marginRight: width / 4 }}>{item.quantity} </Text>    
+                                      </View>  
+                                        <View style={{flex:1}}>
+                                        <Text style={{ position:'absolute',right:20,fontSize: 13, fontWeight: 'bold', color: '#929497', textAlign: 'right', alignSelf: 'flex-end' }}>
+                                            {this.state.currency+' '+(item.quantity*item.price)} </Text>
+                                        </View>
                                     </View>
                                 </View>
                             </View>
@@ -336,9 +348,7 @@ class OrderDetail extends React.Component {
                         <View style={{ alignSelf: 'flex-end', marginRight: 20, marginVertical: 20, flexDirection: 'row' }}>
                             <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>Total:  </Text>
                             <Text style={{ fontWeight: 'bold', color: '#4E4D4D', fontSize: 17, fontFamily: 'Open Sans' }}>
-                                {get_formated_amount(this.state.total_amount)}
-                                {/* this.state.total_amount */}
-                        
+                                {this.state.currency+get_formated_amount(this.state.total_amount)}
                                 </Text>
                         </View>
 

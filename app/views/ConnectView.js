@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Dimensions, Image, Platform, Alert,TextInput, TouchableOpacity } from 'react-native'
+import { View, Dimensions, Image, Platform, Alert,TextInput, TouchableOpacity, TouchableWithoutFeedback } from 'react-native'
 import { Text,  Modal } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/ConnectViewCss';
@@ -9,6 +9,7 @@ import Header from '../views/Header';
 import { Constants } from '../views/Constant';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { connect } from 'react-redux';
+import NavBack from "./Components/NavBack";
 import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
@@ -42,8 +43,8 @@ class ConnectView extends React.Component {
         console.log('props !!!!!!!!!!!!!!!!!!!!!', this.props.route.params.item);
         // let pro_url = Constants.products + '/' + this.props.route.params.prod_id
         // this.getProductDetail(pro_url)
-        let buyer_name = this.props.route.params.item.buyer_name;
-        let url = Constants.searchMerchant + '?merchantId=' + buyer_name;
+        let buyer_id = this.props.route.params.item.buyer_id;
+        let url = Constants.searchMerchant + '?cicodNumber=' + buyer_id;
         console.log('url @@@@@@@@@@ !!!!!!!!!!!!!!!!!!!!!', url);
         this.getBuyer(url);
     }
@@ -73,7 +74,7 @@ class ConnectView extends React.Component {
                         area: buyer_detail.area,
                         business_sector: buyer_detail.business_sector,
                         business_type: buyer_detail.business_type,
-                        buyer_id: buyer_detail.merchant_id,
+                        merchant_id: buyer_detail.merchant_id,
                         buyer_name: buyer_detail.merchant_name,
                         date_joined: buyer_detail.date_joined,
                         buyer_data: {
@@ -168,17 +169,25 @@ class ConnectView extends React.Component {
     }
 
     declineRequest(){
+
+        if(this.state.comment.trim()==''){
+            Alert.alert("Info","Please provide reason for decline!")
+            return;
+        }
     this.setState({ spinner: true })
 
-    let url = Constants.decline_request+'?id='+this.state.buyer_id+'&comment='+this.state.comment;
+    let url = Constants.decline_request+'?id='+this.props.route.params.item.id
     console.log('***********',url)
     let postData = {
-        method: 'GET',
+        method: 'POST',
         headers: {
             Accept: 'application/json',
             'Content-Type': 'application/json',
             Authorization: this.props.user.access_token,
         },
+        body: JSON.stringify({
+            comment: this.state.comment,
+        })
     };
     console.log('**************',this.state.comment);
     fetch(url, postData)
@@ -206,6 +215,10 @@ class ConnectView extends React.Component {
                             buyer_name: responseJson.data.merchant_name
                         },
                     })
+
+                    
+                    Alert.alert('Success', "Decline is successfull!");
+                    this.props.navigation.navigate('Connect')
                 } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 }
@@ -240,16 +253,7 @@ class ConnectView extends React.Component {
                     textStyle={{ color: '#fff' }}
                     color={'#fff'}
                 />
-                <View style={[{}, styles.backHeaderRowView]}>
-                    <TouchableOpacity
-                        onPress={() => this.props.navigation.goBack()}
-                    >
-                        <Icon name="arrow-left" size={25} color="#929497" />
-                    </TouchableOpacity>
-                    <View style={[{}, styles.backHeadingView]}>
-                        <Text style={[{}, styles.backHeadingText]}>Connect</Text>
-                    </View>
-                </View>
+                <NavBack title="CONNECT" onClick={()=> this.props.navigation.goBack()} />
                 <View style={[{}, styles.productDeatailContainer]}>
                     <View style={[{}, styles.productDeatailHeaderRow]}>
 
@@ -264,7 +268,7 @@ class ConnectView extends React.Component {
                     <View style={[{}, styles.descRow]}>
                         <View style={[{}, styles.descColumn]}>
                             <Text style={[{}, styles.lightGrayTex]}>Merchant ID</Text>
-                            <Text style={[{}, styles.darkGarayText]}>{this.state.buyer_id}</Text>
+                            <Text style={[{}, styles.darkGarayText]}>{this.state.buyer_name}</Text>
                         </View>
                     </View>
                     <View style={[{}, styles.descRow]}>
@@ -299,7 +303,7 @@ class ConnectView extends React.Component {
                         <Text style={{ color: '#929497' }}>Decline</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => this.props.navigation.navigate('UpdateProduct', { buyer_detail: this.state.buyer_data, screen: 'buyer' })}
+                        onPress={() => this.props.navigation.navigate('UpdateProduct', { buyer_detail: this.state.buyer_data, screen: 'buyer',item:this.props.route.params.item })}
                         style={[{}, styles.redTouch]}>
                         <Text style={{ color: '#fff' }}>Enable</Text>
                     </TouchableOpacity>
@@ -371,21 +375,23 @@ class ConnectView extends React.Component {
                     <TouchableOpacity
                        onPress={()=>this.setState({decline_modal:false})}
                     >
-                        <View style={[{zIndex:-0.999}, styles.suspendmodalBackGround]}>
-                           <View style={{zIndex:0.999,backgroundColor:'#fff',paddingVertical:30,paddingHorizontal:30,width:width-50, borderRadius:5,justifyContent:'center',alignItems:'center'}}>
+                       
+                        <View style={[ styles.suspendmodalBackGround]}>
+                        <TouchableWithoutFeedback>
+                           <View style={{backgroundColor:'#fff',paddingVertical:30,paddingHorizontal:30,width:width-50, borderRadius:5,justifyContent:'center',alignItems:'center'}}>
                            <Image
                            style={{height:100,width:100}}
                            source={require('../images/Group7637.png')}
                            />
                            <Text style={[{color:'#4E4D4D'},fontStyles.normal15]}>You are about to Decline</Text> 
                            <View style={{flexDirection:'row'}}>
-                             <Text style={[{color:'#4E4D4D'},fontStyles.bold18]}>KNGS CROWN</Text>
-                             <Text style={[{color:'#4E4D4D'},fontStyles.normal15]}>  request</Text>
+                             <Text style={[{color:'#4E4D4D'},fontStyles.bold18]}>{this.state.buyer_name}</Text>
+                             <Text style={[{color:'#4E4D4D',paddingTop:3},fontStyles.normal15]}>  request</Text>
                            </View>
                            <Text style={[{color:'#929497',alignSelf:'flex-start',marginVertical:10},fontStyles.bold15]}>Reason</Text>
                           <View style={{width:width-70,}}>
                           <TextInput
-                           placeholder="fdafdf"
+                           placeholder="Enter Reason for decline"
                            style={{height:width/3,backgroundColor:'#E6E6E6',borderRadius:5}}
                            onChangeText={(text) => this.setState({ comment: text })} 
                            />
@@ -404,6 +410,7 @@ class ConnectView extends React.Component {
                               <Text style={[{color:'#929497'},fontStyles.normal15]}>Cancle</Text>
                           </TouchableOpacity>
                            </View>
+                           </TouchableWithoutFeedback>
                         </View>
 
                     </TouchableOpacity>

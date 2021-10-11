@@ -1,5 +1,6 @@
 import React from 'react'
-import { View, TouchableHighlight, FlatList, Dimensions, Alert, Image, Platform, TouchableOpacity, ScrollView, } from 'react-native'
+import { View, TouchableHighlight, FlatList, Dimensions, Alert, Image, Platform, TouchableOpacity, ScrollView, } from 'react-native';
+import Modal from 'react-native-modal';
 import { Text, TextInput, Searchbar } from 'react-native-paper';
 import splashImg from '../images/splash.jpg'
 import styles from '../css/DashboardCss';
@@ -9,12 +10,14 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import Header from '../views/Header';
 import { connect } from 'react-redux';
 import ImagePicker from 'react-native-image-crop-picker';
-import { SET_USER, LOGOUT_USER, UpdateTabbar,ORDER_RELOAD, PRODUCT_RELOAD } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER, UpdateTabbar, PRODUCT_RELOAD } from '../redux/constants/index';
 const { width, height } = Dimensions.get('window')
 const isAndroid = Platform.OS == 'android'
 import DropDownPicker from 'react-native-dropdown-picker';
 import { Constants } from '../views/Constant';
 import TabNav from '../views/TabsNav';
+// import Modal from 'react-native-modal';
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import { nativeViewProps } from 'react-native-gesture-handler/lib/typescript/handlers/NativeViewGestureHandler';
 class Products extends React.Component {
     constructor(props) {
@@ -29,9 +32,24 @@ class Products extends React.Component {
             prod_image: '',
             reload: true,
             filters:[],
-            url_products:''
+            url_products:'',
+            isFetching: false,
         };
         this.onDateChange = this.onDateChange.bind(this);
+    }
+    onRefresh(){
+        console.log('222222222222',this.state.isFetching)
+        this.setState({isFetching: true})
+        // if(this.state.isFetching==true){
+           
+            // let search_url = Constants.productslist + '?search=' + this.state.search_product;
+        this.getData(this.state.url_products);
+           return;
+        // }
+        console.log('333333333333',this.state.isFetching)
+        // _that.setState({
+        //     url_orders: url,
+        // })
     }
     onDateChange(date) {
         this.setState({
@@ -49,6 +67,10 @@ class Products extends React.Component {
   
 
     async getData(url) {
+        let _that=this;
+        if(_that.state.isFetching==true){
+            _that.setState({isFetching:false})
+        }
         
       
         this.setState({ spinner: true })
@@ -66,7 +88,7 @@ class Products extends React.Component {
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                console.log('~~~~~~~~~~~~~~~~~~responseJson.responseJson responseJson responseJson @@@@@@@', responseJson);
+                // console.log('~~~~~~~~~~~~~~~~~~responseJson.responseJson responseJson responseJson @@@@@@@', responseJson);
                 // console.log('responseJson.postData', postData);
                 this.setState({
                     spinner: false,
@@ -202,9 +224,11 @@ class Products extends React.Component {
             <View>
                 
             <FlatList
+            onRefresh={() => _that.onRefresh()}
+            refreshing={_that.state.isFetching}
                         style={{}}
                         data={_that.state.data}
-
+                        
                         ItemSeparatorComponent={
                             Platform.OS !== 'android' &&
                             (({ highlighted }) => (
@@ -233,7 +257,7 @@ class Products extends React.Component {
                                             :
                                             <Image
                                                 style={[{ height: 50, width: 50 }]}
-                                                source={{ uri: item.image_url }}
+                                                source={{ uri: item.image }}
                                             />}
                                     </View>
                                     <View style={{ position: 'relative', flex: 3, marginLeft: 10 }}>
@@ -283,11 +307,11 @@ class Products extends React.Component {
                         <Text style={[{ color: '#2F2E7C', fontWeight: '700' }, fontStyles.normal15]}>Products</Text>
                     </View>
                     <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('ProductCategory')}
                         >
                             <Text style={{ fontSize: 12, color: '#B1272C', marginRight: 10 }}>View Product Category</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('CreateProduct', { action: 'create', prodDetail: null })}
                         >
@@ -353,6 +377,20 @@ class Products extends React.Component {
                     <this.listProducts _that={this}/>                    
                </ScrollView>
                 <TabNav style={{ position: 'absolute', bottom: 0 }} screen={'product'} props={this.props} />
+                {/* <Modal
+                 animationType="fade"
+                 visible={true}//this.state.regionModal
+                 transparent={true}
+                 hasBackdrop={true}
+                 deviceHeight={height}
+                 deviceWidth={width}
+                 ba
+                 justifyContent={'flex-end'}
+                 alignItems={'flex-end'}
+                 backgroundColor={'#000'}
+                 opacity={0.8}
+                > */}
+                
             </View>
         )
     }

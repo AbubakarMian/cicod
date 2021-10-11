@@ -93,6 +93,7 @@ export default StyleSheet.create({
         top:5,
         width:width,
         left:5,
+        
         flexDirection:'row'
     },
     OrderDetailHeadingRowText:{
@@ -148,13 +149,14 @@ orderDetailAmmountRow:{
     flexDirection:'row',
     width:width-20,
     alignSelf:'center',
-    paddingHorizontal:10,
+    paddingHorizontal:5,
     marginTop:10
 },
 orderDetailAmmountColumn:{
     flex:1,
     flexDirection:'row',
-    
+   
+   
 },
 orderDetailAmmountColumnGaryBolText:{
     fontWeight:'bold',
