@@ -424,7 +424,7 @@ class Dashboard extends React.Component {
                                 <Text style={[{}, styles.bannerboldText]}>{this.props.currency.currency}{this.state.target.sales_made_amount}</Text>
                                 <View style={{ flexDirection: 'row', marginBottom: 3, marginTop: 10, width: width / 1.5, position: 'relative' }}>
                                     <Text style={[{ color: '#707070' }]}>Target: {this.props.currency.currency}  {this.state.target.sales_target_amount}</Text>
-                                    {(this.state.target.percentage<1)?
+                                    {(this.state.target.percentage<1 || isNaN(this.state.target.percentage))?
                                     <Text style={[{ position: 'absolute', right: 0,textAlign:'center',}, styles.bannerpercentText]}>
                                         
                                         0%</Text>
