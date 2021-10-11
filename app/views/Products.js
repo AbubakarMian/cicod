@@ -307,11 +307,11 @@ class Products extends React.Component {
                         <Text style={[{ color: '#2F2E7C', fontWeight: '700' }, fontStyles.normal15]}>Products</Text>
                     </View>
                     <View style={{ flex: 2, flexDirection: 'row', justifyContent: 'flex-end', alignItems: 'center' }}>
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('ProductCategory')}
                         >
                             <Text style={{ fontSize: 12, color: '#B1272C', marginRight: 10 }}>View Product Category</Text>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('CreateProduct', { action: 'create', prodDetail: null })}
                         >

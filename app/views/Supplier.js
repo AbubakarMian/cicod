@@ -106,21 +106,21 @@ class Supplier extends React.Component {
 
     supliersDetail(items) {
         console.log('items !!!!!!!!!!!!', items);
-        if(typeof this.props.route.params.heading !==undefined){
-        if ( this.props.route.params.heading=="buy") {
-            this.props.setSupplier({
-                id:items.seller_id,
-                name:items.seller_name
-            })
-        this.props.navigation.navigate('CreateOrderValueChain', { heading: 'supplier',screen_name:"buy" ,item:items})
-        } else {
+        // if(typeof this.props.route.params.heading !==undefined){
+        // if ( this.props.route.params.heading=="buy") {
+        //     this.props.setSupplier({
+        //         id:items.seller_id,
+        //         name:items.seller_name
+        //     })
+        // this.props.navigation.navigate('CreateOrderValueChain', { heading: 'supplier',screen_name:"buy" ,item:items})
+        // } else {
         this.props.navigation.navigate('BuyersView', { items: items, heading: 'SUPPLIERS' })
             
-        }
-    }else{
-        this.props.navigation.navigate('BuyersView', { items: items, heading: 'SUPPLIERS' })
+    //     }
+    // }else{
+    //     this.props.navigation.navigate('BuyersView', { items: items, heading: 'SUPPLIERS' })
 
-    }
+    // }
         
     }
 
@@ -163,7 +163,8 @@ class Supplier extends React.Component {
                     textStyle={{ color: '#fff' }}
                     color={'#fff'}
                 />
-                 <NavBack title={ this.props.route.params.heading=="buy"?"Choose Supplier To Buy From":"SUPPLIERS"} onClick={()=>this.props.navigation.goBack()} />
+                 <NavBack title={ "SUPPLIERS"} onClick={()=>this.props.navigation.goBack()} />
+                 {/* <NavBack title={ this.props.route.params.heading=="buy"?"Choose Supplier To Buy From":"SUPPLIERS"} onClick={()=>this.props.navigation.goBack()} /> */}
                 {/* <View style={{ marginBottom: 5, flexDirection: 'row', width: width - 20, alignSelf: 'center', paddingHorizontal: 10, borderRadius: 5, marginTop: 10, alignItems: 'center' }}>
                     <Image
                         source={require('../images/products/searchicon.png')}

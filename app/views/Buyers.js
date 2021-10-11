@@ -315,7 +315,7 @@ class Buyers extends React.Component {
                         onPress={() => this.props.navigation.goBack()}
                         style={[{ flexDirection: 'row', alignItems: 'center', marginVertical: 10, marginLeft: 5 }]}>
                         <Icon name="arrow-left" size={25} color="#929497" />
-                        <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>BUYERS</Text>
+                        <Text style={[{ color: '#2F2E7C', fontWeight: 'bold', marginHorizontal: 10 }]}>RESELLERS</Text>
 
                     </TouchableOpacity>
                 </View>
@@ -368,7 +368,7 @@ class Buyers extends React.Component {
                         />
                     </View> */}
                     <Searchbar
-                        placeholder="Search buyers"
+                        placeholder="Search Resellers"
                         iconColor="#929497"
                         style={{ width: width / 1.3, alignSelf: 'center', marginTop: 10, marginBottom: 5, elevation: 0, borderColor: '#D8DCDE' }}
                         onChangeText={text => this.setState({ search_buyers: text })}

@@ -294,10 +294,12 @@ class CreateProductCategory extends React.Component {
                     textStyle={{ color: '#fff' }}
                     color={'#fff'}
                 />
+
+
                 <View style={[{}, styles.backRowView]}>
                     <TouchableOpacity
                         // onPress={() => this.props.navigation.navigate('Home')}
-                        onPress={() => this.props.navigation.goBack()}
+                        onPress={() => this.props.route.params.action==null? this.props.navigation.goBack():this.props.navigation.navigate("CreateProduct",{action: 'create', prodDetail: null})}
                     >
                         <Icon name="arrow-left" size={25} color="#929497" />
                     </TouchableOpacity>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Image, TouchableOpacity, Dimensions,FlatList, Touchable, ScrollView,Alert } from 'react-native';
+import { BackHandler,View, Image, TouchableOpacity, Dimensions,FlatList, Touchable, ScrollView,Alert } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 import styles from '../css/OrderDetailCss';
 import fontStyles from '../css/FontCss'
@@ -19,6 +19,7 @@ var { width, height } = Dimensions.get('window');
 class OrderDetail extends React.Component {
     constructor(props) {
         super(props);
+        this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
         this.state = {
             Spinner: false,
             order_id: 0,
@@ -49,6 +50,24 @@ class OrderDetail extends React.Component {
             },
             item: [],
         };
+    }
+
+    componentWillMount() {
+        BackHandler.addEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    
+    componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this.handleBackButtonClick);
+    }
+    
+    handleBackButtonClick() {
+        this.props.navigation.goBack(null);
+        if (this.props.route.params.from==null) {
+            this.props.navigation.replace("Home")
+        } else {
+            this.props.navigation.goBack(null)
+        }
+        return true;
     }
     componentDidMount() {
         
@@ -217,7 +236,7 @@ class OrderDetail extends React.Component {
                         textStyle={{ color: '#fff' }}
                         color={'#fff'}
                     />
-                    <NavBack title="ORDER DETAIL" onClick={()=>this.props.navigation.navigate("Supplier")} />
+                    <NavBack title="ORDER DETAIL" onClick={()=>this.props.route.params.from==null? this.props.navigation.navigate("Supplier"):this.props.navigation.goBack()} />
                     
 
                     <OrderDetailSection delivery_type={this.state.delivery_type} delivery_amount={this.state.delivery_amount} pay={this.pay} total_amount={this.state.total_amount} currency={this.state.currency} data={this.state.item} amount_paid_from_credit_limit={this.state.data.amount_paid_from_credit_limit} delivery_address={this.state.data.delivery_address} ticket_id={this.state.data.ticket_id} payment_status={this.state.data.payment_status} order_status={this.state.order_status} payment_mode={this.state.payment_mode } customer_email={this.state.data.customer.customer_email} customer_address={this.state.data.customer.customer_address} customer_phone={this.state.data.customer.customer_phone} order_id={this.state.data.order_id} resendRecipt={this.ReciptResend} customer_name={this.state.data.customer.customer_name}  />

@@ -354,6 +354,12 @@ class UpdateProduct extends React.Component {
     }
 
     showUpdateProductAccessPopup() {
+
+        // if(this.state.products.length<1){
+        //     Alert.alert("Error","Please select a product.");
+        //     return;
+        // }
+
         let list = this.state.prod_list;
         let products = this.state.products;
         let categories = [];
@@ -369,11 +375,25 @@ class UpdateProduct extends React.Component {
                 categories.push(list[i].category);
             }
         }
-        this.setState({
-            products: products,
-            categories: categories,
-            updateProductModal: true
-        })
+        // if(products.length<1){
+        //     Alert.alert("Error","Please select a product.");
+            
+            this.setState({
+                products: products,
+                categories: categories,
+               // updateProductModal: false
+            })
+            if (this.state.products.length<1) {
+            Alert.alert("Error","Please select a product.");
+                return
+            } else {
+                this.setState({
+                    
+                    updateProductModal: true
+                })
+            }
+     
+        
     }
 
     countProductSelected(){
@@ -421,7 +441,7 @@ class UpdateProduct extends React.Component {
                 />
                 <Header navigation={this.props.navigation} />
                 
-                <NavBack title={(this.props.route.params.screen == 'buyer') ? "CONNECT"+this.state.buyer_detail.buyer_name:"UPDATE PRODUCTS"+this.state.buyer_detail.buyer_name } onClick={() => this.props.navigation.goBack()} />
+                <NavBack title={(this.props.route.params.screen == 'buyer') ? "CONNECT "+this.state.buyer_detail.buyer_name:"UPDATE PRODUCTS "+this.state.buyer_detail.buyer_name } onClick={() => this.props.navigation.goBack()} />
                 <View style={[{}, styles.headingDescView]}>
                     <Text style={[{}, styles.headingDescText]}>Select Product category or products you want Merchant to have access to</Text>
                 </View>

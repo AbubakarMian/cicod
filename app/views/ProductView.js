@@ -182,7 +182,7 @@ class ProductView extends React.Component {
                         </TouchableOpacity>
     }
                     </View>
-                    <Text style={[{color:'#4E4D4D',textAlign:'center'},fontStyles.bold18]}>{ _that.props.route.params.heading=='SUPPLIERS'? _that.state.prodDetail.name :_that.state.prodDetail.name + ' ' + _that.state.prodDetail.quantity}</Text>
+                    <Text style={[{color:'#4E4D4D',textAlign:'center'},fontStyles.bold18]}>{ _that.props.route.params.heading=='SUPPLIERS'? _that.state.prodDetail.name :_that.state.prodDetail.name}</Text>
                     <Text style={[{color:'#929497',textAlign:'center'}, fontStyles.normal12]}>{_that.state.prodDetail.code}</Text>
                     <View style={{ borderBottomWidth: 1, borderColor: '#E6E6E6', marginVertical: 10 }}></View>
                     <View style={[{}, styles.descRow]}>
@@ -190,31 +190,41 @@ class ProductView extends React.Component {
                             <Text style={[{}, styles.lightGrayTex]}>Quantity</Text>
                             <Text style={[{}, styles.darkGarayText]}>{ _that.props.route.params.heading=='SUPPLIERS'?_that.state.prodDetail.no_qty_limit?'No Qty Limit':_that.state.prodDetail.qnty : _that.state.prodDetail.no_qty_limit?'No Qty Limit':_that.state.prodDetail.quantity}</Text>
                         </View>
-                        {_that.props.route.params.heading!='SUPPLIERS' &&(
-                            <>
+                        <View style={[{}, styles.descColumn]}>
+                            <Text style={[{}, styles.lightGrayTex]}>Price</Text>
+                            <Text style={[{}, styles.darkGarayText]}>{_that.state.prodDetail.currency}{_that.state.prodDetail.price}</Text>
+
+                        </View>
+                        {/* {_that.props.route.params.heading!='SUPPLIERS' &&(
+                            <> */}
                             <View style={[{}, styles.descColumn]}>
+
+
                             <Text style={[{}, styles.lightGrayTex]}>Category</Text>
                             <Text style={[{}, styles.darkGarayText]}>{_that.state.prodDetail.category}</Text>
                         </View>
 
-                    <View style={[{}, styles.descRow]}>
+                       
+
+</View>
+                    <View style={[ styles.descRow,{marginTop:15}]}>
                         <View style={[{}, styles.descColumn]}>
                             <Text style={[{}, styles.lightGrayTex]}>Reservation (Days)</Text>
                             <Text style={[{}, styles.darkGarayText]}>0</Text>
                         </View>
                         <View style={[{}, styles.descColumn]}>
                             <Text style={[{}, styles.lightGrayTex]}>Created By</Text>
-                            <Text style={[{}, styles.darkGarayText]}>{_that.state.prodDetail.created_by} </Text>
+                            <Text style={[{}, styles.darkGarayText]}>{_that.props.route.params.heading=='SUPPLIERS'? '--':_that.state.prodDetail.created_by} </Text>
                         </View>
                         <View style={[{}, styles.descColumn]}>
                             <Text style={[{}, styles.lightGrayTex]}>Created Date</Text>
-                            <Text style={[{}, styles.darkGarayText]}>{_that.state.prodDetail.date_created}</Text>
+                            <Text style={[{}, styles.darkGarayText]}>{_that.props.route.params.heading=='SUPPLIERS'? '--': _that.state.prodDetail.date_created}</Text>
                             {/* <Text style={[{}, styles.darkGarayText]}>10:30 AM</Text> */}
 
                         </View>
 
                     </View>
-                    <View style={[{}, styles.descRow]}>
+                    <View style={[ styles.descRow,{marginTop:15}]}>
                         <View style={[{}, styles.descColumn]}>
                             <Text style={[{}, styles.lightGrayTex]}>Updated Date</Text>
                             <Text style={[{}, styles.darkGarayText]}>{_that.state.prodDetail.date_updated ||'-'}</Text>
@@ -228,8 +238,8 @@ class ProductView extends React.Component {
                         </View>
 
                     </View>
-                        </>
-                        )}
+                       
+                        
 
 {_that.props.route.params.heading=='SUPPLIERS' &&(
     <>
@@ -241,15 +251,10 @@ class ProductView extends React.Component {
                         </>
                         )}
                         
-                        <View style={[{}, styles.descColumn]}>
-                            <Text style={[{}, styles.lightGrayTex]}>Price</Text>
-                            <Text style={[{}, styles.darkGarayText]}>{_that.state.prodDetail.currency}{_that.state.prodDetail.price}</Text>
-
-                        </View>
+                       
                     </View>
 
 
-                </View>
                 <Text style={[{}, styles.imageHeadingText]}>IMAGE</Text>
                 <TouchableOpacity
                     onPress={() => _that.setState({ productImageModal: true })}

@@ -1,11 +1,12 @@
 import {REMOVE_DELIVERY_FEE_TO_COST, ADD_DELIVERY_FEE_TO_COST,REMOVE_FROM_CART, ADD_TO_PRODUCT_CHAIN, REMOVE_PRODUCT_FORM_CART,CLEAR_CART ,UPDATE_CART, CLEAR_ORDER_CHAIN, REMOVE_FROM_CART_CHAIN, REMOVE_PRODUCT_FORM_CART_CHAIN} from '../constants';
 const initialState = {
     cart: [],
+    currency:'₦',
     cart_detail:{
         total_price:0,
         tax:0,
-        total_price_with_tax:0,
-        delivery_fee:0,
+        total_price_with_tax:0.00,
+        delivery_fee:0.00,
        // total_price_with_tax_delivery:0,
         vat_amount:0,
         vat_percent:0,
@@ -60,7 +61,7 @@ const cartChainReducer = (state = initialState, action) => {
     total_price_with_tax = (parseFloat(total_price)+parseFloat(tax)).toFixed(2)
 console.log("rr#@e",total_price_with_tax,total_price)
             // updateCart();
-            return { ...state ,cart,cart_detail:{total_price,total_price_with_tax,tax,has_vat,vat_percent,vat_amount}};
+            return { ...state ,currency:cart[0].currency,cart,cart_detail:{total_price,total_price_with_tax,tax,has_vat,vat_percent,vat_amount}};
 
             break;
           
@@ -192,6 +193,7 @@ console.log("rr#@e",total_price_with_tax,total_price)
         // console.log("remov#$#@e",total_price_with_tax_rpc,total_price_rpc)
                     // updateCart();
                     return { ...state ,
+                        currency:'₦',
                         cart,
                         cart_detail:{
                             total_price:0,
@@ -206,7 +208,7 @@ console.log("rr#@e",total_price_with_tax,total_price)
         
             break;
             case CLEAR_CART:
-                return { ...state, cart:[],cart_detail:{} }; 
+                return { ...state,  currency:'₦',cart:[],cart_detail:{} }; 
         case UPDATE_CART:
             updateCart();
             return { state };
