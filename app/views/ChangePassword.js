@@ -32,7 +32,6 @@ class ChangePassword extends React.Component {
            Alert.alert('All fields are required!');
            return;
         }
-
         console.log('Constants.changePassword', Constants.changePassword)
 
         this.setState({ spinner: true })
@@ -52,22 +51,24 @@ class ChangePassword extends React.Component {
         fetch(Constants.changePassword, postData)
             .then(response => response.json())
             .then(async responseJson => {
+                this.setState({ spinner: false })
                 console.log(" response Json responseJson responseJson!!!!!!!!!!!", responseJson)
                 if (responseJson.status === "SUCCESS") {
 
-                    this.setState({ spinner: false })
+                    
                     Alert.alert("Your password has been changed successfully!");
                     this.props.navigation.navigate('Home')
                 } else if (responseJson.status == 401) {
                     this.unauthorizedLogout();
                 }
                 else {
-                    let message = responseJson.message
+                    let message = responseJson.data[0].message
                     Alert.alert('Error', message)
                 }
             }
             )
             .catch((error) => {
+                this.setState({ spinner: false })
                 console.log("Api call error", error);
                 // Alert.alert(error.message);
             });
