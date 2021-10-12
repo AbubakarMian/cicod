@@ -19,6 +19,7 @@ const cartReducer = (state = initialState, action) => {
         case ADD_TO_PRODUCT:
             console.log("reopx")
             let product_found = false;
+            let complete_state = state;
             let cart = state.cart;
             let i = 0;
             for (; i < cart.length; i++) {
@@ -37,26 +38,33 @@ const cartReducer = (state = initialState, action) => {
             if (!product_found) {
                 cart.push(action.value)
             }
-            updateCart();
-            return { ...state ,cart};
+            state = { ...state ,cart}
+            complete_state = updateCart(state);
+            return complete_state;
 
             break;
           
             case ADD_DELIVERY_FEE_TO_COST:
-                console.log("feeReu#",action.value,initialState.cart_detail.total_price_with_tax)
+                console.log("feeReu#",action.value,state.cart_detail.total_price_with_tax)
                 const total=parseFloat(state.cart_detail.total_price_with_tax)+parseFloat(action.value);
                 console.log("add#E",total)
-                state.cart_detail.delivery_fee=action.value;
-                updateCart();
-               // initialState.cart_detail.total_price_with_tax+=parseFloat(action.value)
-                return {...state,delivery_fee:0}
+                // state.cart_detail.delivery_fee=action.value;
+                // updateCart();
+                // return {...state,delivery_fee:0}
+                
+            state = {...state,delivery_fee:0}
+            complete_state = updateCart(state);
+            return complete_state;
+
             break;
             case REMOVE_DELIVERY_FEE_TO_COST:
                 
                 state.cart_detail.delivery_fee=0;
-                updateCart();
-               // initialState.cart_detail.total_price_with_tax+=parseFloat(action.value)
-                return {...state,delivery_fee:0}
+                // updateCart();
+                // return {...state,delivery_fee:0}
+                
+                complete_state = updateCart(state);
+                return complete_state;
             break;
         case REMOVE_FROM_CART:
             cart = state.cart;
@@ -75,8 +83,11 @@ const cartReducer = (state = initialState, action) => {
                     }
                 }
             }
-            updateCart();
-            return { ...state, cart };
+            // updateCart();
+            // return { ...state, cart };
+            state = {...state,cart}
+            complete_state = updateCart(state);
+            return complete_state;
             break;
 
         case REMOVE_PRODUCT_FORM_CART:
@@ -87,8 +98,11 @@ const cartReducer = (state = initialState, action) => {
                     cart.splice(i,1);
                 }
             }
-            updateCart();
-            return { ...state, cart };
+            // updateCart();
+            // return { ...state, cart };
+            state = {...state,cart}
+            complete_state = updateCart(state);
+            return complete_state;
             break;
         case CLEAR_ORDER:
             cart = state.cart;
@@ -105,21 +119,54 @@ const cartReducer = (state = initialState, action) => {
             }
             cart.splice(0);
            
-            updateCart();
-            return { ...state, cart };
+            // updateCart();
+            // return { ...state, cart };
+            state = {...state,cart}
+            complete_state = updateCart(state);
+            return complete_state;
             break;
             case CLEAR_CART:
                 return { ...state, cart:[],cart_detail:{} }; 
         case UPDATE_CART:
-            updateCart();
-            return { state };
+            // updateCart();
+            // return { state };
+            complete_state = updateCart(state);
+            return complete_state;
         default:
             return state;
     }    
 }
 export default cartReducer;
 
-function updateCart (){
+
+function updateCart (complete_state){
+    let cart= complete_state.cart;
+    let total_price = 0;
+    let vat_amount = 0;
+    let vat_percent = 0;
+    let has_vat = false;
+    for(let i=0;i<cart.length;i++){
+        total_price = total_price + (cart[i].purchased_quantity * cart[i].price);
+        vat_amount = vat_amount + (cart[i].purchased_quantity *(cart[i].vat_amount==null?0:cart[i].vat_amount));
+        vat_percent = cart[i].vat_percent; // amount is single percent cant be added multiple times
+        has_vat = cart[i].has_vat; // amount is single percent cant be added multiple times
+
+    }
+    console.log("tessss@3",cart)
+    total_price = parseFloat(total_price).toFixed(2);
+    let tax = vat_amount;//parseFloat(total_price*0.075).toFixed(2);
+    complete_state.cart_detail.total_price = total_price;
+    complete_state.cart_detail.tax = tax;
+    complete_state.cart_detail.total_price_with_tax = (parseFloat(total_price)+parseFloat(tax)+parseFloat(complete_state.cart_detail.delivery_fee)).toFixed(2)+'';
+    complete_state.cart_detail.vat_percent = vat_percent;
+    complete_state.cart_detail.has_vat = has_vat;
+    console.log('total_price',total_price)
+    console.log('tax',tax)
+    console.log('total_price+tax###',(complete_state.cart_detail.total_price_with_tax))
+    return complete_state;
+}
+
+function updateCartpre (){
     let cart= initialState.cart;
     let total_price = 0;
     let vat_amount = 0;
@@ -137,7 +184,7 @@ function updateCart (){
     let tax = vat_amount;//parseFloat(total_price*0.075).toFixed(2);
     initialState.cart_detail.total_price = total_price;
     initialState.cart_detail.tax = tax;
-    initialState.cart_detail.total_price_with_tax = (parseFloat(total_price)+parseFloat(tax)+parseFloat(initialState.cart_detail.delivery_fee)).toFixed(2);
+    initialState.cart_detail.total_price_with_tax = (parseFloat(total_price)+parseFloat(tax)+parseFloat(initialState.cart_detail.delivery_fee)).toFixed(2)+'';
     initialState.cart_detail.vat_percent = vat_percent;
     initialState.cart_detail.has_vat = has_vat;
     console.log('total_price',total_price)

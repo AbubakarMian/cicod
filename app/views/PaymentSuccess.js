@@ -120,8 +120,8 @@ console.log("#$dtr",this.props.route.params)
     }
     successview(props) {
         let _that = props._that;
-        //let order = _that.props.route.params.data;
-        let order = _that.state.order_detail;
+        let order = _that.props.route.params.data;
+        // let order = _that.state.order_detail;
         console.log("order @@@@@@@@@@@@~~~~~~~~~~~~~~~~ order",order)
         // if (order.payment_status == 'success') {            
         return (

@@ -53,8 +53,14 @@ class CreateOrder extends React.Component {
             
         }
     }
+    update_cart_state(){ return;
+        this.setState({
+            cart_detail: this.props.cart.cart_detail,
+        })
+    }
     clearOrder() {
         this.props.emptyOrder();
+        this.update_cart_state();
     }
     async componentDidMount() {
      
@@ -87,8 +93,8 @@ class CreateOrder extends React.Component {
                 alert('Out of stock');
             }
             else {
-                await this.props.cartReducer(data[index]);
                 data[index].purchased_quantity = updated_purchased_quantity;
+                await this.props.cartReducer(data[index]);
                 let res = data;
                 let cart_arr = res.map((x, key) => { return { id: x.id, quantity: x.purchased_quantity } });
                 this.setState({
@@ -96,6 +102,7 @@ class CreateOrder extends React.Component {
                     limit_cart_arr: cart_arr
                 });
 
+                this.update_cart_state();
                 console.log('cart : ', this.props.cart);
             }
         }
@@ -107,7 +114,8 @@ class CreateOrder extends React.Component {
                 data[index].purchased_quantity = updated_purchased_quantity;
                 this.setState({
                     data: data
-                })
+                })                
+                this.update_cart_state();
                 console.log(' remove from cart cart : ', this.props.cart);
             }
         }
@@ -182,7 +190,8 @@ class CreateOrder extends React.Component {
         })
     }
     removeProduct(id) {
-        this.props.removeProductFromCart(id);
+        this.props.removeProductFromCart(id);        
+        this.update_cart_state();
     }
 
     set_limit_cart_arr() {
@@ -415,6 +424,7 @@ class CreateOrder extends React.Component {
         let user_data = {}
         this.props.setCustomer(user_data);
         this.props.emptyOrder();
+        this.update_cart_state();
         this.props.navigation.goBack()
     }
 
@@ -443,6 +453,8 @@ class CreateOrder extends React.Component {
     }
     render() {
         console.log(' supplierlist @@@@@@@@@@@@@@@ supplierlist  !!!!!!!!!!!!!!', this.props.supplier);
+        console.log(' this.props.cart.cart_detail @@@@@@@@@@@@@@@ this.props.cart.cart_detail  !!!!!!!!!!!!!!', this.props.cart.cart_detail);
+        console.log(' this.props.cart.cart_detail @@@@@@@@@@@@@@@ this.props.cart.cart_detail  !!!!!!!!!!!!!!', this.state.cart_detail);
         var radio_props_dilvery = [
             { label: 'Delivery', value: 0 },
 
