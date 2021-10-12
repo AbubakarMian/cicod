@@ -53,10 +53,12 @@ class PayByCash extends React.Component {
             .then(response => response.json())
             .then(async responseJson => {
                 console.log("order response response Json responseJson responseJson!!!!!!!!!!!", responseJson.status)
+                console.log("order response pay by cashresponse Json responseJson responseJson!!!!!!!!!!!", responseJson)
                 this.setState({ spinner: false })
                 if (responseJson.status =="success" || responseJson.status =="SUCCESS") {
                     let data = responseJson.data;
                     data.payment_status = 'success';
+                    data.order_id = order_id;
                     this.props.navigation.navigate('PaymentSuccess', { data:responseJson.data})
 
                     // this.props.navigation.navigate('OrderDetail', { id: this.responseJson.data.id ,data:responseJson.data})
