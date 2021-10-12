@@ -48,6 +48,7 @@ class ChangePassword extends React.Component {
                 confirmPassword: this.state.confirm_password//sandbox
             })
         };
+        console.log('************',postData);
         fetch(Constants.changePassword, postData)
             .then(response => response.json())
             .then(async responseJson => {
@@ -62,7 +63,7 @@ class ChangePassword extends React.Component {
                     this.unauthorizedLogout();
                 }
                 else {
-                    let message = responseJson.data[0].message
+                    let message = responseJson.status
                     Alert.alert('Error', message)
                 }
             }
