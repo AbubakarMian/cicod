@@ -13,7 +13,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { Constants } from '../views/Constant';
 import Header from './Header'
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER,CUSTOMER_RELOAD } from '../redux/constants/index';
 
 class Customer extends React.Component {
     constructor(props) {
@@ -96,6 +96,12 @@ class Customer extends React.Component {
     }
 
     render() {
+        if(this.props.reload.customer){
+            this.getCustomers(Constants.customerlist);
+            this.props.setScreenReload({
+                reload:false
+            })
+        }
 
         const { selectedStartDate } = this.state;
         const startDate = selectedStartDate ? selectedStartDate.toString() : '';
@@ -215,13 +221,15 @@ class Customer extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        user: state.userReducer
+        user: state.userReducer,
+        reload: state.reloadReducer,
     }
 };
 function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
-        logoutUser: () => dispatch({ type: LOGOUT_USER })
+        logoutUser: () => dispatch({ type: LOGOUT_USER }),
+        setScreenReload: (value) => dispatch({ type: CUSTOMER_RELOAD, value: value }),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(Customer)
