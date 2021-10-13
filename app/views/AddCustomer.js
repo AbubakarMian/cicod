@@ -270,12 +270,7 @@ class AddCustomer extends React.Component {
                                     <Image source={require('../images/circlePlus.png')} />
                                     <Text style={[{color:'#4E4D4D',marginLeft:10}, fontStyles.bold15]}>Add new customer</Text>
                                 </TouchableOpacity>
-                            </View>}
-
-
-
-
-                    
+                            </View>}                    
                 </View>
             </View>
             </ScrollView>

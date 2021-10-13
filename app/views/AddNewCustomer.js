@@ -9,7 +9,7 @@ import { ScrollView } from 'react-native-gesture-handler';
 import Spinner from 'react-native-loading-spinner-overlay';
 import DropDownPicker from 'react-native-dropdown-picker';
 import { connect } from 'react-redux';
-import { SET_USER, LOGOUT_USER } from '../redux/constants/index';
+import { SET_USER, LOGOUT_USER,CUSTOMER_RELOAD } from '../redux/constants/index';
 import { Constants } from '../views/Constant';
 import { Text, TextInput } from 'react-native-paper';
 import Modal from 'react-native-modal';
@@ -164,8 +164,6 @@ class AddNewCustomer extends React.Component {
     }
     createCustomerDelivery(customer_id) {
         this.setState({ spinner: true })
-
-
         let postData = {
             method: 'POST',
             headers: {
@@ -190,10 +188,11 @@ class AddNewCustomer extends React.Component {
                 console.log(" delivery customer response!!!!!!!!!!!", responseJson)
                 this.setState({ spinner: false })
                 if (responseJson.status === "success") {
-
-                } else {
-                    this.setState({ spinner: false })
-                    // this.setState({ spinner: false })
+                    this.props.setScreenReload({
+                        reload:true
+                    })
+                    this.props.navigation.navigate('Customer');
+                } else {                    
                     let message = JSON.stringify(responseJson.status)
                     Alert.alert('Error', message)
                     this.refs.PopUp.setModal(true, responseJson.status);
@@ -202,7 +201,6 @@ class AddNewCustomer extends React.Component {
             )
             .catch((error) => {
                 console.log("Api call error", error);
-                // Alert.alert(error.message);
             });
     }
     getCountryList() {
@@ -914,13 +912,15 @@ class AddNewCustomer extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        user: state.userReducer
+        user: state.userReducer,
+        reload: state.reloadReducer,
     }
 };
 function mapDispatchToProps(dispatch) {
     return {
         setUser: (value) => dispatch({ type: SET_USER, value: value }),
-        logoutUser: () => dispatch({ type: LOGOUT_USER })
+        logoutUser: () => dispatch({ type: LOGOUT_USER }),
+        setScreenReload: (value) => dispatch({ type: CUSTOMER_RELOAD, value: value }),
     }
 };
 export default connect(mapStateToProps, mapDispatchToProps)(AddNewCustomer)
