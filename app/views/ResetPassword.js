@@ -16,13 +16,19 @@ export default class ResetPassword extends React.Component {
         super(props);
         this.state = {
             isChecked: false,
+            tenantId:'',
             email:''
         }
     }
     ressetPassword() {
         console.log("Resset Resset Resset ")
+        if(this.state.tenantId == ''){
+            Alert.alert('Message','Domain is required')
+            return;
+        }
         if(this.state.email == ''){
             Alert.alert('Message','Email is required')
+            return;
         }
         let valid_email=/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
         if(!this.state.email.match(valid_email)){
@@ -31,52 +37,37 @@ export default class ResetPassword extends React.Component {
 
         }
         let postData = {
-            method: 'PUT',
+            method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
                 'Authorization': Constants.autherizationKey
             },
-            body: JSON.stringify({
-                token: "RZyvWDiVdo",
-                newPassword: "Crown123!\"#$%&}~",
-                confirmPassword: "Crown123!\"#$%&}~"
-            })
         };
-        let myurl ='https://api.cicodsaasstaging.com/sso/auth/password_reset'+'/'+this.state.email;// Constants.reset_password
-        console.log('myurlmyurlmyurlmyurlmyurlmyurl',myurl);
-        fetch(myurl, postData)
+        let url=Constants.forgot_password+'/'+this.state.email+'/'+this.state.tenantId;
+        console.log('url',url)
+        fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
                 this.setState({ Spinner: false })
                 console.log("response Json responseJson responseJson!!!!!!!!!!!", responseJson)
                 if (responseJson.status === "SUCCESS") {
-                    this.props.setUser({
-                        firstname: responseJson.user.firstname,
-                        lastname: responseJson.user.lastname,
-                        email: responseJson.user.email,
-                        phone: responseJson.user.phone,
-                        access_token: 'Bearer ' + responseJson.token
-                    });
-                    
-
-
-                    console.log('get user !!!!!!!!!!!!!!!!', this.props.user)
-                    this.props.navigation.navigate('Home')
+                    // rico@yopmail.com
+                    let message = responseJson.status
+                    Alert.alert('SUCCESS', message)
+                    this.props.navigation.navigate('Login')
                 } else {
                     this.setState({ Spinner: false })
                     // this.setState({ Spinner: false })
-                    let message = responseJson.error
-                    if (message == '') {
-                        message = 'Server responded with error contact admin'
-                    }
+                    let message = responseJson.status
                     Alert.alert('Error', message)
+                    
                 }
             }
             )
             .catch((error) => {
                 this.setState({ Spinner: false })
-                console.log("Api call error", error);
+                console.log("Api call error 1111111", error);
                 // Alert.alert(error.message);
             });    
 
@@ -110,7 +101,18 @@ export default class ResetPassword extends React.Component {
 
                     <Text style={[{fontSize:15,fontWeight:'700',fontFamily:'Open Sans',color:'#2F2E7C',marginLeft:10}]}>Reset Password</Text>
                 </View>
+      
                 <View style={[{}, styles.textInputView]}>
+                <TextInput
+                        label="Domain Name"
+                        style={{ backgroundColor: 'transparent', }}
+                        width={width - 50}
+                        alignSelf={'center'}
+                        color={'#000'}
+                        color="#929497"
+                        keyboardType={'default'}
+                        onChangeText={(text)=>this.setState({tenantId:text})}
+                    />
                     <TextInput
                         label="Email Address"
                         style={{ backgroundColor: 'transparent', }}
