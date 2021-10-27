@@ -61,7 +61,6 @@ export default class ResetPassword extends React.Component {
                     // this.setState({ Spinner: false })
                     let message = responseJson.status
                     Alert.alert('Error', message)
-                    
                 }
             }
             )
