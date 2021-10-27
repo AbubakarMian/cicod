@@ -7,6 +7,7 @@ import Header from '../views/Header'
 import CheckBox from 'react-native-check-box';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Constants } from '../views/Constant';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 var { width, height } = Dimensions.get('window');
@@ -17,10 +18,13 @@ export default class ResetPassword extends React.Component {
         this.state = {
             isChecked: false,
             tenantId:'',
-            email:''
+            email:'',
+            spinner: false,
         }
     }
     ressetPassword() {
+
+        
         console.log("Resset Resset Resset ")
         if(this.state.tenantId == ''){
             Alert.alert('Message','Domain is required')
@@ -36,6 +40,7 @@ export default class ResetPassword extends React.Component {
             return
 
         }
+        this.setState({ spinner: true })
         let postData = {
             method: 'POST',
             headers: {
@@ -49,7 +54,7 @@ export default class ResetPassword extends React.Component {
         fetch(url, postData)
             .then(response => response.json())
             .then(async responseJson => {
-                this.setState({ Spinner: false })
+                this.setState({ spinner: false })
                 console.log("response Json responseJson responseJson!!!!!!!!!!!", responseJson)
                 if (responseJson.status === "SUCCESS") {
                     // rico@yopmail.com
@@ -57,23 +62,29 @@ export default class ResetPassword extends React.Component {
                     Alert.alert('SUCCESS', message)
                     this.props.navigation.navigate('Login')
                 } else {
-                    this.setState({ Spinner: false })
-                    // this.setState({ Spinner: false })
+                    this.setState({ spinner: false })
                     let message = responseJson.status
                     Alert.alert('Error', message)
                 }
             }
             )
             .catch((error) => {
-                this.setState({ Spinner: false })
+                this.setState({ spinner: false })
                 console.log("Api call error 1111111", error);
                 // Alert.alert(error.message);
             });    
 
     }
     render() {
+        console.log('SPINER',this.state.spinner)
         return (
             <View style={[{}, styles.mainView]}>
+                <Spinner
+                        visible={this.state.spinner}
+                        textContent={'Please Wait...'}
+                        textStyle={{ color: '#fff' }}
+                        color={'#fff'}
+                    />
                 <View style={{ flexDirection: 'row', width: width, position: 'relative', backgroundColor: '#FFFFFF', paddingVertical: 10, paddingHorizontal: 10 }}>
                     <View
 
