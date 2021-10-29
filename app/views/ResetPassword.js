@@ -26,11 +26,13 @@ export default class ResetPassword extends React.Component {
 
         
         console.log("Resset Resset Resset ")
-        if(this.state.tenantId == ''){
+        if(this.state.tenantId.trim() == ''){
             Alert.alert('Message','Domain is required')
             return;
         }
-        if(this.state.email == ''){
+       
+        console.log('id id id id id id id id :',this.state.tenantId )
+        if(this.state.email.trim() == ''){
             Alert.alert('Message','Email is required')
             return;
         }
@@ -40,6 +42,8 @@ export default class ResetPassword extends React.Component {
             return
 
         }
+        
+      
         this.setState({ spinner: true })
         let postData = {
             method: 'POST',
