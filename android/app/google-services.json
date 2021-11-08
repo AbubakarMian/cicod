@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "709636210076",
+    "project_id": "commobile-76169",
+    "storage_bucket": "commobile-76169.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:709636210076:android:d192e307243e27c9f99c59",
+        "android_client_info": {
+          "package_name": "com.cicod"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "709636210076-jblvmo47eqk1e891f7q6im2n5ujapbss.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBB_egtl-sd09z8wBEYaDRxHsCBYjv3K3w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "709636210076-jblvmo47eqk1e891f7q6im2n5ujapbss.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
