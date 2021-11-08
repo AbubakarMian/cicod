@@ -347,7 +347,7 @@ class QuickInvoice extends React.Component {
                         
                     >
                         <Image
-                            style={{ height: 50, width: 50 }}
+                            style={{ height: 49, width: 49 }}
                             source={require('../images/Order/settingicon.png')}
                         />
                     </TouchableOpacity>
