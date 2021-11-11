@@ -244,12 +244,12 @@ class Home extends React.Component {
           name={this.props.route.name}
           navigation={this.props.navigation}
         />
-        <Spinner
+        {/* <Spinner
           visible={this.state.spinner}
           textContent={'Please Wait...'}
           textStyle={{color: '#fff'}}
           color={'#fff'}
-        />
+        /> */}
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={{marginBottom: 40}}>
             <View style={[{flexDirection: 'row', paddingVertical: 10}]}>
