@@ -1,34 +1,41 @@
 {
   "project_info": {
-    "project_number": "709636210076",
-    "project_id": "commobile-76169",
-    "storage_bucket": "commobile-76169.appspot.com"
+    "project_number": "737454767174",
+    "project_id": "cicod-9213c",
+    "storage_bucket": "cicod-9213c.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:709636210076:android:d192e307243e27c9f99c59",
+        "mobilesdk_app_id": "1:737454767174:android:95efd6033b4c6848cede47",
         "android_client_info": {
           "package_name": "com.cicod"
         }
       },
       "oauth_client": [
         {
-          "client_id": "709636210076-jblvmo47eqk1e891f7q6im2n5ujapbss.apps.googleusercontent.com",
+          "client_id": "737454767174-hav9he1cn00inin7s2enk75q43fpqunr.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBB_egtl-sd09z8wBEYaDRxHsCBYjv3K3w"
+          "current_key": "AIzaSyDpkKRWtI-YJ9kjX4A5f3eOIjl4FKDmBF0"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "709636210076-jblvmo47eqk1e891f7q6im2n5ujapbss.apps.googleusercontent.com",
+              "client_id": "737454767174-hav9he1cn00inin7s2enk75q43fpqunr.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "737454767174-798gp1jlcikbhokul8gq9q1j3to6fr2b.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "org.cicod.merchant"
+              }
             }
           ]
         }

@@ -23,7 +23,18 @@ export default class Register extends React.Component {
           color={'#fff'}
         />
         <WebView
-          source={{uri: Constants.sass_url}}
+          onNavigationStateChange={({url, canGoBack}) => {
+            console.log('url', url);
+            if (
+              url ==
+              'https://www.cicodsaasdev.com/admin/merchant/setup/success?step=2'
+            ) {
+              this.props.navigation.replace('Login');
+            }
+          }}
+          source={{
+            uri: `${Constants.sass_url}/subscribe?offer=zZPjmFCBG6amyUvSfc0FkefEVPzTiH&trial=true&isBundle=true`,
+          }}
           onLoadEnd={() => this.setState({spinner: false})}
         />
       </View>

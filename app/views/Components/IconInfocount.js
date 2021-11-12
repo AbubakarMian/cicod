@@ -7,7 +7,7 @@ const IconInfocount = ({count}) => {
     <View
       style={{
         position: 'absolute',
-        right: Device.isTablet ? -6 : 5,
+        right: Device.isTablet ? -6 : -6,
         top: 1,
         zIndex: 100,
         padding: 5,

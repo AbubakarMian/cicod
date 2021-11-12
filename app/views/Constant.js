@@ -2,7 +2,7 @@ const auth_url = 'https://api.cicodsaasstaging.com';
 const base_url = 'https://com.cicodsaasstaging.com/com/api';
 const webshop_url = 'cicodsaasstaging.com/webshop';
 const crm_url = 'https://api.cicodsaasstaging.com/crm';
-const sass_url = 'https://www.cicodsaasstaging.com/';
+const sass_url = 'https://www.cicodsaasstaging.com';
 const tenantId = 'sandbox';
 export const Constants = {
   sass_url,

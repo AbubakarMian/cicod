@@ -9,6 +9,7 @@ import {
   Image,
   Platform,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import styles from '../css/CreateProductCategoryCss';
@@ -295,54 +296,69 @@ class CreateProductCategory extends React.Component {
   render() {
     this.get_edit_product_category();
     return (
-      <View style={[{}, styles.mainView]}>
-        <Header navigation={this.props.navigation} />
-        <Spinner
-          visible={this.state.spinner}
-          textContent={'Please Wait...'}
-          textStyle={{color: '#fff'}}
-          color={'#fff'}
-        />
+      <SafeAreaView style={{flex: 1}}>
+        <View style={[{}, styles.mainView]}>
+          <Header navigation={this.props.navigation} />
+          <Spinner
+            visible={this.state.spinner}
+            textContent={'Please Wait...'}
+            textStyle={{color: '#fff'}}
+            color={'#fff'}
+          />
 
-        <AwesomeAlert
-          show={this.state.isMessage}
-          showProgress={false}
-          title="Info"
-          message={this.state.message_text}
-          closeOnTouchOutside={true}
-          closeOnHardwareBackPress={true}
-          showCancelButton={false}
-          showConfirmButton={true}
-          cancelText="Close"
-          confirmButtonColor="#26C281"
-          //   onCancelPressed={() => {
-          //     this.setState({isMessage:false})
-          //   }}
-          onConfirmPressed={() => {
-            this.setState({isMessage: false});
-            this.props.setScreenReload({
-              reload: true,
-            });
-            this.props.navigation.navigate('ProductCategory');
-          }}
-        />
-        <NavBack
-          onClick={() =>
-            this.props.route.params &&
-            this.props.route.params.action == 'create'
-              ? this.props.navigation.goBack()
-              : this.props.navigation.navigate('CreateProduct', {
-                  action: 'create',
-                  prodDetail: null,
-                })
-          }
-          title={
-            this.props.route.params.items == null
-              ? 'CREATE PRODUCT CATEGORY'
-              : 'EDIT PRODUCT CATEGORY'
-          }
-        />
-        {/* <View style={[{}, styles.backRowView]}>
+          <AwesomeAlert
+            show={this.state.isMessage}
+            showProgress={false}
+            title="Info"
+            message={this.state.message_text}
+            closeOnTouchOutside={true}
+            closeOnHardwareBackPress={true}
+            showCancelButton={false}
+            showConfirmButton={true}
+            cancelText="Close"
+            confirmButtonColor="#26C281"
+            //   onCancelPressed={() => {
+            //     this.setState({isMessage:false})
+            //   }}
+            onConfirmPressed={() => {
+              this.setState({isMessage: false});
+              this.props.setScreenReload({
+                reload: true,
+              });
+              this.props.navigation.navigate('ProductCategory');
+            }}
+          />
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'center',
+              paddingHorizontal: 10,
+              justifyContent: 'space-between',
+            }}>
+            <NavBack
+              onClick={() =>
+                this.props.route.params &&
+                this.props.route.params.action == 'create'
+                  ? this.props.navigation.goBack()
+                  : this.props.navigation.navigate('CreateProduct', {
+                      action: 'create',
+                      prodDetail: null,
+                    })
+              }
+              title={
+                this.props.route.params.items == null
+                  ? 'CREATE PRODUCT CATEGORY'
+                  : 'EDIT PRODUCT CATEGORY'
+              }
+            />
+
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('ProductCategory')}>
+              <Icon name="list" color="#929497" size={20} />
+            </TouchableOpacity>
+          </View>
+
+          {/* <View style={[{}, styles.backRowView]}>
                     <TouchableOpacity
                         // onPress={() => this.props.navigation.navigate('Home')}
                         onPress={() => this.props.route.params.action==null? this.props.navigation.goBack():this.props.navigation.navigate("CreateProduct",{action: 'create', prodDetail: null})}
@@ -352,75 +368,76 @@ class CreateProductCategory extends React.Component {
                     <Text style={[{ color: '#2F2E7C', fontWeight: '700', marginLeft: 10 }, fontStyles.normal15]}>
                         {this.props.route.params.items == null?'CREATE':'EDIT'} PRODUCT CATEGORY</Text>
                 </View> */}
-        <View style={[{}, styles.mainContentView]}>
-          <View style={[{}]}>
-            <TextInput
-              onChangeText={text => this.setName(text)}
-              label="Name*"
-              style={{backgroundColor: 'transparent', borderColor: '#CFCFCF'}}
-              width={width - 50}
-              alignSelf={'center'}
-              color={'#000'}
-              value={this.state.product_category.name}
-            />
-            <TextInput
-              onChangeText={text => this.setDescription(text)}
-              label="Description"
-              style={{backgroundColor: 'transparent', borderColor: '#CFCFCF'}}
-              width={width - 50}
-              alignSelf={'center'}
-              color={'#000'}
-              value={this.state.product_category.description}
-            />
-            <CheckBox
-              style={[
-                {
-                  width: width / 2,
-                  alignSelf: 'flex-start',
-                  marginVertical: 10,
-                  alignItems: 'center',
-                },
-              ]}
-              onClick={() => {
-                this.change_on_webshop();
-              }}
-              isChecked={this.state.product_category.on_webshop}
-              rightText={'Add to Webshop'}
-              rightTextStyle={{
-                color: '#4E4D4D',
-                fontSize: 13,
-                fontFamily: 'Open Sans',
-              }}
-              checkBoxColor={'#929497'}
-            />
-            <Text
-              style={[
-                {color: '#4E4D4D', marginVertical: 10},
-                fontStyles.bold13,
-              ]}>
-              Image
-            </Text>
-            <View style={[{}, styles.addImageView]}>
-              <TouchableOpacity onPress={() => this.imageUpload()}>
-                <View
-                  style={{
-                    borderWidth: 0.5,
-                    borderColor: '#aaa',
-                    height: width / 6,
-                    width: width / 6,
-                  }}>
-                  <this.setImage _that={this} />
-                </View>
-              </TouchableOpacity>
+          <View style={[{}, styles.mainContentView]}>
+            <View style={[{}]}>
+              <TextInput
+                onChangeText={text => this.setName(text)}
+                label="Name*"
+                style={{backgroundColor: 'transparent', borderColor: '#CFCFCF'}}
+                width={width - 50}
+                alignSelf={'center'}
+                color={'#000'}
+                value={this.state.product_category.name}
+              />
+              <TextInput
+                onChangeText={text => this.setDescription(text)}
+                label="Description"
+                style={{backgroundColor: 'transparent', borderColor: '#CFCFCF'}}
+                width={width - 50}
+                alignSelf={'center'}
+                color={'#000'}
+                value={this.state.product_category.description}
+              />
+              <CheckBox
+                style={[
+                  {
+                    width: width / 2,
+                    alignSelf: 'flex-start',
+                    marginVertical: 10,
+                    alignItems: 'center',
+                  },
+                ]}
+                onClick={() => {
+                  this.change_on_webshop();
+                }}
+                isChecked={this.state.product_category.on_webshop}
+                rightText={'Add to Webshop'}
+                rightTextStyle={{
+                  color: '#4E4D4D',
+                  fontSize: 13,
+                  fontFamily: 'Open Sans',
+                }}
+                checkBoxColor={'#929497'}
+              />
+              <Text
+                style={[
+                  {color: '#4E4D4D', marginVertical: 10},
+                  fontStyles.bold13,
+                ]}>
+                Image
+              </Text>
+              <View style={[{}, styles.addImageView]}>
+                <TouchableOpacity onPress={() => this.imageUpload()}>
+                  <View
+                    style={{
+                      borderWidth: 0.5,
+                      borderColor: '#aaa',
+                      height: width / 6,
+                      width: width / 6,
+                    }}>
+                    <this.setImage _that={this} />
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
           </View>
+          <TouchableOpacity
+            onPress={() => this.createCategory()}
+            style={[{}, styles.redBtn]}>
+            <Text style={{color: '#fff'}}>Save</Text>
+          </TouchableOpacity>
         </View>
-        <TouchableOpacity
-          onPress={() => this.createCategory()}
-          style={[{}, styles.redBtn]}>
-          <Text style={{color: '#fff'}}>Save</Text>
-        </TouchableOpacity>
-      </View>
+      </SafeAreaView>
     );
   }
 }
