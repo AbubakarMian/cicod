@@ -10,8 +10,11 @@ import {
   Platform,
   TouchableOpacity,
   ScrollView,
+<<<<<<< HEAD
   SafeAreaView,
   ActivityIndicator,
+=======
+>>>>>>> d3939a8a346336bc612f31aa4b5f06924f0ef523
 } from 'react-native';
 import Modal from 'react-native-modal';
 import {Text, TextInput, Searchbar} from 'react-native-paper';
