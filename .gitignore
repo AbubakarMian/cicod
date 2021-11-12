@@ -87,4 +87,5 @@ lint/tmp/
 # lint/reports/
 node_modules/
 
-
+# CocoaPods
+/ios/Pods/

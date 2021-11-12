@@ -233,7 +233,7 @@ class Home extends React.Component {
   render() {
     console.log('uhhhe#$', this.props.route);
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <SafeAreaView style={{flex: 1, backgroundColor: '#ffffff'}}>
         <View
           style={{
             height: height,

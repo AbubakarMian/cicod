@@ -489,7 +489,7 @@ class Network extends React.Component {
                   Platform.OS !== 'android' &&
                   (({highlighted}) => (
                     <View
-                      style={[style.separator, highlighted && {marginLeft: 0}]}
+                      style={[highlighted && {marginLeft: 0}]}
                     />
                   ))
                 }
