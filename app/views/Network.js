@@ -2,30 +2,19 @@ import React from 'react';
 import {
   View,
   Share,
-  TouchableHighlight,
   FlatList,
   Dimensions,
   Alert,
   Image,
   Platform,
   TouchableOpacity,
-  ScrollView,
-<<<<<<< HEAD
   SafeAreaView,
-  ActivityIndicator,
-=======
->>>>>>> d3939a8a346336bc612f31aa4b5f06924f0ef523
 } from 'react-native';
-import Modal from 'react-native-modal';
-import {Text, TextInput, Searchbar} from 'react-native-paper';
-import splashImg from '../images/splash.jpg';
-import styles from '../css/DashboardCss';
+import {Text, Searchbar} from 'react-native-paper';
 import fontStyles from '../css/FontCss';
-import SearchBar from 'react-native-search-bar';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Header from '../views/Header';
 import {connect} from 'react-redux';
-import ImagePicker from 'react-native-image-crop-picker';
 import {
   SET_USER,
   LOGOUT_USER,
@@ -34,13 +23,9 @@ import {
 } from '../redux/constants/index';
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
-import DropDownPicker from 'react-native-dropdown-picker';
 import {Constants} from '../views/Constant';
-import TabNav from '../views/TabsNav';
-import {Picker} from '@react-native-picker/picker';
 // import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
-import {nativeViewProps} from 'react-native-gesture-handler/lib/typescript/handlers/NativeViewGestureHandler';
 import NavBack from './Components/NavBack';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import DropDownModal from './Components/DropDownModal';
@@ -488,9 +473,7 @@ class Network extends React.Component {
                 ItemSeparatorComponent={
                   Platform.OS !== 'android' &&
                   (({highlighted}) => (
-                    <View
-                      style={[highlighted && {marginLeft: 0}]}
-                    />
+                    <View style={[highlighted && {marginLeft: 0}]} />
                   ))
                 }
                 // extraData={this.state.data}
