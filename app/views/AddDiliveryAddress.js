@@ -33,6 +33,7 @@ import RadioForm, {
   RadioButtonLabel,
 } from 'react-native-simple-radio-button';
 import NavBack from './Components/NavBack';
+import Scaffold from './Components/Scaffold';
 
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
@@ -318,72 +319,73 @@ class AddDiliveryAddress extends React.Component {
   }
   render() {
     return (
-      <View style={[{}, styles.mainView]}>
-        <Header navigation={this.props.navigation} />
-        <Spinner
-          visible={this.state.spinner}
-          textContent={'Please Wait...'}
-          textStyle={{color: '#fff'}}
-          color={'#fff'}
-        />
-        <ScrollView>
-          <View>
-            <View style={[{}, styles.backHeaderRowView]}>
-              <NavBack
-                title="ADD DELIVERY ADDRESS"
-                onClick={() => this.props.navigation.goBack()}
-              />
-            </View>
-            <View style={[{}, styles.addressContainer]}>
-              <View
-                style={[
-                  {marginTop: 10, height: height / 1.5},
-                  styles.mainFormView,
-                ]}>
-                <View>
-                  <TextInput
-                    label="House No.*"
-                    style={{backgroundColor: 'transparent'}}
-                    width={width - 50}
-                    alignSelf={'center'}
-                    color={'#000'}
-                    onChangeText={text => this.setState({house_no: text})}
-                  />
-                  <TextInput
-                    label="Street*"
-                    style={{backgroundColor: 'transparent'}}
-                    width={width - 50}
-                    alignSelf={'center'}
-                    color={'#000'}
-                    onChangeText={text => this.setState({street: text})}
-                  />
-                  <TextInput
-                    label="Landmark"
-                    style={{backgroundColor: 'transparent'}}
-                    width={width - 50}
-                    alignSelf={'center'}
-                    color={'#000'}
-                    onChangeText={text => this.setState({landmark: text})}
-                  />
-                  <View style={[{}, styles.formRow]}>
-                    <View style={[{}, styles.formColumn]}>
-                      <TouchableOpacity
-                        onPress={() => this.setState({countryModal: true})}
-                        style={{
-                          padding: 10,
-                          borderBottomWidth: 1,
-                          borderBottomColor: '#aaaa',
-                        }}>
-                        {this.state.country_name == '' ? (
-                          <Text style={{color: '#929497'}}>Country *</Text>
-                        ) : (
-                          <Text style={{color: '#929497'}}>
-                            {this.state.country_name}
-                          </Text>
-                        )}
-                      </TouchableOpacity>
+      <Scaffold>
+        <View style={[{}, styles.mainView]}>
+          <Header navigation={this.props.navigation} />
+          <Spinner
+            visible={this.state.spinner}
+            textContent={'Please Wait...'}
+            textStyle={{color: '#fff'}}
+            color={'#fff'}
+          />
+          <ScrollView>
+            <View>
+              <View style={[{}, styles.backHeaderRowView]}>
+                <NavBack
+                  title="ADD DELIVERY ADDRESS"
+                  onClick={() => this.props.navigation.goBack()}
+                />
+              </View>
+              <View style={[{}, styles.addressContainer]}>
+                <View
+                  style={[
+                    {marginTop: 10, height: height / 1.5},
+                    styles.mainFormView,
+                  ]}>
+                  <View>
+                    <TextInput
+                      label="House No.*"
+                      style={{backgroundColor: 'transparent'}}
+                      width={width - 50}
+                      alignSelf={'center'}
+                      color={'#000'}
+                      onChangeText={text => this.setState({house_no: text})}
+                    />
+                    <TextInput
+                      label="Street*"
+                      style={{backgroundColor: 'transparent'}}
+                      width={width - 50}
+                      alignSelf={'center'}
+                      color={'#000'}
+                      onChangeText={text => this.setState({street: text})}
+                    />
+                    <TextInput
+                      label="Landmark"
+                      style={{backgroundColor: 'transparent'}}
+                      width={width - 50}
+                      alignSelf={'center'}
+                      color={'#000'}
+                      onChangeText={text => this.setState({landmark: text})}
+                    />
+                    <View style={[{}, styles.formRow]}>
+                      <View style={[{}, styles.formColumn]}>
+                        <TouchableOpacity
+                          onPress={() => this.setState({countryModal: true})}
+                          style={{
+                            padding: 10,
+                            borderBottomWidth: 1,
+                            borderBottomColor: '#aaaa',
+                          }}>
+                          {this.state.country_name == '' ? (
+                            <Text style={{color: '#929497'}}>Country *</Text>
+                          ) : (
+                            <Text style={{color: '#929497'}}>
+                              {this.state.country_name}
+                            </Text>
+                          )}
+                        </TouchableOpacity>
 
-                      {/* <DropDownPicker
+                        {/* <DropDownPicker
                                                 onOpen={()=>
                                                 this.setState({
                                                     setCountry:true,
@@ -410,26 +412,26 @@ class AddDiliveryAddress extends React.Component {
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectCountry(item)}
                                             /> */}
+                      </View>
                     </View>
-                  </View>
-                  <View style={[{flexDirection: 'row', alignSelf: 'center'}]}>
-                    <View style={{flex: 1}}>
-                      <TouchableOpacity
-                        onPress={() => this.get_state()}
-                        style={{
-                          padding: 10,
-                          borderBottomWidth: 1,
-                          borderBottomColor: '#aaaa',
-                        }}>
-                        {this.state.state_name == '' ? (
-                          <Text style={{color: '#929497'}}>State *</Text>
-                        ) : (
-                          <Text style={{color: '#929497'}}>
-                            {this.state.state_name}
-                          </Text>
-                        )}
-                      </TouchableOpacity>
-                      {/* <DropDownPicker
+                    <View style={[{flexDirection: 'row', alignSelf: 'center'}]}>
+                      <View style={{flex: 1}}>
+                        <TouchableOpacity
+                          onPress={() => this.get_state()}
+                          style={{
+                            padding: 10,
+                            borderBottomWidth: 1,
+                            borderBottomColor: '#aaaa',
+                          }}>
+                          {this.state.state_name == '' ? (
+                            <Text style={{color: '#929497'}}>State *</Text>
+                          ) : (
+                            <Text style={{color: '#929497'}}>
+                              {this.state.state_name}
+                            </Text>
+                          )}
+                        </TouchableOpacity>
+                        {/* <DropDownPicker
                                                onOpen={()=>
                                             this.setState({
                                                  setCountry:false,
@@ -455,25 +457,25 @@ class AddDiliveryAddress extends React.Component {
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectState(item)}
                                             /> */}
-                    </View>
-                    <View style={{flex: 1}}>
-                      <TouchableOpacity
-                        onPress={() => this.get_region()}
-                        style={{
-                          padding: 10,
-                          borderBottomWidth: 1,
-                          marginLeft: 5,
-                          borderBottomColor: '#aaaa',
-                        }}>
-                        {this.state.lgas_name == '' ? (
-                          <Text style={{color: '#929497'}}>Region *</Text>
-                        ) : (
-                          <Text style={{color: '#929497'}}>
-                            {this.state.lgas_name}
-                          </Text>
-                        )}
-                      </TouchableOpacity>
-                      {/* <DropDownPicker
+                      </View>
+                      <View style={{flex: 1}}>
+                        <TouchableOpacity
+                          onPress={() => this.get_region()}
+                          style={{
+                            padding: 10,
+                            borderBottomWidth: 1,
+                            marginLeft: 5,
+                            borderBottomColor: '#aaaa',
+                          }}>
+                          {this.state.lgas_name == '' ? (
+                            <Text style={{color: '#929497'}}>Region *</Text>
+                          ) : (
+                            <Text style={{color: '#929497'}}>
+                              {this.state.lgas_name}
+                            </Text>
+                          )}
+                        </TouchableOpacity>
+                        {/* <DropDownPicker
                                                 onOpen={()=>
                                                 this.setState({
                                                     setCountry:false,
@@ -500,230 +502,231 @@ class AddDiliveryAddress extends React.Component {
                                                 onChangeItem={item => this.onSelectLgas(item)}
                                                 
                                             /> */}
+                      </View>
                     </View>
-                  </View>
-                  <View style={{zIndex: -0.999, marginVertical: 20}}>
-                    <CheckBox
-                      style={[{width: width, zIndex: -0.999}, styles.cheBox]}
-                      onClick={() => {
-                        this.setState({
-                          is_default: !this.state.is_default,
-                        });
-                      }}
-                      isChecked={this.state.is_default}
-                      rightText={'Set as default'}
-                      rightTextStyle={{
-                        color: '#4E4D4D',
-                        fontSize: 13,
-                        fontFamily: 'Open Sans',
-                      }}
-                      checkBoxColor={'#4E4D4D'}
-                    />
+                    <View style={{zIndex: -0.999, marginVertical: 20}}>
+                      <CheckBox
+                        style={[{width: width, zIndex: -0.999}, styles.cheBox]}
+                        onClick={() => {
+                          this.setState({
+                            is_default: !this.state.is_default,
+                          });
+                        }}
+                        isChecked={this.state.is_default}
+                        rightText={'Set as default'}
+                        rightTextStyle={{
+                          color: '#4E4D4D',
+                          fontSize: 13,
+                          fontFamily: 'Open Sans',
+                        }}
+                        checkBoxColor={'#4E4D4D'}
+                      />
+                    </View>
                   </View>
                 </View>
               </View>
+              <TouchableOpacity
+                onPress={() => this.createDeliveryAddress()}
+                style={[{zIndex: -0.999}, styles.redBtn]}>
+                <Text style={{color: '#fff'}}>Save</Text>
+              </TouchableOpacity>
             </View>
-            <TouchableOpacity
-              onPress={() => this.createDeliveryAddress()}
-              style={[{zIndex: -0.999}, styles.redBtn]}>
-              <Text style={{color: '#fff'}}>Save</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
-        <Modal
-          animationType="fade"
-          visible={this.state.countryModal}
-          transparent={true}
-          hasBackdrop={true}
-          onBackdropPress={() => this.setState({countryModal: false})}
-          deviceHeight={height}
-          deviceWidth={width}
-          justifyContent={'center'}
-          alignItems={'center'}
-          backgroundColor={'#000'}
-          opacity={0.8}>
-          <View
-            style={{
-              maxHeight: height / 1.5,
-              width: width / 1.5,
-              backgroundColor: 'white',
-              zIndex: 9999,
-              opacity: 1,
-              paddingHorizontal: 5,
-              borderRadius: 5,
-              paddingVertical: 5,
-            }}>
-            <FlatList
-              ItemSeparatorComponent={
-                Platform.OS !== 'android' &&
-                (({highlighted}) => (
-                  <View
-                    style={[
-                      style.separator,
-                      highlighted && {marginLeft: 0, height: height / 3},
-                    ]}
-                  />
-                ))
-              }
-              data={this.state.countries_arr} //[{ title: 'Title Text', key: 'item1' }]
-              renderItem={({item, index, separators}) => (
-                <TouchableOpacity
-                  key={item.key}
-                  style={{
-                    marginBottom: 2,
-                    paddingBottom: 5,
-                    paddingHorizontal: 5,
-                    backgroundColor: '#fff',
-                    borderRadius: 2,
-                  }}
-                  onPress={() => this.onSelectCountry(item)}
-                  onShowUnderlay={separators.highlight}
-                  onHideUnderlay={separators.unhighlight}>
-                  <View
+          </ScrollView>
+          <Modal
+            animationType="fade"
+            visible={this.state.countryModal}
+            transparent={true}
+            hasBackdrop={true}
+            onBackdropPress={() => this.setState({countryModal: false})}
+            deviceHeight={height}
+            deviceWidth={width}
+            justifyContent={'center'}
+            alignItems={'center'}
+            backgroundColor={'#000'}
+            opacity={0.8}>
+            <View
+              style={{
+                maxHeight: height / 1.5,
+                width: width / 1.5,
+                backgroundColor: 'white',
+                zIndex: 9999,
+                opacity: 1,
+                paddingHorizontal: 5,
+                borderRadius: 5,
+                paddingVertical: 5,
+              }}>
+              <FlatList
+                ItemSeparatorComponent={
+                  Platform.OS !== 'android' &&
+                  (({highlighted}) => (
+                    <View
+                      style={[
+                        style.separator,
+                        highlighted && {marginLeft: 0, height: height / 3},
+                      ]}
+                    />
+                  ))
+                }
+                data={this.state.countries_arr} //[{ title: 'Title Text', key: 'item1' }]
+                renderItem={({item, index, separators}) => (
+                  <TouchableOpacity
+                    key={item.key}
                     style={{
-                      backgroundColor: 'white',
-                      padding: 5,
-                      marginHorizontal: 10,
-                      justifyContent: 'center',
-                      width: width,
-                      borderRadius: 10,
-                    }}>
-                    <Text>{item.label}</Text>
-                  </View>
-                </TouchableOpacity>
-              )}
-            />
-          </View>
-        </Modal>
-        <Modal
-          animationType="fade"
-          visible={this.state.stateModal}
-          transparent={true}
-          hasBackdrop={true}
-          onBackdropPress={() => this.setState({stateModal: false})}
-          deviceHeight={height}
-          deviceWidth={width}
-          justifyContent={'center'}
-          alignItems={'center'}
-          backgroundColor={'#000'}
-          opacity={0.8}>
-          <View
-            style={{
-              maxHeight: height / 1.5,
-              width: width / 1.5,
-              backgroundColor: 'white',
-              opacity: 1,
-              paddingHorizontal: 5,
-              borderRadius: 5,
-              paddingVertical: 5,
-            }}>
-            <FlatList
-              ItemSeparatorComponent={
-                Platform.OS !== 'android' &&
-                (({highlighted}) => (
-                  <View
-                    style={[
-                      style.separator,
-                      highlighted && {marginLeft: 0, height: height / 3},
-                    ]}
-                  />
-                ))
-              }
-              data={this.state.states_arr} //[{ title: 'Title Text', key: 'item1' }]
-              renderItem={({item, index, separators}) => (
-                <TouchableOpacity
-                  key={item.key}
-                  style={{
-                    marginBottom: 1,
-                    paddingBottom: 5,
-                    paddingHorizontal: 5,
-                    backgroundColor: '#fff',
-                    borderRadius: 2,
-                  }}
-                  onPress={() => this.onSelectState(item)}
-                  onShowUnderlay={separators.highlight}
-                  onHideUnderlay={separators.unhighlight}>
-                  <View
+                      marginBottom: 2,
+                      paddingBottom: 5,
+                      paddingHorizontal: 5,
+                      backgroundColor: '#fff',
+                      borderRadius: 2,
+                    }}
+                    onPress={() => this.onSelectCountry(item)}
+                    onShowUnderlay={separators.highlight}
+                    onHideUnderlay={separators.unhighlight}>
+                    <View
+                      style={{
+                        backgroundColor: 'white',
+                        padding: 5,
+                        marginHorizontal: 10,
+                        justifyContent: 'center',
+                        width: width,
+                        borderRadius: 10,
+                      }}>
+                      <Text>{item.label}</Text>
+                    </View>
+                  </TouchableOpacity>
+                )}
+              />
+            </View>
+          </Modal>
+          <Modal
+            animationType="fade"
+            visible={this.state.stateModal}
+            transparent={true}
+            hasBackdrop={true}
+            onBackdropPress={() => this.setState({stateModal: false})}
+            deviceHeight={height}
+            deviceWidth={width}
+            justifyContent={'center'}
+            alignItems={'center'}
+            backgroundColor={'#000'}
+            opacity={0.8}>
+            <View
+              style={{
+                maxHeight: height / 1.5,
+                width: width / 1.5,
+                backgroundColor: 'white',
+                opacity: 1,
+                paddingHorizontal: 5,
+                borderRadius: 5,
+                paddingVertical: 5,
+              }}>
+              <FlatList
+                ItemSeparatorComponent={
+                  Platform.OS !== 'android' &&
+                  (({highlighted}) => (
+                    <View
+                      style={[
+                        style.separator,
+                        highlighted && {marginLeft: 0, height: height / 3},
+                      ]}
+                    />
+                  ))
+                }
+                data={this.state.states_arr} //[{ title: 'Title Text', key: 'item1' }]
+                renderItem={({item, index, separators}) => (
+                  <TouchableOpacity
+                    key={item.key}
                     style={{
-                      backgroundColor: 'white',
-                      padding: 5,
-                      marginHorizontal: 10,
-                      justifyContent: 'center',
-                      width: width,
-                      borderRadius: 10,
-                    }}>
-                    <Text>{item.label}</Text>
-                  </View>
-                </TouchableOpacity>
-              )}
-            />
-          </View>
-        </Modal>
-        <Modal
-          animationType="fade"
-          visible={this.state.regionModal}
-          transparent={true}
-          hasBackdrop={true}
-          onBackdropPress={() => this.setState({regionModal: false})}
-          deviceHeight={height}
-          deviceWidth={width}
-          justifyContent={'center'}
-          alignItems={'center'}
-          backgroundColor={'#000'}
-          opacity={0.8}>
-          <View
-            style={{
-              maxHeight: height / 1.5,
-              width: width / 1.5,
-              backgroundColor: 'white',
-              opacity: 1,
-              paddingHorizontal: 5,
-              borderRadius: 5,
-              paddingVertical: 5,
-            }}>
-            <FlatList
-              ItemSeparatorComponent={
-                Platform.OS !== 'android' &&
-                (({highlighted}) => (
-                  <View
-                    style={[
-                      style.separator,
-                      highlighted && {marginLeft: 0, height: height / 3},
-                    ]}
-                  />
-                ))
-              }
-              data={this.state.lgas_arr} //[{ title: 'Title Text', key: 'item1' }]
-              renderItem={({item, index, separators}) => (
-                <TouchableOpacity
-                  key={item.key}
-                  style={{
-                    marginBottom: 1,
-                    paddingBottom: 5,
-                    paddingHorizontal: 5,
-                    backgroundColor: '#fff',
-                    borderRadius: 2,
-                  }}
-                  onPress={() => this.onSelectLgas(item)}
-                  onShowUnderlay={separators.highlight}
-                  onHideUnderlay={separators.unhighlight}>
-                  <View
+                      marginBottom: 1,
+                      paddingBottom: 5,
+                      paddingHorizontal: 5,
+                      backgroundColor: '#fff',
+                      borderRadius: 2,
+                    }}
+                    onPress={() => this.onSelectState(item)}
+                    onShowUnderlay={separators.highlight}
+                    onHideUnderlay={separators.unhighlight}>
+                    <View
+                      style={{
+                        backgroundColor: 'white',
+                        padding: 5,
+                        marginHorizontal: 10,
+                        justifyContent: 'center',
+                        width: width,
+                        borderRadius: 10,
+                      }}>
+                      <Text>{item.label}</Text>
+                    </View>
+                  </TouchableOpacity>
+                )}
+              />
+            </View>
+          </Modal>
+          <Modal
+            animationType="fade"
+            visible={this.state.regionModal}
+            transparent={true}
+            hasBackdrop={true}
+            onBackdropPress={() => this.setState({regionModal: false})}
+            deviceHeight={height}
+            deviceWidth={width}
+            justifyContent={'center'}
+            alignItems={'center'}
+            backgroundColor={'#000'}
+            opacity={0.8}>
+            <View
+              style={{
+                maxHeight: height / 1.5,
+                width: width / 1.5,
+                backgroundColor: 'white',
+                opacity: 1,
+                paddingHorizontal: 5,
+                borderRadius: 5,
+                paddingVertical: 5,
+              }}>
+              <FlatList
+                ItemSeparatorComponent={
+                  Platform.OS !== 'android' &&
+                  (({highlighted}) => (
+                    <View
+                      style={[
+                        style.separator,
+                        highlighted && {marginLeft: 0, height: height / 3},
+                      ]}
+                    />
+                  ))
+                }
+                data={this.state.lgas_arr} //[{ title: 'Title Text', key: 'item1' }]
+                renderItem={({item, index, separators}) => (
+                  <TouchableOpacity
+                    key={item.key}
                     style={{
-                      backgroundColor: 'white',
-                      padding: 5,
-                      marginHorizontal: 10,
-                      justifyContent: 'center',
-                      width: width,
-                      borderRadius: 10,
-                    }}>
-                    <Text>{item.label}</Text>
-                  </View>
-                </TouchableOpacity>
-              )}
-            />
-          </View>
-        </Modal>
-      </View>
+                      marginBottom: 1,
+                      paddingBottom: 5,
+                      paddingHorizontal: 5,
+                      backgroundColor: '#fff',
+                      borderRadius: 2,
+                    }}
+                    onPress={() => this.onSelectLgas(item)}
+                    onShowUnderlay={separators.highlight}
+                    onHideUnderlay={separators.unhighlight}>
+                    <View
+                      style={{
+                        backgroundColor: 'white',
+                        padding: 5,
+                        marginHorizontal: 10,
+                        justifyContent: 'center',
+                        width: width,
+                        borderRadius: 10,
+                      }}>
+                      <Text>{item.label}</Text>
+                    </View>
+                  </TouchableOpacity>
+                )}
+              />
+            </View>
+          </Modal>
+        </View>
+      </Scaffold>
     );
   }
 }

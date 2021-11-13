@@ -41,6 +41,7 @@ import RadioForm, {
 } from 'react-native-simple-radio-button';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import SearchBar from 'react-native-search-bar';
+import Scaffold from './Components/Scaffold';
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
 class CreateOrder extends React.Component {
@@ -614,7 +615,7 @@ class CreateOrder extends React.Component {
     }
 
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <Scaffold>
         <View style={[{}, styles.mainView]}>
           <Header navigation={this.props.navigation} />
           <Spinner
@@ -1368,7 +1369,7 @@ class CreateOrder extends React.Component {
             </View>
           </Modal>
         </View>
-      </SafeAreaView>
+      </Scaffold>
     );
   }
 }

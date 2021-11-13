@@ -30,6 +30,7 @@ const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
 import DropDownPicker from 'react-native-dropdown-picker';
 import NavBack from './Components/NavBack';
+import Scaffold from './Components/Scaffold';
 class CustomersDetal extends React.Component {
   constructor(props) {
     super(props);
@@ -97,7 +98,7 @@ class CustomersDetal extends React.Component {
     const {selectedStartDate} = this.state;
     const startDate = selectedStartDate ? selectedStartDate.toString() : '';
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <Scaffold style={{flex: 1}}>
         <View style={[{}, styles.mainView]}>
           <Header navigation={this.props.navigation} />
           <Spinner
@@ -216,7 +217,7 @@ class CustomersDetal extends React.Component {
             </View>
           </View>
         </View>
-      </SafeAreaView>
+      </Scaffold>
     );
   }
 }

@@ -27,6 +27,7 @@ import {Constants} from '../views/Constant';
 import {Text, TextInput} from 'react-native-paper';
 import Modal from 'react-native-modal';
 import NavBack from './Components/NavBack';
+import Scaffold from './Components/Scaffold';
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
 class AddNewCustomer extends React.Component {
@@ -418,7 +419,7 @@ class AddNewCustomer extends React.Component {
   render() {
     // console.log('countries_arr countries_arr countries_arr', this.state.countries_arr)
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <Scaffold>
         <View style={[{}, styles.mainView]}>
           <Header navigation={this.props.navigation} />
           <Spinner
@@ -1053,7 +1054,7 @@ class AddNewCustomer extends React.Component {
             </View>
           </Modal>
         </View>
-      </SafeAreaView>
+      </Scaffold>
     );
   }
 }

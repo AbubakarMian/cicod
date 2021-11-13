@@ -31,6 +31,7 @@ import CheckBox from 'react-native-check-box';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import axios from 'axios';
 import NavBack from './Components/NavBack';
+import Scaffold from './Components/Scaffold';
 const {width, height} = Dimensions.get('window');
 
 class CreateProductCategory extends React.Component {
@@ -296,7 +297,7 @@ class CreateProductCategory extends React.Component {
   render() {
     this.get_edit_product_category();
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <Scaffold>
         <View style={[{}, styles.mainView]}>
           <Header navigation={this.props.navigation} />
           <Spinner
@@ -437,7 +438,7 @@ class CreateProductCategory extends React.Component {
             <Text style={{color: '#fff'}}>Save</Text>
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
+      </Scaffold>
     );
   }
 }

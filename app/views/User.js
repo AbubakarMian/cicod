@@ -25,6 +25,7 @@ import {
   REMOVE_FROM_CART,
 } from '../redux/constants/index';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Scaffold from './Components/Scaffold';
 
 var {width, height} = Dimensions.get('window');
 
@@ -116,7 +117,7 @@ class User extends React.Component {
 
   viewOne() {
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <Scaffold style={{flex: 1}}>
         <View>
           <View style={{flexDirection: 'row', width: width, marginTop: 10}}>
             <View style={{flex: 1}}>
@@ -171,7 +172,7 @@ class User extends React.Component {
             <Text style={[{}, styles.changePasswordText]}>Change Password</Text>
           </TouchableOpacity>
         </View>
-      </SafeAreaView>
+      </Scaffold>
     );
   }
 

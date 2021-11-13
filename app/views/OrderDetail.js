@@ -28,6 +28,7 @@ import {Constants} from './Constant';
 
 import {get_formated_amount} from '../redux/reducers/currencyReducer';
 import NavBack from './Components/NavBack';
+import Scaffold from './Components/Scaffold';
 var {width, height} = Dimensions.get('window');
 
 class OrderDetail extends React.Component {
@@ -165,7 +166,7 @@ class OrderDetail extends React.Component {
       this.get_order_detail(this.props.route.params.id);
     }
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <Scaffold style={{flex: 1}}>
         <View style={[{}, styles.mainView]}>
           <Header navigation={this.props.navigation} />
 
@@ -515,7 +516,7 @@ class OrderDetail extends React.Component {
             </View>
           </ScrollView>
         </View>
-      </SafeAreaView>
+      </Scaffold>
     );
   }
 }

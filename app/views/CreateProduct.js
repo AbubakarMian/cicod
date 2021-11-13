@@ -46,6 +46,7 @@ import {
 import {serialize} from 'object-to-formdata';
 import CategoryDropdown from './Components/CategoryDropdown';
 import DropDownModal from './Components/DropDownModal';
+import Scaffold from './Components/Scaffold';
 
 const {width, height} = Dimensions.get('window');
 
@@ -746,7 +747,7 @@ class CreateProduct extends React.Component {
     this.getProduct();
     console.log('this.state.price', this.state.categoryarr);
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <Scaffold style={{flex: 1}}>
         <View style={[{}, styles.mainView]}>
           <Header navigation={this.props.navigation} />
           <Spinner
@@ -1387,7 +1388,7 @@ class CreateProduct extends React.Component {
             </View>
           </Modal>
         </View>
-      </SafeAreaView>
+      </Scaffold>
     );
   }
 }

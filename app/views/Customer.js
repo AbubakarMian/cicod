@@ -29,6 +29,7 @@ import Header from './Header';
 import {connect} from 'react-redux';
 import {SET_USER, LOGOUT_USER, CUSTOMER_RELOAD} from '../redux/constants/index';
 import NavBack from './Components/NavBack';
+import Scaffold from './Components/Scaffold';
 
 class Customer extends React.Component {
   constructor(props) {
@@ -121,7 +122,7 @@ class Customer extends React.Component {
     const {selectedStartDate} = this.state;
     const startDate = selectedStartDate ? selectedStartDate.toString() : '';
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <Scaffold style={{flex: 1}}>
         <View style={[{}, styles.mainView]}>
           <Header navigation={this.props.navigation} />
           <Spinner
@@ -286,7 +287,7 @@ class Customer extends React.Component {
             )}
           </ScrollView>
         </View>
-      </SafeAreaView>
+      </Scaffold>
     );
   }
 }

@@ -32,6 +32,8 @@ import {
 import {Constants} from '../views/Constant';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import IconInfocount from './Components/IconInfocount';
+import Scaffold from './Components/Scaffold';
+import ModuleCard from './Components/ModuleCard';
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
 class Home extends React.Component {
@@ -233,7 +235,7 @@ class Home extends React.Component {
   render() {
     console.log('uhhhe#$', this.props.route);
     return (
-      <SafeAreaView style={{flex: 1, backgroundColor: '#ffffff'}}>
+      <Scaffold>
         <View
           style={{
             height: height,
@@ -329,17 +331,15 @@ class Home extends React.Component {
                   {
                     flexDirection: 'row',
                     // backgroundColor: 'red',
-                    padding: 10,
-                    alignSelf: 'center',
-                    width: width - 20,
-                    alignSelf: 'center',
+                    paddingHorizontal: 10,
+
                     marginTop: 20,
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     // paddingRight: 10,
                   },
                 ]}>
-                <TouchableOpacity
+                <ModuleCard
                   disabled={
                     this.state.user.kciInfo &&
                     this.state.user.kciInfo.showWarning &&
@@ -347,35 +347,11 @@ class Home extends React.Component {
                       ? true
                       : false
                   }
-                  // style={{flex: 1}}
-                  onPress={() => this.props.navigation.navigate('Dashboard')}>
-                  <View
-                    style={[
-                      {
-                        flexDirection: 'column',
-                        width: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        height: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        justifyContent: 'center',
-
-                        alignItems: 'center',
-                        borderWidth: 1,
-                        borderRadius: 10,
-                        backgroundColor: '#fff',
-                        borderColor: '#fff',
-                      },
-                    ]}>
-                    <Image
-                      style={{height: width / 8, width: width / 8}}
-                      source={require('../images/home/dashboard.png')}
-                    />
-                    <Text style={[{}, styles.cardLableText]}>Dashboard</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Dashboard')}
+                  source={require('../images/home/dashboard.png')}
+                  title="Dashboard"
+                />
+                <ModuleCard
                   disabled={
                     this.state.user.kciInfo &&
                     this.state.user.kciInfo.showWarning &&
@@ -383,35 +359,11 @@ class Home extends React.Component {
                       ? true
                       : false
                   }
-                  // style={{flex: 1}}
-                  onPress={() => this.createOrder()}>
-                  <View
-                    style={[
-                      {
-                        flexDirection: 'column',
-                        width: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        height: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        // //marginLeft: 7,
-                        borderWidth: 1,
-                        borderRadius: 10,
-                        backgroundColor: '#fff',
-                        borderColor: '#fff',
-                      },
-                    ]}>
-                    <Image
-                      style={{height: width / 8, width: width / 8}}
-                      source={require('../images/home/sell.png')}
-                    />
-                    <Text style={[{}, styles.cardLableText]}>Sell</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
+                  onPress={() => this.createOrder()}
+                  source={require('../images/home/sell.png')}
+                  title="     Sell       "
+                />
+                <ModuleCard
                   disabled={
                     this.state.user.kciInfo &&
                     this.state.user.kciInfo.showWarning &&
@@ -419,51 +371,25 @@ class Home extends React.Component {
                       ? true
                       : false
                   }
-                  // style={{flex: 1}}
-                  onPress={() => this.props.navigation.navigate('Order')}>
-                  <View
-                    style={[
-                      {
-                        flexDirection: 'column',
-                        width: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        height: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        // //marginLeft: 10,
-                        borderWidth: 1,
-                        borderRadius: 10,
-                        backgroundColor: '#fff',
-                        borderColor: '#fff',
-                      },
-                    ]}>
-                    <Image
-                      style={{height: width / 8, width: width / 8}}
-                      source={require('../images/home/order.png')}
-                    />
-                    <Text style={[{}, styles.cardLableText]}>Orders</Text>
-                  </View>
-                </TouchableOpacity>
+                  onPress={() => this.props.navigation.navigate('Order')}
+                  source={require('../images/home/order.png')}
+                  title="     Order     "
+                />
               </View>
 
               <View
                 style={[
                   {
                     flexDirection: 'row',
-                    alignSelf: 'center',
-                    width: width - 20,
-                    alignSelf: 'center',
+
                     marginTop: 10,
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     // paddingRight: 10,
-                    padding: 10,
+                    paddingHorizontal: 10,
                   },
                 ]}>
-                <TouchableOpacity
+                <ModuleCard
                   disabled={
                     this.state.user.kciInfo &&
                     this.state.user.kciInfo.showWarning &&
@@ -471,34 +397,11 @@ class Home extends React.Component {
                       ? true
                       : false
                   }
-                  // style={{flex: 1}}
-                  onPress={() => this.props.navigation.navigate('Customer')}>
-                  <View
-                    style={[
-                      {
-                        flexDirection: 'column',
-                        width: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        height: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderWidth: 1,
-                        borderRadius: 10,
-                        backgroundColor: '#fff',
-                        borderColor: '#fff',
-                      },
-                    ]}>
-                    <Image
-                      style={{height: width / 8, width: width / 8}}
-                      source={require('../images/home/customers.png')}
-                    />
-                    <Text style={[{}, styles.cardLableText]}>Customers</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Customer')}
+                  source={require('../images/home/customers.png')}
+                  title="Customers"
+                />
+                <ModuleCard
                   disabled={
                     this.state.user.kciInfo &&
                     this.state.user.kciInfo.showWarning &&
@@ -506,37 +409,13 @@ class Home extends React.Component {
                       ? true
                       : false
                   }
-                  // style={{flex: 1}}
                   onPress={() =>
                     this.props.navigation.navigate('Products', {seller_id: 0})
-                  }>
-                  <View
-                    style={[
-                      {
-                        flexDirection: 'column',
-                        width: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        height: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        //marginLeft: 7,
-                        borderWidth: 1,
-                        borderRadius: 10,
-                        backgroundColor: '#fff',
-                        borderColor: '#fff',
-                      },
-                    ]}>
-                    <Image
-                      style={{height: width / 8, width: width / 8}}
-                      source={require('../images/home/products.png')}
-                    />
-                    <Text style={[{}, styles.cardLableText]}>Products</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
+                  }
+                  source={require('../images/home/products.png')}
+                  title="Products"
+                />
+                <ModuleCard
                   disabled={
                     this.state.user.kciInfo &&
                     this.state.user.kciInfo.showWarning &&
@@ -544,50 +423,24 @@ class Home extends React.Component {
                       ? true
                       : false
                   }
-                  // style={{flex: 1}}
-                  onPress={() => this.setState({isShopModal: true})}>
-                  <View
-                    style={[
-                      {
-                        flexDirection: 'column',
-                        width: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        height: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        //marginLeft: 10,
-                        borderWidth: 1,
-                        borderRadius: 10,
-                        backgroundColor: '#fff',
-                        borderColor: '#fff',
-                      },
-                    ]}>
-                    <Image
-                      style={{height: width / 8, width: width / 8}}
-                      source={require('../images/home/webshop.png')}
-                    />
-                    <Text style={[{}, styles.cardLableText]}>Store</Text>
-                  </View>
-                </TouchableOpacity>
+                  onPress={() => this.props.navigation.navigate('Buyers')}
+                  source={require('../images/home/buyers.png')}
+                  title="Resellers"
+                />
               </View>
               <View
                 style={[
                   {
                     flexDirection: 'row',
-                    alignSelf: 'center',
-                    width: width - 20,
-                    alignSelf: 'center',
+
                     marginTop: 10,
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     // paddingRight: 10,
-                    padding: 10,
+                    paddingHorizontal: 10,
                   },
                 ]}>
-                <TouchableOpacity
+                <ModuleCard
                   disabled={
                     this.state.user.kciInfo &&
                     this.state.user.kciInfo.showWarning &&
@@ -595,34 +448,11 @@ class Home extends React.Component {
                       ? true
                       : false
                   }
-                  // style={{flex: 1}}
-                  onPress={() => this.props.navigation.navigate('Connect')}>
-                  <View
-                    style={[
-                      {
-                        flexDirection: 'column',
-                        width: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        height: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderWidth: 1,
-                        borderRadius: 10,
-                        backgroundColor: '#fff',
-                        borderColor: '#fff',
-                      },
-                    ]}>
-                    <Image
-                      style={{height: width / 8, width: width / 8}}
-                      source={require('../images/home/connect.png')}
-                    />
-                    <Text style={[{}, styles.cardLableText]}>Connect</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
+                  onPress={() => this.props.navigation.navigate('Connect')}
+                  source={require('../images/home/connect.png')}
+                  title="Connect"
+                />
+                <ModuleCard
                   disabled={
                     this.state.user.kciInfo &&
                     this.state.user.kciInfo.showWarning &&
@@ -630,39 +460,15 @@ class Home extends React.Component {
                       ? true
                       : false
                   }
-                  // style={{flex: 1}}
                   onPress={() =>
                     this.props.navigation.navigate('Supplier', {
                       heading: 'supplier',
                     })
-                  }>
-                  <View
-                    style={[
-                      {
-                        flexDirection: 'column',
-                        width: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        height: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        //marginLeft: 7,
-                        borderWidth: 1,
-                        borderRadius: 10,
-                        backgroundColor: '#fff',
-                        borderColor: '#fff',
-                      },
-                    ]}>
-                    <Image
-                      style={{height: width / 8, width: width / 8}}
-                      source={require('../images/home/suppliers.png')}
-                    />
-                    <Text style={[{}, styles.cardLableText]}>Suppliers</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
+                  }
+                  source={require('../images/home/suppliers.png')}
+                  title="Suppliers"
+                />
+                <ModuleCard
                   disabled={
                     this.state.user.kciInfo &&
                     this.state.user.kciInfo.showWarning &&
@@ -670,113 +476,45 @@ class Home extends React.Component {
                       ? true
                       : false
                   }
-                  // style={{flex: 1}}
-                  onPress={() => this.props.navigation.navigate('Buyers')}>
-                  <View
-                    style={[
-                      {
-                        flexDirection: 'column',
-                        width: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        height: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        //marginLeft: 10,
-                        borderWidth: 1,
-                        borderRadius: 10,
-                        backgroundColor: '#fff',
-                        borderColor: '#fff',
-                      },
-                    ]}>
-                    <Image
-                      style={{height: width / 8, width: width / 8}}
-                      source={require('../images/home/buyers.png')}
-                    />
-                    <Text style={[{}, styles.cardLableText]}>Resellers</Text>
-                  </View>
-                </TouchableOpacity>
-
-                {/* <TouchableOpacity
-              disabled={ this.state.user.kciInfo.showWarning && this.state.user.kciInfo.kciUpdates[0].dayRemaining==0 ?true:false }
-
-                style={{ flex: 1 }}
-                onPress={() => this.props.navigation.navigate('Supplier', { heading: 'buy' })}
-
-              >
-                <View style={[{
-                  flexDirection: 'column',width: width / 2 - 80, height: width / 2 - 80,
-                  justifyContent: 'center', alignItems: 'center', marginLeft: 15,
-                  borderWidth: 1, borderRadius: 10, backgroundColor: '#fff', borderColor: '#fff'
-                }]}>
-                  <Image
-                    style={{ height: width / 8, width: width / 8 }}
-                    source={require('../images/home/tag.png')}
-                  />
-                  <Text style={[{}, styles.cardLableText]}>Buy</Text>
-                </View>
-              </TouchableOpacity> */}
+                  onPress={() => this.props.navigation.navigate('QuickInvoice')}
+                  source={require('../images/home/quickinvoice.png')}
+                  title="Quick Invoice"
+                />
               </View>
               <View
                 style={[
                   {
                     flexDirection: 'row',
-                    alignSelf: 'center',
-                    width: width - 20,
-                    alignSelf: 'center',
+
                     marginTop: 10,
                     alignItems: 'center',
                     justifyContent: 'space-between',
                     // paddingRight: 10,
-                    padding: 10,
+                    paddingHorizontal: 10,
                   },
                 ]}>
-                <TouchableOpacity
-                  disabled={
-                    this.state.user.kciInfo &&
-                    this.state.user.kciInfo.showWarning &&
-                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0
-                      ? true
-                      : false
-                  }
-                  // style={{flex: 1}}
-                  onPress={() => {
-                    this.setState({countNetwork: 0}, () =>
-                      this.props.navigation.navigate('Network'),
-                    );
-                  }}>
+                <View>
                   {this.state.countNetwork > 0 && (
                     <IconInfocount count={this.state.countNetwork} />
                   )}
-                  <View
-                    style={[
-                      {
-                        flexDirection: 'column',
-                        width: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        height: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderWidth: 1,
-                        borderRadius: 10,
-                        backgroundColor: '#fff',
-                        borderColor: '#fff',
-                      },
-                    ]}>
-                    <Image
-                      style={{height: width / 8, width: width / 8}}
-                      source={require('../images/home/network.png')}
-                    />
-                    <Text style={[{}, styles.cardLableText]}>Network</Text>
-                  </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity
+                  <ModuleCard
+                    disabled={
+                      this.state.user.kciInfo &&
+                      this.state.user.kciInfo.showWarning &&
+                      this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0
+                        ? true
+                        : false
+                    }
+                    onPress={() => {
+                      this.setState({countNetwork: 0}, () =>
+                        this.props.navigation.navigate('Network'),
+                      );
+                    }}
+                    source={require('../images/home/network.png')}
+                    title="Network"
+                  />
+                </View>
+                <ModuleCard
                   disabled={
                     this.state.user.kciInfo &&
                     this.state.user.kciInfo.showWarning &&
@@ -784,39 +522,18 @@ class Home extends React.Component {
                       ? true
                       : false
                   }
-                  // style={{flex: 1}}
                   onPress={() =>
-                    this.props.navigation.navigate('QuickInvoice')
-                  }>
-                  <View
-                    style={[
-                      {
-                        flexDirection: 'column',
-                        width: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        height: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        //marginLeft: 7,
-                        borderWidth: 1,
-                        borderRadius: 10,
-                        backgroundColor: '#fff',
-                        borderColor: '#fff',
-                      },
-                    ]}>
-                    <Image
-                      style={{height: width / 8, width: width / 8}}
-                      source={require('../images/home/quickinvoice.png')}
-                    />
-                    <Text style={[{}, styles.cardLableText]}>
-                      Quick Invoice
-                    </Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
+                    this.setState({
+                      modalInfoType: 'finance',
+                      modalInfoTextMore: 'Manage accounting on the web',
+                      modalInfo: true,
+                      modalInfoText: '',
+                    })
+                  }
+                  source={require('../images/home/account.png')}
+                  title="Accounting"
+                />
+                <ModuleCard
                   disabled={
                     this.state.user.kciInfo &&
                     this.state.user.kciInfo.showWarning &&
@@ -824,7 +541,58 @@ class Home extends React.Component {
                       ? true
                       : false
                   }
-                  // style={{flex: 1}}
+                  onPress={() =>
+                    this.setState({
+                      modalInfoType: 'adduser',
+                      modalInfoTextMore:
+                        'To add more users to your account, go on the web',
+                      modalInfo: true,
+                    })
+                  }
+                  source={require('../images/home/AddUser.png')}
+                  title="Add User"
+                />
+              </View>
+
+              <View
+                style={[
+                  {
+                    flexDirection: 'row',
+
+                    marginTop: 10,
+                    alignItems: 'center',
+                    // justifyContent: 'space-between',
+
+                    paddingHorizontal: 10,
+                  },
+                ]}>
+                {/* <ModuleCard
+                  disabled={
+                    this.state.user.kciInfo &&
+                    this.state.user.kciInfo.showWarning &&
+                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0
+                      ? true
+                      : false
+                  }
+                  onPress={() =>
+                    this.setState({
+                      modalInfoType: 'finance',
+                      modalInfoTextMore: 'Finace coming soon...',
+                      modalInfo: true,
+                      modalInfoText: '',
+                    })
+                  }
+                  source={require('../images/home/finance.png')}
+                  title="Finance"
+                /> */}
+                <ModuleCard
+                  disabled={
+                    this.state.user.kciInfo &&
+                    this.state.user.kciInfo.showWarning &&
+                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0
+                      ? true
+                      : false
+                  }
                   onPress={() => {
                     this.setState({
                       modalInfoType: 'delivery',
@@ -834,177 +602,10 @@ class Home extends React.Component {
                       modalInfoText:
                         'Your delivery rate card is only accessible on the web',
                     });
-                  }}>
-                  <View
-                    style={[
-                      {
-                        flexDirection: 'column',
-                        width: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        height: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        //marginLeft: 10,
-                        borderWidth: 1,
-                        borderRadius: 10,
-                        backgroundColor: '#fff',
-                        borderColor: '#fff',
-                      },
-                    ]}>
-                    <Image
-                      style={{height: width / 8, width: width / 8}}
-                      source={require('../images/home/delivery.png')}
-                    />
-                    <Text style={[{}, styles.cardLableText]}>Delivery</Text>
-                  </View>
-                </TouchableOpacity>
-              </View>
-
-              <View
-                style={[
-                  {
-                    flexDirection: 'row',
-                    alignSelf: 'center',
-                    width: width - 20,
-                    alignSelf: 'center',
-                    marginTop: 10,
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: 10,
-                  },
-                ]}>
-                <TouchableOpacity
-                  disabled={
-                    this.state.user.kciInfo &&
-                    this.state.user.kciInfo.showWarning &&
-                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0
-                      ? true
-                      : false
-                  }
-                  // style={{flex: 1}}
-                  onPress={() =>
-                    this.setState({
-                      modalInfoType: 'finance',
-                      modalInfoTextMore: 'Finace coming soon...',
-                      modalInfo: true,
-                      modalInfoText: '',
-                    })
-                  }>
-                  <View
-                    style={[
-                      {
-                        flexDirection: 'column',
-                        width: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        height: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        borderWidth: 1,
-                        borderRadius: 10,
-                        backgroundColor: '#fff',
-                        borderColor: '#fff',
-                      },
-                    ]}>
-                    <Image
-                      style={{height: width / 8, width: width / 8}}
-                      source={require('../images/home/finance.png')}
-                    />
-                    <Text style={[{}, styles.cardLableText]}>Finance</Text>
-                  </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  disabled={
-                    this.state.user.kciInfo &&
-                    this.state.user.kciInfo.showWarning &&
-                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0
-                      ? true
-                      : false
-                  }
-                  // style={{flex: 1}}
-                  onPress={() =>
-                    this.setState({
-                      modalInfoType: 'finance',
-                      modalInfoTextMore: 'Manage accounting on the web',
-                      modalInfo: true,
-                      modalInfoText: '',
-                    })
-                  }>
-                  <View
-                    style={[
-                      {
-                        flexDirection: 'column',
-                        width: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        height: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        //marginLeft: 7,
-                        borderWidth: 1,
-                        borderRadius: 10,
-                        backgroundColor: '#fff',
-                        borderColor: '#fff',
-                      },
-                    ]}>
-                    <Image
-                      style={{height: width / 8, width: width / 8}}
-                      source={require('../images/home/account.png')}
-                    />
-                    <Text style={[{}, styles.cardLableText]}>Accounting</Text>
-                  </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  disabled={
-                    this.state.user.kciInfo &&
-                    this.state.user.kciInfo.showWarning &&
-                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0
-                      ? true
-                      : false
-                  }
-                  // style={{flex: 1}}
-                  onPress={() =>
-                    this.setState({
-                      modalInfoType: 'adduser',
-                      modalInfoTextMore:
-                        'To add more users to your account, go on the web',
-                      modalInfo: true,
-                    })
-                  }>
-                  <View
-                    style={[
-                      {
-                        flexDirection: 'column',
-                        width: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        height: Device.isTablet
-                          ? width / 2 - 200
-                          : width / 2 - 80,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        //marginLeft: 10,
-                        borderWidth: 1,
-                        borderRadius: 10,
-                        backgroundColor: '#fff',
-                        borderColor: '#fff',
-                      },
-                    ]}>
-                    <Image
-                      style={{height: width / 8, width: width / 8}}
-                      source={require('../images/home/AddUser.png')}
-                    />
-                    <Text style={[{}, styles.cardLableText]}>Add User</Text>
-                  </View>
-                </TouchableOpacity>
+                  }}
+                  source={require('../images/home/delivery.png')}
+                  title="Delivery"
+                />
               </View>
 
               <View
@@ -1259,7 +860,7 @@ class Home extends React.Component {
             </View>
           </Modal>
         </View>
-      </SafeAreaView>
+      </Scaffold>
     );
   }
 }

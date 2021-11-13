@@ -25,6 +25,7 @@ import {Constants} from './Constant';
 import {connect} from 'react-redux';
 import {SET_USER, LOGOUT_USER, SET_SUPPLIER} from '../redux/constants/index';
 import NumberFormat from 'react-number-format';
+import Scaffold from './Components/Scaffold';
 
 var {width, height} = Dimensions.get('window');
 class BuyersView extends React.Component {
@@ -401,7 +402,7 @@ class BuyersView extends React.Component {
   render() {
     console.log(' this state  this state items', this.state.is_active);
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <Scaffold style={{flex: 1}}>
         <View>
           <Header navigation={this.props.navigation} />
           <Spinner
@@ -989,7 +990,7 @@ class BuyersView extends React.Component {
             </View>
           </SuspendModal>
         </View>
-      </SafeAreaView>
+      </Scaffold>
     );
   }
 }

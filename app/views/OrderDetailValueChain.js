@@ -30,6 +30,7 @@ import {Constants} from './Constant';
 // import NumberFormat from 'react-number-format';
 import {} from '../redux/reducers/currencyReducer';
 import OrderDetailSection from './Components/Order/OrderDetailSection';
+import Scaffold from './Components/Scaffold';
 var {width, height} = Dimensions.get('window');
 
 class OrderDetail extends React.Component {
@@ -245,7 +246,7 @@ class OrderDetail extends React.Component {
     //         this.get_order_detail(this.props.route.params.id)
     // }
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <Scaffold style={{flex: 1}}>
         <View style={[{}, styles.mainView]}>
           <Header navigation={this.props.navigation} />
           <Spinner
@@ -295,7 +296,7 @@ class OrderDetail extends React.Component {
             />
           </ScrollView>
         </View>
-      </SafeAreaView>
+      </Scaffold>
     );
   }
 }

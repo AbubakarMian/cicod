@@ -35,6 +35,7 @@ import TabNav from '../views/TabsNav';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import {nativeViewProps} from 'react-native-gesture-handler/lib/typescript/handlers/NativeViewGestureHandler';
 import NavBack from './Components/NavBack';
+import Scaffold from './Components/Scaffold';
 class QuickInvoice extends React.Component {
   constructor(props) {
     super(props);
@@ -390,107 +391,108 @@ class QuickInvoice extends React.Component {
     const startDate = selectedStartDate ? selectedStartDate.toString() : '';
 
     return (
-      <View
-        style={{
-          width: width,
-          backgroundColor: '#F0F0F0',
-          alignItems: 'center',
-          flex: 1,
-          borderRadius: 10,
-          flexDirection: 'column',
-        }}>
-        <Spinner
-          visible={this.state.spinner}
-          textContent={'Please Wait...'}
-          textStyle={{color: '#fff'}}
-          color={'#fff'}
-        />
-        <Header navigation={this.props.navigation} />
+      <Scaffold>
         <View
           style={{
-            flexDirection: 'row',
-            paddingHorizontal: 10,
-            // backgroundColor: 'red',
-            width: '100%',
-            marginTop: 10,
+            width: width,
+            backgroundColor: '#F0F0F0',
             alignItems: 'center',
-            justifyContent: 'space-between',
+            flex: 1,
+            borderRadius: 10,
+            flexDirection: 'column',
           }}>
-          <NavBack
-            title="QUICK INVOICE"
-            onClick={() => this.props.navigation.goBack()}
+          <Spinner
+            visible={this.state.spinner}
+            textContent={'Please Wait...'}
+            textStyle={{color: '#fff'}}
+            color={'#fff'}
           />
+          <Header navigation={this.props.navigation} />
+          <View
+            style={{
+              flexDirection: 'row',
+              paddingHorizontal: 10,
+              // backgroundColor: 'red',
+              width: '100%',
+              marginTop: 10,
+              alignItems: 'center',
+              justifyContent: 'space-between',
+            }}>
+            <NavBack
+              title="QUICK INVOICE"
+              onClick={() => this.props.navigation.goBack()}
+            />
 
-          {/* <TouchableOpacity
+            {/* <TouchableOpacity
                             onPress={() => this.props.navigation.navigate('ProductCategory')}
                         >
                             <Text style={{ fontSize: 12, color: '#B1272C', marginRight: 10 }}>View Product Category</Text>
                         </TouchableOpacity> */}
-          <TouchableOpacity
-            onPress={() =>
-              this.props.navigation.navigate('CreateQuickInvoice', {
-                action: 'create',
-                prodDetail: null,
-              })
-            }>
-            <Image
-              style={{height: 30, width: 30}}
-              source={require('../images/products/circlePlus.png')}
-            />
-          </TouchableOpacity>
-        </View>
-        <View
-          style={{
-            marginBottom: 5,
-            flexDirection: 'row',
-            width: width - 20,
-            alignSelf: 'center',
-            borderRadius: 5,
-            marginTop: 10,
-            alignItems: 'center',
-          }}>
-          <Searchbar
-            placeholder="Search Invoice No."
-            style={[{color: '#D8D8D8'}, fontStyles.normal14]}
-            iconColor="#929497"
-            style={{
-              width: width / 1.3,
-              alignSelf: 'center',
-              marginTop: 5,
-              marginBottom: 5,
-              elevation: 0,
-              borderColor: '#D8DCDE',
-            }}
-            onChangeText={text => this.setState({search_product: text})}
-            // onSubmitEditing={() => this.search()}
-            //update
-          ></Searchbar>
+            <TouchableOpacity
+              onPress={() =>
+                this.props.navigation.navigate('CreateQuickInvoice', {
+                  action: 'create',
+                  prodDetail: null,
+                })
+              }>
+              <Image
+                style={{height: 30, width: 30}}
+                source={require('../images/products/circlePlus.png')}
+              />
+            </TouchableOpacity>
+          </View>
           <View
-            style={[
-              {
-                borderBottomColor: '#E6E6E6',
-                borderBottomWidth: 0.5,
-                width: width - 20,
+            style={{
+              marginBottom: 5,
+              flexDirection: 'row',
+              width: width - 20,
+              alignSelf: 'center',
+              borderRadius: 5,
+              marginTop: 10,
+              alignItems: 'center',
+            }}>
+            <Searchbar
+              placeholder="Search Invoice No."
+              style={[{color: '#D8D8D8'}, fontStyles.normal14]}
+              iconColor="#929497"
+              style={{
+                width: width / 1.3,
                 alignSelf: 'center',
-                marginTop: 10,
-                marginBottom: 10,
-              },
-            ]}></View>
+                marginTop: 5,
+                marginBottom: 5,
+                elevation: 0,
+                borderColor: '#D8DCDE',
+              }}
+              onChangeText={text => this.setState({search_product: text})}
+              // onSubmitEditing={() => this.search()}
+              //update
+            ></Searchbar>
+            <View
+              style={[
+                {
+                  borderBottomColor: '#E6E6E6',
+                  borderBottomWidth: 0.5,
+                  width: width - 20,
+                  alignSelf: 'center',
+                  marginTop: 10,
+                  marginBottom: 10,
+                },
+              ]}></View>
 
-          <TouchableOpacity
-            style={{position: 'absolute', right: 0, alignSelf: 'center'}}>
-            <Image
-              style={{height: 49, width: 49}}
-              source={require('../images/Order/settingicon.png')}
-            />
-          </TouchableOpacity>
-        </View>
+            <TouchableOpacity
+              style={{position: 'absolute', right: 0, alignSelf: 'center'}}>
+              <Image
+                style={{height: 49, width: 49}}
+                source={require('../images/Order/settingicon.png')}
+              />
+            </TouchableOpacity>
+          </View>
 
-        {/* <ScrollView></ScrollView> */}
-        <ScrollView zIndex={-0.999}>
-          <this.listProducts _that={this} />
-        </ScrollView>
-        {/* <Modal
+          {/* <ScrollView></ScrollView> */}
+          <ScrollView zIndex={-0.999}>
+            <this.listProducts _that={this} />
+          </ScrollView>
+          {/* <Modal
                  animationType="fade"
                  visible={true}//this.state.regionModal
                  transparent={true}
@@ -503,7 +505,8 @@ class QuickInvoice extends React.Component {
                  backgroundColor={'#000'}
                  opacity={0.8}
                 > */}
-      </View>
+        </View>
+      </Scaffold>
     );
   }
 }

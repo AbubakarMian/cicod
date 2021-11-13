@@ -37,6 +37,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import TabNav from '../views/TabsNav';
 // import DropDownPicker from 'react-native-dropdown-picker';
 import FontCss from '../css/FontCss';
+import Scaffold from './Components/Scaffold';
 
 class Order extends React.Component {
   constructor(props) {
@@ -543,7 +544,7 @@ class Order extends React.Component {
   render() {
     console.log(this.props.user);
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <Scaffold style={{flex: 1}}>
         <View
           style={{
             width: width,
@@ -800,7 +801,7 @@ class Order extends React.Component {
             props={this.props}
           />
         </View>
-      </SafeAreaView>
+      </Scaffold>
     );
   }
 }

@@ -41,6 +41,7 @@ import {nativeViewProps} from 'react-native-gesture-handler/lib/typescript/handl
 import NavBack from './Components/NavBack';
 import DropDownModal from './Components/DropDownModal';
 import CategoryDropdown from './Components/CategoryDropdown';
+import Scaffold from './Components/Scaffold';
 class Products extends React.Component {
   constructor(props) {
     super(props);
@@ -195,7 +196,7 @@ class Products extends React.Component {
       ' category ID search !!!!!!!!!!!!!!!@@@@@@@@@@@@@@',
       category_id,
     );
-    this.setState({category_id});
+    this.setState({category_id, showdropDownModal: false});
     let url =
       category_id == ''
         ? Constants.productslist
@@ -378,7 +379,7 @@ class Products extends React.Component {
     const startDate = selectedStartDate ? selectedStartDate.toString() : '';
 
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <Scaffold>
         <View
           style={{
             width: width,
@@ -603,7 +604,7 @@ class Products extends React.Component {
             data={this.state.categoryarr}
           />
         </View>
-      </SafeAreaView>
+      </Scaffold>
     );
   }
 }

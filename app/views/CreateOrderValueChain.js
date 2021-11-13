@@ -51,6 +51,7 @@ import NoOrderDetail from './Components/CreateOrder/NoOrderDetail';
 import OrderDetail from './Components/CreateOrder/OrderDetail';
 import _ from 'lodash';
 import NavBack from './Components/NavBack';
+import Scaffold from './Components/Scaffold';
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
 class CreateOrderValueChain extends React.Component {
@@ -697,187 +698,335 @@ class CreateOrderValueChain extends React.Component {
     );
 
     return (
-      <View style={[{}, styles.mainView]}>
-        <Header navigation={this.props.navigation} />
-        <Spinner
-          visible={this.state.spinner}
-          textContent={'Please Wait...'}
-          textStyle={{color: '#fff'}}
-          color={'#fff'}
-        />
-        <ScrollView>
-          <View style={{paddingBottom: 20}}>
-            <View style={[{}, styles.backHeaderRowView]}>
-              <NavBack
-                title="CREATE ORDER"
-                onClick={() => this.props.navigation.goBack()}
-              />
+      <Scaffold>
+        <View style={[{}, styles.mainView]}>
+          <Header navigation={this.props.navigation} />
+          <Spinner
+            visible={this.state.spinner}
+            textContent={'Please Wait...'}
+            textStyle={{color: '#fff'}}
+            color={'#fff'}
+          />
+          <ScrollView>
+            <View style={{paddingBottom: 20}}>
+              <View style={[{}, styles.backHeaderRowView]}>
+                <NavBack
+                  title="CREATE ORDER"
+                  onClick={() => this.props.navigation.goBack()}
+                />
 
-              <View style={[{}, styles.backHeadingCloseView]}>
-                <Icon name="times" size={20} color="#929497" />
-                <TouchableOpacity
-                  // onPress={() => this.props.navigation.navigate('Order')}
-                  onPress={() => this.closeOrder()}>
-                  <Text style={[{}, styles.backHeadingCloseText]}>Close</Text>
-                </TouchableOpacity>
+                <View style={[{}, styles.backHeadingCloseView]}>
+                  <Icon name="times" size={20} color="#929497" />
+                  <TouchableOpacity
+                    // onPress={() => this.props.navigation.navigate('Order')}
+                    onPress={() => this.closeOrder()}>
+                    <Text style={[{}, styles.backHeadingCloseText]}>Close</Text>
+                  </TouchableOpacity>
+                </View>
               </View>
-            </View>
-            {this.props.route.params.screen_name == 'buy' ? (
-              <View style={[{}, styles.customerTitleRowView]}>
-                {this.props.supplier.name != '' ? (
-                  <Text style={[{}, styles.customerTitleRowHeadingText]}>
-                    {this.props.supplier.name}
-                  </Text>
-                ) : (
-                  <Text style={[{}, styles.customerTitleRowHeadingText]}>
-                    {this.props.user.firstname + ' ' + this.props.user.lastname}
-                  </Text>
-                )}
-                <TouchableOpacity
-                  onPress={() => {
-                    this.getSuppliersList(Constants.supplierlist);
-                    // this.setState({ suppliereModal: true });
-                  }}>
-                  <Text style={[{}, styles.customerTitleRowchangesupplierText]}>
-                    Change Supplier
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            ) : null}
-            <View style={[styles.customerContainerView, {paddingVertical: 10}]}>
-              <Text
-                style={[
-                  {
-                    color: '#929497',
-                    textAlign: 'left',
-                    alignSelf: 'flex-start',
-                    marginLeft: 10,
-                  },
-                  fontStyles.bold15,
-                ]}>
-                Customer Details
-              </Text>
-
+              {this.props.route.params.screen_name == 'buy' ? (
+                <View style={[{}, styles.customerTitleRowView]}>
+                  {this.props.supplier.name != '' ? (
+                    <Text style={[{}, styles.customerTitleRowHeadingText]}>
+                      {this.props.supplier.name}
+                    </Text>
+                  ) : (
+                    <Text style={[{}, styles.customerTitleRowHeadingText]}>
+                      {this.props.user.firstname +
+                        ' ' +
+                        this.props.user.lastname}
+                    </Text>
+                  )}
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.getSuppliersList(Constants.supplierlist);
+                      // this.setState({ suppliereModal: true });
+                    }}>
+                    <Text
+                      style={[{}, styles.customerTitleRowchangesupplierText]}>
+                      Change Supplier
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              ) : null}
               <View
-                style={{
-                  borderBottomWidth: 0.5,
-                  width: width - 20,
-                  alignSelf: 'center',
-                  marginVertical: 5,
-                  borderColor: '#E6E6E6',
-                }}></View>
-
-              {this.props.route.params.heading == 'supplier' && (
-                <CustomerDetail
-                  isSupplier={true}
-                  customer={this.state.customer}
-                  name={this.state.customer_name}
-                  email={this.state.customer_email}
-                  phone={this.state.customer_phone}
-                />
-              )}
-              {this.props.route.params.heading != 'supplier' &&
-                (this.props.customer.name == '' ||
-                this.props.customer.name == undefined ? (
-                  <NoCustomer />
-                ) : (
-                  <CustomerDetail
-                    currency={this.props.currency.currency}
-                    name={this.props.customer.name}
-                    email={this.props.customer.email}
-                    phone={this.props.customer.phone}
-                  />
-                ))}
-            </View>
-            <TouchableOpacity
-              onPress={() =>
-                this.props.navigation.navigate('AddProductValueChain', {
-                  heading: 'supplier',
-                  item: this.state.supplier,
-                })
-              }>
-              <View style={[{}, styles.customerContaineraddProductView]}>
-                <Image
-                  style={{height: 30, width: 30}}
-                  source={require('../images/products/circlePlus.png')}
-                />
-                <Text style={[{}, styles.customerContaineraddProductText]}>
-                  Add Product
-                </Text>
-              </View>
-            </TouchableOpacity>
-            <View style={[{}, styles.OrderDetailContainer]}>
-              <View style={[{}, styles.OrderDetailHeadingRow]}>
-                <Text style={[{}, styles.OrderDetailHeadingRowText]}>
-                  Order Detail
-                </Text>
-                {this.state.cart_arr.length != 0 ? (
-                  <Text style={[{}, styles.OrderDetailNotificationText]}>
-                    {this.state.cart_arr.length ?? 0}
-                  </Text>
-                ) : null}
-              </View>
-              <TouchableOpacity
-                onPress={() => this.clearOrder()}
-                style={[{}, styles.OrderDetailClearTouc]}>
-                <Text style={[{}, styles.OrderDetailNormalgRowText]}>
-                  Clear Order
-                </Text>
-              </TouchableOpacity>
-              {this.state.cart_arr.length == 0 ? (
-                <NoOrderDetail />
-              ) : (
-                <OrderDetail
-                  currency={this.props.cart.currency}
-                  carts={this.state.cart_arr}
-                  counterFun={this.counterFun}
-                  removeProduct={this.removeProduct}
-                />
-              )}
-            </View>
-            <View style={[{}, styles.diliveryTypeContainerView]}>
-              <TouchableOpacity onPress={() => this.DeliveryType('delivery')}>
-                <View
+                style={[styles.customerContainerView, {paddingVertical: 10}]}>
+                <Text
                   style={[
                     {
-                      borderWidth: 0.25,
-                      backgroundColor:
-                        this.state.deliveryType === 'delivery' &&
-                        this.props.deliveryAddress.address != ''
-                          ? '#FFF4F4'
-                          : '#fff',
+                      color: '#929497',
+                      textAlign: 'left',
+                      alignSelf: 'flex-start',
+                      marginLeft: 10,
                     },
-                    styles.radioFormView,
+                    fontStyles.bold15,
                   ]}>
+                  Customer Details
+                </Text>
+
+                <View
+                  style={{
+                    borderBottomWidth: 0.5,
+                    width: width - 20,
+                    alignSelf: 'center',
+                    marginVertical: 5,
+                    borderColor: '#E6E6E6',
+                  }}></View>
+
+                {this.props.route.params.heading == 'supplier' && (
+                  <CustomerDetail
+                    isSupplier={true}
+                    customer={this.state.customer}
+                    name={this.state.customer_name}
+                    email={this.state.customer_email}
+                    phone={this.state.customer_phone}
+                  />
+                )}
+                {this.props.route.params.heading != 'supplier' &&
+                  (this.props.customer.name == '' ||
+                  this.props.customer.name == undefined ? (
+                    <NoCustomer />
+                  ) : (
+                    <CustomerDetail
+                      currency={this.props.currency.currency}
+                      name={this.props.customer.name}
+                      email={this.props.customer.email}
+                      phone={this.props.customer.phone}
+                    />
+                  ))}
+              </View>
+              <TouchableOpacity
+                onPress={() =>
+                  this.props.navigation.navigate('AddProductValueChain', {
+                    heading: 'supplier',
+                    item: this.state.supplier,
+                  })
+                }>
+                <View style={[{}, styles.customerContaineraddProductView]}>
+                  <Image
+                    style={{height: 30, width: 30}}
+                    source={require('../images/products/circlePlus.png')}
+                  />
+                  <Text style={[{}, styles.customerContaineraddProductText]}>
+                    Add Product
+                  </Text>
+                </View>
+              </TouchableOpacity>
+              <View style={[{}, styles.OrderDetailContainer]}>
+                <View style={[{}, styles.OrderDetailHeadingRow]}>
+                  <Text style={[{}, styles.OrderDetailHeadingRowText]}>
+                    Order Detail
+                  </Text>
+                  {this.state.cart_arr.length != 0 ? (
+                    <Text style={[{}, styles.OrderDetailNotificationText]}>
+                      {this.state.cart_arr.length ?? 0}
+                    </Text>
+                  ) : null}
+                </View>
+                <TouchableOpacity
+                  onPress={() => this.clearOrder()}
+                  style={[{}, styles.OrderDetailClearTouc]}>
+                  <Text style={[{}, styles.OrderDetailNormalgRowText]}>
+                    Clear Order
+                  </Text>
+                </TouchableOpacity>
+                {this.state.cart_arr.length == 0 ? (
+                  <NoOrderDetail />
+                ) : (
+                  <OrderDetail
+                    currency={this.props.cart.currency}
+                    carts={this.state.cart_arr}
+                    counterFun={this.counterFun}
+                    removeProduct={this.removeProduct}
+                  />
+                )}
+              </View>
+              <View style={[{}, styles.diliveryTypeContainerView]}>
+                <TouchableOpacity onPress={() => this.DeliveryType('delivery')}>
+                  <View
+                    style={[
+                      {
+                        borderWidth: 0.25,
+                        backgroundColor:
+                          this.state.deliveryType === 'delivery' &&
+                          this.props.deliveryAddress.address != ''
+                            ? '#FFF4F4'
+                            : '#fff',
+                      },
+                      styles.radioFormView,
+                    ]}>
+                    <RadioForm
+                      // isSelected={this.state.delivery_type_option == 'delivery'}
+                      color={'yellow'}
+                      size={5}
+                      buttonColor={'green'}
+                      buttonSize={10}
+                      buttonOuterSize={20}
+                      onPress={value => {
+                        this.setState({value3Index: value});
+                      }}
+                    />
+
+                    {radio_props_dilvery.map((obj, i) => (
+                      <RadioButton labelHorizontal={true} key={i}>
+                        {/*  You can set RadioButtonLabel before RadioButtonInput */}
+                        <RadioButtonInput
+                          obj={obj}
+                          index={i}
+                          null
+                          isSelected={
+                            this.state.delivery_type_option == 'delivery' &&
+                            this.props.deliveryAddress.address != ''
+                          }
+                          onPress={() => this.DeliveryType('delivery')}
+                          borderWidth={1}
+                          buttonInnerColor={'#e74c3c'}
+                          buttonOuterColor={
+                            this.state.value3Index === i &&
+                            this.props.deliveryAddress.address != ''
+                              ? '#2196f3'
+                              : '#000'
+                          }
+                          buttonSize={10}
+                          buttonOuterSize={20}
+                          buttonStyle={{}}
+                          buttonWrapStyle={{marginLeft: 10}}
+                        />
+                        <RadioButtonLabel
+                          obj={obj}
+                          index={i}
+                          labelHorizontal={true}
+                          onPress={() => this.DeliveryType('delivery')}
+                          // labelStyle={{fontSize: 20, color: '#2ecc71'}}
+                          labelWrapStyle={{}}
+                        />
+                      </RadioButton>
+                    ))}
+                    {/* <Text style={[{}, styles.smailGrayText]}>{this.props.deliveryAddress.address ?? 'Dilivery to customer address'}</Text> */}
+
+                    <Text style={[{}, styles.smailGrayText]}>
+                      {this.state.delivery_type_option == 'delivery' &&
+                      this.props.deliveryAddress.address != ''
+                        ? this.props.deliveryAddress.address
+                        : 'Delivery to customer address'}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={() => this.DeliveryType('pickup')}>
+                  <View
+                    style={[
+                      {
+                        borderWidth: 0.25,
+                        backgroundColor:
+                          this.state.deliveryType === 'pickup'
+                            ? '#FFF4F4'
+                            : '#fff',
+                      },
+                      styles.radioFormView,
+                    ]}>
+                    <RadioForm
+                      isSelected={this.state.delivery_type_option == 'pickup'}
+                      color={'yellow'}
+                      // radio_props={radio_props_payment}
+                      size={5}
+                      buttonColor={'green'}
+                      buttonSize={10}
+                      buttonOuterSize={20}
+                      backgroundColor={
+                        this.state.address_backgound === 'delivery'
+                          ? '#2196f3'
+                          : '#fff'
+                      }
+                      onPress={() => this.DeliveryType('pickup')}
+                    />
+                    {radio_props_pickup.map((obj, i) => (
+                      <RadioButton labelHorizontal={true} key={i}>
+                        <RadioButtonInput
+                          obj={obj}
+                          index={i}
+                          isSelected={
+                            this.state.delivery_type_option == 'pickup'
+                          }
+                          onPress={() => this.DeliveryType('pickup')}
+                          borderWidth={1}
+                          buttonInnerColor={'#e74c3c'}
+                          buttonOuterColor={
+                            this.state.value3Index === i ? '#2196f3' : '#000'
+                          }
+                          backgroundColor={
+                            this.state.address_backgound === 'pickup'
+                              ? '#2196f3'
+                              : '#fff'
+                          }
+                          buttonSize={10}
+                          buttonOuterSize={20}
+                          buttonStyle={{}}
+                          buttonWrapStyle={{marginLeft: 10}}
+                        />
+                        <RadioButtonLabel
+                          obj={obj}
+                          index={i}
+                          labelHorizontal={true}
+                          onPress={value => {
+                            this.setState({value3Index: value});
+                          }}
+                          labelWrapStyle={{}}
+                        />
+                      </RadioButton>
+                    ))}
+                    <Text style={[{}, styles.smailGrayText]}>
+                      Pickup from our location
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+              <View style={[{}, styles.paymentContainerView]}>
+                <Text style={[{}, styles.OrderDetailHeadingRowText]}>
+                  Payment Options
+                </Text>
+                <View
+                  style={{
+                    borderWidth: 0.25,
+                    borderColor: '#E6E6E6',
+                    width: width - 20,
+                    alignSelf: 'center',
+                    marginTop: 10,
+                  }}></View>
+                <View style={[{}, styles.radioFormView]}>
                   <RadioForm
-                    // isSelected={this.state.delivery_type_option == 'delivery'}
+                    isSelected={false}
                     color={'yellow'}
                     size={5}
                     buttonColor={'green'}
                     buttonSize={10}
                     buttonOuterSize={20}
+                    initial={0}
+                    style={{}}
                     onPress={value => {
-                      this.setState({value3Index: value});
+                      this.setState({value3IndexPayment: value});
                     }}
+                    // onPress={() => this.DeliveryType('delivery')}
                   />
-
-                  {radio_props_dilvery.map((obj, i) => (
-                    <RadioButton labelHorizontal={true} key={i}>
-                      {/*  You can set RadioButtonLabel before RadioButtonInput */}
+                  {radio_props_payment.map((obj, i) => (
+                    <RadioButton
+                      style={{
+                        backgroundColor: '#F5F5F5',
+                        paddingVertical: 10,
+                        marginBottom: 20,
+                        paddingHorizontal: 10,
+                      }}
+                      labelHorizontal={true}
+                      key={i}>
                       <RadioButtonInput
                         obj={obj}
                         index={i}
-                        null
-                        isSelected={
-                          this.state.delivery_type_option == 'delivery' &&
-                          this.props.deliveryAddress.address != ''
-                        }
-                        onPress={() => this.DeliveryType('delivery')}
+                        style={{backgroundColor: 'red'}}
+                        isSelected={this.state.value3IndexPayment === i}
+                        onPress={(value, label) => this.paymentFun(obj)}
                         borderWidth={1}
                         buttonInnerColor={'#e74c3c'}
                         buttonOuterColor={
-                          this.state.value3Index === i &&
-                          this.props.deliveryAddress.address != ''
+                          this.state.value3IndexPayment === i
                             ? '#2196f3'
                             : '#000'
                         }
@@ -890,256 +1039,118 @@ class CreateOrderValueChain extends React.Component {
                         obj={obj}
                         index={i}
                         labelHorizontal={true}
-                        onPress={() => this.DeliveryType('delivery')}
+                        onPress={(value, label) => this.paymentFun(obj)} //this.setState({ value3Index: value })
                         // labelStyle={{fontSize: 20, color: '#2ecc71'}}
                         labelWrapStyle={{}}
                       />
                     </RadioButton>
                   ))}
-                  {/* <Text style={[{}, styles.smailGrayText]}>{this.props.deliveryAddress.address ?? 'Dilivery to customer address'}</Text> */}
-
-                  <Text style={[{}, styles.smailGrayText]}>
-                    {this.state.delivery_type_option == 'delivery' &&
-                    this.props.deliveryAddress.address != ''
-                      ? this.props.deliveryAddress.address
-                      : 'Delivery to customer address'}
-                  </Text>
                 </View>
-              </TouchableOpacity>
-              <TouchableOpacity onPress={() => this.DeliveryType('pickup')}>
-                <View
-                  style={[
-                    {
-                      borderWidth: 0.25,
-                      backgroundColor:
-                        this.state.deliveryType === 'pickup'
-                          ? '#FFF4F4'
-                          : '#fff',
-                    },
-                    styles.radioFormView,
-                  ]}>
-                  <RadioForm
-                    isSelected={this.state.delivery_type_option == 'pickup'}
-                    color={'yellow'}
-                    // radio_props={radio_props_payment}
-                    size={5}
-                    buttonColor={'green'}
-                    buttonSize={10}
-                    buttonOuterSize={20}
-                    backgroundColor={
-                      this.state.address_backgound === 'delivery'
-                        ? '#2196f3'
-                        : '#fff'
-                    }
-                    onPress={() => this.DeliveryType('pickup')}
-                  />
-                  {radio_props_pickup.map((obj, i) => (
-                    <RadioButton labelHorizontal={true} key={i}>
-                      <RadioButtonInput
-                        obj={obj}
-                        index={i}
-                        isSelected={this.state.delivery_type_option == 'pickup'}
-                        onPress={() => this.DeliveryType('pickup')}
-                        borderWidth={1}
-                        buttonInnerColor={'#e74c3c'}
-                        buttonOuterColor={
-                          this.state.value3Index === i ? '#2196f3' : '#000'
-                        }
-                        backgroundColor={
-                          this.state.address_backgound === 'pickup'
-                            ? '#2196f3'
-                            : '#fff'
-                        }
-                        buttonSize={10}
-                        buttonOuterSize={20}
-                        buttonStyle={{}}
-                        buttonWrapStyle={{marginLeft: 10}}
-                      />
-                      <RadioButtonLabel
-                        obj={obj}
-                        index={i}
-                        labelHorizontal={true}
-                        onPress={value => {
-                          this.setState({value3Index: value});
-                        }}
-                        labelWrapStyle={{}}
-                      />
-                    </RadioButton>
-                  ))}
-                  <Text style={[{}, styles.smailGrayText]}>
-                    Pickup from our location
-                  </Text>
-                </View>
-              </TouchableOpacity>
-            </View>
-            <View style={[{}, styles.paymentContainerView]}>
-              <Text style={[{}, styles.OrderDetailHeadingRowText]}>
-                Payment Options
-              </Text>
+                {this.props.route.params.screen_name != 'buy' && (
+                  <View style={[{}, styles.paymentCheckboxView]}>
+                    <CheckBox
+                      style={{
+                        width: width / 1.5,
+                        alignSelf: 'center',
+                        alignItems: 'center',
+                      }}
+                      onClick={() => {
+                        this.setState({
+                          show_part_payment: !this.state.show_part_payment,
+                        });
+                      }}
+                      isChecked={this.state.show_part_payment}
+                      rightText={'Accept multiple part payment'}
+                      rightTextStyle={{
+                        color: '#4E4D4D',
+                        fontSize: 13,
+                        fontFamily: 'Open Sans',
+                      }}
+                      checkBoxColor={'#929497'}
+                    />
+                  </View>
+                )}
+              </View>
               <View
                 style={{
-                  borderWidth: 0.25,
-                  borderColor: '#E6E6E6',
+                  backgroundColor: '#fff',
                   width: width - 20,
                   alignSelf: 'center',
                   marginTop: 10,
-                }}></View>
-              <View style={[{}, styles.radioFormView]}>
-                <RadioForm
-                  isSelected={false}
-                  color={'yellow'}
-                  size={5}
-                  buttonColor={'green'}
-                  buttonSize={10}
-                  buttonOuterSize={20}
-                  initial={0}
-                  style={{}}
-                  onPress={value => {
-                    this.setState({value3IndexPayment: value});
-                  }}
-                  // onPress={() => this.DeliveryType('delivery')}
-                />
-                {radio_props_payment.map((obj, i) => (
-                  <RadioButton
-                    style={{
-                      backgroundColor: '#F5F5F5',
-                      paddingVertical: 10,
-                      marginBottom: 20,
-                      paddingHorizontal: 10,
-                    }}
-                    labelHorizontal={true}
-                    key={i}>
-                    <RadioButtonInput
-                      obj={obj}
-                      index={i}
-                      style={{backgroundColor: 'red'}}
-                      isSelected={this.state.value3IndexPayment === i}
-                      onPress={(value, label) => this.paymentFun(obj)}
-                      borderWidth={1}
-                      buttonInnerColor={'#e74c3c'}
-                      buttonOuterColor={
-                        this.state.value3IndexPayment === i ? '#2196f3' : '#000'
-                      }
-                      buttonSize={10}
-                      buttonOuterSize={20}
-                      buttonStyle={{}}
-                      buttonWrapStyle={{marginLeft: 10}}
-                    />
-                    <RadioButtonLabel
-                      obj={obj}
-                      index={i}
-                      labelHorizontal={true}
-                      onPress={(value, label) => this.paymentFun(obj)} //this.setState({ value3Index: value })
-                      // labelStyle={{fontSize: 20, color: '#2ecc71'}}
-                      labelWrapStyle={{}}
-                    />
-                  </RadioButton>
-                ))}
-              </View>
-              {this.props.route.params.screen_name != 'buy' && (
-                <View style={[{}, styles.paymentCheckboxView]}>
-                  <CheckBox
-                    style={{
-                      width: width / 1.5,
-                      alignSelf: 'center',
-                      alignItems: 'center',
-                    }}
-                    onClick={() => {
-                      this.setState({
-                        show_part_payment: !this.state.show_part_payment,
-                      });
-                    }}
-                    isChecked={this.state.show_part_payment}
-                    rightText={'Accept multiple part payment'}
-                    rightTextStyle={{
-                      color: '#4E4D4D',
-                      fontSize: 13,
-                      fontFamily: 'Open Sans',
-                    }}
-                    checkBoxColor={'#929497'}
-                  />
-                </View>
-              )}
-            </View>
-            <View
-              style={{
-                backgroundColor: '#fff',
-                width: width - 20,
-                alignSelf: 'center',
-                marginTop: 10,
-                borderRadius: 10,
-                paddingBottom: 10,
-              }}>
-              <View style={[{borderBottomWidth: 0.25}, styles.subTotleRowView]}>
-                <View style={[{}, styles.subTotleColumn1View]}>
-                  <Text style={[{}, styles.subTotleColumn1Text]}>
-                    Subtotal:
-                  </Text>
-                  {this.state.cart_detail.has_vat ? (
+                  borderRadius: 10,
+                  paddingBottom: 10,
+                }}>
+                <View
+                  style={[{borderBottomWidth: 0.25}, styles.subTotleRowView]}>
+                  <View style={[{}, styles.subTotleColumn1View]}>
                     <Text style={[{}, styles.subTotleColumn1Text]}>
-                      Tax({this.state.cart_detail.vat_percent}%)
+                      Subtotal:
                     </Text>
-                  ) : null}
+                    {this.state.cart_detail.has_vat ? (
+                      <Text style={[{}, styles.subTotleColumn1Text]}>
+                        Tax({this.state.cart_detail.vat_percent}%)
+                      </Text>
+                    ) : null}
 
-                  {this.props.delivery.country_id != 0 ? (
-                    <Text style={[{}, styles.subTotleColumn1Text]}>
-                      Delivery Fee:
+                    {this.props.delivery.country_id != 0 ? (
+                      <Text style={[{}, styles.subTotleColumn1Text]}>
+                        Delivery Fee:
+                      </Text>
+                    ) : null}
+                    <Text style={[{}, styles.subTotleColumn1Text]}>TOTAL:</Text>
+                  </View>
+                  <View style={[{}, styles.subTotleColumn2View]}>
+                    <Text style={[{}, styles.subTotleColumn2Text]}>
+                      {this.props.cart.currency}{' '}
+                      {parseFloat(
+                        this.state.cart_detail.total_price ?? 0.0,
+                      ).toFixed(2)}
                     </Text>
-                  ) : null}
-                  <Text style={[{}, styles.subTotleColumn1Text]}>TOTAL:</Text>
-                </View>
-                <View style={[{}, styles.subTotleColumn2View]}>
-                  <Text style={[{}, styles.subTotleColumn2Text]}>
-                    {this.props.cart.currency}{' '}
-                    {parseFloat(
-                      this.state.cart_detail.total_price ?? 0.0,
-                    ).toFixed(2)}
-                  </Text>
-                  {this.state.cart_detail.has_vat ? (
+                    {this.state.cart_detail.has_vat ? (
+                      <Text style={[{}, styles.subTotleColumn2Text]}>
+                        {this.props.cart.currency +
+                          ' ' +
+                          this.state.cart_detail.tax.toFixed(2) ?? 0.0}
+                      </Text>
+                    ) : null}
+
+                    {this.props.delivery.country_id != 0 ? (
+                      <Text style={[{}, styles.subTotleColumn2Text]}>
+                        {' '}
+                        {this.props.cart.currency}{' '}
+                        {this.props.delivery.delivery_fee ?? 0.0}
+                      </Text>
+                    ) : null}
                     <Text style={[{}, styles.subTotleColumn2Text]}>
                       {this.props.cart.currency +
                         ' ' +
-                        this.state.cart_detail.tax.toFixed(2) ?? 0.0}
+                        parseFloat(this.state.amount_payable + '').toFixed(2)}
                     </Text>
-                  ) : null}
-
-                  {this.props.delivery.country_id != 0 ? (
-                    <Text style={[{}, styles.subTotleColumn2Text]}>
-                      {' '}
-                      {this.props.cart.currency}{' '}
-                      {this.props.delivery.delivery_fee ?? 0.0}
-                    </Text>
-                  ) : null}
-                  <Text style={[{}, styles.subTotleColumn2Text]}>
-                    {this.props.cart.currency +
-                      ' ' +
-                      parseFloat(this.state.amount_payable + '').toFixed(2)}
-                  </Text>
+                  </View>
                 </View>
-              </View>
-              <View
-                style={{
-                  flexDirection: 'row',
-                  width: width - 50,
-                  alignSelf: 'center',
-                  marginVertical: 10,
-                }}>
-                <TouchableOpacity
-                  style={{flex: 1, justifyContent: 'center'}}
-                  onPress={() =>
-                    this.props.navigation.navigate('ApplyDiscount', {
-                      total_price: this.state.cart_detail.total_price,
-                      discount_amount: this.props.orderDiscountReducer
-                        .discount_amount,
-                    })
-                  }>
-                  {/* <View style={{ flexDirection: 'row' }}>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    width: width - 50,
+                    alignSelf: 'center',
+                    marginVertical: 10,
+                  }}>
+                  <TouchableOpacity
+                    style={{flex: 1, justifyContent: 'center'}}
+                    onPress={() =>
+                      this.props.navigation.navigate('ApplyDiscount', {
+                        total_price: this.state.cart_detail.total_price,
+                        discount_amount: this.props.orderDiscountReducer
+                          .discount_amount,
+                      })
+                    }>
+                    {/* <View style={{ flexDirection: 'row' }}>
                                         <Image source={require('../images/icon15.png')}
                                             style={{ height: 20, width: 20 }} />
                                         <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Apply Discount</Text>
                                     </View> */}
-                </TouchableOpacity>
-                {/* <TouchableOpacity
+                  </TouchableOpacity>
+                  {/* <TouchableOpacity
                                     style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}
                                     onPress={() => this.props.navigation.navigate('AddNote')}
                                 >
@@ -1149,161 +1160,165 @@ class CreateOrderValueChain extends React.Component {
                                         <Text style={{ color: '#929497', fontSize: 10, marginLeft: 5, fontWeight: 'bold' }}>Add Note</Text>
                                     </View>
                                 </TouchableOpacity> */}
-              </View>
-              <TouchableOpacity
-                onPress={() => this.createOrderFun()}
-                style={[{}, styles.btnContinuueView]}>
-                <Text style={{color: '#FFFFFF'}}>
-                  {this.state.pay_button_lable}
-                </Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </ScrollView>
-        <Modal
-          visible={this.state.suppliereModal}
-          onRequestClose={() => this.setState({suppliereModal: false})}
-          onDismiss={() => this.setState({suppliereModal: false})}
-          transparent={true}>
-          <View style={[{}, styles.mainContainer]}>
-            <TouchableOpacity
-              style={[{}, styles.backgroundTouch]}></TouchableOpacity>
-            <View style={[{}, styles.contentView]}>
-              <View style={[{}, styles.modalCancleRow]}>
-                <Text style={[{}, styles.modalCancleText]}>
-                  SELECT SUPPLIERS
-                </Text>
+                </View>
                 <TouchableOpacity
-                  onPress={() => this.setState({suppliereModal: false})}
-                  style={[{}, styles.modalCancleTouch]}>
-                  <Icon name="times" size={20} color="#929497" />
-                </TouchableOpacity>
-              </View>
-              <View style={[{}, styles.searchRow]}>
-                <Icon name="search" size={20} color="#929497" />
-                <TextInput
-                  label="Search supplier"
-                  style={{backgroundColor: 'transparent'}}
-                  width={width - 50}
-                  alignSelf={'center'}
-                  color={'#000'}
-                  onChangeText={text => this.setState({search_supplier: text})}
-                  onSubmitEditing={() => this.searchSupplier()}
-                />
-              </View>
-              <ScrollView>
-                <FlatList
-                  ItemSeparatorComponent={
-                    Platform.OS !== 'android' &&
-                    (({highlighted}) => (
-                      <View
-                        style={[
-                          style.separator,
-                          highlighted && {marginLeft: 0},
-                        ]}
-                      />
-                    ))
-                  }
-                  data={this.state.supplierlist}
-                  renderItem={({item, index, separators}) => (
-                    <TouchableOpacity
-                      key={item.key}
-                      onPress={() => this.supplierModalFun(item)}
-                      onShowUnderlay={separators.highlight}
-                      onHideUnderlay={separators.unhighlight}>
-                      <View
-                        style={[{marginTop: 10}, styles.modalListContainer]}>
-                        <Image
-                          style={{width: 30, height: 30}}
-                          source={require('../images/bage.png')}
-                        />
-                        <View style={[{}, styles.modalListContentView]}>
-                          <Text style={[{color: '#4E4D4D'}, fontStyles.bold15]}>
-                            {item.seller_name}
-                          </Text>
-                          <Text
-                            style={[{color: '#929497'}, fontStyles.normal12]}>
-                            {item.seller_id}
-                          </Text>
-                        </View>
-                        <Icon
-                          style={[{}, styles.modalListContentRightIcon]}
-                          name="angle-right"
-                          size={20}
-                          color="#aaa"
-                        />
-                      </View>
-                    </TouchableOpacity>
-                  )}
-                />
-              </ScrollView>
-            </View>
-          </View>
-        </Modal>
-        <Modal visible={this.state.ConfirmationPayInvoice}>
-          {console.log(this.props.user)}
-          <View
-            style={{
-              alignSelf: 'center',
-              backgroundColor: '#fff',
-              width: width - 50,
-              justifyContent: 'center',
-              alignItems: 'center',
-              paddingVertical: 20,
-              borderRadius: 10,
-              flexDirection: 'column',
-            }}>
-            <View style={{flexDirection: 'row', marginBottom: 30}}>
-              <Text
-                style={{color: '#B1272C', fontWeight: 'bold', fontSize: 20}}>
-                Generate CICOD Order
-              </Text>
-            </View>
-            <View style={{flexDirection: 'row'}}>
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: '#fff',
-                    paddingVertical: 15,
-                    padding: 30,
-                    borderRadius: 100,
-                    borderWidth: 1,
-                    borderColor: '#B1272C',
-                  }}
-                  onPress={() => {
-                    this.setState({ConfirmationPayInvoice: false});
-                  }}>
-                  <Text style={{color: '#B1272C', paddingHorizontal: 10}}>
-                    Cancel
+                  onPress={() => this.createOrderFun()}
+                  style={[{}, styles.btnContinuueView]}>
+                  <Text style={{color: '#FFFFFF'}}>
+                    {this.state.pay_button_lable}
                   </Text>
                 </TouchableOpacity>
               </View>
-              <View
-                style={{
-                  flex: 1,
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}>
-                <TouchableOpacity
-                  style={{
-                    backgroundColor: '#B1272C',
-                    paddingVertical: 15,
-                    padding: 40,
-                    borderRadius: 100,
-                  }}
-                  onPress={() => this.createOrderFun()}>
-                  <Text style={{color: '#fff'}}>Confirm</Text>
-                </TouchableOpacity>
+            </View>
+          </ScrollView>
+          <Modal
+            visible={this.state.suppliereModal}
+            onRequestClose={() => this.setState({suppliereModal: false})}
+            onDismiss={() => this.setState({suppliereModal: false})}
+            transparent={true}>
+            <View style={[{}, styles.mainContainer]}>
+              <TouchableOpacity
+                style={[{}, styles.backgroundTouch]}></TouchableOpacity>
+              <View style={[{}, styles.contentView]}>
+                <View style={[{}, styles.modalCancleRow]}>
+                  <Text style={[{}, styles.modalCancleText]}>
+                    SELECT SUPPLIERS
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => this.setState({suppliereModal: false})}
+                    style={[{}, styles.modalCancleTouch]}>
+                    <Icon name="times" size={20} color="#929497" />
+                  </TouchableOpacity>
+                </View>
+                <View style={[{}, styles.searchRow]}>
+                  <Icon name="search" size={20} color="#929497" />
+                  <TextInput
+                    label="Search supplier"
+                    style={{backgroundColor: 'transparent'}}
+                    width={width - 50}
+                    alignSelf={'center'}
+                    color={'#000'}
+                    onChangeText={text =>
+                      this.setState({search_supplier: text})
+                    }
+                    onSubmitEditing={() => this.searchSupplier()}
+                  />
+                </View>
+                <ScrollView>
+                  <FlatList
+                    ItemSeparatorComponent={
+                      Platform.OS !== 'android' &&
+                      (({highlighted}) => (
+                        <View
+                          style={[
+                            style.separator,
+                            highlighted && {marginLeft: 0},
+                          ]}
+                        />
+                      ))
+                    }
+                    data={this.state.supplierlist}
+                    renderItem={({item, index, separators}) => (
+                      <TouchableOpacity
+                        key={item.key}
+                        onPress={() => this.supplierModalFun(item)}
+                        onShowUnderlay={separators.highlight}
+                        onHideUnderlay={separators.unhighlight}>
+                        <View
+                          style={[{marginTop: 10}, styles.modalListContainer]}>
+                          <Image
+                            style={{width: 30, height: 30}}
+                            source={require('../images/bage.png')}
+                          />
+                          <View style={[{}, styles.modalListContentView]}>
+                            <Text
+                              style={[{color: '#4E4D4D'}, fontStyles.bold15]}>
+                              {item.seller_name}
+                            </Text>
+                            <Text
+                              style={[{color: '#929497'}, fontStyles.normal12]}>
+                              {item.seller_id}
+                            </Text>
+                          </View>
+                          <Icon
+                            style={[{}, styles.modalListContentRightIcon]}
+                            name="angle-right"
+                            size={20}
+                            color="#aaa"
+                          />
+                        </View>
+                      </TouchableOpacity>
+                    )}
+                  />
+                </ScrollView>
               </View>
             </View>
-          </View>
-        </Modal>
-      </View>
+          </Modal>
+          <Modal visible={this.state.ConfirmationPayInvoice}>
+            {console.log(this.props.user)}
+            <View
+              style={{
+                alignSelf: 'center',
+                backgroundColor: '#fff',
+                width: width - 50,
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingVertical: 20,
+                borderRadius: 10,
+                flexDirection: 'column',
+              }}>
+              <View style={{flexDirection: 'row', marginBottom: 30}}>
+                <Text
+                  style={{color: '#B1272C', fontWeight: 'bold', fontSize: 20}}>
+                  Generate CICOD Order
+                </Text>
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: '#fff',
+                      paddingVertical: 15,
+                      padding: 30,
+                      borderRadius: 100,
+                      borderWidth: 1,
+                      borderColor: '#B1272C',
+                    }}
+                    onPress={() => {
+                      this.setState({ConfirmationPayInvoice: false});
+                    }}>
+                    <Text style={{color: '#B1272C', paddingHorizontal: 10}}>
+                      Cancel
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: '#B1272C',
+                      paddingVertical: 15,
+                      padding: 40,
+                      borderRadius: 100,
+                    }}
+                    onPress={() => this.createOrderFun()}>
+                    <Text style={{color: '#fff'}}>Confirm</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
+        </View>
+      </Scaffold>
     );
   }
 }

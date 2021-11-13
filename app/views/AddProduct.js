@@ -39,6 +39,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import NavBack from './Components/NavBack';
 import DropDownModal from './Components/DropDownModal';
 import CategoryDropdown from './Components/CategoryDropdown';
+import Scaffold from './Components/Scaffold';
 
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
@@ -170,6 +171,7 @@ class AddProduct extends React.Component {
     console.log('text !!!!!!!!!!!!!!!!!', category_id);
     this.setState({
       category_id: category_id,
+      showdropDownModal: false,
     });
     this.getProductList(this.state.search_product, category_id);
   };
@@ -255,7 +257,7 @@ class AddProduct extends React.Component {
       {label: 'Part Payment', value: 3},
     ];
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <Scaffold>
         <View style={[{}, styles.mainView]}>
           <Header navigation={this.props.navigation} />
 
@@ -456,7 +458,8 @@ class AddProduct extends React.Component {
                                 flexDirection: 'row',
                                 backgroundColor: '#B1272C',
                                 position: 'absolute',
-                                right: 10,
+                                right: 20,
+                                marginLeft: 5,
                                 paddingHorizontal: 10,
                                 borderRadius: 100,
                                 paddingVertical: 2,
@@ -499,7 +502,7 @@ class AddProduct extends React.Component {
             data={this.state.categoryarr}
           />
         </View>
-      </SafeAreaView>
+      </Scaffold>
     );
   }
 }

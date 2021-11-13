@@ -33,6 +33,8 @@ import {Constants} from './Constant';
 import {connect} from 'react-redux';
 import {SET_USER, LOGOUT_USER} from '../redux/constants/index';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Scaffold from './Components/Scaffold';
+import NavBack from './Components/NavBack';
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
 class Connect extends React.Component {
@@ -947,7 +949,7 @@ class Connect extends React.Component {
 
   render() {
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <Scaffold style={{flex: 1}}>
         <View style={[{}, styles.mainView]}>
           <Header navigation={this.props.navigation} />
           <Spinner
@@ -958,31 +960,18 @@ class Connect extends React.Component {
             color={'#fff'}
           />
           <ScrollView>
-            <View style={[{}, styles.mainRow]}>
-              <TouchableOpacity
-                // onPress={() => this.props.navigation.navigate('Home')}
-                onPress={() => this.props.navigation.goBack()}
-                style={[
-                  {
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginLeft: 5,
-                    marginVertical: 10,
-                  },
-                ]}>
-                <Icon name="arrow-left" size={20} color="#929497" />
-                <Text
-                  style={[
-                    {color: '#2F2E7C', marginLeft: 10},
-                    fontStyles.normal15,
-                  ]}>
-                  {this.props.route.params &&
+            <View style={{paddingHorizontal: 10}}>
+              <NavBack
+                title={
+                  this.props.route.params &&
                   this.props.route.params.header == 'Network'
                     ? 'NETWORK'
-                    : 'CONNECT'}
-                </Text>
-              </TouchableOpacity>
+                    : 'CONNECT'
+                }
+                onClick={() => this.props.navigation.goBack()}
+              />
             </View>
+
             <View style={[{}, styles.tabView]}>
               <TouchableOpacity
                 style={{
@@ -1052,7 +1041,7 @@ class Connect extends React.Component {
             <this.tabView />
           </ScrollView>
         </View>
-      </SafeAreaView>
+      </Scaffold>
     );
   }
 }

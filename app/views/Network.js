@@ -2,30 +2,22 @@ import React from 'react';
 import {
   View,
   Share,
-  TouchableHighlight,
   FlatList,
   Dimensions,
   Alert,
   Image,
   Platform,
   TouchableOpacity,
-  ScrollView,
-<<<<<<< HEAD
-  SafeAreaView,
-  ActivityIndicator,
-=======
->>>>>>> d3939a8a346336bc612f31aa4b5f06924f0ef523
 } from 'react-native';
-import Modal from 'react-native-modal';
+
 import {Text, TextInput, Searchbar} from 'react-native-paper';
-import splashImg from '../images/splash.jpg';
-import styles from '../css/DashboardCss';
+
 import fontStyles from '../css/FontCss';
-import SearchBar from 'react-native-search-bar';
+
 import Spinner from 'react-native-loading-spinner-overlay';
 import Header from '../views/Header';
 import {connect} from 'react-redux';
-import ImagePicker from 'react-native-image-crop-picker';
+
 import {
   SET_USER,
   LOGOUT_USER,
@@ -34,17 +26,17 @@ import {
 } from '../redux/constants/index';
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
-import DropDownPicker from 'react-native-dropdown-picker';
+
 import {Constants} from '../views/Constant';
-import TabNav from '../views/TabsNav';
-import {Picker} from '@react-native-picker/picker';
+
 // import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
-import {nativeViewProps} from 'react-native-gesture-handler/lib/typescript/handlers/NativeViewGestureHandler';
+
 import NavBack from './Components/NavBack';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import DropDownModal from './Components/DropDownModal';
 import moment from 'moment';
+import Scaffold from './Components/Scaffold';
 class Network extends React.Component {
   constructor(props) {
     super(props);
@@ -180,8 +172,9 @@ class Network extends React.Component {
           responseJson.status === 'SUCCESS' ||
           responseJson.success === true
         ) {
+          // const data=responseJson.merchants
           await this.setState({
-            data: responseJson.merchants,
+            data: [...this.state.data, ...responseJson.merchants],
             statistics: responseJson.statistics,
           });
         } else if (responseJson.status == 401) {
@@ -229,7 +222,7 @@ class Network extends React.Component {
   }
 
   onSelectSector = sector => {
-    this.setState({selected_sector: sector});
+    this.setState({selected_sector: sector, showdropDownModal: false});
     //console.log(' category ID search !!!!!!!!!!!!!!!@@@@@@@@@@@@@@', category_id)
     let search_url = `${Constants.getMerchants}?searchType=sector&searchKeyword=${sector}`;
 
@@ -245,7 +238,7 @@ class Network extends React.Component {
   async shareNetwork() {
     try {
       let message = `I found this commerce app that enables us collaborate in trade. \n`;
-      message += `CTA- Download CICOD Merchant and connect with me on my CICOD handle “${this.props.user.tenantId}”.`;
+      message += `Download CICOD Merchant and connect with me on my CICOD handle “${this.props.user.tenantId}”.`;
       const result = await Share.share({
         message,
       });
@@ -272,7 +265,7 @@ class Network extends React.Component {
     const startDate = selectedStartDate ? selectedStartDate.toString() : '';
     console.log('user$##', this.props.user);
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <Scaffold style={{flex: 1}}>
         <View
           style={{
             width: width,
@@ -488,9 +481,7 @@ class Network extends React.Component {
                 ItemSeparatorComponent={
                   Platform.OS !== 'android' &&
                   (({highlighted}) => (
-                    <View
-                      style={[highlighted && {marginLeft: 0}]}
-                    />
+                    <View style={[highlighted && {marginLeft: 0}]} />
                   ))
                 }
                 // extraData={this.state.data}
@@ -560,6 +551,7 @@ class Network extends React.Component {
                           style={{
                             flexDirection: 'row',
                             marginBottom: 5,
+                            flex: 1,
                             alignItems: 'center',
                           }}>
                           {item.state && (
@@ -623,6 +615,7 @@ class Network extends React.Component {
                                 style={[
                                   {
                                     color: '#929497',
+                                    flex: 1,
                                     marginLeft: 3,
                                     marginRight: 5,
                                   },
@@ -676,7 +669,7 @@ class Network extends React.Component {
             }}
           />
         </View>
-      </SafeAreaView>
+      </Scaffold>
     );
   }
 }

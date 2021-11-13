@@ -26,6 +26,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import {Constants} from '../views/Constant';
 import _ from 'lodash';
 import NavBack from './Components/NavBack';
+import Scaffold from './Components/Scaffold';
 class Supplier extends React.Component {
   constructor(props) {
     super(props);
@@ -166,7 +167,7 @@ class Supplier extends React.Component {
     const {selectedStartDate} = this.state;
     const startDate = selectedStartDate ? selectedStartDate.toString() : '';
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <Scaffold style={{flex: 1}}>
         <View
           style={{
             height: height,
@@ -426,7 +427,7 @@ class Supplier extends React.Component {
             )}
           </ScrollView>
         </View>
-      </SafeAreaView>
+      </Scaffold>
     );
   }
 }

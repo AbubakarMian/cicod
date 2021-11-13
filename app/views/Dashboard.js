@@ -36,6 +36,7 @@ import {
   StackedBarChart,
 } from 'react-native-chart-kit';
 import {Console} from 'node:console';
+import Scaffold from './Components/Scaffold';
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
 class Dashboard extends React.Component {
@@ -280,7 +281,7 @@ class Dashboard extends React.Component {
     const {selectedStartDate} = this.state;
     const startDate = selectedStartDate ? selectedStartDate.toString() : '';
     return (
-      <SafeAreaView style={{flex: 1}}>
+      <Scaffold>
         <View
           style={{
             width: width,
@@ -664,7 +665,7 @@ class Dashboard extends React.Component {
             props={this.props}
           />
         </View>
-      </SafeAreaView>
+      </Scaffold>
     );
   }
 }
