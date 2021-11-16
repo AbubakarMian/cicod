@@ -42,8 +42,12 @@ class AddCustomer extends React.Component {
       searchPress: 1,
       spinner: false,
       customerData: [],
+      pageNo: 1,
       search_text: '',
     };
+  }
+  componentDidMount() {
+    this.getCustomers(Constants.customerlist);
   }
   seacrhClick() {
     if (this.state.searchPress === 1) {
@@ -55,14 +59,15 @@ class AddCustomer extends React.Component {
     }
   }
   searchText() {
-    this.getCustomers(this.state.search_text);
+    const search_text = this.state.search_text;
+    this.getCustomers(Constants.customerlist + '?search=' + search_text);
   }
   unauthorizedLogout() {
     Alert.alert('Error', Constants.UnauthorizedErrorMsg);
     this.props.logoutUser();
     this.props.navigation.navigate('Login');
   }
-  getCustomers(search_text) {
+  getCustomers(url) {
     let param = 'first_name';
     // if(search_text == ''){
     //     return;
@@ -84,12 +89,12 @@ class AddCustomer extends React.Component {
         Authorization: this.props.user.access_token,
       },
     };
-    console.log(
-      'url~~~~~~~~',
-      Constants.customerlist + '?' + param + '=' + search_text,
-    );
+    // console.log(
+    //   'url~~~~~~~~',
+    //   Constants.customerlist + '?' + param + '=' + search_text,
+    // );
     console.log('TTTTTTTTT', this.props.user.access_token);
-    fetch(Constants.customerlist + '?search=' + search_text, postData)
+    fetch(url, postData)
       .then(response => response.json())
       .then(async responseJson => {
         this.setState({
@@ -98,7 +103,7 @@ class AddCustomer extends React.Component {
         if (responseJson.status === 'success') {
           console.log('KKKKKKKKK', responseJson);
           this.setState({
-            customerData: responseJson.data,
+            customerData: [...this.state.customerData, ...responseJson.data],
           });
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
@@ -129,6 +134,31 @@ class AddCustomer extends React.Component {
     this.props.navigation.navigate('CreateOrder');
   }
 
+  handleLoadMore = () => {
+    // if (!this.state.spinner) {
+    //   alert();
+    const pageNo = this.state.pageNo + 1; // increase page by 1
+    this.setState({pageNo});
+    const url = Constants.customerlist + '?page=' + pageNo;
+
+    this.getCustomers(url); // method for API call
+    // } else {
+    //   alert('here');
+    // }
+  };
+
+  renderFooter = () => {
+    //it will show indicator at the bottom of the list when data is loading otherwise it returns null
+    // if (!this.state.spinner) return null;
+    // return <ActivityIndicator style={{color: '#000'}} />;
+    return (
+      <TouchableOpacity
+        onPress={() => this.handleLoadMore()}
+        style={{padding: 5, alignSelf: 'center', marginVertical: 20}}>
+        <Text style={{letterSpacing: 1.1, fontWeight: 'bold'}}>Load More</Text>
+      </TouchableOpacity>
+    );
+  };
   render() {
     return (
       <Scaffold>
@@ -140,11 +170,27 @@ class AddCustomer extends React.Component {
             textStyle={{color: '#fff'}}
             color={'#fff'}
           />
-          <View style={[{}, styles.backHeaderRowView]}>
+          <View
+            style={{
+              paddingHorizontal: 10,
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+            }}>
             <NavBack
-              title="ADD NEW CUSTOMER"
+              title="ADD CUSTOMER"
               onClick={() => this.props.navigation.goBack()}
             />
+
+            <TouchableOpacity
+              onPress={() => this.props.navigation.navigate('AddNewCustomer')}
+              // onPress={() => this.props.navigation.navigate('CreateProduct', { action: 'create', prodDetail: null })}
+            >
+              <Image
+                style={{height: 30, width: 30}}
+                source={require('../images/products/circlePlus.png')}
+              />
+            </TouchableOpacity>
           </View>
           <View>
             <Searchbar
@@ -196,7 +242,7 @@ class AddCustomer extends React.Component {
                         </View> */}
 
             {this.state.customerData.length != 0 ? (
-              <View>
+              <View style={{paddingBottom: 260}}>
                 <FlatList
                   data={this.state.customerData}
                   ItemSeparatorComponent={
@@ -210,6 +256,8 @@ class AddCustomer extends React.Component {
                       />
                     ))
                   }
+                  ListFooterComponent={this.renderFooter}
+                  onEndReachedThreshold={0.1}
                   renderItem={({item, index, separators}) => (
                     <View
                       style={[
@@ -272,7 +320,8 @@ class AddCustomer extends React.Component {
                             </Text>
                             <Text
                               style={[{}, styles.custommerDtailCardNormalText]}>
-                              ₦ {item.available_balance}
+                              {this.props.currency.currency}{' '}
+                              {item.available_balance}
                             </Text>
                           </View>
                           <View style={[{}, styles.countingRowView]}>
@@ -282,7 +331,8 @@ class AddCustomer extends React.Component {
                             </Text>
                             <Text
                               style={[{}, styles.custommerDtailCardNormalText]}>
-                              ₦ {item.account_balance}
+                              {this.props.currency.currency}{' '}
+                              {item.account_balance}
                             </Text>
                           </View>
                           <View style={[{}, styles.countingRowView]}>
@@ -292,7 +342,8 @@ class AddCustomer extends React.Component {
                             </Text>
                             <Text
                               style={[{}, styles.custommerDtailCardNormalText]}>
-                              ₦ {item.credit_note_balance}
+                              {this.props.currency.currency}{' '}
+                              {item.credit_note_balance}
                             </Text>
                           </View>
                         </View>
@@ -364,6 +415,7 @@ function mapStateToProps(state) {
   return {
     user: state.userReducer,
     customer: state.customReducer,
+    currency: state.currencyReducer,
   };
 }
 function mapDispatchToProps(dispatch) {

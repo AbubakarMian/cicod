@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   SafeAreaView,
+  BackHandler,
   View,
   Image,
   TouchableOpacity,
@@ -34,6 +35,7 @@ var {width, height} = Dimensions.get('window');
 class OrderDetail extends React.Component {
   constructor(props) {
     super(props);
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     this.state = {
       Spinner: false,
       order_id: 0,
@@ -60,6 +62,30 @@ class OrderDetail extends React.Component {
       },
       item: [],
     };
+  }
+
+  componentWillMount() {
+    BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.handleBackButtonClick,
+    );
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener(
+      'hardwareBackPress',
+      this.handleBackButtonClick,
+    );
+  }
+
+  handleBackButtonClick() {
+    // this.props.navigation.goBack(null);
+    if (this.props.route.params.from == null) {
+      this.props.navigation.replace('Home');
+    } else {
+      this.props.navigation.goBack(null);
+    }
+    return true;
   }
   componentDidMount() {}
   get_order_detail(order_id) {
@@ -185,7 +211,11 @@ class OrderDetail extends React.Component {
             }}>
             <NavBack
               title="ORDER DETAIL"
-              onClick={() => this.props.navigation.goBack()}
+              onClick={() =>
+                this.props.route.params.from == null
+                  ? this.props.navigation.navigate('Buyers')
+                  : this.props.navigation.goBack()
+              }
             />
           </View>
           <ScrollView>

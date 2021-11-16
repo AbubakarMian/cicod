@@ -41,6 +41,7 @@ class OrderFilter extends React.Component {
       backup_createdby_arr: [],
       backup_paymentmode_arr: [],
       paymentmode_arr: [],
+      delivery_type: '',
       // orderchannel_arr: [{'all':'All'},{'pending':'PENDING'}],
       backup_orderchannel_arr: backup_orderchannel_arr,
       orderchannel_arr: backup_orderchannel_arr,
@@ -290,6 +291,7 @@ class OrderFilter extends React.Component {
     let filters = this.state.filters;
     filters.push({key: 'delivery_type', value: value});
     this.setState({
+      delivery_type: value,
       filters: filters,
     });
   }
@@ -512,11 +514,20 @@ class OrderFilter extends React.Component {
                 <View style={[{paddingRight: 20}, styles.mainRow]}>
                   <View style={[{marginRight: 10}]}>
                     <TouchableOpacity
+                      style={{
+                        backgroundColor:
+                          this.state.delivery_type == 'PICKUP'
+                            ? '#DAF8EC'
+                            : '#F0F0F0',
+                      }}
                       onPress={() => this.deliveryType('PICKUP')}>
                       <Text
                         style={[
                           {
-                            color: '#929497',
+                            color:
+                              this.state.delivery_type == 'PICKUP'
+                                ? '#26C281'
+                                : '#929497',
                             borderRadius: 50,
                             backgroundColor: '#E6E6E6',
                             paddingHorizontal: 5,
@@ -528,11 +539,20 @@ class OrderFilter extends React.Component {
                   </View>
                   <View style={[{}]}>
                     <TouchableOpacity
+                      style={{
+                        backgroundColor:
+                          this.state.delivery_type == 'DELIVERY'
+                            ? '#DAF8EC'
+                            : '#F0F0F0',
+                      }}
                       onPress={() => this.deliveryType('DELIVERY')}>
                       <Text
                         style={[
                           {
-                            color: '#929497',
+                            color:
+                              this.state.delivery_type == 'DELIVERY'
+                                ? '#26C281'
+                                : '#929497',
                             borderRadius: 50,
                             backgroundColor: '#E6E6E6',
                             paddingHorizontal: 5,

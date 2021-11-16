@@ -16,6 +16,7 @@ export const Constants = {
   changePassword: `${auth_url}/sso/user/password_update`,
   getMerchants: `${auth_url}/sso/user/network/merchantlist`,
   unReadNetwork: `${auth_url}/sso/user/network/count/unread`,
+  validatedUser: `${auth_url}/sso/user/validateUser/com`,
   products: `${base_url}/products`,
   update_product_category: `${base_url}/categories`,
   customerlist: `${base_url}/customers`,

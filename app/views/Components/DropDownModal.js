@@ -19,7 +19,7 @@ const DropDownModal = ({
   buttonContainerStyle,
   handleClose = f => f,
   onSelected,
-  title,
+  title = '',
 }) => {
   return (
     <Modal
@@ -39,7 +39,7 @@ const DropDownModal = ({
         }}>
         <View
           style={{
-            height: data.length > 10 ? height / 3 : height / 6,
+            height: data.length > 10 ? height / 4 : height / 2,
             bottom: 0,
             backgroundColor: '#fff',
             padding: 10,
