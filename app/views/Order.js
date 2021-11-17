@@ -544,7 +544,7 @@ class Order extends React.Component {
   render() {
     console.log(this.props.user);
     return (
-      <Scaffold style={{flex: 1}}>
+      <Scaffold>
         <View
           style={{
             width: width,
@@ -553,7 +553,7 @@ class Order extends React.Component {
             backgroundColor: '#F0F0F0',
             flex: 1,
           }}>
-          <View style={{height: height / 3.1}}>
+          <View>
             <Header navigation={this.props.navigation} />
             <Spinner
               visible={this.state.spinner}
@@ -793,6 +793,7 @@ class Order extends React.Component {
               </ScrollView>
             </View>
           </View>
+
           {/* <ScrollView  style={{ marginBottom: 200 }}> */}
           <this.getOrderList _that={this} />
           <TabNav

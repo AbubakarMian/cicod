@@ -35,6 +35,7 @@ class User extends React.Component {
     this.state = {
       isChecked: false,
       spinner: false,
+      spinner_new: false,
       first_name: '',
       last_name: '',
       email: '',
@@ -43,6 +44,7 @@ class User extends React.Component {
       role: '',
       tabViewIndex: 1,
       profile: null,
+      user: null,
     };
   }
   ressetPassword() {
@@ -51,6 +53,43 @@ class User extends React.Component {
 
   async componentDidMount() {
     this.getUserDetail();
+    this.getValidatedUserDetail();
+  }
+
+  getValidatedUserDetail() {
+    this.setState({spinner_new: true});
+    let postData = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: this.props.user.access_token,
+      },
+    };
+    console.log(this.props.user.access_token);
+    console.log('url', Constants.validatedUser);
+    fetch(Constants.validatedUser, postData)
+      .then(response => response.json())
+      .then(async responseJson => {
+        // console.log('!!!!!!!!!responseJson @@@@@@@@###########', responseJson.data)
+        // console.log('Constants.marchantDetail @@@@@@@@###########', Constants.marchantDetail)
+        // console.log('this.props.user.access_token@@@@@@@@###########', this.props.user.access_token)
+        this.setState({
+          spinner_new: false,
+        });
+        if (responseJson.status === 'SUCCESS') {
+          let merchant_contact = responseJson;
+          console.log('~~~~validuser$#~~~', responseJson);
+          this.setState({
+            user: responseJson.user,
+          });
+        } else if (responseJson.status == 401) {
+          this.unauthorizedLogout();
+        } else {
+          let message = responseJson.message;
+          Alert.alert('Error', message);
+        }
+      });
   }
 
   getUserDetail() {
@@ -116,6 +155,7 @@ class User extends React.Component {
   };
 
   viewOne() {
+    if (!this.state.user) return null;
     return (
       <Scaffold style={{flex: 1}}>
         <View>
@@ -127,7 +167,7 @@ class User extends React.Component {
                   {color: '#4E4D4D', marginBottom: 10},
                   fontStyles.normal15,
                 ]}>
-                {this.state.first_name}
+                {this.state.user.firstname}
               </Text>
               <Text style={[{}, styles.userInfoLable]}>Last Name</Text>
               <Text
@@ -135,7 +175,7 @@ class User extends React.Component {
                   {color: '#4E4D4D', marginBottom: 10},
                   fontStyles.normal15,
                 ]}>
-                {this.state.last_name ?? this.state.first_name}
+                {this.state.user.lastname ?? this.state.user.lastname}
               </Text>
             </View>
             <View
@@ -153,17 +193,17 @@ class User extends React.Component {
           <Text style={[{}, styles.userInfoLable]}>Email</Text>
           <Text
             style={[{color: '#4E4D4D', marginBottom: 10}, fontStyles.normal15]}>
-            {this.state.email}
+            {this.state.user.email}
           </Text>
           <Text style={[{}, styles.userInfoLable]}>Phone Number</Text>
           <Text
             style={[{color: '#4E4D4D', marginBottom: 10}, fontStyles.normal15]}>
-            {this.state.phone}
+            {this.state.user.phone}
           </Text>
           <Text style={[{}, styles.userInfoLable]}>Role</Text>
           <Text
             style={[{color: '#4E4D4D', marginBottom: 10}, fontStyles.normal15]}>
-            {this.state.role}
+            {this.state.user.roles}
           </Text>
           <TouchableOpacity
             onPress={() => this.props.navigation.navigate('ChangePassword')}
@@ -332,16 +372,23 @@ class User extends React.Component {
             marginTop: 10,
           }}>
           <View>
-            <Text style={{fontWeight: 'bold'}}>{this.state.first_name}</Text>
+            <Text style={{fontWeight: 'bold'}}>
+              {this.state.user.firstname}
+            </Text>
             <Text style={{color: '#929497', fontSize: 12}}>
-              {this.state.email}
+              {this.state.user.email}
             </Text>
           </View>
-          <View style={{justifyContent: 'center'}}>
+          <View
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginRight: 50,
+            }}>
             <Text style={{fontWeight: 'bold'}}>USER</Text>
             <View
               style={{
-                marginRight: 50,
+                // marginRight: 50,
                 backgroundColor: '#DAF8EC',
                 justifyContent: 'center',
                 alignItems: 'center',
@@ -366,10 +413,11 @@ class User extends React.Component {
           />
 
           <Text style={{fontWeight: 'bold', color: '#4E4D4D', fontSize: 20}}>
-            To add more users to your account , use the web
+            Want to add more user?
           </Text>
+          <Text>Please access on the web.</Text>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={{
               borderWidth: 1,
               marginTop: 15,
@@ -380,7 +428,7 @@ class User extends React.Component {
               borderRadius: 100,
             }}>
             <Text style={{color: '#2F2E7C'}}>Access Now</Text>
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
       </View>
     );
@@ -391,11 +439,12 @@ class User extends React.Component {
       <View style={[{}, styles.mainView]}>
         <Header navigation={this.props.navigation} />
         <Spinner
-          visible={this.state.spinner}
+          visible={this.state.spinner || this.state.spinner_new}
           textContent={'Please Wait...'}
           textStyle={{color: '#fff'}}
           color={'#fff'}
         />
+
         <TouchableOpacity
           // onPress={()=>this.props.navigation.navigate('More')}
           onPress={() => this.props.navigation.goBack()}>
@@ -489,8 +538,7 @@ class User extends React.Component {
             <Text
               style={[{alignSelf: 'center'}, styles.bottomDescText]}
               numberOfLines={2}>
-              CICOD Customer Order Management Mobile App Is a product of Crown
-              Interactive
+              CICOD Merchant Mobile App is a product of Crown Interactive
             </Text>
             <Text style={[{alignSelf: 'center'}, styles.bottomVersioncText]}>
               Version 1.0

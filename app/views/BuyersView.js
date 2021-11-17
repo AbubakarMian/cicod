@@ -420,8 +420,8 @@ class BuyersView extends React.Component {
           <AwesomeAlert
             show={this.state.isShowAlert}
             showProgress={false}
-            title={this.state.isShowAlertSuccess ? 'Info' : 'Error'}
-            message={this.state.alert_message}
+            title={this.state.alert_message}
+            // message={this.state.alert_message}
             closeOnTouchOutside={true}
             closeOnHardwareBackPress={true}
             showCancelButton={true}

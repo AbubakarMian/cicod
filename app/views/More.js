@@ -5,8 +5,11 @@ import {
   TouchableOpacity,
   Dimensions,
   Touchable,
+  TouchableWithoutFeedback,
   Alert,
+  Linking,
   ScrollView,
+  Modal as OtherModal,
 } from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import styles from '../css/MoreCss';
@@ -25,6 +28,7 @@ class More extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      supportModal: false,
       isChecked: false,
     };
   }
@@ -34,6 +38,27 @@ class More extends React.Component {
   logoutFun() {
     this.props.logoutUser();
     this.props.navigation.navigate('Login');
+  }
+
+  supportVideos() {
+    Linking.openURL(
+      `https://support.cicod.com/product/4/Customer-Order-Management/productArticle`,
+    );
+  }
+  contactus() {
+    Linking.canOpenURL('mailto:support@cicod.com?subject=Enquiry')
+      .then(supported => {
+        if (!supported) {
+          console.log('Cant handle url');
+          Alert.alert('Cant Open Email');
+        } else {
+          return Linking.openURL('mailto:support@cicod.com?subject=Enquiry');
+        }
+      })
+      .catch(err => {
+        console.error('An error occurred', err);
+        Alert.alert('Cant Open Email');
+      });
   }
   render() {
     return (
@@ -60,7 +85,7 @@ class More extends React.Component {
                   </Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 onPress={() =>
                   this.props.navigation.navigate('CreateOrder', {
                     screen_name: 'buy',
@@ -78,7 +103,7 @@ class More extends React.Component {
                     Purchase Product from your suppliers
                   </Text>
                 </View>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('Supplier')}
                 style={[{}, styles.cardView]}>
@@ -164,7 +189,7 @@ class More extends React.Component {
               </TouchableOpacity>
 
               <TouchableOpacity
-                // onPress={() => this.props.navigation.navigate('Connect')}
+                onPress={() => this.setState({supportModal: true})}
                 style={[{}, styles.cardView]}>
                 <View style={{width: 30}}>
                   <Image
@@ -220,8 +245,7 @@ class More extends React.Component {
               }}>
               <Text
                 style={{color: '#929497', letterSpacing: 1.0, fontSize: 10}}>
-                CICOD Customer Order Management Mobile App is a product of Crown
-                Interactive
+                CICOD Merchant Mobile App is a product of Crown Interactive
               </Text>
               <Text
                 style={{
@@ -237,6 +261,53 @@ class More extends React.Component {
                 A PRODUCT OF CROWN INTERACTIVE
               </Text>
             </View>
+            <OtherModal
+              visible={this.state.supportModal}
+              onRequestClose={() => this.setState({supportModal: false})}
+              transparent={true}>
+              <TouchableOpacity
+                onPress={() => this.setState({supportModal: false})}>
+                <View style={[{}, styles.modalBackGround]}>
+                  <TouchableWithoutFeedback>
+                    <View style={styles.suspendModal}>
+                      <View
+                        style={{alignItems: 'center', flexDirection: 'row'}}>
+                        <Image
+                          style={{height: 20, width: 20}}
+                          source={require('../images/email.png')}
+                        />
+                        <TouchableOpacity
+                          onPress={() => this.contactus()}
+                          style={[{marginLeft: 7}, styles.suspendTouch]}>
+                          <Text style={{color: '#808080'}}>Contact us</Text>
+                        </TouchableOpacity>
+                      </View>
+                      <View
+                        style={{alignItems: 'center', flexDirection: 'row'}}>
+                        <Image
+                          style={{height: 20, width: 20}}
+                          source={require('../images/multimedia.png')}
+                        />
+                        <TouchableOpacity
+                          onPress={() => this.supportVideos()}
+                          style={[{marginLeft: 7}, styles.suspendTouch]}>
+                          <Text style={{color: '#808080'}}>
+                            Watch Videos/Articles
+                          </Text>
+                        </TouchableOpacity>
+                      </View>
+                      {/* <View style={{marginTop:5}} /> */}
+                      {/* <TouchableOpacity
+                                onPress={() => this.setState({suspendModal:false})}
+                                style={[{}, styles.suspendTouch]}>
+                                <Image source={require('../images/redCross.png')} style={[{width:20,height:20}, styles.banImage]} />
+                                <Text style={{}}> Cancel</Text>
+                            </TouchableOpacity> */}
+                    </View>
+                  </TouchableWithoutFeedback>
+                </View>
+              </TouchableOpacity>
+            </OtherModal>
           </ScrollView>
           <TabNav
             style={{position: 'absolute', bottom: 0}}

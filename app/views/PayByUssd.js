@@ -131,6 +131,7 @@ class PayByUssd extends React.Component {
         this.setState({spinner: false});
         console.log('all response ', responseJson);
         if (responseJson.status === 'success') {
+          this.props.emptyOrder();
           this.get_order_detail(responseJson.data.id);
           // let payment_link = responseJson.data.payment_link
           // this.payment_response(responseJson, 'PaymentWeb', { payment_link: payment_link, data: responseJson.data });

@@ -525,9 +525,9 @@ class Home extends React.Component {
                   onPress={() =>
                     this.setState({
                       modalInfoType: 'finance',
-                      modalInfoTextMore: 'Manage accounting on the web',
+                      modalInfoTextMore: 'Please access cicod on the web',
                       modalInfo: true,
-                      modalInfoText: '',
+                      modalInfoText: 'Want to manage finance?',
                     })
                   }
                   source={require('../images/home/account.png')}
@@ -544,8 +544,8 @@ class Home extends React.Component {
                   onPress={() =>
                     this.setState({
                       modalInfoType: 'adduser',
-                      modalInfoTextMore:
-                        'To add more users to your account, go on the web',
+                      modalInfoText: 'Want to add more user?',
+                      modalInfoTextMore: 'Please access cicod on the web',
                       modalInfo: true,
                     })
                   }
@@ -596,11 +596,9 @@ class Home extends React.Component {
                   onPress={() => {
                     this.setState({
                       modalInfoType: 'delivery',
-                      modalInfoTextMore:
-                        'Create and your delivery rate on the web',
+                      modalInfoTextMore: 'Please access cicod on the web',
                       modalInfo: true,
-                      modalInfoText:
-                        'Your delivery rate card is only accessible on the web',
+                      modalInfoText: 'Want to manage delivery rate?',
                     });
                   }}
                   source={require('../images/home/delivery.png')}
@@ -779,7 +777,7 @@ class Home extends React.Component {
                 {this.state.modalInfoTextMore}
               </Text>
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={{
                   borderWidth: 1,
                   marginTop: 15,
@@ -790,7 +788,7 @@ class Home extends React.Component {
                   borderRadius: 100,
                 }}>
                 <Text style={{color: '#2F2E7C'}}>Access Now</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
           </Modal>
 

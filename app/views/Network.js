@@ -280,8 +280,8 @@ class Network extends React.Component {
           <AwesomeAlert
             show={this.state.isMessage}
             showProgress={false}
-            title="Info"
-            message={this.state.message_text}
+            title={this.state.message_text}
+            // message={this.state.message_text}
             closeOnTouchOutside={true}
             closeOnHardwareBackPress={true}
             showCancelButton={true}

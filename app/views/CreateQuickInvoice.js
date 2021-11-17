@@ -454,8 +454,8 @@ class CreateQuickInvoice extends React.Component {
           <AwesomeAlert
             show={this.state.isShowError}
             showProgress={false}
-            title={this.state.isInvoiceSuccess ? 'Info' : 'Error'}
-            message={this.state.error_title}
+            title={this.state.error_title}
+            // message={this.state.error_title}
             closeOnTouchOutside={true}
             closeOnHardwareBackPress={true}
             showCancelButton={true}

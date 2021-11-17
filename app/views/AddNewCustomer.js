@@ -181,8 +181,10 @@ class AddNewCustomer extends React.Component {
         }
       })
       .catch(error => {
-        console.log('Api call error', error);
-        // Alert.alert(error.message);
+        console.log('Error !!!', error);
+        this.setState({
+          spinner: false,
+        });
       });
   }
   createCustomerDelivery(customer_id) {
@@ -222,7 +224,10 @@ class AddNewCustomer extends React.Component {
         }
       })
       .catch(error => {
-        console.log('Api call error', error);
+        console.log('Error !!!', error);
+        this.setState({
+          spinner: false,
+        });
       });
   }
   getCountryList() {
@@ -257,6 +262,12 @@ class AddNewCustomer extends React.Component {
           let message = responseJson.message;
           Alert.alert('Error', message);
         }
+      })
+      .catch(error => {
+        console.log('Error !!!', error);
+        this.setState({
+          spinner: false,
+        });
       });
   }
 
@@ -293,6 +304,12 @@ class AddNewCustomer extends React.Component {
           let message = responseJson.message;
           Alert.alert('Error', message);
         }
+      })
+      .catch(error => {
+        console.log('Error !!!', error);
+        this.setState({
+          spinner: false,
+        });
       });
   }
 
@@ -328,6 +345,12 @@ class AddNewCustomer extends React.Component {
           let message = responseJson.message;
           Alert.alert('Error', message);
         }
+      })
+      .catch(error => {
+        console.log('Error !!!', error);
+        this.setState({
+          spinner: false,
+        });
       });
   }
 

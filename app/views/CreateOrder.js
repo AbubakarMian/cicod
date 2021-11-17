@@ -60,9 +60,9 @@ class CreateOrder extends React.Component {
       limit_cart_arr: [],
       cart_detail: this.props.cart.cart_detail,
       payment_option: 0,
-      delivery_type_option: null,
+      delivery_type_option: 'pickup',
       is_pickup: true,
-      payment_mode: '',
+      payment_mode: 'ONLINE',
       suppliereModal: false,
       search_supplier: '',
       supplierlist: [],
@@ -74,12 +74,13 @@ class CreateOrder extends React.Component {
       part_payment_percent: 0,
       part_payment_amount: 0,
       goto_payment_screen: '',
-      payment_option_selected: '',
+      payment_option_selected: 'Pay Online',
       pay_button_lable: 'Pay',
       amount_payable: 0,
       ConfirmationPayInvoice: false,
       valuePayNowPayment: null,
       showPayNowDropDown: false,
+      value3IndexPayment: 0,
       alertMessage: '',
       isAlertError: false,
       alertType: '',
@@ -100,6 +101,15 @@ class CreateOrder extends React.Component {
     // this.getSuppliersList(Constants.supplierlist);
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.customer.name != prevProps.customer.name) {
+      this.setState({
+        customer_name: this.props.customer.name,
+        customer_email: this.props.customer.email,
+        customer_phone: this.props.customer.phone,
+      });
+    }
+  }
   componentWillReceiveProps() {
     this.setState({
       customer_name: this.props.customer.name,
@@ -220,45 +230,30 @@ class CreateOrder extends React.Component {
 
     let pay_button_lable = 'Pay';
     let goto_payment_screen = '';
-    if (
-      item.label == 'Pay Now' ||
-      item.label == 'Pay Cash' ||
-      item.label == 'Pay Online' ||
-      item.label == 'Pay By POS' ||
-      item.label == 'Pay By USSD'
-    ) {
-      mode = '';
+    if (item.value == 0) {
+      mode = 'ONLINE';
       goto_payment_screen = 'MakePayment';
-    } else if (item.label == 'Pay Account') {
+    } else if (item.value == 1) {
       mode = 'ACCOUNT';
       goto_payment_screen = '';
-    } else if (item.label == 'Send Invoice') {
+    } else if (item.value == 3) {
+      mode = 'POS';
+      goto_payment_screen = '';
+    } else if (item.value == 4) {
+      mode = 'USSD';
+      goto_payment_screen = '';
+    } else if (item.value == 2) {
+      mode = 'CASH';
+      goto_payment_screen = '';
+    } else if (item.value == 6) {
       mode = 'ONLINE';
       goto_payment_screen = '';
       pay_button_lable = 'Generate CICOD Order ID';
-    } else if (item.label == 'Part Payment') {
+    } else if (item.value == 5) {
       mode = 'ONLINE';
       goto_payment_screen = 'PartPaytment';
     }
 
-    // if (
-    //   item.label == 'Pay Now' ||
-    //   item.label == 'Pay Cash' ||
-    //   item.label == 'Pay Online' ||
-    //   item.label == 'Pay By POS' ||
-    //   item.label == 'Pay By USSD'
-    // ) {
-    //   console.log('here$%%', item);
-    //   this.setState({
-    //     valuePayNowPayment: item.value,
-    //     value3IndexPayment: null,
-
-    //     payment_mode: mode,
-    //     goto_payment_screen: goto_payment_screen,
-    //     payment_option_selected: item.label,
-    //     pay_button_lable: pay_button_lable,
-    //   });
-    // } else {
     console.log('forrr##', item);
     this.setState({
       valuePayNowPayment: null,
@@ -292,7 +287,7 @@ class CreateOrder extends React.Component {
     await this.setState({spinner: true});
 
     if (
-      this.state.payment_option_selected == 'Pay Invoice' &&
+      this.state.value3IndexPayment == 6 &&
       !this.state.ConfirmationPayInvoice
     ) {
       this.setState({
@@ -316,9 +311,10 @@ class CreateOrder extends React.Component {
     }
 
     // alert(this.state.payment_option_selected);
+    //if is
     if (
-      (this.state.payment_option_selected != 'Pay Cash' ||
-        this.state.payment_option_selected != 'Pay By POS') &&
+      (this.state.value3IndexPayment < 2 ||
+        this.state.value3IndexPayment > 3) &&
       this.props.customer.name == ''
     ) {
       this.setState({
@@ -358,9 +354,24 @@ class CreateOrder extends React.Component {
     // }
 
     let bodyOrder = {
-      customer_name: this.state.customer_name, //this.state.customer_name,//required
-      customer_phone: this.state.customer_phone, //this.state.customer_phone,//required
-      customer_email: this.state.customer_email, //this.state.customer_email,
+      customer_name:
+        this.state.customer_name == '' &&
+        this.state.value3IndexPayment >= 2 &&
+        this.state.value3IndexPayment <= 3
+          ? '-'
+          : this.state.customer_name, //this.state.customer_name,//required
+      customer_phone:
+        this.state.customer_phone == '' &&
+        this.state.value3IndexPayment >= 2 &&
+        this.state.value3IndexPayment <= 3
+          ? '-'
+          : this.state.customer_phone, //this.state.customer_phone,//required
+      customer_email:
+        this.state.customer_email == '' &&
+        this.state.value3IndexPayment >= 2 &&
+        this.state.value3IndexPayment <= 3
+          ? '-'
+          : this.state.customer_email, //this.state.customer_email,
       products: cart, //required this.state.limit_cart_arr
       delivery_type: this.props.deliveryAddress.type, //dilevery_type,?? 'PICKUP'
       delivery_address: this.props.deliveryAddress.address ?? '',
@@ -381,19 +392,46 @@ class CreateOrder extends React.Component {
     //     amount_payable: amount_payable,
     //     ConfirmationPayInvoice: false
     // })
+
+    console.log('boff', bodyOrder);
     if (this.state.goto_payment_screen == '') {
       //show_part_payment
       console.log('step  1 ');
       await this.create_order_id(Constants.orderslist, bodyOrder);
     } else {
-      await this.setState({spinner: false});
-      this.props.navigation.navigate(this.state.goto_payment_screen, {
-        bodyOrder: bodyOrder,
-        payment_mode: this.state.payment_mode,
-        amount_payable: this.state.amount_payable,
-      });
-      console.log('step  2 ');
+      if (this.state.value3IndexPayment == 4) {
+        //ussd
+
+        this.props.navigation.navigate('PayByUssd', {
+          bodyOrder,
+          amount_payable,
+
+          payment_mode: this.state.payment_mode,
+        });
+      } else {
+        await this.create_order_id(Constants.orderslist, bodyOrder);
+      }
+
       return;
+    }
+  }
+
+  async payment_response(responseJson, redirect_screen, redirect_body) {
+    console.log(
+      ' response Json responseJson responseJson!!!!!!!!!!!',
+      responseJson,
+    );
+    console.log('redirecB0#', redirect_body);
+    if (responseJson.status === 'success' || responseJson.success) {
+      this.setState({spinner: false});
+      // alert(responseJson.message)
+      this.props.navigation.navigate(redirect_screen, redirect_body);
+    } else if (responseJson.status == 401) {
+      this.unauthorizedLogout();
+    } else {
+      this.setState({spinner: false});
+      let message = responseJson.message;
+      alert(message);
     }
   }
 
@@ -460,8 +498,19 @@ class CreateOrder extends React.Component {
         this.setState({spinner: false});
         if (responseJson.status === 'success') {
           // alert(responseJson.message)
-          let payment_link = responseJson.data; //Pay Account,ACCOUNT
-          if (this.state.payment_option_selected == 'Pay Account') {
+          let payment_link = responseJson.data.payment_link;
+
+          const params = {
+            data: responseJson.data,
+            heading: 'buyer',
+
+            amount_payable: this.state.amount_payable,
+            payment_link,
+            payment_mode: this.state.payment_mode,
+            order_id: responseJson.data.id,
+          };
+          // let payment_link = responseJson.data; //Pay Account,ACCOUNT
+          if (this.state.value3IndexPayment == 1) {
             // alert(responseJson.message)
             console.log(
               '~~~~~~~~~~~create_order_id payment_link!',
@@ -471,8 +520,33 @@ class CreateOrder extends React.Component {
 
             // this.props.navigation.navigate('PaymentCash', { payment_link: payment_link,data:responseJson });
             // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link,data:responseJson.data });
-          }
-          if (this.state.payment_option_selected == 'Pay Invoice') {
+          } else if (this.state.value3IndexPayment == 2) {
+            this.payment_response(responseJson, 'PayByCash', params);
+            //pay cash
+          } else if (this.state.value3IndexPayment == 6) {
+            // send invoice
+            this.props.navigation.navigate('OrderDetail', {
+              id: responseJson.data.id,
+            });
+          } else if (this.state.value3IndexPayment == 0) {
+            // pay online
+            this.payment_response(responseJson, 'PaymentWeb', params);
+          } else if (this.state.value3IndexPayment == 3) {
+            // pay pos
+            this.payment_response(responseJson, 'PayByPos', params);
+          } else if (this.state.value3IndexPayment == 4) {
+            // pay ussd
+            // this.props.navigation.navigate('OrderDetail', {
+            //   id: responseJson.data.id,
+            // });
+            this.props.navigation.navigate('PayByUssd', {
+              bodyOrder,
+              amount_payable: this.state.amount_payable,
+
+              payment_mode: this.state.payment_mode,
+            });
+          } else if (this.state.value3IndexPayment == 5) {
+            // part payment
             this.props.navigation.navigate('OrderDetail', {
               id: responseJson.data.id,
             });
@@ -627,8 +701,8 @@ class CreateOrder extends React.Component {
           <AwesomeAlert
             show={this.state.isAlertError}
             showProgress={false}
-            title="Info"
-            message={this.state.alertMessage}
+            title={this.state.alertMessage}
+            // message={this.state.alertMessage}
             closeOnTouchOutside={true}
             closeOnHardwareBackPress={true}
             showCancelButton={true}
@@ -1062,45 +1136,50 @@ class CreateOrder extends React.Component {
                     // onPress={() => this.DeliveryType('delivery')}
                   />
                   {radio_props_payment.map((obj, i) => (
-                    <RadioButton
-                      style={{
-                        backgroundColor: '#F5F5F5',
-                        paddingVertical: 10,
-                        marginBottom: 20,
-                        paddingHorizontal: 10,
-                      }}
-                      labelHorizontal={true}
-                      key={i}>
-                      <RadioButtonInput
-                        obj={obj}
-                        index={i}
-                        style={{backgroundColor: 'red'}}
-                        isSelected={this.state.value3IndexPayment === i}
-                        onPress={(value, label) => this.paymentFun(obj)}
-                        borderWidth={1}
-                        buttonInnerColor={'#e74c3c'}
-                        buttonOuterColor={
-                          this.state.value3IndexPayment === i
-                            ? '#2196f3'
-                            : '#000'
-                        }
-                        buttonSize={10}
-                        buttonOuterSize={20}
-                        buttonStyle={{}}
-                        buttonWrapStyle={{marginLeft: 10}}
-                      />
-                      <RadioButtonLabel
-                        obj={obj}
-                        index={i}
+                    <TouchableOpacity
+                      key={i}
+                      onPress={() => this.paymentFun(obj)}>
+                      <RadioButton
+                        style={{
+                          backgroundColor: '#F5F5F5',
+                          paddingVertical: 10,
+                          marginBottom: 20,
+                          paddingHorizontal: 10,
+                        }}
                         labelHorizontal={true}
-                        onPress={(value, label) => this.paymentFun(obj)} //this.setState({ value3Index: value })
-                        // labelStyle={{fontSize: 20, color: '#2ecc71'}}
-                        labelWrapStyle={{}}
-                      />
-                    </RadioButton>
+                        // key={i}
+                      >
+                        <RadioButtonInput
+                          obj={obj}
+                          index={i}
+                          style={{backgroundColor: 'red'}}
+                          isSelected={this.state.value3IndexPayment === i}
+                          onPress={(value, label) => this.paymentFun(obj)}
+                          borderWidth={1}
+                          buttonInnerColor={'#e74c3c'}
+                          buttonOuterColor={
+                            this.state.value3IndexPayment === i
+                              ? '#2196f3'
+                              : '#000'
+                          }
+                          buttonSize={10}
+                          buttonOuterSize={20}
+                          buttonStyle={{}}
+                          buttonWrapStyle={{marginLeft: 10}}
+                        />
+                        <RadioButtonLabel
+                          obj={obj}
+                          index={i}
+                          labelHorizontal={true}
+                          onPress={(value, label) => this.paymentFun(obj)} //this.setState({ value3Index: value })
+                          // labelStyle={{fontSize: 20, color: '#2ecc71'}}
+                          labelWrapStyle={{}}
+                        />
+                      </RadioButton>
+                    </TouchableOpacity>
                   ))}
                 </View>
-                <View style={[{}, styles.paymentCheckboxView]}>
+                {/* <View style={[{}, styles.paymentCheckboxView]}>
                   <CheckBox
                     style={{
                       width: width / 1.5,
@@ -1121,7 +1200,7 @@ class CreateOrder extends React.Component {
                     }}
                     checkBoxColor={'#929497'}
                   />
-                </View>
+                </View> */}
               </View>
 
               <View
@@ -1214,7 +1293,7 @@ class CreateOrder extends React.Component {
                   onPress={() => this.createOrderFun()}
                   style={[{}, styles.btnContinuueView]}>
                   <Text style={{color: '#FFFFFF'}}>
-                    {this.state.pay_button_lable}
+                    {this.state.payment_option_selected}
                   </Text>
                 </TouchableOpacity>
               </View>

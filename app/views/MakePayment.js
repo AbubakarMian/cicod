@@ -61,12 +61,13 @@ class MakePayment extends React.Component {
       '!!!!!!!!!@@@@@@@@@@@!!!!!!!!!!!!~~~~~~~~~~',
       this.state.bodyOrder,
     );
+    console.log('EEEEEEEEEEEEEEEE', this.props.route.params.pending_order_res);
   }
   async setPaymentMode(payment_mode, navigateScreen) {
     if (await this.state.spinner) {
       return;
     }
-    this.props.emptyOrder();
+    // this.props.emptyOrder();
     console.log('EEEEEEEEEEEEEEEE', this.props.route.params.pending_order_res);
     await this.setState({spinner: false});
     console.log('AAAAAAAAAAAAAAAAAAAAAAAAA', this.props.route.params);

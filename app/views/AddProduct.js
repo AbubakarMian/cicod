@@ -27,6 +27,7 @@ import RadioForm, {
   RadioButtonLabel,
 } from 'react-native-simple-radio-button';
 import {Constants} from '../views/Constant';
+import AddProductCartItem from './Components/CreateOrder/AddProductCartItem';
 
 import {connect} from 'react-redux';
 import {
@@ -63,12 +64,14 @@ class AddProduct extends React.Component {
 
   componentDidMount() {
     this.getCategoryList();
+
+    this.getProductList(Constants.productslist + '?is_active=1');
   }
 
-  getProductList(search_product, category_id) {
-    if (search_product == '' && category_id == '') {
-      return;
-    }
+  getProductList(search_url) {
+    // if ( search_product == '' && category_id == '') {
+    //   return;
+    // }
     this.setState({spinner: true});
     let postData = {
       method: 'GET',
@@ -80,15 +83,15 @@ class AddProduct extends React.Component {
     };
     //Constants.productslist + '?is_active=1&search=' + this.state.search_product
     // let search_url =  '?is_active=1&search=' + this.state.search_product + '&category_id=' + this.state.category_id
-    let category_search =
-      category_id == 0 || category_id == ''
-        ? ''
-        : '&category_id=' + category_id;
-    let search_url =
-      Constants.productslist +
-      '?is_active=1&search=' +
-      search_product +
-      category_search;
+    // let category_search =
+    //   category_id == 0 || category_id == ''
+    //     ? ''
+    //     : '&category_id=' + category_id;
+    // let search_url =
+    //   Constants.productslist +
+    //   '?is_active=1&search=' +
+    //   search_product +
+    //   category_search;
     console.log('search url ', search_url);
     console.log('postData ', postData);
     fetch(search_url, postData)
@@ -124,8 +127,11 @@ class AddProduct extends React.Component {
           this.unauthorizedLogout();
         } else {
           let message = responseJson.message;
-          Alert.alert('Error', message);
+          // Alert.alert('Error', message);
         }
+      })
+      .catch(error => {
+        console.log('error');
       });
   }
 
@@ -162,7 +168,7 @@ class AddProduct extends React.Component {
           this.unauthorizedLogout();
         } else {
           let message = responseJson.message;
-          Alert.alert('Error', message);
+          // Alert.alert('Error', message);
         }
       });
   }
@@ -173,7 +179,11 @@ class AddProduct extends React.Component {
       category_id: category_id,
       showdropDownModal: false,
     });
-    this.getProductList(this.state.search_product, category_id);
+    const url =
+      Constants.productslist +
+      '?is_active=1&category_id=' +
+      this.state.category_id;
+    this.getProductList(url);
   };
 
   async addProduct(index) {
@@ -230,7 +240,7 @@ class AddProduct extends React.Component {
           data: data,
         });
         // this.props.cartReducer(data[index]);
-
+        await this.props.cartReducer(data[index]);
         console.log('cart : ', this.props.cart);
       }
     } else {
@@ -245,6 +255,16 @@ class AddProduct extends React.Component {
         console.log(' remove from cart cart : ', this.props.cart);
       }
     }
+  }
+
+  doneCart() {
+    let data = this.state.data;
+    if (data.length == 0) {
+      // && data[index].purchased_quantity == 0  this.props.cart.cart.length
+      Alert.alert('Error ', 'Cart is empty');
+      return;
+    }
+    this.props.navigation.navigate('CreateOrder', {screen: 'active'});
   }
 
   render() {
@@ -296,12 +316,27 @@ class AddProduct extends React.Component {
                   color: '#D5D5D5',
                   borderColor: '#D8DCDE',
                 }}
-                onSubmitEditing={() =>
-                  this.getProductList(
-                    this.state.search_product,
-                    this.state.category_id,
-                  )
-                }
+                onSubmitEditing={() => {
+                  //   category_id == 0 || category_id == ''
+                  //     ? ''
+                  //     : '&category_id=' + category_id;
+                  // let search_url =
+                  //   Constants.productslist +
+                  //   '?is_active=1&search=' +
+                  //   search_product +
+                  //   category_search;
+
+                  let category_search =
+                    category_id == 0 || category_id == ''
+                      ? ''
+                      : '&category_id=' + category_id;
+                  let url =
+                    Constants.productslist +
+                    '?is_active=1&search=' +
+                    this.state.search_product +
+                    category_search;
+                  this.getProductList(url);
+                }}
                 onChangeText={text => this.setState({search_product: text})}
                 //update
               ></Searchbar>
@@ -377,13 +412,41 @@ class AddProduct extends React.Component {
                   marginBottom: 10,
                 }}></View>
               <View style={[{zIndex: -0.9999}, styles.OrderDetailContainer]}>
-                <View style={[{}, styles.OrderDetailHeadingRow]}>
-                  <Text style={[{}, styles.OrderDetailHeadingRowText]}>
-                    Product Catalog
-                  </Text>
-                  <Text style={[{}, styles.OrderDetailNotificationText]}>
-                    {this.catelog_count()}
-                  </Text>
+                <View
+                  style={[
+                    styles.OrderDetailHeadingRow,
+                    {justifyContent: 'space-between', right: 20},
+                  ]}>
+                  <View style={{flexDirection: 'row'}}>
+                    <Text style={[{}, styles.OrderDetailHeadingRowText]}>
+                      Product Catalog
+                    </Text>
+                    <Text style={[{}, styles.OrderDetailNotificationText]}>
+                      {this.catelog_count()}
+                    </Text>
+                  </View>
+
+                  {this.state.data.length > 0 && (
+                    <TouchableOpacity
+                      onPress={() => this.doneCart()}
+                      style={{
+                        flexDirection: 'row',
+                        backgroundColor: '#B1272C',
+                        marginRight: 30,
+                        paddingHorizontal: 10,
+                        borderRadius: 100,
+                        paddingVertical: 2,
+                        width: width / 6,
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                      }}>
+                      <Icon name="plus-circle" color={'#fff'} />
+                      <Text
+                        style={{color: '#fff', marginLeft: 5, fontSize: 12}}>
+                        Done
+                      </Text>
+                    </TouchableOpacity>
+                  )}
                 </View>
 
                 {this.state.data.length != 0 ? (
@@ -401,79 +464,12 @@ class AddProduct extends React.Component {
                       ))
                     }
                     renderItem={({item, index, separators}) => (
-                      <View
-                        style={[{flexDirection: 'column', marginBottom: 20}]}>
-                        <View style={[{}, styles.OrderDetailDataCOntainer]}>
-                          <View
-                            style={[{}, styles.OrderDetailDataCOntainerRow]}>
-                            <View>
-                              <Text
-                                style={[
-                                  {},
-                                  styles.OrderDetailDataCOntainerHeadingText,
-                                ]}>
-                                {item.name}{' '}
-                                {item.no_qty_limit ? '' : item.quantity}PACK
-                              </Text>
-                              <Text
-                                style={[{}, styles.OrderDetailHeadingRowText]}>
-                                {item.name}
-                              </Text>
-                            </View>
-                          </View>
-                        </View>
-                        <View style={[{}, styles.orderDetailAmmountRow]}>
-                          <View style={[{}, styles.orderDetailAmmountColumn]}>
-                            <Text
-                              style={[
-                                {},
-                                styles.orderDetailAmmountColumnGaryBolText,
-                              ]}>
-                              {this.props.currency.currency} {item.price}
-                            </Text>
-                          </View>
-                          <View style={[{}, styles.orderDetailAmmountColumn]}>
-                            <View
-                              style={[
-                                {},
-                                styles.OrderDetailDataCOntainerCounterView,
-                              ]}>
-                              <TouchableOpacity
-                                onPress={() => this.counterFun('sub', index)}
-                                style={[{}, styles.iconView]}>
-                                <Icon name="minus" />
-                              </TouchableOpacity>
-                              <View style={[{}, styles.iconView]}>
-                                <Text>{item.purchased_quantity}</Text>
-                              </View>
-                              <TouchableOpacity
-                                style={[{}, styles.iconView]}
-                                onPress={() => this.counterFun('add', index)}>
-                                <Icon name="plus" color="#B1272C" />
-                              </TouchableOpacity>
-                            </View>
-                            <TouchableOpacity
-                              onPress={() => this.addProduct(index)}
-                              style={{
-                                flexDirection: 'row',
-                                backgroundColor: '#B1272C',
-                                position: 'absolute',
-                                right: 20,
-                                marginLeft: 5,
-                                paddingHorizontal: 10,
-                                borderRadius: 100,
-                                paddingVertical: 2,
-                                width: width / 6,
-                                alignItems: 'center',
-                              }}>
-                              <Icon name="plus-circle" color={'#fff'} />
-                              <Text style={{color: '#fff', marginLeft: 5}}>
-                                Add
-                              </Text>
-                            </TouchableOpacity>
-                          </View>
-                        </View>
-                      </View>
+                      <AddProductCartItem
+                        item={item}
+                        counterFunAdd={() => this.counterFun('add', index)}
+                        counterFunSub={() => this.counterFun('sub', index)}
+                        isValueChain={false}
+                      />
                     )}
                   />
                 ) : (
@@ -483,7 +479,7 @@ class AddProduct extends React.Component {
                       source={require('../images/noProduct.png')}
                     />
                     <Text style={[{}, styles.contentViewHeadingText]}>
-                      No product selected
+                      No product found
                     </Text>
                     <Text style={[{color: '#929497'}, fontStyles.normal15]}>
                       Search for a product

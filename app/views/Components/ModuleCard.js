@@ -7,7 +7,7 @@ import {
   Image,
   Text,
 } from 'react-native';
-
+const Device = require('react-native-device-detection');
 const {width, height} = Dimensions.get('screen');
 const ModuleCard = ({source, onPress, disabled, title}) => {
   return (
@@ -17,7 +17,10 @@ const ModuleCard = ({source, onPress, disabled, title}) => {
           style={{height: width / 3 - 80, width: width / 3 - 80}}
           source={source}
         />
-        <Text style={[{}, styles.cardLableText]}>{title}</Text>
+        <Text
+          style={[styles.cardLableText, {fontSize: Device.isTablet ? 15 : 12}]}>
+          {title}
+        </Text>
       </View>
     </TouchableOpacity>
   );

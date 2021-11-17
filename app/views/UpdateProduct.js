@@ -301,7 +301,7 @@ class UpdateProduct extends React.Component {
         );
         this.setState({spinner: false, updateProductModal: false});
         if (responseJson.success) {
-          Alert.alert('Message', 'Action is successfull');
+          Alert.alert('Product update successfull', '');
           if (this.props.route.params.screen == 'buyer') {
             this.props.navigation.navigate('Connect');
           } else {

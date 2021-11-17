@@ -35,6 +35,7 @@ import {
 } from '../redux/constants/index';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Scaffold from './Components/Scaffold';
+import AddProductCartItem from './Components/CreateOrder/AddProductCartItem';
 
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
@@ -527,96 +528,11 @@ class AddProduct extends React.Component {
                       ))
                     }
                     renderItem={({item, index, separators}) => (
-                      <View
-                        style={[
-                          {
-                            flexDirection: 'column',
-                            marginBottom: 20,
-                            borderBottomWidth: 1,
-                            borderBottomColor: '#DCDCDC',
-                            paddingBottom: 7,
-                          },
-                        ]}>
-                        <View style={[{}, styles.OrderDetailDataCOntainer]}>
-                          <View
-                            style={[{}, styles.OrderDetailDataCOntainerRow]}>
-                            <View>
-                              <Text
-                                style={[
-                                  {},
-                                  styles.OrderDetailDataCOntainerHeadingText,
-                                ]}>
-                                {item.name}{' '}
-                              </Text>
-                              <Text
-                                style={[
-                                  styles.OrderDetailHeadingRowText,
-                                  {fontSize: 11},
-                                ]}>
-                                {item.name}{' '}
-                                {item.no_qty_limit
-                                  ? 'Qty: No Limit'
-                                  : '| Qty: ' + item.qnty}
-                              </Text>
-                            </View>
-                          </View>
-                        </View>
-                        <View style={[{}, styles.orderDetailAmmountRow]}>
-                          <View style={[{}, styles.orderDetailAmmountColumn]}>
-                            <Text
-                              style={[
-                                {},
-                                styles.orderDetailAmmountColumnGaryBolText,
-                              ]}>
-                              {item.currency} {item.price}
-                            </Text>
-                          </View>
-                          {item.is_active ? (
-                            <View style={[{}, styles.orderDetailAmmountColumn]}>
-                              <View
-                                style={[
-                                  styles.OrderDetailDataCOntainerCounterView,
-                                  {right: 20},
-                                ]}>
-                                <TouchableOpacity
-                                  onPress={() => this.counterFun('sub', index)}
-                                  style={[{}, styles.iconView]}>
-                                  <Icon name="minus" />
-                                </TouchableOpacity>
-                                <View style={[{}, styles.iconView]}>
-                                  <Text>{item.purchased_quantity}</Text>
-                                </View>
-                                <TouchableOpacity
-                                  style={[{}, styles.iconView]}
-                                  onPress={() => this.counterFun('add', index)}>
-                                  <Icon name="plus" color="#B1272C" />
-                                </TouchableOpacity>
-                              </View>
-                              {/* <TouchableOpacity
-                                                       onPress={() => this.addProduct(index)}
-                                                       style={{ flexDirection: 'row', backgroundColor: '#B1272C', position: 'absolute', right: 10, paddingHorizontal: 10, borderRadius: 100, paddingVertical: 2, width: width / 6, alignItems: 'center' }}
-                                                   >
-                                                       <Icon name="plus-circle" color={'#fff'} />
-                                                       <Text style={{ color: '#fff', marginLeft: 5 }}>Add</Text>
-                                                   </TouchableOpacity> */}
-                            </View>
-                          ) : (
-                            <View
-                              style={{
-                                backgroundColor: '#FFF4F4',
-                                justifyContent: 'center',
-                                right: 10,
-                                borderRadius: 60,
-                                width: width / 6,
-                                alignItems: 'center',
-                              }}>
-                              <Text style={{color: '#B1272C', fontSize: 7}}>
-                                INACTIVE
-                              </Text>
-                            </View>
-                          )}
-                        </View>
-                      </View>
+                      <AddProductCartItem
+                        item={item}
+                        counterFunAdd={() => this.counterFun('add', index)}
+                        counterFunSub={() => this.counterFun('sub', index)}
+                      />
                     )}
                   />
                 ) : (
