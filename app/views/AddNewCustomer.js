@@ -790,7 +790,6 @@ class AddNewCustomer extends React.Component {
                               borderBottomRightRadius: 10,
                               opacity: 1,
                             }}
-                            labelStyle={{color: '#A9A9A9'}}
                             onChangeItem={item =>
                               this.onDeliverySelectState(item.value)
                             }
@@ -888,7 +887,7 @@ class AddNewCustomer extends React.Component {
                   (({highlighted}) => (
                     <View
                       style={[
-                        style.separator,
+                        styles.separator,
                         highlighted && {marginLeft: 0, height: height / 3},
                       ]}
                     />
