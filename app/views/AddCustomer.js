@@ -42,6 +42,7 @@ class AddCustomer extends React.Component {
       searchPress: 1,
       spinner: false,
       customerData: [],
+      isSearch: false,
       pageNo: 1,
       search_text: '',
     };
@@ -59,6 +60,7 @@ class AddCustomer extends React.Component {
     }
   }
   searchText() {
+    this.setState({isSearch: true});
     const search_text = this.state.search_text;
     this.getCustomers(Constants.customerlist + '?search=' + search_text);
   }
@@ -102,9 +104,17 @@ class AddCustomer extends React.Component {
         });
         if (responseJson.status === 'success') {
           console.log('KKKKKKKKK', responseJson);
-          this.setState({
-            customerData: [...this.state.customerData, ...responseJson.data],
-          });
+          if (this.state.isSearch) {
+            this.setState({
+              customerData: responseJson.data,
+              isSearch: false,
+            });
+          } else {
+            this.setState({
+              customerData: [...this.state.customerData, ...responseJson.data],
+              isSearch: false,
+            });
+          }
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
         } else {
@@ -128,6 +138,7 @@ class AddCustomer extends React.Component {
       customer_state: item.state,
       customer_lga: item.lga,
       customer_address: item.address,
+      detail: item,
     };
     await this.props.setCustomer(user_data);
     console.log('user info !!!!!!!!!!!!!!! @@@@@@@@@@@@@', this.props);

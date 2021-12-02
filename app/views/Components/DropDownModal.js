@@ -62,6 +62,7 @@ const DropDownModal = ({
 
           <FlatList
             data={data}
+            keyExtractor={(item, index) => index}
             renderItem={({item, index, separators}) => (
               <TouchableOpacity
                 key={index}

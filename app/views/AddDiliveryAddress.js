@@ -26,6 +26,7 @@ import {
   SET_USER,
   LOGOUT_USER,
   SET_DELIVERY_ADDRESS,
+  ADD_DELIVERY_FEE_TO_COST,
 } from '../redux/constants/index';
 import RadioForm, {
   RadioButton,
@@ -61,9 +62,15 @@ class AddDiliveryAddress extends React.Component {
       countryModal: false,
       stateModal: false,
       regionModal: false,
+      delivery_fee: 0,
     };
   }
   componentDidMount() {
+    // alert(this.props.cart.total_price_with_tax);
+    console.log(
+      'this.props.cart.total_price_with_tax',
+      this.props.cart.cart_detail.total_price_with_tax,
+    );
     this.getCountryList();
   }
   unauthorizedLogout() {
@@ -229,6 +236,61 @@ class AddDiliveryAddress extends React.Component {
     this.setState({spinner: false});
   }
 
+  getDeliveryFee() {
+    if (this.state.house_no.trim() === '') {
+      Alert.alert('Warning', 'House No required');
+      return;
+    } else if (this.state.street.trim() == '') {
+      Alert.alert('Warning', 'Street Name are required');
+      return;
+    } else if (this.state.country_id == 0) {
+      Alert.alert('Warning', 'Country required');
+      return;
+    } else if (this.state.state_id == 0) {
+      Alert.alert('Warning', 'State required');
+      return;
+    } else if (this.state.lgas_id == 0) {
+      Alert.alert('Warning', 'Region required');
+      return;
+    }
+    this.setState({spinner: true});
+    let postData = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: this.props.user.access_token,
+      },
+    };
+    console.log('adMo78', Constants.customerdelivery, postData);
+
+    fetch(
+      `${Constants.deliveryCost}?order_amount=${this.props.cart.cart_detail.total_price_with_tax}&country_id=${this.state.country_id}&state_id=${this.state.state_id}&lga_id=${this.state.lgas_id}`,
+      postData,
+    )
+      .then(response => response.json())
+      .then(async responseJson => {
+        this.setState({spinner: false});
+        console.log('sucgjhjlkkll#@ RRE', responseJson);
+        if (responseJson.status === 'success') {
+          this.setState({
+            delivery_fee: responseJson.data,
+          });
+
+          //call
+          this.createDeliveryAddress();
+        } else {
+          this.setState({spinner: false});
+          let message = responseJson.status;
+          Alert.alert('Error', message);
+        }
+      })
+      .catch(error => {
+        console.log('Api call error', error);
+        // Alert.alert(error.message);
+      });
+  }
+
   createDeliveryAddress() {
     if (this.state.house_no.trim() === '') {
       Alert.alert('Warning', 'House No required');
@@ -265,6 +327,7 @@ class AddDiliveryAddress extends React.Component {
         is_default: this.state.is_default,
       }),
     };
+    console.log('adMo78', Constants.customerdelivery, postData);
 
     fetch(Constants.customerdelivery, postData)
       .then(response => response.json())
@@ -287,8 +350,15 @@ class AddDiliveryAddress extends React.Component {
           await this.props.setDeliveryAddress({
             address: address,
             type: 'delivery',
+            country_id: this.state.country_id,
+            lga_id: this.state.lgas_id,
+            state_id: this.state.state_id,
+            delivery_fee: this.state.delivery_fee,
           });
           console.log('~~~~~~~~~~~~~~~', address);
+          this.props.addDeliveryFee({
+            delivery_fee: this.state.delivery_fee,
+          });
 
           Alert.alert('Message', responseJson.message);
           this.props.navigation.navigate('CreateOrder', {render: true});
@@ -526,7 +596,7 @@ class AddDiliveryAddress extends React.Component {
                 </View>
               </View>
               <TouchableOpacity
-                onPress={() => this.createDeliveryAddress()}
+                onPress={() => this.getDeliveryFee()}
                 style={[{zIndex: -0.999}, styles.redBtn]}>
                 <Text style={{color: '#fff'}}>Save</Text>
               </TouchableOpacity>
@@ -732,6 +802,7 @@ class AddDiliveryAddress extends React.Component {
 }
 function mapStateToProps(state) {
   return {
+    cart: state.cartReducer,
     user: state.userReducer,
     customer: state.customReducer,
   };
@@ -741,6 +812,9 @@ function mapDispatchToProps(dispatch) {
     setUser: value => dispatch({type: SET_USER, value: value}),
     setDeliveryAddress: value =>
       dispatch({type: SET_DELIVERY_ADDRESS, value: value}),
+    addDeliveryFee: value =>
+      dispatch({type: ADD_DELIVERY_FEE_TO_COST, value: value}),
+
     logoutUser: () => dispatch({type: LOGOUT_USER}),
   };
 }

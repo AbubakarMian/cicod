@@ -10,6 +10,7 @@ import {
   Platform,
   TouchableOpacity,
   FlatList,
+  BackHandler,
 } from 'react-native';
 import {Text, TextInput, Modal} from 'react-native-paper';
 import splashImg from '../images/splash.jpg';
@@ -57,6 +58,7 @@ const isAndroid = Platform.OS == 'android';
 class CreateOrderValueChain extends React.Component {
   constructor(props) {
     super(props);
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     this.state = {
       value: 0,
       spinner: false,
@@ -90,7 +92,32 @@ class CreateOrderValueChain extends React.Component {
       pay_button_lable: 'Pay',
       amount_payable: 0,
       ConfirmationPayInvoice: false,
+      closeApp: false,
     };
+  }
+
+  componentWillMount() {
+    BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.handleBackButtonClick,
+    );
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener(
+      'hardwareBackPress',
+      this.handleBackButtonClick,
+    );
+  }
+
+  handleBackButtonClick() {
+    if (!this.props.navigation.isFocused()) {
+      return false;
+    }
+    if (this.state.cart_arr.length > 0) {
+      this.setState({closeApp: true});
+      return true;
+    }
   }
 
   // componentWillUnmount(){
@@ -645,7 +672,7 @@ class CreateOrderValueChain extends React.Component {
     let user_data = {};
     this.props.setCustomer(user_data);
     this.props.emptyOrder();
-    this.props.navigation.goBack();
+    // this.props.navigation.goBack();
   }
 
   supplierModalFun(item) {
@@ -720,7 +747,9 @@ class CreateOrderValueChain extends React.Component {
                   <TouchableOpacity
                     // onPress={() => this.props.navigation.navigate('Order')}
                     onPress={() => this.closeOrder()}>
-                    <Text style={[{}, styles.backHeadingCloseText]}>Close</Text>
+                    <Text style={[{}, styles.backHeadingCloseText]}>
+                      Clear Order
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -815,7 +844,7 @@ class CreateOrderValueChain extends React.Component {
               <View style={[{}, styles.OrderDetailContainer]}>
                 <View style={[{}, styles.OrderDetailHeadingRow]}>
                   <Text style={[{}, styles.OrderDetailHeadingRowText]}>
-                    Order Detail
+                    Product Detail
                   </Text>
                   {this.state.cart_arr.length != 0 ? (
                     <Text style={[{}, styles.OrderDetailNotificationText]}>
@@ -827,7 +856,7 @@ class CreateOrderValueChain extends React.Component {
                   onPress={() => this.clearOrder()}
                   style={[{}, styles.OrderDetailClearTouc]}>
                   <Text style={[{}, styles.OrderDetailNormalgRowText]}>
-                    Clear Order
+                    Clear Products
                   </Text>
                 </TouchableOpacity>
                 {this.state.cart_arr.length == 0 ? (
@@ -1312,6 +1341,71 @@ class CreateOrderValueChain extends React.Component {
                     }}
                     onPress={() => this.createOrderFun()}>
                     <Text style={{color: '#fff'}}>Confirm</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
+
+          <Modal
+            visible={this.state.closeApp}
+            onDismiss={() => this.setState({closeApp: false})}>
+            <View
+              style={{
+                alignSelf: 'center',
+                backgroundColor: '#fff',
+                width: width - 50,
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingVertical: 20,
+                borderRadius: 10,
+                flexDirection: 'column',
+              }}>
+              <View style={{flexDirection: 'row', marginBottom: 30}}>
+                <Text
+                  style={{color: '#2d3093', fontWeight: 'bold', fontSize: 20}}>
+                  Want to exit Order?
+                </Text>
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: '#fff',
+                      paddingVertical: 15,
+                      padding: 30,
+                      borderRadius: 100,
+                      borderWidth: 1,
+                      borderColor: '#2d3093',
+                    }}
+                    onPress={() => {
+                      this.setState({closeApp: false});
+                    }}>
+                    <Text style={{color: '#2d3093', paddingHorizontal: 10}}>
+                      No
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: '#2d3093',
+                      paddingVertical: 15,
+                      padding: 40,
+                      borderRadius: 100,
+                    }}
+                    onPress={() => this.closeOrder()}>
+                    <Text style={{color: '#fff'}}>Yes</Text>
                   </TouchableOpacity>
                 </View>
               </View>

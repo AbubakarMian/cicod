@@ -141,7 +141,12 @@ class User extends React.Component {
   async logout_user() {
     this.props.logoutUser();
     await AsyncStorage.removeItem('User');
-    BackHandler.exitApp();
+
+    this.props.navigation.reset({
+      index: 0,
+      routes: [{name: 'Login'}],
+    });
+    // BackHandler.exitApp();
   }
 
   tabView = () => {

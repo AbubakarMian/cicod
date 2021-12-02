@@ -406,7 +406,8 @@ class CreateQuickInvoice extends React.Component {
       tax_amount = (parseFloat(tax_loc) / 100) * this.state.sub_total;
       total_amount =
         this.state.sub_total +
-        (parseFloat(tax_amount) + this.state.discount_amount);
+        parseFloat(tax_amount) -
+        this.state.discount_amount;
       this.setState({total_amount, tax_amount, tax_percent: tax_loc});
     }
   };
@@ -458,11 +459,12 @@ class CreateQuickInvoice extends React.Component {
             // message={this.state.error_title}
             closeOnTouchOutside={true}
             closeOnHardwareBackPress={true}
-            showCancelButton={true}
-            showConfirmButton={false}
+            showCancelButton={false}
+            showConfirmButton={true}
             cancelText="Close"
+            confirmText="Ok"
             confirmButtonColor="#DD6B55"
-            onCancelPressed={() => {
+            onConfirmPressed={() => {
               if (this.state.isInvoiceSuccess) {
                 this.setState({isShowError: false}, () =>
                   this.props.navigation.replace('QuickInvoice'),

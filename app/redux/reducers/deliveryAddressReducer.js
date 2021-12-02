@@ -1,4 +1,4 @@
-import {SET_DELIVERY_ADDRESS, RESET} from '../constants';
+import {SET_DELIVERY_ADDRESS, RESET, RESET_DELIVERY_MAIN} from '../constants';
 const initialState = {
   country_id: 0,
   state_id: 0,
@@ -7,7 +7,7 @@ const initialState = {
   type: 'PICKUP',
   same_as_delivery: false,
   selected_address_id: 0,
-  address: '',
+
   delivery_fee: 0.0,
 };
 const deliveryAddressReducer = (state = initialState, action) => {
@@ -28,18 +28,17 @@ const deliveryAddressReducer = (state = initialState, action) => {
       };
 
       break;
-    case RESET:
-      {
-        return {
-          ...state,
-          country_id: 0,
-          state_id: 0,
-          address: '',
-          delivery_fee: 0,
-          lga_id: 0,
-          type: 'PICKUP',
-        };
-      }
+    case RESET_DELIVERY_MAIN:
+      return {
+        ...state,
+        country_id: 0,
+        state_id: 0,
+        address: '',
+        delivery_fee: 0,
+        lga_id: 0,
+        type: 'PICKUP',
+      };
+
       break;
     default:
       return state;

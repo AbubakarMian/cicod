@@ -17,9 +17,16 @@ import CheckBox from 'react-native-check-box';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {connect} from 'react-redux';
-import {SET_USER, LOGOUT_USER, ORDER_RELOAD} from '../redux/constants/index';
+import {
+  SET_USER,
+  LOGOUT_USER,
+  ORDER_RELOAD,
+  CLEAR_CART,
+  CLEAR_ORDER,
+} from '../redux/constants/index';
 import {Constants} from './Constant';
 import Scaffold from './Components/Scaffold';
+import NumberFormat from 'react-number-format';
 
 var {width, height} = Dimensions.get('window');
 
@@ -43,6 +50,7 @@ class OrderDetail_pending extends React.Component {
       currency: '',
       supendModal: false,
       bodyOrder: {},
+      delivery_amount: 0,
       amount_paid_from_credit_limit: '',
       order_detail_url: '',
       data: {
@@ -55,6 +63,10 @@ class OrderDetail_pending extends React.Component {
       },
       item: [],
     };
+  }
+
+  componentDidMount() {
+    this.props.emptyOrder();
   }
   get_order_detail() {
     let order_id = this.props.route.params.id;
@@ -111,6 +123,7 @@ class OrderDetail_pending extends React.Component {
             data: resdata,
             cicod_order_id: resdata.cicod_order_id,
             delivery_type: resdata.delivery_type,
+            delivery_amount: resdata.delivery_amount,
             payment_mode: resdata.payment_mode,
             order_status: resdata.order_status,
             payment_status: resdata.payment_status,
@@ -316,7 +329,7 @@ class OrderDetail_pending extends React.Component {
                       {color: '#2F2E7C', fontWeight: '700', marginLeft: 10},
                       fontStyles.normal15,
                     ]}>
-                    ORDER DETAILS
+                    ORDER DETAIL
                   </Text>
                 </View>
               </TouchableOpacity>
@@ -681,33 +694,157 @@ class OrderDetail_pending extends React.Component {
                     )}
                   />
                 </View>
-                <View
-                  style={{
-                    alignSelf: 'flex-end',
-                    marginRight: 20,
-                    marginVertical: 20,
-                    flexDirection: 'row',
-                  }}>
-                  <Text
+
+                {this.state.delivery_type == 'DELIVERY' ? (
+                  <View>
+                    <View
+                      style={{
+                        alignSelf: 'flex-end',
+                        marginRight: 20,
+                        marginVertical: 20,
+                        flexDirection: 'row',
+                      }}>
+                      <Text
+                        style={{
+                          fontWeight: 'bold',
+                          color: '#4E4D4D',
+                          fontSize: 15,
+                          fontFamily: 'Open Sans',
+                        }}>
+                        Sub Total:{' '}
+                      </Text>
+                      <Text
+                        style={{
+                          fontWeight: 'bold',
+                          color: '#4E4D4D',
+                          fontSize: 15,
+                          fontFamily: 'Open Sans',
+                        }}>
+                        <NumberFormat
+                          decimalScale={2}
+                          renderText={(value, props) => (
+                            <Text {...props}>{value}</Text>
+                          )}
+                          value={this.state.total_amount}
+                          displayType={'text'}
+                          thousandSeparator={true}
+                          prefix={this.state.currency}
+                        />
+                        {/*                                     
+                                {currency+ total_amount} */}
+                        {/* {this.props.currency.currency+total_amount.replace(/\B(?=(\d{1})+(?!\d))/g, ",")} */}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        alignSelf: 'flex-end',
+                        marginRight: 20,
+                        marginVertical: 20,
+                        flexDirection: 'row',
+                      }}>
+                      <Text
+                        style={{
+                          fontWeight: 'bold',
+                          color: '#4E4D4D',
+                          fontSize: 15,
+                          fontFamily: 'Open Sans',
+                        }}>
+                        Delivery Fee:{' '}
+                      </Text>
+                      <Text
+                        style={{
+                          fontWeight: 'bold',
+                          color: '#4E4D4D',
+                          fontSize: 15,
+                          fontFamily: 'Open Sans',
+                        }}>
+                        <NumberFormat
+                          decimalScale={2}
+                          renderText={(value, props) => (
+                            <Text {...props}>{value}</Text>
+                          )}
+                          value={this.state.delivery_amount}
+                          displayType={'text'}
+                          thousandSeparator={true}
+                          prefix={this.state.currency}
+                        />
+                        {/*                                     
+                                {currency+ total_amount} */}
+                        {/* {this.props.currency.currency+total_amount.replace(/\B(?=(\d{1})+(?!\d))/g, ",")} */}
+                      </Text>
+                    </View>
+
+                    <View
+                      style={{
+                        alignSelf: 'flex-end',
+                        marginRight: 20,
+                        marginVertical: 20,
+                        flexDirection: 'row',
+                      }}>
+                      <Text
+                        style={{
+                          fontWeight: 'bold',
+                          color: '#4E4D4D',
+                          fontSize: 15,
+                          fontFamily: 'Open Sans',
+                        }}>
+                        Total:{' '}
+                      </Text>
+                      <Text
+                        style={{
+                          fontWeight: 'bold',
+                          color: '#4E4D4D',
+                          fontSize: 15,
+                          fontFamily: 'Open Sans',
+                        }}>
+                        <NumberFormat
+                          decimalScale={2}
+                          renderText={(value, props) => (
+                            <Text {...props}>{value}</Text>
+                          )}
+                          value={
+                            parseFloat(this.state.total_amount) +
+                            parseFloat(this.state.delivery_amount)
+                          }
+                          displayType={'text'}
+                          thousandSeparator={true}
+                          prefix={this.state.currency}
+                        />
+                        {/*                                     
+                                {currency+ total_amount} */}
+                        {/* {this.props.currency.currency+total_amount.replace(/\B(?=(\d{1})+(?!\d))/g, ",")} */}
+                      </Text>
+                    </View>
+                  </View>
+                ) : (
+                  <View
                     style={{
-                      fontWeight: 'bold',
-                      color: '#4E4D4D',
-                      fontSize: 17,
-                      fontFamily: 'Open Sans',
+                      alignSelf: 'flex-end',
+                      marginRight: 20,
+                      marginVertical: 20,
+                      flexDirection: 'row',
                     }}>
-                    Total:{' '}
-                  </Text>
-                  <Text
-                    style={{
-                      fontWeight: 'bold',
-                      color: '#4E4D4D',
-                      fontSize: 17,
-                      fontFamily: 'Open Sans',
-                    }}>
-                    {' '}
-                    {this.state.currency + ' ' + this.state.total_amount}
-                  </Text>
-                </View>
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        color: '#4E4D4D',
+                        fontSize: 17,
+                        fontFamily: 'Open Sans',
+                      }}>
+                      Total:{' '}
+                    </Text>
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        color: '#4E4D4D',
+                        fontSize: 17,
+                        fontFamily: 'Open Sans',
+                      }}>
+                      {' '}
+                      {this.state.currency + ' ' + this.state.total_amount}
+                    </Text>
+                  </View>
+                )}
                 <View
                   style={[
                     {
@@ -730,6 +867,7 @@ class OrderDetail_pending extends React.Component {
                   </TouchableOpacity>
                 </View>
               </View>
+
               <View style={[{}, styles.noteView]}>
                 <Text
                   style={[
@@ -810,7 +948,7 @@ function mapDispatchToProps(dispatch) {
   return {
     setUser: value => dispatch({type: SET_USER, value: value}),
     logoutUser: () => dispatch({type: LOGOUT_USER}),
-    setScreenReload: value => dispatch({type: ORDER_RELOAD, value: value}),
+    emptyOrder: () => dispatch({type: CLEAR_ORDER}),
     setScreenReload: value => dispatch({type: ORDER_RELOAD, value: value}),
   };
 }

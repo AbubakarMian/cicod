@@ -60,6 +60,7 @@ class CreateProduct extends React.Component {
       selected_index: '',
       prod_id: '',
       value: '',
+      selected_cat: '',
       isChecked: false,
       categoryarr: [],
       spinner: false,
@@ -240,7 +241,21 @@ class CreateProduct extends React.Component {
     console.log('**************', this.state.attributes);
   }
   onCategoryText = item => {
+    // alert(item);
+    let data = this.state.categoryarr.filter(itm => itm.value == item);
+    console.log(
+      'hr$$#',
+      item,
+      't%$',
+      this.state.categoryarr[item].label,
+      'uu$#',
+      data,
+      'd87E',
+      this.state.categoryarr,
+    );
     this.setState({
+      selected_cat: data[0].label,
+      showdropDownModal: false,
       category_id: item,
     });
   };
@@ -786,7 +801,11 @@ class CreateProduct extends React.Component {
                         },
                       ]}>
                       <CategoryDropdown
-                        title="Select Product Category"
+                        title={
+                          this.state.selected_cat == ''
+                            ? 'Select Product Category'
+                            : this.state.selected_cat
+                        }
                         onPress={() => this.setState({showdropDownModal: true})}
                       />
                     </View>

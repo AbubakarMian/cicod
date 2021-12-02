@@ -7,6 +7,8 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
 // import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, Touchable, ScrollView, Alert } from 'react-native';
 import styles from '../css/LoginCss';
 import fontStyles from '../css/FontCss';
@@ -203,7 +205,16 @@ class Login extends React.Component {
   }
   render() {
     return (
-      <ScrollView>
+      <KeyboardAwareScrollView
+        bounces={false}
+        showsVerticalScrollIndicator={false}
+        // style={{marginBottom: 150}}
+        enableOnAndroid={true}
+        scrollEnabled={true}
+        extraScrollHeight={100}
+        keyboardShouldPersistTaps="handled"
+        scrollToOverflowEnabled={true}
+        enableAutomaticScroll={true}>
         <View style={[{position: 'relative'}, styles.mainView]}>
           <Spinner
             visible={this.state.Spinner}
@@ -393,7 +404,7 @@ class Login extends React.Component {
                            />
                         </View> */}
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     );
   }
 }

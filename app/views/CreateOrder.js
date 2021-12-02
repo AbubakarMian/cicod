@@ -1,5 +1,6 @@
 import React from 'react';
 import {
+  BackHandler,
   View,
   ImageBackground,
   ScrollView,
@@ -47,6 +48,7 @@ const isAndroid = Platform.OS == 'android';
 class CreateOrder extends React.Component {
   constructor(props) {
     super(props);
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     this.state = {
       value: 0,
       spinner: false,
@@ -84,6 +86,8 @@ class CreateOrder extends React.Component {
       alertMessage: '',
       isAlertError: false,
       alertType: '',
+      closeApp: false,
+      toggleMore: false,
     };
   }
   update_cart_state() {
@@ -97,17 +101,61 @@ class CreateOrder extends React.Component {
     this.update_cart_state();
   }
   async componentDidMount() {
-    console.log(' create order !!!! !!!!!!!!', this.props.user);
+    console.log(' create order !!!! !!!!!!!!', this.props.deliveryAddress);
     // this.getSuppliersList(Constants.supplierlist);
   }
 
-  componentDidUpdate(prevProps) {
+  componentWillMount() {
+    BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.handleBackButtonClick,
+    );
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener(
+      'hardwareBackPress',
+      this.handleBackButtonClick,
+    );
+  }
+
+  handleBackButtonClick() {
+    if (!this.props.navigation.isFocused()) {
+      return false;
+    }
+    if (this.state.cart_arr.length > 0) {
+      this.setState({closeApp: true});
+      return true;
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
     if (this.props.customer.name != prevProps.customer.name) {
       this.setState({
         customer_name: this.props.customer.name,
         customer_email: this.props.customer.email,
         customer_phone: this.props.customer.phone,
       });
+    }
+    console.log(
+      'ye#$#',
+      this.props.cart.cart_detail.total_price,
+      prevProps.cart.cart_detail.total_price,
+      'riri',
+      prevState.cart_detail,
+    );
+    if (
+      this.props.cart.cart_detail.total_price_with_tax !=
+      prevState.cart_detail.total_price_with_tax
+    ) {
+      console.log('yroe');
+      this.setState({
+        cart_arr: this.props.cart.cart,
+
+        cart_detail: this.props.cart.cart_detail,
+      });
+    } else {
+      console.log('noou');
     }
   }
   componentWillReceiveProps() {
@@ -358,7 +406,9 @@ class CreateOrder extends React.Component {
         this.state.customer_name == '' &&
         this.state.value3IndexPayment >= 2 &&
         this.state.value3IndexPayment <= 3
-          ? '-'
+          ? this.state.value3IndexPayment == 2
+            ? 'Cash Customer'
+            : 'POS Customer'
           : this.state.customer_name, //this.state.customer_name,//required
       customer_phone:
         this.state.customer_phone == '' &&
@@ -378,7 +428,7 @@ class CreateOrder extends React.Component {
       payment_mode: this.state.payment_mode, //required
       country_id: this.props.deliveryAddress.country_id,
       state_id: this.props.deliveryAddress.state_id,
-      lga_id: this.state.customer_lga,
+      lga_id: this.props.deliveryAddress.lga_id,
       note: this.props.notes.notes ?? '',
       discount_amount: discounted_price,
       discount_percent: discounted_percentage,
@@ -525,6 +575,7 @@ class CreateOrder extends React.Component {
             //pay cash
           } else if (this.state.value3IndexPayment == 6) {
             // send invoice
+            this.setState({ConfirmationPayInvoice: false});
             this.props.navigation.navigate('OrderDetail', {
               id: responseJson.data.id,
             });
@@ -604,7 +655,7 @@ class CreateOrder extends React.Component {
     this.props.setCustomer(user_data);
     this.props.emptyOrder();
     this.update_cart_state();
-    this.props.navigation.goBack();
+    // this.props.navigation.goBack();
   }
 
   supplierModalFun(item) {
@@ -744,14 +795,24 @@ class CreateOrder extends React.Component {
               <View style={[{}, styles.backHeaderRowView]}>
                 <NavBack
                   title="CREATE ORDER"
-                  onClick={() => this.props.navigation.goBack()}
+                  onClick={() => {
+                    if (this.state.cart_arr.length > 0) {
+                      this.setState({
+                        closeApp: true,
+                      });
+                    } else {
+                      this.props.navigation.goBack();
+                    }
+                  }}
                 />
                 <View style={[{}, styles.backHeadingCloseView]}>
                   <Icon name="times" size={20} color="#929497" />
                   <TouchableOpacity
                     // onPress={() => this.props.navigation.navigate('Order')}
                     onPress={() => this.closeOrder()}>
-                    <Text style={[{}, styles.backHeadingCloseText]}>Close</Text>
+                    <Text style={[{}, styles.backHeadingCloseText]}>
+                      Clear Order
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -793,7 +854,7 @@ class CreateOrder extends React.Component {
               <View style={[{}, styles.OrderDetailContainer]}>
                 <View style={[{}, styles.OrderDetailHeadingRow]}>
                   <Text style={[{}, styles.OrderDetailHeadingRowText]}>
-                    Order Detail
+                    Products Detail
                   </Text>
                   {this.state.cart_arr.length != 0 ? (
                     <Text style={[{}, styles.OrderDetailNotificationText]}>
@@ -805,7 +866,7 @@ class CreateOrder extends React.Component {
                   onPress={() => this.clearOrder()}
                   style={[{}, styles.OrderDetailClearTouc]}>
                   <Text style={[{}, styles.OrderDetailNormalgRowText]}>
-                    Clear Order
+                    Clear Products
                   </Text>
                 </TouchableOpacity>
                 {this.state.cart_arr.length == 0 ? (
@@ -923,7 +984,10 @@ class CreateOrder extends React.Component {
                   onPress={() => this.props.navigation.navigate('AddCustomer')}>
                   <Icon name="plus-circle" size={20} color={'#fff'} />
                   <Text style={[{}, styles.customerContaineraddBtnText]}>
-                    Add
+                    {this.props.customer.name == '' ||
+                    this.props.customer.name == undefined
+                      ? 'Add'
+                      : 'Change'}
                   </Text>
                 </TouchableOpacity>
                 <View
@@ -960,9 +1024,131 @@ class CreateOrder extends React.Component {
                         {this.props.customer.phone}
                       </Text>
                     </View>
-                    <View style={[{}, styles.downIconView]}>
-                      <Icon name="angle-down" size={20} color={'#929497'} />
+                    <View style={[{}, styles.userDEtailCOntainerIconView]}>
+                      <Text style={[{}, styles.usetDetailLableText]}>
+                        Customer Address:{' '}
+                      </Text>
+                      <Text style={[{flex: 1}, styles.usetDetailInfoText]}>
+                        {this.props.customer.detail.address ?? '--'}
+                      </Text>
                     </View>
+                    {this.state.toggleMore && (
+                      <View
+                        style={{
+                          borderTopColor: '#E6E6E6',
+                          borderTopWidth: 1,
+                          paddingVertical: 10,
+                          marginRight: 10,
+                        }}>
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                          }}>
+                          <View
+                            style={{
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                            }}>
+                            <Text style={[{}, styles.usetDetailLableText]}>
+                              Aval Balance
+                            </Text>
+                            <Text
+                              style={[{flex: 1}, styles.usetDetailInfoText]}>
+                              {this.props.currency.currency}{' '}
+                              {this.props.customer.detail.credit_note_balance ??
+                                '0'}
+                            </Text>
+                          </View>
+
+                          <View
+                            style={{
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                            }}>
+                            <Text style={[{}, styles.usetDetailLableText]}>
+                              Accnt Balance
+                            </Text>
+                            <Text
+                              style={[{flex: 1}, styles.usetDetailInfoText]}>
+                              {this.props.currency.currency}{' '}
+                              {this.props.customer.detail.account_balance ??
+                                '0'}
+                            </Text>
+                          </View>
+
+                          <View
+                            style={{
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                            }}>
+                            <Text style={[{}, styles.usetDetailLableText]}>
+                              Credit Balance
+                            </Text>
+                            <Text
+                              style={[{flex: 1}, styles.usetDetailInfoText]}>
+                              {this.props.currency.currency}{' '}
+                              {this.props.customer.detail
+                                .credit_limit_balance ?? '0'}
+                            </Text>
+                          </View>
+                        </View>
+
+                        <View
+                          style={{
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                            marginTop: 15,
+                          }}>
+                          <View
+                            style={{
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                            }}>
+                            <Text style={[{}, styles.usetDetailLableText]}>
+                              Loyalty Points
+                            </Text>
+                            <Text
+                              style={[{flex: 1}, styles.usetDetailInfoText]}>
+                              {this.props.customer.detail.loyalty_points ?? '0'}
+                            </Text>
+                          </View>
+
+                          <View
+                            style={{
+                              flexDirection: 'column',
+                              alignItems: 'center',
+                            }}>
+                            <Text style={[{}, styles.usetDetailLableText]}>
+                              Credit Note
+                            </Text>
+                            <Text
+                              style={[{flex: 1}, styles.usetDetailInfoText]}>
+                              {this.props.currency.currency}{' '}
+                              {this.props.customer.detail.credit_note_balance ??
+                                '0'}
+                            </Text>
+                          </View>
+                        </View>
+                      </View>
+                    )}
+                    <TouchableOpacity
+                      style={{padding: 10}}
+                      onPress={() =>
+                        this.setState({
+                          toggleMore: !this.state.toggleMore,
+                        })
+                      }>
+                      <View style={[{}, styles.downIconView]}>
+                        <Icon
+                          name={
+                            this.state.toggleMore ? 'angle-up' : 'angle-down'
+                          }
+                          size={20}
+                          color={'#929497'}
+                        />
+                      </View>
+                    </TouchableOpacity>
                   </View>
                 )}
               </View>
@@ -1223,6 +1409,11 @@ class CreateOrder extends React.Component {
                         Tax({this.state.cart_detail.vat_percent}%)
                       </Text>
                     ) : null}
+                    {this.state.cart_detail.delivery_fee > 0 && (
+                      <Text style={[{}, styles.subTotleColumn1Text]}>
+                        Delivery Fee
+                      </Text>
+                    )}
 
                     <Text style={[{}, styles.subTotleColumn1Text]}>TOTAL:</Text>
                   </View>
@@ -1239,6 +1430,12 @@ class CreateOrder extends React.Component {
                           this.state.cart_detail.tax ?? 0.0}
                       </Text>
                     ) : null}
+                    {this.state.cart_detail.delivery_fee > 0 && (
+                      <Text style={[{}, styles.subTotleColumn2Text]}>
+                        {this.props.currency.currency}{' '}
+                        {this.state.cart_detail.delivery_fee ?? 0.0}
+                      </Text>
+                    )}
                     <Text style={[{}, styles.subTotleColumn2Text]}>
                       {this.props.currency.currency +
                         ' ' +
@@ -1442,6 +1639,71 @@ class CreateOrder extends React.Component {
                     }}
                     onPress={() => this.createOrderFun()}>
                     <Text style={{color: '#fff'}}>Confirm</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
+
+          <Modal
+            visible={this.state.closeApp}
+            onDismiss={() => this.setState({closeApp: false})}>
+            <View
+              style={{
+                alignSelf: 'center',
+                backgroundColor: '#fff',
+                width: width - 50,
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingVertical: 20,
+                borderRadius: 10,
+                flexDirection: 'column',
+              }}>
+              <View style={{flexDirection: 'row', marginBottom: 30}}>
+                <Text
+                  style={{color: '#2d3093', fontWeight: 'bold', fontSize: 20}}>
+                  Want to exit Order?
+                </Text>
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: '#fff',
+                      paddingVertical: 15,
+                      padding: 30,
+                      borderRadius: 100,
+                      borderWidth: 1,
+                      borderColor: '#2d3093',
+                    }}
+                    onPress={() => {
+                      this.setState({closeApp: false});
+                    }}>
+                    <Text style={{color: '#2d3093', paddingHorizontal: 10}}>
+                      No
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: '#2d3093',
+                      paddingVertical: 15,
+                      padding: 40,
+                      borderRadius: 100,
+                    }}
+                    onPress={() => this.closeOrder()}>
+                    <Text style={{color: '#fff'}}>Yes</Text>
                   </TouchableOpacity>
                 </View>
               </View>

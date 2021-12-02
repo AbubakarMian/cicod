@@ -482,6 +482,40 @@ class Order extends React.Component {
                       ]}>
                       {item.order_status}
                     </Text>
+                  ) : item.order_status == 'DELIVERED' ? (
+                    <Text
+                      style={[
+                        {
+                          borderRadius: 50,
+                          paddingHorizontal: 5,
+                          fontSize: 12,
+                          textAlign: 'center',
+                          backgroundColor: '#DAF8EC',
+                          color: '#26C281',
+                          width: width / 5,
+                          alignSelf: 'flex-end',
+                        },
+                        styles.detailColumn2text,
+                      ]}>
+                      {item.order_status}
+                    </Text>
+                  ) : item.order_status == 'PICKED' ? (
+                    <Text
+                      style={[
+                        {
+                          borderRadius: 50,
+                          paddingHorizontal: 5,
+                          fontSize: 12,
+                          textAlign: 'center',
+                          backgroundColor: '#DAF8EC',
+                          color: '#26C281',
+                          width: width / 5,
+                          alignSelf: 'flex-end',
+                        },
+                        styles.detailColumn2text,
+                      ]}>
+                      {item.order_status}
+                    </Text>
                   ) : item.order_status == 'PAID' ? (
                     <Text
                       style={[

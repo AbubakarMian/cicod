@@ -608,21 +608,32 @@ class Network extends React.Component {
                                   backgroundColor: '#EDE2E2',
                                   width: 10,
                                   height: 10,
+
                                   borderRadius: 50,
                                 }}
                               />
-                              <Text
-                                style={[
+                              <View
+                                style={
                                   {
-                                    color: '#929497',
-                                    flex: 1,
-                                    marginLeft: 3,
-                                    marginRight: 5,
-                                  },
-                                  fontStyles.normal12,
-                                ]}>
-                                {item.sector}
-                              </Text>
+                                    // flex: 1,
+                                    // flexDirection: 'row',
+                                    // flexWrap: 'wrap',
+                                  }
+                                }>
+                                <Text
+                                  style={[
+                                    {
+                                      color: '#929497',
+                                      // flex: 1,
+                                      flexWrap: 'wrap',
+                                      marginLeft: 3,
+                                      marginRight: 5,
+                                    },
+                                    fontStyles.normal12,
+                                  ]}>
+                                  {item.sector}
+                                </Text>
+                              </View>
                             </>
                           )}
                         </View>

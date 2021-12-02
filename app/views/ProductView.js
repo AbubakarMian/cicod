@@ -195,7 +195,7 @@ class ProductView extends React.Component {
             />
             {_that.props.route.params.heading != 'SUPPLIERS' && (
               <TouchableOpacity
-                style={[{}, styles.settingIcon]}
+                style={[{padding: 10}, styles.settingIcon]}
                 onPress={() => _that.setState({supendModal: true})}>
                 <Icon size={25} color={'#929497'} name="ellipsis-h" />
               </TouchableOpacity>
@@ -347,7 +347,7 @@ class ProductView extends React.Component {
                 ]}>
                 <TouchableOpacity
                   onPress={() => _that.updateProductFun()}
-                  style={[{flexDirection: 'row'}]}>
+                  style={[{flexDirection: 'row', alignItems: 'center'}]}>
                   {/* <Image source={require('../images/ban.png')} style={[{}, styles.banImage]} /> */}
                   <Icon
                     name="edit"
@@ -359,7 +359,14 @@ class ProductView extends React.Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => _that.suspendUnsuspendFun()}
-                  style={[{flexDirection: 'row', marginVertical: 10}]}>
+                  style={[
+                    {
+                      flexDirection: 'row',
+                      marginTop: 25,
+                      marginVertical: 10,
+                      alignItems: 'center',
+                    },
+                  ]}>
                   <Image
                     source={require('../images/ban.png')}
                     style={[{}, styles.banImage]}

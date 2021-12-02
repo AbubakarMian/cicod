@@ -24,6 +24,7 @@ export const Constants = {
   productslist: `${base_url}/products`,
   quickInvoice: `${base_url}/qr-invoices`,
   orderslist: `${base_url}/orders`,
+  updateDeliveryStaus: `${base_url}/delivery-acceptance/update-delivery-status`,
   sellerOrderHistory: `${base_url}/value-chain/seller-order-history`,
   viewSellerOrder: `${base_url}/value-chain/view-seller-order`,
   sellerProductList: `${base_url}/value-chain/seller-products`,

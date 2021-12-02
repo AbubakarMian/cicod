@@ -44,7 +44,7 @@ class QuickInvoice extends React.Component {
       calenderModal: false,
       data: [],
       categoryarr: [],
-      search_product: '',
+      search_invoice: '',
       spinner: false,
       prod_image: '',
       reload: true,
@@ -59,12 +59,12 @@ class QuickInvoice extends React.Component {
     this.setState({isFetching: true});
     // if(this.state.isFetching==true){
 
-    // let search_url = Constants.productslist + '?search=' + this.state.search_product;
+    // let search_url = Constants.productslist + '?search=' + this.state.search_invoice;
     this.getData(this.state.quick_invoice);
     return;
     // }
     console.log('333333333333', this.state.isFetching);
-    // _that.setState({
+    // this.setState({
     //     url_orders: url,
     // })
   }
@@ -74,19 +74,10 @@ class QuickInvoice extends React.Component {
     });
   }
   async componentDidMount() {
-    console.log(
-      '~~~~~~~~~~~~~~~~~~~~*************',
-      this.props.user.access_token,
-    );
-    const that = this;
+    this.getData(Constants.quickInvoice);
   }
 
   async getData(url) {
-    let _that = this;
-    if (_that.state.isFetching == true) {
-      _that.setState({isFetching: false});
-    }
-
     this.setState({spinner: true});
     console.log('search url ', url);
     console.log('token ', this.props.user.access_token);
@@ -129,58 +120,8 @@ class QuickInvoice extends React.Component {
 
   search() {
     let search_url =
-      Constants.productslist + '?search=' + this.state.search_product;
+      Constants.quickInvoice + '?search=' + this.state.search_invoice;
     this.getData(search_url);
-  }
-
-  imageUpload() {
-    ImagePicker.openPicker({
-      width: 300,
-      height: 400,
-      cropping: true,
-      size: 1000000,
-    }).then(image => {
-      console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@', image);
-      this.setState({
-        prod_image: image.path,
-      });
-    });
-  }
-
-  getCategoryList() {
-    this.setState({spinner: true});
-    let postData = {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: this.props.user.access_token,
-      },
-    };
-
-    fetch(Constants.productcategorylist, postData)
-      .then(response => response.json())
-      .then(async responseJson => {
-        this.setState({spinner: false});
-        console.log(' category body ', postData);
-        console.log('URLLLLLLLLLLLLLLLLLLLLLLL', Constants.productcategorylist);
-        console.log('responseJson responseJson', responseJson);
-
-        if (responseJson.status === 'success') {
-          let res = responseJson.data;
-          let categoryarr = res.map((x, key) => {
-            return {label: x.name, value: x.id};
-          });
-          this.setState({
-            categoryarr: categoryarr,
-          });
-        } else if (responseJson.status == 401) {
-          this.unauthorizedLogout();
-        } else {
-          let message = responseJson.message;
-          Alert.alert('Error', message);
-        }
-      });
   }
 
   onCategoryText(category_id) {
@@ -198,40 +139,8 @@ class QuickInvoice extends React.Component {
     this.props.navigation.navigate('Login');
   }
 
-  listProducts(props) {
-    let _that = props._that;
-    let url = Constants.quickInvoice;
-    if (
-      _that.props.route == null ||
-      _that.props.route.params == null ||
-      _that.props.route.params.filters == null
-    ) {
-      url = Constants.quickInvoice;
-    } else {
-      let filters = _that.props.route.params.filters;
-      let filter = '?';
-      for (let i = 0; i < filters.length; i++) {
-        filter = filter + filters[i].key + '=' + filters[i].value;
-        if (i != filters.length - 1) {
-          filter = filter + '&';
-        }
-      }
-      url = Constants.quickInvoice + filter;
-    }
-    console.log('reloaded 1', _that.props.reload.product);
-    if (url != _that.state.quick_invoice || _that.props.reload.product) {
-      console.log('reloaded', _that.props.reload.product);
-      _that.props.setScreenReload({
-        reload: false,
-      });
-      _that.getData(url);
-      _that.setState({
-        quick_invoice: url,
-      });
-    }
-    console.log('quick_invoice ', url);
-    // return null;
-    if (_that.state.data.length < 1) {
+  listInvoice = () => {
+    if (this.state.data.length < 1) {
       return (
         <View
           style={{
@@ -263,10 +172,10 @@ class QuickInvoice extends React.Component {
       return (
         <View>
           <FlatList
-            onRefresh={() => _that.onRefresh()}
-            refreshing={_that.state.isFetching}
+            onRefresh={() => this.onRefresh()}
+            refreshing={this.state.isFetching}
             style={{}}
-            data={_that.state.data}
+            data={this.state.data}
             ItemSeparatorComponent={
               Platform.OS !== 'android' &&
               (({highlighted}) => (
@@ -278,7 +187,11 @@ class QuickInvoice extends React.Component {
             renderItem={({item, index, separators}) => (
               <TouchableOpacity
                 key={item.key}
-                // onPress={() => _that.props.navigation.navigate('ProductView', { prod_id: item.id })}
+                onPress={() =>
+                  this.props.navigation.navigate('InvoiceView', {
+                    invoice_id: item.id,
+                  })
+                }
                 onShowUnderlay={separators.highlight}
                 onHideUnderlay={separators.unhighlight}>
                 <View
@@ -325,7 +238,7 @@ class QuickInvoice extends React.Component {
                           },
                         ]}>
                         <Text>
-                          {_that.props.currency.currency}
+                          {this.props.currency.currency}
                           {item.amount}
                         </Text>
                       </View>
@@ -383,7 +296,7 @@ class QuickInvoice extends React.Component {
         </View>
       );
     }
-  }
+  };
 
   render() {
     //console.log('categoryarr categoryarr categoryarr', this.props);
@@ -463,7 +376,7 @@ class QuickInvoice extends React.Component {
                 elevation: 0,
                 borderColor: '#D8DCDE',
               }}
-              onChangeText={text => this.setState({search_product: text})}
+              onChangeText={text => this.setState({search_invoice: text})}
               // onSubmitEditing={() => this.search()}
               //update
             ></Searchbar>
@@ -489,9 +402,7 @@ class QuickInvoice extends React.Component {
           </View>
 
           {/* <ScrollView></ScrollView> */}
-          <ScrollView zIndex={-0.999}>
-            <this.listProducts _that={this} />
-          </ScrollView>
+          <ScrollView zIndex={-0.999}>{this.listInvoice()}</ScrollView>
           {/* <Modal
                  animationType="fade"
                  visible={true}//this.state.regionModal

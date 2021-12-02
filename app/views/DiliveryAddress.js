@@ -28,6 +28,7 @@ import {
   SET_USER,
   LOGOUT_USER,
   SET_DELIVERY_ADDRESS,
+  ADD_DELIVERY_FEE_TO_COST,
 } from '../redux/constants/index';
 import {Container, Content, List, ListItem, Radio} from 'native-base';
 import Scaffold from './Components/Scaffold';
@@ -185,8 +186,57 @@ class DiliveryAddress extends React.Component {
   }
 
   selectAddressGoBack(object) {
-    this.selectAddress(object);
+    this.getDeliveryFee(object);
     this.props.navigation.goBack();
+  }
+
+  getDeliveryFee(object) {
+    this.setState({
+      is_selected_address: !this.state.is_selected_address,
+      selected_address_id: object.list_id,
+      spinner: true,
+    });
+
+    let postData = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: this.props.user.access_token,
+      },
+    };
+
+    fetch(
+      `${Constants.deliveryCost}?order_amount=${this.props.cart.cart_detail.total_price_with_tax}&country_id=${object.country_id}&state_id=${object.state_id}&lga_id=${object.lgas_id}`,
+      postData,
+    )
+      .then(response => response.json())
+      .then(async responseJson => {
+        this.setState({spinner: false});
+        console.log('sucgjhjlkkll#@ RRE', responseJson);
+        console.log('obk$##', object);
+        if (responseJson.status === 'success') {
+          this.props.setDeliveryAddress({
+            address: object.value,
+            country_id: object.country_id,
+            state_id: object.state_id,
+            type: 'Delivery',
+            same_as_delivery: false,
+            selected_address_id: object.list_id,
+          });
+          this.props.addDeliveryFee({
+            delivery_fee: responseJson.data,
+          });
+        } else {
+          this.setState({spinner: false});
+          let message = responseJson.status;
+          Alert.alert('Error', message);
+        }
+      })
+      .catch(error => {
+        console.log('Api call error', error);
+        // Alert.alert(error.message);
+      });
   }
 
   selectAddress(object) {
@@ -351,6 +401,7 @@ class DiliveryAddress extends React.Component {
 
 function mapStateToProps(state) {
   return {
+    cart: state.cartReducer,
     user: state.userReducer,
     customer: state.customReducer,
     deliveryAddress: state.deliveryAddressReducer,
@@ -362,6 +413,8 @@ function mapDispatchToProps(dispatch) {
     logoutUser: () => dispatch({type: LOGOUT_USER}),
     setDeliveryAddress: value =>
       dispatch({type: SET_DELIVERY_ADDRESS, value: value}),
+    addDeliveryFee: value =>
+      dispatch({type: ADD_DELIVERY_FEE_TO_COST, value: value}),
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(DiliveryAddress);

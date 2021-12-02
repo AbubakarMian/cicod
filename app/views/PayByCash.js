@@ -89,6 +89,7 @@ class PayByCash extends React.Component {
           data.order_id = order_id;
           this.props.navigation.navigate('PaymentSuccess', {
             data: responseJson.data,
+            order_id: responseJson.data.id,
           });
 
           // this.props.navigation.navigate('OrderDetail', { id: this.responseJson.data.id ,data:responseJson.data})

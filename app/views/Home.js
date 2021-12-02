@@ -28,6 +28,9 @@ import {
   SET_CUSTOMER,
   LOGOUT_USER,
   CLEAR_ORDER,
+  CLEAR_CART,
+  RESET,
+  RESET_DELIVERY_MAIN,
 } from '../redux/constants/index';
 import {Constants} from '../views/Constant';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -89,9 +92,14 @@ class Home extends React.Component {
   }
 
   veiwShop() {
-    Linking.openURL(
-      `https://${this.state.tenantId.toLowerCase()}.${Constants.webshop_url}`,
-    );
+    this.props.navigation.navigate('InAppWebView', {
+      uri: `https://${this.state.tenantId.toLowerCase()}.${
+        Constants.webshop_url
+      }`,
+    });
+    // Linking.openURL(
+    //   `https://${this.state.tenantId.toLowerCase()}.${Constants.webshop_url}`,
+    // );
   }
 
   async shareShop() {
@@ -163,6 +171,7 @@ class Home extends React.Component {
         Authorization: this.props.user.access_token,
       },
     };
+    console.log('por%$$', postData);
     fetch(Constants.unReadNetwork, postData)
       .then(response => response.json())
       .then(async responseJson => {
@@ -220,12 +229,25 @@ class Home extends React.Component {
     this.props.logoutUser();
     this.props.navigation.navigate('Login');
   }
+
+  async logout_user() {
+    this.props.logoutUser();
+    await AsyncStorage.removeItem('User');
+
+    this.props.navigation.reset({
+      index: 0,
+      routes: [{name: 'Login'}],
+    });
+    // BackHandler.exitApp();
+  }
   createOrder() {
     this.props.setCustomer({
       customer_name: '',
       customer_email: '',
       customer_phone: '',
     });
+    this.props.resetDelivery();
+
     this.props.emptyOrder({
       cart: [],
     });
@@ -245,6 +267,13 @@ class Home extends React.Component {
             backgroundColor: '#F0F0F0',
           }}>
           <Header
+            disabled={
+              this.state.user.kciInfo &&
+              this.state.user.kciInfo.showWarning &&
+              this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0
+                ? true
+                : false
+            }
             name={this.props.route.name}
             navigation={this.props.navigation}
           />
@@ -280,7 +309,13 @@ class Home extends React.Component {
                 </View>
                 <View style={{flex: 1, alignItems: 'flex-end', padding: 10}}>
                   <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate('User')}>
+                    onPress={() =>
+                      this.state.user.kciInfo &&
+                      this.state.user.kciInfo.showWarning &&
+                      this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0
+                        ? this.logout_user()
+                        : this.props.navigation.navigate('User')
+                    }>
                     <Image
                       style={{height: 50, width: 50, borderRadius: 50}}
                       source={
@@ -872,7 +907,8 @@ function mapDispatchToProps(dispatch) {
     setUser: value => dispatch({type: SET_USER, value: value}),
     logoutUser: () => dispatch({type: LOGOUT_USER}),
     setCustomer: value => dispatch({type: SET_CUSTOMER, value: value}),
-    emptyOrder: () => dispatch({type: CLEAR_ORDER}),
+    resetDelivery: () => dispatch({type: RESET_DELIVERY_MAIN}),
+    emptyOrder: () => dispatch({type: CLEAR_CART}),
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

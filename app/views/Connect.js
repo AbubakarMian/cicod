@@ -304,11 +304,16 @@ class Connect extends React.Component {
   }
 
   veiwShop() {
-    Linking.openURL(
-      `https://${this.state.merchant_id.toLowerCase()}.${
+    this.props.navigation.navigate('InAppWebView', {
+      uri: `https://${this.state.merchant_id.toLowerCase()}.${
         Constants.webshop_url
       }`,
-    );
+    });
+    // Linking.openURL(
+    //   `https://${this.state.merchant_id.toLowerCase()}.${
+    //     Constants.webshop_url
+    //   }`,
+    // );
   }
   connectView() {
     return (

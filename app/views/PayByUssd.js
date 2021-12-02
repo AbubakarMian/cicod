@@ -29,6 +29,7 @@ import {Constants} from '../views/Constant';
 import {connect} from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Scaffold from './Components/Scaffold';
+import {CLEAR_ORDER} from '../redux/constants';
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
 class PayByUssd extends React.Component {

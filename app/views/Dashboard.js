@@ -12,6 +12,7 @@ import {
   TouchableNativeFeedback,
   Alert,
   SafeAreaView,
+  ActivityIndicator,
 } from 'react-native';
 import {Text, TextInput, Modal} from 'react-native-paper';
 import splashImg from '../images/splash.jpg';
@@ -45,11 +46,11 @@ class Dashboard extends React.Component {
     this.state = {
       spinner: false,
       data: [],
-      target: [],
-      totalOrder: [],
-      paidOrder: [],
-      pendingOrder: [],
-      canclledOrder: [],
+      target: {},
+      totalOrder: null,
+      paidOrder: null,
+      pendingOrder: null,
+      canclledOrder: null,
       graph_total_orders: [],
       total_orders_pending_data: [],
       graph_data: [],
@@ -92,7 +93,7 @@ class Dashboard extends React.Component {
           'postData postDatapostData !!!!!!!!!!!!!@@@@@@@@@@@@@@',
           postData,
         );
-        console.log('response !!!!!!!!!!!!!@@@@@@@@@@@@@@', responseJson);
+        console.log('response !!!!!!!!!!!!!@@@@@@@@@@@@@@', responseJson.data);
         console.log('url url url !!!!!!!!!!!!!@@@@@@@@@@@@@@', url);
         if (responseJson.status === 'success') {
           console.log(
@@ -280,6 +281,15 @@ class Dashboard extends React.Component {
   render() {
     const {selectedStartDate} = this.state;
     const startDate = selectedStartDate ? selectedStartDate.toString() : '';
+
+    if (!this.state.totalOrder) {
+      return (
+        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+          <ActivityIndicator size="large" color="#2f2c7d" />
+          <Text>Please wait...</Text>
+        </View>
+      );
+    }
     return (
       <Scaffold>
         <View
@@ -292,13 +302,14 @@ class Dashboard extends React.Component {
             flexDirection: 'column',
           }}>
           <Header navigation={this.props.navigation} />
-          {/* <Spinner
-                    visible={this.state.spinner}
-                    textContent={'Please Wait...'}
-                    textStyle={{ color: '#fff' }}
-                    color={'#fff'}
-                /> */}
+          <Spinner
+            visible={this.state.spinner}
+            textContent={'Please Wait...'}
+            textStyle={{color: '#fff'}}
+            color={'#fff'}
+          />
           <DateTimePickerModal
+            style={{backgroundColor: '#2f2c7d'}}
             themeVariant={'light'}
             isVisible={this.state.isDatePickerVisible}
             mode="date"
@@ -358,7 +369,7 @@ class Dashboard extends React.Component {
                         fontSize: 10,
                         fontFamily: 'Open Sans',
                       }}>
-                      Total Orders
+                      Total Order
                     </Text>
                     <Text
                       style={{
@@ -368,10 +379,10 @@ class Dashboard extends React.Component {
                         color: '#4E4D4D',
                       }}>
                       {this.props.currency.currency}
-                      {this.state.totalOrder.amount}
+                      {this.state.totalOrder.amount ?? '0.00'}
                     </Text>
                     <Text style={[{}, styles.recardtext]}>
-                      {this.state.totalOrder.count}
+                      {this.state.totalOrder.count ?? '0.00'}
                     </Text>
                   </View>
                 </View>
@@ -397,10 +408,10 @@ class Dashboard extends React.Component {
                         color: '#4E4D4D',
                       }}>
                       {this.props.currency.currency}
-                      {this.state.paidOrder.amount}
+                      {this.state.paidOrder.amount ?? '0.00'}
                     </Text>
                     <Text style={[{}, styles.greencardtext]}>
-                      {this.state.paidOrder.count}
+                      {this.state.paidOrder.count ?? '0.00'}
                     </Text>
                   </View>
                 </View>
@@ -428,10 +439,10 @@ class Dashboard extends React.Component {
                         color: '#4E4D4D',
                       }}>
                       {this.props.currency.currency}
-                      {this.state.pendingOrder.amount}
+                      {this.state.pendingOrder.amount ?? '0.00'}
                     </Text>
                     <Text style={[{}, styles.bluecardtext]}>
-                      {this.state.pendingOrder.count}
+                      {this.state.pendingOrder.count ?? '0.00'}
                     </Text>
                   </View>
                 </View>
@@ -457,11 +468,11 @@ class Dashboard extends React.Component {
                         color: '#4E4D4D',
                       }}>
                       {this.props.currency.currency}
-                      {this.state.canclledOrder.amount}
+                      {this.state.canclledOrder.amount ?? '0.00'}
                     </Text>
 
                     <Text style={[{}, styles.yellowcardtext]}>
-                      {this.state.canclledOrder.count}
+                      {this.state.canclledOrder.count ?? '0.00'}
                     </Text>
                   </View>
                 </View>
@@ -476,7 +487,7 @@ class Dashboard extends React.Component {
                   borderRadius: 5,
                   paddingLeft: 10,
                 }}>
-                <View style={[{}, styles.calenderbtn]}>
+                {/* <View style={[{}, styles.calenderbtn]}>
                   <TouchableOpacity
                     style={{
                       backgroundColor:
@@ -523,9 +534,9 @@ class Dashboard extends React.Component {
                       Paid Orders{' '}
                     </Text>
                   </TouchableOpacity>
-                </View>
+                </View> */}
 
-                {this.state.graph_data.length == 0 ? null : (
+                {/* {this.state.graph_data.length == 0 ? null : (
                   <ScrollView horizontal={true}>
                     <LineChart
                       data={this.state.graph_data}
@@ -575,10 +586,10 @@ class Dashboard extends React.Component {
                       }}
                     />
                   </ScrollView>
-                )}
+                )} */}
               </View>
-              <View style={[{}, styles.bannerView]}>
-                <View style={[{}, styles.bannerContentView]}>
+              {/* <View style={[{}, styles.bannerView]}> */}
+              {/* <View style={[{}, styles.bannerContentView]}>
                   <Text style={[{}, styles.bannerText]}>Monthly Sales</Text>
                   <Text style={[{}, styles.bannerboldText]}>
                     {this.props.currency.currency}
@@ -618,15 +629,14 @@ class Dashboard extends React.Component {
                       </Text>
                     )}
                   </View>
-                  {/* <Progress.Bar color="#B1272C" backgroundColor="#fff" progress={0.00} width={200} /> */}
-                </View>
-                <View style={[{}, styles.bannerImagetView]}>
+                </View> */}
+              {/* <View style={[{}, styles.bannerImagetView]}>
                   <Image
                     style={{height: 60, width: 60}}
                     source={require('../images/dashboard/graph.png')}
                   />
-                </View>
-              </View>
+                </View> */}
+              {/* </View> */}
             </View>
           </ScrollView>
 
@@ -649,9 +659,10 @@ class Dashboard extends React.Component {
                     backgroundColor: '#fff',
                   }}>
                   <CalendarPicker
+                    headerWrapperStyle={{backgroundColor: '#2f2c7d'}}
                     onDateChange={this.setDate}
                     selectedDayColor={'#000'}
-                    selectedDayTextColor={'#eeee'}
+                    selectedDayTextColor={'#2f2c7d'}
                     startDate={''}
                   />
                 </View>

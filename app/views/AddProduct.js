@@ -63,9 +63,8 @@ class AddProduct extends React.Component {
   }
 
   componentDidMount() {
-    this.getCategoryList();
-
     this.getProductList(Constants.productslist + '?is_active=1');
+    this.getCategoryList();
   }
 
   getProductList(search_url) {
@@ -131,6 +130,7 @@ class AddProduct extends React.Component {
         }
       })
       .catch(error => {
+        console.log('error$$', error);
         console.log('error');
       });
   }
@@ -482,7 +482,7 @@ class AddProduct extends React.Component {
                       No product found
                     </Text>
                     <Text style={[{color: '#929497'}, fontStyles.normal15]}>
-                      Search for a product
+                      Select product category
                     </Text>
                   </View>
                 )}
