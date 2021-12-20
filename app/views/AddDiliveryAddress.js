@@ -35,6 +35,8 @@ import RadioForm, {
 } from 'react-native-simple-radio-button';
 import NavBack from './Components/NavBack';
 import Scaffold from './Components/Scaffold';
+import DropDownModal from './Components/DropDownModal';
+import CategoryDropdown from './Components/CategoryDropdown';
 
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
@@ -184,13 +186,15 @@ class AddDiliveryAddress extends React.Component {
       });
   }
 
-  onSelectCountry(item) {
+  onSelectCountry=(item) =>{
     this.setState({
       setCountry: true,
       setStates: true,
       setRegion: false,
       state_name: '',
       lgas_name: '',
+      state_id:0,
+      lga_id:0
     });
     console.log('country Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item);
     this.setState({
@@ -205,12 +209,13 @@ class AddDiliveryAddress extends React.Component {
     this.setState({spinner: false});
     this.getStateList(statesUrl);
   }
-  onSelectState(item) {
+  onSelectState=(item)=> {
     this.setState({
       setCountry: false,
       setStates: true,
       setRegion: false,
       lgas_name: '',
+      lga_id:0
     });
     console.log('state Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item);
     this.setState({
@@ -225,7 +230,7 @@ class AddDiliveryAddress extends React.Component {
     this.setState({spinner: false});
     this.getLgaList(lgasUrl);
   }
-  onSelectLgas(item) {
+  onSelectLgas=(item) =>{
     this.setState({
       spinner: true,
       lgas_id: item.value,
@@ -262,7 +267,7 @@ class AddDiliveryAddress extends React.Component {
         Authorization: this.props.user.access_token,
       },
     };
-    console.log('adMo78', Constants.customerdelivery, postData);
+    console.log('adMo78', Constants.customerdelivery, postData,"run#",`${Constants.deliveryCost}?order_amount=${this.props.cart.cart_detail.total_price_with_tax}&country_id=${this.state.country_id}&state_id=${this.state.state_id}&lga_id=${this.state.lgas_id}`);
 
     fetch(
       `${Constants.deliveryCost}?order_amount=${this.props.cart.cart_detail.total_price_with_tax}&country_id=${this.state.country_id}&state_id=${this.state.state_id}&lga_id=${this.state.lgas_id}`,
@@ -281,8 +286,8 @@ class AddDiliveryAddress extends React.Component {
           this.createDeliveryAddress();
         } else {
           this.setState({spinner: false});
-          let message = responseJson.status;
-          Alert.alert('Error', message);
+          let message = responseJson.message;
+          Alert.alert('Info', message);
         }
       })
       .catch(error => {
@@ -438,8 +443,22 @@ class AddDiliveryAddress extends React.Component {
                       onChangeText={text => this.setState({landmark: text})}
                     />
                     <View style={[{}, styles.formRow]}>
-                      <View style={[{}, styles.formColumn]}>
-                        <TouchableOpacity
+                      {/* <View style={[{}, styles.formColumn]}> */}
+
+                      <CategoryDropdown
+                              // containerStyle={{flex: 1}}
+                              title={
+                                this.state.country_name == ''
+                                  ? 'Select Country *'
+                                  : this.state.country_name
+                              }
+                              onPress={() =>
+                                this.setState({countryModal: true})
+                              }
+                            />
+
+
+                        {/* <TouchableOpacity
                           onPress={() => this.setState({countryModal: true})}
                           style={{
                             padding: 10,
@@ -453,7 +472,7 @@ class AddDiliveryAddress extends React.Component {
                               {this.state.country_name}
                             </Text>
                           )}
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
 
                         {/* <DropDownPicker
                                                 onOpen={()=>
@@ -482,11 +501,22 @@ class AddDiliveryAddress extends React.Component {
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectCountry(item)}
                                             /> */}
-                      </View>
+                      {/* </View> */}
                     </View>
                     <View style={[{flexDirection: 'row', alignSelf: 'center'}]}>
                       <View style={{flex: 1}}>
-                        <TouchableOpacity
+                      <CategoryDropdown
+                              // containerStyle={{flex: 1}}
+                              title={
+                                this.state.state_name == ''
+                                  ? 'Select State *'
+                                  : this.state.state_name
+                              }
+                              onPress={() =>
+                                this.get_state()
+                              }
+                            />
+                        {/* <TouchableOpacity
                           onPress={() => this.get_state()}
                           style={{
                             padding: 10,
@@ -500,7 +530,7 @@ class AddDiliveryAddress extends React.Component {
                               {this.state.state_name}
                             </Text>
                           )}
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         {/* <DropDownPicker
                                                onOpen={()=>
                                             this.setState({
@@ -529,6 +559,19 @@ class AddDiliveryAddress extends React.Component {
                                             /> */}
                       </View>
                       <View style={{flex: 1}}>
+                      <CategoryDropdown
+                              // containerStyle={{flex: 1}}
+                              title={
+                                this.state.lgas_name == ''
+                                  ? 'Region *'
+                                  : this.state.lgas_name
+                              }
+                              onPress={() =>
+                                this.get_region()
+                              }
+                            />
+
+{/* 
                         <TouchableOpacity
                           onPress={() => this.get_region()}
                           style={{
@@ -544,7 +587,7 @@ class AddDiliveryAddress extends React.Component {
                               {this.state.lgas_name}
                             </Text>
                           )}
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         {/* <DropDownPicker
                                                 onOpen={()=>
                                                 this.setState({
@@ -602,6 +645,18 @@ class AddDiliveryAddress extends React.Component {
               </TouchableOpacity>
             </View>
           </ScrollView>
+
+          <DropDownModal
+              title="Choose Country"
+              selected={this.state.country_id}
+              itemFull={true}
+              showdropDownModal={this.state.countryModal}
+              handleClose={() => this.setState({countryModal: false})}
+              onSelected={this.onSelectCountry}
+              data={this.state.countries_arr}
+            />
+
+{/* 
           <Modal
             animationType="fade"
             visible={this.state.countryModal}
@@ -666,7 +721,19 @@ class AddDiliveryAddress extends React.Component {
                 )}
               />
             </View>
-          </Modal>
+          </Modal> */}
+
+<DropDownModal
+              title="Choose State"
+              selected={this.state.state_id}
+              itemFull={true}
+              showdropDownModal={this.state.stateModal}
+              handleClose={() => this.setState({stateModal: false})}
+              onSelected={this.onSelectState}
+              data={this.state.states_arr}
+            />
+
+{/* 
           <Modal
             animationType="fade"
             visible={this.state.stateModal}
@@ -730,8 +797,19 @@ class AddDiliveryAddress extends React.Component {
                 )}
               />
             </View>
-          </Modal>
-          <Modal
+          </Modal> */}
+
+<DropDownModal
+              title="Choose Region"
+              selected={this.state.lgas_id}
+              itemFull={true}
+              showdropDownModal={this.state.regionModal}
+              handleClose={() => this.setState({regionModal: false})}
+              onSelected={this.onSelectLgas}
+              data={this.state.lgas_arr}
+            />
+
+          {/* <Modal
             animationType="fade"
             visible={this.state.regionModal}
             transparent={true}
@@ -794,7 +872,7 @@ class AddDiliveryAddress extends React.Component {
                 )}
               />
             </View>
-          </Modal>
+          </Modal> */}
         </View>
       </Scaffold>
     );

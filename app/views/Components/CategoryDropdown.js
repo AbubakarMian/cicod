@@ -2,19 +2,22 @@ import React from 'react';
 import {View, TouchableOpacity, Text} from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 
-const CategoryDropdown = ({onPress, title}) => {
+const CategoryDropdown = ({onPress, title,containerStyle={}}) => {
   return (
     <TouchableOpacity
       onPress={onPress}
-      style={{
+      style={[
+        containerStyle,
+        {
         backgroundColor: '#F5F5F5',
         padding: 15,
         flexDirection: 'row',
         justifyContent: 'space-between',
         marginBottom: 10,
+        // flex:1,
         borderColor: '#D8DCDE',
         backgroundColor: '#ffffff',
-      }}>
+      }]}>
       <Text
         style={{
           color: '#929497',

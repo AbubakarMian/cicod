@@ -2,6 +2,8 @@ import {SET_USER, LOGOUT_USER} from '../constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const initialState = {
   kciInfo: null,
+  merchantApps:[],
+  merchantStatus:{},
   id: 0,
   tenantId: '',
   firstname: 'Guest',
@@ -10,6 +12,7 @@ const initialState = {
   phone: '080000000',
   avatar: '',
   access_token: '',
+  roles:null
 };
 const userReducer = (state = initialState, action) => {
   console.log('data----------user', action);
@@ -25,7 +28,10 @@ const userReducer = (state = initialState, action) => {
           phone: action.value.phone,
           access_token: action.value.access_token,
           kciInfo: action.value.kciInfo,
+          merchantApps: action.value.merchantApps,
+          merchantStatus: action.value.merchantStatus,
           tenantId: action.value.tenantId,
+          roles: action.value.roles,
         }),
       );
       return {
@@ -37,7 +43,10 @@ const userReducer = (state = initialState, action) => {
         phone: action.value.phone,
         access_token: action.value.access_token,
         kciInfo: action.value.kciInfo,
+        merchantApps: action.value.merchantApps,
+        merchantStatus: action.value.merchantStatus,
         tenantId: action.value.tenantId,
+        roles: action.value.roles,
       };
 
       break;

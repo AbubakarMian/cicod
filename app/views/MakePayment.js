@@ -54,6 +54,7 @@ class MakePayment extends React.Component {
       spinner: false,
       pending_order_res: this.props.route.params.pending_order_res ?? null,
       data: [],
+      settlementMode:"OFFLINE"
     };
   }
   componentDidMount() {
@@ -62,7 +63,48 @@ class MakePayment extends React.Component {
       this.state.bodyOrder,
     );
     console.log('EEEEEEEEEEEEEEEE', this.props.route.params.pending_order_res);
+    this.getUserDetail()
   }
+
+
+  getUserDetail() {
+    this.setState({spinner: true});
+    let postData = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: this.props.user.access_token,
+      },
+    };
+    fetch(Constants.marchantDetail, postData)
+      .then(response => response.json())
+      .then(async responseJson => {
+        console.log(
+          'responseJson @@@@@@@@###########',
+          Constants.marchantDetail,
+          postData,
+          responseJson,
+        );
+        this.setState({
+          spinner: false,
+        });
+        if (responseJson.status === 'SUCCESS') {
+          let merchant_contact = responseJson.merchant;
+          this.setState({
+            settlementMode: merchant_contact.settlementModeType==null?"OFFLINE":merchant_contact.settlementModeType,
+            valuePaymentKey:merchant_contact.settlementModeType=="OFFLINE" ||merchant_contact.settlementModeType==null?"PAY_ACCOUNT" :"PAY_ONLINE"
+            
+          });
+        } else if (responseJson.status == 401) {
+          this.unauthorizedLogout();
+        } else {
+          let message = responseJson.message;
+          Alert.alert('Error', message);
+        }
+      });
+  }
+
   async setPaymentMode(payment_mode, navigateScreen) {
     if (await this.state.spinner) {
       return;
@@ -302,7 +344,17 @@ class MakePayment extends React.Component {
 
     // this.setPaymentMode('CASH', 'PayByCash')
     if (this.props.route.params.pending_order_res == undefined) {
-      this.setPaymentMode('CASH', 'PayByCash');
+      this.props.navigation.navigate('PayByCash', {
+        bodyOrder: this.props.route.params.bodyOrder,
+        amount_payable: this.props.route.params.amount_payable,
+        // pending_order_res: this.props.route.params.pending_order_res,
+        payment_link: "",
+        payment_mode: 'CASH',
+        data:"",
+        order_id: "",
+        new_order:true
+      });
+      // this.setPaymentMode('CASH', 'PayByCash');
     } else {
       this.props.navigation.navigate('PayByCash', {
         bodyOrder: this.props.route.params.bodyOrder,
@@ -313,6 +365,7 @@ class MakePayment extends React.Component {
         payment_mode: 'CASH',
         data: this.props.route.params.pending_order_res.data,
         order_id: this.props.route.params.pending_order_res.data.id,
+        new_order:false
       });
     }
   }
@@ -345,6 +398,7 @@ class MakePayment extends React.Component {
           <View>
             <ScrollView>
               <View>
+                {this.state.settlementMode!="OFFLINE" &&<>
                 <TouchableOpacity
                   style={[{}, styles.cardTouch]}
                   onPress={() => this.makePaymentFun('ONLINE')}>
@@ -435,6 +489,7 @@ class MakePayment extends React.Component {
                     <Image source={require('../images/payByUssd.png')} />
                   </View>
                 </TouchableOpacity>
+                </>}
                 {this.props.route.params.heading != 'supplier' && (
                   <TouchableOpacity
                     onPress={() => this.payByCash()}
@@ -442,7 +497,7 @@ class MakePayment extends React.Component {
                     <View>
                       <View>
                         <Text style={[{}, styles.cardHeadingText]}>
-                          Pay by cash
+                          Pay by Cash
                         </Text>
                         <Text style={[{}, styles.cardDescText]}>
                           Make payment using cash

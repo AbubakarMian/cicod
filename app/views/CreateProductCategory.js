@@ -181,6 +181,17 @@ class CreateProductCategory extends React.Component {
             if (response.data.status === 'success') {
               console.log('GGGGGGGGGGG', response.data);
               _that.setState({
+                name:"",
+                description:"",
+                prod_image:"",
+                product_category: {
+                  id: 0,
+                  name: '',
+                  description: '',
+                  prod_image: '',
+                  on_webshop: false,
+                },
+                screen: 'new',
                 isMessage: true,
                 message_text: 'Product Category Created Successfully',
               });
@@ -204,10 +215,34 @@ class CreateProductCategory extends React.Component {
             _that.setState({spinner: false});
             if (response.data.status === 'success') {
               console.log('GGGGGGGGGGG', response.data);
-              _that.props.setScreenReload({
-                reload: true,
-              });
-              _that.props.navigation.navigate('ProductCategory');
+              _that.setState({
+                name:"",
+                description:"",
+                prod_image:"",
+                product_category: {
+                  id: 0,
+                  name: '',
+                  description: '',
+                  prod_image: '',
+                  on_webshop: false,
+                },
+                screen: 'new',
+                
+              })
+              Alert.alert("Success","Product Category Updated Successfully!",[
+                {
+                  text:"OK",
+                  onPress:()=>{
+                    _that.props.setScreenReload({
+                      reload: true,
+                    });
+                    _that.props.navigation.navigate('ProductCategory');
+
+                  }
+                }
+              ])
+              
+
             } else {
               Alert.alert(response.response.message);
             }
@@ -317,6 +352,7 @@ class CreateProductCategory extends React.Component {
             showCancelButton={false}
             showConfirmButton={true}
             cancelText="Close"
+            confirmText="Ok"
             confirmButtonColor="#26C281"
             //   onCancelPressed={() => {
             //     this.setState({isMessage:false})
@@ -333,7 +369,7 @@ class CreateProductCategory extends React.Component {
             style={{
               flexDirection: 'row',
               alignItems: 'center',
-              paddingHorizontal: 10,
+              paddingHorizontal: 15,
               justifyContent: 'space-between',
             }}>
             <NavBack

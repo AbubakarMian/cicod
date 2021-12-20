@@ -60,7 +60,8 @@ export default class Register extends React.Component {
               }
             }}
             source={{
-              uri: `${Constants.sass_url}/subscribe?offer=zZPjmFCBG6amyUvSfc0FkefEVPzTiH&trial=true&isBundle=true`,
+             // uri: `${Constants.sass_url}/subscribe?offer=zZPjmFCBG6amyUvSfc0FkefEVPzTiH&trial=true&isBundle=true`,
+              uri: `${Constants.sass_url}/subscribe?offer=kMOR8wwTNaJjfzO1JVDSXNJfdz6bBk&trial=true&isBundle=true`,
             }}
             onLoadEnd={() => this.setState({spinner: false})}
           />

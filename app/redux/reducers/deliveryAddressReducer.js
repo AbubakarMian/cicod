@@ -36,6 +36,7 @@ const deliveryAddressReducer = (state = initialState, action) => {
         address: '',
         delivery_fee: 0,
         lga_id: 0,
+        same_as_delivery:false,
         type: 'PICKUP',
       };
 

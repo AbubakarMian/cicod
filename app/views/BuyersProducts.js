@@ -56,7 +56,7 @@ class BuyerProducts extends React.Component {
     });
   }
   async componentDidMount() {
-    console.log('items.....sd', this.props.route.params.buyer_id);
+    console.log('items.....sd', this.props.route.params.heading);
     console.log(
       '~~~~~~~~~~~~~~~~~~~~*************',
       this.props.user.access_token,
@@ -271,6 +271,7 @@ class BuyerProducts extends React.Component {
                     item,
                     prod_id: item.id,
                     heading: _that.props.route.params.heading || 'BUYERS',
+                    items:_that.props.route.params.items
                   })
                 }
                 onShowUnderlay={separators.highlight}
@@ -306,7 +307,7 @@ class BuyerProducts extends React.Component {
                     </Text>
                     <View style={{flexDirection: 'row'}}>
                       <Text style={[{color: '#929497'}, fontStyles.normal12]}>
-                        QTY: {item.qnty}
+                        QTY: {item.no_qty_limit?"NO LIMIT": item.qnty}
                       </Text>
                       <Text style={[{color: '#929497'}, fontStyles.normal12]}>
                         . {item.slug}

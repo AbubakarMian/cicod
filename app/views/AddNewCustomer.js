@@ -21,6 +21,7 @@ import fontStyles from '../css/FontCss';
 import {ScrollView} from 'react-native-gesture-handler';
 import Spinner from 'react-native-loading-spinner-overlay';
 import DropDownPicker from 'react-native-dropdown-picker';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {connect} from 'react-redux';
 import {SET_USER, LOGOUT_USER, CUSTOMER_RELOAD} from '../redux/constants/index';
 import {Constants} from '../views/Constant';
@@ -28,6 +29,8 @@ import {Text, TextInput} from 'react-native-paper';
 import Modal from 'react-native-modal';
 import NavBack from './Components/NavBack';
 import Scaffold from './Components/Scaffold';
+import CategoryDropdown from './Components/CategoryDropdown';
+import DropDownModal from './Components/DropDownModal';
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
 class AddNewCustomer extends React.Component {
@@ -46,6 +49,12 @@ class AddNewCustomer extends React.Component {
       delivery_state_id: 0,
       country_id: 0,
       delivery_country_id: 0,
+      delivery_country_name: '',
+      delivery_state_name: '',
+      delivery_lga_name: '',
+      stateDeliveryModal: false,
+      lgaDeliveryModal: false,
+      countryDeliveryModal: false,
       delivery_house_no: '',
       delivery_street: '',
       delivery_landmark: '',
@@ -71,6 +80,7 @@ class AddNewCustomer extends React.Component {
   }
 
   componentDidMount() {
+  
     this.getCountryList();
   }
 
@@ -81,13 +91,14 @@ class AddNewCustomer extends React.Component {
   }
   ceateCustomer() {
     if (
-      this.props.route.params &&
-      this.props.route.params.from == 'invoice' &&
+      // this.props.route.params &&
+      // this.props.route.params.from == 'invoice' &&
       this.state.email == ''
     ) {
       Alert.alert('Warning', 'Email is required');
       return;
     }
+
     if (this.state.first_name === '' && this.state.last_name === '') {
       Alert.alert('Warning', 'First name and Last Name are required');
       return;
@@ -104,6 +115,11 @@ class AddNewCustomer extends React.Component {
       this.state.delivery_house_no == ''
     ) {
       Alert.alert('Warning', 'House No required');
+      return;
+    }
+
+    if (this.state.lgas_id == 0 || this.state.lgas_id == '') {
+      Alert.alert('Warning', 'Region is required');
       return;
     }
     this.setState({spinner: true});
@@ -141,7 +157,7 @@ class AddNewCustomer extends React.Component {
 
         this.setState({spinner: false});
         if (responseJson.status === 'success') {
-          Alert.alert('MESSAGE', responseJson.message);
+          // Alert.alert('MESSAGE', responseJson.message);
           let customer_id = responseJson.data.id;
           this.setState({
             spinner: false,
@@ -187,6 +203,7 @@ class AddNewCustomer extends React.Component {
         });
       });
   }
+
   createCustomerDelivery(customer_id) {
     this.setState({spinner: true});
     let postData = {
@@ -213,10 +230,31 @@ class AddNewCustomer extends React.Component {
         console.log(' delivery customer response!!!!!!!!!!!', responseJson);
         this.setState({spinner: false});
         if (responseJson.status === 'success') {
-          this.props.setScreenReload({
-            reload: true,
-          });
-          this.props.navigation.navigate('Customer');
+          console.log('fropm$#', this.props.route.params);
+          Alert.alert('SUCCESS', 'Customer Created Successfully', [
+            {
+              text: 'OK',
+              onPress: () => {
+                if (
+                  this.props.route.params &&
+                  this.props.route.params.from == 'create_order'
+                ) {
+                  //redirect to create order screen
+                  this.props.setScreenReload({
+                    reload: true,
+                  });
+                  this.props.navigation.navigate('AddCustomer', {
+                    newCustomer: true,
+                  });
+                } else {
+                  this.props.setScreenReload({
+                    reload: true,
+                  });
+                  this.props.navigation.navigate('Customer');
+                }
+              },
+            },
+          ]);
         } else {
           let message = JSON.stringify(responseJson.status);
           Alert.alert('Error', message);
@@ -354,7 +392,7 @@ class AddNewCustomer extends React.Component {
       });
   }
 
-  onSelectCountry(item) {
+  onSelectCountry = item => {
     console.log('country Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item);
     this.setState({
       spinner: true,
@@ -366,6 +404,8 @@ class AddNewCustomer extends React.Component {
       setRegion: false,
       state_name: '',
       lgas_name: '',
+      state_id:0,
+      lga_id:0
     });
 
     console.log('country Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item);
@@ -373,8 +413,8 @@ class AddNewCustomer extends React.Component {
     let statesUrl = Constants.stateslist + '?country_id=' + item.value;
     console.log('statesUrl !!!!!!!!!!!!!!@@@@@@@@@@@@@', statesUrl);
     this.getStateList(statesUrl);
-  }
-  onSelectState(item) {
+  };
+  onSelectState = item => {
     console.log('state Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item);
     this.setState({
       spinner: true,
@@ -383,12 +423,13 @@ class AddNewCustomer extends React.Component {
       setStates: false,
       stateModal: false,
       lgas_name: '',
+      lga_id:0
     });
     let lgasUrl = Constants.lgaslist + '?state_id=' + item.value;
     console.log('lgasUrl !!!!!!!!!!!!!!@@@@@@@@@@@@@', lgasUrl);
     this.getLgaList(lgasUrl);
-  }
-  onSelectLgas(item) {
+  };
+  onSelectLgas = item => {
     this.setState({
       lgas_id: item,
     });
@@ -400,40 +441,53 @@ class AddNewCustomer extends React.Component {
       regionModal: false,
     });
     this.setState({spinner: false});
-  }
-  onDeliverySelectCountry(item) {
+  };
+  onDeliverySelectCountry = item => {
     console.log('country Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item);
     this.setState({
-      delivery_country_id: item,
+      delivery_country_id: item.value,
+      delivery_country_name: item.label,
+      countryDeliveryModal: false,
+      delivery_state_name:"",
+      delivery_state_id:0,
+      delivery_lgas_id:0,
+      delivery_lga_name:""
+
     });
-    let statesUrl = Constants.stateslist + '?country_id=' + item;
+    let statesUrl = Constants.stateslist + '?country_id=' + item.value;
     console.log('statesUrl !!!!!!!!!!!!!!@@@@@@@@@@@@@', statesUrl);
     this.getStateList(statesUrl);
-  }
-  onDeliverySelectState(item) {
+  };
+  onDeliverySelectState = item => {
     console.log('state Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item);
     this.setState({
-      delivery_state_id: item,
+      delivery_state_id: item.value,
+      stateDeliveryModal: false,
+      delivery_state_name: item.label,
+      delivery_lgas_id:0,
+      delivery_lga_name:""
     });
-    let lgasUrl = Constants.lgaslist + '?state_id=' + item;
+    let lgasUrl = Constants.lgaslist + '?state_id=' + item.value;
     console.log('lgasUrl !!!!!!!!!!!!!!@@@@@@@@@@@@@', lgasUrl);
     this.getLgaList(lgasUrl);
-  }
-  onDeliverySelectLgas(item) {
+  };
+  onDeliverySelectLgas = item => {
     this.setState({
-      delivery_lgas_id: item,
+      lgaDeliveryModal: false,
+      delivery_lgas_id: item.value,
+      delivery_lga_name: item.label,
     });
-  }
+  };
   get_state() {
     if (this.state.country_name != '') {
       this.setState({stateModal: true});
     } else {
-      Alert.alert('Select Country first');
+      Alert.alert('Warning!', 'Select Country first');
     }
   }
   get_region() {
     if (this.state.state_name == '') {
-      Alert.alert('Select State first');
+      Alert.alert('Warning', 'Select State first');
     } else {
       this.setState({regionModal: true});
     }
@@ -443,114 +497,136 @@ class AddNewCustomer extends React.Component {
     // console.log('countries_arr countries_arr countries_arr', this.state.countries_arr)
     return (
       <Scaffold>
-        <View style={[{}, styles.mainView]}>
-          <Header navigation={this.props.navigation} />
-          <Spinner
-            visible={this.state.spinner}
-            textContent={'Please Wait...'}
-            textStyle={{color: '#fff'}}
-            color={'#fff'}
-          />
-          <View style={[{}, styles.backRowView]}>
-            <NavBack
-              title="ADD NEW CUSTOMER"
-              onClick={() => this.props.navigation.goBack()}
+        <KeyboardAwareScrollView
+          bounces={false}
+          showsVerticalScrollIndicator={false}
+          // style={{marginBottom: 150}}
+          enableOnAndroid={true}
+          scrollEnabled={true}
+          extraScrollHeight={100}
+          keyboardShouldPersistTaps="handled"
+          scrollToOverflowEnabled={true}
+          enableAutomaticScroll={true}>
+          <View style={[{}, styles.mainView]}>
+            <Header navigation={this.props.navigation} />
+            <Spinner
+              visible={this.state.spinner}
+              textContent={'Please Wait...'}
+              textStyle={{color: '#fff'}}
+              color={'#fff'}
             />
-          </View>
-          <ScrollView>
-            <View>
-              <View style={[{}, styles.mainFormView]}>
-                <TextInput
-                  label="First Name*"
-                  style={{backgroundColor: 'transparent'}}
-                  width={width - 50}
-                  alignSelf={'center'}
-                  color={'#000'}
-                  onChangeText={text => this.setState({first_name: text})}
-                  value={this.state.first_name}
-                />
-                <TextInput
-                  label="Last Name*"
-                  style={{backgroundColor: 'transparent'}}
-                  width={width - 50}
-                  alignSelf={'center'}
-                  color={'#000'}
-                  onChangeText={text => this.setState({last_name: text})}
-                  value={this.state.last_name}
-                />
-                <TextInput
-                  label="Customer Code"
-                  style={{backgroundColor: 'transparent'}}
-                  width={width - 50}
-                  alignSelf={'center'}
-                  color={'#000'}
-                  onChangeText={text => this.setState({customer_code: text})}
-                  value={this.state.customer_code}
-                />
-                <TextInput
-                  label={`Email${
-                    this.props.route.params &&
-                    this.props.route.params.from == 'invoice'
-                      ? '*'
-                      : ''
-                  }`}
-                  style={{backgroundColor: 'transparent'}}
-                  width={width - 50}
-                  alignSelf={'center'}
-                  color={'#000'}
-                  onChangeText={text => this.setState({email: text})}
-                  value={this.state.email}
-                />
-                <View style={{flexDirection: 'row'}}>
-                  <View style={{flex: 1}}>
-                    <TextInput
-                      keyboardType="numeric"
-                      onChangeText={text => this.setState({phone_number: text})}
-                      label="Phone Number"
-                      style={{backgroundColor: 'transparent'}}
-                      width={width / 2 - 20}
-                      alignSelf={'center'}
-                      color={'#000'}
-                      value={this.state.phone_number}
-                    />
+            <View style={[{}, styles.backRowView]}>
+              <NavBack
+                title="ADD NEW CUSTOMER"
+                onClick={() => this.props.navigation.goBack()}
+              />
+            </View>
+            <ScrollView>
+              <View>
+                <View style={[{}, styles.mainFormView]}>
+                  <TextInput
+                    label="First Name*"
+                    style={{backgroundColor: 'transparent'}}
+                    width={width - 50}
+                    alignSelf={'center'}
+                    color={'#000'}
+                    onChangeText={text => this.setState({first_name: text})}
+                    value={this.state.first_name}
+                  />
+                  <TextInput
+                    label="Last Name*"
+                    style={{backgroundColor: 'transparent'}}
+                    width={width - 50}
+                    alignSelf={'center'}
+                    color={'#000'}
+                    onChangeText={text => this.setState({last_name: text})}
+                    value={this.state.last_name}
+                  />
+                  <TextInput
+                    label="Customer Code"
+                    style={{backgroundColor: 'transparent'}}
+                    width={width - 50}
+                    alignSelf={'center'}
+                    color={'#000'}
+                    onChangeText={text => this.setState({customer_code: text})}
+                    value={this.state.customer_code}
+                  />
+                  <TextInput
+                    keyboardType="email-address"
+                    label={`Email${
+                      this.props.route.params &&
+                      this.props.route.params.from == 'invoice'
+                        ? '*'
+                        : '*'
+                    }`}
+                    style={{backgroundColor: 'transparent'}}
+                    width={width - 50}
+                    alignSelf={'center'}
+                    color={'#000'}
+                    onChangeText={text => this.setState({email: text})}
+                    value={this.state.email}
+                  />
+                  <View style={{flexDirection: 'row'}}>
+                    <View style={{flex: 1}}>
+                      <TextInput
+                        keyboardType="numeric"
+                        onChangeText={text =>
+                          this.setState({phone_number: text})
+                        }
+                        label="Phone Number"
+                        style={{backgroundColor: 'transparent'}}
+                        width={width / 2 - 20}
+                        alignSelf={'center'}
+                        color={'#000'}
+                        value={this.state.phone_number}
+                      />
+                    </View>
+                    <View style={{flex: 1, marginHorizontal: 5}}>
+                      <TextInput
+                        onChangeText={text => this.setState({house_no: text})}
+                        label="House No."
+                        style={{backgroundColor: 'transparent'}}
+                        width={width / 2 - 20}
+                        alignSelf={'center'}
+                        color={'#000'}
+                        value={this.state.house_no}
+                      />
+                    </View>
                   </View>
-                  <View style={{flex: 1, marginHorizontal: 5}}>
-                    <TextInput
-                      onChangeText={text => this.setState({house_no: text})}
-                      label="House No."
-                      style={{backgroundColor: 'transparent'}}
-                      width={width / 2 - 20}
-                      alignSelf={'center'}
-                      color={'#000'}
-                      value={this.state.house_no}
-                    />
-                  </View>
-                </View>
-                <TextInput
-                  label="Street"
-                  style={{backgroundColor: 'transparent'}}
-                  width={width - 50}
-                  alignSelf={'center'}
-                  color={'#000'}
-                  onChangeText={text => this.setState({street: text})}
-                  value={this.state.street}
-                />
-                <TextInput
-                  label="Landmark"
-                  style={{backgroundColor: 'transparent'}}
-                  width={width - 50}
-                  alignSelf={'center'}
-                  color={'#000'}
-                  onChangeText={text => this.setState({landmark: text})}
-                  value={this.state.landmark}
-                />
-                <View style={[{}, styles.formRow]}>
-                  <View
-                    style={[
-                      {alignItems: 'center', paddingTop: 10, marginRight: 3},
-                      styles.formColumn,
-                    ]}>
-                    <TouchableOpacity
+                  <TextInput
+                    label="Street"
+                    style={{backgroundColor: 'transparent'}}
+                    width={width - 50}
+                    alignSelf={'center'}
+                    color={'#000'}
+                    onChangeText={text => this.setState({street: text})}
+                    value={this.state.street}
+                  />
+                  <TextInput
+                    label="Landmark"
+                    style={{backgroundColor: 'transparent'}}
+                    width={width - 50}
+                    alignSelf={'center'}
+                    color={'#000'}
+                    onChangeText={text => this.setState({landmark: text})}
+                    value={this.state.landmark}
+                  />
+                  <View style={[{}, styles.formRow]}>
+                    <View
+                      style={[
+                        {alignItems: 'center', paddingTop: 10, marginRight: 3},
+                        styles.formColumn,
+                      ]}>
+                      <CategoryDropdown
+                        containerStyle={{flex: 1}}
+                        title={
+                          this.state.country_name == ''
+                            ? 'Select Country *'
+                            : this.state.country_name
+                        }
+                        onPress={() => this.setState({countryModal: true})}
+                      />
+                      {/* <TouchableOpacity
                       onPress={() => this.setState({countryModal: true})}
                       style={{padding: 10}}>
                       {this.state.country_name == '' ? (
@@ -560,8 +636,8 @@ class AddNewCustomer extends React.Component {
                           {this.state.country_name}
                         </Text>
                       )}
-                    </TouchableOpacity>
-                    {/* {this.state.countries_arr.length < 1 ? null :
+                    </TouchableOpacity> */}
+                      {/* {this.state.countries_arr.length < 1 ? null :
                                         <DropDownPicker
                                             items={this.state.countries_arr}
                                             containerStyle={{ height: 50, width: width / 2 - 10, }}
@@ -577,13 +653,27 @@ class AddNewCustomer extends React.Component {
 
                                         />
                                         } */}
-                  </View>
-                  <View
-                    style={[
-                      {alignItems: 'center', paddingTop: 10, marginLeft: 3},
-                      styles.formColumn,
-                    ]}>
-                    <TouchableOpacity
+                    </View>
+                    <View
+                      style={[
+                        {
+                          alignItems: 'center',
+                          paddingTop: 10,
+                          marginLeft: 3,
+                          flex: 1,
+                        },
+                        styles.formColumn,
+                      ]}>
+                      <CategoryDropdown
+                        containerStyle={{flex: 1}}
+                        title={
+                          this.state.state_name == ''
+                            ? 'State *'
+                            : this.state.state_name
+                        }
+                        onPress={() => this.get_state()}
+                      />
+                      {/* <TouchableOpacity
                       onPress={() => this.get_state()}
                       style={{padding: 10}}>
                       {this.state.state_name == '' ? (
@@ -593,9 +683,9 @@ class AddNewCustomer extends React.Component {
                           {this.state.state_name}
                         </Text>
                       )}
-                    </TouchableOpacity>
-                    {/* {this.state.states_arr.length < 1 ? null : */}
-                    {/* <DropDownPicker
+                    </TouchableOpacity> */}
+                      {/* {this.state.states_arr.length < 1 ? null : */}
+                      {/* <DropDownPicker
                                             items={this.state.states_arr}
                                             itemStyle={{
                                                 justifyContent: 'flex-start', zIndex: 0.999
@@ -607,18 +697,18 @@ class AddNewCustomer extends React.Component {
                                             labelStyle={{ color: '#A9A9A9' }}
                                             onChangeItem={item => this.onDeliverySelectState(item.value)}
                                         /> */}
-                    {/* } */}
+                      {/* } */}
+                    </View>
                   </View>
-                </View>
-                <View style={[{marginTop: 10}, styles.formRow]}>
-                  {/* <View style={[{ alignItems: 'center', paddingTop: 10,width:width/2 }]}> */}
-                  {/* <TextInput
+                  <View style={[{marginTop: 10}, styles.formRow]}>
+                    {/* <View style={[{ alignItems: 'center', paddingTop: 10,width:width/2 }]}> */}
+                    {/* <TextInput
                                         placeholder="LGA*"
                                     />
                                     <Icon
                                         style={[{}, styles.gownIcon]}
                                         name="caret-down" /> */}
-                  {/* {this.state.lgas_arr.length < 1 ? null :
+                    {/* {this.state.lgas_arr.length < 1 ? null :
                                         <DropDownPicker
                                             items={this.state.lgas_arr}
                                             placeholder="LGA *"
@@ -633,237 +723,54 @@ class AddNewCustomer extends React.Component {
                                             labelStyle={{ color: '#A9A9A9' }}
                                             onChangeItem={item => this.onSelectLgas(item.value)}
                                         />} */}
-                  <TouchableOpacity
-                    onPress={() => this.get_region()}
-                    style={{
-                      padding: 10,
-                      paddingLeft: 0,
-                      marginRight: 5,
-                      width: width / 2 - 30,
-                      borderBottomWidth: 1,
-                      borderBottomColor: '#aaaa',
-                    }}>
-                    {this.state.lgas_name == '' ? (
-                      <Text style={{color: '#929497'}}>Region *</Text>
-                    ) : (
-                      <Text style={{color: '#929497'}}>
-                        {this.state.lgas_name}
-                      </Text>
-                    )}
-                  </TouchableOpacity>
-                  {/* </View> */}
-                  {/* <View style={[{}, styles.formColumn]}>
+
+                    <CategoryDropdown
+                      containerStyle={{flex: 1}}
+                      title={
+                        this.state.lgas_name == ''
+                          ? 'Region *'
+                          : this.state.lgas_name
+                      }
+                      onPress={() => this.get_region()}
+                    />
+
+                    {/* </View> */}
+                    {/* <View style={[{}, styles.formColumn]}>
 
                                 </View> */}
-                </View>
-                <View style={[{zIndex: -0.99999}, styles.formRow]}>
-                  <View style={[{zIndex: -0.99999}, styles.formColumn]}>
-                    <CheckBox
-                      style={[{width: width / 2}, styles.cheBox]}
-                      onClick={() => {
-                        this.setState({
-                          isFreeDelivery: !this.state.isFreeDelivery,
-                        });
-                      }}
-                      isChecked={this.state.isFreeDelivery}
-                      rightText={'Enable Free Delivery'}
-                      rightTextStyle={[{color: '#4E4D4D'}, fontStyles.normal13]}
-                      checkBoxColor={'#929497'}
-                    />
                   </View>
-                  <View style={[{}, styles.formColumn]}>
-                    <CheckBox
-                      style={[
-                        {width: width / 2, zIndex: -99999},
-                        styles.cheBox,
-                      ]}
-                      onClick={() => {
-                        this.setState({
-                          isFreeVAT: !this.state.isFreeVAT,
-                        });
-                      }}
-                      size={2}
-                      isChecked={this.state.isFreeVAT}
-                      rightText={'Enable VAT Exemption'}
-                      rightTextStyle={[{color: '#4E4D4D'}, fontStyles.normal13]}
-                      checkBoxColor={'#929497'}
-                    />
-                  </View>
-                </View>
-              </View>
-              <View
-                style={[
-                  {marginTop: 10, marginBottom: 20},
-                  styles.mainFormView,
-                ]}>
-                <Text style={{color: '#929497', fontWeight: 'bold'}}>
-                  Delivery Address
-                </Text>
-
-                <View>
-                  <CheckBox
-                    style={[{width: width}, styles.cheBox]}
-                    onClick={() => {
-                      this.setState({
-                        is_same_as_customer: !this.state.is_same_as_customer,
-                      });
-                    }}
-                    size={2}
-                    isChecked={this.state.is_same_as_customer}
-                    rightText={'Same as customer’s address'}
-                    rightTextStyle={[{color: '#4E4D4D'}, fontStyles.normal13]}
-                    checkBoxColor={'#929497'}
-                  />
-                </View>
-                {this.state.is_same_as_customer == false ? (
-                  <View>
-                    <TextInput
-                      label="House No.*"
-                      style={{backgroundColor: 'transparent'}}
-                      width={width - 50}
-                      alignSelf={'center'}
-                      color={'#000'}
-                      onChangeText={text =>
-                        this.setState({delivery_house_no: text})
-                      }
-                    />
-                    <TextInput
-                      label="Street*"
-                      style={{backgroundColor: 'transparent'}}
-                      width={width - 50}
-                      alignSelf={'center'}
-                      color={'#000'}
-                      onChangeText={text =>
-                        this.setState({delivery_street: text})
-                      }
-                    />
-                    <TextInput
-                      label="Landmark"
-                      style={{backgroundColor: 'transparent'}}
-                      width={width - 50}
-                      alignSelf={'center'}
-                      color={'#000'}
-                      onChangeText={text =>
-                        this.setState({delivery_landmark: text})
-                      }
-                    />
-                    <View style={[{}, styles.formRow]}>
-                      <View style={[{}, styles.formColumn]}>
-                        {this.state.countries_arr.length < 1 ? null : (
-                          <DropDownPicker
-                            items={this.state.countries_arr}
-                            autoScrollToDefaultValue={true}
-                            style={{
-                              backgroundColor: '#fff',
-                              borderWidth: 0,
-                              borderBottomWidth: 0.5,
-                              zIndex: 9999999,
-                            }}
-                            itemStyle={{
-                              justifyContent: 'flex-start',
-                              zIndex: 0.99,
-                            }}
-                            placeholder="Country *"
-                            labelStyle={{color: '#A9A9A9'}}
-                            containerStyle={{
-                              height: 50,
-                              width: width - 50,
-                              alignSelf: 'center',
-                              marginVertical: 10,
-                            }}
-                            dropDownStyle={{
-                              zIndex: 99999999,
-                              height: 80,
-                              backgroundColor: '#fff',
-                              borderBottomLeftRadius: 20,
-                              borderBottomRightRadius: 10,
-                              opacity: 1,
-                            }}
-                            labelStyle={{color: '#A9A9A9'}}
-                            onChangeItem={item =>
-                              this.onDeliverySelectCountry(item.value)
-                            }
-                          />
-                        )}
-                      </View>
-                    </View>
-                    <View style={[{}, styles.formRow]}>
-                      <View style={[{}, styles.formColumn]}>
-                        {this.state.states_arr.length < 1 ? null : (
-                          <DropDownPicker
-                            items={this.state.states_arr}
-                            placeholder="State*"
-                            style={{
-                              backgroundColor: '#fff',
-                              borderWidth: 0,
-                              borderBottomWidth: 0.5,
-                              zIndex: 9999999,
-                            }}
-                            itemStyle={{
-                              justifyContent: 'flex-start',
-                              zIndex: 0.99,
-                            }}
-                            labelStyle={{color: '#A9A9A9'}}
-                            containerStyle={{height: 50, width: width / 2 - 10}}
-                            dropDownStyle={{
-                              zIndex: 99999999,
-                              height: 80,
-                              backgroundColor: '#fff',
-                              borderBottomLeftRadius: 20,
-                              borderBottomRightRadius: 10,
-                              opacity: 1,
-                            }}
-                            labelStyle={{color: '#A9A9A9'}}
-                            onChangeItem={item =>
-                              this.onDeliverySelectState(item.value)
-                            }
-                          />
-                        )}
-                      </View>
-                      <View style={[{}, styles.formColumn]}>
-                        {this.state.lgas_arr.length < 1 ? null : (
-                          <DropDownPicker
-                            items={this.state.lgas_arr}
-                            placeholder="LGA *"
-                            style={{
-                              backgroundColor: '#fff',
-                              borderWidth: 0,
-                              borderBottomWidth: 0.5,
-                              zIndex: 9999999,
-                            }}
-                            itemStyle={{
-                              justifyContent: 'flex-start',
-                              zIndex: 0.99,
-                            }}
-                            labelStyle={{color: '#A9A9A9'}}
-                            containerStyle={{height: 50, width: width / 2 - 10}}
-                            dropDownStyle={{
-                              zIndex: 99999999,
-                              height: 80,
-                              backgroundColor: '#fff',
-                              borderBottomLeftRadius: 20,
-                              borderBottomRightRadius: 10,
-                              opacity: 1,
-                            }}
-                            labelStyle={{color: '#A9A9A9'}}
-                            onChangeItem={item =>
-                              this.onDeliverySelectLgas(item.value)
-                            }
-                          />
-                        )}
-                      </View>
-                    </View>
-                    <View>
+                  <View style={[{zIndex: -0.99999}, styles.formRow]}>
+                    <View style={[{zIndex: -0.99999}, styles.formColumn]}>
                       <CheckBox
-                        style={[{width: width}, styles.cheBox]}
+                        style={[{width: width / 2}, styles.cheBox]}
                         onClick={() => {
                           this.setState({
-                            is_default: !this.state.is_default,
+                            isFreeDelivery: !this.state.isFreeDelivery,
+                          });
+                        }}
+                        isChecked={this.state.isFreeDelivery}
+                        rightText={'Enable Free Delivery'}
+                        rightTextStyle={[
+                          {color: '#4E4D4D'},
+                          fontStyles.normal13,
+                        ]}
+                        checkBoxColor={'#929497'}
+                      />
+                    </View>
+                    <View style={[{}, styles.formColumn]}>
+                      <CheckBox
+                        style={[
+                          {width: width / 2, zIndex: -99999},
+                          styles.cheBox,
+                        ]}
+                        onClick={() => {
+                          this.setState({
+                            isFreeVAT: !this.state.isFreeVAT,
                           });
                         }}
                         size={2}
-                        isChecked={this.state.is_default}
-                        rightText={'Set as default'}
+                        isChecked={this.state.isFreeVAT}
+                        rightText={'Enable VAT Exemption'}
                         rightTextStyle={[
                           {color: '#4E4D4D'},
                           fontStyles.normal13,
@@ -872,211 +779,201 @@ class AddNewCustomer extends React.Component {
                       />
                     </View>
                   </View>
-                ) : null}
-                <TouchableOpacity
-                  onPress={() => this.ceateCustomer()}
-                  style={[{}, styles.redTouchView]}>
-                  <Text style={{color: '#fff'}}>Save</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </ScrollView>
+                </View>
+                <View
+                  style={[
+                    {marginTop: 10, marginBottom: 20},
+                    styles.mainFormView,
+                  ]}>
+                  <Text style={{color: '#929497', fontWeight: 'bold'}}>
+                    Delivery Address
+                  </Text>
 
-          <Modal
-            animationType="fade"
-            visible={this.state.countryModal}
-            transparent={true}
-            hasBackdrop={true}
-            onBackdropPress={() => this.setState({countryModal: false})}
-            deviceHeight={height}
-            deviceWidth={width}
-            justifyContent={'center'}
-            alignItems={'center'}
-            backgroundColor={'#000'}
-            opacity={0.8}>
-            <View
-              style={{
-                maxHeight: height / 1.5,
-                width: width / 1.5,
-                alignSelf: 'center',
-                backgroundColor: '#e6e6e6',
-                opacity: 1,
-                paddingHorizontal: 5,
-                borderRadius: 5,
-                paddingVertical: 5,
-              }}>
-              <FlatList
-                ItemSeparatorComponent={
-                  Platform.OS !== 'android' &&
-                  (({highlighted}) => (
-                    <View
-                      style={[
-                        style.separator,
-                        highlighted && {marginLeft: 0, height: height / 3},
-                      ]}
+                  <View>
+                    <CheckBox
+                      style={[{width: width}, styles.cheBox]}
+                      onClick={() => {
+                        this.setState({
+                          is_same_as_customer: !this.state.is_same_as_customer,
+                        });
+                      }}
+                      size={2}
+                      isChecked={this.state.is_same_as_customer}
+                      rightText={'Same as customer’s address'}
+                      rightTextStyle={[{color: '#4E4D4D'}, fontStyles.normal13]}
+                      checkBoxColor={'#929497'}
                     />
-                  ))
-                }
-                data={this.state.countries_arr} //[{ title: 'Title Text', key: 'item1' }]
-                renderItem={({item, index, separators}) => (
-                  <TouchableOpacity
-                    key={item.key}
-                    style={{
-                      marginBottom: 2,
-                      paddingBottom: 5,
-                      paddingHorizontal: 5,
-                      backgroundColor: '#fff',
-                      alignSelf: 'center',
-                      borderRadius: 2,
-                    }}
-                    onPress={() => this.onSelectCountry(item)}
-                    onShowUnderlay={separators.highlight}
-                    onHideUnderlay={separators.unhighlight}>
-                    <View
-                      style={{
-                        backgroundColor: 'white',
-                        padding: 5,
-                        marginHorizontal: 10,
-                        justifyContent: 'center',
-                        width: width / 1.5,
-                        borderRadius: 10,
-                      }}>
-                      <Text>{item.label}</Text>
+                  </View>
+                  {this.state.is_same_as_customer == false ? (
+                    <View>
+                      <TextInput
+                        label="House No.*"
+                        style={{backgroundColor: 'transparent'}}
+                        width={width - 50}
+                        alignSelf={'center'}
+                        color={'#000'}
+                        onChangeText={text =>
+                          this.setState({delivery_house_no: text})
+                        }
+                      />
+                      <TextInput
+                        label="Street*"
+                        style={{backgroundColor: 'transparent'}}
+                        width={width - 50}
+                        alignSelf={'center'}
+                        color={'#000'}
+                        onChangeText={text =>
+                          this.setState({delivery_street: text})
+                        }
+                      />
+                      <TextInput
+                        label="Landmark"
+                        style={{backgroundColor: 'transparent'}}
+                        width={width - 50}
+                        alignSelf={'center'}
+                        color={'#000'}
+                        onChangeText={text =>
+                          this.setState({delivery_landmark: text})
+                        }
+                      />
+                      <View style={[{}, styles.formRow]}>
+                        <View style={[{}, styles.formColumn]}>
+                          {this.state.countries_arr.length < 1 ? null : (
+                            <CategoryDropdown
+                              containerStyle={{flex: 1}}
+                              title={
+                                this.state.delivery_country_name == ''
+                                  ? 'Select Country *'
+                                  : this.state.delivery_country_name
+                              }
+                              onPress={() =>
+                                this.setState({countryDeliveryModal: true})
+                              }
+                            />
+                          )}
+                        </View>
+                      </View>
+                      <View style={[{}, styles.formRow]}>
+                        <View style={[{}, styles.formColumn]}>
+                          {this.state.states_arr.length < 1 ? null : (
+                            <CategoryDropdown
+                              containerStyle={{flex: 1}}
+                              title={
+                                this.state.delivery_state_name == ''
+                                  ? 'Select State *'
+                                  : this.state.delivery_state_name
+                              }
+                              onPress={() =>
+                                this.setState({stateDeliveryModal: true})
+                              }
+                            />
+                          )}
+                        </View>
+                        <View style={[{}, styles.formColumn]}>
+                          {this.state.lgas_arr.length < 1 ? null : (
+                            <CategoryDropdown
+                              containerStyle={{flex: 1}}
+                              title={
+                                this.state.delivery_lga_name == ''
+                                  ? 'Select Region *'
+                                  : this.state.delivery_lga_name
+                              }
+                              onPress={() =>
+                                this.setState({lgaDeliveryModal: true})
+                              }
+                            />
+                          )}
+                        </View>
+                      </View>
+                      <View>
+                        <CheckBox
+                          style={[{width: width}, styles.cheBox]}
+                          onClick={() => {
+                            this.setState({
+                              is_default: !this.state.is_default,
+                            });
+                          }}
+                          size={2}
+                          isChecked={this.state.is_default}
+                          rightText={'Set as default'}
+                          rightTextStyle={[
+                            {color: '#4E4D4D'},
+                            fontStyles.normal13,
+                          ]}
+                          checkBoxColor={'#929497'}
+                        />
+                      </View>
                     </View>
-                  </TouchableOpacity>
-                )}
-              />
-            </View>
-          </Modal>
-          <Modal
-            animationType="fade"
-            visible={this.state.stateModal}
-            transparent={true}
-            hasBackdrop={true}
-            onBackdropPress={() => this.setState({stateModal: false})}
-            deviceHeight={height}
-            deviceWidth={width}
-            justifyContent={'center'}
-            alignItems={'center'}
-            backgroundColor={'#000'}
-            opacity={0.8}>
-            <View
-              style={{
-                maxHeight: height / 1.5,
-                width: width / 1.5,
-                backgroundColor: 'white',
-                opacity: 1,
-                paddingHorizontal: 5,
-                borderRadius: 5,
-                paddingVertical: 5,
-              }}>
-              <FlatList
-                ItemSeparatorComponent={
-                  Platform.OS !== 'android' &&
-                  (({highlighted}) => (
-                    <View
-                      style={[
-                        style.separator,
-                        highlighted && {marginLeft: 0, height: height / 3},
-                      ]}
-                    />
-                  ))
-                }
-                data={this.state.states_arr} //[{ title: 'Title Text', key: 'item1' }]
-                renderItem={({item, index, separators}) => (
+                  ) : null}
                   <TouchableOpacity
-                    key={item.key}
-                    style={{
-                      marginBottom: 1,
-                      paddingBottom: 5,
-                      paddingHorizontal: 5,
-                      backgroundColor: '#fff',
-                      borderRadius: 2,
-                    }}
-                    onPress={() => this.onSelectState(item)}
-                    onShowUnderlay={separators.highlight}
-                    onHideUnderlay={separators.unhighlight}>
-                    <View
-                      style={{
-                        backgroundColor: 'white',
-                        padding: 5,
-                        marginHorizontal: 10,
-                        justifyContent: 'center',
-                        width: width,
-                        borderRadius: 10,
-                      }}>
-                      <Text>{item.label}</Text>
-                    </View>
+                    onPress={() => this.ceateCustomer()}
+                    style={[{}, styles.redTouchView]}>
+                    <Text style={{color: '#fff'}}>Save</Text>
                   </TouchableOpacity>
-                )}
-              />
-            </View>
-          </Modal>
-          <Modal
-            animationType="fade"
-            visible={this.state.regionModal}
-            transparent={true}
-            hasBackdrop={true}
-            onBackdropPress={() => this.setState({regionModal: false})}
-            deviceHeight={height}
-            deviceWidth={width}
-            justifyContent={'center'}
-            alignItems={'center'}
-            backgroundColor={'#000'}
-            opacity={0.8}>
-            <View
-              style={{
-                maxHeight: height / 1.5,
-                width: width / 1.5,
-                backgroundColor: 'white',
-                opacity: 1,
-                paddingHorizontal: 5,
-                borderRadius: 5,
-                paddingVertical: 5,
-              }}>
-              <FlatList
-                ItemSeparatorComponent={
-                  Platform.OS !== 'android' &&
-                  (({highlighted}) => (
-                    <View
-                      style={[
-                        style.separator,
-                        highlighted && {marginLeft: 0, height: height / 3},
-                      ]}
-                    />
-                  ))
-                }
-                data={this.state.lgas_arr} //[{ title: 'Title Text', key: 'item1' }]
-                renderItem={({item, index, separators}) => (
-                  <TouchableOpacity
-                    key={item.key}
-                    style={{
-                      marginBottom: 1,
-                      paddingBottom: 5,
-                      paddingHorizontal: 5,
-                      backgroundColor: '#fff',
-                      borderRadius: 2,
-                    }}
-                    onPress={() => this.onSelectLgas(item)}
-                    onShowUnderlay={separators.highlight}
-                    onHideUnderlay={separators.unhighlight}>
-                    <View
-                      style={{
-                        backgroundColor: 'white',
-                        padding: 5,
-                        marginHorizontal: 10,
-                        justifyContent: 'center',
-                        width: width,
-                        borderRadius: 10,
-                      }}>
-                      <Text>{item.label}</Text>
-                    </View>
-                  </TouchableOpacity>
-                )}
-              />
-            </View>
-          </Modal>
-        </View>
+                </View>
+              </View>
+            </ScrollView>
+            <DropDownModal
+              title="Choose Country"
+              selected={this.state.country_id}
+              itemFull={true}
+              showdropDownModal={this.state.countryModal}
+              handleClose={() => this.setState({countryModal: false})}
+              onSelected={this.onSelectCountry}
+              data={this.state.countries_arr}
+            />
+
+            <DropDownModal
+              title="Choose Delivery Country"
+              selected={this.state.delivery_country_id}
+              itemFull={true}
+              showdropDownModal={this.state.countryDeliveryModal}
+              handleClose={() => this.setState({countryDeliveryModal: false})}
+              onSelected={this.onDeliverySelectCountry}
+              data={this.state.countries_arr}
+            />
+
+            <DropDownModal
+              title="Choose State"
+              selected={this.state.state_id}
+              itemFull={true}
+              showdropDownModal={this.state.stateModal}
+              handleClose={() => this.setState({stateModal: false})}
+              onSelected={this.onSelectState}
+              data={this.state.states_arr}
+            />
+
+            <DropDownModal
+              title="Choose Delivery State"
+              selected={this.state.delivery_state_id}
+              itemFull={true}
+              showdropDownModal={this.state.stateDeliveryModal}
+              handleClose={() => this.setState({stateDeliveryModal: false})}
+              onSelected={this.onDeliverySelectState}
+              data={this.state.states_arr}
+            />
+
+            <DropDownModal
+              title="Choose Region"
+              selected={this.state.lgas_id}
+              itemFull={true}
+              showdropDownModal={this.state.regionModal}
+              handleClose={() => this.setState({regionModal: false})}
+              onSelected={this.onSelectLgas}
+              data={this.state.lgas_arr}
+            />
+
+            <DropDownModal
+              title="Choose Delivery LGA"
+              selected={this.state.delivery_lgas_id}
+              itemFull={true}
+              showdropDownModal={this.state.lgaDeliveryModal}
+              handleClose={() => this.setState({lgaDeliveryModal: false})}
+              onSelected={this.onDeliverySelectLgas}
+              data={this.state.lgas_arr}
+            />
+          </View>
+        </KeyboardAwareScrollView>
       </Scaffold>
     );
   }

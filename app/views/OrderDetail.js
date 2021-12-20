@@ -92,8 +92,9 @@ class OrderDetail extends React.Component {
   }
 
   handleBackButtonClick() {
+   
     // this.props.navigation.goBack(null);
-    if (this.props.route.params.from == null) {
+    if (this.props.route.params.from == null || typeof this.props.route.params.from =='undefined') {
       this.props.emptyOrder();
       let user_data = {};
       this.props.setCustomer(user_data);
@@ -108,6 +109,8 @@ class OrderDetail extends React.Component {
   }
   componentDidMount() {
     this.props.emptyOrder();
+
+    console.log("this.props.route.params.from",this.props.route.params.from)
   }
 
   updateDeliveryStatus() {
@@ -138,14 +141,14 @@ class OrderDetail extends React.Component {
 
         console.log('tokensent$###$l', responseJson.data);
         if (responseJson.data.status == 200) {
-          this.setState({tokenModalSuccess: true});
+          this.setState({tokenModalSuccess: true,tokenModal:false});
         } else if (responseJson.data.status == 400) {
           Alert.alert('Info', responseJson.data.message);
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
         } else {
           let message = responseJson.data.message;
-          this.setState({tokenModalSuccess: true});
+          this.setState({tokenModalSuccess: true,tokenModal:false});
         }
       })
       .catch(e => {
@@ -252,7 +255,7 @@ class OrderDetail extends React.Component {
         });
         if (responseJson.status === 'success') {
           console.log('data data data res res res ', responseJson);
-          Alert.alert('Success', responseJson.message);
+          Alert.alert('Success',"Your reciept has been sent successfully.");
           // this.props.navigation.navigate('DrawerNavigation')
         } else {
           // let message = JSON.stringify(responseJson.error.message)
@@ -830,7 +833,7 @@ class OrderDetail extends React.Component {
                       fontWeight: 'bold',
                       fontSize: 16,
                     }}>
-                    Delivey Acceptance Token
+                    Delivery Acceptance Token
                   </Text>
                 </View>
                 <Text style={{color: '#4D4D4D', marginBottom: 20}}>

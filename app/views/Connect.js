@@ -379,16 +379,16 @@ class Connect extends React.Component {
               <Text
                 style={[
                   {
-                    fontSize: 20,
+                    fontSize: 18,
                     color: '#929497',
                     fontWeight: 'bold',
                     fontFamily: 'Open Sans',
                   },
                 ]}>
-                No Merchant
+               {`Sorry we could not find ${this.state.search_text}`}
               </Text>
-              <Text style={[{color: '#929497'}, fontStyles.normal15]}>
-                Search for a merchant
+              <Text onPress={()=>this.props.navigation.navigate("Network")} style={[{color: '#929497',fontSize:9}, fontStyles.normal15]}>
+                Please click to see the list of merchants.
               </Text>
             </View>
           )}

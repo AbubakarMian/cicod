@@ -32,6 +32,7 @@ import {
 } from '../redux/constants/index';
 import {Container, Content, List, ListItem, Radio} from 'native-base';
 import Scaffold from './Components/Scaffold';
+import NavBack from './Components/NavBack';
 
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
@@ -62,7 +63,7 @@ class DiliveryAddress extends React.Component {
       this.props.route.params.address == '' ||
       this.props.route.params.address == undefined
     ) {
-      alert('Customer Address not avalible');
+      alert('Customer address not avalaible');
       return;
     }
     let same_as_delivery = !this.props.deliveryAddress.same_as_delivery;
@@ -72,12 +73,23 @@ class DiliveryAddress extends React.Component {
     if (same_as_delivery) {
       console.log('step 3', this.props.route.params.address);
       console.log('Set');
-      this.props.setDeliveryAddress({
-        address: this.props.route.params.address,
-        type: 'Delivery',
-        same_as_delivery: same_as_delivery,
-        selected_address_id: 0,
-      });
+      this.setState({same_as_delivery: same_as_delivery})
+      this.getDeliveryFee(this.props.customer.detail,true);
+
+      // this.props.setDeliveryAddress({
+      //   address: object.value,
+      //   country_id: object.country_id,
+      //   state_id: object.state_id,
+      //   type: 'Delivery',
+      //   same_as_delivery: false,
+      //   selected_address_id: object.list_id,
+      // });
+      // this.props.setDeliveryAddress({
+      //   address: this.props.route.params.address,
+      //   type: 'Delivery',
+      //   same_as_delivery: same_as_delivery,
+      //   selected_address_id: 0,
+      // });
     } else {
       console.log('Set');
       this.props.setDeliveryAddress({
@@ -86,10 +98,11 @@ class DiliveryAddress extends React.Component {
         same_as_delivery: same_as_delivery,
         selected_address_id: 0,
       });
+      this.props.navigation.goBack();
     }
 
-    console.log('~diliver this.props.route.params', this.props.route.params);
-    this.props.navigation.goBack();
+    console.log('~diliver this.props.route.params',this.props.customer.detail);
+   
   }
   getDeliveryAddress() {
     if (!this.loadDelivery_address) {
@@ -125,45 +138,103 @@ class DiliveryAddress extends React.Component {
           let default_address = null;
           let selected_address = null;
           let res = responseJson.data;
-          let addressarr = res.map((x, key) => {
-            let address_item = {
-              list_id: key + 1,
-              is_default: x.is_default,
-              country_id: x.country.id,
-              state_id: x.state.id,
-              label:
-                x.house_no +
-                ',' +
-                x.street +
-                ',' +
-                x.state.name +
-                ',' +
-                x.country.name,
-              value:
-                x.house_no +
-                ',' +
-                x.street +
-                ',' +
-                x.state.name +
-                ',' +
-                x.country.name,
-            };
-            if (x.is_default) {
-              default_address = address_item;
-            }
-            console.log(
-              'selected address  respone !!!!!!',
-              this.props.deliveryAddress,
-            );
+          console.log("fojt%",res)
+          if (res.length>0) {
+            
+            let addressarr=[];
 
-            if (address_item.label == this.props.deliveryAddress.address) {
-              selected_address = address_item;
+            for (let index = 0; index < res.length; index++) {
+              const x = res[index];
+              if (x.country.id<1) {
+                continue;
+              }
+              let address_item = {
+                list_id: index + 1,
+                is_default: x.is_default,
+                country_id: x.country.id,
+                state_id: x.state.id,
+                lga_id:x.lga.id,
+                label:
+                  x.house_no +
+                  ',' +
+                  x.street +
+                  ',' +
+                  x.state.name +
+                  ',' +
+                  x.country.name,
+                value:
+                  x.house_no +
+                  ',' +
+                  x.street +
+                  ',' +
+                  x.state.name +
+                  ',' +
+                  x.country.name,
+              };
+            
+              if (x.is_default) {
+                default_address = address_item;
+              }
+              console.log(
+                'selected address  respone !!!!!!',
+                this.props.deliveryAddress,
+              );
+  
+              if (address_item.label == this.props.deliveryAddress.address) {
+                selected_address = address_item;
+              }
+              addressarr.push(address_item)
+              
             }
-            return address_item;
-          });
+          
+          // let addressarr = res.map((x, key) => {
+         
+              
+            
+          //   let address_item = {
+          //     list_id: key + 1,
+          //     is_default: x.is_default,
+          //     country_id: x.country.id,
+          //     state_id: x.state.id,
+          //     lga_id:x.lga.id,
+          //     label:
+          //       x.house_no +
+          //       ',' +
+          //       x.street +
+          //       ',' +
+          //       x.state.name +
+          //       ',' +
+          //       x.country.name,
+          //     value:
+          //       x.house_no +
+          //       ',' +
+          //       x.street +
+          //       ',' +
+          //       x.state.name +
+          //       ',' +
+          //       x.country.name,
+          //   };
+          
+          //   if (x.is_default) {
+          //     default_address = address_item;
+          //   }
+          //   console.log(
+          //     'selected address  respone !!!!!!',
+          //     this.props.deliveryAddress,
+          //   );
+
+          //   if (address_item.label == this.props.deliveryAddress.address) {
+          //     selected_address = address_item;
+          //   }
+          //   return address_item;
+          // });
+
+          console.log("hre#$",addressarr)
           await this.setState({
             addressarr: addressarr,
           });
+
+        }
           // if(this.props.same_as_delivery){
           //     this.set_address();
           // }
@@ -190,12 +261,13 @@ class DiliveryAddress extends React.Component {
     this.props.navigation.goBack();
   }
 
-  getDeliveryFee(object) {
+  getDeliveryFee(object,same_as=false) {
     this.setState({
       is_selected_address: !this.state.is_selected_address,
       selected_address_id: object.list_id,
       spinner: true,
     });
+    console.log("incoming",object)
 
     let postData = {
       method: 'GET',
@@ -206,8 +278,10 @@ class DiliveryAddress extends React.Component {
       },
     };
 
+    console.log("uyy@#", `${Constants.deliveryCost}?order_amount=${this.props.cart.cart_detail.total_price_with_tax}&country_id=${object.country_id}&state_id=${object.state_id}&lga_id=${object.lga_id}`)
+
     fetch(
-      `${Constants.deliveryCost}?order_amount=${this.props.cart.cart_detail.total_price_with_tax}&country_id=${object.country_id}&state_id=${object.state_id}&lga_id=${object.lgas_id}`,
+      `${Constants.deliveryCost}?order_amount=${this.props.cart.cart_detail.total_price_with_tax}&country_id=${object.country_id}&state_id=${object.state_id}&lga_id=${object.lga_id}`,
       postData,
     )
       .then(response => response.json())
@@ -216,21 +290,38 @@ class DiliveryAddress extends React.Component {
         console.log('sucgjhjlkkll#@ RRE', responseJson);
         console.log('obk$##', object);
         if (responseJson.status === 'success') {
-          this.props.setDeliveryAddress({
-            address: object.value,
-            country_id: object.country_id,
-            state_id: object.state_id,
-            type: 'Delivery',
-            same_as_delivery: false,
-            selected_address_id: object.list_id,
-          });
           this.props.addDeliveryFee({
             delivery_fee: responseJson.data,
           });
+          if(same_as){
+            this.props.setDeliveryAddress({
+              address: object.address,
+              country_id: object.country_id,
+              state_id: object.state_id,
+              type: 'Delivery',
+              same_as_delivery: true,
+              lga_id:object.lga_id,
+              selected_address_id: object.list_id,
+            });
+            this.props.navigation.goBack()
+          }else{
+            this.props.setDeliveryAddress({
+              address: object.value,
+              country_id: object.country_id,
+              state_id: object.state_id,
+              type: 'Delivery',
+              same_as_delivery: false,
+              selected_address_id: object.list_id,
+            });
+          }
+         
+         
+
+         
         } else {
           this.setState({spinner: false});
           let message = responseJson.status;
-          Alert.alert('Error', message);
+          Alert.alert('Info', responseJson.message);
         }
       })
       .catch(error => {
@@ -258,7 +349,7 @@ class DiliveryAddress extends React.Component {
   render() {
     this.getDeliveryAddress();
     {
-      console.log('this.props.deliveryAddress', this.props.deliveryAddress);
+      console.log('this.props.deliveryAddress', this.state.addressarr);
     }
     return (
       <Scaffold>
@@ -271,19 +362,11 @@ class DiliveryAddress extends React.Component {
             color={'#fff'}
           />
           <ScrollView>
-            <View>
-              <View style={[{}, styles.backHeaderRowView]}>
-                <TouchableOpacity
-                  // onPress={() => this.props.navigation.navigate('BuyCreateOrder')}
-                  onPress={() => this.props.navigation.goBack()}>
-                  <Icon name="arrow-left" size={25} color="#929497" />
-                </TouchableOpacity>
-                <View style={[{}, styles.backHeadingView]}>
-                  <Text style={[{}, styles.backHeadingText]}>
-                    DELIVERY ADDRESS
-                  </Text>
-                </View>
-              </View>
+            <View >
+           <View style={{marginHorizontal:10}}>
+             <NavBack title="DELIVERY ADDRESS" onClick={()=>this.props.navigation.goBack()} />
+
+           </View> 
               <CheckBox
                 style={{
                   width: width - 20,
@@ -322,7 +405,8 @@ class DiliveryAddress extends React.Component {
 
                       // onPress={(value) => this.selectAddress(obj)} //{ this.setState({ value3Index: value }) }
                     />
-                    {this.state.addressarr.map((obj, i) => (
+
+                    {this.state.addressarr.length>0 && this.state.addressarr.map((obj, i) => (
                       <RadioButton labelHorizontal={true} key={i}>
                         {/*  You can set RadioButtonLabel before RadioButtonInput */}
                         <View

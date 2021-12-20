@@ -38,7 +38,7 @@ class Filter extends React.Component {
   }
   componentDidMount() {
     this.setFilter();
-    this.getCategoryList();
+    // this.getCategoryList();
     console.log('screen Props !!!!!!!!!!!!', this.props.route.params.screen);
   }
   setFilter() {

@@ -197,7 +197,7 @@ class PaymentSuccess extends React.Component {
           Your payment of {order.currency ?? ''}{' '}
           {parseFloat(+order.amount) +
             parseFloat(
-              order.delivery_type == 'DELIVERY'
+              order.delivery_type == 'DELIVERY' && !order.is_part_payment
                 ? parseFloat(order.delivery_amount)
                 : 0,
             )}{' '}

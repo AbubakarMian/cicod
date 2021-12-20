@@ -59,12 +59,13 @@ class Network extends React.Component {
       isMessage: false,
       message_text: '',
       pageNo: 1,
+      isSearch:false
     };
     this.onDateChange = this.onDateChange.bind(this);
   }
   onRefresh() {
     console.log('222222222222', this.state.isFetching);
-    this.setState({isFetching: true});
+    this.setState({isFetching: true,data:[]});
     // if(this.state.isFetching==true){
 
     let search_url = Constants.getMerchants;
@@ -167,16 +168,27 @@ class Network extends React.Component {
         // console.log('responseJson.postData', postData);
         this.setState({
           spinner: false,
+          isFetching:false
         });
         if (
           responseJson.status === 'SUCCESS' ||
           responseJson.success === true
         ) {
+          if(this.state.isSearch){
+this.setState({
+  data:responseJson.merchants,
+  isSearch:false
+})
+          }else{
+
+          
           // const data=responseJson.merchants
-          await this.setState({
+           this.setState({
             data: [...this.state.data, ...responseJson.merchants],
             statistics: responseJson.statistics,
+            isSearch:false
           });
+        }
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
         } else {
@@ -191,13 +203,20 @@ class Network extends React.Component {
   }
 
   renderFooter = () => {
+    
     //it will show indicator at the bottom of the list when data is loading otherwise it returns null
     // if (!this.state.spinner) return null;
     // return <ActivityIndicator style={{color: '#000'}} />;
     return (
       <TouchableOpacity
         onPress={() => this.handleLoadMore()}
-        style={{padding: 5, alignSelf: 'center', marginTop: 7}}>
+        style={{
+          padding: 5,
+          alignSelf: 'center',
+          marginTop: 7,
+          marginBottom: 350,
+          padding:20
+        }}>
         <Text style={{letterSpacing: 1.1, fontWeight: 'bold'}}>Load More</Text>
       </TouchableOpacity>
     );
@@ -218,14 +237,15 @@ class Network extends React.Component {
 
   search() {
     let search_url = `${Constants.getMerchants}?searchType=merchant&searchKeyword=${this.state.search_merchant}`;
+    console.log("dse#$$",search_url)
     this.getData(search_url);
   }
 
   onSelectSector = sector => {
-    this.setState({selected_sector: sector, showdropDownModal: false});
+    this.setState({selected_sector: sector, showdropDownModal: false,isSearch:true});
     //console.log(' category ID search !!!!!!!!!!!!!!!@@@@@@@@@@@@@@', category_id)
     let search_url = `${Constants.getMerchants}?searchType=sector&searchKeyword=${sector}`;
-
+    console.log('koi$##', search_url);
     this.getData(search_url);
   };
 
@@ -388,7 +408,7 @@ class Network extends React.Component {
                 elevation: 0,
                 borderColor: '#D8DCDE',
               }}
-              onChangeText={text => this.setState({search_merchant: text})}
+              onChangeText={text => this.setState({search_merchant: text,isSearch:true})}
               onSubmitEditing={() => this.search()}
               //update
             ></Searchbar>
@@ -445,7 +465,7 @@ class Network extends React.Component {
           </View>
           {/* <ScrollView></ScrollView> */}
 
-          <View style={{paddingBottom: 350}}>
+          <View>
             {this.state.data.length < 1 ? (
               <View
                 style={{
@@ -648,7 +668,7 @@ class Network extends React.Component {
                   </TouchableOpacity>
                 )}
                 ListFooterComponent={this.renderFooter}
-                onEndReachedThreshold={0.1}
+                // onEndReachedThreshold={0.1}
                 // onEndReached={this.handleLoadMore}
               />
             )}
@@ -670,7 +690,7 @@ class Network extends React.Component {
           <DropDownModal
             showdropDownModal={this.state.showdropDownModal}
             data={this.state.sectors}
-            title="Select Setor"
+            title="Select Sector"
             selected={this.state.selected_sector}
             onSelected={this.onSelectSector}
             handleClose={() => {

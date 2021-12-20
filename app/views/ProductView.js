@@ -6,6 +6,7 @@ import {
   Platform,
   Alert,
   TouchableOpacity,
+  Modal as OtherModal
 } from 'react-native';
 import {Text, TextInput, Modal} from 'react-native-paper';
 import splashImg from '../images/splash.jpg';
@@ -156,6 +157,8 @@ class ProductView extends React.Component {
     this.props.navigation.navigate('CreateProduct', {
       action: 'update',
       prodDetail: this.state.prodDetail,
+      heading: this.props.route.params.heading,
+      items:this.props.route.params.items
     });
   }
   ProductViewRender(_that) {
@@ -297,8 +300,11 @@ class ProductView extends React.Component {
             </>
           )}
         </View>
+{_that.state.prodDetail.image_url=="" || _that.state.prodDetail.image_url!=null ||_that.state.prodDetail.image==""||_that.state.prodDetail.image!==null &&(
+ <Text style={[{}, styles.imageHeadingText]}>IMAGE</Text>
 
-        <Text style={[{}, styles.imageHeadingText]}>IMAGE</Text>
+)}
+       
         <TouchableOpacity
           onPress={() => _that.setState({productImageModal: true})}>
           <Image

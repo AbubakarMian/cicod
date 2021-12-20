@@ -66,7 +66,7 @@ changePasswordText:{
 logoutView:{
     marginTop:height/15,
     alignSelf:'center',
-    marginBottom:20,
+    marginBottom:10,
     flexDirection:'row',
     alignItems:'center',
 },
@@ -80,7 +80,7 @@ bottomDescText:{
     fontSize:12,
     fontWeight:'bold',
     color:'#929497',
-    marginTop:height/7
+    marginTop:height/10
 },
 bottomVersioncText:{
     width:width-50,

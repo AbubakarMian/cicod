@@ -429,6 +429,7 @@ class Buyers extends React.Component {
               width: width - 20,
               alignSelf: 'center',
               borderRadius: 5,
+              justifyContent:"space-between",
               marginTop: 10,
               alignItems: 'center',
             }}>
@@ -449,11 +450,12 @@ class Buyers extends React.Component {
                             onSubmitEditing={() => this.search()}
                         />
                     </View> */}
+                    <View style={{flex:1}}>
             <Searchbar
               placeholder="Search Resellers"
               iconColor="#929497"
               style={{
-                width: width / 1.3,
+                width:"100%",
                 alignSelf: 'center',
                 marginTop: 10,
                 marginBottom: 5,
@@ -464,16 +466,17 @@ class Buyers extends React.Component {
               onSubmitEditing={() => this.search()}
               //update
             ></Searchbar>
+            </View>
 
-            <TouchableOpacity
-              style={{position: 'absolute', right: 0, alignSelf: 'center'}}
+            {/* <TouchableOpacity
+              style={{}}
               // onPress={() => this.props.navigation.navigate('ProductFilter')}
               onPress={() => this.props.navigation.navigate('BuyersFilter')}>
               <Image
                 style={{height: 50, width: 50}}
                 source={require('../images/Order/settingicon.png')}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
           <View
             style={{

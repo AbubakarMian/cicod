@@ -12,10 +12,10 @@ var {width, height} = Dimensions.get('window');
 
 export default StyleSheet.create({
   mainView: {
-        width: width,
-        backgroundColor: '#fff',
-
-        alignItems: 'center',
+    // width: width,
+    backgroundColor: '#fff',
+    height: height,
+    alignItems: 'center',
     flex: 1,
     flexDirection: 'column',
   },

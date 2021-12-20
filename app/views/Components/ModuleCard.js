@@ -12,7 +12,7 @@ const {width, height} = Dimensions.get('screen');
 const ModuleCard = ({source, onPress, disabled, title}) => {
   return (
     <TouchableOpacity disabled={disabled} onPress={onPress}>
-      <View style={styles.cardViewStyle}>
+      <View style={[ styles.cardViewStyle,disabled?styles.disabledBg:styles.activeBg]}>
         <Image
           style={{height: width / 3 - 80, width: width / 3 - 80}}
           source={source}
@@ -47,9 +47,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderWidth: 1,
     borderRadius: 10,
+    
+  },
+  activeBg:{
     backgroundColor: '#fff',
     borderColor: '#fff',
   },
+  disabledBg:{
+    backgroundColor:"#D8D8D8",
+    borderColor:"#D8D8D8"
+  }
 });
 
 export default ModuleCard;

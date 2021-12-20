@@ -69,11 +69,11 @@ class OrderFilter extends React.Component {
         Authorization: this.props.user.access_token,
       },
     };
-    fetch(Constants.orderslist, postData)
+    fetch(Constants.orderslist+"?page=1", postData)
       .then(response => response.json())
       .then(async responseJson => {
         this.setState({spinner: false});
-        // console.log('response json @@@@@@@@@@@@!!!!!!!!!!!!!!!!!', responseJson);
+        console.log('response json @@@@@@@@@@@@!!!!!!!!!!!!!!!!!', responseJson);
         if (responseJson.status === 'success') {
           let res = responseJson.data;
           // let createdby_arr = res.map((x, key) => { return { label: x.created_by ?? '', value: x.created_by ?? '' } });
@@ -112,7 +112,7 @@ class OrderFilter extends React.Component {
           // this.props.navigation.navigate('DrawerNavigation')
         } else {
           let message = JSON.stringify(responseJson.message);
-          Alert.alert('Error', message);
+          //Alert.alert('Error', message);
         }
       });
   }

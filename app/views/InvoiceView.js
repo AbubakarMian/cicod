@@ -41,6 +41,7 @@ class InvoiceView extends React.Component {
       selectedStartDate: null,
       calenderModal: false,
       products: [],
+      totalAmount:0,
       moreModal: false,
       spinner: false,
       data: null,
@@ -61,13 +62,14 @@ class InvoiceView extends React.Component {
 
   calculateDiscount() {
     let discount_amount = 0;
-    let amount = this.state.data.amount.replace(/,/g, '');
+    //let amount = this.state.data.amount.replace(/,/g, '');
+    let amount = this.state.totalAmount;
     if (this.state.data.discount_fixed > 0) {
       discount_amount =
         parseFloat(amount) - parseFloat(this.state.data.discount_fixed);
     } else if (this.state.data.discount_percent > 0) {
       discount_amount =
-        parseFloat(this.state.data.discount_percent) * parseFloat(amount);
+        parseFloat(this.state.data.discount_percent)/100 * parseFloat(amount);
     }
 
     return parseFloat(discount_amount);
@@ -75,7 +77,8 @@ class InvoiceView extends React.Component {
 
   calculateTaxAmount() {
     let tax_amount = 0.0;
-    let amount = this.state.data.amount.replace(/,/g, '');
+    //let amount = this.state.data.amount.replace(/,/g, '');
+    let amount = this.state.totalAmount;
     if (this.state.data.tax > 0) {
       tax_amount = parseFloat(this.state.data.tax) * parseFloat(amount);
     }
@@ -121,7 +124,12 @@ class InvoiceView extends React.Component {
         });
 
         if (responseJson.status === 'success') {
-          Alert.alert('Info', 'Successfully marked as paid');
+          Alert.alert('Info', 'Successfully marked as paid',[
+            {
+              text:"Ok",
+              onPress:()=>this.getInvoice()
+            }
+          ]);
           this.setState({
             moreModal: false,
           });
@@ -162,9 +170,17 @@ class InvoiceView extends React.Component {
         });
 
         if (responseJson.status === 'success') {
+          let totalAmount=0;
+          for (let index = 0; index < responseJson.data.products.length; index++) {
+            const product = responseJson.data.products[index];
+            let sub_cost=parseFloat(product.unit_price)* parseInt(product.quantity);
+            totalAmount+=sub_cost;
+            
+          }
           this.setState({
             data: responseJson.data,
             products: responseJson.data.products,
+            totalAmount
           });
           // this.props.navigation.navigate('DrawerNavigation')
         } else if (responseJson.status == 401) {
@@ -218,7 +234,7 @@ class InvoiceView extends React.Component {
                   borderRadius: 10,
                 }}>
                 <View style={[{borderRadius: 10}, styles.mainContentView]}>
-                  <TouchableOpacity
+                   {this.state.data.status == 'PENDING' && <TouchableOpacity
                     onPress={() => this.setState({moreModal: true})}
                     style={[
                       {
@@ -232,6 +248,7 @@ class InvoiceView extends React.Component {
                     ]}>
                     <Icon name="ellipsis-h" color={'#929497'} size={20} />
                   </TouchableOpacity>
+  }
                   <View style={[{}, styles.mainContentUserImageView]}>
                     <Image
                       style={{width: 40, height: 40}}
@@ -273,6 +290,8 @@ class InvoiceView extends React.Component {
                                 ? '#FFF4F4'
                                 : this.state.data.status == 'PAID'
                                 ? '#DAF8EC'
+                                : this.state.data.status == 'DRAFT'
+                                ? '#DAF8EC'
                                 : this.state.data.status == 'PART PAYMENT'
                                 ? '#E6E6E6'
                                 : null,
@@ -281,6 +300,8 @@ class InvoiceView extends React.Component {
                                 ? '#FDB72B'
                                 : this.state.data.status == 'CANCELLED'
                                 ? '#B1272C'
+                                : this.state.data.status == 'DRAFT'
+                                ? '#26C281'
                                 : this.state.data.status == 'PAID'
                                 ? '#26C281'
                                 : this.state.data.status == 'PART PAYMENT'
@@ -379,7 +400,7 @@ class InvoiceView extends React.Component {
                   }}
                 />
 
-                <View style={{marginTop: 10, padding: 10}}>
+                <View >
                   <FlatList
                     data={this.state.products}
                     ItemSeparatorComponent={
@@ -476,7 +497,7 @@ class InvoiceView extends React.Component {
 
                     <Text>
                       {this.props.currency.currency}
-                      {this.state.data.amount}
+                      {this.state.totalAmount}
                     </Text>
                   </View>
 
@@ -521,7 +542,7 @@ class InvoiceView extends React.Component {
 
                     <Text style={{fontWeight: 'bold'}}>
                       {this.props.currency.currency}
-                      {this.displayAmount() +
+                      {this.state.totalAmount +
                         this.calculateTaxAmount() -
                         this.calculateDiscount()}
                     </Text>

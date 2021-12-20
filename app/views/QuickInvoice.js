@@ -60,7 +60,7 @@ class QuickInvoice extends React.Component {
     // if(this.state.isFetching==true){
 
     // let search_url = Constants.productslist + '?search=' + this.state.search_invoice;
-    this.getData(this.state.quick_invoice);
+    this.getData(Constants.quickInvoice);
     return;
     // }
     console.log('333333333333', this.state.isFetching);
@@ -101,6 +101,7 @@ class QuickInvoice extends React.Component {
         // console.log('responseJson.postData', postData);
         this.setState({
           spinner: false,
+          isFetching:false
         });
         if (
           responseJson.status === 'success' ||
@@ -255,7 +256,7 @@ class QuickInvoice extends React.Component {
                       <Text style={[{color: '#929497'}, fontStyles.normal12]}>
                         {item.status == 'DRAFT'
                           ? item.date_created
-                          : item.due_date}
+                          : item.due_date==""|| !item.due_date?'--':item.due_date}
                       </Text>
                       {item.status == 'PENDING' && (
                         <View
@@ -284,7 +285,7 @@ class QuickInvoice extends React.Component {
                               borderRadius: 50,
                             },
                           ]}>
-                          <Text style={[{color: '#26C281'}]}>ACTIVE</Text>
+                          <Text style={[{color: '#26C281'}]}>PAID</Text>
                         </View>
                       )}
                     </View>
@@ -364,12 +365,12 @@ class QuickInvoice extends React.Component {
               marginTop: 10,
               alignItems: 'center',
             }}>
-            <Searchbar
+            {/* <Searchbar
               placeholder="Search Invoice No."
               style={[{color: '#D8D8D8'}, fontStyles.normal14]}
               iconColor="#929497"
               style={{
-                width: width / 1.3,
+                width: width / 1.07,
                 alignSelf: 'center',
                 marginTop: 5,
                 marginBottom: 5,
@@ -379,8 +380,8 @@ class QuickInvoice extends React.Component {
               onChangeText={text => this.setState({search_invoice: text})}
               // onSubmitEditing={() => this.search()}
               //update
-            ></Searchbar>
-            <View
+            ></Searchbar> */}
+            {/* <View
               style={[
                 {
                   borderBottomColor: '#E6E6E6',
@@ -390,19 +391,19 @@ class QuickInvoice extends React.Component {
                   marginTop: 10,
                   marginBottom: 10,
                 },
-              ]}></View>
+              ]}></View> */}
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{position: 'absolute', right: 0, alignSelf: 'center'}}>
               <Image
                 style={{height: 49, width: 49}}
                 source={require('../images/Order/settingicon.png')}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
 
           {/* <ScrollView></ScrollView> */}
-          <ScrollView zIndex={-0.999}>{this.listInvoice()}</ScrollView>
+          <View style={{flex:1}} zIndex={-0.999}>{this.listInvoice()}</View>
           {/* <Modal
                  animationType="fade"
                  visible={true}//this.state.regionModal

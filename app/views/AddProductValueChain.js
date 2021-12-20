@@ -36,6 +36,7 @@ import {
 import DropDownPicker from 'react-native-dropdown-picker';
 import Scaffold from './Components/Scaffold';
 import AddProductCartItem from './Components/CreateOrder/AddProductCartItem';
+import NavBack from './Components/NavBack';
 
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
@@ -51,6 +52,8 @@ class AddProduct extends React.Component {
       total_add_order: 0,
       categoryarr: [],
       category_id: 0,
+      pageNo:1,
+      totalPageCount: 1,
       // catelog_products_total: 0,
       selected_product: [],
     };
@@ -60,10 +63,10 @@ class AddProduct extends React.Component {
     console.log('oun#$');
     console.log('sellers s@@@##', this.props.route.params.item);
 
-    const url = this.getSellersProducts(
+     this.getSellersProducts(
       Constants.sellerProductList +
         '?id=' +
-        this.props.route.params.item.seller_id,
+        this.props.route.params.item.seller_id+"&page=1",
     );
 
     this.getCategoryList();
@@ -117,7 +120,22 @@ class AddProduct extends React.Component {
           this.unauthorizedLogout();
         } else {
           let message = responseJson.message;
-          Alert.alert('Error', message);
+          Alert.alert('Info', "Please Reload Products",[
+            {
+              text:"OK",
+onPress:()=>{
+  this.getSellersProducts(
+    Constants.sellerProductList +
+      '?id=' +
+      this.props.route.params.item.seller_id+"&page=1",
+  );
+
+}
+            },{
+              text:"Back",
+              onPress:()=>this.props.navigation.goBack()
+            }
+          ]);
         }
       });
   }
@@ -402,7 +420,8 @@ class AddProduct extends React.Component {
             textStyle={{color: '#fff'}}
             color={'#fff'}
           />
-          <View style={[{}, styles.backHeaderRowView]}>
+          <NavBack title="ADD PRODUCT" onClick={()=> this.props.navigation.goBack()} />
+          {/* <View style={[{}, styles.backHeaderRowView]}>
             <TouchableOpacity
               // onPress={() => this.props.navigation.navigate('CreateOrder')}
               onPress={() => this.props.navigation.goBack()}>
@@ -411,7 +430,7 @@ class AddProduct extends React.Component {
             <View style={[{}, styles.backHeadingView]}>
               <Text style={[{}, styles.backHeadingText]}>ADD PRODUCT</Text>
             </View>
-          </View>
+          </View> */}
           <View>
             <ScrollView>
               <Searchbar
@@ -434,7 +453,8 @@ class AddProduct extends React.Component {
               {/* <View style={[{}, styles.searchByCatCOntainer]}> */}
 
               {this.state.categoryarr.length < 1 ? null : (
-                <DropDownPicker
+               
+               <DropDownPicker
                   scrollViewProps={{
                     persistentScrollbar: true,
                   }}

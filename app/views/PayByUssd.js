@@ -79,8 +79,8 @@ class PayByUssd extends React.Component {
         );
         if (responseJson.status.toUpperCase() === 'SUCCESS') {
           console.log('##########', responseJson.data.id);
-          this.props.navigation.navigate('OrderDetail', {
-            id: responseJson.data.id,
+          this.props.navigation.navigate('OrderDetail_pending', {
+            id: responseJson.data.id
           });
           // let payment_link = responseJson.data.payment_link
           // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
@@ -133,7 +133,10 @@ class PayByUssd extends React.Component {
         console.log('all response ', responseJson);
         if (responseJson.status === 'success') {
           this.props.emptyOrder();
-          this.get_order_detail(responseJson.data.id);
+          this.props.navigation.navigate('OrderDetail_pending', {
+            id: responseJson.data.id
+          });
+          //this.get_order_detail(responseJson.data.id);
           // let payment_link = responseJson.data.payment_link
           // this.payment_response(responseJson, 'PaymentWeb', { payment_link: payment_link, data: responseJson.data });
         } else if (responseJson.status == 401) {

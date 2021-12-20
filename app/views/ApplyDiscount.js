@@ -146,22 +146,24 @@ class ApplyDiscount extends React.Component {
         discount_amount: parseFloat(this.props.route.params.discount_amount),
       });
     }
-    console.log(this.props.orderDiscountReducer.discount_amount);
+    console.log("ee",this.props.orderDiscountReducer.discount_amount);
 
     return (
       <Scaffold>
         <View style={[{}, styles.mainView]}>
           <Header navigation={this.props.navigation} />
-          <View style={[{}, styles.backHeaderRowView]}>
-            <TouchableOpacity
+          <TouchableOpacity
               // onPress={() => this.props.navigation.navigate('CreateOrder')}
               onPress={() => this.props.navigation.goBack()}>
+          <View style={[{}, styles.backHeaderRowView]}>
+           
               <Icon name="arrow-left" size={25} color="#929497" />
-            </TouchableOpacity>
+            
             <View style={[{}, styles.backHeadingView]}>
               <Text style={[{}, styles.backHeadingText]}>APPLY DISCOUNT</Text>
             </View>
           </View>
+          </TouchableOpacity>
 
           <View style={[{}, styles.mainContentView]}>
             <View style={[{}, styles.formRow]}>
@@ -222,9 +224,7 @@ class ApplyDiscount extends React.Component {
                 keyboardType="numeric"
                 onChangeText={text => this.setDiscountAmount(text)}
                 value={
-                  this.props.orderDiscountReducer.discount_amount + '' == '0'
-                    ? ''
-                    : this.props.orderDiscountReducer.discount_amount
+                  this.props.orderDiscountReducer.discount_amount.toString()  
                 }
               />
             </View>

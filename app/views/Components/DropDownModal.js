@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useEffect, useState} from 'react';
 import {Picker} from '@react-native-picker/picker';
 import {
   Dimensions,
@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
   StyleSheet,
   FlatList,
+  TextInput,
+  
 } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 const {width, height} = Dimensions.get('screen');
@@ -17,10 +19,47 @@ const DropDownModal = ({
   selected,
   showdropDownModal = false,
   buttonContainerStyle,
+  itemFull=false,
   handleClose = f => f,
   onSelected,
+  searchPlaceHolder = 'Search',
   title = '',
 }) => {
+
+const [mainData,setMainData]=useState([]);
+const [filteredData,setFilteredData]=useState([]);
+const [searchText,setSearchText]=useState("")
+
+useEffect(()=>{
+  setFilteredData(data)
+  setMainData(data)
+},[])
+
+ console.log("dsd$#",filteredData)
+  const searchList=(text)=>{
+    console.log("searchRRT%",text)
+    setSearchText(text);
+    if (text=="") {
+      setFilteredData(mainData)
+      
+    } else {
+      const newList=data.filter(item=>{
+        return item.label.toLowerCase().includes(text.toLowerCase())
+      })
+      console.log("filter array",newList);
+      setFilteredData(newList)
+    }
+  }
+
+  const renderHeader = () => {
+    if (data.length<10)return null;
+    return (
+      <View style={{}}>
+        <TextInput  value={searchText} onChangeText={(text)=>searchList(text)} style={{borderBottomColor:"#2F2E7C", borderBottomWidth:1,paddingHorizontal:15}} placeholderTextColor="#2F2E7C" placeholder={searchPlaceHolder} />
+      </View>
+    );
+  };
+
   return (
     <Modal
       animated
@@ -39,7 +78,7 @@ const DropDownModal = ({
         }}>
         <View
           style={{
-            height: data.length > 10 ? height / 4 : height / 2,
+            height: data.length > 10 ? height / 2 : height / 3,
             bottom: 0,
             backgroundColor: '#fff',
             padding: 10,
@@ -59,14 +98,15 @@ const DropDownModal = ({
               <Icon name="close" size={22} color="#B1272C" />
             </TouchableOpacity>
           </View>
-
+          {renderHeader()}
           <FlatList
-            data={data}
+            data={filteredData && filteredData.length>0 ?filteredData:data}
             keyExtractor={(item, index) => index}
+            // ListHeaderComponent={renderHeader}
             renderItem={({item, index, separators}) => (
               <TouchableOpacity
                 key={index}
-                onPress={() => onSelected(item.value)}
+                onPress={() => onSelected(itemFull?item :item.value)}
                 style={[styles.buttonStyle, buttonContainerStyle]}>
                 <Text
                   style={{

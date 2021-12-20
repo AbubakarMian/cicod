@@ -35,6 +35,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import {Constants} from '../views/Constant';
 import {Picker} from '@react-native-picker/picker';
 import TabNav from '../views/TabsNav';
+import _ from 'lodash';
 // import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import {nativeViewProps} from 'react-native-gesture-handler/lib/typescript/handlers/NativeViewGestureHandler';
@@ -60,16 +61,19 @@ class Products extends React.Component {
       filters: [],
       url_products: '',
       isFetching: false,
+      pageNo: 1,
+      totalPageCount: 1,
     };
     this.onDateChange = this.onDateChange.bind(this);
   }
   onRefresh() {
     console.log('222222222222', this.state.isFetching);
-    this.setState({isFetching: true});
+    this.setState({isFetching: true,data:[]});
     // if(this.state.isFetching==true){
 
     // let search_url = Constants.productslist + '?search=' + this.state.search_product;
-    this.getData(this.state.url_products);
+    let product_url = Constants.productslist + '?page=' + this.state.pageNo;
+    this.getData(product_url);
     return;
     // }
     console.log('333333333333', this.state.isFetching);
@@ -87,11 +91,22 @@ class Products extends React.Component {
       '~~~~~~~~~~~~~~~~~~~~*************',
       this.props.user.access_token,
     );
+    let product_url = Constants.productslist + '?page=' + this.state.pageNo;
+    this.getData(product_url);
     const that = this;
     setTimeout(function () {
       that.getCategoryList();
     }, 700);
   }
+
+
+componentDidUpdate(prevProps){
+  console.log(prevProps.route.params,"ds%0",this.props.route.params)
+  if (!_.isEqual(prevProps.route.params,this.props.route.params)) {
+    let product_url = Constants.productslist + '?page=' + this.state.pageNo;
+    this.getData(product_url);
+  }
+}
 
   async getData(url) {
     let _that = this;
@@ -114,17 +129,22 @@ class Products extends React.Component {
     fetch(url, postData)
       .then(response => response.json())
       .then(async responseJson => {
-        // console.log('~~~~~~~~~~~~~~~~~~responseJson.responseJson responseJson responseJson @@@@@@@', responseJson);
+        console.log(
+          '~~~~~~~~~~~~~~~~~~responseJson.responseJson responseJson responseJson @@@@@@@',
+          responseJson,
+        );
         // console.log('responseJson.postData', postData);
         this.setState({
           spinner: false,
+          isFetching:false
         });
         if (
           responseJson.status === 'success' ||
           responseJson.success === true
         ) {
           await this.setState({
-            data: responseJson.data,
+            data: [...this.state.data, ...responseJson.data],
+            totalPageCount: responseJson.pages,
           });
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
@@ -136,8 +156,10 @@ class Products extends React.Component {
   }
 
   search() {
+    this.setState({data: []});
     let search_url =
       Constants.productslist + '?search=' + this.state.search_product;
+    console.log('urlsearch$#', search_url);
     this.getData(search_url);
   }
 
@@ -172,7 +194,7 @@ class Products extends React.Component {
         this.setState({spinner: false});
         console.log(' category body ', postData);
         console.log('URLLLLLLLLLLLLLLLLLLLLLLL', Constants.productcategorylist);
-        console.log('responseJson responseJson', responseJson);
+        // console.log('responseJson responseJson', responseJson);
 
         if (responseJson.status === 'success') {
           let res = responseJson.data;
@@ -196,11 +218,15 @@ class Products extends React.Component {
       ' category ID search !!!!!!!!!!!!!!!@@@@@@@@@@@@@@',
       category_id,
     );
-    this.setState({category_id, showdropDownModal: false});
+    this.setState({category_id, showdropDownModal: false, pageNo: 1, data: []});
     let url =
       category_id == ''
-        ? Constants.productslist
-        : Constants.productslist + '?category_id=' + category_id;
+        ? Constants.productslist + '?page=' + this.state.pageNo
+        : Constants.productslist +
+          '?category_id=' +
+          category_id +
+          '&page=' +
+          this.state.pageNo;
     this.getData(url);
   };
 
@@ -210,38 +236,88 @@ class Products extends React.Component {
     this.props.navigation.navigate('Login');
   }
 
+  handleLoadMore = () => {
+    // if (!this.state.spinner) {
+    // alert(this.state.totalPageCount);
+    const pageNo = this.state.pageNo + 1; // increase page by 1
+    this.setState({pageNo});
+
+    const product_url =
+      this.state.category_id == ''
+        ? Constants.productslist + '?page=' + pageNo
+        : Constants.productslist +
+          '?category_id=' +
+          this.state.category_id +
+          '&page=' +
+          pageNo;
+
+    console.log('product_url$##@0', product_url);
+    this.getData(product_url);
+
+    // method for API call
+    // } else {
+    //   alert('here');
+    // }
+  };
+
+  renderFooter = () => {
+    //it will show indicator at the bottom of the list when data is loading otherwise it returns null
+    // if (!this.state.spinner) return null;
+    // return <ActivityIndicator style={{color: '#000'}} />;
+    if (
+      this.state.totalPageCount > 1 &&
+      this.state.pageNo < this.state.totalPageCount
+    ) {
+      return (
+        <TouchableOpacity
+          onPress={() => this.handleLoadMore()}
+          style={{
+            padding: 5,
+            alignSelf: 'center',
+            marginTop: 7,
+            marginBottom: 300,
+          }}>
+          <Text style={{letterSpacing: 1.1, fontWeight: 'bold'}}>
+            Load More
+          </Text>
+        </TouchableOpacity>
+      );
+    }
+    return null;
+  };
+
   listProducts(props) {
     let _that = props._that;
-    let url = Constants.productslist;
-    if (
-      _that.props.route == null ||
-      _that.props.route.params == null ||
-      _that.props.route.params.filters == null
-    ) {
-      url = Constants.productslist;
-    } else {
-      let filters = _that.props.route.params.filters;
-      let filter = '?';
-      for (let i = 0; i < filters.length; i++) {
-        filter = filter + filters[i].key + '=' + filters[i].value;
-        if (i != filters.length - 1) {
-          filter = filter + '&';
-        }
-      }
-      url = Constants.productslist + filter;
-    }
-    console.log('reloaded 1', _that.props.reload.product);
-    if (url != _that.state.url_products || _that.props.reload.product) {
-      console.log('reloaded', _that.props.reload.product);
-      _that.props.setScreenReload({
-        reload: false,
-      });
-      _that.getData(url);
-      _that.setState({
-        url_products: url,
-      });
-    }
-    console.log('url_products ', url);
+    // let url = Constants.productslist;
+    // if (
+    //   _that.props.route == null ||
+    //   _that.props.route.params == null ||
+    //   _that.props.route.params.filters == null
+    // ) {
+    //   url = Constants.productslist + '?page=' + _that.state.pageNo;
+    // } else {
+    //   let filters = _that.props.route.params.filters;
+    //   let filter = '?page=' + _that.state.pageNo;
+    //   for (let i = 0; i < filters.length; i++) {
+    //     filter = filter + filters[i].key + '=' + filters[i].value;
+    //     if (i != filters.length - 1) {
+    //       filter = filter + '&';
+    //     }
+    //   }
+    //   url = Constants.productslist + filter;
+    // }
+    // console.log('reloaded 1', _that.props.reload.product);
+    // if (url != _that.state.url_products || _that.props.reload.product) {
+    //   console.log('reloaded', _that.props.reload.product);
+    //   _that.props.setScreenReload({
+    //     reload: false,
+    //   });
+    //   _that.getData(url);
+    //   _that.setState({
+    //     url_products: url,
+    //   });
+    // }
+    // console.log('url_products ', url);
     // return null;
     if (_that.state.data.length < 1) {
       return (
@@ -267,7 +343,7 @@ class Products extends React.Component {
               fontWeight: 'bold',
               fontFamily: 'Open Sans',
             }}>
-            No order found
+            No Product found
           </Text>
         </View>
       );
@@ -287,6 +363,8 @@ class Products extends React.Component {
                 />
               ))
             }
+            keyExtractor={(item, index) => index}
+            ListFooterComponent={_that.renderFooter}
             renderItem={({item, index, separators}) => (
               <TouchableOpacity
                 key={item.key}
@@ -312,12 +390,12 @@ class Products extends React.Component {
                   <View style={[{zIndex: -0.999, flexDirection: 'row'}]}>
                     {item.image == null ? (
                       <Image
-                        style={[{height: 40, width: 40, marginRight: 5}]}
+                        style={[{height: 50, width: 50, marginRight: 5}]}
                         source={require('../images/ticket.png')}
                       />
                     ) : (
                       <Image
-                        style={[{height: 50, width: 50}]}
+                        style={[{height: 50, width: 50,borderRadius:10}]}
                         source={{uri: item.image}}
                       />
                     )}
@@ -328,7 +406,7 @@ class Products extends React.Component {
                     </Text>
                     <View style={{flexDirection: 'row'}}>
                       <Text style={[{color: '#929497'}, fontStyles.normal12]}>
-                        QTY: {item.quantity}
+                        QTY: {item.no_qty_limit?"NO LIMIT": item.quantity}
                       </Text>
                       <Text style={[{color: '#929497'}, fontStyles.normal12]}>
                         . {item.slug}
@@ -374,7 +452,13 @@ class Products extends React.Component {
   }
 
   render() {
-    console.log('categoryarr categoryarr categoryarr', this.props);
+    console.log(
+      'ui#@@m',
+      this.state.pageNo,
+      'd87#@',
+      this.state.totalPageCount,
+    );
+
     const {selectedStartDate} = this.state;
     const startDate = selectedStartDate ? selectedStartDate.toString() : '';
 
@@ -405,7 +489,7 @@ class Products extends React.Component {
               }}>
               <NavBack
                 title="PRODUCTS"
-                onClick={() => this.props.navigation.goBack()}
+                onClick={() => this.props.navigation.navigate("Home")}
               />
 
               {/* <TouchableOpacity
@@ -439,7 +523,7 @@ class Products extends React.Component {
               style={[{color: '#D8D8D8'}, fontStyles.normal14]}
               iconColor="#929497"
               style={{
-                width: width / 1.3,
+                width: width / 1.1,
                 alignSelf: 'center',
                 elevation: 0,
                 borderColor: '#D8DCDE',
@@ -460,7 +544,7 @@ class Products extends React.Component {
                 },
               ]}></View>
 
-            <TouchableOpacity
+            {/* <TouchableOpacity
               style={{position: 'absolute', right: 0, alignSelf: 'center'}}
               onPress={() => {
                 this.setState({
@@ -473,15 +557,16 @@ class Products extends React.Component {
                 style={{height: 50, width: 50}}
                 source={require('../images/Order/settingicon.png')}
               />
-            </TouchableOpacity>
+            </TouchableOpacity> */}
           </View>
-          <View style={[{}, styles.formRowView]}>
+          <View style={{flexDirection:"row",justifyContent:"space-between",paddingHorizontal:10}}>
             <View
               style={[
                 {
-                  position: 'relative',
+                  // position: 'relative',
                   borderBottomColor: '#E6E6E6',
                   borderBottomWidth: 1,
+                 flex:2
                 },
                 styles.formColumn,
               ]}>
@@ -508,15 +593,34 @@ class Products extends React.Component {
             </View>
             <View
               style={{
-                width: width - 20,
-                alignSelf: 'center',
-                marginVertical: 5,
+                
+                
+                // marginVertical: 5,
               }}></View>
+
+            <TouchableOpacity
+              style={{
+                height: 50,
+                width: 50,
+                // position: 'absolute',
+                // right: 0,
+                // alignSelf: 'center',
+                alignItems: 'center',
+                justifyContent: 'center',
+                // paddingLeft: 10,
+              }}
+              onPress={() => {
+                this.setState({data: [], pageNo: 1});
+                let product_url = Constants.productslist + '?page=1';
+                this.getData(product_url);
+              }}>
+              <Icon name="refresh" size={30} color="#929497" />
+            </TouchableOpacity>
           </View>
           {/* <ScrollView></ScrollView> */}
-          <ScrollView zIndex={-0.999}>
+     <View style={{flex:1,marginBottom:10}}>
             <this.listProducts _that={this} />
-          </ScrollView>
+          </View>
           <TabNav
             style={{position: 'absolute', bottom: 0}}
             screen={'product'}
@@ -559,7 +663,7 @@ class Products extends React.Component {
                             });
                           })
                         }
-                        style={[{marginLeft: 7}, styles.suspendTouch]}>
+                        style={[{marginLeft: 7,width:"100%"}, styles.suspendTouch,]}>
                         <Text style={{color: '#4E4D4D'}}>Add Product</Text>
                       </TouchableOpacity>
                     </View>
@@ -577,7 +681,7 @@ class Products extends React.Component {
                             );
                           })
                         }
-                        style={[{marginLeft: 7}, styles.suspendTouch]}>
+                        style={[{marginLeft: 7,width:"100%"}, styles.suspendTouch]}>
                         <Text style={{color: '#4E4D4D'}}>
                           Add Product Category
                         </Text>

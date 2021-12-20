@@ -44,11 +44,15 @@ class UpdateProduct extends React.Component {
       search_text: '',
       updateProductModal: false,
       prod_list: [],
+      responseProdList:[],
       buyer_detail: {},
       is_default: false,
       categories: [],
       products: [],
       item: {},
+      pageNo: 1,
+
+      totalPageCount: 1,
     };
   }
 
@@ -56,10 +60,11 @@ class UpdateProduct extends React.Component {
     this.setState({
       buyer_detail: this.props.route.params.buyer_detail,
       item: this.props.route.params.item,
+      pageNo: 1,
     });
     console.log('reduxVComdid', this.props.productFilter);
     console.log('buyer_detail', this.props.route.params.buyer_detail);
-    this.getData(Constants.products);
+    this.getData(Constants.products + '?page=1');
   }
   componentWillReceiveProps() {
     console.log('here in receive props !!!!!!!!!!!!!!!', this.props);
@@ -84,7 +89,9 @@ class UpdateProduct extends React.Component {
       }
     }
 
-    this.getData(Constants.productslist + filter);
+    this.getData(
+      Constants.productslist + filter + '&page=' + this.state.pageNo,
+    );
   }
 
   getData(url) {
@@ -113,6 +120,7 @@ class UpdateProduct extends React.Component {
           responseJson.status === 'success' ||
           responseJson.success === true
         ) {
+          let producResp = responseJson;
           let datares_arr = responseJson.data;
           // console.log('all data  ', datares_arr);
           let categories = [];
@@ -122,10 +130,10 @@ class UpdateProduct extends React.Component {
             // console.log('data_arrdata_arrdata_arr ', datares_arr[i]);
             // console.log('data_arrdata_arrdata_arr 2', datares_arr[i].category);
             let cat_name = '';
-            if (!datares_arr[i].category || datares_arr[i].category == null) {
-              continue;
-              // cat_name = datares_arr[i].category;
-            }
+            // if (!datares_arr[i].category || datares_arr[i].category == null) {
+            //   continue;
+            //   // cat_name = datares_arr[i].category;
+            // }
             cat_name = datares_arr[i].category;
             console.log('log in array', this.in_array(categories, cat_name));
             if (this.in_array(categories, cat_name) === -1) {
@@ -137,6 +145,7 @@ class UpdateProduct extends React.Component {
                 data: [],
               });
               console.log('rdatakk.....d', datares_arr[i]);
+              console.log("gories$##",data_arr)
               // data_arr.push({
               //     category: 'null cat here',
               //     data: [],
@@ -150,17 +159,28 @@ class UpdateProduct extends React.Component {
                   console.log('.....eeeee........ee...');
                   datares_arr[j].isChecked = false;
                   data_arr[data_arr.length - 1].data.push(datares_arr[j]);
+
                 }
               }
+
+              console.log("yupoo$##",data_arr[0])
 
               //  break;
             }
           }
+
+          // this.setState({
+          //   spinner: false, 
+          //   totalPageCount: producResp.pages,
+          //   responseProdList:[...this.state.responseProdList,...producResp.data],
+          //   prod_list: [...this.state.prod_list, ...data_arr],
+          // });
           //if route screen is update product get all te products buyer is given access to and do
           //te
           if (this.props.route.params.screen == 'updateproduct') {
-            const approve_product_url = `${Constants.approved_buyer_products}?id=${this.props.route.params.item.buyer_id}`;
-
+            // alert('fff');
+            const approve_product_url = `${Constants.approved_buyer_products}?id=${this.props.route.params.item.buyer_id}&page=${this.state.pageNo}`;
+console.log("approve_product_url%$$$0",approve_product_url)
             let postRData = {
               method: 'GET',
               headers: {
@@ -209,8 +229,11 @@ class UpdateProduct extends React.Component {
                     console.log('dataR......dsa...', data_arr);
                     this.setState({
                       spinner: false,
-                      data: responseJson.data,
-                      prod_list: data_arr,
+                      // data:  responseJson.data,
+              //responseProdList:[...this.state.responseProdList,...producResp.data],
+
+                      totalPageCount: producResp.pages,
+                      prod_list: [...this.state.prod_list, ...data_arr],
                     });
                   }
                 } else if (responseJson.status == 401) {
@@ -223,9 +246,10 @@ class UpdateProduct extends React.Component {
           } else {
             console.log('dataR......dsa...', data_arr);
             this.setState({
-              spinner: false,
-              data: responseJson.data,
-              prod_list: data_arr,
+              spinner: false, 
+              totalPageCount: producResp.pages,
+              //responseProdList:[...this.state.responseProdList,...producResp.data],
+              prod_list: [...this.state.prod_list, ...data_arr],
             });
           }
         } else if (responseJson.status == 401) {
@@ -301,16 +325,23 @@ class UpdateProduct extends React.Component {
         );
         this.setState({spinner: false, updateProductModal: false});
         if (responseJson.success) {
-          Alert.alert('Product update successfull', '');
-          if (this.props.route.params.screen == 'buyer') {
-            this.props.navigation.navigate('Connect');
-          } else {
-            this.props.navigation.navigate('BuyersView', {
-              items: this.props.route.params.item,
-              heading: 'BUYERS',
-            });
-            //this.props.navigation.goBack();
-          }
+          Alert.alert("Success",'Product update successfull', [
+            {
+              text:"OK",
+              onPress:()=>{
+                if (this.props.route.params.screen == 'buyer') {
+                  this.props.navigation.navigate('Connect');
+                } else {
+                  this.props.navigation.navigate('BuyersView', {
+                    items: this.props.route.params.item,
+                    heading: 'BUYERS',
+                  });
+                  //this.props.navigation.goBack();
+                }
+              }
+            }
+          ]);
+         
 
           // this.props.navigation.goBack();
         } else if (responseJson.status == 401) {
@@ -448,6 +479,50 @@ class UpdateProduct extends React.Component {
     console.log('seearc@@##', search_text);
     this.getData(`${Constants.productslist}?search=${search_text}`);
   }
+
+  handleLoadMore = () => {
+    // if (!this.state.spinner) {
+    // alert(this.state.totalPageCount);
+    const pageNo = this.state.pageNo + 1; // increase page by 1
+    this.setState({pageNo});
+
+    const product_url = Constants.productslist + '?page=' + pageNo;
+
+    console.log('product_url$##@0', product_url);
+    this.getData(product_url);
+
+    // method for API call
+    // } else {
+    //   alert('here');
+    // }
+  };
+
+  renderFooter = () => {
+    //it will show indicator at the bottom of the list when data is loading otherwise it returns null
+    // if (!this.state.spinner) return null;
+    // return <ActivityIndicator style={{color: '#000'}} />;
+    if (
+      this.state.totalPageCount > 1 &&
+      this.state.pageNo < this.state.totalPageCount
+    ) {
+      return (
+        <TouchableOpacity
+          onPress={() => this.handleLoadMore()}
+          style={{
+            padding: 5,
+            alignSelf: 'center',
+            marginTop: 7,
+            marginBottom: 300,
+          }}>
+          <Text style={{letterSpacing: 1.1, fontWeight: 'bold'}}>
+            Load More
+          </Text>
+        </TouchableOpacity>
+      );
+    }
+    return null;
+  };
+
   render() {
     return (
       <Scaffold>
@@ -540,6 +615,7 @@ class UpdateProduct extends React.Component {
               refreshing={true}
               sections={this.state.prod_list}
               keyExtractor={(item, index) => item + index}
+              ListFooterComponent={this.renderFooter}
               renderItem={({item}) => <this.Item item={item} />}
               renderSectionHeader={({section: {category, isChecked}}) => (
                 <TouchableOpacity

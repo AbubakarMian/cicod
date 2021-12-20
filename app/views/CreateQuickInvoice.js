@@ -365,6 +365,11 @@ class CreateQuickInvoice extends React.Component {
   handleChangeDiscount = numb => {
     let total_amount = 0;
     let discount = 0;
+    if (isNaN(numb)|| parseInt(numb)<1) {
+// this.setState({discount:0})
+      return;
+    }
+    numb=numb==""?0:numb
     if (numb == '') {
       total_amount =
         this.state.total_amount + parseInt(this.state.discount_amount);
@@ -389,6 +394,14 @@ class CreateQuickInvoice extends React.Component {
     let total_amount = 0;
     let tax_amount = 0;
     let tax_loc = 0;
+    if (isNaN(tax_percent)|| parseInt(tax_percent)<1) {
+      // this.setState({discount:0})
+            return;
+          }
+
+    // if (tax_percent < 1) {
+    //   return;
+    // }
     if (tax_percent == '') {
       tax_loc = this.state.tax_percent;
       console.log(
@@ -466,6 +479,8 @@ class CreateQuickInvoice extends React.Component {
             confirmButtonColor="#DD6B55"
             onConfirmPressed={() => {
               if (this.state.isInvoiceSuccess) {
+                let user_data = {};
+                this.props.setCustomer(user_data);
                 this.setState({isShowError: false}, () =>
                   this.props.navigation.replace('QuickInvoice'),
                 );
@@ -1072,7 +1087,7 @@ class CreateQuickInvoice extends React.Component {
           <Modal
             visible={this.state.isShowProductModal}
             onDismiss={() => this.setState({isShowProductModal: false})}>
-            <ScrollView
+            <View
               style={{
                 height: height - 350,
                 alignSelf: 'center',
@@ -1082,6 +1097,7 @@ class CreateQuickInvoice extends React.Component {
                 flexDirection: 'column',
                 padding: 25,
               }}>
+                <ScrollView showsVerticalScrollIndicator={false} style={{flex:1}}>
               <View style={{flexDirection: 'row', marginBottom: 30}}>
                 <Text
                   style={{color: '#2F2E7C', fontWeight: 'bold', fontSize: 15}}>
@@ -1110,10 +1126,18 @@ class CreateQuickInvoice extends React.Component {
                     keyboardType="numeric"
                     value={this.state.quantity}
                     onChangeText={text => {
-                      this.setState({
-                        quantity: text,
-                        modal_total: parseInt(text) * this.state.price,
-                      });
+                      if (isNaN(text)|| parseInt(text)<1) {
+                        this.setState({
+                          modal_total: this.state.quantity * this.state.price,
+                        });
+                      }else{
+                        let quantity = text == ''||parseInt(text)<1 ? 0 : text;
+                        this.setState({
+                          quantity,
+                          modal_total: parseInt(quantity) * this.state.price,
+                        });
+                      }
+                     
                     }}
                     placeholder="Quantity"
                     style={{
@@ -1126,12 +1150,25 @@ class CreateQuickInvoice extends React.Component {
                   <TextInput
                     keyboardType="numeric"
                     value={this.state.price}
-                    onChangeText={text =>
-                      this.setState({
-                        price: text,
-                        modal_total: parseInt(text) * this.state.quantity,
-                      })
-                    }
+                    onChangeText={text => {
+                      if (isNaN(text) || parseInt(text)<1) {
+                        // alert(parseInt(text))
+                        // this.setState({
+                        //   price: 0,
+                        //   modal_total: 0* this.state.quantity,
+                        // })
+
+                        this.setState({
+                          modal_total: this.state.price * this.state.quantity,
+                        });
+                      } else {
+                        let price = text == ''||parseInt(text)<1 ? 0 : text;
+                        this.setState({
+                          price,
+                          modal_total: parseInt(price) * this.state.quantity,
+                        });
+                      }
+                    }}
                     placeholder="Price(0.00)"
                     style={{
                       paddingLeft: 0,
@@ -1216,7 +1253,8 @@ class CreateQuickInvoice extends React.Component {
                   </TouchableOpacity>
                 </View>
               </View>
-            </ScrollView>
+              </ScrollView>
+            </View>
           </Modal>
         </View>
       </Scaffold>

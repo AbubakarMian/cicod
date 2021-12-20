@@ -23,6 +23,7 @@ import Header from '../views/Header';
 import Spinner from 'react-native-loading-spinner-overlay';
 import CheckBox from 'react-native-check-box';
 import {Constants} from '../views/Constant';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import RadioForm, {
   RadioButton,
   RadioButtonInput,
@@ -66,7 +67,7 @@ class CreateProduct extends React.Component {
       spinner: false,
       category_id: '',
       name: '',
-      quantity: '',
+      quantity: "",
       code: '',
       price: '',
       reservation_day: '',
@@ -85,6 +86,7 @@ class CreateProduct extends React.Component {
       attributes_set: false,
       attributes: [],
       variations: [],
+      prod_image_url:null,
       selected_variation: {
         key: '',
         quentity: '',
@@ -166,24 +168,49 @@ class CreateProduct extends React.Component {
 
             return {label: x.name, value: x.id, selected: selected_bool};
           });
+          if(this.props.route.params.action=="update"){
+            let data = categoryarr.filter(itm => itm.label == this.props.route.params.prodDetail.category);
+            if (data.length>0) {
+              this.setState({
+                selected_cat: data[0].label,
+                category_id:data[0].value,
+                categoryarr: categoryarr,
+              });
+            } else {
+              this.setState({
+               
+                categoryarr: categoryarr,
+              });
+            }
+            
+          }else{
+            this.setState({
+              
+              categoryarr: categoryarr,
+            });
+          }
+          
           console.log(
             'category !!!!!!!!!!!!!!!#@@@@@@@@@@ !!!!!!',
             categoryarr,
           );
-          this.setState({
-            categoryarr: categoryarr,
-          });
+         
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
         } else {
           let message = responseJson.message;
-          console.log('Api call error else', responseJson);
-          Alert.alert('Error', message);
+          console.log('catftApi#e', responseJson);
+          Alert.alert('Info', "Could not fetch category",[
+            {
+              text:"Reload",
+              onPress:()=>this.getCategoryList()
+            }
+          ]);
         }
       })
       .catch(error => {
         this.setState({spinner: false});
-        console.log('Api call error', error);
+        console.log('ajo#$$$', error);
       });
   }
 
@@ -247,7 +274,7 @@ class CreateProduct extends React.Component {
       'hr$$#',
       item,
       't%$',
-      this.state.categoryarr[item].label,
+      // this.state.categoryarr[item].label,
       'uu$#',
       data,
       'd87E',
@@ -266,11 +293,23 @@ class CreateProduct extends React.Component {
   }
   create_or_update_Product() {
     // this.setState({ spinner: true })
+
+    // if (this.state.validity==0 || this.state.validity=="") {
+    //   Alert.alert("Warning","Please Enter reservation days");
+    //   return;
+    // }
+
+     if ((this.state.quantity==0 || this.state.quantity=="") && !this.state.no_qty_limit) {
+      Alert.alert("Warning","Please Enter quantity");
+      return;
+    }
     if (this.state.name.trim() === '' || this.state.price === '') {
       this.setState({spinner: false});
       Alert.alert('Warning', 'Product name and Price are required');
       return;
-    } else {
+    }
+    
+    else {
       var formData = new FormData();
       if (this.state.prod_image != null && this.state.prod_image != '') {
         formData.append('image', {
@@ -284,9 +323,9 @@ class CreateProduct extends React.Component {
       formData.append('description', this.state.description);
       formData.append('code', this.state.code);
       formData.append('price', this.state.price);
-      formData.append('validity', this.state.validity);
-      formData.append('quantity', this.state.quantity);
-      formData.append('no_qty_limit', this.state.no_qty_limit);
+      formData.append('validity', this.state.validity==""?0:this.state.validity);
+      formData.append('quantity', this.state.quantity==""?1:this.state.quantity);
+      formData.append('no_qty_limit', this.state.no_qty_limit?1:0);
       formData.append('has_vat', this.state.has_vat);
       formData.append('on_webshop', this.state.is_web_shop ? 1 : 0);
 
@@ -367,12 +406,33 @@ class CreateProduct extends React.Component {
             reload: true,
           });
           if (responseJson.status === 'success') {
-            Alert.alert('MESSAGE', responseJson.message);
+            
             let customer_id = responseJson.data.id;
             if (this.props.route.params.action == 'create') {
-              this.props.navigation.navigate('Products', {seller_id: 0});
+              Alert.alert('SUCCESS', "Product Created Successfully!",[
+                {
+                  text:"OK",
+                  onPress:()=>this.props.navigation.navigate('Products', {seller_id: 1})
+                }
+              ]);
+              
             } else {
-              this.props.navigation.goBack();
+              Alert.alert('SUCCESS', "Product Updated Successfully!",[
+                {
+                  text:"OK",
+                  onPress:()=>{
+                    if (this.props.route.params.heading=="BUYERS") {
+                      this.props.navigation.navigate('BuyersProducts', {items:this.props.route.params.items,heading:this.props.route.params.heading})
+                    } else {
+                    this.props.navigation.navigate('Products', {seller_id: 1})
+                      
+                    }
+
+                  }
+                }
+              ]);
+              // this.props.navigation.navigate('Products', {seller_id: 0});
+              //this.props.navigation.goBack();
             }
           } else if (responseJson.status == 401) {
             this.unauthorizedLogout();
@@ -474,10 +534,12 @@ class CreateProduct extends React.Component {
   }
   setValidity(text) {
     console.log(' text @@@@@@@@@', text);
-    let ex = /^[1-9]\d*$/;
+    let ex = /^[0-9]\d*$/;
     if (text.match(ex)) {
       this.setState({validity: text});
       // Alert.alert('Warning','Value can not be negative')
+    }else{
+      this.setState({validity:""})
     }
   }
   setQuentity(text) {
@@ -486,6 +548,8 @@ class CreateProduct extends React.Component {
     if (text.match(ex)) {
       this.setState({quantity: text});
       // Alert.alert('Warning','Value can not be negative')
+    }else{
+      this.setState({quantity: ""});
     }
   }
   setVariationSamePrice(index) {
@@ -601,10 +665,13 @@ class CreateProduct extends React.Component {
         'sdkf hsjkdhfjkshgkfdgs djgjsgdfjgsdf',
         this.props.route.params.prodDetail,
       );
+   
+console.log("caeee$#");
       let pre_product = this.props.route.params.prodDetail;
       this.setState({
+        
         prod_id: this.props.route.params.prodDetail.id,
-        category_id: this.props.route.params.prodDetail.category,
+        // category_id: this.props.route.params.prodDetail.category,
         name: this.props.route.params.prodDetail.name,
         quantity: this.props.route.params.prodDetail.quantity,
         code: this.props.route.params.prodDetail.code,
@@ -613,7 +680,7 @@ class CreateProduct extends React.Component {
         no_qty_limit: this.props.route.params.prodDetail.no_qty_limit,
         validity: this.props.route.params.prodDetail.validity,
         has_vat: this.props.route.params.prodDetail.has_vat,
-        prod_image: this.props.route.params.prodDetail.image,
+        prod_image_url: this.props.route.params.prodDetail.image,
         is_web_shop: this.props.route.params.prodDetail.on_webshop,
       });
       if (this.props.route.params.prodDetail.variations.length > 0) {
@@ -763,6 +830,16 @@ class CreateProduct extends React.Component {
     console.log('this.state.price', this.state.categoryarr);
     return (
       <Scaffold style={{flex: 1}}>
+            <KeyboardAwareScrollView
+        bounces={false}
+        showsVerticalScrollIndicator={false}
+        // style={{marginBottom: 150}}
+        enableOnAndroid={true}
+        scrollEnabled={true}
+        extraScrollHeight={100}
+        keyboardShouldPersistTaps="handled"
+        scrollToOverflowEnabled={true}
+        enableAutomaticScroll={true}>
         <View style={[{}, styles.mainView]}>
           <Header navigation={this.props.navigation} />
           <Spinner
@@ -1010,10 +1087,10 @@ class CreateProduct extends React.Component {
                   // onPress={()=> this.imageUpload()}
                   >
                     {this.state.prod_image != '' ||
-                    this.state.prod_image != null ? (
+                    this.state.prod_image != null || this.state.prod_image_url!=null ? (
                       <Image
                         style={{height: 50, width: 50}}
-                        source={{uri: this.state.prod_image}}
+                        source={{uri: this.state.prod_image || this.state.prod_image_url }}
                       />
                     ) : (
                       <View style={{flex: 1}}>
@@ -1407,6 +1484,7 @@ class CreateProduct extends React.Component {
             </View>
           </Modal>
         </View>
+        </KeyboardAwareScrollView>
       </Scaffold>
     );
   }

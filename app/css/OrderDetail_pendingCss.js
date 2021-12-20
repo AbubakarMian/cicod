@@ -115,7 +115,7 @@ export default StyleSheet.create({
     },
     detailColumn2text: {
         textAlign: 'right',
-        fontSize:13,
+        fontSize:11,
         fontWeight:'bold',
         color:'#4E4D4D'
     },

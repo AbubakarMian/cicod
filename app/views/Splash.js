@@ -107,8 +107,17 @@ class SplashScreen extends React.Component {
               </TouchableOpacity>
               <TouchableOpacity
                 onPress={() => this.props.navigation.navigate('Register')}
-                style={{marginTop: 10}}>
-                <Text style={{color: '#487AE0'}}>Register</Text>
+                style={{
+                  width: width / 2,
+                  alignItems: 'center',
+                  borderWidth: 1,
+                  borderColor: '#B1272C',
+                  backgroundColor: '#B1272C',
+                  borderRadius: 50,
+                  paddingVertical: 10,
+                  marginTop:20
+                }}>
+                <Text style={{color: '#FFF4F4'}}>Register</Text>
               </TouchableOpacity>
               {/* <View>
                 <Image
