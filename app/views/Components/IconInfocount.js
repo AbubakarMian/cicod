@@ -13,8 +13,8 @@ const IconInfocount = ({count}) => {
         padding: 5,
         backgroundColor: '#33A354',
         borderRadius: 70,
-        width: 27,
-        height: 27,
+        width: count>100?50:30,
+        height: 35,
         justifyContent: 'center',
         alignItems: 'center',
       }}>

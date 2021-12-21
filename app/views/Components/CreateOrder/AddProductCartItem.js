@@ -1,7 +1,10 @@
 import React from 'react';
-import {View, Image, Text, TouchableOpacity} from 'react-native';
+import {View, Image, Text, TouchableOpacity, Dimensions} from 'react-native';
 import styles from '../../../css/AddProductCss';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
+
+const {width, height} = Dimensions.get('screen');
+
 const AddProductCartItem = ({
   isValueChain = true,
   item,

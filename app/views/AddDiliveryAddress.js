@@ -26,6 +26,7 @@ import {
   SET_USER,
   LOGOUT_USER,
   SET_DELIVERY_ADDRESS,
+  ADD_DELIVERY_FEE_TO_COST,
 } from '../redux/constants/index';
 import RadioForm, {
   RadioButton,
@@ -34,6 +35,8 @@ import RadioForm, {
 } from 'react-native-simple-radio-button';
 import NavBack from './Components/NavBack';
 import Scaffold from './Components/Scaffold';
+import DropDownModal from './Components/DropDownModal';
+import CategoryDropdown from './Components/CategoryDropdown';
 
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
@@ -61,9 +64,15 @@ class AddDiliveryAddress extends React.Component {
       countryModal: false,
       stateModal: false,
       regionModal: false,
+      delivery_fee: 0,
     };
   }
   componentDidMount() {
+    // alert(this.props.cart.total_price_with_tax);
+    console.log(
+      'this.props.cart.total_price_with_tax',
+      this.props.cart.cart_detail.total_price_with_tax,
+    );
     this.getCountryList();
   }
   unauthorizedLogout() {
@@ -177,13 +186,15 @@ class AddDiliveryAddress extends React.Component {
       });
   }
 
-  onSelectCountry(item) {
+  onSelectCountry=(item) =>{
     this.setState({
       setCountry: true,
       setStates: true,
       setRegion: false,
       state_name: '',
       lgas_name: '',
+      state_id:0,
+      lga_id:0
     });
     console.log('country Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item);
     this.setState({
@@ -198,12 +209,13 @@ class AddDiliveryAddress extends React.Component {
     this.setState({spinner: false});
     this.getStateList(statesUrl);
   }
-  onSelectState(item) {
+  onSelectState=(item)=> {
     this.setState({
       setCountry: false,
       setStates: true,
       setRegion: false,
       lgas_name: '',
+      lga_id:0
     });
     console.log('state Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item);
     this.setState({
@@ -218,7 +230,7 @@ class AddDiliveryAddress extends React.Component {
     this.setState({spinner: false});
     this.getLgaList(lgasUrl);
   }
-  onSelectLgas(item) {
+  onSelectLgas=(item) =>{
     this.setState({
       spinner: true,
       lgas_id: item.value,
@@ -227,6 +239,61 @@ class AddDiliveryAddress extends React.Component {
       regionModal: false,
     });
     this.setState({spinner: false});
+  }
+
+  getDeliveryFee() {
+    if (this.state.house_no.trim() === '') {
+      Alert.alert('Warning', 'House No required');
+      return;
+    } else if (this.state.street.trim() == '') {
+      Alert.alert('Warning', 'Street Name are required');
+      return;
+    } else if (this.state.country_id == 0) {
+      Alert.alert('Warning', 'Country required');
+      return;
+    } else if (this.state.state_id == 0) {
+      Alert.alert('Warning', 'State required');
+      return;
+    } else if (this.state.lgas_id == 0) {
+      Alert.alert('Warning', 'Region required');
+      return;
+    }
+    this.setState({spinner: true});
+    let postData = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: this.props.user.access_token,
+      },
+    };
+    console.log('adMo78', Constants.customerdelivery, postData,"run#",`${Constants.deliveryCost}?order_amount=${this.props.cart.cart_detail.total_price_with_tax}&country_id=${this.state.country_id}&state_id=${this.state.state_id}&lga_id=${this.state.lgas_id}`);
+
+    fetch(
+      `${Constants.deliveryCost}?order_amount=${this.props.cart.cart_detail.total_price_with_tax}&country_id=${this.state.country_id}&state_id=${this.state.state_id}&lga_id=${this.state.lgas_id}`,
+      postData,
+    )
+      .then(response => response.json())
+      .then(async responseJson => {
+        this.setState({spinner: false});
+        console.log('sucgjhjlkkll#@ RRE', responseJson);
+        if (responseJson.status === 'success') {
+          this.setState({
+            delivery_fee: responseJson.data,
+          });
+
+          //call
+          this.createDeliveryAddress();
+        } else {
+          this.setState({spinner: false});
+          let message = responseJson.message;
+          Alert.alert('Info', message);
+        }
+      })
+      .catch(error => {
+        console.log('Api call error', error);
+        // Alert.alert(error.message);
+      });
   }
 
   createDeliveryAddress() {
@@ -265,6 +332,7 @@ class AddDiliveryAddress extends React.Component {
         is_default: this.state.is_default,
       }),
     };
+    console.log('adMo78', Constants.customerdelivery, postData);
 
     fetch(Constants.customerdelivery, postData)
       .then(response => response.json())
@@ -287,8 +355,15 @@ class AddDiliveryAddress extends React.Component {
           await this.props.setDeliveryAddress({
             address: address,
             type: 'delivery',
+            country_id: this.state.country_id,
+            lga_id: this.state.lgas_id,
+            state_id: this.state.state_id,
+            delivery_fee: this.state.delivery_fee,
           });
           console.log('~~~~~~~~~~~~~~~', address);
+          this.props.addDeliveryFee({
+            delivery_fee: this.state.delivery_fee,
+          });
 
           Alert.alert('Message', responseJson.message);
           this.props.navigation.navigate('CreateOrder', {render: true});
@@ -368,8 +443,22 @@ class AddDiliveryAddress extends React.Component {
                       onChangeText={text => this.setState({landmark: text})}
                     />
                     <View style={[{}, styles.formRow]}>
-                      <View style={[{}, styles.formColumn]}>
-                        <TouchableOpacity
+                      {/* <View style={[{}, styles.formColumn]}> */}
+
+                      <CategoryDropdown
+                              // containerStyle={{flex: 1}}
+                              title={
+                                this.state.country_name == ''
+                                  ? 'Select Country *'
+                                  : this.state.country_name
+                              }
+                              onPress={() =>
+                                this.setState({countryModal: true})
+                              }
+                            />
+
+
+                        {/* <TouchableOpacity
                           onPress={() => this.setState({countryModal: true})}
                           style={{
                             padding: 10,
@@ -383,7 +472,7 @@ class AddDiliveryAddress extends React.Component {
                               {this.state.country_name}
                             </Text>
                           )}
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
 
                         {/* <DropDownPicker
                                                 onOpen={()=>
@@ -412,11 +501,22 @@ class AddDiliveryAddress extends React.Component {
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectCountry(item)}
                                             /> */}
-                      </View>
+                      {/* </View> */}
                     </View>
                     <View style={[{flexDirection: 'row', alignSelf: 'center'}]}>
                       <View style={{flex: 1}}>
-                        <TouchableOpacity
+                      <CategoryDropdown
+                              // containerStyle={{flex: 1}}
+                              title={
+                                this.state.state_name == ''
+                                  ? 'Select State *'
+                                  : this.state.state_name
+                              }
+                              onPress={() =>
+                                this.get_state()
+                              }
+                            />
+                        {/* <TouchableOpacity
                           onPress={() => this.get_state()}
                           style={{
                             padding: 10,
@@ -430,7 +530,7 @@ class AddDiliveryAddress extends React.Component {
                               {this.state.state_name}
                             </Text>
                           )}
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         {/* <DropDownPicker
                                                onOpen={()=>
                                             this.setState({
@@ -459,6 +559,19 @@ class AddDiliveryAddress extends React.Component {
                                             /> */}
                       </View>
                       <View style={{flex: 1}}>
+                      <CategoryDropdown
+                              // containerStyle={{flex: 1}}
+                              title={
+                                this.state.lgas_name == ''
+                                  ? 'Region *'
+                                  : this.state.lgas_name
+                              }
+                              onPress={() =>
+                                this.get_region()
+                              }
+                            />
+
+{/* 
                         <TouchableOpacity
                           onPress={() => this.get_region()}
                           style={{
@@ -474,7 +587,7 @@ class AddDiliveryAddress extends React.Component {
                               {this.state.lgas_name}
                             </Text>
                           )}
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                         {/* <DropDownPicker
                                                 onOpen={()=>
                                                 this.setState({
@@ -526,12 +639,24 @@ class AddDiliveryAddress extends React.Component {
                 </View>
               </View>
               <TouchableOpacity
-                onPress={() => this.createDeliveryAddress()}
+                onPress={() => this.getDeliveryFee()}
                 style={[{zIndex: -0.999}, styles.redBtn]}>
                 <Text style={{color: '#fff'}}>Save</Text>
               </TouchableOpacity>
             </View>
           </ScrollView>
+
+          <DropDownModal
+              title="Choose Country"
+              selected={this.state.country_id}
+              itemFull={true}
+              showdropDownModal={this.state.countryModal}
+              handleClose={() => this.setState({countryModal: false})}
+              onSelected={this.onSelectCountry}
+              data={this.state.countries_arr}
+            />
+
+{/* 
           <Modal
             animationType="fade"
             visible={this.state.countryModal}
@@ -596,7 +721,19 @@ class AddDiliveryAddress extends React.Component {
                 )}
               />
             </View>
-          </Modal>
+          </Modal> */}
+
+<DropDownModal
+              title="Choose State"
+              selected={this.state.state_id}
+              itemFull={true}
+              showdropDownModal={this.state.stateModal}
+              handleClose={() => this.setState({stateModal: false})}
+              onSelected={this.onSelectState}
+              data={this.state.states_arr}
+            />
+
+{/* 
           <Modal
             animationType="fade"
             visible={this.state.stateModal}
@@ -660,8 +797,19 @@ class AddDiliveryAddress extends React.Component {
                 )}
               />
             </View>
-          </Modal>
-          <Modal
+          </Modal> */}
+
+<DropDownModal
+              title="Choose Region"
+              selected={this.state.lgas_id}
+              itemFull={true}
+              showdropDownModal={this.state.regionModal}
+              handleClose={() => this.setState({regionModal: false})}
+              onSelected={this.onSelectLgas}
+              data={this.state.lgas_arr}
+            />
+
+          {/* <Modal
             animationType="fade"
             visible={this.state.regionModal}
             transparent={true}
@@ -724,7 +872,7 @@ class AddDiliveryAddress extends React.Component {
                 )}
               />
             </View>
-          </Modal>
+          </Modal> */}
         </View>
       </Scaffold>
     );
@@ -732,6 +880,7 @@ class AddDiliveryAddress extends React.Component {
 }
 function mapStateToProps(state) {
   return {
+    cart: state.cartReducer,
     user: state.userReducer,
     customer: state.customReducer,
   };
@@ -741,6 +890,9 @@ function mapDispatchToProps(dispatch) {
     setUser: value => dispatch({type: SET_USER, value: value}),
     setDeliveryAddress: value =>
       dispatch({type: SET_DELIVERY_ADDRESS, value: value}),
+    addDeliveryFee: value =>
+      dispatch({type: ADD_DELIVERY_FEE_TO_COST, value: value}),
+
     logoutUser: () => dispatch({type: LOGOUT_USER}),
   };
 }

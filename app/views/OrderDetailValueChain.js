@@ -86,7 +86,10 @@ class OrderDetail extends React.Component {
   handleBackButtonClick() {
     // this.props.navigation.goBack(null);
     if (this.props.route.params.from == null) {
-      this.props.navigation.replace('Home');
+      this.props.navigation.reset({
+        index: 0,
+        routes: [{name: 'Home'}],
+      });
     } else {
       this.props.navigation.goBack(null);
     }

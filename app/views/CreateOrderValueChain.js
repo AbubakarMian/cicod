@@ -10,6 +10,7 @@ import {
   Platform,
   TouchableOpacity,
   FlatList,
+  BackHandler,
 } from 'react-native';
 import {Text, TextInput, Modal} from 'react-native-paper';
 import splashImg from '../images/splash.jpg';
@@ -57,6 +58,7 @@ const isAndroid = Platform.OS == 'android';
 class CreateOrderValueChain extends React.Component {
   constructor(props) {
     super(props);
+    // this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     this.state = {
       value: 0,
       spinner: false,
@@ -71,15 +73,16 @@ class CreateOrderValueChain extends React.Component {
       limit_cart_arr: [],
       cart_detail: this.props.cart.cart_detail,
       payment_option: 0,
-      delivery_type_option: null,
+      delivery_type_option: "pickup",
       is_pickup: true,
-      payment_mode: '',
+      payment_mode: 'ONLINE',
       suppliereModal: false,
       search_supplier: '',
       supplierlist: [],
       supplier: {},
       address_backgound: '',
       deliveryType: '',
+      value3IndexPayment:0,
       show_part_payment: false,
       isDatePickerVisible: false,
       part_payment_balance_due_date: new Date(),
@@ -88,10 +91,36 @@ class CreateOrderValueChain extends React.Component {
       goto_payment_screen: '',
       payment_option_selected: '',
       pay_button_lable: 'Pay',
+      valuePaymentKey:"PAY_ONLINE",
       amount_payable: 0,
       ConfirmationPayInvoice: false,
+      closeApp: false,
     };
   }
+
+  // componentWillMount() {
+  //   BackHandler.addEventListener(
+  //     'hardwareBackPress',
+  //     this.handleBackButtonClick,
+  //   );
+  // }
+
+  // componentWillUnmount() {
+  //   BackHandler.removeEventListener(
+  //     'hardwareBackPress',
+  //     this.handleBackButtonClick,
+  //   );
+  // }
+
+  // handleBackButtonClick() {
+  //   if (!this.props.navigation.isFocused()) {
+  //     return false;
+  //   }
+  //   if (this.state.cart_arr.length > 0) {
+  //     this.setState({closeApp: true});
+  //     return true;
+  //   }
+  // }
 
   // componentWillUnmount(){
   //     this.clearOrder()
@@ -110,7 +139,8 @@ class CreateOrderValueChain extends React.Component {
     console.log('heress#', this.props.cart.cart_detail);
     // this.props.emptyOrder();
 
-    //   console.log("dele#$",this.props.delivery,this.props.cart.cart_detail)
+      console.log("dele#$",this.props.route.params.item)
+      this.clearOrder()
     //getSellers
     this.setState({supplier: this.props.route.params.item});
     let url =
@@ -293,16 +323,16 @@ class CreateOrderValueChain extends React.Component {
   };
 
   DeliveryType(type) {
-    if (this.props.route.params.heading == 'supplier') {
+   // if (this.props.route.params.heading == 'supplier') {
       if (this.state.customer_name == '') {
         alert('NO CUSTOMER FOUND');
       }
-    } else {
-      if (this.props.customer.name == '') {
-        alert('ADD CUSTOMER FIRST');
-        return;
-      }
-    }
+    // } else {
+    //   if (this.props.customer.name == '') {
+    //     alert('ADD CUSTOMER FIRST');
+    //     return;
+    //   }
+    // }
 
     if (
       !this.state.cart_detail.total_price ||
@@ -351,24 +381,31 @@ class CreateOrderValueChain extends React.Component {
     let mode = '';
     let pay_button_lable = 'Pay';
     let goto_payment_screen = '';
-    if (item.label == 'Pay Now') {
-      mode = '';
+    if (item.key == 'PAY_ONLINE') {
+      mode = 'ONLINE';
       goto_payment_screen = 'MakePayment';
-    } else if (item.label == 'Pay Account') {
+    }  else if (item.key == "PAY_ACCOUNT") {
       mode = 'ACCOUNT';
       goto_payment_screen = '';
-    } else if (item.label == 'Pay Invoice') {
+    } else if (item.key == "PAY_POS") {
+      mode = 'POS';
+      goto_payment_screen = '';
+    } else if (item.key == "PAY_USSD") {
+      mode = 'USSD';
+      goto_payment_screen = '';
+    } else if (item.key == "PAY_CASH") {
+      mode = 'CASH';
+      goto_payment_screen = '';
+    } else if (item.key == "SEND_INVOICE") {
       mode = 'ONLINE';
       goto_payment_screen = '';
       pay_button_lable = 'Generate CICOD Order ID';
-    } else if (item.label == 'Part Payment') {
-      mode = 'ONLINE';
-      goto_payment_screen = 'PartPaytment';
     }
 
     this.setState({
       value3IndexPayment: item.value,
       payment_mode: mode,
+      valuePaymentKey:item.key,
       goto_payment_screen: goto_payment_screen,
       payment_option_selected: item.label,
       pay_button_lable: pay_button_lable,
@@ -395,7 +432,7 @@ class CreateOrderValueChain extends React.Component {
     await this.setState({spinner: true});
 
     if (
-      this.state.payment_option_selected == 'Pay Invoice' &&
+      this.state.payment_option_selected == 'SEND_INVOICE' &&
       !this.state.ConfirmationPayInvoice
     ) {
       this.setState({
@@ -468,28 +505,35 @@ class CreateOrderValueChain extends React.Component {
     //     amount_payable: amount_payable,
     //     ConfirmationPayInvoice: false
     // })
-    if (this.state.goto_payment_screen == '') {
+  //  if (this.state.goto_payment_screen == '') {
       //show_part_payment
       //console.log('step  1 ')
+      // let params={
+      //   bodyOrder,
+      //   heading: 'supplier',
+      //   item: this.state.supplier,
+      //   payment_mode: this.state.payment_mode,
+      //   amount_payable: this.state.amount_payable,
+      // }
       await this.create_order_id(Constants.orderslist, bodyOrder);
-    } else {
-      await this.setState({spinner: false});
-      this.props.route.params.heading == 'supplier'
-        ? this.props.navigation.navigate(this.state.goto_payment_screen, {
-            bodyOrder: bodyOrder,
-            heading: 'supplier',
-            item: this.state.supplier,
-            payment_mode: this.state.payment_mode,
-            amount_payable: this.state.amount_payable,
-          })
-        : this.props.navigation.navigate(this.state.goto_payment_screen, {
-            bodyOrder: bodyOrder,
-            payment_mode: this.state.payment_mode,
-            amount_payable: this.state.amount_payable,
-          });
+    // } else {
+    //   await this.setState({spinner: false});
+    //   this.props.route.params.heading == 'supplier'
+    //     ? this.props.navigation.navigate(this.state.goto_payment_screen, {
+    //         bodyOrder: bodyOrder,
+    //         heading: 'supplier',
+    //         item: this.state.supplier,
+    //         payment_mode: this.state.payment_mode,
+    //         amount_payable: this.state.amount_payable,
+    //       })
+    //     : this.props.navigation.navigate(this.state.goto_payment_screen, {
+    //         bodyOrder: bodyOrder,
+    //         payment_mode: this.state.payment_mode,
+    //         amount_payable: this.state.amount_payable,
+    //       });
       //console.log('step  2 ')
-      return;
-    }
+     // return;
+   // }
   }
 
   get_order_detail(order_id) {
@@ -536,7 +580,7 @@ class CreateOrderValueChain extends React.Component {
   }
 
   create_order_id(url, bodyOrder) {
-    //console.log('create_order_id', bodyOrder);
+    console.log('create_order_id', bodyOrder);
     let postData = {
       method: 'POST',
       headers: {
@@ -552,14 +596,27 @@ class CreateOrderValueChain extends React.Component {
       .then(response => response.json())
       .then(async responseJson => {
         this.setState({spinner: false});
+        console.log("ress$#",responseJson)
         if (responseJson.status === 'success') {
           // alert(responseJson.message)
           // this.props.clearCart();
-          this.clearOrder();
+          // this.clearOrder();
           console.log('here#$d', responseJson.data);
           console.log('ropsx$#', this.props.route.params.item);
-          let payment_link = responseJson.data; //Pay Account,ACCOUNT
-          if (this.state.payment_option_selected == 'Pay Account') {
+          let payment_link = responseJson.data.payment_link;
+        
+
+
+          const params = {
+            data: responseJson.data,
+            heading: 'supplier',
+            seller_id: this.props.route.params.item.seller_id,
+            amount_payable: this.state.amount_payable,
+            payment_link,
+            payment_mode: this.state.payment_mode,
+            order_id: responseJson.data.id,
+          };
+          if (this.state.valuePaymentKey == 'PAY_ACCOUNT') {
             // alert(responseJson.message)
             this.props.navigation.navigate('PaymentSuccess', {
               heading: 'supplier',
@@ -572,7 +629,10 @@ class CreateOrderValueChain extends React.Component {
             // this.props.navigation.navigate('PaymentCash', { payment_link: payment_link,data:responseJson });
             // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link,data:responseJson.data });
           }
-          if (this.state.payment_option_selected == 'Pay Invoice') {
+          else if (this.state.valuePaymentKey == 'PAY_ONLINE') { 
+            this.props.navigation.navigate('PaymentWeb',params);
+          }
+          else if (this.state.valuePaymentKey == 'SEND_INVOICE') {
             console.log('oprf$3');
             this.props.navigation.navigate('OrderDetailValueChain', {
               order_id: responseJson.data.cicod_order_id,
@@ -583,6 +643,7 @@ class CreateOrderValueChain extends React.Component {
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
         } else {
+          console.log("fdfd4$",responseJson);
           let message = responseJson.message;
           alert(message);
         }
@@ -645,7 +706,7 @@ class CreateOrderValueChain extends React.Component {
     let user_data = {};
     this.props.setCustomer(user_data);
     this.props.emptyOrder();
-    this.props.navigation.goBack();
+    // this.props.navigation.goBack();
   }
 
   supplierModalFun(item) {
@@ -679,19 +740,21 @@ class CreateOrderValueChain extends React.Component {
     var radio_props_dilvery = [{label: 'Delivery', value: 0}];
     var radio_props_pickup = [{label: 'Pickup', value: 1}];
     var radio_props_payment =
-      this.props.route.params.heading == 'supplier'
-        ? [
-            {label: 'Pay Now', value: 0},
-            {label: 'Pay Account', value: 1},
-            {label: 'Pay Invoice', value: 2},
+      // this.props.route.params.heading == 'supplier'
+      //   ?
+         [
+          {label: 'Pay Online', value: 0,key:"PAY_ONLINE"},
+            {label: 'Pay Account', value: 1,key:"PAY_ACCOUNT"},
+            {label: 'Send Invoice', value: 2,key:"SEND_INVOICE"},
+            {label: 'Pay by POS', value: 2,key:"PAY_POS"},
             //{ label: 'Part Payment', value: 3 },
           ]
-        : [
-            {label: 'Pay Now', value: 0},
-            {label: 'Pay Account', value: 1},
-            {label: 'Pay Invoice', value: 2},
-            {label: 'Part Payment', value: 3},
-          ];
+        // : [
+        //     {label: 'Pay Now', value: 0},
+        //     {label: 'Pay Account', value: 1},
+        //     {label: 'Pay Invoice', value: 2},
+        //     {label: 'Part Payment', value: 3},
+        //   ];
     console.log(
       'amount Payable@@@',
       this.props.orderDiscountReducer.discount_type,
@@ -719,8 +782,10 @@ class CreateOrderValueChain extends React.Component {
                   <Icon name="times" size={20} color="#929497" />
                   <TouchableOpacity
                     // onPress={() => this.props.navigation.navigate('Order')}
-                    onPress={() => this.closeOrder()}>
-                    <Text style={[{}, styles.backHeadingCloseText]}>Close</Text>
+                    onPress={() => this.clearOrder()}>
+                    <Text style={[{}, styles.backHeadingCloseText]}>
+                      Clear Order
+                    </Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -815,7 +880,7 @@ class CreateOrderValueChain extends React.Component {
               <View style={[{}, styles.OrderDetailContainer]}>
                 <View style={[{}, styles.OrderDetailHeadingRow]}>
                   <Text style={[{}, styles.OrderDetailHeadingRowText]}>
-                    Order Detail
+                    Product Detail
                   </Text>
                   {this.state.cart_arr.length != 0 ? (
                     <Text style={[{}, styles.OrderDetailNotificationText]}>
@@ -827,7 +892,7 @@ class CreateOrderValueChain extends React.Component {
                   onPress={() => this.clearOrder()}
                   style={[{}, styles.OrderDetailClearTouc]}>
                   <Text style={[{}, styles.OrderDetailNormalgRowText]}>
-                    Clear Order
+                    Clear Products
                   </Text>
                 </TouchableOpacity>
                 {this.state.cart_arr.length == 0 ? (
@@ -842,6 +907,74 @@ class CreateOrderValueChain extends React.Component {
                 )}
               </View>
               <View style={[{}, styles.diliveryTypeContainerView]}>
+              <TouchableOpacity onPress={() => this.DeliveryType('pickup')}>
+                  <View
+                    style={[
+                      {
+                        borderWidth: 0.25,
+                        backgroundColor:
+                          this.state.deliveryType === 'pickup'
+                            ? '#FFF4F4'
+                            : '#fff',
+                      },
+                      styles.radioFormView,
+                    ]}>
+                    <RadioForm
+                      isSelected={this.state.delivery_type_option == 'pickup'}
+                      color={'yellow'}
+                      // radio_props={radio_props_payment}
+                      size={5}
+                      buttonColor={'green'}
+                      buttonSize={10}
+                      buttonOuterSize={20}
+                      backgroundColor={
+                        this.state.address_backgound === 'delivery'
+                          ? '#2196f3'
+                          : '#fff'
+                      }
+                      onPress={() => this.DeliveryType('pickup')}
+                    />
+                    {radio_props_pickup.map((obj, i) => (
+                      <RadioButton labelHorizontal={true} key={i}>
+                        <RadioButtonInput
+                          obj={obj}
+                          index={i}
+                          isSelected={
+                            this.state.delivery_type_option == 'pickup'
+                          }
+                          onPress={() => this.DeliveryType('pickup')}
+                          borderWidth={1}
+                          buttonInnerColor={'#e74c3c'}
+                          buttonOuterColor={
+                            this.state.value3Index === i ? '#2196f3' : '#000'
+                          }
+                          backgroundColor={
+                            this.state.address_backgound === 'pickup'
+                              ? '#2196f3'
+                              : '#fff'
+                          }
+                          buttonSize={10}
+                          buttonOuterSize={20}
+                          buttonStyle={{}}
+                          buttonWrapStyle={{marginLeft: 10}}
+                        />
+                        <RadioButtonLabel
+                          obj={obj}
+                          index={i}
+                          labelHorizontal={true}
+                          onPress={value => {
+                            this.setState({value3Index: value});
+                          }}
+                          labelWrapStyle={{}}
+                        />
+                      </RadioButton>
+                    ))}
+                    <Text style={[{}, styles.smailGrayText]}>
+                      Pickup from our location
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+
                 <TouchableOpacity onPress={() => this.DeliveryType('delivery')}>
                   <View
                     style={[
@@ -912,73 +1045,7 @@ class CreateOrderValueChain extends React.Component {
                     </Text>
                   </View>
                 </TouchableOpacity>
-                <TouchableOpacity onPress={() => this.DeliveryType('pickup')}>
-                  <View
-                    style={[
-                      {
-                        borderWidth: 0.25,
-                        backgroundColor:
-                          this.state.deliveryType === 'pickup'
-                            ? '#FFF4F4'
-                            : '#fff',
-                      },
-                      styles.radioFormView,
-                    ]}>
-                    <RadioForm
-                      isSelected={this.state.delivery_type_option == 'pickup'}
-                      color={'yellow'}
-                      // radio_props={radio_props_payment}
-                      size={5}
-                      buttonColor={'green'}
-                      buttonSize={10}
-                      buttonOuterSize={20}
-                      backgroundColor={
-                        this.state.address_backgound === 'delivery'
-                          ? '#2196f3'
-                          : '#fff'
-                      }
-                      onPress={() => this.DeliveryType('pickup')}
-                    />
-                    {radio_props_pickup.map((obj, i) => (
-                      <RadioButton labelHorizontal={true} key={i}>
-                        <RadioButtonInput
-                          obj={obj}
-                          index={i}
-                          isSelected={
-                            this.state.delivery_type_option == 'pickup'
-                          }
-                          onPress={() => this.DeliveryType('pickup')}
-                          borderWidth={1}
-                          buttonInnerColor={'#e74c3c'}
-                          buttonOuterColor={
-                            this.state.value3Index === i ? '#2196f3' : '#000'
-                          }
-                          backgroundColor={
-                            this.state.address_backgound === 'pickup'
-                              ? '#2196f3'
-                              : '#fff'
-                          }
-                          buttonSize={10}
-                          buttonOuterSize={20}
-                          buttonStyle={{}}
-                          buttonWrapStyle={{marginLeft: 10}}
-                        />
-                        <RadioButtonLabel
-                          obj={obj}
-                          index={i}
-                          labelHorizontal={true}
-                          onPress={value => {
-                            this.setState({value3Index: value});
-                          }}
-                          labelWrapStyle={{}}
-                        />
-                      </RadioButton>
-                    ))}
-                    <Text style={[{}, styles.smailGrayText]}>
-                      Pickup from our location
-                    </Text>
-                  </View>
-                </TouchableOpacity>
+              
               </View>
               <View style={[{}, styles.paymentContainerView]}>
                 <Text style={[{}, styles.OrderDetailHeadingRowText]}>
@@ -1312,6 +1379,71 @@ class CreateOrderValueChain extends React.Component {
                     }}
                     onPress={() => this.createOrderFun()}>
                     <Text style={{color: '#fff'}}>Confirm</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </Modal>
+
+          <Modal
+            visible={this.state.closeApp}
+            onDismiss={() => this.setState({closeApp: false})}>
+            <View
+              style={{
+                alignSelf: 'center',
+                backgroundColor: '#fff',
+                width: width - 50,
+                justifyContent: 'center',
+                alignItems: 'center',
+                paddingVertical: 20,
+                borderRadius: 10,
+                flexDirection: 'column',
+              }}>
+              <View style={{flexDirection: 'row', marginBottom: 30}}>
+                <Text
+                  style={{color: '#2d3093', fontWeight: 'bold', fontSize: 20}}>
+                  Want to exit Order?
+                </Text>
+              </View>
+              <View style={{flexDirection: 'row'}}>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: '#fff',
+                      paddingVertical: 15,
+                      padding: 30,
+                      borderRadius: 100,
+                      borderWidth: 1,
+                      borderColor: '#2d3093',
+                    }}
+                    onPress={() => {
+                      this.setState({closeApp: false});
+                    }}>
+                    <Text style={{color: '#2d3093', paddingHorizontal: 10}}>
+                      No
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                  }}>
+                  <TouchableOpacity
+                    style={{
+                      backgroundColor: '#2d3093',
+                      paddingVertical: 15,
+                      padding: 40,
+                      borderRadius: 100,
+                    }}
+                    onPress={() => this.closeOrder()}>
+                    <Text style={{color: '#fff'}}>Yes</Text>
                   </TouchableOpacity>
                 </View>
               </View>

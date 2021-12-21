@@ -30,7 +30,7 @@ class PartPaytment extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      Spinner: false,
+      spinner: false,
       calenderModal: false,
       order_detail: null,
       payment_link: null,
@@ -89,9 +89,9 @@ class PartPaytment extends React.Component {
     if (!this.required_fields_check()) {
       return;
     }
-    if (this.state.order == null) {
-      await this.create_order('pay');
-    }
+    // if (this.state.order == null) {
+    //   await this.create_order('pay');
+    // }
 
     if (this.state.amount_to_pay_now < 100) {
       Alert.alert('Minimun Payable amount is 100');
@@ -106,14 +106,14 @@ class PartPaytment extends React.Component {
 
     let bodyOrder = this.get_body_order();
     console.log('RRRRRRRRRRRRRRRRRR bodyOrder', JSON.stringify(bodyOrder));
-    console.log('RRRRRRRRRRRRRRRRRR payment_mode', payment_mode);
-    console.log('RRRRRRRRRRRRRRRRRR amount_payable', amount_payable);
+    console.log('RRRRRRRRRRRRRRRRRR payment_mode', bodyOrder.payment_mode);
+    // console.log('RRRRRRRRRRRRRRRRRR amount_payable', amount_payable);
     console.log('RRRRRRRRRRRRRRRRRR', order);
     this.props.navigation.navigate('MakePayment', {
       bodyOrder: bodyOrder,
-      payment_mode: this.state.payment_mode,
+      payment_mode:bodyOrder.payment_mode,
       amount_payable: bodyOrder.part_payment_amount,
-      data: order,
+      // data: order,
     });
   }
 
@@ -225,7 +225,7 @@ class PartPaytment extends React.Component {
     }
 
     let bodyOrder = this.get_body_order();
-
+this.setState({spinner:true})
     // part_payment_balance_due_date:  //this.state.part_payment_balance_due_date,
     // part_payment_percent:  // this.state.part_payment_percent,
     // part_payment_amount:  // this.state.part_payment_amount,
@@ -250,10 +250,22 @@ class PartPaytment extends React.Component {
           responseJson,
         );
         if (responseJson.status === 'success') {
-          if (action == 'invoice') {
-            alert(this.state.invoice_sent_msg);
-          }
           this.setState({spinner: false, order: responseJson.data});
+          if (action == 'invoice') {
+           
+           Alert.alert("Suucess", "Invoice sent successfully.",[
+             {
+               text:"Ok",
+               onPress:()=> this.props.navigation.replace('OrderDetail_pending', {
+                heading: 'buyer',
+                id: responseJson.data.id,
+                from:"ussd"
+              })
+             }
+           ]);
+          }
+          // this.setState({spinner: false, order: responseJson.data});
+          
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
         } else {
@@ -395,7 +407,7 @@ class PartPaytment extends React.Component {
     return (
       <View style={[{position: 'relative'}, styles.mainView]}>
         <Spinner
-          visible={_that.state.Spinner}
+          visible={false}
           textContent={'Please Wait...'}
           textStyle={{color: '#fff'}}
           color={'#fff'}
@@ -403,16 +415,18 @@ class PartPaytment extends React.Component {
         <Header navigation={_that.props.navigation} />
         <ScrollView>
           <View>
+          <TouchableOpacity onPress={() => _that.props.navigation.goBack()}>
             <View style={[{}, styles.backHeaderRowView]}>
-              <TouchableOpacity onPress={() => _that.props.navigation.goBack()}>
+             
                 <Icon name="arrow-left" size={25} color="#929497" />
-              </TouchableOpacity>
+              
               <View style={[{}, styles.backHeadingView]}>
                 <Text style={[{color: '#2F2E7C'}, fontStyles.normal15]}>
                   PART PAYMENT
                 </Text>
               </View>
             </View>
+            </TouchableOpacity>
             <View style={[{paddingHorizontal: 10}, styles.balanceHeadingView]}>
               <Text
                 style={[

@@ -46,6 +46,8 @@ class BuyersView extends React.Component {
       isShowAlert: false,
       isShowAlertSuccess: false,
       alert_message: '',
+      pageNo: 1,
+      totalPageCount: 1,
     };
   }
 
@@ -87,14 +89,15 @@ class BuyersView extends React.Component {
         Constants.sellerOrderHistory +
         '?id=' +
         this.props.route.params.items.seller_id +
-        '&sort=-id';
+        '&sort=-id&page=' +
+        this.state.pageNo;
       this.getSellerOrderHistory(sellerurl);
     } else {
       const url = `${Constants.viewBuyer}?id=${this.props.route.params.items.buyer_id}`;
       this.getData(url);
       let orderListUrl =
         Constants.orderslist +
-        '?merchant_id=' +
+        '?page=1&merchant_id=' +
         this.props.route.params.items.buyer_id;
 
       this.getBuyerOrderHistory(orderListUrl);
@@ -123,6 +126,7 @@ class BuyersView extends React.Component {
           console.log('data data data res res res ', responseJson);
           this.setState({
             items: responseJson.data,
+
             is_active: responseJson.data.is_active,
           });
         } else if (responseJson.status == 401) {
@@ -133,6 +137,33 @@ class BuyersView extends React.Component {
         }
       });
   }
+
+  handleLoadMore = () => {
+    // if (!this.state.spinner) {
+      // alert(this.state.totalPageCount);
+    const pageNo = this.state.pageNo + 1; // increase page by 1
+    this.setState({pageNo});
+   
+    if (this.props.route.params.heading == 'SUPPLIERS') {
+    const sellerurl =
+        Constants.sellerOrderHistory +
+        '?id=' +
+        this.props.route.params.items.seller_id +
+        '&sort=-id&page=' +
+        pageNo;
+        console.log("sellerurl$##@0",sellerurl)
+      this.getSellerOrderHistory(sellerurl);
+
+    }else{
+      let orderListUrl =
+      Constants.orderslist +
+      '?page='+pageNo+'&merchant_id=' +
+      this.props.route.params.items.buyer_id;
+
+    this.getBuyerOrderHistory(orderListUrl);
+    }
+
+  };
 
   getSellerOrderHistory(url) {
     this.setState({spinnerOder: true});
@@ -154,12 +185,17 @@ class BuyersView extends React.Component {
           spinnerOder: false,
         });
         console.log('order##$$@@!', responseJson);
+        const fj= [...this.state.orderList, ...responseJson.data];
         if (responseJson.success) {
-          console.log('data data data res res res ', responseJson);
-          this.setState({
-            isSearch: false,
-            orderList: responseJson.data,
-          });
+          console.log('yu##@0p res ',fj);
+        
+            this.setState({
+              isSearch: false,
+              totalPageCount: responseJson._meta.pageCount,
+              orderList:[...this.state.orderList, ...responseJson.data],
+            });
+        
+         
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
         } else {
@@ -195,8 +231,9 @@ class BuyersView extends React.Component {
         if (responseJson.status === 'success') {
           console.log('data data data res res res ', responseJson);
           this.setState({
-            orderList: responseJson.data,
+            orderList:[...this.state.orderList, ...responseJson.data],
             isSearch: false,
+            totalPageCount:responseJson.pages
           });
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
@@ -315,8 +352,13 @@ class BuyersView extends React.Component {
     }
   }
   search() {
+    if (this.state.search_order=="") {
+      return
+    }
+    this.setState({orderList:[]})
     if (this.props.route.params.heading == 'SUPPLIERS') {
       // let search_url = Constants.buyerlist + '?filter[order_id]=' + this.state.search_buyers;
+
       const sellerurl =
         Constants.sellerOrderHistory +
         '?id=' +
@@ -327,8 +369,12 @@ class BuyersView extends React.Component {
       this.getSellerOrderHistory(sellerurl);
       //merchant_id
     } else {
-      let orderListUrl =
-        Constants.orderslist + '?order_id=' + this.state.search_order;
+    
+
+        let orderListUrl =
+        Constants.orderslist +
+        '?merchant_id=' +
+        this.props.route.params.items.buyer_id + '&order_id=' + this.state.search_order;
 
       this.getBuyerOrderHistory(orderListUrl);
     }
@@ -355,38 +401,54 @@ class BuyersView extends React.Component {
   }
 
   filterOrder(filter) {
-    this.setState({is_active_list: filter});
+   
     if (this.props.route.params.heading == 'SUPPLIERS') {
       // let search_url = Constants.buyerlist + '?filter[order_id]=' + this.state.search_buyers;
+      this.setState({is_active_list: filter,orderList:[],pageNo:1})
       let sellerurl;
       sellerurl =
         filter == 'all'
           ? Constants.sellerOrderHistory +
             '?id=' +
             this.props.route.params.items.seller_id +
-            '&sort=-id'
+            '&sort=-id&page='+1
           : Constants.sellerOrderHistory +
             '?id=' +
             this.props.route.params.items.seller_id +
             '&sort=-id&filter[order_status]=' +
-            filter;
+            filter+"&page="+1;
 
       this.getSellerOrderHistory(sellerurl);
       //merchant_id
     } else {
+      this.setState({is_active_list: filter,orderList:[],pageNo:1});
       let orderListUrl =
         filter == 'all'
           ? Constants.orderslist +
-            '?merchant_id=' +
+            '?page=1&merchant_id=' +
             this.props.route.params.items.buyer_id
           : Constants.orderslist +
-            '?merchant_id=' +
+            '?page=1&merchant_id=' +
             this.props.route.params.items.buyer_id +
-            '&payment_status=' +
-            filter;
+            '&' +this.get_searach_by_status("",filter)
+            ;
 
       this.getBuyerOrderHistory(orderListUrl);
     }
+  }
+
+  get_searach_by_status(filter_concat, active_list) {
+    let filter = '';
+    if (active_list != '') {
+      if (active_list == 'PART PAYMENT') {
+        filter = filter + filter_concat + 'payment_status=' + active_list;
+      } else if (active_list == 'ACCOUNT') {
+        filter = filter + filter_concat + 'payment_mode=' + active_list;
+      } else {
+        filter = filter + filter_concat + 'order_status=' + active_list;
+      }
+    }
+    return filter;
   }
   createOrderFun() {
     this.props.setSupplier({
@@ -399,6 +461,28 @@ class BuyersView extends React.Component {
       item: this.state.items,
     });
   }
+
+  renderFooter = () => {
+    //it will show indicator at the bottom of the list when data is loading otherwise it returns null
+    // if (!this.state.spinner) return null;1 22
+    // return <ActivityIndicator style={{color: '#000'}} />;
+    if(this.state.totalPageCount>1 && this.state.pageNo<this.state.totalPageCount ){
+    return (
+      <TouchableOpacity
+        onPress={() => this.handleLoadMore()}
+        style={{
+          padding: 5,
+          alignSelf: 'center',
+          marginTop: 7,
+          marginBottom: 300,
+        }}>
+        <Text style={{letterSpacing: 1.1, fontWeight: 'bold'}}>Load More</Text>
+      </TouchableOpacity>
+    );
+      }
+      return null
+  };
+
   render() {
     console.log(' this state  this state items', this.state.is_active);
     return (
@@ -576,9 +660,9 @@ class BuyersView extends React.Component {
                     </TouchableOpacity>
                   ) : (
                     <TouchableOpacity
-                      onPress={() => this.createOrderFun()}
+                      onPress={() =>this.state.items.is_active==0?{}: this.createOrderFun()}
                       style={[{}, styles.redTouch]}>
-                      <Text style={{color: '#fff'}}>Create Order</Text>
+                      <Text style={{color: '#fff'}}>{this.state.items.is_active==0?"INACTIVE":"Create Order"}</Text>
                     </TouchableOpacity>
                   )}
                 </View>
@@ -643,16 +727,14 @@ class BuyersView extends React.Component {
                       borderRadius: 5,
                       width: width - 25,
                     }}>
-                    <Image
-                      style={{height: 20, width: 20}}
-                      source={require('../images/products/searchicon.png')}
-                    />
+
+                    
                     <TextInput
-                      label="Search order ID, amount, ticket Id"
+                      label="Search order ID"
                       // selectionColor={'#fff'}
                       value={this.state.search_order}
                       style={{backgroundColor: 'transparent'}}
-                      width={width - 50}
+                      width={width - 70}
                       alignSelf={'center'}
                       color={'#000'}
                       onChangeText={text =>
@@ -663,6 +745,12 @@ class BuyersView extends React.Component {
                       }
                       onSubmitEditing={() => this.search()}
                     />
+                    <TouchableOpacity style={{padding:10}} onPress={() => this.search()}>
+                    <Image
+                      style={{height: 20, width: 20}}
+                      source={require('../images/products/searchicon.png')}
+                    />
+                    </TouchableOpacity>
                   </View>
                   {/* 
 <TouchableOpacity
@@ -862,6 +950,7 @@ class BuyersView extends React.Component {
                         </View>
                       </TouchableOpacity>
                     )}
+                    ListFooterComponent={this.renderFooter}
                   />
                 </ScrollView>
               </View>

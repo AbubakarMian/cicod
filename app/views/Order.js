@@ -61,35 +61,61 @@ class Order extends React.Component {
       reload: 0,
       isFetching: false,
       apply_screen_filters: false,
+      pageNo:1,
+      totalPageCount:1
     };
     this.onDateChange = this.onDateChange.bind(this);
   }
   customeList(listType) {
     this.setState({
+      data:[],
+      pageNo:1,
+      totalPageCount:1,
       is_active_list: listType,
       apply_screen_filters: true,
+      search_order_text:""
     });
-    return;
+    
+
+    const order_url =
+        Constants.orderslist +
+        '?page=1&'+this.get_searach_by_status("",listType);
+        console.log("order_url$##@0",order_url)
+      this.orderList(order_url);
+
+
   }
   onRefresh() {
-    this.setState({isFetching: true});
+    this.setState({isFetching: true,data:[]});
     // if(this.state.isFetching==true){
-    console.log('222222222222', this.state.isFetching);
-    this.orderList(this.state.url_orders);
+      const order_url =
+      Constants.orderslist +
+      '?page=' +
+      this.state.pageNo;
+  this.orderList(order_url);
     return;
     // }
     console.log('333333333333', this.state.isFetching);
     // _that.setState({
     //     url_orders: url,
-    // })
+    // })const dd=()=>{}
   }
-  orderList(url) {
+
+ 
+  componentDidMount(){
+const order_url =
+        Constants.orderslist +
+        '?page=' +
+        this.state.pageNo;
+    this.orderList(order_url);
+  }
+  orderList=(url) =>{
     let _that = this;
     if (_that.state.isFetching == true) {
       _that.setState({isFetching: false});
     }
 
-    console.log('access token', this.props.user.access_token);
+    
     this.setState({spinner: true}); //,apply_filter:false
     let postData = {
       method: 'GET',
@@ -107,13 +133,15 @@ class Order extends React.Component {
         this.setState({spinner: false});
         if (responseJson.status === 'success') {
           this.setState({
-            data: responseJson.data,
+            // url_orders:url,
+            data: [...this.state.data, ...responseJson.data],
+            totalPageCount:responseJson.pages
           });
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
         } else {
           let message = responseJson.message;
-          Alert.alert('Error', message);
+         // Alert.alert('Error', message);
         }
       })
       .catch(function (error) {
@@ -137,9 +165,9 @@ class Order extends React.Component {
     const id = item.id;
 
     if (type == 'PENDING') {
-      this.props.navigation.navigate('OrderDetail_pending', {id});
+      this.props.navigation.navigate('OrderDetail_pending', {id,from:"orders"});
     } else {
-      this.props.navigation.navigate('OrderDetail', {id});
+      this.props.navigation.navigate('OrderDetail', {id,from:"orders"});
     }
   }
 
@@ -149,6 +177,60 @@ class Order extends React.Component {
       isDatePickerVisible: !this.state.isDatePickerVisible,
     });
   };
+
+
+  
+
+  handleLoadMore = () => {
+    // if (!this.state.spinner) {
+      // alert(this.state.totalPageCount);
+    const pageNo = this.state.pageNo + 1; // increase page by 1
+    this.setState({pageNo});
+   
+    // alert(pageNo+"oo"+this.state.totalPageCount)
+    // const order_url =
+    //     Constants.orderslist +
+    //     '?page=' +
+    //     ;
+
+        const order_url =
+        Constants.orderslist +
+        '?page='+pageNo+'&'+this.get_searach_by_status("",this.state.is_active_list)
+
+
+        console.log("order_url$##@0",order_url)
+      this.orderList(order_url);
+
+    
+
+    // method for API call
+    // } else {
+    //   alert('here');
+    // }
+  };
+
+
+  renderFooter = () => {
+    //it will show indicator at the bottom of the list when data is loading otherwise it returns null
+    // if (!this.state.spinner) return null;
+    // return <ActivityIndicator style={{color: '#000'}} />;
+    if(this.state.totalPageCount>1 && this.state.pageNo<this.state.totalPageCount ){
+    return (
+      <TouchableOpacity
+        onPress={() => this.handleLoadMore()}
+        style={{
+          padding: 5,
+          alignSelf: 'center',
+          marginTop: 7,
+          marginBottom: 300,
+        }}>
+        <Text style={{letterSpacing: 1.1, fontWeight: 'bold'}}>Load More</Text>
+      </TouchableOpacity>
+    );
+      }
+      return null
+  };
+
 
   setDate(date) {
     var month = date.getUTCMonth() + 1; //months from 1-12
@@ -169,11 +251,19 @@ class Order extends React.Component {
     console.log('timestamptimestamptimestamptimestamp', newdate);
 
     this.setState({
+      data:[],
       isDatePickerVisible: false,
       apply_screen_filters: true,
       date: newdate,
       date_created_timestamp: newdate,
     });
+
+    const order_url =
+    Constants.orderslist +
+    '?page=1&order_date='+newdate+'&'+this.get_searach_by_status("",this.state.is_active_list)
+
+    console.log("dateSreatch$0",order_url)
+    this.orderList(order_url);
   }
   hideDatePicker = () => {
     this.setState({
@@ -183,10 +273,22 @@ class Order extends React.Component {
   };
   search(text) {
     this.setState({
+      data:[],
       search_order: text.nativeEvent.text,
       apply_filter: false,
+      pageNo:1,
       apply_screen_filters: true,
     });
+
+    const order_url =
+    Constants.orderslist +
+    '?order_id=' + text.nativeEvent.text
+    
+
+
+    console.log("searchUI$##@0",order_url)
+  this.orderList(order_url);
+
   }
 
   timeConvertion(date) {
@@ -264,101 +366,367 @@ class Order extends React.Component {
     // }
     return url + filter;
   }
+
+
+
+  // getOrderList(props) {
+   
+  //   // return null;
+  //   let _that = props._that;
+  //   let url = Constants.orderslist;
+  //   let filters = [];
+  //   let filter_concat = _that.state.url_orders.includes("?")?'&': '?';
+
+  //   if (
+  //     _that.props.route == null ||
+  //     _that.props.route.params == null ||
+  //     _that.props.route.params.filters == null
+  //   ) {
+     
+  //     let moreFilter=_that.get_searach_by_status(
+  //       "&",
+  //       _that.state.is_active_list,
+  //     );
+      
+  //     url =moreFilter==""? Constants.orderslist+"?page="+_that.state.pageNo:Constants.orderslist+"?page="+_that.state.pageNo+moreFilter;
+  //   } 
+  //   else if (_that.state.apply_filter && !_that.state.apply_screen_filters) {
+  //     filters = _that.props.route.params.filters;
+  //     console.log('fikhgg#$$!', filters.length);
+  //     if(filters.length>0){
+  //       filter_concat =_that.state.url_orders.includes("?")?'&': '?'
+  //     }else{
+  //       filter_concat="?"
+  //     }
+     
+  //     let filter = '';
+
+  //     for (let i = 0; i < filters.length; i++) {
+  //       console.log('~~~~~~~~~~~~~~!!!!!!!!!!!', filters.length);
+  //       // filter = filter +'filter'+ '['+filters[i].key +']' + '=' + filters[i].value;
+
+  //       if (filters[i].key == 'order_status') {
+  //         console.log('url A ' + i, url);
+  //         filter = _that.get_searach_by_status(filter_concat, filters[i].value);
+  //         console.log('url B ' + i, url);
+  //         console.log('url filter ' + i, filter);
+
+  //         // _that.customeList(filters[i].value)
+  //       } else {
+  //         filter =
+  //           filter + filter_concat + filters[i].key + '=' + filters[i].value;
+  //       }
+  //       // if (i != filters.length - 1) {
+  //       //     filter = filter + '&';
+  //       // }
+  //       filter_concat = '&';
+  //     }
+  //     console.log('url 1', url);
+  //     // url =  _that.change_filter_concat(url,filter);
+  //     url = url + filter+"&page="+_that.state.pageNo;
+  //     console.log('url 2', url);
+  //   }
+
+  //   console.log('url 3', url);
+
+  //   // if (filters.length != 0) {
+  //   //     filter_concat = '&';
+  //   // }
+  //   // if (_that.state.search_order != '' && _that.state.apply_screen_filters) {
+  //   //   url = url + filter_concat + 'order_id=' + _that.state.search_order;
+  //   //   // url = url + filter_concat + 'search=' + _that.state.search_order
+  //   //   filter_concat = '&';
+  //   // }
+
+  //   if (_that.state.search_order != '' && _that.state.apply_screen_filters) {
+  //     url = url + filter_concat + 'order_id=' + _that.state.search_order;
+  //     // url = url + filter_concat + 'search=' + _that.state.search_order
+  //     filter_concat = '&';
+  //   }
+
+   
+
+  //   if (
+  //     _that.state.date_created_timestamp != 'Today' &&
+  //     _that.state.apply_screen_filters
+  //   ) {
+  //     //YY-MM-DD
+  //     url =
+  //       url +
+  //       filter_concat +
+  //       'date_created=' +
+  //       _that.state.date_created_timestamp;
+  //     filter_concat = '&';
+  //   }
+  //   console.log('url 4', url);
+  //   // let filter = _that.get_searach_by_status(
+  //   //   filter_concat,
+  //   //   _that.state.is_active_list,
+  //   // );
+  //   // filter_concat = '&';
+  //   // // url =  _that.change_filter_concat(url,filter);
+  //   // url = url + filter;
+  //   console.log('url 5', url);
+  //   console.log('reload hata ', _that.props.reload);
+  //   if (url != _that.state.url_orders || _that.props.reload.order) {
+  //     _that.props.setScreenReload({
+  //       reload: false,
+  //     });
+  //     console.log('urllllll', url);
+  //     _that.orderList(url);
+  //     console.log('url ', url);
+  //     _that.setState({
+  //       url_orders: url,
+  //     });
+  //   }
+  //   // _that.setState({
+  //   //     url_orders: url,
+  //   // })
+  //   console.log('url hit', url);
+  //   console.log(' will data !!!!!!!!!!!!!', _that.state.data.length);
+
+  //   if (_that.state.data.length < 1) {
+  //     return (
+  //       <View
+  //         style={{
+  //           height: height / 1.75,
+  //           position: 'relative',
+  //           flexDirection: 'column',
+  //           alignSelf: 'center',
+  //           alignItems: 'center',
+  //           justifyContent: 'center',
+  //           backgroundColor: '#F0F0F0',
+  //           width: width - 20,
+  //           padding: 10,
+  //           borderRadius: 10,
+  //           marginBottom: 5,
+  //         }}>
+  //         <Image source={require('../images/Untitled-1.png')} />
+  //         <Text
+  //           style={{
+  //             color: '#929497',
+  //             fontSize: 20,
+  //             fontWeight: 'bold',
+  //             fontFamily: 'Open Sans',
+  //           }}>
+  //           No order found
+  //         </Text>
+  //       </View>
+  //     );
+  //   } else {
+  //     return (
+  //       <FlatList
+  //         data={_that.state.data}
+  //         onRefresh={() => _that.onRefresh()}
+  //         refreshing={false}
+  //         ItemSeparatorComponent={
+  //           Platform.OS !== 'android' &&
+  //           (({highlighted}) => (
+  //             <View style={[style.separator, highlighted && {marginLeft: 0}]} />
+  //           ))
+  //         }
+  //         keyExtractor={(item, index) => index}
+  //         ListFooterComponent={_that.renderFooter}
+  //         renderItem={({item, index, separators}) => (
+  //           <TouchableOpacity
+  //             key={item.key}
+  //             onPress={() => _that.itemDetail(item, item.order_status)}
+  //             onShowUnderlay={separators.highlight}
+  //             onHideUnderlay={separators.unhighlight}>
+  //             <View
+  //               style={{
+  //                 position: 'relative',
+  //                 alignSelf: 'center',
+  //                 flexDirection: 'row',
+  //                 backgroundColor: 'white',
+  //                 width: width - 20,
+  //                 padding: 10,
+  //                 borderRadius: 10,
+  //                 marginBottom: 5,
+  //               }}>
+  //               <View style={{flex: 1}}>
+  //                 <View style={{flexDirection: 'column'}}>
+  //                   <View style={{flexDirection: 'row'}}>
+  //                     <Image
+  //                       style={{height: 30, width: 30, marginRight: 5}}
+  //                       source={require('../images/Order/bage.png')}
+  //                     />
+  //                     <View style={{flexDirection: 'column'}}>
+  //                       <Text style={[{color: '#4E4D4D'}, fontStyles.bold15]}>
+  //                         {item.cicod_order_id}
+  //                       </Text>
+  //                       <Text style={[{color: '#929497'}, fontStyles.normal12]}>
+  //                         {item.customer.name}
+  //                       </Text>
+  //                     </View>
+  //                   </View>
+  //                   {}
+  //                   <Text
+  //                     style={[
+  //                       {color: '#929497', marginTop: 5},
+  //                       fontStyles.normal12,
+  //                     ]}>
+  //                     {' '}
+  //                     {_that.timeConvertion(item.order_date)}
+  //                   </Text>
+  //                 </View>
+  //               </View>
+  //               <View
+  //                 style={{
+  //                   flex: 1,
+  //                   alignItems: 'flex-end',
+  //                   flexDirection: 'column',
+  //                 }}>
+  //                 {item.balance_part_payment > 0 ? (
+  //                   <Text
+  //                     style={[
+  //                       {color: '#4E4D4D', marginRight: 10},
+  //                       fontStyles.bold15,
+  //                     ]}>
+  //                     {item.currency} {item.balance_part_payment.amount}
+  //                   </Text>
+  //                 ) : (
+  //                   <Text
+  //                     style={[
+  //                       {color: '#4E4D4D', marginRight: 10},
+  //                       fontStyles.bold15,
+  //                     ]}>
+  //                     {item.currency} {item.amount}
+  //                   </Text>
+  //                 )}
+
+  //                 {item.order_status == 'PENDING' ? (
+  //                   <Text
+  //                     style={[
+  //                       {
+  //                         borderRadius: 50,
+  //                         paddingHorizontal: 5,
+  //                         textAlign: 'center',
+  //                         backgroundColor: '#FFF3DB',
+  //                         color: '#FDB72B',
+  //                         width: width / 5,
+  //                         alignSelf: 'flex-end',
+  //                       },
+  //                       styles.detailColumn2text,
+  //                     ]}>
+  //                     {item.order_status}
+  //                   </Text>
+  //                 ) : item.order_status == 'DELIVERED' ? (
+  //                   <Text
+  //                     style={[
+  //                       {
+  //                         borderRadius: 50,
+  //                         paddingHorizontal: 5,
+  //                         fontSize: 12,
+  //                         textAlign: 'center',
+  //                         backgroundColor: '#DAF8EC',
+  //                         color: '#26C281',
+  //                         width: width / 5,
+  //                         alignSelf: 'flex-end',
+  //                       },
+  //                       styles.detailColumn2text,
+  //                     ]}>
+  //                     {item.order_status}
+  //                   </Text>
+  //                 ) : item.order_status == 'PICKED' ? (
+  //                   <Text
+  //                     style={[
+  //                       {
+  //                         borderRadius: 50,
+  //                         paddingHorizontal: 5,
+  //                         fontSize: 12,
+  //                         textAlign: 'center',
+  //                         backgroundColor: '#DAF8EC',
+  //                         color: '#26C281',
+  //                         width: width / 5,
+  //                         alignSelf: 'flex-end',
+  //                       },
+  //                       styles.detailColumn2text,
+  //                     ]}>
+  //                     {item.order_status}
+  //                   </Text>
+  //                 ) : item.order_status == 'PAID' ? (
+  //                   <Text
+  //                     style={[
+  //                       {
+  //                         borderRadius: 50,
+  //                         paddingHorizontal: 5,
+  //                         textAlign: 'center',
+  //                         backgroundColor: '#DAF8EC',
+  //                         color: '#26C281',
+  //                         width: width / 5,
+  //                         alignSelf: 'flex-end',
+  //                       },
+  //                       styles.detailColumn2text,
+  //                     ]}>
+  //                     {item.order_status}
+  //                   </Text>
+  //                 ) : item.order_status == 'CANCELLED' ? (
+  //                   <Text
+  //                     style={[
+  //                       {
+  //                         borderRadius: 50,
+  //                         paddingHorizontal: 5,
+  //                         textAlign: 'center',
+  //                         backgroundColor: '#E6E6E6',
+  //                         color: '#929497',
+  //                         width: width / 4,
+  //                         alignSelf: 'flex-end',
+  //                         fontSize: 12,
+  //                       },
+  //                       styles.detailColumn2text,
+  //                     ]}>
+  //                     {item.order_status}
+  //                   </Text>
+  //                 ): item.order_status == 'EXPIRED' ? (
+  //                   <Text
+  //                     style={[
+  //                       {
+  //                         borderRadius: 50,
+  //                         paddingHorizontal: 5,
+  //                         textAlign: 'center',
+  //                         backgroundColor: '#E6E6E6',
+  //                         color: '#929497',
+  //                         width: width / 4,
+  //                         alignSelf: 'flex-end',
+  //                         fontSize: 12,
+  //                       },
+  //                       styles.detailColumn2text,
+  //                     ]}>
+  //                     {item.order_status}
+  //                   </Text>
+  //                 ) : item.order_status == 'PART PAYMENT' ? (
+  //                   <Text
+  //                     style={[
+  //                       {
+  //                         borderRadius: 50,
+  //                         paddingHorizontal: 5,
+  //                         textAlign: 'center',
+  //                         backgroundColor: '#E6E6E6',
+  //                         color: '#929497',
+  //                         width: width / 5,
+  //                         alignSelf: 'flex-end',
+  //                       },
+  //                       styles.detailColumn2text,
+  //                     ]}>
+  //                     {item.order_status}
+  //                   </Text>
+  //                 ) : null}
+  //               </View>
+  //             </View>
+  //           </TouchableOpacity>
+  //         )}
+  //       />
+  //     );
+  //   }
+  // }
+
+
   getOrderList(props) {
-    console.log('props ---- ', props);
+   
     // return null;
-    let _that = props._that;
-    let url = Constants.orderslist;
-    let filters = [];
-    let filter_concat = '?';
-
-    if (
-      _that.props.route == null ||
-      _that.props.route.params == null ||
-      _that.props.route.params.filters == null
-    ) {
-      url = Constants.orderslist;
-    } else if (_that.state.apply_filter && !_that.state.apply_screen_filters) {
-      filters = _that.props.route.params.filters;
-
-      let filter = '';
-
-      for (let i = 0; i < filters.length; i++) {
-        console.log('~~~~~~~~~~~~~~!!!!!!!!!!!', filters.length);
-        // filter = filter +'filter'+ '['+filters[i].key +']' + '=' + filters[i].value;
-        if (filters[i].key == 'order_status') {
-          console.log('url A ' + i, url);
-          filter = _that.get_searach_by_status(filter_concat, filters[i].value);
-          console.log('url B ' + i, url);
-          console.log('url filter ' + i, filter);
-
-          // _that.customeList(filters[i].value)
-        } else {
-          filter =
-            filter + filter_concat + filters[i].key + '=' + filters[i].value;
-        }
-        // if (i != filters.length - 1) {
-        //     filter = filter + '&';
-        // }
-        filter_concat = '&';
-      }
-      console.log('url 1', url);
-      // url =  _that.change_filter_concat(url,filter);
-      url = url + filter;
-      console.log('url 2', url);
-    }
-
-    console.log('url 3', url);
-
-    // if (filters.length != 0) {
-    //     filter_concat = '&';
-    // }
-    if (_that.state.search_order != '' && _that.state.apply_screen_filters) {
-      url = url + filter_concat + 'order_id=' + _that.state.search_order;
-      // url = url + filter_concat + 'search=' + _that.state.search_order
-      filter_concat = '&';
-    }
-
-    if (
-      _that.state.date_created_timestamp != 'Today' &&
-      _that.state.apply_screen_filters
-    ) {
-      //YY-MM-DD
-      url =
-        url +
-        filter_concat +
-        'date_created=' +
-        _that.state.date_created_timestamp;
-      filter_concat = '&';
-    }
-    console.log('url 4', url);
-    let filter = _that.get_searach_by_status(
-      filter_concat,
-      _that.state.is_active_list,
-    );
-    filter_concat = '&';
-    // url =  _that.change_filter_concat(url,filter);
-    url = url + filter;
-    console.log('url 5', url);
-    console.log('reload hata ', _that.reload);
-    if (url != _that.state.url_orders || _that.props.reload.order) {
-      _that.props.setScreenReload({
-        reload: false,
-      });
-      console.log('urllllll', url);
-      _that.orderList(url);
-      console.log('url ', url);
-      _that.setState({
-        url_orders: url,
-      });
-    }
-    // _that.setState({
-    //     url_orders: url,
-    // })
-    console.log('url hit', url);
-    console.log(' will data !!!!!!!!!!!!!', _that.state.data.length);
-
-    if (_that.state.data.length < 1) {
+    let _that=props._that;
+        if (_that.state.data.length < 1) {
       return (
         <View
           style={{
@@ -398,6 +766,8 @@ class Order extends React.Component {
               <View style={[style.separator, highlighted && {marginLeft: 0}]} />
             ))
           }
+          keyExtractor={(item, index) => index}
+          ListFooterComponent={_that.renderFooter}
           renderItem={({item, index, separators}) => (
             <TouchableOpacity
               key={item.key}
@@ -482,6 +852,40 @@ class Order extends React.Component {
                       ]}>
                       {item.order_status}
                     </Text>
+                  ) : item.order_status == 'DELIVERED' ? (
+                    <Text
+                      style={[
+                        {
+                          borderRadius: 50,
+                          paddingHorizontal: 5,
+                          fontSize: 12,
+                          textAlign: 'center',
+                          backgroundColor: '#DAF8EC',
+                          color: '#26C281',
+                          width: width / 5,
+                          alignSelf: 'flex-end',
+                        },
+                        styles.detailColumn2text,
+                      ]}>
+                      {item.order_status}
+                    </Text>
+                  ) : item.order_status == 'PICKED' ? (
+                    <Text
+                      style={[
+                        {
+                          borderRadius: 50,
+                          paddingHorizontal: 5,
+                          fontSize: 12,
+                          textAlign: 'center',
+                          backgroundColor: '#DAF8EC',
+                          color: '#26C281',
+                          width: width / 5,
+                          alignSelf: 'flex-end',
+                        },
+                        styles.detailColumn2text,
+                      ]}>
+                      {item.order_status}
+                    </Text>
                   ) : item.order_status == 'PAID' ? (
                     <Text
                       style={[
@@ -499,6 +903,23 @@ class Order extends React.Component {
                       {item.order_status}
                     </Text>
                   ) : item.order_status == 'CANCELLED' ? (
+                    <Text
+                      style={[
+                        {
+                          borderRadius: 50,
+                          paddingHorizontal: 5,
+                          textAlign: 'center',
+                          backgroundColor: '#E6E6E6',
+                          color: '#929497',
+                          width: width / 4,
+                          alignSelf: 'flex-end',
+                          fontSize: 12,
+                        },
+                        styles.detailColumn2text,
+                      ]}>
+                      {item.order_status}
+                    </Text>
+                  ): item.order_status == 'EXPIRED' ? (
                     <Text
                       style={[
                         {
@@ -541,8 +962,9 @@ class Order extends React.Component {
     }
   }
 
+
   render() {
-    console.log(this.props.user);
+    console.log("ui#@@m",this.state.pageNo,"d87#@",this.state.totalPageCount);
     return (
       <Scaffold>
         <View
@@ -659,11 +1081,11 @@ class Order extends React.Component {
                   width: width - 80,
                 }}>
                 <Searchbar
-                  placeholder="Search order ID, customer, amount, etc"
+                  placeholder="Search order ID"
                   style={[{color: '#D8D8D8'}, fontStyles.normal14]}
                   iconColor="#929497"
                   style={{
-                    width: width / 1.3,
+                    width: width / 1.07,
                     alignSelf: 'center',
                     position: 'absolute',
                     left: 0,
@@ -675,6 +1097,7 @@ class Order extends React.Component {
                   onChangeText={text =>
                     this.setState({
                       apply_screen_filters: true,
+                      
                       search_order_text: text,
                     })
                   }
@@ -687,14 +1110,14 @@ class Order extends React.Component {
                 ></Searchbar>
               </View>
 
-              <TouchableOpacity
+              {/* <TouchableOpacity
                 style={{position: 'absolute', right: 0, alignSelf: 'center'}}
                 onPress={() => this.apply_filters()}>
                 <Image
                   style={{height: 50, width: 50}}
                   source={require('../images/Order/settingicon.png')}
                 />
-              </TouchableOpacity>
+              </TouchableOpacity> */}
             </View>
             <View style={{width: width - 20, alignSelf: 'center', height: 40}}>
               <ScrollView
@@ -796,12 +1219,16 @@ class Order extends React.Component {
 
           {/* <ScrollView  style={{ marginBottom: 200 }}> */}
           <this.getOrderList _that={this} />
+          
+        </View>
+        {
+            !this.state.spinner &&
           <TabNav
             style={{position: 'absolute', bottom: 0}}
             screen={'order'}
             props={this.props}
           />
-        </View>
+  }
       </Scaffold>
     );
   }

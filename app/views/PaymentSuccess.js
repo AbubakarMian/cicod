@@ -72,11 +72,27 @@ class PaymentSuccess extends React.Component {
   }
 
   handleBackButtonClick() {
-    this.props.navigation.replace('Home');
+    this.props.navigation.reset({
+      index: 0,
+      routes: [{name: 'Home'}],
+    });
 
     return true;
   }
   componentDidMount() {
+    let user_data = {
+      customer_id: 0,
+      customer_name: '',
+      customer_email: '',
+      customer_phone: '',
+      customer_country: '',
+      customer_state: '',
+      customer_lga: '',
+      customer_address: '',
+      detail: null,
+    };
+    this.props.clearCart();
+    this.props.setCustomer(user_data);
     this.get_order_detail();
   }
 
@@ -134,7 +150,11 @@ class PaymentSuccess extends React.Component {
           // let payment_link = responseJson.data.payment_link
           // this.props.navigation.navigate('PaymentWeb', { payment_link: payment_link });
         } else {
-          this.setState({spinner: false});
+          this.setState({
+            spinner: false,
+            order_detail: this.props.route.params.data,
+            order_id: order_id,
+          });
           let message = responseJson.message;
           console.log('some error', responseJson);
         }
@@ -154,9 +174,12 @@ class PaymentSuccess extends React.Component {
   navigate() {}
   successview(props) {
     let _that = props._that;
-    let order = _that.props.route.params.data;
+    let order = _that.state.order_detail;
     // let order = _that.state.order_detail;
-    console.log('order @@@@@@@@@@@@~~~~~~~~~~~~~~~~ order', order);
+    console.log(
+      'order @@@@@@@@@@@@~~~~~~~~~~~~~~~~ order',
+      _that.state.order_detail,
+    );
     // if (order.payment_status == 'success') {
     return (
       <View style={[{}, styles.mainContainer]}>
@@ -171,10 +194,10 @@ class PaymentSuccess extends React.Component {
           Payment Successful
         </Text>
         <Text style={[{color: '#929497'}, fontStyles.normal15]}>
-          Your payment of {order.currency}{' '}
+          Your payment of {order.currency ?? ''}{' '}
           {parseFloat(+order.amount) +
             parseFloat(
-              order.delivery_type == 'DELIVERY'
+              order.delivery_type == 'DELIVERY' && !order.is_part_payment
                 ? parseFloat(order.delivery_amount)
                 : 0,
             )}{' '}

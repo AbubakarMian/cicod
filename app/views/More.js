@@ -46,19 +46,23 @@ class More extends React.Component {
     );
   }
   contactus() {
-    Linking.canOpenURL('mailto:support@cicod.com?subject=Enquiry')
-      .then(supported => {
-        if (!supported) {
-          console.log('Cant handle url');
-          Alert.alert('Cant Open Email');
-        } else {
-          return Linking.openURL('mailto:support@cicod.com?subject=Enquiry');
-        }
-      })
-      .catch(err => {
-        console.error('An error occurred', err);
-        Alert.alert('Cant Open Email');
-      });
+    this.setState({supportModal: false});
+    this.props.navigation.navigate('InAppWebView', {
+      uri: 'https://support.cicod.com/contact',
+    });
+    // Linking.canOpenURL('mailto:support@cicod.com?subject=Enquiry')
+    //   .then(supported => {
+    //     if (!supported) {
+    //       console.log('Cant handle url');
+    //       Alert.alert('Cant Open Email');
+    //     } else {
+    //       return Linking.openURL('mailto:support@cicod.com?subject=Enquiry');
+    //     }
+    //   })
+    //   .catch(err => {
+    //     console.error('An error occurred', err);
+    //     Alert.alert('Cant Open Email');
+    //   });
   }
   render() {
     return (
@@ -254,7 +258,7 @@ class More extends React.Component {
                   marginTop: 20,
                   marginBottom: 20,
                 }}>
-                Version 1.0
+                Version 1.1.3
               </Text>
               <Text
                 style={{color: '#B1272C', fontSize: 13, fontWeight: 'bold'}}>
@@ -278,7 +282,10 @@ class More extends React.Component {
                         />
                         <TouchableOpacity
                           onPress={() => this.contactus()}
-                          style={[{marginLeft: 7}, styles.suspendTouch]}>
+                          style={[
+                            {marginLeft: 7, padding: 10, width: '100%'},
+                            styles.suspendTouch,
+                          ]}>
                           <Text style={{color: '#808080'}}>Contact us</Text>
                         </TouchableOpacity>
                       </View>
@@ -290,7 +297,14 @@ class More extends React.Component {
                         />
                         <TouchableOpacity
                           onPress={() => this.supportVideos()}
-                          style={[{marginLeft: 7}, styles.suspendTouch]}>
+                          style={[
+                            {
+                              marginLeft: 7,
+                              padding: 10,
+                              width: '100%',
+                            },
+                            styles.suspendTouch,
+                          ]}>
                           <Text style={{color: '#808080'}}>
                             Watch Videos/Articles
                           </Text>

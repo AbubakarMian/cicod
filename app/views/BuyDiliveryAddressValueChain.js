@@ -78,7 +78,7 @@ class BuyDiliveryAddressValueChain extends React.Component {
   }
 
   componentDidMount() {
-    console.log('ReousfCart@#', this.props.cart);
+    console.log('ReousfCart@#', this.props.route.params);
     this.getCountryList();
   }
   unauthorizedLogout() {
@@ -95,7 +95,9 @@ class BuyDiliveryAddressValueChain extends React.Component {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: this.props.user.access_token,
-        'Tenant-ID': this.props.route.params.item.seller_name.toLowerCase(),
+        'Tenant-ID': this.props.route.params.item.seller_name
+          .toLowerCase()
+          .replace(/ /g, ''),
       },
     };
     console.log('postDate#2', postData, Constants.deliveryCountriesList);
@@ -140,10 +142,12 @@ class BuyDiliveryAddressValueChain extends React.Component {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: this.props.user.access_token,
-        'Tenant-ID': this.props.route.params.item.seller_name.toLowerCase(),
+        'Tenant-ID': this.props.route.params.item.seller_name
+          .toLowerCase()
+          .replace(/ /g, ''),
       },
     };
-    // console.log()
+    console.log('postDaFFRRE', postData);
     fetch(url, postData)
       .then(response => response.json())
       .then(async responseJson => {
@@ -270,13 +274,16 @@ class BuyDiliveryAddressValueChain extends React.Component {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: this.props.user.access_token,
-        'Tenant-ID': this.props.route.params.item.seller_name.toLowerCase(),
+        'Tenant-ID': this.props.route.params.item.seller_name
+          .toLowerCase()
+          .replace(/ /g, ''),
       },
     };
     const url =
       this.state.lgas_id == 0
         ? `${Constants.deliveryCost}?order_amount=${this.props.cart.total_price_with_tax}&country_id=${this.state.country_id}&state_id=${this.state.state_id}`
         : `${Constants.deliveryCost}?order_amount=${this.props.cart.total_price_with_tax}&country_id=${this.state.country_id}&state_id=${this.state.state_id}&lga_id=${this.state.lgas_id}`;
+    console.log('poigt#', url, postData);
     fetch(url, postData)
       .then(response => response.json())
       .then(async responseJson => {

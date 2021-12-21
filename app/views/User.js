@@ -141,7 +141,12 @@ class User extends React.Component {
   async logout_user() {
     this.props.logoutUser();
     await AsyncStorage.removeItem('User');
-    BackHandler.exitApp();
+
+    this.props.navigation.reset({
+      index: 0,
+      routes: [{name: 'Login'}],
+    });
+    // BackHandler.exitApp();
   }
 
   tabView = () => {
@@ -285,10 +290,11 @@ class User extends React.Component {
               <View
                 style={{
                   flexDirection: 'row',
+                  flex:1,
                   justifyContent: 'space-between',
                   marginBottom: 10,
                 }}>
-                <View>
+                <View style={{flex:1}}>
                   <Text style={[{}, styles.userInfoLable]}>City</Text>
                   <Text
                     style={[
@@ -299,7 +305,7 @@ class User extends React.Component {
                   </Text>
                 </View>
 
-                <View>
+                <View style={{flex:1}}>
                   <Text style={[{}, styles.userInfoLable]}>Location</Text>
                   <Text
                     style={[
@@ -541,7 +547,7 @@ class User extends React.Component {
               CICOD Merchant Mobile App is a product of Crown Interactive
             </Text>
             <Text style={[{alignSelf: 'center'}, styles.bottomVersioncText]}>
-              Version 1.0
+              Version 1.1.3
             </Text>
           </View>
         </ScrollView>

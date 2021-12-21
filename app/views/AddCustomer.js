@@ -26,7 +26,7 @@ import RadioForm, {
 import SearchBar from 'react-native-search-bar';
 import {Constants} from '../views/Constant';
 import {connect} from 'react-redux';
-import {SET_USER, SET_CUSTOMER} from '../redux/constants/index';
+import {SET_USER, SET_CUSTOMER, CUSTOMER_RELOAD} from '../redux/constants/index';
 import {Item} from 'native-base';
 import {Text, TextInput, Searchbar} from 'react-native-paper';
 import NavBack from './Components/NavBack';
@@ -42,13 +42,21 @@ class AddCustomer extends React.Component {
       searchPress: 1,
       spinner: false,
       customerData: [],
+      isSearch: false,
+      isFetching:false,
       pageNo: 1,
       search_text: '',
     };
   }
   componentDidMount() {
-    this.getCustomers(Constants.customerlist);
+    this.getCustomers(Constants.customerlist+"?page=1");
   }
+
+//   componentDidUpdate(prevProps){
+// if(this.props.route.params && this.props.route.params.newCustomer && !prevProps.params && prevProps.params.newCustomer!=this.props.route.params.newCustomer){
+//   this.getCustomers(Constants.customerlist+"?page=1");
+// }
+//   }
   seacrhClick() {
     if (this.state.searchPress === 1) {
       console.log('**********');
@@ -59,6 +67,7 @@ class AddCustomer extends React.Component {
     }
   }
   searchText() {
+    this.setState({isSearch: true});
     const search_text = this.state.search_text;
     this.getCustomers(Constants.customerlist + '?search=' + search_text);
   }
@@ -98,13 +107,22 @@ class AddCustomer extends React.Component {
       .then(response => response.json())
       .then(async responseJson => {
         this.setState({
+          isFetching:false,
           spinner: false,
         });
         if (responseJson.status === 'success') {
           console.log('KKKKKKKKK', responseJson);
-          this.setState({
-            customerData: [...this.state.customerData, ...responseJson.data],
-          });
+          if (this.state.isSearch) {
+            this.setState({
+              customerData: responseJson.data,
+              isSearch: false,
+            });
+          } else {
+            this.setState({
+              customerData: [...this.state.customerData, ...responseJson.data],
+              isSearch: false,
+            });
+          }
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
         } else {
@@ -128,6 +146,7 @@ class AddCustomer extends React.Component {
       customer_state: item.state,
       customer_lga: item.lga,
       customer_address: item.address,
+      detail: item,
     };
     await this.props.setCustomer(user_data);
     console.log('user info !!!!!!!!!!!!!!! @@@@@@@@@@@@@', this.props);
@@ -147,19 +166,44 @@ class AddCustomer extends React.Component {
     // }
   };
 
+  onRefresh=()=> {
+    console.log('222222222222', this.state.isFetching);
+    this.setState({isFetching: true,customerData:[]});
+    // if(this.state.isFetching==true){
+
+    // let search_url = Constants.productslist + '?search=' + this.state.search_product;
+    let url = Constants.customerlist + '?page=1';
+    this.getCustomers(url);
+    return;
+    // }
+    console.log('333333333333', this.state.isFetching);
+    // _that.setState({
+    //     url_orders: url,
+    // })
+  }
   renderFooter = () => {
     //it will show indicator at the bottom of the list when data is loading otherwise it returns null
     // if (!this.state.spinner) return null;
     // return <ActivityIndicator style={{color: '#000'}} />;
+    if(this.state.customerData.length<2) return null; 
     return (
       <TouchableOpacity
         onPress={() => this.handleLoadMore()}
-        style={{padding: 5, alignSelf: 'center', marginVertical: 20}}>
+        style={{padding: 5, alignSelf: 'center',alignItems:"center", marginVertical: 20,marginBottom:10,width:"100%",padding:10}}>
         <Text style={{letterSpacing: 1.1, fontWeight: 'bold'}}>Load More</Text>
       </TouchableOpacity>
     );
   };
   render() {
+
+    if (this.props.reload.customer) {
+      let url = Constants.customerlist + '?page=1';
+      this.getCustomers(url);
+      
+      this.props.setScreenReload({
+        reload: false,
+      });
+    }
     return (
       <Scaffold>
         <View style={[{}, styles.mainView]}>
@@ -183,7 +227,7 @@ class AddCustomer extends React.Component {
             />
 
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('AddNewCustomer')}
+              onPress={() => this.props.navigation.navigate('AddNewCustomer',{from:"create_order"})}
               // onPress={() => this.props.navigation.navigate('CreateProduct', { action: 'create', prodDetail: null })}
             >
               <Image
@@ -244,6 +288,9 @@ class AddCustomer extends React.Component {
             {this.state.customerData.length != 0 ? (
               <View style={{paddingBottom: 260}}>
                 <FlatList
+                refreshing={this.state.isFetching}
+                
+                onRefresh={this.onRefresh}
                   data={this.state.customerData}
                   ItemSeparatorComponent={
                     Platform.OS !== 'android' &&
@@ -256,8 +303,9 @@ class AddCustomer extends React.Component {
                       />
                     ))
                   }
+                  keyExtractor={(item, index) => index}
                   ListFooterComponent={this.renderFooter}
-                  onEndReachedThreshold={0.1}
+                  // onEndReachedThreshold={0.1}
                   renderItem={({item, index, separators}) => (
                     <View
                       style={[
@@ -390,7 +438,7 @@ class AddCustomer extends React.Component {
 
                 <TouchableOpacity
                   onPress={() =>
-                    this.props.navigation.navigate('AddNewCustomer')
+                    this.props.navigation.navigate('AddNewCustomer',{from:"create_order"})
                   }
                   style={[{}, styles.addCustommerRowView]}>
                   <Image source={require('../images/circlePlus.png')} />
@@ -416,11 +464,14 @@ function mapStateToProps(state) {
     user: state.userReducer,
     customer: state.customReducer,
     currency: state.currencyReducer,
+    reload: state.reloadReducer,
   };
 }
 function mapDispatchToProps(dispatch) {
   return {
     setCustomer: value => dispatch({type: SET_CUSTOMER, value: value}),
+    setScreenReload: value =>
+    dispatch({type: CUSTOMER_RELOAD, value: value}),
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(AddCustomer);

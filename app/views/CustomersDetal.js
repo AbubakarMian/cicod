@@ -107,10 +107,12 @@ class CustomersDetal extends React.Component {
             textStyle={{color: '#fff'}}
             color={'#fff'}
           />
-          <NavBack
-            title="Customer"
-            onClick={() => this.props.navigation.goBack()}
-          />
+          <View style={{alignSelf: 'flex-start'}}>
+            <NavBack
+              title="Customer"
+              onClick={() => this.props.navigation.goBack()}
+            />
+          </View>
 
           <View
             style={{
@@ -123,7 +125,12 @@ class CustomersDetal extends React.Component {
             }}>
             <View style={[{borderRadius: 10}, styles.mainContentView]}>
               <View style={[{}, styles.mainContentUserImageView]}>
-                <Image source={require('../images/customer/usericon.png')} />
+                <Image
+                  style={{width: 40, height: 40}}
+                  width={40}
+                  height={40}
+                  source={require('../images/customer/usericon.png')}
+                />
               </View>
               <View>
                 <Text

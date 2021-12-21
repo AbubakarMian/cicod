@@ -6,6 +6,7 @@ import {
   Platform,
   Alert,
   TouchableOpacity,
+  Modal as OtherModal
 } from 'react-native';
 import {Text, TextInput, Modal} from 'react-native-paper';
 import splashImg from '../images/splash.jpg';
@@ -156,6 +157,8 @@ class ProductView extends React.Component {
     this.props.navigation.navigate('CreateProduct', {
       action: 'update',
       prodDetail: this.state.prodDetail,
+      heading: this.props.route.params.heading,
+      items:this.props.route.params.items
     });
   }
   ProductViewRender(_that) {
@@ -195,7 +198,7 @@ class ProductView extends React.Component {
             />
             {_that.props.route.params.heading != 'SUPPLIERS' && (
               <TouchableOpacity
-                style={[{}, styles.settingIcon]}
+                style={[{padding: 10}, styles.settingIcon]}
                 onPress={() => _that.setState({supendModal: true})}>
                 <Icon size={25} color={'#929497'} name="ellipsis-h" />
               </TouchableOpacity>
@@ -297,8 +300,11 @@ class ProductView extends React.Component {
             </>
           )}
         </View>
+{_that.state.prodDetail.image_url=="" || _that.state.prodDetail.image_url!=null ||_that.state.prodDetail.image==""||_that.state.prodDetail.image!==null &&(
+ <Text style={[{}, styles.imageHeadingText]}>IMAGE</Text>
 
-        <Text style={[{}, styles.imageHeadingText]}>IMAGE</Text>
+)}
+       
         <TouchableOpacity
           onPress={() => _that.setState({productImageModal: true})}>
           <Image
@@ -347,7 +353,7 @@ class ProductView extends React.Component {
                 ]}>
                 <TouchableOpacity
                   onPress={() => _that.updateProductFun()}
-                  style={[{flexDirection: 'row'}]}>
+                  style={[{flexDirection: 'row', alignItems: 'center'}]}>
                   {/* <Image source={require('../images/ban.png')} style={[{}, styles.banImage]} /> */}
                   <Icon
                     name="edit"
@@ -359,7 +365,14 @@ class ProductView extends React.Component {
                 </TouchableOpacity>
                 <TouchableOpacity
                   onPress={() => _that.suspendUnsuspendFun()}
-                  style={[{flexDirection: 'row', marginVertical: 10}]}>
+                  style={[
+                    {
+                      flexDirection: 'row',
+                      marginTop: 25,
+                      marginVertical: 10,
+                      alignItems: 'center',
+                    },
+                  ]}>
                   <Image
                     source={require('../images/ban.png')}
                     style={[{}, styles.banImage]}

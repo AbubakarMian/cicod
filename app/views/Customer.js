@@ -41,6 +41,9 @@ class Customer extends React.Component {
       search_text: '',
       spinner: false,
       data: [],
+      pageNo: 1,
+      isFetching:false,
+      totalPageCount: 1,
     };
     this.onDateChange = this.onDateChange.bind(this);
   }
@@ -53,8 +56,56 @@ class Customer extends React.Component {
 
   componentDidMount() {
     console.log('this.props.user', this.props.user.access_token);
-    this.getCustomers(Constants.customerlist);
+    this.getCustomers(Constants.customerlist+"?page="+this.state.pageNo);
   }
+
+  handleLoadMore = () => {
+    // if (!this.state.spinner) {
+    // alert(this.state.totalPageCount);
+    const pageNo = this.state.pageNo + 1; // increase page by 1
+    this.setState({pageNo});
+
+    const customer_url =
+      
+         Constants.customerlist + '?page=' + pageNo
+      
+
+    console.log('customer_url$##@0', customer_url);
+    this.getCustomers(customer_url);
+
+    // method for API call
+    // } else {
+    //   alert('here');
+    // }
+  };
+
+  renderFooter = () => {
+    //it will show indicator at the bottom of the list when data is loading otherwise it returns null
+    // if (!this.state.spinner) return null;
+    // return <ActivityIndicator style={{color: '#000'}} />;
+    if (
+      this.state.totalPageCount > 1 &&
+      this.state.pageNo < this.state.totalPageCount
+    ) {
+      return (
+        <TouchableOpacity
+          onPress={() => this.handleLoadMore()}
+          style={{
+            padding: 5,
+            alignSelf: 'center',
+            marginTop: 7,
+            marginBottom: 400,
+            paddingVertical:40
+          }}>
+          <Text style={{letterSpacing: 1.1, fontWeight: 'bold'}}>
+            Load More
+          </Text>
+        </TouchableOpacity>
+      );
+    }
+    return null;
+  };
+
 
   getCustomers(url) {
     this.setState({spinner: true});
@@ -74,17 +125,19 @@ class Customer extends React.Component {
         console.log('responseJson !!!! @@@@@@@@@@@@', responseJson);
         this.setState({
           spinner: false,
+          isFetching:false
         });
         if (responseJson.status === 'success') {
           this.setState({
-            data: responseJson.data,
+            data: [...this.state.data,...responseJson.data],
+            totalPageCount:responseJson.pages
           });
           // this.props.navigation.navigate('DrawerNavigation')
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
         } else {
           let message = responseJson.message;
-          Alert.alert('Error', message);
+          // Alert.alert('Error', message);
         }
       })
       .catch(error => {
@@ -111,9 +164,25 @@ class Customer extends React.Component {
     this.getCustomers(url);
   }
 
+
+  onRefresh=()=> {
+    console.log('222222222222', this.state.isFetching);
+    this.setState({isFetching: true,data:[]});
+    // if(this.state.isFetching==true){
+
+    // let search_url = Constants.productslist + '?search=' + this.state.search_product;
+    let url = Constants.customerlist + '?page=1';
+    this.getCustomers(url);
+    return;
+    // }
+    console.log('333333333333', this.state.isFetching);
+    // _that.setState({
+    //     url_orders: url,
+    // })
+  }
   render() {
     if (this.props.reload.customer) {
-      this.getCustomers(Constants.customerlist);
+      this.getCustomers(Constants.customerlist+"?page=1");
       this.props.setScreenReload({
         reload: false,
       });
@@ -185,11 +254,11 @@ class Customer extends React.Component {
                 borderBottomWidth: 0.5,
                 width: width - 20,
                 alignSelf: 'center',
-                marginTop: 10,
-                marginBottom: 10,
+                marginTop: 2,
+                marginBottom: 2,
               },
             ]}></View>
-          <ScrollView>
+          <View style={{flex:1}}>
             {this.state.data.length > 0 ? (
               <FlatList
                 data={this.state.data}
@@ -201,6 +270,10 @@ class Customer extends React.Component {
                     />
                   ))
                 }
+                refreshing={this.state.isFetching}
+                onRefresh={this.onRefresh}
+                keyExtractor={(item, index) => index}
+                ListFooterComponent={this.renderFooter}
                 renderItem={({item, index, separators}) => (
                   <TouchableOpacity
                     key={item.key}
@@ -285,7 +358,7 @@ class Customer extends React.Component {
                 </Text>
               </View>
             )}
-          </ScrollView>
+          </View>
         </View>
       </Scaffold>
     );

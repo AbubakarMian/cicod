@@ -36,6 +36,8 @@ class Supplier extends React.Component {
       calenderModal: false,
       spinner: false,
       data: [],
+      pageNo: 1,
+      totalPageCount: 1,
     };
     this.onDateChange = this.onDateChange.bind(this);
   }
@@ -46,7 +48,7 @@ class Supplier extends React.Component {
     });
   }
   componentDidMount() {
-    this.getSuppliersList(Constants.supplierlist);
+    this.getSuppliersList(Constants.supplierlist + '?page=1');
   }
 
   unauthorizedLogout() {
@@ -75,9 +77,13 @@ class Supplier extends React.Component {
             filter = filter + '&';
           }
         }
-        this.getSuppliersList(Constants.supplierlist + filter);
+        this.getSuppliersList(
+          Constants.supplierlist + filter + '&page=' + this.state.pageNo,
+        );
       } else {
-        this.getSuppliersList(Constants.supplierlist);
+        this.getSuppliersList(
+          Constants.supplierlist + '?page=' + this.state.pageNo,
+        );
       }
     }
   }
@@ -102,7 +108,8 @@ class Supplier extends React.Component {
         });
         if (responseJson.success === true) {
           this.setState({
-            data: responseJson.data,
+            data: [...this.state.data, ...responseJson.data],
+            totalPageCount: responseJson._meta.pageCount,
           });
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
@@ -141,11 +148,19 @@ class Supplier extends React.Component {
       console.log('productCa$#', catArr);
       return catArr.map(elem => {
         return (
-          <Chip
-            style={{height: 20, alignItems: 'center', marginRight: 2}}
-            textStyle={{fontSize: 10}}>
-            {elem}
-          </Chip>
+          <View
+            style={{
+              height: 20,
+              alignItems: 'center',
+              justifyContent: 'center',
+              paddingHorizontal: 6,
+              paddingVertical: 2,
+              backgroundColor: '#eeeeee',
+              borderRadius: 10,
+              marginRight: 3,
+            }}>
+            <Text style={{fontSize: 10}}> {elem}</Text>
+          </View>
         );
       });
     }
@@ -163,6 +178,45 @@ class Supplier extends React.Component {
   handleKeyPress = () => {
     alert(this.state.search_product);
   };
+
+  handleLoadMore = () => {
+    // if (!this.state.spinner) {
+    // alert(this.state.totalPageCount);
+    const pageNo = this.state.pageNo + 1; // increase page by 1
+    this.setState({pageNo});
+
+    const supplier_url = Constants.supplierlist + '?page=' + pageNo;
+    console.log('supplier_url$##@0', supplier_url);
+    this.getSuppliersList(supplier_url);
+  };
+
+  
+  renderFooter = () => {
+    //it will show indicator at the bottom of the list when data is loading otherwise it returns null
+    // if (!this.state.spinner) return null;1 22
+    // return <ActivityIndicator style={{color: '#000'}} />;
+    if (
+      this.state.totalPageCount > 1 &&
+      this.state.pageNo < this.state.totalPageCount
+    ) {
+      return (
+        <TouchableOpacity
+          onPress={() => this.handleLoadMore()}
+          style={{
+            padding: 5,
+            alignSelf: 'center',
+            marginTop: 7,
+            marginBottom: 300,
+          }}>
+          <Text style={{letterSpacing: 1.1, fontWeight: 'bold'}}>
+            Load More
+          </Text>
+        </TouchableOpacity>
+      );
+    }
+    return <View style={{marginVertical:100}}/>;
+  };
+
   render() {
     const {selectedStartDate} = this.state;
     const startDate = selectedStartDate ? selectedStartDate.toString() : '';
@@ -171,6 +225,8 @@ class Supplier extends React.Component {
         <View
           style={{
             height: height,
+            // paddingBottom:60,
+
             width: width,
             position: 'relative',
             backgroundColor: '#F0F0F0',
@@ -217,6 +273,7 @@ class Supplier extends React.Component {
             style={{
               marginBottom: 5,
               flexDirection: 'row',
+              justifyContent: 'space-between',
               width: width - 20,
               alignSelf: 'center',
               borderRadius: 5,
@@ -240,26 +297,28 @@ class Supplier extends React.Component {
                             onSubmitEditing={() => this.search()}
                         />
                     </View> */}
-            <Searchbar
-              onIconPress={() => this.search()}
-              //onKeyPress={this.handleKeyPress}
-              placeholder="Search supplier"
-              value={this.state.search_product}
-              style={[{color: '#D8D8D8'}, fontStyles.normal14]}
-              iconColor="#929497"
-              style={{
-                width: width / 1.3,
-                alignSelf: 'center',
-                marginTop: 10,
-                marginBottom: 5,
-                elevation: 0,
-                borderColor: '#D8DCDE',
-              }}
-              onChangeText={text => this.setState({search_product: text})}
-              onSubmitEditing={() => this.search()}
-              //update
-            ></Searchbar>
-            <View
+            <View style={{flex: 1, marginRight: 10}}>
+              <Searchbar
+                onIconPress={() => this.search()}
+                //onKeyPress={this.handleKeyPress}
+                placeholder="Search supplier"
+                value={this.state.search_product}
+                style={[{color: '#D8D8D8'}, fontStyles.normal14]}
+                iconColor="#929497"
+                style={{
+                  width: '100%',
+                  alignSelf: 'center',
+                  marginTop: 10,
+                  marginBottom: 5,
+                  elevation: 0,
+                  borderColor: '#D8DCDE',
+                }}
+                onChangeText={text => this.setState({search_product: text})}
+                onSubmitEditing={() => this.search()}
+                //update
+              ></Searchbar>
+            </View>
+            {/* <View
               style={[
                 {
                   borderBottomColor: '#E6E6E6',
@@ -269,9 +328,9 @@ class Supplier extends React.Component {
                   marginTop: 10,
                   marginBottom: 10,
                 },
-              ]}></View>
+              ]}></View> */}
             <TouchableOpacity
-              style={{position: 'absolute', right: 0, alignSelf: 'center'}}
+              // style={{position: 'absolute', right: 0, alignSelf: 'center'}}
               onPress={() =>
                 this.props.navigation.navigate('Filter', {screen: 'Supplier'})
               }>
@@ -290,7 +349,8 @@ class Supplier extends React.Component {
               marginVertical: 5,
             }}></View>
 
-          <ScrollView>
+          {/* <ScrollView> */}
+          <View style={{paddingHorizontal: 10}}>
             {this.state.data.length > 0 ? (
               <FlatList
                 data={this.state.data}
@@ -302,6 +362,9 @@ class Supplier extends React.Component {
                     />
                   ))
                 }
+                keyExtractor={(item, index) => index.toString()}
+                ListFooterComponent={this.renderFooter}
+                // ListFooterComponentStyle={{marginBottom:40}}
                 renderItem={({item, index, separators}) => (
                   <TouchableOpacity
                     key={index}
@@ -425,7 +488,8 @@ class Supplier extends React.Component {
                 </Text>
               </View>
             )}
-          </ScrollView>
+            {/* </ScrollView> */}
+          </View>
         </View>
       </Scaffold>
     );

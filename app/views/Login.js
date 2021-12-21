@@ -7,6 +7,8 @@ import {
   ScrollView,
   Alert,
 } from 'react-native';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+
 // import { View, Text, Image, TextInput, TouchableOpacity, Dimensions, Touchable, ScrollView, Alert } from 'react-native';
 import styles from '../css/LoginCss';
 import fontStyles from '../css/FontCss';
@@ -73,7 +75,7 @@ class Login extends React.Component {
     console.log('Login Login Login ');
 
     let c = get_formated_amount(2432643543654);
-    console.log('WWWWWWWWW', c + this.props.currency.currency);
+    console.log('WWWWWWWWW', Constants.login);
     // console.log(this.props. FORMAT_CURRENCY.amount)
     this.resetReducer();
     if (this.state.tenantId === '') {
@@ -132,8 +134,11 @@ class Login extends React.Component {
               lastname: responseJson.user.lastname,
               email: responseJson.user.email,
               phone: responseJson.user.phone,
+              roles: responseJson.user.roles,
               access_token: user_token,
               kciInfo: responseJson.user.kciInfo,
+              merchantApps: responseJson.user.merchantApps,
+              merchantStatus: responseJson.user.merchantStatus,
               tenantId: responseJson.user.tenantId,
             });
             this.setState({Spinner: false});
@@ -203,7 +208,16 @@ class Login extends React.Component {
   }
   render() {
     return (
-      <ScrollView>
+      <KeyboardAwareScrollView
+        bounces={false}
+        showsVerticalScrollIndicator={false}
+        // style={{marginBottom: 150}}
+        enableOnAndroid={true}
+        scrollEnabled={true}
+        extraScrollHeight={100}
+        keyboardShouldPersistTaps="handled"
+        scrollToOverflowEnabled={true}
+        enableAutomaticScroll={true}>
         <View style={[{position: 'relative'}, styles.mainView]}>
           <Spinner
             visible={this.state.Spinner}
@@ -331,6 +345,7 @@ class Login extends React.Component {
               value={this.state.password}
             />
             <TouchableOpacity
+            hitSlop={{top:20,bottom:20,right:20,left:20}}
               style={{position: 'absolute', right: 10}}
               onPress={() => {
                 this.setState({hide_password: !this.state.hide_password});
@@ -345,25 +360,45 @@ class Login extends React.Component {
           <View
             style={{
               flexDirection: 'row',
-              justifyContent: 'center',
-              width: width - 50,
-              marginTop: 20,
-              marginBottom: 10,
+              justifyContent: 'space-between',
+              alignItems: 'center',
             }}>
-            <CheckBox
+            <View
               style={{
-                width: width / 2,
-                alignSelf: 'center',
-                alignItems: 'center',
-              }}
-              onClick={() => {
-                this.setState({
-                  rememberIsChecked: !this.state.rememberIsChecked,
-                });
-              }}
-              isChecked={this.state.rememberIsChecked}
-              rightText={'Remember details'}
-            />
+                flexDirection: 'row',
+                // justifyContent: 'center',
+                // width: width - 50,
+                // marginTop: 20,
+                // marginBottom: 10,
+              }}>
+              <CheckBox
+                style={{
+                  width: width / 2,
+                  // alignSelf: 'center',
+                  // alignItems: 'center',
+                }}
+                onClick={() => {
+                  this.setState({
+                    rememberIsChecked: !this.state.rememberIsChecked,
+                  });
+                }}
+                isChecked={this.state.rememberIsChecked}
+                rightText={'Remember details'}
+              />
+            </View>
+            <TouchableOpacity
+              style={{marginTop: 20, zIndex: 0.9999, marginBottom: 20}}
+              onPress={() => this.props.navigation.navigate('ResetPassword')}>
+              <Text
+                style={{
+                  color: '#487AE0',
+                  fontSize: 14,
+                  textAlign: 'left',
+                  fontFamily: 'Open Sans',
+                }}>
+                Reset Password
+              </Text>
+            </TouchableOpacity>
           </View>
           <TouchableOpacity
             onPress={() => this.login()}
@@ -373,17 +408,19 @@ class Login extends React.Component {
               Continue
             </Text>
           </TouchableOpacity>
+
           <TouchableOpacity
-            style={{marginTop: 20, zIndex: 0.9999, marginBottom: height / 10}}
-            onPress={() => this.props.navigation.navigate('ResetPassword')}>
+            style={{paddingTop: 20}}
+            onPress={() => this.props.navigation.navigate('Register')}>
             <Text
               style={{
-                color: '#487AE0',
-                fontSize: 14,
+                color: '#B1272C',
+                letterSpacing: 1.2,
+                fontSize: 16,
                 textAlign: 'left',
                 fontFamily: 'Open Sans',
               }}>
-              Reset Password
+              Register
             </Text>
           </TouchableOpacity>
           {/* <View>
@@ -393,7 +430,7 @@ class Login extends React.Component {
                            />
                         </View> */}
         </View>
-      </ScrollView>
+      </KeyboardAwareScrollView>
     );
   }
 }

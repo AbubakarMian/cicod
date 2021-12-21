@@ -28,6 +28,9 @@ import {
   SET_CUSTOMER,
   LOGOUT_USER,
   CLEAR_ORDER,
+  CLEAR_CART,
+  RESET,
+  RESET_DELIVERY_MAIN,
 } from '../redux/constants/index';
 import {Constants} from '../views/Constant';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -53,6 +56,7 @@ class Home extends React.Component {
       spinner: false,
       avatar: '',
       tenantId: '',
+      disable_button: false,
       user: {
         kciInfo: {
           kciUpdates: [
@@ -89,9 +93,14 @@ class Home extends React.Component {
   }
 
   veiwShop() {
-    Linking.openURL(
-      `https://${this.state.tenantId.toLowerCase()}.${Constants.webshop_url}`,
-    );
+    this.props.navigation.navigate('InAppWebView', {
+      uri: `https://${this.state.tenantId.toLowerCase()}.${
+        Constants.webshop_url
+      }`,
+    });
+    // Linking.openURL(
+    //   `https://${this.state.tenantId.toLowerCase()}.${Constants.webshop_url}`,
+    // );
   }
 
   async shareShop() {
@@ -133,8 +142,16 @@ class Home extends React.Component {
     let user = await AsyncStorage.getItem('User');
     let me = JSON.parse(user);
 
-    console.log('nr%$^', me);
-    this.setState({tenantId: me.tenantId, user: me, spinner: false});
+    console.log('nrs87h%$^', me);
+    const disable_button = me.merchantStatus.code < 5 ? true : false;
+    //const disable_button= (me.merchantStatus.code==6||me.merchantStatus.code==7) ||(me.merchantStatus.code==5&& me.merchantApps.includes("ucg"))?true:false;
+
+    this.setState({
+      tenantId: me.tenantId,
+      user: me,
+      spinner: false,
+      disable_button,
+    });
 
     if (this.props.user.firstname == 'Guest') {
       console.log('rwewe#');
@@ -163,6 +180,7 @@ class Home extends React.Component {
         Authorization: this.props.user.access_token,
       },
     };
+    console.log('por%$$', postData);
     fetch(Constants.unReadNetwork, postData)
       .then(response => response.json())
       .then(async responseJson => {
@@ -197,7 +215,12 @@ class Home extends React.Component {
     fetch(Constants.marchantDetail, postData)
       .then(response => response.json())
       .then(async responseJson => {
-        console.log('responseJson @@@@@@@@###########', responseJson);
+        console.log(
+          'responseJson @@@@@@@@###########',
+          Constants.marchantDetail,
+          postData,
+          responseJson,
+        );
         this.setState({
           spinner: false,
         });
@@ -220,20 +243,58 @@ class Home extends React.Component {
     this.props.logoutUser();
     this.props.navigation.navigate('Login');
   }
+
+  async logout_user() {
+    this.props.logoutUser();
+    await AsyncStorage.removeItem('User');
+
+    this.props.navigation.reset({
+      index: 0,
+      routes: [{name: 'Login'}],
+    });
+    // BackHandler.exitApp();
+  }
   createOrder() {
     this.props.setCustomer({
       customer_name: '',
       customer_email: '',
       customer_phone: '',
     });
+    this.props.resetDelivery();
+
     this.props.emptyOrder({
       cart: [],
     });
     this.props.navigation.navigate('CreateOrder', {screen_name: 'sell'});
   }
 
+  async shareNetwork() {
+    try {
+      let message = `I found this commerce app that enables us collaborate in trade. \n`;
+      message += `Download CICOD Merchant and connect with me on my CICOD handle “${this.props.user.tenantId}”.`;
+      const result = await Share.share({
+        message,
+      });
+      if (result.action === Share.sharedAction) {
+        if (result.activityType) {
+          // shared with activity type of result.activityType
+          console.log('hrer#');
+        } else {
+          // shared
+          console.log('shared#');
+        }
+      } else if (result.action === Share.dismissedAction) {
+        // dismissed
+        console.log('dismissed#');
+      }
+    } catch (error) {
+      alert(error.message);
+    }
+  }
+
   render() {
-    console.log('uhhhe#$', this.props.route);
+    console.log('uhhhe#$', this.state.user);
+
     return (
       <Scaffold>
         <View
@@ -245,6 +306,13 @@ class Home extends React.Component {
             backgroundColor: '#F0F0F0',
           }}>
           <Header
+            disabled={
+              this.state.user.kciInfo &&
+              this.state.user.kciInfo.showWarning &&
+              this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0
+                ? true
+                : false
+            }
             name={this.props.route.name}
             navigation={this.props.navigation}
           />
@@ -280,7 +348,13 @@ class Home extends React.Component {
                 </View>
                 <View style={{flex: 1, alignItems: 'flex-end', padding: 10}}>
                   <TouchableOpacity
-                    onPress={() => this.props.navigation.navigate('User')}>
+                    onPress={() =>
+                      this.state.user.kciInfo &&
+                      this.state.user.kciInfo.showWarning &&
+                      this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0
+                        ? this.logout_user()
+                        : this.props.navigation.navigate('User')
+                    }>
                     <Image
                       style={{height: 50, width: 50, borderRadius: 50}}
                       source={
@@ -326,6 +400,56 @@ class Home extends React.Component {
                 </View>
               )}
 
+              {this.state.user.merchantStatus &&
+                (this.state.user.merchantStatus.code == 6 ||
+                  this.state.user.merchantStatus.code == 7) && (
+                  <View
+                    style={{
+                      backgroundColor: '#a4272d',
+                      padding: 10,
+                      borderRadius: 10,
+                      flexDirection: 'row',
+                    }}>
+                    <Text style={{color: '#fff', fontSize: 13}}>
+                      Your Documents are currently being reviewed, you'll be
+                      notified via email within 24Hrs. Thank you.
+                    </Text>
+                  </View>
+                )}
+
+
+                {this.state.user.merchantStatus &&
+                this.state.user.merchantStatus.code < 5 && (
+                  <View
+                    style={{
+                      backgroundColor: '#a4272d',
+                      padding: 10,
+                      borderRadius: 10,
+                      flexDirection: 'row',
+                    }}>
+                    <Text style={{color: '#fff', fontSize: 13}}>
+                      Please provide your contact details on the web.
+                    </Text>
+                  </View>
+                )}
+
+              {/* {this.state.user.merchantStatus &&
+                this.state.user.merchantStatus.code == 5 &&
+                this.state.user.merchantApps.includes('ucg') && (
+                  <View
+                    style={{
+                      backgroundColor: '#a4272d',
+                      padding: 10,
+                      borderRadius: 10,
+                      flexDirection: 'row',
+                    }}>
+                    <Text style={{color: '#fff', fontSize: 13}}>
+                      One more thing, please provide your bank details and
+                      business information on the web app.
+                    </Text>
+                  </View>
+                )} */}
+
               <View
                 style={[
                   {
@@ -343,7 +467,8 @@ class Home extends React.Component {
                   disabled={
                     this.state.user.kciInfo &&
                     this.state.user.kciInfo.showWarning &&
-                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0
+                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0||
+                    this.state.disable_button
                       ? true
                       : false
                   }
@@ -353,9 +478,11 @@ class Home extends React.Component {
                 />
                 <ModuleCard
                   disabled={
-                    this.state.user.kciInfo &&
-                    this.state.user.kciInfo.showWarning &&
-                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0
+                    (this.state.user.kciInfo &&
+                      this.state.user.kciInfo.showWarning &&
+                      this.state.user.kciInfo.kciUpdates[0].dayRemaining ==
+                        0) ||
+                    this.state.disable_button
                       ? true
                       : false
                   }
@@ -365,9 +492,11 @@ class Home extends React.Component {
                 />
                 <ModuleCard
                   disabled={
-                    this.state.user.kciInfo &&
-                    this.state.user.kciInfo.showWarning &&
-                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0
+                    (this.state.user.kciInfo &&
+                      this.state.user.kciInfo.showWarning &&
+                      this.state.user.kciInfo.kciUpdates[0].dayRemaining ==
+                        0) ||
+                    this.state.disable_button
                       ? true
                       : false
                   }
@@ -405,7 +534,8 @@ class Home extends React.Component {
                   disabled={
                     this.state.user.kciInfo &&
                     this.state.user.kciInfo.showWarning &&
-                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0
+                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0 ||
+                    this.state.disable_button
                       ? true
                       : false
                   }
@@ -419,7 +549,8 @@ class Home extends React.Component {
                   disabled={
                     this.state.user.kciInfo &&
                     this.state.user.kciInfo.showWarning &&
-                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0
+                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0 ||
+                    this.state.disable_button
                       ? true
                       : false
                   }
@@ -442,9 +573,11 @@ class Home extends React.Component {
                 ]}>
                 <ModuleCard
                   disabled={
-                    this.state.user.kciInfo &&
-                    this.state.user.kciInfo.showWarning &&
-                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0
+                    (this.state.user.kciInfo &&
+                      this.state.user.kciInfo.showWarning &&
+                      this.state.user.kciInfo.kciUpdates[0].dayRemaining ==
+                        0) ||
+                    this.state.disable_button
                       ? true
                       : false
                   }
@@ -456,7 +589,8 @@ class Home extends React.Component {
                   disabled={
                     this.state.user.kciInfo &&
                     this.state.user.kciInfo.showWarning &&
-                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0
+                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0 ||
+                    this.state.disable_button
                       ? true
                       : false
                   }
@@ -472,8 +606,10 @@ class Home extends React.Component {
                   disabled={
                     this.state.user.kciInfo &&
                     this.state.user.kciInfo.showWarning &&
-                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0
-                      ? true
+                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0 ||
+                    this.state.disable_button
+                      ? //|| this.state.user.roles!="SUPERADMIN"
+                        true
                       : false
                   }
                   onPress={() => this.props.navigation.navigate('QuickInvoice')}
@@ -524,10 +660,15 @@ class Home extends React.Component {
                   }
                   onPress={() =>
                     this.setState({
-                      modalInfoType: 'finance',
-                      modalInfoTextMore: 'Please access cicod on the web',
+                      modalInfoType: 'accounting',
+                      modalInfoTextMore: 'Please access on the web',
                       modalInfo: true,
-                      modalInfoText: 'Want to manage finance?',
+                      btn_modal_txt:"Login to CICOD.com",
+                      modalInfoTextMore: 'Every transaction carried out on this CICOD Merchant app is automatically logged in the accounting module, which can be accessed via account on www.cicod.com',
+                      modalInfoTextMore_two:
+                        'This feature helps you keep track of your income and expenses and shows you the financial performance of your business.',
+                      modalInfoTextMore_three: '',
+                      modalInfoText: 'Keeping good records is important to monitor the health of your business.',
                     })
                   }
                   source={require('../images/home/account.png')}
@@ -545,7 +686,10 @@ class Home extends React.Component {
                     this.setState({
                       modalInfoType: 'adduser',
                       modalInfoText: 'Want to add more user?',
-                      modalInfoTextMore: 'Please access cicod on the web',
+                      modalInfoTextMore: 'Go to www.cicod.com/login',
+                      modalInfoTextMore_two:
+                        'Click on Customer Order Management Module',
+                      modalInfoTextMore_three: 'Then Administration tab',
                       modalInfo: true,
                     })
                   }
@@ -566,7 +710,7 @@ class Home extends React.Component {
                     paddingHorizontal: 10,
                   },
                 ]}>
-                {/* <ModuleCard
+                <ModuleCard
                   disabled={
                     this.state.user.kciInfo &&
                     this.state.user.kciInfo.showWarning &&
@@ -577,14 +721,19 @@ class Home extends React.Component {
                   onPress={() =>
                     this.setState({
                       modalInfoType: 'finance',
-                      modalInfoTextMore: 'Finace coming soon...',
+                      modalInfoTextMore: 'Different financial service providers shall update their criteria from time to time and this will be visible on check out during an order.',
                       modalInfo: true,
-                      modalInfoText: '',
+                      modalInfo: true,
+                      modalInfoTextMore_two:"This affords you the opportunity of being considered for financial services from various financial service providers in your region. The following criteria will be considered: 1- Must have traded via the app continuously for 3 months and be linked on the trade network. 2- Conducted online transactions as this enables financial service providers with assurance of viability based on electronically referenced transactions over time.",
+                      modalInfoTextMore_three:"",
+                      modalInfoText: 'Keep the wheels of your business going with inventory finance.',
+                      btn_modal_txt:"Login to CICOD.com "
                     })
                   }
                   source={require('../images/home/finance.png')}
                   title="Finance"
-                /> */}
+                />
+                <View style={{width:30}} />
                 <ModuleCard
                   disabled={
                     this.state.user.kciInfo &&
@@ -595,10 +744,15 @@ class Home extends React.Component {
                   }
                   onPress={() => {
                     this.setState({
+                      btn_modal_txt:"Invite now",
                       modalInfoType: 'delivery',
-                      modalInfoTextMore: 'Please access cicod on the web',
+                      modalInfoTextMore: 'The buyer is expected to provide the DAT when receiving the product, the DAT must then be validated by the merchant and provided on the app in order for settlement to occur. ',
+                      modalInfoTextMore_two:
+                        'In order to ensure a satisfactory business transaction between buyers and sellers a Delivery Acceptance Token (DAT) is sent to the buyer upon every successful sale.',
+                      modalInfoTextMore_three:
+                        'You can also invite your logistics partner to register on the app.',
                       modalInfo: true,
-                      modalInfoText: 'Want to manage delivery rate?',
+                      modalInfoText: 'Delivery',
                     });
                   }}
                   source={require('../images/home/delivery.png')}
@@ -733,32 +887,33 @@ class Home extends React.Component {
             onDismiss={() => this.setState({modalInfo: false})}>
             <View
               style={{
-                height: height - 250,
+                height: height - 90,
                 alignSelf: 'center',
                 backgroundColor: '#fff',
                 width: width - 50,
                 justifyContent: 'center',
                 alignItems: 'center',
-                paddingVertical: 20,
-                padding: 30,
+                // paddingVertical: 20,
+                // paddingVertical: 10,
+                paddingHorizontal:10,
                 borderRadius: 10,
                 flexDirection: 'column',
               }}>
               {this.state.modalInfoType == 'delivery' && (
                 <Image
-                  // style={{height:20,width:20}}
+                   style={{height:100,width:100}}
                   source={require('../images/home/delivery.png')}
                 />
               )}
               {this.state.modalInfoType == 'finance' && (
                 <Image
-                  // style={{height:20,width:20}}
+                   style={{height:100,width:100}}
                   source={require('../images/home/finance.png')}
                 />
               )}
               {this.state.modalInfoType == 'accounting' && (
                 <Image
-                  // style={{height:20,width:20}}
+                   style={{height:100,width:100}}
                   source={require('../images/home/account.png')}
                 />
               )}
@@ -768,27 +923,54 @@ class Home extends React.Component {
                   source={require('../images/home/AddUserInfo.png')}
                 />
               )}
-
               <Text
-                style={{fontWeight: 'bold', color: '#4E4D4D', fontSize: 20}}>
+                style={{fontWeight: 'bold', color: '#4E4D4D', fontSize:this.state.modalInfoType == 'finance'?17: 20,marginTop:10,marginHorizontal:10}}>
                 {this.state.modalInfoText}
               </Text>
-              <Text style={{color: '#4E4D4D', marginTop: 16}}>
-                {this.state.modalInfoTextMore}
-              </Text>
-
-              {/* <TouchableOpacity
+              <View style={{alignSelf: 'flex-start', paddingHorizontal: 20}}>
+               
+                <Text style={{ marginTop: 14, fontSize:this.state.modalInfoType == 'finance'? 12: 14}}>
+                   {this.state.modalInfoTextMore_two}
+                </Text>
+                <View style={{marginTop:20,backgroundColor:"#F0F3F5",borderColor:"#DDE2E5",borderWidth:1,borderRadius:10,paddingHorizontal:10,paddingVertical:20}}>
+                <Text style={{color:"#B1272C",fontWeight:"bold",textAlign:"center"}}>NOTE</Text>
+                <Text style={{color: '#4E4D4D', marginTop: 16, fontSize: 14}}>
+                   {this.state.modalInfoTextMore}
+                </Text>
+                {
+                  this.state.modalInfoTextMore_three!="" &&(
+                    <Text style={{color: '#4E4D4D', marginTop: 16, fontSize: 14}}>
+                    {this.state.modalInfoTextMore_three}
+                    </Text>
+                  )
+                }
+               
+                <TouchableOpacity
+                onPress={() => {
+                  this.state.modalInfoType=="delivery"?this.shareNetwork()  : Linking.openURL(`${Constants.sass_url}/login`);
+                }}
                 style={{
                   borderWidth: 1,
-                  marginTop: 15,
+                  marginTop: 35,
+                  alignItems:"center",
+                  justifyContent:"center",
                   backgroundColor: '#fff',
                   borderColor: '#2F2E7C',
                   paddingVertical: 10,
                   padding: 15,
+                  width:200,
+                  alignSelf:"center",
                   borderRadius: 100,
                 }}>
-                <Text style={{color: '#2F2E7C'}}>Access Now</Text>
-              </TouchableOpacity> */}
+                <Text style={{color: '#2F2E7C'}}>{this.state.btn_modal_txt}</Text>
+              </TouchableOpacity>
+                </View>
+                {/* <Text style={{color: '#4E4D4D', marginTop: 10, fontSize: 12}}>
+                  * {this.state.modalInfoTextMore_three}
+                </Text> */}
+              </View>
+
+            
             </View>
           </Modal>
 
@@ -872,7 +1054,8 @@ function mapDispatchToProps(dispatch) {
     setUser: value => dispatch({type: SET_USER, value: value}),
     logoutUser: () => dispatch({type: LOGOUT_USER}),
     setCustomer: value => dispatch({type: SET_CUSTOMER, value: value}),
-    emptyOrder: () => dispatch({type: CLEAR_ORDER}),
+    resetDelivery: () => dispatch({type: RESET_DELIVERY_MAIN}),
+    emptyOrder: () => dispatch({type: CLEAR_CART}),
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Home);

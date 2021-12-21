@@ -8,6 +8,7 @@ import {
   Touchable,
   ScrollView,
   Alert,
+  BackHandler
 } from 'react-native';
 import {Text, TextInput, Modal} from 'react-native-paper';
 import styles from '../css/OrderDetail_pendingCss';
@@ -17,15 +18,23 @@ import CheckBox from 'react-native-check-box';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {connect} from 'react-redux';
-import {SET_USER, LOGOUT_USER, ORDER_RELOAD} from '../redux/constants/index';
+import {
+  SET_USER,
+  LOGOUT_USER,
+  ORDER_RELOAD,
+  CLEAR_CART,
+  CLEAR_ORDER,
+} from '../redux/constants/index';
 import {Constants} from './Constant';
 import Scaffold from './Components/Scaffold';
+import NumberFormat from 'react-number-format';
 
 var {width, height} = Dimensions.get('window');
 
 class OrderDetail_pending extends React.Component {
   constructor(props) {
     super(props);
+    this.handleBackButtonClick = this.handleBackButtonClick.bind(this);
     this.state = {
       Spinner: false,
       order_id: 0,
@@ -43,8 +52,10 @@ class OrderDetail_pending extends React.Component {
       currency: '',
       supendModal: false,
       bodyOrder: {},
+      delivery_amount: 0,
       amount_paid_from_credit_limit: '',
       order_detail_url: '',
+      balance_part_payment: [],
       data: {
         customer: {
           name: '',
@@ -55,6 +66,40 @@ class OrderDetail_pending extends React.Component {
       },
       item: [],
     };
+  }
+  componentWillMount() {
+    BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.handleBackButtonClick,
+    );
+  }
+
+  componentWillUnmount() {
+    BackHandler.removeEventListener(
+      'hardwareBackPress',
+      this.handleBackButtonClick,
+    );
+  }
+
+  handleBackButtonClick() {
+    alert
+    // this.props.navigation.goBack(null);
+    // if (typeof this.props.route.params=='undefined' || this.props.route.params.from == null) {
+    //   this.props.emptyOrder();
+    //   let user_data = {};
+    //   this.props.setCustomer(user_data);
+    if (this.props.route.params.from == null || typeof this.props.route.params.from =='undefined') {
+      this.props.navigation.reset({
+        index: 0,
+        routes: [{name: 'Home'}],
+      });
+    } else {
+      this.props.navigation.goBack(null);
+    }
+    return true;
+  }
+  componentDidMount() {
+    this.props.emptyOrder();
   }
   get_order_detail() {
     let order_id = this.props.route.params.id;
@@ -109,8 +154,10 @@ class OrderDetail_pending extends React.Component {
           this.setState({
             pending_order_res: responseJson,
             data: resdata,
+            balance_part_payment: responseJson.data.balance_part_payment,
             cicod_order_id: resdata.cicod_order_id,
             delivery_type: resdata.delivery_type,
+            delivery_amount: resdata.delivery_amount,
             payment_mode: resdata.payment_mode,
             order_status: resdata.order_status,
             payment_status: resdata.payment_status,
@@ -179,7 +226,7 @@ class OrderDetail_pending extends React.Component {
         });
         if (responseJson.status === 'success') {
           // console.log('data data data res res res ', responseJson)
-          Alert.alert('Success', responseJson.message);
+          Alert.alert('Success', "Order Confirmation sent successfully.");
           // this.props.navigation.navigate('DrawerNavigation')
         } else {
           // let message = JSON.stringify(responseJson.error.message)
@@ -196,8 +243,8 @@ class OrderDetail_pending extends React.Component {
     if (this.state.pending_order_res.data.balance_part_payment.length == 0) {
       amount_payable = this.state.bodyOrder.amount; // amount_payable not available,bodyOrder.amount
     } else {
-      amount_payable = this.state.pending_order_res.data.balance_part_payment[0]
-        .amount; // amount_payable not available,bodyOrder.amount
+      amount_payable =
+        this.state.pending_order_res.data.balance_part_payment[0].amount; // amount_payable not available,bodyOrder.amount
     }
     let order_id = order_id; // this.props.route.params.id
 
@@ -271,13 +318,14 @@ class OrderDetail_pending extends React.Component {
           responseJson,
         );
         if (responseJson.status === 'success') {
-          Alert.alert('Message', responseJson.message);
+          Alert.alert("Success","Order confirmation sent successfully.")
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
         } else {
           this.setState({spinner: false});
           let message = responseJson.message;
-          alert(message);
+         // Alert.alert("Success","Order confirmation sent successfully.")
+           alert(message);
         }
       })
       .catch(error => {
@@ -288,7 +336,18 @@ class OrderDetail_pending extends React.Component {
   go_back_btn() {
     console.log('go back btn');
     this.props.setScreenReload({reload: true});
-    this.props.navigation.navigate('Order');
+   // this.props.navigation.navigate('Order');
+    if ( this.props.route.params.from!=null) {
+      this.props.navigation.reset({
+        index: 0,
+        routes: [{name: 'Home'}],
+      })
+    } else {
+      this.props.navigation.goBack()
+    }
+      
+    
+    
   }
   render() {
     this.get_order_detail();
@@ -316,7 +375,7 @@ class OrderDetail_pending extends React.Component {
                       {color: '#2F2E7C', fontWeight: '700', marginLeft: 10},
                       fontStyles.normal15,
                     ]}>
-                    ORDER DETAILS
+                    ORDER DETAIL
                   </Text>
                 </View>
               </TouchableOpacity>
@@ -504,12 +563,28 @@ class OrderDetail_pending extends React.Component {
                 </View>
                 <View style={({}, styles.detailRow)}>
                   <View style={[{}, styles.detailColumn1]}>
-                    <Text style={[{}, styles.detailColumn1text]}>
+                    <Text style={[{ }, styles.detailColumn1text]}>
                       Payment Status
                     </Text>
                   </View>
                   <View style={[{}, styles.detailColumn2]}>
-                    <Text style={[{}, styles.detailColumn2text]}>
+                    <Text style={[{
+                      borderRadius: 50,
+                      paddingHorizontal: 5,
+                     
+                      width: width / 5,
+                      alignSelf: 'flex-end',
+backgroundColor:this.state.data.payment_status=='PENDING'?'#FFF3DB': 
+this.state.data.payment_status=='CANCELLED'? '#FFF4F4':
+this.state.data.payment_status=='PAID'? '#DAF8EC':
+this.state.data.payment_status=='PART PAYMENT'? '#E6E6E6'
+:null,color:this.state.data.payment_status=='PENDING'?'#FDB72B': 
+this.state.data.payment_status=='CANCELLED'? '#B1272C':
+this.state.data.payment_status=='PAID'? '#26C281':
+this.state.data.payment_status=='PART PAYMENT'? '#929497'
+:null
+
+                    }, styles.detailColumn2text]}>
                       {this.state.data.payment_status ?? '--'}
                     </Text>
                   </View>
@@ -681,32 +756,209 @@ class OrderDetail_pending extends React.Component {
                     )}
                   />
                 </View>
-                <View
+
+
+                {this.state.delivery_type == 'DELIVERY' ? (
+                  <View>
+                    <View
+                      style={{
+                        alignSelf: 'flex-end',
+                        marginRight: 20,
+                        marginVertical: 20,
+                        flexDirection: 'row',
+                      }}>
+                      <Text
+                        style={{
+                          fontWeight: 'bold',
+                          color: '#4E4D4D',
+                          fontSize: 15,
+                          fontFamily: 'Open Sans',
+                        }}>
+                        Sub Total:{' '}
+                      </Text>
+                      <Text
+                        style={{
+                          fontWeight: 'bold',
+                          color: '#4E4D4D',
+                          fontSize: 15,
+                          fontFamily: 'Open Sans',
+                        }}>
+                        <NumberFormat
+                          decimalScale={2}
+                          renderText={(value, props) => (
+                            <Text {...props}>{value}</Text>
+                          )}
+                          value={this.state.total_amount}
+                          displayType={'text'}
+                          thousandSeparator={true}
+                          prefix={this.state.currency}
+                        />
+                        {/*                                     
+                                {currency+ total_amount} */}
+                        {/* {this.props.currency.currency+total_amount.replace(/\B(?=(\d{1})+(?!\d))/g, ",")} */}
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        alignSelf: 'flex-end',
+                        marginRight: 20,
+                        marginVertical: 20,
+                        flexDirection: 'row',
+                      }}>
+                      <Text
+                        style={{
+                          fontWeight: 'bold',
+                          color: '#4E4D4D',
+                          fontSize: 15,
+                          fontFamily: 'Open Sans',
+                        }}>
+                        Delivery Fee:{' '}
+                      </Text>
+                      <Text
+                        style={{
+                          fontWeight: 'bold',
+                          color: '#4E4D4D',
+                          fontSize: 15,
+                          fontFamily: 'Open Sans',
+                        }}>
+                        <NumberFormat
+                          decimalScale={2}
+                          renderText={(value, props) => (
+                            <Text {...props}>{value}</Text>
+                          )}
+                          value={this.state.delivery_amount}
+                          displayType={'text'}
+                          thousandSeparator={true}
+                          prefix={this.state.currency}
+                        />
+                        {/*                                     
+                                {currency+ total_amount} */}
+                        {/* {this.props.currency.currency+total_amount.replace(/\B(?=(\d{1})+(?!\d))/g, ",")} */}
+                      </Text>
+                    </View>
+
+                    <View
+                      style={{
+                        alignSelf: 'flex-end',
+                        marginRight: 20,
+                        marginVertical: 20,
+                        flexDirection: 'row',
+                      }}>
+                      <Text
+                        style={{
+                          fontWeight: 'bold',
+                          color: '#4E4D4D',
+                          fontSize: 15,
+                          fontFamily: 'Open Sans',
+                        }}>
+                       {this.state.data.is_part_payment?"First Installment: " : "Total: "}
+                      </Text>
+                      <Text
+                        style={{
+                          fontWeight: 'bold',
+                          color: '#4E4D4D',
+                          fontSize: 15,
+                          fontFamily: 'Open Sans',
+                        }}>
+                        <NumberFormat
+                          decimalScale={2}
+                          renderText={(value, props) => (
+                            <Text {...props}>{value}</Text>
+                          )}
+                          value={
+                            this.state.data.is_part_payment?parseFloat(this.state.data.amount).toFixed(2): (parseFloat(this.state.total_amount) +
+                            parseFloat(this.state.delivery_amount)).toFixed(2)
+                          }
+                          displayType={'text'}
+                          thousandSeparator={true}
+                          prefix={this.state.currency}
+                        />
+                        {/*                                     
+                                {currency+ total_amount} */}
+                        {/* {this.props.currency.currency+total_amount.replace(/\B(?=(\d{1})+(?!\d))/g, ",")} */}
+                      </Text>
+                    </View>
+                  </View>
+                ) : (
+                  <View
+                    style={{
+                      alignSelf: 'flex-end',
+                      marginRight: 20,
+                      marginVertical: 20,
+                      justifyContent:"center",
+                      alignItems:"center",
+                      flexDirection: 'row',
+                    }}>
+                    <Text
+                      style={{
+                        fontWeight: 'bold',
+                        color: '#4E4D4D',
+                        fontSize: 14,
+                        fontFamily: 'Open Sans',
+                      }}>
+                     {this.state.data.is_part_payment?"First Installment: " : "Total: "}
+                    </Text>
+
+                    <NumberFormat
+                            decimalScale={2}
+                            renderText={(value, props) => (
+                              <Text {...props}>{value}</Text>
+                            )}
+                            value={this.state.data.is_part_payment
+                              ? this.state.data.amount.toFixed(2)
+                              : this.state.total_amount.toFixed(2)}
+                            displayType={'text'}
+                            thousandSeparator={true}
+                            prefix={this.state.currency}
+                          />
+                    
+                   
+                  </View>
+                )}
+
+
+                
+<View
                   style={{
                     alignSelf: 'flex-end',
                     marginRight: 20,
                     marginVertical: 20,
                     flexDirection: 'row',
                   }}>
-                  <Text
-                    style={{
-                      fontWeight: 'bold',
-                      color: '#4E4D4D',
-                      fontSize: 17,
-                      fontFamily: 'Open Sans',
-                    }}>
-                    Total:{' '}
-                  </Text>
-                  <Text
-                    style={{
-                      fontWeight: 'bold',
-                      color: '#4E4D4D',
-                      fontSize: 17,
-                      fontFamily: 'Open Sans',
-                    }}>
-                    {' '}
-                    {this.state.currency + ' ' + this.state.total_amount}
-                  </Text>
+                  {this.state.balance_part_payment.length > 0 && (
+                    <FlatList
+                      data={this.state.balance_part_payment}
+                      renderItem={({item, index, separators}) => (
+                        <View
+                          style={{
+                            alignSelf: 'flex-end',
+                            flexDirection: 'row',
+                            justifyContent: 'space-between',
+                          }}>
+                          <Text
+                            style={{
+                              fontWeight: 'bold',
+                              color: '#4E4D4D',
+                              fontSize: 15,
+                              fontFamily: 'Open Sans',
+                            }}>
+                            Balance Amount:{' '}
+                          </Text>
+
+                          <NumberFormat
+                            decimalScale={2}
+                            renderText={(value, props) => (
+                              <Text {...props}>{value}</Text>
+                            )}
+                            value={item.amount.toFixed(2)}
+                            displayType={'text'}
+                            thousandSeparator={true}
+                            prefix={this.state.currency}
+                          />
+                        </View>
+                      )}
+                    />
+                  )}
                 </View>
                 <View
                   style={[
@@ -730,6 +982,7 @@ class OrderDetail_pending extends React.Component {
                   </TouchableOpacity>
                 </View>
               </View>
+
               <View style={[{}, styles.noteView]}>
                 <Text
                   style={[
@@ -810,7 +1063,7 @@ function mapDispatchToProps(dispatch) {
   return {
     setUser: value => dispatch({type: SET_USER, value: value}),
     logoutUser: () => dispatch({type: LOGOUT_USER}),
-    setScreenReload: value => dispatch({type: ORDER_RELOAD, value: value}),
+    emptyOrder: () => dispatch({type: CLEAR_ORDER}),
     setScreenReload: value => dispatch({type: ORDER_RELOAD, value: value}),
   };
 }

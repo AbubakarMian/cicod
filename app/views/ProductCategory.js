@@ -86,7 +86,7 @@ class ProductCategory extends React.Component {
           });
         } else {
           let message = responseJson.message;
-          Alert.alert('Error', message);
+          // Alert.alert('Error', message);
         }
       });
   }
@@ -246,10 +246,7 @@ class ProductCategory extends React.Component {
                 borderRadius: 5,
                 width: width - 80,
               }}>
-              <Image
-                style={{height: 30, width: 30}}
-                source={require('../images/products/searchicon.png')}
-              />
+               
 
               <TextInput
                 label="Search a category"
@@ -262,6 +259,13 @@ class ProductCategory extends React.Component {
                 onChangeText={text => this.setState({search_text: text})}
                 onSubmitEditing={() => this.search()}
               />
+              <TouchableOpacity onPress={()=>this.search()} style={{position:"absolute",right:10}}>
+              <Image
+                style={{height: 30, width: 30,}}
+                source={require('../images/products/searchicon.png')}
+              />
+              </TouchableOpacity>
+             
             </View>
 
             <TouchableOpacity
@@ -337,7 +341,7 @@ class ProductCategory extends React.Component {
                       {item.name}
                     </Text>
                     <Text style={[{}, styles.listDescNormalText]}>
-                      {item.description}
+                      {item.description==""?"--":item.description}
                     </Text>
                   </View>
                   <View

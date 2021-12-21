@@ -34,6 +34,7 @@ class PayByCash extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      data:{},
       order_detail: null,
       payment_link: null,
       order_id: 0,
@@ -49,7 +50,7 @@ class PayByCash extends React.Component {
 
   get_order_detail() {
     this.setState({spinner: true});
-    let order_id = this.props.route.params.data.id;
+    let order_id = this.state.data.id;
 
     let postData = {
       method: 'GET',
@@ -89,6 +90,7 @@ class PayByCash extends React.Component {
           data.order_id = order_id;
           this.props.navigation.navigate('PaymentSuccess', {
             data: responseJson.data,
+            order_id: responseJson.data.id,
           });
 
           // this.props.navigation.navigate('OrderDetail', { id: this.responseJson.data.id ,data:responseJson.data})
@@ -116,35 +118,67 @@ class PayByCash extends React.Component {
     // console.log("@@@@@@@@@@@!!!!!!!!!!!~~~~~~~~~~",bodyOrder)
     // bodyOrder.payment_mode = payment_mode;
     // console.log("$$$$$$$$$$$$$$$$$$$",bodyOrder.payment_mode)
-    let postData = {
-      method: 'GET', // POST
+
+    let postData =this.props.route.params.new_order?{
+      method:'POST', // POST
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
         Authorization: this.props.user.access_token,
       },
-      // body: JSON.stringify(bodyOrder)
+     body: JSON.stringify(bodyOrder)
+    
+    } : {
+      method: "GET", // POST
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: this.props.user.access_token,
+      },
+    
     };
-    let order_id = this.props.route.params.order_id;
+    // let order_id = this.props.route.params.order_id;
 
-    let url =
-      Constants.orderslist + '/' + order_id + '?action=make_cash_payment';
-    console.log('*****************#########33333333333', url);
+    // let url =
+    //   Constants.orderslist + '/' + order_id + '?action=make_cash_payment';
+    // console.log('*****************#########33333333333', url);
     console.log(this.props.user);
     // console.log("*****************#########33333333333",Constants.orderslist+'/'+order_id+'?action=make_cash_payment')
     // console.log('222222222222 makePaymentFun body params list @@@@@@!!!!!!!!!!!!!!', postData);
 
-    fetch(url, postData)
+    fetch(this.props.route.params.new_order?Constants.orderslist: Constants.orderslist + '/' + this.props.route.params.order_id + '?action=make_cash_payment', postData)
       .then(response => response.json())
       .then(async responseJson => {
         this.setState({spinner: false});
         console.log('**************all response  ', responseJson);
-        if (responseJson.status === 'success') {
+        if (responseJson.status === 'success' ||
+        responseJson.status == 'SUCCESS') {
           console.log(
             '&&&&&&&&&&&&&&&&&&&&& responseJson.data',
             responseJson.data,
           );
-          this.get_order_detail();
+
+          Alert.alert("Success","Cash Payment Successfull",[{
+            text:"Ok",
+            onPress:()=>{
+              this.props.navigation.reset({
+                index: 0,
+                routes: [{name: 'Home'}],
+              });
+            }
+          }])
+
+
+          
+            // this.props.navigation.navigate('PaymentSuccess', {
+            //   data: responseJson.data,
+            //   order_id: responseJson.data.id,
+            // });
+          
+
+          
+          // this.setState({data:responseJson.data})
+          // this.get_order_detail();
           // this.props.navigation.navigate('PaymentSuccess', { data:responseJson.status})
           // this.get_order_detail(responseJson.data.id);
           // let payment_link = responseJson.data.payment_link
@@ -212,16 +246,19 @@ class PayByCash extends React.Component {
       return;
     }
 
-    console.log('~~~~~~~~~~~~~~~', this.props.route.params.data);
+    // console.log('~~~~~~~~~~~~~~~', this.props.route.params.data);
     // if(this.props.route.params.pending_order_res != undefined){
     // console.log('in if this.props.route.params.data.id',this.props.route.params.pending_order_res.data.id)
     // this.props.navigation.navigate('PaymentSuccess',{data:this.props.route.params.pending_order_res.data})
     // return;
+    
     // }
+
+
     this.makePaymentFun(this.props.route.params.payment_mode);
-    console.log('EEEEEEEEEEEEEE', this.props.route.params.data.id);
-    let order_id = this.props.route.params.data.id;
-    console.log(order_id);
+    // console.log('EEEEEEEEEEEEEE', this.props.route.params.data.id);
+    // let order_id = this.props.route.params.data.id;
+    // console.log(order_id);
     // this.props.navigation.navigate('PaymentSuccess',{data:this.props.route.params.data,order_id})
     return;
     // this.makePaymentFun(this.props.route.params.payment_mode);

@@ -107,6 +107,7 @@ export default class ResetPassword extends React.Component {
                 </View>
                 <View style={[{}, styles.headingRow]}>
                     <TouchableOpacity
+                     hitSlop={{top:20,bottom:20,right:20,left:20}}
                         // onPress={() => this.props.navigation.navigate('Login')}
                         onPress={() => this.props.navigation.goBack()}
                     >
@@ -139,13 +140,14 @@ export default class ResetPassword extends React.Component {
                     />
                 </View>
                 <TouchableOpacity
+                 hitSlop={{top:50,bottom:50,right:50,left:50}}
                     onPress={() => this.ressetPassword()}
                     style={[{}, styles.btnContinuueView]}>
                     <Text style={{ color: '#FFFFFF' }}>Reset Password</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     onPress={() => this.props.navigation.navigate('Login')}
-                    style={{ marginTop: 20 }}
+                    style={{ marginTop: 40 }}
                 >
                     <Text style={{ color: '#2F2E7C', fontWeight: '600', fontSize: 20 }}>Login</Text>
                 </TouchableOpacity>

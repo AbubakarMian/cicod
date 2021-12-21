@@ -59,13 +59,14 @@ class AddProduct extends React.Component {
       showdropDownModal: false,
       // catelog_products_total: 0,
       selected_product: [],
+      pageNo:1,
+      totalPageCount:1
     };
   }
 
   componentDidMount() {
+    this.getProductList(Constants.productslist + '?is_active=1&page=1');
     this.getCategoryList();
-
-    this.getProductList(Constants.productslist + '?is_active=1');
   }
 
   getProductList(search_url) {
@@ -81,17 +82,7 @@ class AddProduct extends React.Component {
         Authorization: this.props.user.access_token,
       },
     };
-    //Constants.productslist + '?is_active=1&search=' + this.state.search_product
-    // let search_url =  '?is_active=1&search=' + this.state.search_product + '&category_id=' + this.state.category_id
-    // let category_search =
-    //   category_id == 0 || category_id == ''
-    //     ? ''
-    //     : '&category_id=' + category_id;
-    // let search_url =
-    //   Constants.productslist +
-    //   '?is_active=1&search=' +
-    //   search_product +
-    //   category_search;
+   
     console.log('search url ', search_url);
     console.log('postData ', postData);
     fetch(search_url, postData)
@@ -101,14 +92,14 @@ class AddProduct extends React.Component {
           spinner: false,
         });
         console.log('response !!!!!!!!', responseJson);
-        if (responseJson.status === 'success') {
+        if (responseJson.status == 'success') {
           let cart_data = this.props.cart.cart;
           console.log('cart data : ', cart_data);
           let data = responseJson.data;
           for (let i = 0; i < data.length; i++) {
             let product_found = false;
             for (let c = 0; c < cart_data.length; c++) {
-              console.log('asd');
+           
               if (cart_data[c].id == data[i].id) {
                 data[i].purchased_quantity = cart_data[c].purchased_quantity;
                 data[i].is_added = true;
@@ -121,16 +112,24 @@ class AddProduct extends React.Component {
             }
           }
           this.setState({
-            data: data,
+            data: [...this.state.data,...data],
+            totalPageCount:responseJson.pages
           });
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
         } else {
           let message = responseJson.message;
           // Alert.alert('Error', message);
+          Alert.alert('Info', "Please click to reload products",[
+            {
+              text:"Reload",
+              onPress:()=>this.getProductList(Constants.productslist + '?is_active=1&page=1')
+            }
+          ]);
         }
       })
       .catch(error => {
+        console.log('error$$', error);
         console.log('error');
       });
   }
@@ -178,11 +177,12 @@ class AddProduct extends React.Component {
     this.setState({
       category_id: category_id,
       showdropDownModal: false,
+      pageNo: 1, data: []
     });
     const url =
       Constants.productslist +
       '?is_active=1&category_id=' +
-      this.state.category_id;
+      this.state.category_id+ '?page=' + this.state.pageNo;
     this.getProductList(url);
   };
 
@@ -267,6 +267,58 @@ class AddProduct extends React.Component {
     this.props.navigation.navigate('CreateOrder', {screen: 'active'});
   }
 
+  handleLoadMore = () => {
+    // if (!this.state.spinner) {
+    // alert(this.state.totalPageCount);
+    const pageNo = this.state.pageNo + 1; // increase page by 1
+    this.setState({pageNo});
+
+    const product_url =
+      this.state.category_id == ''
+        ? Constants.productslist + '?page=' + pageNo
+        : Constants.productslist +
+          '?category_id=' +
+          this.state.category_id +
+          '&page=' +
+          pageNo;
+
+    console.log('product_url$##@0', product_url);
+    this.getProductList(product_url);
+
+    // method for API call
+    // } else {
+    //   alert('here');
+    // }
+  };
+
+  renderFooter = () => {
+    //it will show indicator at the bottom of the list when data is loading otherwise it returns null
+    // if (!this.state.spinner) return null;
+    // return <ActivityIndicator style={{color: '#000'}} />;
+    if (
+      this.state.totalPageCount > 1 &&
+      this.state.pageNo < this.state.totalPageCount
+    ) {
+      return (
+        <TouchableOpacity
+          onPress={() => this.handleLoadMore()}
+          style={{
+            padding: 5,
+            alignSelf: 'center',
+            marginTop: 7,
+            paddingBottom:50,
+            marginBottom: 350,
+          }}>
+          <Text style={{letterSpacing: 1.1, fontWeight: 'bold'}}>
+            Load More
+          </Text>
+        </TouchableOpacity>
+      );
+    }
+    return null;
+  };
+
+
   render() {
     var radio_props_dilvery = [{label: 'Dilivery', value: 0}];
     var radio_props_pickup = [{label: 'Pickup', value: 1}];
@@ -278,6 +330,7 @@ class AddProduct extends React.Component {
     ];
     return (
       <Scaffold>
+        
         <View style={[{}, styles.mainView]}>
           <Header navigation={this.props.navigation} />
 
@@ -287,10 +340,12 @@ class AddProduct extends React.Component {
             textStyle={{color: '#fff'}}
             color={'#fff'}
           />
+          <View style={{marginHorizontal:10}}>
           <NavBack
             title="ADD PRODUCT"
             onClick={() => this.props.navigation.goBack()}
           />
+          </View>
           {/* <View style={[{}, styles.backHeaderRowView]}>
           <TouchableOpacity
             // onPress={() => this.props.navigation.navigate('CreateOrder')}
@@ -302,13 +357,14 @@ class AddProduct extends React.Component {
           </View>
         </View> */}
           <View>
-            <ScrollView>
+         <View style={{flexDirection:"row",justifyContent:"space-between",paddingHorizontal:10,alignItems:"center"}}>
               <Searchbar
                 placeholder="Search Product"
                 iconColor="#929497"
                 style={{
-                  width: width - 20,
-                  alignSelf: 'center',
+                  flex:1,
+                  // width: width - 50,
+                  // alignSelf: 'center',
                   marginTop: 10,
                   marginBottom: 5,
                   elevation: 0,
@@ -325,11 +381,11 @@ class AddProduct extends React.Component {
                   //   '?is_active=1&search=' +
                   //   search_product +
                   //   category_search;
-
+this.setState({data:[]})
                   let category_search =
-                    category_id == 0 || category_id == ''
+                    this.state.category_id == 0 ||  this.state.category_id == ''
                       ? ''
-                      : '&category_id=' + category_id;
+                      : '&category_id=' +  this.state.category_id;
                   let url =
                     Constants.productslist +
                     '?is_active=1&search=' +
@@ -340,6 +396,29 @@ class AddProduct extends React.Component {
                 onChangeText={text => this.setState({search_product: text})}
                 //update
               ></Searchbar>
+
+<TouchableOpacity
+              style={{
+                height: 50,
+                width: 50,
+                // position: 'absolute',
+                // right: 0,
+                // alignSelf: 'center',
+                alignItems: 'center',
+                justifyContent: 'center',
+                paddingLeft: 10,
+              }}
+              onPress={() => {
+                this.setState({data: [], pageNo: 1});
+                let product_url = Constants.productslist + '?page=1&is_active=1';
+                this.getProductList(product_url);
+              }}>
+              <Icon name="refresh" size={30} color="#929497" />
+            </TouchableOpacity>
+
+              </View>
+
+              
               {/* <View style={[{}, styles.searchByCatCOntainer]}> */}
 
               {
@@ -463,6 +542,8 @@ class AddProduct extends React.Component {
                         />
                       ))
                     }
+                    keyExtractor={(item, index) => index}
+                    ListFooterComponent={this.renderFooter}
                     renderItem={({item, index, separators}) => (
                       <AddProductCartItem
                         item={item}
@@ -482,13 +563,17 @@ class AddProduct extends React.Component {
                       No product found
                     </Text>
                     <Text style={[{color: '#929497'}, fontStyles.normal15]}>
-                      Search for a product
+                      Select product category
                     </Text>
                   </View>
                 )}
+
+               
               </View>
-            </ScrollView>
+           
+           
           </View>
+         
           <DropDownModal
             title="Product Categories"
             selected={this.state.category_id}
