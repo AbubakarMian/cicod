@@ -171,6 +171,7 @@ class Dashboard extends React.Component {
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
         } else {
+          console.log("eruuu$",responseJson)
           let message = responseJson.message;
           Alert.alert('Error', message);
         }

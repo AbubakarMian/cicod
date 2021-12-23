@@ -318,7 +318,19 @@ onPress:()=>{
   counterFun = async (action, index) => {
     let data = this.state.data;
     if (action == 'add') {
-      let updated_purchased_quantity = data[index].purchased_quantity + 1;
+      let updated_purchased_quantity=0;
+      if (data[index].minimum_order > 0 &&  (!data[index].purchased_quantity ||  data[index].purchased_quantity <1 )) {
+        updated_purchased_quantity=data[index].minimum_order;
+        // Alert.alert(
+        //   'Info!',
+        //   `${data[index].name} purchased quantity less than minimum order ${data[i].minimum_order}`,
+        // );
+        // return;
+      }else{
+         updated_purchased_quantity = data[index].purchased_quantity + 1;
+      }
+
+      //let updated_purchased_quantity = data[index].purchased_quantity + 1;
       if (
         updated_purchased_quantity > data[index].qnty &&
         !data[index].no_qty_limit
@@ -335,13 +347,13 @@ onPress:()=>{
           'here in else condition !!!!!!!!! after : ',
           data[index].purchased_quantity,
         );
-        if (data[index].minimum_order > data[index].purchased_quantity) {
-          Alert.alert(
-            'Info!',
-            `${data[index].name} purchased quantity less than minimum order ${data[i].minimum_order}`,
-          );
-          return;
-        }
+        // if (data[index].minimum_order > data[index].purchased_quantity) {
+        //   Alert.alert(
+        //     'Info!',
+        //     `${data[index].name} purchased quantity less than minimum order ${data[i].minimum_order}`,
+        //   );
+        //   return;
+        // }
 
         // this.setState({
         //     data: data
@@ -359,11 +371,24 @@ onPress:()=>{
         console.log('cart : ', this.props.cart);
       }
     } else {
-      let updated_purchased_quantity = data[index].purchased_quantity - 1;
+
+     // let updated_purchased_quantity = data[index].purchased_quantity - 1;
+      let updated_purchased_quantity =0;
+     
 
       if (data[index].purchased_quantity > 0) {
-        await this.props.removeFromCart(data[index]);
+
+        if (data[index].minimum_order >0 &&data[index].minimum_order>= data[index].purchased_quantity) {
+          updated_purchased_quantity=data[index].purchased_quantity-data[index].minimum_order;
+        }else{
+           updated_purchased_quantity = data[index].purchased_quantity - 1;
+        }
+
+
         data[index].purchased_quantity = updated_purchased_quantity;
+
+        await this.props.removeFromCart(data[index]);
+        
         this.setState({
           data: data,
         });

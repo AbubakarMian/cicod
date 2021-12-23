@@ -115,6 +115,7 @@ class AddProduct extends React.Component {
             data: [...this.state.data,...data],
             totalPageCount:responseJson.pages
           });
+         
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
         } else {
@@ -122,10 +123,18 @@ class AddProduct extends React.Component {
           // Alert.alert('Error', message);
           Alert.alert('Info', "Please click to reload products",[
             {
+              text:"Close",
+              onPress:()=>{
+                console.log("close")
+              }
+            },
+            {
               text:"Reload",
               onPress:()=>this.getProductList(Constants.productslist + '?is_active=1&page=1')
             }
-          ]);
+            ,
+            
+          ],{ cancelable: true });
         }
       })
       .catch(error => {

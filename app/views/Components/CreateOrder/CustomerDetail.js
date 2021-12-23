@@ -3,7 +3,7 @@ import {View,Text} from 'react-native'
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import styles from '../../../css/CreateOrderCss';
 import NumberFormat from 'react-number-format';
-const CustomerDetail=({name,email,phone,isSupplier=false,customer={},currency='₦'})=>(
+const CustomerDetail=({name,email,phone,isSupplier=false,customer={},currency='₦',minimum_spend,supplierCurrency=""})=>(
     <View style={[{}, styles.userDEtailCOntainer]}>
         <View style={[{}, styles.userDEtailCOntainerIconView]}>
             <Icon
@@ -26,6 +26,11 @@ const CustomerDetail=({name,email,phone,isSupplier=false,customer={},currency='�
             <View style={[{}, styles.userDEtailCOntainerIconView]}>
             <Text style={[{}, styles.usetDetailLableText]}>Available Bal.: </Text>
             <Text style={[{}, styles.usetDetailInfoText]}>{customer.avail_balance==0?currency+'0.00' :<NumberFormat decimalScale={2} renderText={(value, props) => <Text {...props}>{value}</Text>} value={customer.avail_balance} displayType={'text'} thousandSeparator={true}  prefix={currency}/>}</Text>
+        </View>
+
+        <View style={[{}, styles.userDEtailCOntainerIconView]}>
+            <Text style={[{}, styles.usetDetailLableText]}>Minimum Spend: </Text>
+            <Text style={[{}, styles.usetDetailInfoText]}>{<NumberFormat decimalScale={2} renderText={(value, props) => <Text {...props}>{value}</Text>} value={minimum_spend} displayType={'text'} thousandSeparator={true}  prefix={supplierCurrency}/>}</Text>
         </View>
         {/* <View style={[{}, styles.userDEtailCOntainerIconView]}>
             <Text style={[{}, styles.usetDetailLableText]}>Minimum Spend: </Text>

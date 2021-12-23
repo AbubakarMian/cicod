@@ -2,6 +2,7 @@ import { RESET, SET_SUPPLIER } from '../constants';
 const initialState = {
     id: 0,
     name: '',
+    detail:null
 }
  const supplierReducer = (state = initialState, action) => {
 
@@ -11,6 +12,7 @@ const initialState = {
         case SET_SUPPLIER:
             return {
                 ...state,
+                detail:action.value.detail,
                 id: action.value.id,
                 name: action.value.name,
             }
@@ -21,6 +23,7 @@ const initialState = {
             ...state,
             id: 0,
             name: '',
+            detail:null
         }
 
         default:

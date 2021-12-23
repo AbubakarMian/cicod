@@ -18,7 +18,7 @@ const ModuleCard = ({source, onPress, disabled, title}) => {
           source={source}
         />
         <Text
-          style={[styles.cardLableText, {fontSize: Device.isTablet ? 15 : 12}]}>
+          style={[styles.cardLableText, {fontSize: Device.isTablet ? 15 : width*0.03}]}>
           {title}
         </Text>
       </View>

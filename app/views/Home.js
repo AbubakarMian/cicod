@@ -232,6 +232,7 @@ class Home extends React.Component {
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
         } else {
+          console.log("error#@",responseJson)
           let message = responseJson.message;
           Alert.alert('Error', message);
         }
@@ -687,6 +688,7 @@ class Home extends React.Component {
                       modalInfoType: 'adduser',
                       modalInfoText: 'Want to add more user?',
                       modalInfoTextMore: 'Go to www.cicod.com/login',
+                      btn_modal_txt:"Login to CICOD.com ",
                       modalInfoTextMore_two:
                         'Click on Customer Order Management Module',
                       modalInfoTextMore_three: 'Then Administration tab',
@@ -927,12 +929,12 @@ class Home extends React.Component {
                 style={{fontWeight: 'bold', color: '#4E4D4D', fontSize:this.state.modalInfoType == 'finance'?17: 20,marginTop:10,marginHorizontal:10}}>
                 {this.state.modalInfoText}
               </Text>
-              <View style={{alignSelf: 'flex-start', paddingHorizontal: 20}}>
+              <View style={{alignSelf: 'flex-start', paddingHorizontal: 20,}}>
                
                 <Text style={{ marginTop: 14, fontSize:this.state.modalInfoType == 'finance'? 12: 14}}>
                    {this.state.modalInfoTextMore_two}
                 </Text>
-                <View style={{marginTop:20,backgroundColor:"#F0F3F5",borderColor:"#DDE2E5",borderWidth:1,borderRadius:10,paddingHorizontal:10,paddingVertical:20}}>
+                <View style={{justifyContent:"center",alignItems:"center", marginTop:20,backgroundColor:"#F0F3F5",borderColor:"#DDE2E5",borderWidth:1,borderRadius:10,paddingHorizontal:10,paddingVertical:20}}>
                 <Text style={{color:"#B1272C",fontWeight:"bold",textAlign:"center"}}>NOTE</Text>
                 <Text style={{color: '#4E4D4D', marginTop: 16, fontSize: 14}}>
                    {this.state.modalInfoTextMore}
