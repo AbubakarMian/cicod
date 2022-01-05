@@ -1,17 +1,10 @@
 import React from 'react';
 import {
   View,
-  ImageBackground,
-  TouchableHighlight,
-  TouchableWithoutFeedback,
-  FlatList,
   Alert,
   Dimensions,
-  Image,
   Platform,
   TouchableOpacity,
-  Touchable,
-  SafeAreaView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
@@ -20,7 +13,6 @@ import styles from '../css/AddNewCustomerCss';
 import fontStyles from '../css/FontCss';
 import {ScrollView} from 'react-native-gesture-handler';
 import Spinner from 'react-native-loading-spinner-overlay';
-import DropDownPicker from 'react-native-dropdown-picker';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {connect} from 'react-redux';
 import {SET_USER, LOGOUT_USER, CUSTOMER_RELOAD} from '../redux/constants/index';
@@ -80,7 +72,6 @@ class AddNewCustomer extends React.Component {
   }
 
   componentDidMount() {
-  
     this.getCountryList();
   }
 
@@ -404,8 +395,8 @@ class AddNewCustomer extends React.Component {
       setRegion: false,
       state_name: '',
       lgas_name: '',
-      state_id:0,
-      lga_id:0
+      state_id: 0,
+      lga_id: 0,
     });
 
     console.log('country Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item);
@@ -423,7 +414,7 @@ class AddNewCustomer extends React.Component {
       setStates: false,
       stateModal: false,
       lgas_name: '',
-      lga_id:0
+      lga_id: 0,
     });
     let lgasUrl = Constants.lgaslist + '?state_id=' + item.value;
     console.log('lgasUrl !!!!!!!!!!!!!!@@@@@@@@@@@@@', lgasUrl);
@@ -448,11 +439,10 @@ class AddNewCustomer extends React.Component {
       delivery_country_id: item.value,
       delivery_country_name: item.label,
       countryDeliveryModal: false,
-      delivery_state_name:"",
-      delivery_state_id:0,
-      delivery_lgas_id:0,
-      delivery_lga_name:""
-
+      delivery_state_name: '',
+      delivery_state_id: 0,
+      delivery_lgas_id: 0,
+      delivery_lga_name: '',
     });
     let statesUrl = Constants.stateslist + '?country_id=' + item.value;
     console.log('statesUrl !!!!!!!!!!!!!!@@@@@@@@@@@@@', statesUrl);
@@ -464,8 +454,8 @@ class AddNewCustomer extends React.Component {
       delivery_state_id: item.value,
       stateDeliveryModal: false,
       delivery_state_name: item.label,
-      delivery_lgas_id:0,
-      delivery_lga_name:""
+      delivery_lgas_id: 0,
+      delivery_lga_name: '',
     });
     let lgasUrl = Constants.lgaslist + '?state_id=' + item.value;
     console.log('lgasUrl !!!!!!!!!!!!!!@@@@@@@@@@@@@', lgasUrl);

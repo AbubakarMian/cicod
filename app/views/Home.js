@@ -733,7 +733,6 @@ class Home extends React.Component {
                       modalInfoTextMore:
                         'Different financial service providers shall update their criteria from time to time and this will be visible on check out during an order.',
                       modalInfo: true,
-
                       modalInfoTextMore_two:
                         'This affords you the opportunity of being considered for financial services from various financial service providers in your region. The following criteria will be considered: 1- Must have traded via the app continuously for 3 months and be linked on the trade network. 2- Conducted online transactions as this enables financial service providers with assurance of viability based on electronically referenced transactions over time.',
                       modalInfoTextMore_three: '',
@@ -800,7 +799,6 @@ class Home extends React.Component {
                     flexDirection: 'row',
 
                     width: width - 20,
-                    alignSelf: 'center',
                     marginTop: 10,
                     alignItems: 'center',
                     paddingRight: 10,
@@ -850,6 +848,7 @@ class Home extends React.Component {
               </View>
             </View>
           </ScrollView>
+          
           <OtherModal
             visible={this.state.isShopModal}
             onRequestClose={() => this.setState({isShopModal: false})}
@@ -1009,12 +1008,12 @@ class Home extends React.Component {
                     </Text>
                   </TouchableOpacity>
                 </View>
-                {/* <Text style={{color: '#4E4D4D', marginTop: 10, fontSize: 12}}>
-                  * {this.state.modalInfoTextMore_three}
-                </Text> */}
-              </View>
+               
+                </View>
+              
             </View>
           </Modal>
+          
 
           <Modal
             visible={this.state.closeApp}
@@ -1081,7 +1080,11 @@ class Home extends React.Component {
               </View>
             </View>
           </Modal>
+
+          
+          
         </View>
+    
       </Scaffold>
     );
   }

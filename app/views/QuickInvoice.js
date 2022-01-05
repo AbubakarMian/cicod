@@ -102,7 +102,7 @@ class QuickInvoice extends React.Component {
         // console.log('responseJson.postData', postData);
         this.setState({
           spinner: false,
-          isFetching:false
+          isFetching: false,
         });
         if (
           responseJson.status === 'success' ||
@@ -257,7 +257,9 @@ class QuickInvoice extends React.Component {
                       <Text style={[{color: '#929497'}, fontStyles.normal12]}>
                         {item.status == 'DRAFT'
                           ? item.date_created
-                          : item.due_date==""|| !item.due_date?'--':item.due_date}
+                          : item.due_date == '' || !item.due_date
+                          ? '--'
+                          : item.due_date}
                       </Text>
                       {item.status == 'PENDING' && (
                         <View
@@ -404,7 +406,9 @@ class QuickInvoice extends React.Component {
           </View>
 
           {/* <ScrollView></ScrollView> */}
-          <View style={{flex:1}} zIndex={-0.999}>{this.listInvoice()}</View>
+          <View style={{flex: 1}} zIndex={-0.999}>
+            {this.listInvoice()}
+          </View>
           {/* <Modal
                  animationType="fade"
                  visible={true}//this.state.regionModal

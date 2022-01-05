@@ -62,38 +62,33 @@ class Order extends React.Component {
       reload: 0,
       isFetching: false,
       apply_screen_filters: false,
-      pageNo:1,
-      totalPageCount:1
+      pageNo: 1,
+      totalPageCount: 1,
     };
     this.onDateChange = this.onDateChange.bind(this);
   }
   customeList(listType) {
     this.setState({
-      data:[],
-      pageNo:1,
-      totalPageCount:1,
+      data: [],
+      pageNo: 1,
+      totalPageCount: 1,
       is_active_list: listType,
       apply_screen_filters: true,
-      search_order_text:""
+      search_order_text: '',
     });
-    
 
     const order_url =
-        Constants.orderslist +
-        '?page=1&'+this.get_searach_by_status("",listType);
-        console.log("order_url$##@0",order_url)
-      this.orderList(order_url);
-
-
+      Constants.orderslist +
+      '?page=1&' +
+      this.get_searach_by_status('', listType);
+    console.log('order_url$##@0', order_url);
+    this.orderList(order_url);
   }
   onRefresh() {
-    this.setState({isFetching: true,data:[]});
+    this.setState({isFetching: true, data: []});
     // if(this.state.isFetching==true){
-      const order_url =
-      Constants.orderslist +
-      '?page=' +
-      this.state.pageNo;
-  this.orderList(order_url);
+    const order_url = Constants.orderslist + '?page=' + this.state.pageNo;
+    this.orderList(order_url);
     return;
     // }
     
@@ -102,21 +97,16 @@ class Order extends React.Component {
     // })const dd=()=>{}
   }
 
- 
-  componentDidMount(){
-const order_url =
-        Constants.orderslist +
-        '?page=' +
-        this.state.pageNo;
+  componentDidMount() {
+    const order_url = Constants.orderslist + '?page=' + this.state.pageNo;
     this.orderList(order_url);
   }
-  orderList=(url) =>{
+  orderList = url => {
     let _that = this;
     if (_that.state.isFetching == true) {
       _that.setState({isFetching: false});
     }
 
-    
     this.setState({spinner: true}); //,apply_filter:false
     let postData = {
       method: 'GET',
@@ -136,20 +126,20 @@ const order_url =
           this.setState({
             // url_orders:url,
             data: [...this.state.data, ...responseJson.data],
-            totalPageCount:responseJson.pages
+            totalPageCount: responseJson.pages,
           });
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
         } else {
           let message = responseJson.message;
-         // Alert.alert('Error', message);
+          // Alert.alert('Error', message);
         }
       })
       .catch(function (error) {
         this.setState({spinner: false});
         Alert.alert(error);
       });
-  }
+  };
   unauthorizedLogout() {
     Alert.alert('Error', Constants.UnauthorizedErrorMsg);
     this.props.logoutUser();
@@ -166,9 +156,12 @@ const order_url =
     const id = item.id;
 
     if (type == 'PENDING') {
-      this.props.navigation.navigate('OrderDetail_pending', {id,from:"orders"});
+      this.props.navigation.navigate('OrderDetail_pending', {
+        id,
+        from: 'orders',
+      });
     } else {
-      this.props.navigation.navigate('OrderDetail', {id,from:"orders"});
+      this.props.navigation.navigate('OrderDetail', {id, from: 'orders'});
     }
   }
 
@@ -179,30 +172,27 @@ const order_url =
     });
   };
 
-
-  
-
   handleLoadMore = () => {
     // if (!this.state.spinner) {
-      // alert(this.state.totalPageCount);
+    // alert(this.state.totalPageCount);
     const pageNo = this.state.pageNo + 1; // increase page by 1
     this.setState({pageNo});
-   
+
     // alert(pageNo+"oo"+this.state.totalPageCount)
     // const order_url =
     //     Constants.orderslist +
     //     '?page=' +
     //     ;
 
-        const order_url =
-        Constants.orderslist +
-        '?page='+pageNo+'&'+this.get_searach_by_status("",this.state.is_active_list)
+    const order_url =
+      Constants.orderslist +
+      '?page=' +
+      pageNo +
+      '&' +
+      this.get_searach_by_status('', this.state.is_active_list);
 
-
-        console.log("order_url$##@0",order_url)
-      this.orderList(order_url);
-
-    
+    console.log('order_url$##@0', order_url);
+    this.orderList(order_url);
 
     // method for API call
     // } else {
@@ -210,28 +200,31 @@ const order_url =
     // }
   };
 
-
   renderFooter = () => {
     //it will show indicator at the bottom of the list when data is loading otherwise it returns null
     // if (!this.state.spinner) return null;
     // return <ActivityIndicator style={{color: '#000'}} />;
-    if(this.state.totalPageCount>1 && this.state.pageNo<this.state.totalPageCount ){
-    return (
-      <TouchableOpacity
-        onPress={() => this.handleLoadMore()}
-        style={{
-          padding: 5,
-          alignSelf: 'center',
-          marginTop: 7,
-          marginBottom: 300,
-        }}>
-        <Text style={{letterSpacing: 1.1, fontWeight: 'bold'}}>Load More</Text>
-      </TouchableOpacity>
-    );
-      }
-      return null
+    if (
+      this.state.totalPageCount > 1 &&
+      this.state.pageNo < this.state.totalPageCount
+    ) {
+      return (
+        <TouchableOpacity
+          onPress={() => this.handleLoadMore()}
+          style={{
+            padding: 5,
+            alignSelf: 'center',
+            marginTop: 7,
+            marginBottom: 300,
+          }}>
+          <Text style={{letterSpacing: 1.1, fontWeight: 'bold'}}>
+            Load More
+          </Text>
+        </TouchableOpacity>
+      );
+    }
+    return null;
   };
-
 
   setDate(date) {
     var month = date.getUTCMonth() + 1; //months from 1-12
@@ -252,7 +245,7 @@ const order_url =
     console.log('timestamptimestamptimestamptimestamp', newdate);
 
     this.setState({
-      data:[],
+      data: [],
       isDatePickerVisible: false,
       apply_screen_filters: true,
       date: newdate,
@@ -260,10 +253,13 @@ const order_url =
     });
 
     const order_url =
-    Constants.orderslist +
-    '?page=1&order_date='+newdate+'&'+this.get_searach_by_status("",this.state.is_active_list)
+      Constants.orderslist +
+      '?page=1&order_date=' +
+      newdate +
+      '&' +
+      this.get_searach_by_status('', this.state.is_active_list);
 
-    console.log("dateSreatch$0",order_url)
+    console.log('dateSreatch$0', order_url);
     this.orderList(order_url);
   }
   hideDatePicker = () => {
@@ -274,22 +270,18 @@ const order_url =
   };
   search(text) {
     this.setState({
-      data:[],
+      data: [],
       search_order: text.nativeEvent.text,
       apply_filter: false,
-      pageNo:1,
+      pageNo: 1,
       apply_screen_filters: true,
     });
 
     const order_url =
-    Constants.orderslist +
-    '?order_id=' + text.nativeEvent.text
-    
+      Constants.orderslist + '?order_id=' + text.nativeEvent.text;
 
-
-    console.log("searchUI$##@0",order_url)
-  this.orderList(order_url);
-
+    console.log('searchUI$##@0', order_url);
+    this.orderList(order_url);
   }
 
   timeConvertion(date) {
@@ -368,10 +360,8 @@ const order_url =
     return url + filter;
   }
 
-
-
   // getOrderList(props) {
-   
+
   //   // return null;
   //   let _that = props._that;
   //   let url = Constants.orderslist;
@@ -383,14 +373,14 @@ const order_url =
   //     _that.props.route.params == null ||
   //     _that.props.route.params.filters == null
   //   ) {
-     
+
   //     let moreFilter=_that.get_searach_by_status(
   //       "&",
   //       _that.state.is_active_list,
   //     );
-      
+
   //     url =moreFilter==""? Constants.orderslist+"?page="+_that.state.pageNo:Constants.orderslist+"?page="+_that.state.pageNo+moreFilter;
-  //   } 
+  //   }
   //   else if (_that.state.apply_filter && !_that.state.apply_screen_filters) {
   //     filters = _that.props.route.params.filters;
   //     console.log('fikhgg#$$!', filters.length);
@@ -399,7 +389,7 @@ const order_url =
   //     }else{
   //       filter_concat="?"
   //     }
-     
+
   //     let filter = '';
 
   //     for (let i = 0; i < filters.length; i++) {
@@ -444,8 +434,6 @@ const order_url =
   //     // url = url + filter_concat + 'search=' + _that.state.search_order
   //     filter_concat = '&';
   //   }
-
-   
 
   //   if (
   //     _that.state.date_created_timestamp != 'Today' &&
@@ -722,12 +710,10 @@ const order_url =
   //   }
   // }
 
-
   getOrderList(props) {
-   
     // return null;
-    let _that=props._that;
-        if (_that.state.data.length < 1) {
+    let _that = props._that;
+    if (_that.state.data.length < 1) {
       return (
         <View
           style={{
@@ -920,7 +906,7 @@ const order_url =
                       ]}>
                       {item.order_status}
                     </Text>
-                  ): item.order_status == 'EXPIRED' ? (
+                  ) : item.order_status == 'EXPIRED' ? (
                     <Text
                       style={[
                         {
@@ -963,9 +949,13 @@ const order_url =
     }
   }
 
-
   render() {
-    console.log("ui#@@m",this.state.pageNo,"d87#@",this.state.totalPageCount);
+    console.log(
+      'ui#@@m',
+      this.state.pageNo,
+      'd87#@',
+      this.state.totalPageCount,
+    );
     return (
       <Scaffold>
         <View
@@ -1098,7 +1088,7 @@ const order_url =
                   onChangeText={text =>
                     this.setState({
                       apply_screen_filters: true,
-                      
+
                       search_order_text: text,
                     })
                   }
@@ -1220,16 +1210,14 @@ const order_url =
 
           {/* <ScrollView  style={{ marginBottom: 200 }}> */}
           <this.getOrderList _that={this} />
-          
         </View>
-        {
-            !this.state.spinner &&
+        {!this.state.spinner && (
           <TabNav
             style={{position: 'absolute', bottom: 0}}
             screen={'order'}
             props={this.props}
           />
-  }
+        )}
       </Scaffold>
     );
   }

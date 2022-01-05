@@ -43,7 +43,7 @@ class Customer extends React.Component {
       spinner: false,
       data: [],
       pageNo: 1,
-      isFetching:false,
+      isFetching: false,
       totalPageCount: 1,
     };
     this.onDateChange = this.onDateChange.bind(this);
@@ -57,7 +57,7 @@ class Customer extends React.Component {
 
   componentDidMount() {
     console.log('this.props.user', this.props.user.access_token);
-    this.getCustomers(Constants.customerlist+"?page="+this.state.pageNo);
+    this.getCustomers(Constants.customerlist + '?page=' + this.state.pageNo);
   }
 
   handleLoadMore = () => {
@@ -66,10 +66,7 @@ class Customer extends React.Component {
     const pageNo = this.state.pageNo + 1; // increase page by 1
     this.setState({pageNo});
 
-    const customer_url =
-      
-         Constants.customerlist + '?page=' + pageNo
-      
+    const customer_url = Constants.customerlist + '?page=' + pageNo;
 
     console.log('customer_url$##@0', customer_url);
     this.getCustomers(customer_url);
@@ -96,7 +93,7 @@ class Customer extends React.Component {
             alignSelf: 'center',
             marginTop: 7,
             marginBottom: 400,
-            paddingVertical:40
+            paddingVertical: 40,
           }}>
           <Text style={{letterSpacing: 1.1, fontWeight: 'bold'}}>
             Load More
@@ -106,7 +103,6 @@ class Customer extends React.Component {
     }
     return null;
   };
-
 
   getCustomers(url) {
     this.setState({spinner: true});
@@ -126,12 +122,12 @@ class Customer extends React.Component {
         console.log('responseJson !!!! @@@@@@@@@@@@', responseJson);
         this.setState({
           spinner: false,
-          isFetching:false
+          isFetching: false,
         });
         if (responseJson.status === 'success') {
           this.setState({
-            data: [...this.state.data,...responseJson.data],
-            totalPageCount:responseJson.pages
+            data: [...this.state.data, ...responseJson.data],
+            totalPageCount: responseJson.pages,
           });
           // this.props.navigation.navigate('DrawerNavigation')
         } else if (responseJson.status == 401) {
@@ -165,10 +161,9 @@ class Customer extends React.Component {
     this.getCustomers(url);
   }
 
-
-  onRefresh=()=> {
+  onRefresh = () => {
     console.log('222222222222', this.state.isFetching);
-    this.setState({isFetching: true,data:[]});
+    this.setState({isFetching: true, data: []});
     // if(this.state.isFetching==true){
 
     // let search_url = Constants.productslist + '?search=' + this.state.search_product;
@@ -180,10 +175,10 @@ class Customer extends React.Component {
     // _that.setState({
     //     url_orders: url,
     // })
-  }
+  };
   render() {
     if (this.props.reload.customer) {
-      this.getCustomers(Constants.customerlist+"?page=1");
+      this.getCustomers(Constants.customerlist + '?page=1');
       this.props.setScreenReload({
         reload: false,
       });
@@ -259,7 +254,7 @@ class Customer extends React.Component {
                 marginBottom: 2,
               },
             ]}></View>
-          <View style={{flex:1}}>
+          <View style={{flex: 1}}>
             {this.state.data.length > 0 ? (
               <FlatList
                 data={this.state.data}

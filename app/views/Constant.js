@@ -17,7 +17,7 @@ export const Constants = {
   renewalLink: 'cicod.com/admin/merchant/billing',
   //renewalLink: 'cicodsaasstaging.com/admin/merchant/billing',
   base_url: base_url,
-  UnauthorizedErrorMsg: 'Same User can only login in single device at a time',
+  UnauthorizedErrorMsg: 'Your login session has expired, kindly login again.',
   autherizationKey: `Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJldmFuc0BzaGFya2xhc2Vycy5jb20iLCJleHAiOjE1ODg2NjgzMTYsImlzcyI6ImNpY29kc3NvIiwicm9sZXMiOiJTVVBFUkFETUlOIiwiZmlyc3RuYW1lIjoiTW9uaWNhIFJpbyIsImxhc3RuYW1lIjoiLSIsImVtYWlsIjoiZXZhbnNAc2hhcmtsYXNlcnMuY29tIiwidG9rZW4iOiJqa0Vsb3BpdlFxNlh3NkpTcDR0VEU3bE96b1F1MjIiLCJpZCI6MTE5LCJjdXN0b21lcklkIjoxMjYsInRlbmFudElEIjoiZXZhbnNuaWdlcmlhIn0.9B6ULKtIZqgV_wjtZDyIZk-lfvpdmAziO3uqA6FuTznPRcFMK6UWPC0j_PbtuLxhmQiOwtFbGC75fc6nqpY6lw`,
   login: `${auth_url}/sso/auth/login`,
   getSectors: `${crm_url}/integration/v2/fetchSectors`,
@@ -66,6 +66,5 @@ export const Constants = {
   reset_password: `${auth_url}/sso/auth/forgot_password`,
   currency: `${base_url}/currency`,
   get_attribute: `${base_url}/product-attributes`,
-  
   forgot_password: `${auth_url}/sso/auth/forgot_password/v2`,
 };
