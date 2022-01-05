@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { View, Text, Image,StyleSheet } from 'react-native';
 import * as React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
@@ -126,15 +127,15 @@ class TabNavigater extends React.Component {
           name="Products"
           listeners={{
             tabPress: e => {
-              this.setState({active_screen:'products'})
+              this.setState({active_screen:'products'});
             },
           }}
           component={Products}          
-          listeners={{
-            tabPress: e => {
-              this.setState({active_screen:'products'})
-            },
-          }}
+          // listeners={{
+          //   tabPress: e => {
+          //     this.setState({active_screen:'products'})
+          //   },
+          // }}
           options={{
             tabBarIcon: ({ color }) => (
               <View
@@ -153,7 +154,7 @@ class TabNavigater extends React.Component {
                   elevation: 0,
                 }}>
                 <Image
-                  source={require('../images/noProduct.png')}
+                  //source={require('../images/noProduct.png')}
                   source={this.state.active_screen == 'products'?require('../images/tabnav/red_products.png'):require('../images/tabnav/products.png')}
                   style={{
                     width: 25,
@@ -194,7 +195,7 @@ class TabNavigater extends React.Component {
                   elevation: 0,
                 }}>
                 <Image
-                  source={require('../images/more.png')}
+                //  source={require('../images/more.png')}
                   source={this.state.active_screen == 'more'?require('../images/tabnav/red_more.png'):require('../images/tabnav/more.png')}
                   style={{
                     width: 25,
