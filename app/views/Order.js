@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -95,7 +96,7 @@ class Order extends React.Component {
   this.orderList(order_url);
     return;
     // }
-    console.log('333333333333', this.state.isFetching);
+    
     // _that.setState({
     //     url_orders: url,
     // })const dd=()=>{}
@@ -763,7 +764,7 @@ const order_url =
           ItemSeparatorComponent={
             Platform.OS !== 'android' &&
             (({highlighted}) => (
-              <View style={[style.separator, highlighted && {marginLeft: 0}]} />
+              <View style={[styles.separator, highlighted && {marginLeft: 0}]} />
             ))
           }
           keyExtractor={(item, index) => index}
@@ -1082,9 +1083,7 @@ const order_url =
                 }}>
                 <Searchbar
                   placeholder="Search order ID"
-                  style={[{color: '#D8D8D8'}, fontStyles.normal14]}
-                  iconColor="#929497"
-                  style={{
+                  style={[{color: '#D8D8D8'}, fontStyles.normal14,{
                     width: width / 1.07,
                     alignSelf: 'center',
                     position: 'absolute',
@@ -1093,7 +1092,9 @@ const order_url =
                     marginBottom: 5,
                     elevation: 0,
                     borderColor: '#D8DCDE',
-                  }}
+                  }]}
+                  iconColor="#929497"
+                  
                   onChangeText={text =>
                     this.setState({
                       apply_screen_filters: true,
@@ -1134,7 +1135,7 @@ const order_url =
                       color:
                         this.state.is_active_list === '' ? '#000' : '#e2e2e2',
                       fontWeight: 'bold',
-                      backgroundColor: '#E6E6E6',
+                      // backgroundColor: '#E6E6E6',
                       marginRight: 5,
                       paddingHorizontal: 10,
                       borderRadius: 50,
@@ -1151,7 +1152,7 @@ const order_url =
                         this.state.is_active_list === 'pending'
                           ? '#000'
                           : '#e2e2e2',
-                      backgroundColor: '#E6E6E6',
+                      // backgroundColor: '#E6E6E6',
                       marginRight: 5,
                       paddingHorizontal: 10,
                       borderRadius: 50,
@@ -1168,7 +1169,7 @@ const order_url =
                         this.state.is_active_list === 'paid'
                           ? '#000'
                           : '#e2e2e2',
-                      backgroundColor: '#E6E6E6',
+                      // backgroundColor: '#E6E6E6',
                       marginRight: 5,
                       paddingHorizontal: 10,
                       borderRadius: 50,
@@ -1186,7 +1187,7 @@ const order_url =
                         this.state.is_active_list === 'partPayment'
                           ? '#000'
                           : '#e2e2e2',
-                      backgroundColor: '#E6E6E6',
+                      // backgroundColor: '#E6E6E6',
                       marginRight: 5,
                       paddingHorizontal: 10,
                       borderRadius: 50,
@@ -1207,7 +1208,7 @@ const order_url =
                       marginRight: 5,
                       paddingHorizontal: 10,
                       borderRadius: 50,
-                      backgroundColor: '#fff',
+                      // backgroundColor: '#fff',
                       fontSize: 15,
                     }}>
                     PAID FROM CREDIT

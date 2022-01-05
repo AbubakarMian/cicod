@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -90,9 +91,7 @@ class CreateQuickInvoice extends React.Component {
   }
   update_cart_state() {
     return;
-    this.setState({
-      cart_detail: this.props.cart.cart_detail,
-    });
+   
   }
   clearOrder() {
     this.props.emptyOrder();
@@ -673,7 +672,7 @@ class CreateQuickInvoice extends React.Component {
                         (({highlighted}) => (
                           <View
                             style={[
-                              style.separator,
+                              styles.separator,
                               highlighted && {marginLeft: 0},
                             ]}
                           />
@@ -1285,7 +1284,7 @@ function mapDispatchToProps(dispatch) {
     setDeliveryAddress: value =>
       dispatch({type: SET_DELIVERY_ADDRESS, value: value}),
     setCustomer: value => dispatch({type: SET_CUSTOMER, value: value}),
-    setSupplier: value => dispatch({type: SET_SUPPLIER, value: value}),
+  
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(CreateQuickInvoice);

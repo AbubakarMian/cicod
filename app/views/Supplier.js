@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -303,16 +304,16 @@ class Supplier extends React.Component {
                 //onKeyPress={this.handleKeyPress}
                 placeholder="Search supplier"
                 value={this.state.search_product}
-                style={[{color: '#D8D8D8'}, fontStyles.normal14]}
-                iconColor="#929497"
-                style={{
+                style={[{color: '#D8D8D8'}, fontStyles.normal14,{
                   width: '100%',
                   alignSelf: 'center',
                   marginTop: 10,
                   marginBottom: 5,
                   elevation: 0,
                   borderColor: '#D8DCDE',
-                }}
+                }]}
+                iconColor="#929497"
+                
                 onChangeText={text => this.setState({search_product: text})}
                 onSubmitEditing={() => this.search()}
                 //update
@@ -358,7 +359,7 @@ class Supplier extends React.Component {
                   Platform.OS !== 'android' &&
                   (({highlighted}) => (
                     <View
-                      style={[style.separator, highlighted && {marginLeft: 0}]}
+                      style={[styles.separator, highlighted && {marginLeft: 0}]}
                     />
                   ))
                 }

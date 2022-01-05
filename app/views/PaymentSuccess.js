@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   BackHandler,
@@ -292,65 +293,65 @@ class PaymentSuccess extends React.Component {
       }, 1000),
     );
   };
-  sccess_view_select(_that) {
-    _that = _that.that;
-    console.log(_that);
-    let loader = true;
-    // const data =_that.performTimeConsumingTask();
+  // sccess_view_select(_that) {
+  //   _that = _that.that;
+  //   console.log(_that);
+  //   let loader = true;
+  //   // const data =_that.performTimeConsumingTask();
 
-    if (data !== null) {
-      loader = false;
-    }
+  //   if (data !== null) {
+  //     loader = false;
+  //   }
 
-    if (loader) {
-      return (
-        <Spinner
-          visible={loader}
-          textContent={'Please Wait...'}
-          textStyle={{color: '#fff'}}
-          color={'#fff'}
-        />
-      );
-    } else {
-      // successview(props) {
-      //     let _that = props._that;
-      //     let order = _that.props.route.params.data;
-      //     console.log("order @@@@@@@@@@@@~~~~~~~~~~~~~~~~ order",order)
-      // if (order.payment_status == 'success') {
-      return (
-        <View style={[{}, styles.mainContainer]}>
-          <View
-            style={{
-              borderColor: '#DAF8EC',
-              borderWidth: 20,
-              borderRadius: 100,
-            }}>
-            <Image
-              style={{height: width / 4, width: width / 4}}
-              source={require('../images/greenTick.png')}
-            />
-          </View>
-          <Text style={[{color: '#4E4D4D', marginTop: 20}, fontStyles.bold25]}>
-            Payment Successful
-          </Text>
-          <Text style={[{color: '#929497'}, fontStyles.normal15]}>
-            Your payment of {_that.props.currency.currency + ' ' + order.amount}{' '}
-            was successful
-          </Text>
-          <TouchableOpacity
-            onPress={() =>
-              _that.props.navigation.navigate('OrderDetail', {id: order.id})
-            }
-            style={[{}, styles.touchView]}>
-            <Text style={[{}, styles.touchText]}>View order</Text>
-          </TouchableOpacity>
-        </View>
-      );
-      // }
+  //   if (loader) {
+  //     return (
+  //       <Spinner
+  //         visible={loader}
+  //         textContent={'Please Wait...'}
+  //         textStyle={{color: '#fff'}}
+  //         color={'#fff'}
+  //       />
+  //     );
+  //   } else {
+  //     // successview(props) {
+  //     //     let _that = props._that;
+  //     //     let order = _that.props.route.params.data;
+  //     //     console.log("order @@@@@@@@@@@@~~~~~~~~~~~~~~~~ order",order)
+  //     // if (order.payment_status == 'success') {
+  //     return (
+  //       <View style={[{}, styles.mainContainer]}>
+  //         <View
+  //           style={{
+  //             borderColor: '#DAF8EC',
+  //             borderWidth: 20,
+  //             borderRadius: 100,
+  //           }}>
+  //           <Image
+  //             style={{height: width / 4, width: width / 4}}
+  //             source={require('../images/greenTick.png')}
+  //           />
+  //         </View>
+  //         <Text style={[{color: '#4E4D4D', marginTop: 20}, fontStyles.bold25]}>
+  //           Payment Successful
+  //         </Text>
+  //         <Text style={[{color: '#929497'}, fontStyles.normal15]}>
+  //           Your payment of {_that.props.currency.currency + ' ' + order.amount}{' '}
+  //           was successful
+  //         </Text>
+  //         <TouchableOpacity
+  //           onPress={() =>
+  //             _that.props.navigation.navigate('OrderDetail', {id: order.id})
+  //           }
+  //           style={[{}, styles.touchView]}>
+  //           <Text style={[{}, styles.touchText]}>View order</Text>
+  //         </TouchableOpacity>
+  //       </View>
+  //     );
+  //     // }
 
-      // }
-    }
-  }
+  //     // }
+  //   }
+  // }
 
   render() {
     return (
@@ -405,7 +406,7 @@ function mapDispatchToProps(dispatch) {
     setDeliveryAddress: value =>
       dispatch({type: SET_DELIVERY_ADDRESS, value: value}),
     setCustomer: value => dispatch({type: SET_CUSTOMER, value: value}),
-    setSupplier: value => dispatch({type: SET_SUPPLIER, value: value}),
+  
     clearCart: value => dispatch({type: CLEAR_CART, value: value}),
 
     setScreenReload: value => dispatch({type: ORDER_RELOAD, value: value}),

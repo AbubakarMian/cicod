@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from "react";
 
 import { View, Text, Dimensions, StyleSheet, ImageBackground, Modal } from "react-native";
@@ -6,6 +7,34 @@ import { View, Text, Dimensions, StyleSheet, ImageBackground, Modal } from "reac
 var { width, height } = Dimensions.get('window');
 
 export default StyleSheet.create({
+    modalBackGround: {
+        height: height,
+        backgroundColor: '#00000057',
+     flexDirection:'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        position: 'relative',
+        zIndex: -0.999
+    },
+    suspendModal:{
+        //alignSelf: 'baseline',
+        alignItems:"center",
+        zIndex: 999,
+        // justifyContent:'center',
+        justifyContent:"space-between",
+        backgroundColor: '#fff',
+        width: width,
+        paddingVertical:30,
+        borderTopLeftRadius: 15,
+        borderTopRightRadius: 15,
+        paddingHorizontal: 30,
+        // paddingTop: 30,
+        // paddingBottom:30,
+        position: 'absolute',
+        bottom: 0,
+        opacity:1,
+        height:height/6
+    },
     mainView: {
         height: height,
         width: width,

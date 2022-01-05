@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 // const auth_url = 'https://api.cicodsaasstaging.com';
 // const base_url = 'https://com.cicodsaasstaging.com/com/api';
 // const webshop_url = 'cicodsaasstaging.com/webshop';
@@ -65,6 +66,6 @@ export const Constants = {
   reset_password: `${auth_url}/sso/auth/forgot_password`,
   currency: `${base_url}/currency`,
   get_attribute: `${base_url}/product-attributes`,
-  get_attribute: `${base_url}/product-attributes`,
+  
   forgot_password: `${auth_url}/sso/auth/forgot_password/v2`,
 };

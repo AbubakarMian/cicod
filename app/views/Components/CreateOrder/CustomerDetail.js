@@ -25,7 +25,7 @@ const CustomerDetail=({name,email,phone,isSupplier=false,customer={},currency='â
             <>
             <View style={[{}, styles.userDEtailCOntainerIconView]}>
             <Text style={[{}, styles.usetDetailLableText]}>Available Bal.: </Text>
-            <Text style={[{}, styles.usetDetailInfoText]}>{customer.avail_balance==0?currency+'0.00' :<NumberFormat decimalScale={2} renderText={(value, props) => <Text {...props}>{value}</Text>} value={customer.avail_balance} displayType={'text'} thousandSeparator={true}  prefix={currency}/>}</Text>
+            <Text style={[{}, styles.usetDetailInfoText]}>{customer.avail_balance==0?supplierCurrency+'0.00' :<NumberFormat decimalScale={2} renderText={(value, props) => <Text {...props}>{value}</Text>} value={customer.avail_balance} displayType={'text'} thousandSeparator={true}  prefix={supplierCurrency}/>}</Text>
         </View>
 
         <View style={[{}, styles.userDEtailCOntainerIconView]}>

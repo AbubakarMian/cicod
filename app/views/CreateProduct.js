@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -413,6 +414,7 @@ class CreateProduct extends React.Component {
           this.props.setScreenReload({
             reload: true,
           });
+          console.log("createdPRod$$",responseJson.data)
           if (responseJson.status === 'success') {
             
             let customer_id = responseJson.data.id;
@@ -660,7 +662,7 @@ class CreateProduct extends React.Component {
     }
 
     this.setState({galler_cameraAttriModa: false});
-    console.log('###############', variations);
+   
   }
 
   async getProduct() {
@@ -788,7 +790,7 @@ console.log("caeee$#");
         ItemSeparatorComponent={
           Platform.OS !== 'android' &&
           (({highlighted}) => (
-            <View style={[style.separator, highlighted && {marginLeft: 0}]} />
+            <View style={[styles.separator, highlighted && {marginLeft: 0}]} />
           ))
         }
         data={attribute_item.value}
@@ -978,7 +980,7 @@ console.log("caeee$#");
                       width={width / 2 - 20}
                       alignSelf={'center'}
                       color={'#000'}
-                      value={this.state.price}
+                      // value={this.state.price}
                       // onChangeText={text => this.setState({ price: text })}
                       onChangeText={text => this.setPrice(text)}
                       keyboardType="numeric"
@@ -1006,7 +1008,7 @@ console.log("caeee$#");
                       width={width / 2 - 20}
                       alignSelf={'center'}
                       color={'#000'}
-                      value={this.state.quantity}
+                      // value={this.state.quantity}
                       disabled={this.state.no_qty_limit}
                       keyboardType="numeric"
                       onChangeText={text => this.setQuentity(text)}
@@ -1139,7 +1141,7 @@ console.log("caeee$#");
                           (({highlighted}) => (
                             <View
                               style={[
-                                style.separator,
+                                styles.separator,
                                 highlighted && {marginLeft: 0},
                               ]}
                             />
@@ -1386,7 +1388,7 @@ console.log("caeee$#");
                   Platform.OS !== 'android' &&
                   (({highlighted}) => (
                     <View
-                      style={[style.separator, highlighted && {marginLeft: 0}]}
+                      style={[styles.separator, highlighted && {marginLeft: 0}]}
                     />
                   ))
                 }

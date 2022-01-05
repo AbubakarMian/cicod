@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   BackHandler,
@@ -34,6 +35,7 @@ import {
   REMOVE_PRODUCT_FORM_CART,
   CLEAR_ORDER,
   SET_DELIVERY_ADDRESS,
+  SET_SUPPLIER,
 } from '../redux/constants/index';
 import RadioForm, {
   RadioButton,
@@ -94,9 +96,9 @@ class CreateOrder extends React.Component {
   }
   update_cart_state() {
     return;
-    this.setState({
-      cart_detail: this.props.cart.cart_detail,
-    });
+    // this.setState({
+    //   cart_detail: this.props.cart.cart_detail,
+    // });
   }
   clearOrder() {
     this.props.emptyOrder();
@@ -1066,7 +1068,7 @@ console.log("item$#",item)
                       (({highlighted}) => (
                         <View
                           style={[
-                            style.separator,
+                            styles.separator,
                             highlighted && {marginLeft: 0},
                           ]}
                         />
@@ -1716,7 +1718,7 @@ console.log("item$#",item)
                       (({highlighted}) => (
                         <View
                           style={[
-                            style.separator,
+                            styles.separator,
                             highlighted && {marginLeft: 0},
                           ]}
                         />

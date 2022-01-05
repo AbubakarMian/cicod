@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -20,6 +21,7 @@ import {
   REMOVE_PRODUCT_FORM_CART,
   CLEAR_ORDER,
   SET_DELIVERY_ADDRESS,
+  SET_SUPPLIER,
 } from '../redux/constants/index';
 import {Text, TextInput} from 'react-native-paper';
 import splashImg from '../images/splash.jpg';

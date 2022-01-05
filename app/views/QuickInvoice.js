@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -63,7 +64,7 @@ class QuickInvoice extends React.Component {
     this.getData(Constants.quickInvoice);
     return;
     // }
-    console.log('333333333333', this.state.isFetching);
+    
     // this.setState({
     //     url_orders: url,
     // })
@@ -181,7 +182,7 @@ class QuickInvoice extends React.Component {
               Platform.OS !== 'android' &&
               (({highlighted}) => (
                 <View
-                  style={[style.separator, highlighted && {marginLeft: 0}]}
+                  style={[styles.separator, highlighted && {marginLeft: 0}]}
                 />
               ))
             }

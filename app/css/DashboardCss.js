@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from "react";
 
 import { View, Text, Dimensions, StyleSheet, ImageBackground } from "react-native";
@@ -144,7 +145,17 @@ export default StyleSheet.create({
         flex: 1,
         justifyContent: 'center'
 
-    },modalBackGround: {
+    },
+    activeView:{
+backgroundColor:"#C9C9C9",
+
+    },
+
+    titleViewStyle:{
+        backgroundColor:"#fff",padding:10,borderRadius:10,
+        width:80
+    }
+    ,modalBackGround: {
         height: height,
         backgroundColor: '#00000057',
      flexDirection:'column',

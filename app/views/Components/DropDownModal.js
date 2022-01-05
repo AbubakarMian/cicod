@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React,{useEffect, useState} from 'react';
 import {Picker} from '@react-native-picker/picker';
 import {
@@ -94,7 +95,7 @@ useEffect(()=>{
               style={([titleStles], {letterSpacing: 1.06, fontWeight: 'bold'})}>
               {title}
             </Text>
-            <TouchableOpacity onPress={handleClose}>
+            <TouchableOpacity  hitSlop={{top: 20, bottom: 20, right: 20, left: 20}} onPress={handleClose}>
               <Icon name="close" size={22} color="#B1272C" />
             </TouchableOpacity>
           </View>

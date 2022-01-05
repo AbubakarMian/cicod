@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   BackHandler,
@@ -94,19 +95,19 @@ class Home extends React.Component {
 
   veiwShop() {
     this.props.navigation.navigate('InAppWebView', {
-      uri: `https://${this.state.tenantId.toLowerCase()}.${
+      uri: `https://${this.props.user.tenantId.toLowerCase()}.${
         Constants.webshop_url
       }`,
     });
     // Linking.openURL(
-    //   `https://${this.state.tenantId.toLowerCase()}.${Constants.webshop_url}`,
+    //   `https://${this.props.user.tenantId.toLowerCase()}.${Constants.webshop_url}`,
     // );
   }
 
   async shareShop() {
     try {
       const result = await Share.share({
-        message: `https://${this.state.tenantId.toLowerCase()}.${
+        message: `https://${this.props.user.tenantId.toLowerCase()}.${
           Constants.webshop_url
         }`,
       });
@@ -232,7 +233,7 @@ class Home extends React.Component {
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
         } else {
-          console.log("error#@",responseJson)
+          console.log('error#@', responseJson);
           let message = responseJson.message;
           Alert.alert('Error', message);
         }
@@ -384,7 +385,7 @@ class Home extends React.Component {
                       <TouchableOpacity
                         onPress={() => {
                           Linking.openURL(
-                            `https://${this.state.tenantId.toLowerCase()}.${
+                            `https://${this.props.user.tenantId.toLowerCase()}.${
                               Constants.renewalLink
                             }`,
                           );
@@ -418,8 +419,7 @@ class Home extends React.Component {
                   </View>
                 )}
 
-
-                {this.state.user.merchantStatus &&
+              {this.state.user.merchantStatus &&
                 this.state.user.merchantStatus.code < 5 && (
                   <View
                     style={{
@@ -466,9 +466,10 @@ class Home extends React.Component {
                 ]}>
                 <ModuleCard
                   disabled={
-                    this.state.user.kciInfo &&
-                    this.state.user.kciInfo.showWarning &&
-                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0||
+                    (this.state.user.kciInfo &&
+                      this.state.user.kciInfo.showWarning &&
+                      this.state.user.kciInfo.kciUpdates[0].dayRemaining ==
+                        0) ||
                     this.state.disable_button
                       ? true
                       : false
@@ -533,9 +534,10 @@ class Home extends React.Component {
                 />
                 <ModuleCard
                   disabled={
-                    this.state.user.kciInfo &&
-                    this.state.user.kciInfo.showWarning &&
-                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0 ||
+                    (this.state.user.kciInfo &&
+                      this.state.user.kciInfo.showWarning &&
+                      this.state.user.kciInfo.kciUpdates[0].dayRemaining ==
+                        0) ||
                     this.state.disable_button
                       ? true
                       : false
@@ -548,9 +550,10 @@ class Home extends React.Component {
                 />
                 <ModuleCard
                   disabled={
-                    this.state.user.kciInfo &&
-                    this.state.user.kciInfo.showWarning &&
-                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0 ||
+                    (this.state.user.kciInfo &&
+                      this.state.user.kciInfo.showWarning &&
+                      this.state.user.kciInfo.kciUpdates[0].dayRemaining ==
+                        0) ||
                     this.state.disable_button
                       ? true
                       : false
@@ -588,9 +591,10 @@ class Home extends React.Component {
                 />
                 <ModuleCard
                   disabled={
-                    this.state.user.kciInfo &&
-                    this.state.user.kciInfo.showWarning &&
-                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0 ||
+                    (this.state.user.kciInfo &&
+                      this.state.user.kciInfo.showWarning &&
+                      this.state.user.kciInfo.kciUpdates[0].dayRemaining ==
+                        0) ||
                     this.state.disable_button
                       ? true
                       : false
@@ -605,9 +609,10 @@ class Home extends React.Component {
                 />
                 <ModuleCard
                   disabled={
-                    this.state.user.kciInfo &&
-                    this.state.user.kciInfo.showWarning &&
-                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0 ||
+                    (this.state.user.kciInfo &&
+                      this.state.user.kciInfo.showWarning &&
+                      this.state.user.kciInfo.kciUpdates[0].dayRemaining ==
+                        0) ||
                     this.state.disable_button
                       ? //|| this.state.user.roles!="SUPERADMIN"
                         true
@@ -655,21 +660,23 @@ class Home extends React.Component {
                   disabled={
                     this.state.user.kciInfo &&
                     this.state.user.kciInfo.showWarning &&
-                    this.state.user.kciInfo.kciUpdates[0].dayRemaining == 0
+                    this.state.user.kciInfo.kciUpdates[0].dayRemaining === 0
                       ? true
                       : false
                   }
                   onPress={() =>
                     this.setState({
                       modalInfoType: 'accounting',
-                      modalInfoTextMore: 'Please access on the web',
+                      // modalInfoTextMore: 'Please access on the web',
                       modalInfo: true,
-                      btn_modal_txt:"Login to CICOD.com",
-                      modalInfoTextMore: 'Every transaction carried out on this CICOD Merchant app is automatically logged in the accounting module, which can be accessed via account on www.cicod.com',
+                      btn_modal_txt: 'Login to CICOD.com',
+                      modalInfoTextMore:
+                        'Every transaction carried out on this CICOD Merchant app is automatically logged in the accounting module, which can be accessed via account on www.cicod.com',
                       modalInfoTextMore_two:
                         'This feature helps you keep track of your income and expenses and shows you the financial performance of your business.',
                       modalInfoTextMore_three: '',
-                      modalInfoText: 'Keeping good records is important to monitor the health of your business.',
+                      modalInfoText:
+                        'Keeping good records is important to monitor the health of your business.',
                     })
                   }
                   source={require('../images/home/account.png')}
@@ -688,7 +695,7 @@ class Home extends React.Component {
                       modalInfoType: 'adduser',
                       modalInfoText: 'Want to add more user?',
                       modalInfoTextMore: 'Go to www.cicod.com/login',
-                      btn_modal_txt:"Login to CICOD.com ",
+                      btn_modal_txt: 'Login to CICOD.com ',
                       modalInfoTextMore_two:
                         'Click on Customer Order Management Module',
                       modalInfoTextMore_three: 'Then Administration tab',
@@ -723,19 +730,22 @@ class Home extends React.Component {
                   onPress={() =>
                     this.setState({
                       modalInfoType: 'finance',
-                      modalInfoTextMore: 'Different financial service providers shall update their criteria from time to time and this will be visible on check out during an order.',
+                      modalInfoTextMore:
+                        'Different financial service providers shall update their criteria from time to time and this will be visible on check out during an order.',
                       modalInfo: true,
-                      modalInfo: true,
-                      modalInfoTextMore_two:"This affords you the opportunity of being considered for financial services from various financial service providers in your region. The following criteria will be considered: 1- Must have traded via the app continuously for 3 months and be linked on the trade network. 2- Conducted online transactions as this enables financial service providers with assurance of viability based on electronically referenced transactions over time.",
-                      modalInfoTextMore_three:"",
-                      modalInfoText: 'Keep the wheels of your business going with inventory finance.',
-                      btn_modal_txt:"Login to CICOD.com "
+
+                      modalInfoTextMore_two:
+                        'This affords you the opportunity of being considered for financial services from various financial service providers in your region. The following criteria will be considered: 1- Must have traded via the app continuously for 3 months and be linked on the trade network. 2- Conducted online transactions as this enables financial service providers with assurance of viability based on electronically referenced transactions over time.',
+                      modalInfoTextMore_three: '',
+                      modalInfoText:
+                        'Keep the wheels of your business going with inventory finance.',
+                      btn_modal_txt: 'Login to CICOD.com ',
                     })
                   }
                   source={require('../images/home/finance.png')}
                   title="Finance"
                 />
-                <View style={{width:30}} />
+                <View style={{width: 30}} />
                 <ModuleCard
                   disabled={
                     this.state.user.kciInfo &&
@@ -746,9 +756,10 @@ class Home extends React.Component {
                   }
                   onPress={() => {
                     this.setState({
-                      btn_modal_txt:"Invite now",
+                      btn_modal_txt: 'Invite now',
                       modalInfoType: 'delivery',
-                      modalInfoTextMore: 'The buyer is expected to provide the DAT when receiving the product, the DAT must then be validated by the merchant and provided on the app in order for settlement to occur. ',
+                      modalInfoTextMore:
+                        'The buyer is expected to provide the DAT when receiving the product, the DAT must then be validated by the merchant and provided on the app in order for settlement to occur. ',
                       modalInfoTextMore_two:
                         'In order to ensure a satisfactory business transaction between buyers and sellers a Delivery Acceptance Token (DAT) is sent to the buyer upon every successful sale.',
                       modalInfoTextMore_three:
@@ -768,7 +779,6 @@ class Home extends React.Component {
                     flexDirection: 'row',
                     alignSelf: 'center',
                     width: width - 20,
-                    alignSelf: 'center',
                     marginTop: 20,
                     alignItems: 'center',
                     paddingRight: 10,
@@ -788,7 +798,7 @@ class Home extends React.Component {
                 style={[
                   {
                     flexDirection: 'row',
-                    alignSelf: 'center',
+
                     width: width - 20,
                     alignSelf: 'center',
                     marginTop: 10,
@@ -813,7 +823,7 @@ class Home extends React.Component {
                       fontSize: 10,
                       color: '#007BFF',
                       fontWeight: 'bold',
-                    }}>{`https://${this.state.tenantId.toLowerCase()}.${
+                    }}>{`https://${this.props.user.tenantId.toLowerCase()}.${
                     Constants.webshop_url
                   }`}</Text>
                   <Image source={require('../images/home/share_alt.png')} />
@@ -889,7 +899,7 @@ class Home extends React.Component {
             onDismiss={() => this.setState({modalInfo: false})}>
             <View
               style={{
-                height: height - 90,
+                // height: height - 90,
                 alignSelf: 'center',
                 backgroundColor: '#fff',
                 width: width - 50,
@@ -897,25 +907,26 @@ class Home extends React.Component {
                 alignItems: 'center',
                 // paddingVertical: 20,
                 // paddingVertical: 10,
-                paddingHorizontal:10,
+                paddingHorizontal: 10,
+                paddingVertical:30,
                 borderRadius: 10,
                 flexDirection: 'column',
               }}>
               {this.state.modalInfoType == 'delivery' && (
                 <Image
-                   style={{height:100,width:100}}
+                  style={{height: 100, width: 100}}
                   source={require('../images/home/delivery.png')}
                 />
               )}
               {this.state.modalInfoType == 'finance' && (
                 <Image
-                   style={{height:100,width:100}}
+                  style={{height: 100, width: 100}}
                   source={require('../images/home/finance.png')}
                 />
               )}
               {this.state.modalInfoType == 'accounting' && (
                 <Image
-                   style={{height:100,width:100}}
+                  style={{height: 100, width: 100}}
                   source={require('../images/home/account.png')}
                 />
               )}
@@ -926,53 +937,82 @@ class Home extends React.Component {
                 />
               )}
               <Text
-                style={{fontWeight: 'bold', color: '#4E4D4D', fontSize:this.state.modalInfoType == 'finance'?17: 20,marginTop:10,marginHorizontal:10}}>
+                style={{
+                  fontWeight: 'bold',
+                  color: '#4E4D4D',
+                  fontSize: this.state.modalInfoType == 'finance' ? 17 : 19,
+                  marginTop: 10,
+                  marginHorizontal: 10,
+                }}>
                 {this.state.modalInfoText}
               </Text>
-              <View style={{alignSelf: 'flex-start', paddingHorizontal: 20,}}>
-               
-                <Text style={{ marginTop: 14, fontSize:this.state.modalInfoType == 'finance'? 12: 14}}>
-                   {this.state.modalInfoTextMore_two}
+              <View style={{alignSelf: 'flex-start', paddingHorizontal: 20}}>
+                <Text
+                  style={{
+                    marginTop: 14,
+                    fontSize: this.state.modalInfoType == 'finance' ? 12 : 14,
+                  }}>
+                  {this.state.modalInfoTextMore_two}
                 </Text>
-                <View style={{justifyContent:"center",alignItems:"center", marginTop:20,backgroundColor:"#F0F3F5",borderColor:"#DDE2E5",borderWidth:1,borderRadius:10,paddingHorizontal:10,paddingVertical:20}}>
-                <Text style={{color:"#B1272C",fontWeight:"bold",textAlign:"center"}}>NOTE</Text>
-                <Text style={{color: '#4E4D4D', marginTop: 16, fontSize: 14}}>
-                   {this.state.modalInfoTextMore}
-                </Text>
-                {
-                  this.state.modalInfoTextMore_three!="" &&(
-                    <Text style={{color: '#4E4D4D', marginTop: 16, fontSize: 14}}>
-                    {this.state.modalInfoTextMore_three}
+                <View
+                  style={{
+                    alignSelf: 'center',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    marginTop: 20,
+                    backgroundColor: '#F0F3F5',
+                    borderColor: '#DDE2E5',
+                    borderWidth: 1,
+                    borderRadius: 10,
+                    paddingHorizontal: 10,
+                    paddingVertical: 20,
+                  }}>
+                  <Text
+                    style={{
+                      color: '#B1272C',
+                      fontWeight: 'bold',
+                      textAlign: 'center',
+                    }}>
+                    NOTE
+                  </Text>
+                  <Text style={{color: '#4E4D4D', marginTop: 16, fontSize: 14}}>
+                    {this.state.modalInfoTextMore}
+                  </Text>
+                  {this.state.modalInfoTextMore_three != '' && (
+                    <Text
+                      style={{color: '#4E4D4D', marginTop: 16, fontSize: 14}}>
+                      {this.state.modalInfoTextMore_three}
                     </Text>
-                  )
-                }
-               
-                <TouchableOpacity
-                onPress={() => {
-                  this.state.modalInfoType=="delivery"?this.shareNetwork()  : Linking.openURL(`${Constants.sass_url}/login`);
-                }}
-                style={{
-                  borderWidth: 1,
-                  marginTop: 35,
-                  alignItems:"center",
-                  justifyContent:"center",
-                  backgroundColor: '#fff',
-                  borderColor: '#2F2E7C',
-                  paddingVertical: 10,
-                  padding: 15,
-                  width:200,
-                  alignSelf:"center",
-                  borderRadius: 100,
-                }}>
-                <Text style={{color: '#2F2E7C'}}>{this.state.btn_modal_txt}</Text>
-              </TouchableOpacity>
+                  )}
+
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.state.modalInfoType == 'delivery'
+                        ? this.shareNetwork()
+                        : Linking.openURL(`${Constants.sass_url}/login`);
+                    }}
+                    style={{
+                      borderWidth: 1,
+                      marginTop: 35,
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      backgroundColor: '#fff',
+                      borderColor: '#2F2E7C',
+                      paddingVertical: 10,
+                      padding: 15,
+                      width: 200,
+                      alignSelf: 'center',
+                      borderRadius: 100,
+                    }}>
+                    <Text style={{color: '#2F2E7C'}}>
+                      {this.state.btn_modal_txt}
+                    </Text>
+                  </TouchableOpacity>
                 </View>
                 {/* <Text style={{color: '#4E4D4D', marginTop: 10, fontSize: 12}}>
                   * {this.state.modalInfoTextMore_three}
                 </Text> */}
               </View>
-
-            
             </View>
           </Modal>
 

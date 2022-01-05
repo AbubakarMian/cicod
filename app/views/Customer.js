@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -175,7 +176,7 @@ class Customer extends React.Component {
     this.getCustomers(url);
     return;
     // }
-    console.log('333333333333', this.state.isFetching);
+    
     // _that.setState({
     //     url_orders: url,
     // })
@@ -233,16 +234,16 @@ class Customer extends React.Component {
                 </View> */}
           <Searchbar
             placeholder="Search Customer"
-            style={[{color: '#D8D8D8'}, fontStyles.normal14]}
-            iconColor="#929497"
-            style={{
+            style={[{color: '#D8D8D8'}, fontStyles.normal14,{
               width: width - 20,
               alignSelf: 'center',
               marginTop: 10,
               marginBottom: 5,
               elevation: 0,
               borderColor: '#D8DCDE',
-            }}
+            }]}
+            iconColor="#929497"
+            
             onChangeText={text => this.setState({search_text: text})}
             onSubmitEditing={() => this.search()}
             //update
@@ -266,7 +267,7 @@ class Customer extends React.Component {
                   Platform.OS !== 'android' &&
                   (({highlighted}) => (
                     <View
-                      style={[style.separator, highlighted && {marginLeft: 0}]}
+                      style={[styles.separator, highlighted && {marginLeft: 0}]}
                     />
                   ))
                 }

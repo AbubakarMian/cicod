@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -5,11 +6,11 @@ import {
   TouchableOpacity,
   Dimensions,
   FlatList,
-  Touchable,
+  Platform,
   ScrollView,
   Alert,
 } from 'react-native';
-import {Text, TextInput, Modal} from 'react-native-paper';
+import {Text,  Modal} from 'react-native-paper';
 import styles from '../css/OrderDetail_pendingCss';
 import fontStyles from '../css/FontCss';
 import Header from '../views/Header';
@@ -608,7 +609,7 @@ class OrderDetail_pending extends React.Component {
                       (({highlighted}) => (
                         <View
                           style={[
-                            style.separator,
+                            styles.separator,
                             highlighted && {marginLeft: 0},
                           ]}
                         />
@@ -813,7 +814,7 @@ function mapDispatchToProps(dispatch) {
     setUser: value => dispatch({type: SET_USER, value: value}),
     logoutUser: () => dispatch({type: LOGOUT_USER}),
     setScreenReload: value => dispatch({type: ORDER_RELOAD, value: value}),
-    setScreenReload: value => dispatch({type: ORDER_RELOAD, value: value}),
+    
   };
 }
 export default connect(

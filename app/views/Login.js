@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -5,6 +6,7 @@ import {
   Dimensions,
   TouchableOpacity,
   ScrollView,
+  Platform,
   Alert,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
@@ -112,6 +114,7 @@ class Login extends React.Component {
         headers: {
           Accept: 'application/json',
           'Content-Type': 'application/json',
+          'cicod-app-type':Platform.OS==="android"?"android":"ios",
           Authorization: Constants.autherizationKey,
           'Authorization-Secure': Constants.autherizationKey,
         },
@@ -283,7 +286,7 @@ class Login extends React.Component {
                   borderLeftWidth: 0,
                   borderColor: '#CFCFCF',
                 }}
-                alignSelf={'center'}
+                // alignSelf={'center'}
                 color={'#000'}
                 onFocus={() => {
                   this.setState({domain_text_color: 'red'});

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -229,7 +230,7 @@ class Buyers extends React.Component {
               Platform.OS !== 'android' &&
               (({highlighted}) => (
                 <View
-                  style={[style.separator, highlighted && {marginLeft: 0}]}
+                  style={[styles.separator, highlighted && {marginLeft: 0}]}
                 />
               ))
             }

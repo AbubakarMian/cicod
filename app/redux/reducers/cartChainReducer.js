@@ -12,7 +12,7 @@ import {
 } from '../constants';
 const initialState = {
   cart: [],
-  currency: '₦',
+  currency: '',
   cart_detail: {
     total_price: 0,
     tax: 0,

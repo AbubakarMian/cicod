@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -5,10 +6,11 @@ import {
   TouchableOpacity,
   Dimensions,
   FlatList,
-  Touchable,
+
   ScrollView,
   Alert,
-  BackHandler
+  BackHandler,
+  Platform
 } from 'react-native';
 import {Text, TextInput, Modal} from 'react-native-paper';
 import styles from '../css/OrderDetail_pendingCss';
@@ -689,7 +691,7 @@ this.state.data.payment_status=='PART PAYMENT'? '#929497'
                       (({highlighted}) => (
                         <View
                           style={[
-                            style.separator,
+                            styles.separator,
                             highlighted && {marginLeft: 0},
                           ]}
                         />

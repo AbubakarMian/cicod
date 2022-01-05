@@ -7034,7 +7034,7 @@
     "prop-types" "15.5.8"
     "ts-object-utils" "0.0.5"
 
-"redux-thunk@^2.3.0":
+"redux-thunk@^2.3.0", "redux-thunk@^2.4.1":
   "integrity" "sha512-OOYGNY5Jy2TWvTL1KgAlVy6dcx3siPJ1wTq741EPyUKfn6W6nChdICjZwCd0p8AZBs5kWpZlbkXW2nE/zjUa+Q=="
   "resolved" "https://registry.npmjs.org/redux-thunk/-/redux-thunk-2.4.1.tgz"
   "version" "2.4.1"

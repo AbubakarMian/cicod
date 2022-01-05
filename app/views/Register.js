@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {View, Dimensions, Alert, ScrollView} from 'react-native';
 import {WebView} from 'react-native-webview';

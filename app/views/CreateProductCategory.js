@@ -1,15 +1,13 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
-  ImageBackground,
-  TouchableHighlight,
-  ScrollView,
+ 
   Alert,
   Dimensions,
   Image,
-  Platform,
+
   TouchableOpacity,
-  SafeAreaView,
 } from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import styles from '../css/CreateProductCategoryCss';
@@ -160,7 +158,7 @@ class CreateProductCategory extends React.Component {
       console.log('222222222222222~~~~~~~~~~~~body formdata image', {
         uri: this.state.product_category.prod_image,
         type: 'multipart/form-data',
-        name: `image.jpg`,
+        name: 'image.jpg',
       });
       // return;
       let myheader = {
@@ -181,9 +179,9 @@ class CreateProductCategory extends React.Component {
             if (response.data.status === 'success') {
               console.log('GGGGGGGGGGG', response.data);
               _that.setState({
-                name:"",
-                description:"",
-                prod_image:"",
+                name:'',
+                description:'',
+                prod_image:'',
                 product_category: {
                   id: 0,
                   name: '',
@@ -216,9 +214,9 @@ class CreateProductCategory extends React.Component {
             if (response.data.status === 'success') {
               console.log('GGGGGGGGGGG', response.data);
               _that.setState({
-                name:"",
-                description:"",
-                prod_image:"",
+                name:'',
+                description:'',
+                prod_image:'',
                 product_category: {
                   id: 0,
                   name: '',
@@ -227,22 +225,18 @@ class CreateProductCategory extends React.Component {
                   on_webshop: false,
                 },
                 screen: 'new',
-                
-              })
-              Alert.alert("Success","Product Category Updated Successfully!",[
+              });;
+              Alert.alert('Success','Product Category Updated Successfully!',[
                 {
-                  text:"OK",
-                  onPress:()=>{
+                  text:'OK',
+                  onPress: () => {
                     _that.props.setScreenReload({
                       reload: true,
                     });
                     _that.props.navigation.navigate('ProductCategory');
-
-                  }
-                }
-              ])
-              
-
+                  },
+                },
+              ]);
             } else {
               Alert.alert(response.response.message);
             }

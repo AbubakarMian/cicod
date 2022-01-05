@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -101,7 +102,7 @@ export default class EnableProduct extends React.Component {
                   Platform.OS !== 'android' &&
                   (({highlighted}) => (
                     <View
-                      style={[style.separator, highlighted && {marginLeft: 0}]}
+                      style={[styles.separator, highlighted && {marginLeft: 0}]}
                     />
                   ))
                 }
@@ -142,7 +143,7 @@ export default class EnableProduct extends React.Component {
                   Platform.OS !== 'android' &&
                   (({highlighted}) => (
                     <View
-                      style={[style.separator, highlighted && {marginLeft: 0}]}
+                      style={[styles.separator, highlighted && {marginLeft: 0}]}
                     />
                   ))
                 }

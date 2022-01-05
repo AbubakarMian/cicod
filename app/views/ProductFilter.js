@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -54,32 +55,7 @@ class ProductFilter extends React.Component {
     }, 700);
     // await this.getProductList(Constants.productslist);
     return;
-    this.setState({spinner: true});
-    let postData = {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: this.props.user.access_token,
-      },
-    };
-    fetch('https://com.cicodsaasstaging.com/com/api/orders', postData)
-      .then(response => response.json())
-      .then(async responseJson => {
-        console.log('response !!!!!!!!', responseJson);
-        this.setState({Spinner: false});
-        this.setState({
-          list: responseJson,
-          data: responseJson.data,
-        });
-        if (responseJson.status === true) {
-          console.log('dataset', data);
-          // this.props.navigation.navigate('DrawerNavigation')
-        } else {
-          let message = JSON.stringify(responseJson.error.message);
-          Alert.alert('Error', message);
-        }
-      });
+    
   }
   clear_filter() {
     this,

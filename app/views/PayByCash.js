@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -28,6 +29,7 @@ import SearchBar from 'react-native-search-bar';
 import {Constants} from '../views/Constant';
 import {connect} from 'react-redux';
 import Scaffold from './Components/Scaffold';
+import { SET_USER } from '../redux/constants';
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
 class PayByCash extends React.Component {
@@ -362,16 +364,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     setUser: value => dispatch({type: SET_USER, value: value}),
-    logoutUser: () => dispatch({type: LOGOUT_USER}),
-    emptyOrder: () => dispatch({type: CLEAR_ORDER}),
-    cartReducer: value => dispatch({type: ADD_TO_PRODUCT, value: value}),
-    removeFromCart: value => dispatch({type: REMOVE_FROM_CART, value: value}),
-    removeProductFromCart: value =>
-      dispatch({type: REMOVE_PRODUCT_FORM_CART, value: value}),
-    setDeliveryAddress: value =>
-      dispatch({type: SET_DELIVERY_ADDRESS, value: value}),
-    setCustomer: value => dispatch({type: SET_CUSTOMER, value: value}),
-    setSupplier: value => dispatch({type: SET_SUPPLIER, value: value}),
+    
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(PayByCash);

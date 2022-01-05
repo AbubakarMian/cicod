@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -259,7 +260,7 @@ class BuyerProducts extends React.Component {
               Platform.OS !== 'android' &&
               (({highlighted}) => (
                 <View
-                  style={[style.separator, highlighted && {marginLeft: 0}]}
+                  style={[styles.separator, highlighted && {marginLeft: 0}]}
                 />
               ))
             }
@@ -395,16 +396,16 @@ class BuyerProducts extends React.Component {
             }}>
             <Searchbar
               placeholder="Search product, Price and code"
-              style={[{color: '#D8D8D8'}, fontStyles.normal14]}
-              iconColor="#929497"
-              style={{
+              style={[{color: '#D8D8D8'}, fontStyles.normal14,{
                 width: width / 1.3,
                 alignSelf: 'center',
                 marginTop: 5,
                 marginBottom: 5,
                 elevation: 0,
                 borderColor: '#D8DCDE',
-              }}
+              }]}
+              iconColor="#929497"
+              
               onChangeText={text => this.setState({search_product: text})}
               onSubmitEditing={() => this.search()}
               //update

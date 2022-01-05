@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -9,7 +10,10 @@ import {
   Image,
   Platform,
   TouchableOpacity,
+  Modal as OtherModal,
+  TouchableWithoutFeedback,
 } from 'react-native';
+
 import {Text, TextInput} from 'react-native-paper';
 import splashImg from '../images/splash.jpg';
 import styles from '../css/ProductCategoryCss';
@@ -31,12 +35,7 @@ import {
   MenuOption,
   MenuTrigger,
 } from 'react-native-popup-menu';
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel,
-} from 'react-native-simple-radio-button';
-import SearchBar from 'react-native-search-bar';
+
 import NavBack from './Components/NavBack';
 import Scaffold from './Components/Scaffold';
 const {width, height} = Dimensions.get('window');
@@ -53,6 +52,7 @@ class ProductCategory extends React.Component {
       spinner: false,
       search_text: '',
       search_filters: [],
+      isShowModal:false,
     };
   }
   componentDidMount() {
@@ -216,12 +216,8 @@ class ProductCategory extends React.Component {
                         <Text style={[{}, styles.backHeadingText]}>PRODUCT CATEGORY</Text>
                     </View> */}
             <TouchableOpacity
-              onPress={() =>
-                this.props.navigation.navigate('CreateProductCategory', {
-                  screen: 'create',
-                  item: {},
-                })
-              }
+             hitSlop={{top: 20, bottom: 20, right: 20, left: 20}}
+              onPress={() => this.setState({isShowModal: true})}
               style={[{}, styles.plusTouch]}>
               <Image source={require('../images/circlePlus.png')} />
             </TouchableOpacity>
@@ -246,8 +242,6 @@ class ProductCategory extends React.Component {
                 borderRadius: 5,
                 width: width - 80,
               }}>
-               
-
               <TextInput
                 label="Search a category"
                 // selectionColor={'#fff'}
@@ -259,13 +253,14 @@ class ProductCategory extends React.Component {
                 onChangeText={text => this.setState({search_text: text})}
                 onSubmitEditing={() => this.search()}
               />
-              <TouchableOpacity onPress={()=>this.search()} style={{position:"absolute",right:10}}>
-              <Image
-                style={{height: 30, width: 30,}}
-                source={require('../images/products/searchicon.png')}
-              />
+              <TouchableOpacity
+                onPress={() => this.search()}
+                style={{position: 'absolute', right: 10}}>
+                <Image
+                  style={{height: 30, width: 30}}
+                  source={require('../images/products/searchicon.png')}
+                />
               </TouchableOpacity>
-             
             </View>
 
             <TouchableOpacity
@@ -308,7 +303,7 @@ class ProductCategory extends React.Component {
                 Platform.OS !== 'android' &&
                 (({highlighted}) => (
                   <View
-                    style={[style.separator, highlighted && {marginLeft: 0}]}
+                    style={[styles.separator, highlighted && {marginLeft: 0}]}
                   />
                 ))
               }
@@ -341,7 +336,7 @@ class ProductCategory extends React.Component {
                       {item.name}
                     </Text>
                     <Text style={[{}, styles.listDescNormalText]}>
-                      {item.description==""?"--":item.description}
+                      {item.description == '' ? '--' : item.description}
                     </Text>
                   </View>
                   <View
@@ -355,7 +350,7 @@ class ProductCategory extends React.Component {
                     ]}>
                     <Menu>
                       {/* <MenuTrigger text='. . .' customStyles={{}} /> */}
-                      <MenuTrigger style={styles.trigger}>
+                      <MenuTrigger   hitSlop={{top: 20, bottom: 20, right: 20, left: 20}}style={styles.trigger}>
                         {/* <Text style={styles.triggerText}>Slide-in menu...</Text> */}
                         <Icon name="ellipsis-h" color={'#929497'} size={20} />
                       </MenuTrigger>
@@ -428,6 +423,72 @@ class ProductCategory extends React.Component {
             </View>
           )}
         </View>
+
+        <OtherModal
+          visible={this.state.isShowModal}
+          onRequestClose={() => this.setState({isShowModal: false})}
+          transparent={true}>
+          <TouchableOpacity onPress={() => this.setState({isShowModal: false})}>
+            <View style={[{}, styles.modalBackGround]}>
+              <TouchableWithoutFeedback>
+                <View style={styles.suspendModal}>
+                  <View style={{alignItems: 'center', flexDirection: 'row'}}>
+                    <Image
+                      style={{height: 20, width: 20}}
+                      source={require('../images/add_product_sm.png')}
+                    />
+
+                    <TouchableOpacity
+                      hitSlop={{top: 20, bottom: 20, right: 20, left: 20}}
+                      onPress={() =>
+                        this.setState({isShowModal: false}, () => {
+                          this.props.navigation.navigate(
+                            'CreateProductCategory',
+                            {item: {}},
+                          );
+                        })
+                      }
+                      style={[
+                        {marginLeft: 7, width: '100%'},
+                        styles.suspendTouch,
+                      ]}>
+                      <Text style={{color: '#4E4D4D'}}>Add New Category</Text>
+                    </TouchableOpacity>
+                  </View>
+                  <View style={{alignItems: 'center', flexDirection: 'row'}}>
+                    <Image
+                      style={{height: 20, width: 20}}
+                      source={require('../images/product_cat_sm.png')}
+                    />
+                    <TouchableOpacity
+                      hitSlop={{top: 20, bottom: 20, right: 20, left: 20}}
+                      onPress={() =>
+                        this.setState({isShowModal: false}, () => {
+                          this.props.navigation.navigate('CreateProduct', {
+                            action: 'create',
+                            prodDetail: null,
+                          });
+                        })
+                      }
+                      style={[
+                        {marginLeft: 7, width: '100%'},
+                        styles.suspendTouch,
+                      ]}>
+                      <Text style={{color: '#4E4D4D'}}>Add Product</Text>
+                    </TouchableOpacity>
+                  </View>
+                  {/* <View style={{marginTop:5}} /> */}
+                  {/* <TouchableOpacity
+                                onPress={() => this.setState({suspendModal:false})}
+                                style={[{}, styles.suspendTouch]}>
+                                <Image source={require('../images/redCross.png')} style={[{width:20,height:20}, styles.banImage]} />
+                                <Text style={{}}> Cancel</Text>
+                            </TouchableOpacity> */}
+                </View>
+              </TouchableWithoutFeedback>
+            </View>
+          </TouchableOpacity>
+        </OtherModal>
       </Scaffold>
     );
   }

@@ -1,4 +1,4 @@
-import { createStore, combineReducers } from 'redux';
+import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import userReducer from '../reducers/userReducer';
 import tabBarReducer from '../reducers/tabBarReducer';
 import cartReducer from '../reducers/cartReducer';
@@ -12,6 +12,8 @@ import reloadReducer from '../reducers/reloadReducer';
 import productFilterReducer from "../reducers/productFilterReducer";
 import barcodeReducer from '../reducers/barcodeReducer';
 import cartChainReducer from '../reducers/cartChainReducer';
+import products_reducer from '../reducers/products_reducer';
+import reduxThunk from "redux-thunk";
 const rootReducer = combineReducers({
       userReducer, 
       cartReducer , 
@@ -25,11 +27,12 @@ const rootReducer = combineReducers({
       reloadReducer,
       productFilterReducer,
       barcodeReducer,
-      cartChainReducer
+      cartChainReducer,
+      products_reducer
     });
 // const rootReducer = () => combineReducers(
 //     { count: reducer })
 
-const configureStore = createStore(rootReducer)
+const configureStore = createStore(rootReducer,{},compose(applyMiddleware(reduxThunk)))
 
 export default configureStore;

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -72,7 +73,7 @@ class Network extends React.Component {
     this.getData(search_url);
     return;
     // }
-    console.log('333333333333', this.state.isFetching);
+    
     // _that.setState({
     //     url_orders: url,
     // })
@@ -211,7 +212,7 @@ this.setState({
       <TouchableOpacity
         onPress={() => this.handleLoadMore()}
         style={{
-          padding: 5,
+       
           alignSelf: 'center',
           marginTop: 7,
           marginBottom: 350,
@@ -398,16 +399,16 @@ this.setState({
             }}>
             <Searchbar
               placeholder="Search merchant"
-              style={[{color: '#D8D8D8'}, fontStyles.normal14]}
-              iconColor="#929497"
-              style={{
+              style={[{color: '#D8D8D8'}, fontStyles.normal14,{
                 width: width / 1.3,
                 alignSelf: 'center',
                 marginTop: 5,
                 marginBottom: 5,
                 elevation: 0,
                 borderColor: '#D8DCDE',
-              }}
+              }]}
+              iconColor="#929497"
+              
               onChangeText={text => this.setState({search_merchant: text,isSearch:true})}
               onSubmitEditing={() => this.search()}
               //update

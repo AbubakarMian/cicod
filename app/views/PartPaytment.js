@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -161,7 +162,7 @@ class PartPaytment extends React.Component {
     }
     return true;
   }
-  resendInvoice() {
+  resendInvoice(bodyOrder) {
     let postData = {
       method: 'POST',
       headers: {
@@ -176,8 +177,7 @@ class PartPaytment extends React.Component {
       JSON.stringify(bodyOrder),
     );
     // https://com.cicodsaasstaging.com/com/api/orders/948?action=send_invoice
-    let url =
-      Constants.orderslist + '/' + this.state.order.id + '?action=send_invoice';
+   // let url = Constants.orderslist + '/' + this.state.order.id + '?action=send_invoice';
     fetch(Constants.orderslist, postData)
       .then(response => response.json())
       .then(async responseJson => {
@@ -219,12 +219,13 @@ class PartPaytment extends React.Component {
     if (!this.required_fields_check()) {
       return;
     }
+    let bodyOrder = this.get_body_order();
     if (this.state.order != null) {
-      await this.resendInvoice();
+      await this.resendInvoice(bodyOrder);
       return;
     }
 
-    let bodyOrder = this.get_body_order();
+    
 this.setState({spinner:true})
     // part_payment_balance_due_date:  //this.state.part_payment_balance_due_date,
     // part_payment_percent:  // this.state.part_payment_percent,

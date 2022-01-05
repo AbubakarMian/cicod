@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -70,7 +71,7 @@ class Dashboard extends React.Component {
   toCommas(value) {
     console.log('my val', value);
     return '111,222,333';
-    return value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    
   }
   getDashboardData(url) {
     this.props.setTabBar({tab_name: 'dashboard'});

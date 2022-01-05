@@ -1,13 +1,13 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
-import {
-  SafeAreaView,
+import { 
   BackHandler,
   View,
+  Platform,
   Image,
   TouchableOpacity,
   Dimensions,
   FlatList,
-  Touchable,
   ScrollView,
   Alert,
   TouchableWithoutFeedback,
@@ -15,11 +15,11 @@ import {
 } from 'react-native';
 
 import OTPTextInput from 'react-native-otp-textinput';
-import {Text, TextInput, Modal} from 'react-native-paper';
+import {Text,  Modal} from 'react-native-paper';
 import styles from '../css/OrderDetailCss';
-import fontStyles from '../css/FontCss';
+
 import Header from '../views/Header';
-import CheckBox from 'react-native-check-box';
+
 import Icon from 'react-native-vector-icons/FontAwesome';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {connect} from 'react-redux';
@@ -29,16 +29,14 @@ import {
   LOGOUT_USER,
   FORMAT_CURRENCY,
   SET_CURRENCY,
-  CLEAR_CART,
   CLEAR_ORDER,
   SET_CUSTOMER,
 } from '../redux/constants/index';
 import {Constants} from './Constant';
 
-import {get_formated_amount} from '../redux/reducers/currencyReducer';
 import NavBack from './Components/NavBack';
 import Scaffold from './Components/Scaffold';
-var {width, height} = Dimensions.get('window');
+var {width} = Dimensions.get('window');
 
 class OrderDetail extends React.Component {
   constructor(props) {
@@ -152,8 +150,8 @@ class OrderDetail extends React.Component {
         }
       })
       .catch(e => {
-        let message = responseJson.message;
-        Alert.alert('Error', message);
+        //let message = responseJson.message;
+        Alert.alert('Error', "Error in updating");
       });
   }
 
@@ -547,7 +545,7 @@ class OrderDetail extends React.Component {
                   Platform.OS !== 'android' &&
                   (({highlighted}) => (
                     <View
-                      style={[style.separator, highlighted && {marginLeft: 0}]}
+                      style={[styles.separator, highlighted && {marginLeft: 0}]}
                     />
                   ))
                 }

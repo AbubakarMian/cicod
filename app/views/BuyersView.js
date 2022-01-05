@@ -634,7 +634,7 @@ class BuyersView extends React.Component {
                 
               </View>
 
-              <View style={[{alignSelf:"flex-start",marginHorinzontal:20,paddingHorizontal:20}, styles.columnView]}>
+              <View style={[{marginHorinzontal:20,paddingHorizontal:20}, styles.columnView]}>
                   <Text style={[{}, styles.lightGrayText]}>
                     Mininum Spend
                   </Text>

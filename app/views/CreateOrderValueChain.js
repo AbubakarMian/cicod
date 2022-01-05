@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -449,7 +450,7 @@ class CreateOrderValueChain extends React.Component {
 
     console.log("this.state.amount_payable",this.state.amount_payable)
 //check if minimum spent is greater than total order amount
-    if (this.props.supplier.detail.minimum_spend && this.props.supplier.detail.minimum_spend>0 && this.props.supplier.detail.minimum_spend>this.state.amount_payable) {
+    if (this.props.supplier.detail && this.props.supplier.detail.minimum_spend && this.props.supplier.detail.minimum_spend>0 && this.props.supplier.detail.minimum_spend>this.state.amount_payable) {
       Alert.alert("Info","Order cannot be less than amount.");
       return;
     }
@@ -868,8 +869,8 @@ class CreateOrderValueChain extends React.Component {
                   <CustomerDetail
                     isSupplier={true}
                     customer={this.state.customer}
-                    minimum_spend={this.props.supplier.detail.minimum_spend??0}
-                    supplierCurrency={this.props.supplier.detail.seller_currency.symbol}
+                    minimum_spend={ this.props.supplier.detail && this.props.supplier.detail.minimum_spend}
+                    supplierCurrency={this.props.supplier.detail && this.props.supplier.detail.seller_currency &&this.props.supplier.detail.seller_currency.symbol}
                     name={this.state.customer_name}
                     email={this.state.customer_email}
                     phone={this.state.customer_phone}
@@ -1166,6 +1167,8 @@ class CreateOrderValueChain extends React.Component {
                   </View>
                 )}
               </View>
+
+              {this.state.cart_arr.length>0 &&
               <View
                 style={{
                   backgroundColor: '#fff',
@@ -1264,6 +1267,7 @@ class CreateOrderValueChain extends React.Component {
                   </Text>
                 </TouchableOpacity>
               </View>
+              }
             </View>
           </ScrollView>
           <Modal
@@ -1306,7 +1310,7 @@ class CreateOrderValueChain extends React.Component {
                       (({highlighted}) => (
                         <View
                           style={[
-                            style.separator,
+                            styles.separator,
                             highlighted && {marginLeft: 0},
                           ]}
                         />

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -29,6 +30,7 @@ import {Constants} from '../views/Constant';
 import {connect} from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Scaffold from './Components/Scaffold';
+import { SET_USER } from '../redux/constants';
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
 class PayByUssd extends React.Component {
@@ -62,7 +64,7 @@ class PayByUssd extends React.Component {
     };
 
     // let order_id = this.props.route.params.data.id;
-    url = `${Constants.viewSellerOrder}?id=${this.props.route.params.item.seller_id}&orderId=${order_id}&&expand=customer,customerOrderItems`;
+   let url = `${Constants.viewSellerOrder}?id=${this.props.route.params.item.seller_id}&orderId=${order_id}&&expand=customer,customerOrderItems`;
 
     console.log(
       '---- body params list @@@@@@!!!!!!!!!!!!!!',
@@ -321,16 +323,16 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     setUser: value => dispatch({type: SET_USER, value: value}),
-    logoutUser: () => dispatch({type: LOGOUT_USER}),
-    emptyOrder: () => dispatch({type: CLEAR_ORDER}),
-    cartReducer: value => dispatch({type: ADD_TO_PRODUCT, value: value}),
-    removeFromCart: value => dispatch({type: REMOVE_FROM_CART, value: value}),
-    removeProductFromCart: value =>
-      dispatch({type: REMOVE_PRODUCT_FORM_CART, value: value}),
-    setDeliveryAddress: value =>
-      dispatch({type: SET_DELIVERY_ADDRESS, value: value}),
-    setCustomer: value => dispatch({type: SET_CUSTOMER, value: value}),
-    setSupplier: value => dispatch({type: SET_SUPPLIER, value: value}),
+    // logoutUser: () => dispatch({type: LOGOUT_USER}),
+    // emptyOrder: () => dispatch({type: CLEAR_ORDER}),
+    // cartReducer: value => dispatch({type: ADD_TO_PRODUCT, value: value}),
+    // removeFromCart: value => dispatch({type: REMOVE_FROM_CART, value: value}),
+    // removeProductFromCart: value =>
+    //   dispatch({type: REMOVE_PRODUCT_FORM_CART, value: value}),
+    // setDeliveryAddress: value =>
+    //   dispatch({type: SET_DELIVERY_ADDRESS, value: value}),
+    // setCustomer: value => dispatch({type: SET_CUSTOMER, value: value}),
+    // setSupplier: value => dispatch({type: SET_SUPPLIER, value: value}),
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(PayByUssd);

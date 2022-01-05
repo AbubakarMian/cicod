@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -21,6 +22,7 @@ import {
   RESET,
   RESET_DELIVERY,
   REMOVE_DELIVERY_FEE_TO_COST,
+  CLEAR_CART,
 } from '../redux/constants/index';
 import {event} from 'react-native-reanimated';
 
