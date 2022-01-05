@@ -136,11 +136,11 @@ class CreateOrderValueChain extends React.Component {
     this.props.resetDeliveryAddress();
   }
   async componentDidMount() {
-    console.log('heress#', this.props.cart.cart_detail);
+    //console.log('heress#', this.props.cart.cart_detail);
     // this.props.emptyOrder();
 
-      console.log("dele#$",this.props.route.params.item)
-      this.clearOrder()
+      console.log("dsdd#$",this.props.supplier)
+      // this.clearOrder()
     //getSellers
     this.setState({supplier: this.props.route.params.item});
     let url =
@@ -306,11 +306,27 @@ class CreateOrderValueChain extends React.Component {
         //console.log('cart : ', this.props.cart);
       }
     } else {
-      let updated_purchased_quantity = data[index].purchased_quantity - 1;
+      // let updated_purchased_quantity = data[index].purchased_quantity - 1;
+
+      // if (data[index].purchased_quantity > 0) {
+      //   await this.props.removeFromCart(data[index]);
+      //   data[index].purchased_quantity = updated_purchased_quantity;
+
+      let updated_purchased_quantity =0;
+     
 
       if (data[index].purchased_quantity > 0) {
-        await this.props.removeFromCart(data[index]);
+
+        if (data[index].minimum_order >0 &&data[index].minimum_order>= data[index].purchased_quantity) {
+          updated_purchased_quantity=data[index].purchased_quantity-data[index].minimum_order;
+        }else{
+           updated_purchased_quantity = data[index].purchased_quantity - 1;
+        }
+
+
         data[index].purchased_quantity = updated_purchased_quantity;
+
+        await this.props.removeFromCart(data[index]);
 
         this.setState({
           data: data,
@@ -429,6 +445,15 @@ class CreateOrderValueChain extends React.Component {
     if (await this.state.spinner) {
       return;
     }
+
+
+    console.log("this.state.amount_payable",this.state.amount_payable)
+//check if minimum spent is greater than total order amount
+    if (this.props.supplier.detail.minimum_spend && this.props.supplier.detail.minimum_spend>0 && this.props.supplier.detail.minimum_spend>this.state.amount_payable) {
+      Alert.alert("Info","Order cannot be less than amount.");
+      return;
+    }
+
     await this.setState({spinner: true});
 
     if (
@@ -714,6 +739,7 @@ class CreateOrderValueChain extends React.Component {
       suppliereModal: false,
     });
     this.props.setSupplier({
+      detail:item,
       id: item.seller_id,
       name: item.seller_name,
     });
@@ -842,6 +868,8 @@ class CreateOrderValueChain extends React.Component {
                   <CustomerDetail
                     isSupplier={true}
                     customer={this.state.customer}
+                    minimum_spend={this.props.supplier.detail.minimum_spend??0}
+                    supplierCurrency={this.props.supplier.detail.seller_currency.symbol}
                     name={this.state.customer_name}
                     email={this.state.customer_email}
                     phone={this.state.customer_phone}

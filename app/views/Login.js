@@ -15,6 +15,7 @@ import fontStyles from '../css/FontCss';
 import CheckBox from 'react-native-check-box';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Spinner from 'react-native-loading-spinner-overlay';
+import NetInfo from "@react-native-community/netinfo";
 import {connect} from 'react-redux';
 import {
   SET_USER,
@@ -411,7 +412,23 @@ class Login extends React.Component {
 
           <TouchableOpacity
             style={{paddingTop: 20}}
-            onPress={() => this.props.navigation.navigate('Register')}>
+            onPress={() =>{
+              this.props.navigation.navigate('Register');
+              // NetInfo.fetch().then(networkState => {
+              //   console.log("Connection type - ", networkState.type);
+              //   console.log("Is connected? - ", networkState.isConnected);
+              //   console.log("Is reachable? - ", networkState.isInternetReachable);
+
+              //   if(networkState.isConnected && networkState.isInternetReachable){
+              //     this.props.navigation.navigate('Register');
+              //   }else{
+              //     Alert.alert("Info","No network connection... Please enable your internet connection .")
+              //   }
+              // });
+             // this.props.navigation.navigate('Register')
+            }}
+            
+            >
             <Text
               style={{
                 color: '#B1272C',

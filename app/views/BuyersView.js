@@ -454,6 +454,7 @@ class BuyersView extends React.Component {
     this.props.setSupplier({
       id: this.state.items.seller_id,
       name: this.state.items.seller_name,
+      detail:this.state.items
     });
     this.props.navigation.replace('CreateOrderValueChain', {
       heading: 'supplier',
@@ -627,7 +628,36 @@ class BuyersView extends React.Component {
                     />{' '}
                   </Text>
                 </View>
+
+
+
+                
               </View>
+
+              <View style={[{alignSelf:"flex-start",marginHorinzontal:20,paddingHorizontal:20}, styles.columnView]}>
+                  <Text style={[{}, styles.lightGrayText]}>
+                    Mininum Spend
+                  </Text>
+                  <Text style={[{}, styles.darkGrayBoldText]}>
+                    {' '}
+                    <NumberFormat
+                      decimalScale={2}
+                      renderText={(value, props) => (
+                        <Text style={styles.darkGrayBoldText} {...props}>
+                          {value}
+                        </Text>
+                      )}
+                      value={this.state.items.minimum_spend}
+                      displayType={'text'}
+                      thousandSeparator={true}
+                      prefix={
+                        this.state.items.seller_currency == null
+                          ? ''
+                          : this.state.items.seller_currency.symbol
+                      }
+                    />{' '}
+                  </Text>
+                </View>
               {this.props.route.params.heading == 'BUYERS' ? (
                 <View style={[{}, styles.productDetailROwView]}>
                   <View style={[{}, styles.columnView]}>

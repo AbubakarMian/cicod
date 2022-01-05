@@ -173,6 +173,7 @@ class CreateOrder extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    console.log("producT$",this.state.cart_arr)
     if (this.props.customer.name != prevProps.customer.name) {
       this.setState({
         customer_name: this.props.customer.name,
@@ -220,7 +221,7 @@ class CreateOrder extends React.Component {
     let data = this.state.cart_arr;
     if (action == 'add') {
       let updated_purchased_quantity = data[index].purchased_quantity + 1;
-      if (updated_purchased_quantity > data[index].quantity) {
+      if ( !data[index].no_qty_limit && updated_purchased_quantity > data[index].quantity) {
         alert('Out of stock');
       } else {
         data[index].purchased_quantity = updated_purchased_quantity;
@@ -1082,7 +1083,7 @@ console.log("item$#",item)
                                   {width: width / 1.5},
                                   styles.OrderDetailDataCOntainerHeadingText,
                                 ]}>
-                                {item.name} {item.quantity} PACK
+                                {item.name}| Qty: {item.purchased_quantity}
                               </Text>
                               <Text
                                 style={[{}, styles.OrderDetailHeadingRowText]}>

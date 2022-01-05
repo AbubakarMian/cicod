@@ -194,6 +194,8 @@ class CreateProduct extends React.Component {
             'category !!!!!!!!!!!!!!!#@@@@@@@@@@ !!!!!!',
             categoryarr,
           );
+
+          
          
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
@@ -204,6 +206,12 @@ class CreateProduct extends React.Component {
             {
               text:"Reload",
               onPress:()=>this.getCategoryList()
+            },
+            {
+              text:"Close",
+              onPress:()=>{
+                console.log("close")
+              }
             }
           ]);
         }

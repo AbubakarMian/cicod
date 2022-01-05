@@ -258,7 +258,7 @@ class More extends React.Component {
                   marginTop: 20,
                   marginBottom: 20,
                 }}>
-                Version 1.1.3
+                Version 1.1.4
               </Text>
               <Text
                 style={{color: '#B1272C', fontSize: 13, fontWeight: 'bold'}}>

@@ -14,6 +14,7 @@ export default class Register extends React.Component {
     };
   }
   render() {
+    let WebViewRef;
     return (
       <KeyboardAwareScrollView
         bounces={false}
@@ -34,6 +35,7 @@ export default class Register extends React.Component {
             color={'#fff'}
           />
           <WebView
+           ref={WEBVIEW_REF => (WebViewRef = WEBVIEW_REF)}
             style={{flex: 1}}
             onLoadStart={() => this.setState({spinner: true})}
             onNavigationStateChange={({url, canGoBack}) => {
@@ -63,6 +65,23 @@ export default class Register extends React.Component {
              // uri: `${Constants.sass_url}/subscribe?offer=zZPjmFCBG6amyUvSfc0FkefEVPzTiH&trial=true&isBundle=true`,
               uri: `${Constants.sass_url}/subscribe?offer=kMOR8wwTNaJjfzO1JVDSXNJfdz6bBk&trial=true&isBundle=true`,
             }}
+            onError={()=>Alert.alert("Info","Slow or no internet connection. Please check your internet and try again.",[
+              {
+                text:"Close",
+                onPress:()=>{
+                  this.props.navigation.reset({
+                    index: 0,
+                    routes: [{name: 'Login'}],
+                  });
+                }
+              },
+              {
+                text:"Retry",
+                onPress:()=> {
+                  // alert("test")
+                  this.props.navigation.replace("Register")}
+              }
+            ])} 
             onLoadEnd={() => this.setState({spinner: false})}
           />
         </View>

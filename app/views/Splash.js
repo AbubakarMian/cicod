@@ -6,11 +6,13 @@ import {
   Image,
   Platform,
   TouchableOpacity,
+  Alert
 } from 'react-native';
-import {Text, TextInput, Alert, ActivityIndicator} from 'react-native-paper';
+import {Text, TextInput, ActivityIndicator} from 'react-native-paper';
 import splashImg from '../images/splash.jpg';
 import fontStyles from '../css/FontCss';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import NetInfo from "@react-native-community/netinfo";
 import {connect} from 'react-redux';
 import {SET_USER} from '../redux/constants';
 const {width, height} = Dimensions.get('window');
@@ -19,7 +21,42 @@ class SplashScreen extends React.Component {
   state = {
     userExist: null,
   };
+
+  // componentWillMount() {
+  //   NetInfo.addEventListener(networkState => {
+  //     console.log("ConnectionCCC type - ", networkState.type);
+  //     console.log("Is connected? - ", networkState.isConnected);
+  //   });
+  // }
+  
+
+  registerAction(){
+    this.props.navigation.navigate('Register');
+
+    // NetInfo.fetch().then(networkState => {
+    //   console.log("Connection type - ", networkState.type);
+    //   console.log("Is connected? - ", networkState.isConnected);
+    //   console.log("Is reachable? - ", networkState.isInternetReachable);
+
+    //   if(networkState.isConnected && networkState.isInternetReachable){
+    //     this.props.navigation.navigate('Register');
+    //   }else{
+    //     Alert.alert("Info","Slow or no internet connection. Please check your internet and try again.",[
+    //       {
+    //         text:"Close"
+    //       },
+    //       {
+    //         text:"Retry",
+    //         onPress:()=>this.registerAction()
+    //       }
+    //     ])
+    //   }
+    // });
+  }
   async componentDidMount() {
+
+    //listen for network change here
+   
     const data = await AsyncStorage.getItem('User');
     console.log('spalsh@#', data);
     if (data) {
@@ -106,7 +143,7 @@ class SplashScreen extends React.Component {
                 </View>
               </TouchableOpacity>
               <TouchableOpacity
-                onPress={() => this.props.navigation.navigate('Register')}
+                onPress={() =>this.registerAction()}
                 style={{
                   width: width / 2,
                   alignItems: 'center',

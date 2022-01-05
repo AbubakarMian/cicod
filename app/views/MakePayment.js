@@ -398,7 +398,7 @@ class MakePayment extends React.Component {
           <View>
             <ScrollView>
               <View>
-                {this.state.settlementMode!="OFFLINE" &&<>
+                {this.state.settlementMode!="OFFLINE" || this.props.route.params.heading == 'supplier' &&<>
                 <TouchableOpacity
                   style={[{}, styles.cardTouch]}
                   onPress={() => this.makePaymentFun('ONLINE')}>
