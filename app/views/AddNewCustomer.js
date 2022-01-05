@@ -1,17 +1,10 @@
 import React from 'react';
 import {
   View,
-  ImageBackground,
-  TouchableHighlight,
-  TouchableWithoutFeedback,
-  FlatList,
   Alert,
   Dimensions,
-  Image,
   Platform,
   TouchableOpacity,
-  Touchable,
-  SafeAreaView,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import Header from '../views/Header';
@@ -20,7 +13,6 @@ import styles from '../css/AddNewCustomerCss';
 import fontStyles from '../css/FontCss';
 import {ScrollView} from 'react-native-gesture-handler';
 import Spinner from 'react-native-loading-spinner-overlay';
-import DropDownPicker from 'react-native-dropdown-picker';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {connect} from 'react-redux';
 import {SET_USER, LOGOUT_USER, CUSTOMER_RELOAD} from '../redux/constants/index';

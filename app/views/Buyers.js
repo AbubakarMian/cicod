@@ -229,7 +229,7 @@ class Buyers extends React.Component {
               Platform.OS !== 'android' &&
               (({highlighted}) => (
                 <View
-                  style={[style.separator, highlighted && {marginLeft: 0}]}
+                  style={[styles.separator, highlighted && {marginLeft: 0}]}
                 />
               ))
             }
@@ -429,7 +429,7 @@ class Buyers extends React.Component {
               width: width - 20,
               alignSelf: 'center',
               borderRadius: 5,
-              justifyContent:"space-between",
+              justifyContent: 'space-between',
               marginTop: 10,
               alignItems: 'center',
             }}>
@@ -450,22 +450,22 @@ class Buyers extends React.Component {
                             onSubmitEditing={() => this.search()}
                         />
                     </View> */}
-                    <View style={{flex:1}}>
-            <Searchbar
-              placeholder="Search Resellers"
-              iconColor="#929497"
-              style={{
-                width:"100%",
-                alignSelf: 'center',
-                marginTop: 10,
-                marginBottom: 5,
-                elevation: 0,
-                borderColor: '#D8DCDE',
-              }}
-              onChangeText={text => this.setState({search_buyers: text})}
-              onSubmitEditing={() => this.search()}
-              //update
-            ></Searchbar>
+            <View style={{flex: 1}}>
+              <Searchbar
+                placeholder="Search Resellers"
+                iconColor="#929497"
+                style={{
+                  width: '100%',
+                  alignSelf: 'center',
+                  marginTop: 10,
+                  marginBottom: 5,
+                  elevation: 0,
+                  borderColor: '#D8DCDE',
+                }}
+                onChangeText={text => this.setState({search_buyers: text})}
+                onSubmitEditing={() => this.search()}
+                //update
+              ></Searchbar>
             </View>
 
             {/* <TouchableOpacity

@@ -65,6 +65,5 @@ export const Constants = {
   reset_password: `${auth_url}/sso/auth/forgot_password`,
   currency: `${base_url}/currency`,
   get_attribute: `${base_url}/product-attributes`,
-  get_attribute: `${base_url}/product-attributes`,
   forgot_password: `${auth_url}/sso/auth/forgot_password/v2`,
 };

@@ -1,12 +1,6 @@
 import React from 'react';
 
-import {
-  View,
-  Text,
-  Dimensions,
-  StyleSheet,
-  ImageBackground,
-} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
 
 var {width, height} = Dimensions.get('window');
 
@@ -72,6 +66,5 @@ export default StyleSheet.create({
     paddingVertical: 10,
     borderRadius: 100,
     marginVertical: 10,
-    paddingVertical: 10,
   },
 });

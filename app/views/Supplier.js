@@ -190,7 +190,6 @@ class Supplier extends React.Component {
     this.getSuppliersList(supplier_url);
   };
 
-  
   renderFooter = () => {
     //it will show indicator at the bottom of the list when data is loading otherwise it returns null
     // if (!this.state.spinner) return null;1 22
@@ -214,7 +213,7 @@ class Supplier extends React.Component {
         </TouchableOpacity>
       );
     }
-    return <View style={{marginVertical:100}}/>;
+    return <View style={{marginVertical: 100}} />;
   };
 
   render() {
@@ -358,7 +357,7 @@ class Supplier extends React.Component {
                   Platform.OS !== 'android' &&
                   (({highlighted}) => (
                     <View
-                      style={[style.separator, highlighted && {marginLeft: 0}]}
+                      style={[styles.separator, highlighted && {marginLeft: 0}]}
                     />
                   ))
                 }

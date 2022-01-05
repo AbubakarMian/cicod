@@ -68,7 +68,7 @@ class Products extends React.Component {
   }
   onRefresh() {
     console.log('222222222222', this.state.isFetching);
-    this.setState({isFetching: true,data:[]});
+    this.setState({isFetching: true, data: []});
     // if(this.state.isFetching==true){
 
     // let search_url = Constants.productslist + '?search=' + this.state.search_product;
@@ -99,14 +99,13 @@ class Products extends React.Component {
     }, 700);
   }
 
-
-componentDidUpdate(prevProps){
-  console.log(prevProps.route.params,"ds%0",this.props.route.params)
-  if (!_.isEqual(prevProps.route.params,this.props.route.params)) {
-    let product_url = Constants.productslist + '?page=' + this.state.pageNo;
-    this.getData(product_url);
+  componentDidUpdate(prevProps) {
+    console.log(prevProps.route.params, 'ds%0', this.props.route.params);
+    if (!_.isEqual(prevProps.route.params, this.props.route.params)) {
+      let product_url = Constants.productslist + '?page=' + this.state.pageNo;
+      this.getData(product_url);
+    }
   }
-}
 
   async getData(url) {
     let _that = this;
@@ -136,7 +135,7 @@ componentDidUpdate(prevProps){
         // console.log('responseJson.postData', postData);
         this.setState({
           spinner: false,
-          isFetching:false
+          isFetching: false,
         });
         if (
           responseJson.status === 'success' ||
@@ -359,7 +358,7 @@ componentDidUpdate(prevProps){
               Platform.OS !== 'android' &&
               (({highlighted}) => (
                 <View
-                  style={[style.separator, highlighted && {marginLeft: 0}]}
+                  style={[styles.separator, highlighted && {marginLeft: 0}]}
                 />
               ))
             }
@@ -395,7 +394,7 @@ componentDidUpdate(prevProps){
                       />
                     ) : (
                       <Image
-                        style={[{height: 50, width: 50,borderRadius:10}]}
+                        style={[{height: 50, width: 50, borderRadius: 10}]}
                         source={{uri: item.image}}
                       />
                     )}
@@ -406,7 +405,7 @@ componentDidUpdate(prevProps){
                     </Text>
                     <View style={{flexDirection: 'row'}}>
                       <Text style={[{color: '#929497'}, fontStyles.normal12]}>
-                        QTY: {item.no_qty_limit?"NO LIMIT": item.quantity}
+                        QTY: {item.no_qty_limit ? 'NO LIMIT' : item.quantity}
                       </Text>
                       <Text style={[{color: '#929497'}, fontStyles.normal12]}>
                         . {item.slug}
@@ -489,7 +488,7 @@ componentDidUpdate(prevProps){
               }}>
               <NavBack
                 title="PRODUCTS"
-                onClick={() => this.props.navigation.navigate("Home")}
+                onClick={() => this.props.navigation.navigate('Home')}
               />
 
               {/* <TouchableOpacity
@@ -559,14 +558,19 @@ componentDidUpdate(prevProps){
               />
             </TouchableOpacity> */}
           </View>
-          <View style={{flexDirection:"row",justifyContent:"space-between",paddingHorizontal:10}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              paddingHorizontal: 10,
+            }}>
             <View
               style={[
                 {
                   // position: 'relative',
                   borderBottomColor: '#E6E6E6',
                   borderBottomWidth: 1,
-                 flex:2
+                  flex: 2,
                 },
                 styles.formColumn,
               ]}>
@@ -592,11 +596,11 @@ componentDidUpdate(prevProps){
                         /> */}
             </View>
             <View
-              style={{
-                
-                
-                // marginVertical: 5,
-              }}></View>
+              style={
+                {
+                  // marginVertical: 5,
+                }
+              }></View>
 
             <TouchableOpacity
               style={{
@@ -618,7 +622,7 @@ componentDidUpdate(prevProps){
             </TouchableOpacity>
           </View>
           {/* <ScrollView></ScrollView> */}
-     <View style={{flex:1,marginBottom:10}}>
+          <View style={{flex: 1, marginBottom: 10}}>
             <this.listProducts _that={this} />
           </View>
           <TabNav
@@ -663,7 +667,10 @@ componentDidUpdate(prevProps){
                             });
                           })
                         }
-                        style={[{marginLeft: 7,width:"100%"}, styles.suspendTouch,]}>
+                        style={[
+                          {marginLeft: 7, width: '100%'},
+                          styles.suspendTouch,
+                        ]}>
                         <Text style={{color: '#4E4D4D'}}>Add Product</Text>
                       </TouchableOpacity>
                     </View>
@@ -681,7 +688,10 @@ componentDidUpdate(prevProps){
                             );
                           })
                         }
-                        style={[{marginLeft: 7,width:"100%"}, styles.suspendTouch]}>
+                        style={[
+                          {marginLeft: 7, width: '100%'},
+                          styles.suspendTouch,
+                        ]}>
                         <Text style={{color: '#4E4D4D'}}>
                           Add Product Category
                         </Text>

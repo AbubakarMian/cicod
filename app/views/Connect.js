@@ -385,9 +385,11 @@ class Connect extends React.Component {
                     fontFamily: 'Open Sans',
                   },
                 ]}>
-               {`Sorry we could not find ${this.state.search_text}`}
+                {`Sorry we could not find ${this.state.search_text}`}
               </Text>
-              <Text onPress={()=>this.props.navigation.navigate("Network")} style={[{color: '#929497',fontSize:9}, fontStyles.normal15]}>
+              <Text
+                onPress={() => this.props.navigation.navigate('Network')}
+                style={[{color: '#929497', fontSize: 9}, fontStyles.normal15]}>
                 Please click to see the list of merchants.
               </Text>
             </View>
@@ -625,7 +627,7 @@ class Connect extends React.Component {
                   Platform.OS !== 'android' &&
                   (({highlighted}) => (
                     <View
-                      style={[style.separator, highlighted && {marginLeft: 0}]}
+                      style={[styles.separator, highlighted && {marginLeft: 0}]}
                     />
                   ))
                 }
@@ -819,7 +821,7 @@ class Connect extends React.Component {
                 Platform.OS !== 'android' &&
                 (({highlighted}) => (
                   <View
-                    style={[style.separator, highlighted && {marginLeft: 0}]}
+                    style={[styles.separator, highlighted && {marginLeft: 0}]}
                   />
                 ))
               }
