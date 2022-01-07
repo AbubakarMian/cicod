@@ -1,11 +1,12 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import {View, Dimensions} from 'react-native';
+import {View, Dimensions, TouchableOpacity,Text} from 'react-native';
 import {WebView} from 'react-native-webview';
 import Spinner from 'react-native-loading-spinner-overlay';
-import {Constants} from './Constant';
+
 import Scaffold from './Components/Scaffold';
-import Header from './Header';
+import InAppHeader from './Components/InAppHeader';
+
 var {width, height} = Dimensions.get('window');
 
 export default class InAppWebView extends React.Component {
@@ -18,8 +19,10 @@ export default class InAppWebView extends React.Component {
   render() {
     return (
       <Scaffold>
+         
         <View style={{height: height, width: width}}>
-          {/* https://www.cicodsaasstaging.com/admin/merchant/setup/success?step=2 */}
+         <InAppHeader onPress={()=>this.props.navigation.goBack()} />
+         
           <Spinner
             visible={this.state.spinner}
             textContent={'Please Wait...'}

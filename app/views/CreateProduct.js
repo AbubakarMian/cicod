@@ -25,14 +25,10 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import CheckBox from 'react-native-check-box';
 import {Constants} from '../views/Constant';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import RadioForm, {
-  RadioButton,
-  RadioButtonInput,
-  RadioButtonLabel,
-} from 'react-native-simple-radio-button';
+import {Picker} from '@react-native-picker/picker';
 import SearchBar from 'react-native-search-bar';
 import Modal from 'react-native-modal';
-import {Picker} from '@react-native-picker/picker';
+
 import {connect} from 'react-redux';
 import {SET_USER, LOGOUT_USER, PRODUCT_RELOAD} from '../redux/constants/index';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -1050,37 +1046,34 @@ console.log("caeee$#");
                   </View>
                 </View>
                 <View style={[{}, styles.formRowView]}>
-                  <View style={[{position: 'relative'}, styles.formColumn]}>
-                    <DropDownPicker
-                      scrollViewProps={{
-                        persistentScrollbar: true,
-                      }}
-                      placeholder="VAT"
-                      items={[
-                        {label: 'Yes', value: 1},
-                        {label: 'No', value: 0},
-                      ]}
-                      containerStyle={{height: 50, width: width / 2 - 10}}
-                      style={{
-                        backgroundColor: '#fff',
-                        borderWidth: 0,
-                        borderBottomWidth: 0.5,
-                      }}
-                      itemStyle={{
-                        justifyContent: 'flex-start',
-                      }}
-                      dropDownStyle={{
-                        height: 80,
-                        backgroundColor: '#fff',
-                        borderBottomLeftRadius: 20,
-                        borderBottomRightRadius: 10,
-                        opacity: 1,
-                      }}
-                      labelStyle={{color: '#A9A9A9'}}
-                      onChangeItem={item =>
-                        this.setState({has_vat: item.value})
-                      }
-                    />
+                  <View style={[ {position: 'relative', width: 150,marginVertical:5}]}>
+                
+                  <Picker
+                          selectedValue={this.state.has_vat}
+                          onValueChange={(itemValue, itemLabel, itemIndex) => {
+                            console.log("change#",itemValue)
+                            this.setState({has_vat: itemValue})
+                          }}>
+                            <Picker.Item
+                            style={{fontSize: 13}}
+                            color="#000"
+                            label="Vat"
+                            value={""}
+                          />
+                          <Picker.Item
+                            style={{fontSize: 13}}
+                            color="#000"
+                            label="Yes"
+                            value={1}
+                          />
+                          <Picker.Item
+                            style={{fontSize: 13}}
+                            color="#000"
+                            label="No"
+                            value={0}
+                          />
+                        </Picker>
+                 
                   </View>
                 </View>
                 <View style={[{}, styles.addImageView]}>
@@ -1114,189 +1107,7 @@ console.log("caeee$#");
                   </TouchableOpacity>
                 </View>
               </View>
-              <View
-                style={[{marginTop: 10}, styles.productDetailContainerView]}>
-                <View style={[{}, styles.formRowView]}>
-                  <View style={[{flexDirection: 'column'}]}>
-                    <CheckBox
-                      style={[{width: width / 2}, styles.cheBox]}
-                      onClick={() => {
-                        this.add_variation();
-                      }}
-                      isChecked={this.state.add_variation}
-                      rightText={'Add Variation'}
-                    />
-                    <Text style={[{}, styles.lightGrayText]}>
-                      This product has more than one option
-                    </Text>
-                    <Text style={[{}, styles.varaitionText]}>Variation</Text>
-                  </View>
-                </View>
-                {this.state.add_variation == true ? (
-                  <View>
-                    <ScrollView>
-                      <FlatList
-                        ItemSeparatorComponent={
-                          Platform.OS !== 'android' &&
-                          (({highlighted}) => (
-                            <View
-                              style={[
-                                styles.separator,
-                                highlighted && {marginLeft: 0},
-                              ]}
-                            />
-                          ))
-                        }
-                        data={this.state.variations}
-                        renderItem={({item, index, separators}) => (
-                          <TouchableHighlight
-                            key={item.key}
-                            // onPress={() => console.log(item)}
-                            onShowUnderlay={separators.highlight}
-                            onHideUnderlay={separators.unhighlight}>
-                            <View style={{backgroundColor: 'white'}}>
-                              <View>
-                                <View style={[{}, styles.formRowView]}>
-                                  <View
-                                    style={[
-                                      {position: 'relative'},
-                                      styles.formColumn,
-                                    ]}>
-                                    <TouchableOpacity
-                                      onPress={() =>
-                                        this.show_attribute_list(item)
-                                      }
-                                      style={[
-                                        {position: 'relative'},
-                                        styles.formColumn,
-                                      ]}>
-                                      <Text style={[{}, styles.redTouchText]}>
-                                        + Attribute
-                                      </Text>
-                                    </TouchableOpacity>
-                                  </View>
-                                  <View
-                                    style={[
-                                      {position: 'relative'},
-                                      styles.formColumn,
-                                    ]}>
-                                    <TextInput
-                                      label="Price (.00)"
-                                      keyboardType="numeric"
-                                      style={{backgroundColor: 'transparent'}}
-                                      width={width - 50}
-                                      alignSelf={'center'}
-                                      color={'#000'}
-                                      value={item.price + ''}
-                                      onChangeText={text =>
-                                        this.setVariationPrice(index, text)
-                                      }
-                                      disabled={item.is_same_price}
-                                    />
-                                  </View>
-                                </View>
-                                <View style={[{}, styles.formRowView]}>
-                                  <View
-                                    style={[
-                                      {position: 'relative'},
-                                      styles.formColumn,
-                                    ]}>
-                                    <CheckBox
-                                      style={[
-                                        {width: width / 2},
-                                        styles.cheBox,
-                                      ]}
-                                      onClick={() => {
-                                        this.setVariationSamePrice(index);
-                                      }}
-                                      isChecked={item.is_same_price}
-                                      rightText={'Same Price'}
-                                    />
-                                  </View>
-                                </View>
-                                <View style={[{}, styles.formRowView]}>
-                                  <View
-                                    style={[
-                                      {position: 'relative'},
-                                      styles.formColumn,
-                                    ]}>
-                                    <TextInput
-                                      label="Quantity"
-                                      style={{backgroundColor: 'transparent'}}
-                                      width={width - 50}
-                                      alignSelf={'center'}
-                                      color={'#000'}
-                                      onChangeText={text =>
-                                        this.setVariationQuantity(index, text)
-                                      }
-                                      value={item.quantity + ''}
-                                      keyboardType={'numeric'}
-                                      disabled={item.no_quantity_limit}
-                                    />
-                                  </View>
-                                  <View
-                                    style={[
-                                      {position: 'relative'},
-                                      styles.formColumn,
-                                    ]}>
-                                    <CheckBox
-                                      style={[
-                                        {width: width / 2},
-                                        styles.cheBox,
-                                      ]}
-                                      onClick={() => {
-                                        this.setVariationNoQuantityLimit(index);
-                                      }}
-                                      isChecked={item.no_quantity_limit}
-                                      rightText={'No Quantity Limit?'}
-                                    />
-                                  </View>
-                                </View>
-                                <Text style={[{}, styles.productImageLable]}>
-                                  Images
-                                </Text>
-                                <TouchableOpacity
-                                  onPress={() =>
-                                    this.onpen_attribute_image_modal(index)
-                                  }
-                                  // onPress={() => this.setVariationImage(index)}
-
-                                  style={[
-                                    {position: 'relative', width: width / 4},
-                                  ]}>
-                                  {/* {(this.state.prod_image != null || this.state.prod_image !='') ? */}
-
-                                  {item.image == null || item.image == '' ? (
-                                    <Image
-                                      style={{height: 60, width: 30}}
-                                      source={require('../images/redPlus.png')}
-                                    />
-                                  ) : (
-                                    <Image
-                                      style={{height: 60, width: 30}}
-                                      source={{uri: item.image}}
-                                    />
-                                  )}
-                                </TouchableOpacity>
-                              </View>
-                            </View>
-                          </TouchableHighlight>
-                        )}
-                      />
-                    </ScrollView>
-                    <TouchableOpacity
-                      onPress={() => this.add_new_variation()}
-                      style={[
-                        {alignSelf: 'center', marginVertical: 20},
-                        styles.formColumn,
-                      ]}>
-                      <Text style={[{}, styles.redTouchText]}>
-                        + Add another variation
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                ) : null}
-              </View>
+            
               <TouchableOpacity
                 onPress={() => this.onSaveFun()}
                 style={[{}, styles.redTouch]}>

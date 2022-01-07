@@ -443,6 +443,7 @@ class User extends React.Component {
 
   render() {
     return (
+      <Scaffold>
       <View style={[{}, styles.mainView]}>
         <Header navigation={this.props.navigation} />
         <Spinner
@@ -553,6 +554,7 @@ class User extends React.Component {
           </View>
         </ScrollView>
       </View>
+      </Scaffold>
     );
   }
 }

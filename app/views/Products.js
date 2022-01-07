@@ -14,7 +14,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 
-import {Text, TextInput, Searchbar} from 'react-native-paper';
+import {Text, TextInput, Searchbar, Modal} from 'react-native-paper';
 
 import styles from '../css/DashboardCss';
 import fontStyles from '../css/FontCss';
@@ -30,7 +30,7 @@ import {
   UpdateTabbar,
   PRODUCT_RELOAD,
 } from '../redux/constants/index';
-const {width} = Dimensions.get('window');
+const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {Constants} from '../views/Constant';
@@ -69,6 +69,8 @@ class Products extends React.Component {
       isListView: true,
       isShowSearch: false,
       showFloatingButton: false,
+      productImageModal: false,
+      prodImage: '',
     };
     this.onDateChange = this.onDateChange.bind(this);
   }
@@ -397,11 +399,17 @@ class Products extends React.Component {
           ListFooterComponent={_that.renderFooter}
           renderItem={({item, index, separators}) => (
             <TouchableOpacity
+            activeOpacity={0.5}
               key={item.key}
               onPress={() =>
-                _that.props.navigation.navigate('ProductView', {
-                  prod_id: item.id,
-                })
+                _that.state.isListView
+                  ? _that.props.navigation.navigate('ProductView', {
+                      prod_id: item.id,
+                    })
+                  : _that.setState({
+                      prodImage: item.image,
+                      productImageModal: true,
+                    })
               }
               onShowUnderlay={separators.highlight}
               onHideUnderlay={separators.unhighlight}>
@@ -527,7 +535,7 @@ class Products extends React.Component {
                           borderTopRightRadius: 10,
                           borderTopLeftRadius: 10,
                         }}
-                        source={require('../images/ticket.png')}
+                        source={require('../images/local-business.png')}
                       />
                     ) : (
                       <Image
@@ -842,7 +850,7 @@ class Products extends React.Component {
                         source={require('../images/add_product_sm.png')}
                       />
                       <TouchableOpacity
-                      hitSlop={{top:20,bottom:20,right:20,left:20}}
+                        hitSlop={{top: 20, bottom: 20, right: 20, left: 20}}
                         onPress={() =>
                           this.setState({isShowModal: false}, () => {
                             this.props.navigation.navigate('CreateProduct', {
@@ -864,7 +872,7 @@ class Products extends React.Component {
                         source={require('../images/product_cat_sm.png')}
                       />
                       <TouchableOpacity
-                      hitSlop={{top:20,bottom:20,right:20,left:20}}
+                        hitSlop={{top: 20, bottom: 20, right: 20, left: 20}}
                         onPress={() =>
                           this.setState({isShowModal: false}, () => {
                             this.props.navigation.navigate(
@@ -903,6 +911,29 @@ class Products extends React.Component {
             data={this.state.categoryarr}
           />
         </View>
+
+        <Modal visible={this.state.productImageModal} onDismiss={()=>this.setState({productImageModal: false})} transparent={true}>
+          <View style={[{flex:1,justifyContent:"center",alignItems:"center"}]}>
+            <TouchableOpacity
+            
+              onPress={() => this.setState({productImageModal: false})}
+              style={[{}, styles.modalCloseTouch]}>
+              <Icon name="close" color={'#fff'} size={25} />
+              <Text style={{color: '#fff', marginLeft: 10}}>Close</Text>
+            </TouchableOpacity>
+            
+            <Image
+              style={{height: height / 2, width: width / 1.3}}
+              // source={require('../images/juice.png')}
+
+              source={{
+                uri: this.state.prodImage,
+              }}
+            />
+            
+            
+          </View>
+        </Modal>
       </Scaffold>
     );
   }

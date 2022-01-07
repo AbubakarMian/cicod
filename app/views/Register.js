@@ -1,10 +1,12 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import {View, Dimensions, Alert, ScrollView} from 'react-native';
+import {View, Dimensions, Alert,  TouchableOpacity} from 'react-native';
 import {WebView} from 'react-native-webview';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {Constants} from './Constant';
+import Icon from 'react-native-vector-icons/dist/FontAwesome';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import InAppHeader from './Components/InAppHeader';
 var {width, height} = Dimensions.get('window');
 
 export default class Register extends React.Component {
@@ -28,7 +30,8 @@ export default class Register extends React.Component {
         scrollToOverflowEnabled={true}
         enableAutomaticScroll={true}>
         <View style={{height: height, width: width}}>
-          {/* https://www.cicodsaasstaging.com/admin/merchant/setup/success?step=2 */}
+         <InAppHeader onPress={()=>this.props.navigation.goBack()} />
+          
           <Spinner
             visible={this.state.spinner}
             textContent={'Please Wait...'}

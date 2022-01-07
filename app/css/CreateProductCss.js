@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from "react";
 
 import { View, Text, Dimensions, StyleSheet, ImageBackground, Modal } from "react-native";
@@ -90,7 +91,7 @@ export default StyleSheet.create({
         //alignSelf: 'baseline',
         alignItems:"flex-start",
         zIndex: 999,
-        justifyContent:'center',
+        // justifyContent:'center',
         justifyContent:"space-between",
         backgroundColor: '#fff',
         width: width,
