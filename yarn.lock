@@ -6839,17 +6839,10 @@ recyclerlistview@^3.0.0:
     prop-types "15.5.8"
     ts-object-utils "0.0.5"
 
-<<<<<<< HEAD
-"redux-thunk@^2.3.0", "redux-thunk@^2.4.1":
-  "integrity" "sha512-OOYGNY5Jy2TWvTL1KgAlVy6dcx3siPJ1wTq741EPyUKfn6W6nChdICjZwCd0p8AZBs5kWpZlbkXW2nE/zjUa+Q=="
-  "resolved" "https://registry.npmjs.org/redux-thunk/-/redux-thunk-2.4.1.tgz"
-  "version" "2.4.1"
-=======
-redux-thunk@^2.3.0:
+redux-thunk@^2.3.0, redux-thunk@^2.4.1:
   version "2.4.1"
   resolved "https://registry.npmjs.org/redux-thunk/-/redux-thunk-2.4.1.tgz"
   integrity sha512-OOYGNY5Jy2TWvTL1KgAlVy6dcx3siPJ1wTq741EPyUKfn6W6nChdICjZwCd0p8AZBs5kWpZlbkXW2nE/zjUa+Q==
->>>>>>> 0d8ca152afbb038ec8eec6594f401b9a214129bf
 
 redux@^4.0.0, redux@^4.0.5, redux@^4.1.0:
   version "4.1.2"
