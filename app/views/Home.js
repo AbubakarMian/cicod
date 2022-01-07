@@ -504,7 +504,7 @@ class Home extends React.Component {
                   }
                   onPress={() => this.props.navigation.navigate('Order')}
                   source={require('../images/home/order.png')}
-                  title="     Order     "
+                  title="     Orders     "
                 />
               </View>
 

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -119,14 +120,14 @@ class CategoryFilter extends React.Component {
       filters: filters,
     });
   }
-  onCategoryText(text) {
-    // let filters = this.state.filters;
-    // filters.push({ key: 'search', value: text });
-    let filters = upsert(this.state.filters, {key: 'search', value: text});
-    this.setState({
-      filters: filters,
-    });
-  }
+  // onCategoryText(text) {
+  //   // let filters = this.state.filters;
+  //   // filters.push({ key: 'search', value: text });
+  //   let filters = upsert(this.state.filters, {key: 'search', value: text});
+  //   this.setState({
+  //     filters: filters,
+  //   });
+  // }
   activeSet(text) {
     // let filters = this.state.filters;
     // filters.push({ key: 'is_active', value: value })
@@ -340,7 +341,7 @@ class CategoryFilter extends React.Component {
                   zIndex: 99999999,
                 }}
                 placeholder="Created By"
-                containerStyle={{height: 50, width: width - 20}}
+               
                 style={{
                   backgroundColor: '#fff',
                   borderWidth: 0,

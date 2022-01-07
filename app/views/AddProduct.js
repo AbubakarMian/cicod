@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -545,7 +546,7 @@ this.setState({data:[]})
                       (({highlighted}) => (
                         <View
                           style={[
-                            style.separator,
+                            styles.separator,
                             highlighted && {marginLeft: 0},
                           ]}
                         />

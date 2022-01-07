@@ -153,7 +153,7 @@ backgroundColor:"#C9C9C9",
 
     titleViewStyle:{
         backgroundColor:"#fff",padding:10,borderRadius:10,
-        width:80
+        width:100
     }
     ,modalBackGround: {
         height: height,

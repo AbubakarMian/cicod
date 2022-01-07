@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {Container, Input, InputGroup, List, ListItem} from 'native-base';
 import {
@@ -6,6 +7,7 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  Platform,
   TouchableHighlight,
   Alert,
   Touchable,
@@ -813,7 +815,7 @@ class BuyersView extends React.Component {
                             ? '#B1272C'
                             : '#e2e2e2',
                         fontWeight: 'bold',
-                        backgroundColor: '#E6E6E6',
+                        // backgroundColor: '#E6E6E6',
                         marginRight: 5,
                         paddingHorizontal: 10,
                         borderRadius: 50,
@@ -834,7 +836,7 @@ class BuyersView extends React.Component {
                         marginRight: 5,
                         paddingHorizontal: 10,
                         borderRadius: 50,
-                        backgroundColor: '#fff',
+                        // backgroundColor: '#fff',
                         fontSize: 15,
                       }}>
                       PENDING
@@ -851,7 +853,7 @@ class BuyersView extends React.Component {
                         marginRight: 5,
                         paddingHorizontal: 10,
                         borderRadius: 50,
-                        backgroundColor: '#fff',
+                        // backgroundColor: '#fff',
                         fontSize: 15,
                       }}>
                       PAID
@@ -867,7 +869,7 @@ class BuyersView extends React.Component {
                               this.state.is_active_list === 'partPayment'
                                 ? '#B1272C'
                                 : '#e2e2e2',
-                            backgroundColor: '#E6E6E6',
+                            // backgroundColor: '#E6E6E6',
                             marginRight: 5,
                             paddingHorizontal: 10,
                             borderRadius: 50,
@@ -889,7 +891,7 @@ class BuyersView extends React.Component {
                             marginRight: 5,
                             paddingHorizontal: 10,
                             borderRadius: 50,
-                            backgroundColor: '#fff',
+                            // backgroundColor: '#fff',
                             fontSize: 15,
                           }}>
                           PAID FROM CREDIT
@@ -910,7 +912,7 @@ class BuyersView extends React.Component {
                       (({highlighted}) => (
                         <View
                           style={[
-                            style.separator,
+                            styles.separator,
                             highlighted && {marginLeft: 0},
                           ]}
                         />

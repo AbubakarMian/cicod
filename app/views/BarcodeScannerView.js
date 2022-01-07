@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react'
 import { View,Modal, ImageBackground,TouchableHighlight,TouchableWithoutFeedback, ScrollView,Alert,  Dimensions, Image, Platform, TouchableOpacity } from 'react-native'
 import {   Text, TextInput} from 'react-native-paper';

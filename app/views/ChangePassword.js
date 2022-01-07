@@ -1,10 +1,11 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
-import { View, Image, TouchableOpacity, Dimensions, Touchable, ScrollView, Alert } from 'react-native';
+import { View,  TouchableOpacity, Dimensions,  ScrollView, Alert } from 'react-native';
 import { Text, TextInput } from 'react-native-paper';
 import styles from '../css/ChangePasswordCss';
-import fontStyles from '../css/FontCss'
+
 import Header from '../views/Header'
-import CheckBox from 'react-native-check-box';
+
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Constants } from '../views/Constant';
 import Spinner from 'react-native-loading-spinner-overlay';

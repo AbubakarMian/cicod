@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from "react";
 
 import { View, Text, Dimensions, StyleSheet, ImageBackground } from "react-native";
@@ -128,10 +129,10 @@ export default StyleSheet.create({
         paddingTop: 20,
         flexDirection: 'row',
         paddingBottom: 20,
-        alignSelf: 'baseline',
+        
         position: 'absolute',
         bottom:0,
-        flexDirection:'column',
+        // flexDirection:'column',
         justifyContent:'center'
        
     },

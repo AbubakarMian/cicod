@@ -718,7 +718,7 @@ class Products extends React.Component {
             marginTop: 5,
             marginBottom: 5,
             alignSelf: 'center',
-            width: 160,
+            width: 200,
           }}>
           <TouchableOpacity
             onPress={() => this.setState({isListView: true})}

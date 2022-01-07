@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -303,7 +304,7 @@ class BuyDiliveryAddress extends React.Component {
                         disabled={this.state.country_name == '' ? true : false}
                         placeholder="States *"
                         items={this.state.states_arr}
-                        items={this.state.states_arr}
+                       
                         containerStyle={{
                           height: 50,
                           width: width - 20,

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -418,7 +419,7 @@ onPress:()=>{
               '?id=' +
               this.props.route.params.item.seller_id +
               '&filter[category_id]=' +
-              category_id +
+              this.state.category_id +
               '&filter[name]=' +
               this.state.search_product,
       );
@@ -566,7 +567,7 @@ onPress:()=>{
                       (({highlighted}) => (
                         <View
                           style={[
-                            style.separator,
+                            styles.separator,
                             highlighted && {marginLeft: 0},
                           ]}
                         />
