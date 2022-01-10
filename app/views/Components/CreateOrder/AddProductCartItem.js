@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {View, Image, Text, TouchableOpacity, Dimensions} from 'react-native';
 import styles from '../../../css/AddProductCss';
@@ -17,9 +18,12 @@ const AddProductCartItem = ({
         {
           flexDirection: 'column',
           marginBottom: 20,
+          borderRadius:10,
+          paddingBottom:10,
           borderBottomWidth: 1,
+          backgroundColor:"#fff",
           borderBottomColor: '#DCDCDC',
-          paddingBottom: 7,
+          
         },
       ]}>
       <View style={[{}, styles.OrderDetailDataCOntainer]}>
@@ -34,13 +38,23 @@ const AddProductCartItem = ({
                 ? 'Qty: No Limit'
                 : '| Qty: ' + (isValueChain ? item.qnty : item.quantity)}
             </Text>
+            {item.minimum_order &&item.minimum_order>0 ?(
+              <Text style={{fontSize:11}}>
+              Minimum Order: {item.minimum_order}
+            </Text>
+
+            ) :null}
+           
+           
           </View>
         </View>
       </View>
       <View style={[{}, styles.orderDetailAmmountRow]}>
         <View style={[{}, styles.orderDetailAmmountColumn]}>
           <Text style={[{}, styles.orderDetailAmmountColumnGaryBolText]}>
-            {item.currency} {item.price}
+            {item.currency} {item.has_vat
+                          ? item.price + item.vat_amount
+                          : item.price}
           </Text>
         </View>
         {item.is_active ? (

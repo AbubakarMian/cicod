@@ -26,6 +26,8 @@ import RadioForm, {
 } from 'react-native-simple-radio-button';
 import {connect} from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
+import DropDownModal from './Components/DropDownModal';
+import CategoryDropdown from './Components/CategoryDropdown';
 import {
   SET_USER,
   LOGOUT_USER,
@@ -210,37 +212,40 @@ class BuyDiliveryAddressValueChain extends React.Component {
       });
   }
 
-  onSelectCountry(item, index) {
-    console.log('count#$', item, index);
-    if (item == 0) {
+  onSelectCountry=(item)=> {
+    console.log(item);
+    if (item.value == 0) {
       return;
     }
     this.setState({
-      country_id: item,
-      // country_name: item.label
+      country_id: item.value,
+       country_name: item.label,
+       countryModal:false
     });
-    let statesUrl = Constants.deliveryStateList + '?country_id=' + item;
+    let statesUrl = Constants.deliveryStateList + '?country_id=' + item.value;
     console.log('statesUrl !!!!!!!!!!!!!!@@@@@@@@@@@@@', statesUrl);
     this.getStateList(statesUrl);
   }
-  onSelectState(item) {
+  onSelectState=(item)=> {
     console.log('state Id !!!!!!!!!!!!!!@@@@@@@@@@@@@', item);
     if (item == 0 || item == '') {
       return;
     }
     this.setState({
-      state_id: item,
-      //state_name: item.lable
+      state_id: item.value,
+      state_name: item.label,
+      stateModal:false
     });
-    let lgasUrl = Constants.deliveryLgaList + '?state_id=' + item;
+    let lgasUrl = Constants.deliveryLgaList + '?state_id=' + item.value;
     console.log('lgasUrl !!!!!!!!!!!!!!@@@@@@@@@@@@@', lgasUrl);
     this.getLgaList(lgasUrl);
   }
-  onSelectLgas(item) {
+  onSelectLgas=(item)=> {
     console.log('jo#', item);
     this.setState({
-      lgas_id: item,
-      // lgas_name: item.lable,
+      lgas_id: item.value,
+       lgas_name: item.label,
+       regionModal:false
     });
   }
 
@@ -335,18 +340,33 @@ class BuyDiliveryAddressValueChain extends React.Component {
           />
           <ScrollView>
             <View>
+              <View style={{paddingHorizontal:10}}>
               <NavBack
                 title="DELIVERY ADDRESS"
                 onClick={() => this.props.navigation.goBack()}
               />
+              </View>
+              
               <View style={[{}, styles.addressContainer]}>
                 <View style={[{marginTop: 10}, styles.mainFormView]}>
                   <View>
                     <View style={[{}, styles.formRow]}>
-                      <View style={[{}, styles.formColumn]}>
-                        <Picker
+                    <CategoryDropdown
+                              // containerStyle={{flex: 1}}
+                              title={
+                                this.state.country_name == ''
+                                  ? 'Select Country *'
+                                  : this.state.country_name
+                              }
+                              onPress={() =>
+                                this.setState({countryModal: true})
+                              }
+                            />
+
+                     
+                        {/* <Picker
                           onValueChange={(itemValue, itemLabel, itemIndex) =>
-                            this.onSelectCountry(itemValue, itemIndex)
+                            this.onSelectCountry(itemValue)
                           }
                           selectedValue={this.state.country_id}>
                           <Picker.Item label="Select Country" value="" />
@@ -359,7 +379,7 @@ class BuyDiliveryAddressValueChain extends React.Component {
                               />
                             );
                           })}
-                        </Picker>
+                        </Picker> */}
 
                         {/* <DropDownPicker
                                                 placeholder="Country *"
@@ -376,60 +396,32 @@ class BuyDiliveryAddressValueChain extends React.Component {
                                                 labelStyle={{ color: '#A9A9A9' }}
                                                 onChangeItem={item => this.onSelectCountry(item)}
                                             /> */}
-                      </View>
+                   
                     </View>
-                    <View style={[{}, styles.formColumn]}>
-                      <Picker
-                        onValueChange={(itemValue, itemLabel, itemIndex) =>
-                          this.onSelectState(itemValue)
-                        }
-                        selectedValue={this.state.state_id}>
-                        <Picker.Item label="Select State" value="" />
-                        {this.state.states_arr.map(elem => {
-                          console.log('df#', elem);
-                          return (
-                            <Picker.Item
-                              label={elem.label}
-                              value={elem.value}
+                    <CategoryDropdown
+                              // containerStyle={{flex: 1}}
+                              title={
+                                this.state.state_name == ''
+                                  ? 'Select State *'
+                                  : this.state.state_name
+                              }
+                              onPress={() =>
+                                this.setState({stateModal: true})
+                              }
                             />
-                          );
-                        })}
-                      </Picker>
-
-                      {/* <DropDownPicker
-                                        zIndex={1000}
-                                        disabled={this.state.country_name==""?true:false}
-                                            placeholder="States *"
-                                            items={this.state.states_arr}
-                                           
-
-                                            containerStyle={{ height: 50, width: width - 20, alignSelf: 'center' }}
-                                            style={{ backgroundColor: '#fff', borderWidth: 0, borderBottomWidth: 0.5, }}
-                                            itemStyle={{
-                                                justifyContent: 'flex-start',
-                                            }}
-                                            dropDownStyle={{zIndex:1, height: 180, backgroundColor: '#fff', borderBottomLeftRadius: 5, borderBottomRightRadius: 5, opacity: 1, }}
-                                            labelStyle={{ color: '#A9A9A9' }}
-                                            onChangeItem={item => this.onSelectState(item)}
-                                        /> */}
-                    </View>
+                    
                     <View style={[{}, styles.formColumn]}>
-                      <Picker
-                        onValueChange={(itemValue, itemLabel, itemIndex) =>
-                          this.onSelectLgas(itemValue)
-                        }
-                        selectedValue={this.state.lgas_id}>
-                        <Picker.Item label="Select LGA" value="" />
-                        {this.state.lgas_arr.map(elem => {
-                          console.log('df#', elem);
-                          return (
-                            <Picker.Item
-                              label={elem.label}
-                              value={elem.value}
+                    <CategoryDropdown
+                              // containerStyle={{flex: 1}}
+                              title={
+                                this.state.lgas_name == ''
+                                  ? 'Region *'
+                                  : this.state.lgas_name
+                              }
+                              onPress={() =>
+                               this.setState({regionModal:true})
+                              }
                             />
-                          );
-                        })}
-                      </Picker>
 
                       {/* <DropDownPicker
                                         zIndex={1000}
@@ -471,6 +463,36 @@ class BuyDiliveryAddressValueChain extends React.Component {
                     : 'Submit'}
                 </Text>
               </TouchableOpacity>
+
+              <DropDownModal
+              title="Choose Country"
+              selected={this.state.country_id}
+              itemFull={true}
+              showdropDownModal={this.state.countryModal}
+              handleClose={() => this.setState({countryModal: false})}
+              onSelected={this.onSelectCountry}
+              data={this.state.countries_arr}
+            />
+
+<DropDownModal
+              title="Choose State"
+              selected={this.state.state_id}
+              itemFull={true}
+              showdropDownModal={this.state.stateModal}
+              handleClose={() => this.setState({stateModal: false})}
+              onSelected={this.onSelectState}
+              data={this.state.states_arr}
+            />
+
+<DropDownModal
+              title="Choose Region"
+              selected={this.state.lgas_id}
+              itemFull={true}
+              showdropDownModal={this.state.regionModal}
+              handleClose={() => this.setState({regionModal: false})}
+              onSelected={this.onSelectLgas}
+              data={this.state.lgas_arr}
+            />
             </View>
           </ScrollView>
         </View>

@@ -381,7 +381,7 @@ class Products extends React.Component {
               });
             }
           }}
-          ListEmptyComponent={<EmptyList title="No ProductFound" />}
+          ListEmptyComponent={<EmptyList title="No Product Found" />}
           ListHeaderComponent={_that.listHeader}
           onRefresh={() => _that.onRefresh()}
           refreshing={_that.props.products.isFetchingProducts}

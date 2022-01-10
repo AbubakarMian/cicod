@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -235,7 +236,7 @@ class AddCustomerInvoice extends React.Component {
                     (({highlighted}) => (
                       <View
                         style={[
-                          style.separator,
+                          styles.separator,
                           highlighted && {marginLeft: 0},
                         ]}
                       />

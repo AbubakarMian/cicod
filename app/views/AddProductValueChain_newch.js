@@ -38,6 +38,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Scaffold from './Components/Scaffold';
 import AddProductCartItem from './Components/CreateOrder/AddProductCartItem';
 import NavBack from './Components/NavBack';
+import EmptyList from './Components/EmptyList';
 import CategoryDropdown from './Components/CategoryDropdown';
 import DropDownModal from './Components/DropDownModal';
 
@@ -429,40 +430,11 @@ onPress:()=>{
       // category_id=="all"?Constants.sellerProductList+'?id='+this.props.route.params.item.seller_id+'&filter[name]='+this.state.search_product:Constants.sellerProductList+'?id='+this.props.route.params.item.seller_id+'&filter[category_id]='+category_id+'&filter[name]='+this.state.search_product);
     }
   }
-  render() {
-    var radio_props_dilvery = [{label: 'Dilivery', value: 0}];
-    var radio_props_pickup = [{label: 'Pickup', value: 1}];
-    var radio_props_payment = [
-      {label: 'Pay Now', value: 0},
-      {label: 'Pay Acount', value: 1},
-      {label: 'Pay Invoice', value: 2},
-      {label: 'Part Payment', value: 3},
-    ];
-    return (
-      <Scaffold>
-        <View style={[{}, styles.mainView]}>
-          <Header navigation={this.props.navigation} />
 
-          <Spinner
-            visible={this.state.spinner}
-            textContent={'Please Wait...'}
-            textStyle={{color: '#fff'}}
-            color={'#fff'}
-          />
-          <NavBack title="ADD PRODUCT" onClick={()=> this.props.navigation.goBack()} />
-          {/* <View style={[{}, styles.backHeaderRowView]}>
-            <TouchableOpacity
-              // onPress={() => this.props.navigation.navigate('CreateOrder')}
-              onPress={() => this.props.navigation.goBack()}>
-              <Icon name="arrow-left" size={25} color="#929497" />
-            </TouchableOpacity>
-            <View style={[{}, styles.backHeadingView]}>
-              <Text style={[{}, styles.backHeadingText]}>ADD PRODUCT</Text>
-            </View>
-          </View> */}
-          <View>
-          
-              <Searchbar
+  listHeader=()=>{
+    return <>
+    
+    <Searchbar
                 placeholder="Search Product"
                 iconColor="#929497"
                 style={{
@@ -473,7 +445,7 @@ onPress:()=>{
                   elevation: 0,
                   fontSize: 14,
                   color: '#D5D5D5',
-                  borderColor: '#D8DCDE',
+                  borderColor: '#000',
                 }}
                 onSubmitEditing={() => this.searchProduct()}
                 onChangeText={text => this.setState({search_product: text})}
@@ -482,15 +454,15 @@ onPress:()=>{
               {/* <View style={[{}, styles.searchByCatCOntainer]}> */}
 
               {this.state.categoryarr.length < 1 ? null : (
-               <View style={{paddingHorizontal:10}}>
+               
+               
                <CategoryDropdown
                  title="Select Product Category"
                  onPress={() => this.setState({showdropDownModal: true})}
                />
-               </View>
+             
               )}
               {/* </View> */}
-
               <View
                 style={{
                   borderBottomWidth: 0.5,
@@ -499,11 +471,12 @@ onPress:()=>{
                   alignSelf: 'center',
                   marginBottom: 10,
                 }}></View>
-              <View style={[{zIndex: -0.9999}, styles.OrderDetailContainer]}>
+              
+              <View style={[{zIndex: -0.9999,marginTop:10,}]}>
                 <View
                   style={[
-                    styles.OrderDetailHeadingRow,
-                    {justifyContent: 'space-between', right: 20},
+                    
+                    {justifyContent: 'space-between',flexDirection:"row",borderBottomColor: '#E6E6E6',marginBottom:10},
                   ]}>
                   <View style={{flexDirection: 'row'}}>
                     <Text style={[{}, styles.OrderDetailHeadingRowText]}>
@@ -532,9 +505,51 @@ onPress:()=>{
                     </Text>
                   </TouchableOpacity>
                 </View>
+                </View>
+                
+    </>
+  }
 
-                {this.state.data.length != 0 ? (
+
+  render() {
+    
+    return (
+      <Scaffold>
+        <View style={[{}, styles.mainView]}>
+          <Header navigation={this.props.navigation} />
+
+          <Spinner
+            visible={this.state.spinner}
+            textContent={'Please Wait...'}
+            textStyle={{color: '#fff'}}
+            color={'#fff'}
+          />
+          {/* <View style={[{}, styles.backHeaderRowView]}>
+            <TouchableOpacity
+              // onPress={() => this.props.navigation.navigate('CreateOrder')}
+              onPress={() => this.props.navigation.goBack()}>
+              <Icon name="arrow-left" size={25} color="#929497" />
+            </TouchableOpacity>
+            <View style={[{}, styles.backHeadingView]}>
+              <Text style={[{}, styles.backHeadingText]}>ADD PRODUCT</Text>
+            </View>
+          </View> */}
+          <View style={{
+            //  backgroundColor:'#fff',
+            
+            paddingHorizontal:20,
+            
+           
+            
+           
+          }}>
+          <NavBack title="ADD PRODUCT" onClick={()=> this.props.navigation.goBack()} />
+          
+
+               
                   <FlatList
+                  ListEmptyComponent={<EmptyList title="No Product Found" />}
+                  ListHeaderComponent={this.listHeader}
                     data={this.state.data}
                     ItemSeparatorComponent={
                       Platform.OS !== 'android' &&
@@ -555,20 +570,7 @@ onPress:()=>{
                       />
                     )}
                   />
-                ) : (
-                  <View style={[{}, styles.contentView]}>
-                    <Image
-                      style={{height: 100, width: 100}}
-                      source={require('../images/noProduct.png')}
-                    />
-                    <Text style={[{}, styles.contentViewHeadingText]}>
-                      No product selected
-                    </Text>
-                    <Text style={[{color: '#929497'}, fontStyles.normal15]}>
-                      Search for a product
-                    </Text>
-                  </View>
-                )}
+                
               </View>
               <DropDownModal
             title="Product Categories"
@@ -579,7 +581,7 @@ onPress:()=>{
             data={this.state.categoryarr}
           />
           </View>
-        </View>
+        
       </Scaffold>
     );
   }

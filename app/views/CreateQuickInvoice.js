@@ -503,6 +503,14 @@ class CreateQuickInvoice extends React.Component {
                   </View>
                 </View>
               </TouchableOpacity>
+            <View style={{paddingHorizontal:20}}>
+            <Text style={{fontSize:11}}>
+              This is an accounting feature for products/services that are not setup in your product list.
+               Note: This feature does not deplete quantity from your inventory, but registers the sale in accounting.
+              </Text>
+
+            </View>
+             
 
               <View style={[{}, styles.customerContainerView]}>
                 <Text

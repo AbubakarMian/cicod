@@ -660,10 +660,10 @@ class BuyersView extends React.Component {
                     />{' '}
                   </Text>
                 </View>
-              {this.props.route.params.heading == 'BUYERS' ? (
+              {/* {this.props.route.params.heading == 'BUYERS' ? (
                 <View style={[{}, styles.productDetailROwView]}>
                   <View style={[{}, styles.columnView]}>
-                    <Text style={[{}, styles.lightGrayText]}>Min. Spend</Text>
+                    <Text style={[{}, styles.lightGrayText]}>Minimum Spend</Text>
                     <Text style={[{}, styles.darkGrayBoldText]}>
                       {this.state.items.seller_currency == null
                         ? ''
@@ -674,7 +674,7 @@ class BuyersView extends React.Component {
                   <View style={[{}, styles.columnView]}></View>
                   <View style={[{}, styles.columnView]}></View>
                 </View>
-              ) : null}
+              ) : null} */}
               <View style={[{}, styles.productDetailROwView]}>
                 <View style={[{}, styles.columnView]}>
                   {this.props.route.params.heading == 'BUYERS' ? (
@@ -831,7 +831,7 @@ class BuyersView extends React.Component {
                         color:
                           this.state.is_active_list === 'PENDING'
                             ? '#B1272C'
-                            : '#e2e2e2',
+                            : '#000',
                         backgroundColor: '#E6E6E6',
                         marginRight: 5,
                         paddingHorizontal: 10,
@@ -848,7 +848,7 @@ class BuyersView extends React.Component {
                         color:
                           this.state.is_active_list === 'PAID'
                             ? '#B1272C'
-                            : '#e2e2e2',
+                            : '#000',
                         backgroundColor: '#E6E6E6',
                         marginRight: 5,
                         paddingHorizontal: 10,
@@ -868,7 +868,7 @@ class BuyersView extends React.Component {
                             color:
                               this.state.is_active_list === 'partPayment'
                                 ? '#B1272C'
-                                : '#e2e2e2',
+                                : '#000',
                             // backgroundColor: '#E6E6E6',
                             marginRight: 5,
                             paddingHorizontal: 10,
@@ -886,7 +886,7 @@ class BuyersView extends React.Component {
                             color:
                               this.state.is_active_list === 'paidFromCredit'
                                 ? '#B1272C'
-                                : '#e2e2e2',
+                                : '#000',
                             backgroundColor: '#E6E6E6',
                             marginRight: 5,
                             paddingHorizontal: 10,

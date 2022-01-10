@@ -12,8 +12,7 @@ import {
   Platform,
   TouchableOpacity,
   ScrollView,
-  TouchableNativeFeedback,
-  SafeAreaView,
+  
 } from 'react-native';
 import {Text, TextInput, Searchbar} from 'react-native-paper';
 import splashImg from '../images/splash.jpg';
@@ -39,6 +38,7 @@ import TabNav from '../views/TabsNav';
 // import DropDownPicker from 'react-native-dropdown-picker';
 import FontCss from '../css/FontCss';
 import Scaffold from './Components/Scaffold';
+import NumberFormat from 'react-number-format';
 
 class Order extends React.Component {
   constructor(props) {
@@ -805,22 +805,38 @@ class Order extends React.Component {
                     alignItems: 'flex-end',
                     flexDirection: 'column',
                   }}>
+
                   {item.balance_part_payment > 0 ? (
-                    <Text
-                      style={[
+                     <NumberFormat
+                     decimalScale={2}
+                     renderText={(value, props) => (
+                       <Text style={[
                         {color: '#4E4D4D', marginRight: 10},
                         fontStyles.bold15,
-                      ]}>
-                      {item.currency} {item.balance_part_payment.amount}
-                    </Text>
+                      ]} {...props}>{value}</Text>
+                     )}
+                     value={item.balance_part_payment.amount}
+                     displayType={'text'}
+                     thousandSeparator={true}
+                     prefix={item.currency}
+                   />
+                   
                   ) : (
-                    <Text
-                      style={[
-                        {color: '#4E4D4D', marginRight: 10},
-                        fontStyles.bold15,
-                      ]}>
-                      {item.currency} {item.amount}
-                    </Text>
+
+                    <NumberFormat
+                    decimalScale={2}
+                    renderText={(value, props) => (
+                      <Text style={[
+                       {color: '#4E4D4D', marginRight: 10},
+                       fontStyles.bold15,
+                     ]} {...props}>{value}</Text>
+                    )}
+                    value={item.amount}
+                    displayType={'text'}
+                    thousandSeparator={true}
+                    prefix={item.currency}
+                  />
+                   
                   )}
 
                   {item.order_status == 'PENDING' ? (

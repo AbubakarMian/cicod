@@ -736,8 +736,15 @@ class CreateOrderValueChain extends React.Component {
   }
 
   supplierModalFun(item) {
+   
+    this.props.emptyOrder();
+    this.props.resetDelivery();
+    this.props.resetDeliveryAddress();
+
     this.setState({
       suppliereModal: false,
+      cart_detail: this.props.cart.cart_detail,
+      amount_payable: 0,
     });
     this.props.setSupplier({
       detail:item,

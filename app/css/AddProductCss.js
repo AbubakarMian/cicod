@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from "react";
 
 import { View, Text, Dimensions, StyleSheet, ImageBackground } from "react-native";
@@ -45,7 +46,7 @@ export default StyleSheet.create({
         borderBottomColor:'#e2e2e2',
         borderBottomWidth:1,
         position:'relative',
-        width:width-20,
+        
         borderRadius:5
     },
     contentView:{

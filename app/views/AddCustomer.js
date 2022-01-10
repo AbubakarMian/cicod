@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {
   View,
@@ -176,7 +177,7 @@ class AddCustomer extends React.Component {
     this.getCustomers(url);
     return;
     // }
-    console.log('333333333333', this.state.isFetching);
+  
     // _that.setState({
     //     url_orders: url,
     // })
@@ -189,7 +190,7 @@ class AddCustomer extends React.Component {
     return (
       <TouchableOpacity
         onPress={() => this.handleLoadMore()}
-        style={{padding: 5, alignSelf: 'center',alignItems:"center", marginVertical: 20,marginBottom:10,width:"100%",padding:10}}>
+        style={{padding: 5, alignSelf: 'center',alignItems:"center", marginVertical: 20,marginBottom:10,width:"100%"}}>
         <Text style={{letterSpacing: 1.1, fontWeight: 'bold'}}>Load More</Text>
       </TouchableOpacity>
     );
@@ -297,7 +298,7 @@ class AddCustomer extends React.Component {
                     (({highlighted}) => (
                       <View
                         style={[
-                          style.separator,
+                          styles.separator,
                           highlighted && {marginLeft: 0},
                         ]}
                       />
