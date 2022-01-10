@@ -42,7 +42,7 @@ class PayByPOS extends React.Component {
   }
 
   press_confirm() {
-    this.props.emptyOrder();
+  
     if (this.props.route.params.heading == 'supplier') {
       this.props.navigation.navigate('OrderDetailValueChain', {
         order_id: this.props.route.params.order_id,

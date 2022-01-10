@@ -25,7 +25,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import AwesomeAlert from 'react-native-awesome-alerts';
 import {Constants} from './Constant';
 import {connect} from 'react-redux';
-import {SET_USER, LOGOUT_USER, SET_SUPPLIER} from '../redux/constants/index';
+import {SET_USER, LOGOUT_USER, SET_SUPPLIER, CLEAR_ORDER_CHAIN, RESET_DELIVERY, RESET} from '../redux/constants/index';
 import NumberFormat from 'react-number-format';
 import Scaffold from './Components/Scaffold';
 
@@ -453,6 +453,11 @@ class BuyersView extends React.Component {
     return filter;
   }
   createOrderFun() {
+
+    this.props.emptyOrder();
+    this.props.resetDelivery();
+    this.props.resetDeliveryAddress();
+
     this.props.setSupplier({
       id: this.state.items.seller_id,
       name: this.state.items.seller_name,
@@ -1126,6 +1131,9 @@ function mapDispatchToProps(dispatch) {
     setUser: value => dispatch({type: SET_USER, value: value}),
     logoutUser: () => dispatch({type: LOGOUT_USER}),
     setSupplier: value => dispatch({type: SET_SUPPLIER, value: value}),
+    emptyOrder: () => dispatch({type: CLEAR_ORDER_CHAIN}),
+    resetDelivery: () => dispatch({type: RESET_DELIVERY}),
+    resetDeliveryAddress: () => dispatch({type: RESET}),
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(BuyersView);

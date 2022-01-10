@@ -780,7 +780,7 @@ class CreateOrderValueChain extends React.Component {
           {label: 'Pay Online', value: 0,key:"PAY_ONLINE"},
             {label: 'Pay Account', value: 1,key:"PAY_ACCOUNT"},
             {label: 'Send Invoice', value: 2,key:"SEND_INVOICE"},
-            {label: 'Pay by POS', value: 2,key:"PAY_POS"},
+            {label: 'Pay by POS', value: 3,key:"PAY_POS"},
             //{ label: 'Part Payment', value: 3 },
           ]
         // : [
@@ -1111,6 +1111,9 @@ class CreateOrderValueChain extends React.Component {
                     // onPress={() => this.DeliveryType('delivery')}
                   />
                   {radio_props_payment.map((obj, i) => (
+                     <TouchableOpacity
+                     key={i}
+                     onPress={() => this.paymentFun(obj)}>
                     <RadioButton
                       style={{
                         backgroundColor: '#F5F5F5',
@@ -1147,6 +1150,7 @@ class CreateOrderValueChain extends React.Component {
                         labelWrapStyle={{}}
                       />
                     </RadioButton>
+                    </TouchableOpacity>
                   ))}
                 </View>
                 {this.props.route.params.screen_name != 'buy' && (

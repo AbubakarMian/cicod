@@ -349,8 +349,9 @@ class ProductView extends React.Component {
             <View style={[{}, styles.suspendmodalBackGround]}>
               <View
                 style={[
-                  {flexDirection: 'column', alignSelf: 'baseline'},
+                  
                   styles.suspendTouch,
+                  {flexDirection: 'column', alignSelf: 'baseline'}
                 ]}>
                 <TouchableOpacity
                   onPress={() => _that.updateProductFun()}

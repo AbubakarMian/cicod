@@ -373,6 +373,7 @@ class MakePayment extends React.Component {
   }
 
   render() {
+    console.log("op$##",this.state.settlementMode);
     return (
       <Scaffold>
         <View style={[{}, styles.mainView]}>
@@ -400,7 +401,8 @@ class MakePayment extends React.Component {
           <View>
             <ScrollView>
               <View>
-                {this.state.settlementMode!="OFFLINE" || this.props.route.params.heading == 'supplier' &&<>
+                
+                {(this.state.settlementMode!=="OFFLINE" || this.props.route.params.heading == 'supplier') &&<>
                 <TouchableOpacity
                   style={[{}, styles.cardTouch]}
                   onPress={() => this.makePaymentFun('ONLINE')}>
