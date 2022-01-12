@@ -166,19 +166,28 @@ class CreateProduct extends React.Component {
             return {label: x.name, value: x.id, selected: selected_bool};
           });
           if(this.props.route.params.action=="update"){
-            let data = categoryarr.filter(itm => itm.label == this.props.route.params.prodDetail.category);
-            if (data.length>0) {
-              this.setState({
-                selected_cat: data[0].label,
-                category_id:data[0].value,
-                categoryarr: categoryarr,
-              });
-            } else {
+            if (this.props.route.params.prodDetail.category!=null || this.props.route.params.prodDetail.category!=="") {
+              let data = categoryarr.filter(itm => itm.label == this.props.route.params.prodDetail.category);
+              console.log("cateDFE#",data)
+              if (data.length>0) {
+                this.setState({
+                  selected_cat: data[0].label,
+                  category_id:data[0].value,
+                  categoryarr: categoryarr,
+                });
+              } else {
+                this.setState({
+                 
+                  categoryarr: categoryarr,
+                });
+              }
+            }else {
               this.setState({
                
                 categoryarr: categoryarr,
               });
             }
+           
             
           }else{
             this.setState({
@@ -199,18 +208,19 @@ class CreateProduct extends React.Component {
         } else {
           let message = responseJson.message;
           console.log('catftApi#e', responseJson);
-          Alert.alert('Info', "Could not fetch category",[
-            {
-              text:"Reload",
-              onPress:()=>this.getCategoryList()
-            },
-            {
-              text:"Close",
-              onPress:()=>{
-                console.log("close")
-              }
-            }
-          ]);
+          this.getCategoryList()
+          // Alert.alert('Info', "Could not fetch category",[
+          //   {
+          //     text:"Reload",
+          //     onPress:()=>this.getCategoryList()
+          //   },
+          //   {
+          //     text:"Close",
+          //     onPress:()=>{
+          //       console.log("close")
+          //     }
+          //   }
+          // ]);
         }
       })
       .catch(error => {

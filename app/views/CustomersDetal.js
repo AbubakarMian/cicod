@@ -16,7 +16,7 @@ import {
   TouchableNativeFeedback,
   SafeAreaView,
 } from 'react-native';
-import {Text, TextInput} from 'react-native-paper';
+import {Text, TextInput,} from 'react-native-paper';
 import splashImg from '../images/splash.jpg';
 import styles from '../css/CustomerDeatailCss';
 import fontStyles from '../css/FontCss';
@@ -41,6 +41,7 @@ class CustomersDetal extends React.Component {
       calenderModal: false,
       spinner: false,
       data: {},
+      supendModal:false
     };
     this.onDateChange = this.onDateChange.bind(this);
   }
@@ -134,6 +135,14 @@ class CustomersDetal extends React.Component {
                   source={require('../images/customer/usericon.png')}
                 />
               </View>
+              <TouchableOpacity
+              hitSlop={{top:20,bottom:20,right:20,left:20}}
+                style={[{padding: 10, position:'absolute',
+                right:10,
+                top:0}]}
+                onPress={() => this.setState({supendModal: true})}>
+                <Icon size={25} color={'#929497'} name="ellipsis-h" />
+              </TouchableOpacity>
               <View>
                 <Text
                   style={[
@@ -225,7 +234,42 @@ class CustomersDetal extends React.Component {
               </View>
             </View>
           </View>
+
+
         </View>
+
+        <Modal visible={this.state.supendModal} transparent={true}>
+          <TouchableOpacity
+            onPress={() => this.setState({supendModal: false})}>
+            <View style={[{}, styles.suspendmodalBackGround]}>
+              <View
+                style={[
+                  
+                  styles.suspendTouch,
+                  {flexDirection: 'column', alignSelf: 'baseline'}
+                ]}>
+                <TouchableOpacity
+                 hitSlop={{top:20,bottom:20,right:20,left:20}}
+                  onPress={() =>{
+                    this.setState({supendModal:false})
+                    this.props.navigation.navigate('AddNewCustomer',{action:"update",customer_id:this.props.route.params.customer_id})
+                  }}
+                  style={[{flexDirection: 'row', alignItems: 'center',width:"100%"}]}>
+                  {/* <Image source={require('../images/ban.png')} style={[{}, styles.banImage]} /> */}
+                  <Icon
+                    name="edit"
+                    color={'gray'}
+                    size={20}
+                    style={[{  zIndex: 999,
+                      marginRight: 10}, styles.banImage]}
+                  />
+                  <Text style={{}}>Update</Text>
+                </TouchableOpacity>
+                
+              </View>
+            </View>
+          </TouchableOpacity>
+        </Modal>
       </Scaffold>
     );
   }

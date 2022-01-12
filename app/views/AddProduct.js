@@ -121,21 +121,22 @@ class AddProduct extends React.Component {
           this.unauthorizedLogout();
         } else {
           let message = responseJson.message;
+          this.this.getProductList(Constants.productslist + '?is_active=1&page=1');
           // Alert.alert('Error', message);
-          Alert.alert('Info', "Please click to reload products",[
-            {
-              text:"Close",
-              onPress:()=>{
-                console.log("close")
-              }
-            },
-            {
-              text:"Reload",
-              onPress:()=>this.getProductList(Constants.productslist + '?is_active=1&page=1')
-            }
-            ,
+          // Alert.alert('Info', "Please click to reload products",[
+          //   {
+          //     text:"Close",
+          //     onPress:()=>{
+          //       console.log("close")
+          //     }
+          //   },
+          //   {
+          //     text:"Reload",
+          //     onPress:()=>this.getProductList(Constants.productslist + '?is_active=1&page=1')
+          //   }
+          //   ,
             
-          ],{ cancelable: true });
+          // ],{ cancelable: true });
         }
       })
       .catch(error => {
@@ -325,7 +326,15 @@ class AddProduct extends React.Component {
         </TouchableOpacity>
       );
     }
-    return null;
+    return <View style={{
+      padding: 5,
+      alignSelf: 'center',
+      marginTop: 7,
+      paddingBottom:50,
+      marginBottom: 200,
+    }}>
+
+    </View>;
   };
 
 

@@ -123,22 +123,27 @@ class AddProduct extends React.Component {
           this.unauthorizedLogout();
         } else {
           let message = responseJson.message;
-          Alert.alert('Info', "Please Reload Products",[
-            {
-              text:"OK",
-onPress:()=>{
-  this.getSellersProducts(
-    Constants.sellerProductList +
-      '?id=' +
-      this.props.route.params.item.seller_id+"&page=1",
-  );
+          this.getSellersProducts(
+            Constants.sellerProductList +
+              '?id=' +
+              this.props.route.params.item.seller_id+"&page=1",
+          );
+//           Alert.alert('Info', "Please Reload Products",[
+//             {
+//               text:"OK",
+// onPress:()=>{
+//   this.getSellersProducts(
+//     Constants.sellerProductList +
+//       '?id=' +
+//       this.props.route.params.item.seller_id+"&page=1",
+//   );
 
-}
-            },{
-              text:"Back",
-              onPress:()=>this.props.navigation.goBack()
-            }
-          ]);
+// }
+//             },{
+//               text:"Back",
+//               onPress:()=>this.props.navigation.goBack()
+//             }
+//           ]);
         }
       });
   }
@@ -429,6 +434,33 @@ onPress:()=>{
       // category_id=="all"?Constants.sellerProductList+'?id='+this.props.route.params.item.seller_id+'&filter[name]='+this.state.search_product:Constants.sellerProductList+'?id='+this.props.route.params.item.seller_id+'&filter[category_id]='+category_id+'&filter[name]='+this.state.search_product);
     }
   }
+
+  renderFooter = () => {
+    //it will show indicator at the bottom of the list when data is loading otherwise it returns null
+    // if (!this.state.spinner) return null;
+    // return <ActivityIndicator style={{color: '#000'}} />;
+    if (
+      this.state.data.length>3
+    ) {
+      return (
+        <View
+          // onPress={() => this.handleLoadMore()}
+          style={{
+            padding: 5,
+            alignSelf: 'center',
+            marginTop: 7,
+            paddingBottom:50,
+            marginBottom: 300,
+          }}>
+          {/* <Text style={{letterSpacing: 1.1, fontWeight: 'bold'}}>
+            Load More
+          </Text> */}
+        </View>
+      );
+    }
+    return null;
+  };
+
   render() {
     var radio_props_dilvery = [{label: 'Dilivery', value: 0}];
     var radio_props_pickup = [{label: 'Pickup', value: 1}];
@@ -536,6 +568,7 @@ onPress:()=>{
                 {this.state.data.length != 0 ? (
                   <FlatList
                     data={this.state.data}
+                    ListFooterComponent={this.renderFooter}
                     ItemSeparatorComponent={
                       Platform.OS !== 'android' &&
                       (({highlighted}) => (
@@ -547,6 +580,7 @@ onPress:()=>{
                         />
                       ))
                     }
+                    
                     renderItem={({item, index, separators}) => (
                       <AddProductCartItem
                         item={item}

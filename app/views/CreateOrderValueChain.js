@@ -140,10 +140,11 @@ class CreateOrderValueChain extends React.Component {
     //console.log('heress#', this.props.cart.cart_detail);
     // this.props.emptyOrder();
 
-      console.log("dsdd#$",this.props.supplier)
+      console.log("juiii#$",this.props.supplier)
       // this.clearOrder()
     //getSellers
-    this.setState({supplier: this.props.route.params.item});
+    //this.setState({supplier: this.props.supplier});
+    //this.setState({supplier: this.props.route.params.item});
     let url =
       Constants.seller_customer_details + '?id=' + this.props.supplier.id;
 
@@ -203,6 +204,7 @@ class CreateOrderValueChain extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     //   console.log("dui@E",this.props.cart,"fuhs#",prevProps.cart)
+    console.log("su##",this.props.supplier)
     if (!_.isEqual(prevProps.supplier, this.props.supplier)) {
       let url =
         Constants.seller_customer_details + '?id=' + this.props.supplier.id;
@@ -900,7 +902,7 @@ class CreateOrderValueChain extends React.Component {
                 onPress={() =>
                   this.props.navigation.navigate('AddProductValueChain', {
                     heading: 'supplier',
-                    item: this.state.supplier,
+                    item: this.props.supplier.detail,
                   })
                 }>
                 <View style={[{}, styles.customerContaineraddProductView]}>

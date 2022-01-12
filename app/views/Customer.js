@@ -202,7 +202,7 @@ class Customer extends React.Component {
               onClick={() => this.props.navigation.goBack()}
             />
             <TouchableOpacity
-              onPress={() => this.props.navigation.navigate('AddNewCustomer')}
+              onPress={() => this.props.navigation.navigate('AddNewCustomer',{action:"create"})}
               style={[{}, styles.headerRowPlusiconView]}>
               {/* <View > */}
               <Image

@@ -146,6 +146,9 @@ class PayByPOSValueChain extends React.Component {
         <View>
           <ScrollView>
             <View style={[{}, styles.contentContainer]}>
+            <Text style={{fontSize:10,alignSelf:"center",paddingHorizontal:10,marginBottom:10}}>
+              if you have a CICOD Enabled payment card device (POS), enter the CICOD order ID and click confirm after a successful payment.
+                </Text>
               <Image
                 style={{height: 60, width: 40}}
                 source={require('../images/pos-terminal.png')}

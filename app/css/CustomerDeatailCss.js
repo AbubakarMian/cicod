@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 
 import {
@@ -74,12 +75,39 @@ export default StyleSheet.create({
     position: 'relative',
     zIndex: -0.999,
   },
+  suspendmodalBackGround: {
+    height: height,
+    backgroundColor: '#00000057',
+    // opacity: 0.7,
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'relative',
+    zIndex: -0.999
+},
+suspendTouch: {
+  alignSelf: 'baseline',
+  zIndex: 999,
+  backgroundColor: '#fff',
+  width: width,
+  borderTopLeftRadius: 20,
+  borderTopRightRadius: 20,
+  paddingHorizontal: 30,
+  paddingTop: 20,
+  flexDirection: 'row',
+  paddingBottom: 20,
+  
+  position: 'absolute',
+  bottom:0,
+  // flexDirection:'column',
+  justifyContent:'center'
+ 
+},
   suspendModal: {
     //alignSelf: 'baseline',
     alignItems: 'flex-start',
     zIndex: 999,
     justifyContent: 'center',
-    justifyContent: 'space-between',
+    // justifyContent: 'space-between',
     backgroundColor: '#fff',
     width: width,
     borderTopLeftRadius: 15,

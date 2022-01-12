@@ -199,7 +199,7 @@ class ProductView extends React.Component {
             />
             {_that.props.route.params.heading != 'SUPPLIERS' && (
               <TouchableOpacity
-                style={[{padding: 10}, styles.settingIcon]}
+                style={[{padding: 10,}, styles.settingIcon]}
                 onPress={() => _that.setState({supendModal: true})}>
                 <Icon size={25} color={'#929497'} name="ellipsis-h" />
               </TouchableOpacity>

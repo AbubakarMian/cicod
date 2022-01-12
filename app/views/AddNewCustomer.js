@@ -69,13 +69,78 @@ class AddNewCustomer extends React.Component {
       countryModal: false,
       stateModal: false,
       regionModal: false,
+      data:{}
     };
   }
 
   componentDidMount() {
-    this.getCountryList();
+    //this.getCountryList();
+if(this.props.route.params && this.props.route.params.action=="update"){
+  let customer_id = this.props.route.params.customer_id;
+  console.log("customerid##",customer_id)
+  this.getCustomerDetail(customer_id);
+
+}else{
+  this.getCountryList();
+}
+
   }
 
+
+  getCustomerDetail(customer_id) {
+    let postData = {
+      method: 'GET',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        Authorization: this.props.user.access_token,
+      },
+    };
+console.log("io##@",Constants.customerlist + '/' + customer_id)
+    fetch(Constants.customerlist + '/' + customer_id, postData)
+      .then(response => response.json())
+      .then(async responseJson => {
+        console.log(
+          'responseJson !!!! @@@@@@@@@@@@@@@@@@@@@@@@@@',
+          responseJson,
+        );
+        this.setState({
+          spinner: false,
+        });
+
+        if (responseJson.status === 'success') {
+          this.setState({
+            data: responseJson.data,
+            first_name:responseJson.data.first_name,
+            last_name:responseJson.data.last_name,
+            email:responseJson.data.email,
+            phone_number:responseJson.data.phone,
+            house_no:responseJson.data.house_no==null?"":responseJson.data.house_no,
+            street:responseJson.data.street==null?"":responseJson.data.street,
+            landmark:responseJson.data.landmark==null?"":responseJson.data.landmark,
+            customer_code:responseJson.data.code==null?"":responseJson.data.code,
+            country_name:responseJson.data.country==null?"":responseJson.data.country,
+            country_id:responseJson.data.country_id==null?0:responseJson.data.country_id,
+            state_id:responseJson.data.state_id==null?0:responseJson.data.state_id,
+            state_name:responseJson.data.state==null?"":responseJson.data.state,
+            lgas_id:responseJson.data.lga_id==null?0:responseJson.data.lga_id,
+            lgas_name:responseJson.data.lga==null?"":responseJson.data.lga,
+
+            // street:responseJson.data.street,
+          });
+          this.getCountryList();
+          // this.props.navigation.navigate('DrawerNavigation')
+        } else if (responseJson.status == 401) {
+          this.unauthorizedLogout();
+        } else {
+          let message = responseJson.message;
+          Alert.alert('Error', message);
+        }
+      })
+      .catch(error => {
+        console.log('Error !!!', error);
+      });
+  }
   unauthorizedLogout() {
     Alert.alert('Error', Constants.UnauthorizedErrorMsg);
     this.props.logoutUser();
@@ -115,8 +180,9 @@ class AddNewCustomer extends React.Component {
       return;
     }
     this.setState({spinner: true});
+    
     let postData = {
-      method: 'POST',
+      method: this.props.route.params && this.props.route.params.action === 'update' ? 'PUT':"POST",
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
@@ -142,7 +208,7 @@ class AddNewCustomer extends React.Component {
     };
 
     console.log('body sent  == ', postData);
-    fetch(Constants.customerlist, postData)
+    fetch(this.props.route.params && this.props.route.params.action === 'update'?Constants.customerlist+"/"+ this.props.route.params.customer_id:Constants.customerlist, postData)
       .then(response => response.json())
       .then(async responseJson => {
         console.log(' create customer response !!!!!!!!!!!', responseJson);
@@ -180,7 +246,19 @@ class AddNewCustomer extends React.Component {
             state_name: '',
             lgas_name: '',
           });
-          this.createCustomerDelivery(customer_id);
+          if (this.props.route.params && this.props.route.params.action === 'update') {
+            Alert.alert("SUCCESS","Customer updated successfully",[
+              {
+                text:"OK",
+            
+            onPress:()=>this.props.navigation.navigate('Customer')
+              }
+            ])
+
+          } else {
+            this.createCustomerDelivery(customer_id);
+          }
+          
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();
         } else {
@@ -508,7 +586,7 @@ class AddNewCustomer extends React.Component {
             />
             <View style={[{}, styles.backRowView]}>
               <NavBack
-                title="ADD NEW CUSTOMER"
+                title={this.props.route.params && this.props.route.params.action=="update"?"UPDATE CUSTOMER":"ADD NEW CUSTOMER"}
                 onClick={() => this.props.navigation.goBack()}
               />
             </View>
@@ -771,7 +849,7 @@ class AddNewCustomer extends React.Component {
                     </View>
                   </View>
                 </View>
-                <View
+              {this.props.route.params && this.props.route.params.action=="update"?null :  <View
                   style={[
                     {marginTop: 10, marginBottom: 20},
                     styles.mainFormView,
@@ -896,13 +974,15 @@ class AddNewCustomer extends React.Component {
                       </View>
                     </View>
                   ) : null}
-                  <TouchableOpacity
+                
+                </View>
+  }
+    <TouchableOpacity
                     onPress={() => this.ceateCustomer()}
                     style={[{}, styles.redTouchView]}>
                     <Text style={{color: '#fff'}}>Save</Text>
                   </TouchableOpacity>
-                </View>
-              </View>
+             </View>
             </ScrollView>
             <DropDownModal
               title="Choose Country"
