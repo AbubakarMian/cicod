@@ -549,7 +549,7 @@ class User extends React.Component {
               CICOD Merchant Mobile App is a product of Crown Interactive
             </Text>
             <Text style={[{alignSelf: 'center'}, styles.bottomVersioncText]}>
-              Version 1.1.5
+              Version 1.1.6
             </Text>
           </View>
         </ScrollView>

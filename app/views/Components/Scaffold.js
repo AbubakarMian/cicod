@@ -5,7 +5,7 @@ import {SafeAreaView, StatusBar} from 'react-native';
 const Scaffold = props => {
   return (
     <SafeAreaView style={{flex: 1}}>
-      <StatusBar backgroundColor="#ffffff" networkActivityIndicatorVisible={true}/>
+      <StatusBar backgroundColor="#ffffff" />
       {props.children}
     </SafeAreaView>
   );
