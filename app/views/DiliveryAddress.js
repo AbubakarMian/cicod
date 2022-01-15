@@ -138,10 +138,11 @@ class DiliveryAddress extends React.Component {
         if (responseJson.status === 'success') {
           let default_address = null;
           let selected_address = null;
-          let res = responseJson.data;
-          console.log("fojt%",res)
-          if (res.length>0) {
-            
+          let resMain = responseJson.data;
+          console.log("fojt%",resMain)
+          if (resMain.length>0) {
+            //filter inactive addresss
+            let res=resMain.filter((address)=>address.is_active);
             let addressarr=[];
 
             for (let index = 0; index < res.length; index++) {
@@ -391,7 +392,7 @@ class DiliveryAddress extends React.Component {
                 // onPress={() => this.selectAddress(value)}
                 // style={{marginBott}}
                 >
-                  <View style={[{}, styles.radioFormView]}>
+                  <View style={[{}]}>
                     <RadioForm
                       // isSelected={this.state.is_selected_address}
                       color={'yellow'}

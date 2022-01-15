@@ -34,6 +34,9 @@ import {Constants} from '../views/Constant';
 import NavBack from './Components/NavBack';
 import {nativeViewProps} from 'react-native-gesture-handler/lib/typescript/handlers/NativeViewGestureHandler';
 import Scaffold from './Components/Scaffold';
+import MultiViewHeader from './Components/MultiViewHeader';
+import GridView from './Components/GridView';
+import EmptyList from './Components/EmptyList';
 class BuyerProducts extends React.Component {
   constructor(props) {
     super(props);
@@ -48,6 +51,7 @@ class BuyerProducts extends React.Component {
       reload: true,
       filters: [],
       url_products: '',
+      isListView: true,
     };
     this.onDateChange = this.onDateChange.bind(this);
   }
@@ -119,19 +123,7 @@ class BuyerProducts extends React.Component {
     this.getData(search_url);
   }
 
-  imageUpload() {
-    ImagePicker.openPicker({
-      width: 300,
-      height: 400,
-      cropping: true,
-      size: 1000000,
-    }).then(image => {
-      console.log('IMAGE @@@@@@@@@@@@@@@@@@@@@@', image);
-      this.setState({
-        prod_image: image.path,
-      });
-    });
-  }
+  
 
   getCategoryList() {
     this.setState({spinner: true});
@@ -184,6 +176,102 @@ class BuyerProducts extends React.Component {
     this.props.navigation.navigate('Login');
   }
 
+  renderHeader=()=>{
+    return(
+    <>
+    <View
+    style={{
+      marginBottom: 5,
+      flexDirection: 'row',
+      width: width - 20,
+      alignSelf: 'center',
+      borderRadius: 5,
+      marginTop: 10,
+      alignItems: 'center',
+    }}>
+    <Searchbar
+      placeholder="Search product, Price and code"
+      style={[{color: '#D8D8D8'}, fontStyles.normal14,{
+        width: width / 1.3,
+        alignSelf: 'center',
+        marginTop: 5,
+        marginBottom: 5,
+        elevation: 0,
+        borderColor: '#D8DCDE',
+      }]}
+      iconColor="#929497"
+      
+      onChangeText={text => this.setState({search_product: text})}
+      onSubmitEditing={() => this.search()}
+      //update
+    ></Searchbar>
+    <View
+      style={[
+        {
+          borderBottomColor: '#E6E6E6',
+          borderBottomWidth: 0.5,
+          width: width - 20,
+          alignSelf: 'center',
+          marginTop: 10,
+          marginBottom: 10,
+        },
+      ]}></View>
+
+    <TouchableOpacity
+      style={{position: 'absolute', right: 0, alignSelf: 'center'}}
+      onPress={() => {
+        this.setState({
+          reload: true,
+          search_product: '',
+        });
+        this.props.navigation.navigate('ProductFilter');
+      }}>
+      <Image
+        style={{height: 50, width: 50}}
+        source={require('../images/Order/settingicon.png')}
+      />
+    </TouchableOpacity>
+  </View>
+  <View style={[{}, styles.formRowView]}>
+    <View
+      style={{
+        borderBottomWidth: 0.5,
+        borderBottomColor: '#E6E6E6',
+        width: width - 20,
+        alignSelf: 'center',
+        marginVertical: 10,
+      }}></View>
+  </View>
+  <MultiViewHeader isActive={this.state.isListView} onPressGridView={() => this.setState({isListView: false})} onPressListView={() => this.setState({isListView: true})} />
+</>
+    )
+  }
+
+
+  onRefresh() {
+    console.log('222222222222', this.state.isFetching);
+    let url;
+    if (this.props.route.params.heading == 'SUPPLIERS') {
+      url =
+        Constants.sellerProductList +
+        '?id=' +
+        this.props.route.params.items.seller_id;
+    } else {
+      url = `${Constants.approved_buyer_products}?id=${this.props.route.params.items.buyer_id}&sort=-id`;
+    }
+    this.setState({spinner: true, data: []});
+    // if(this.state.isFetching==true){
+
+    // let search_url = Constants.productslist + '?search=' + this.state.search_product;
+    this.getData(url);
+    return;
+    // }
+
+    // _that.setState({
+    //     url_orders: url,
+    // })
+  }
+
   listProducts(props) {
     let _that = props._that;
     let url;
@@ -222,38 +310,40 @@ class BuyerProducts extends React.Component {
     }
     console.log('url_products ', url);
     // return null;
-    if (_that.state.data.length < 1) {
+    // if (_that.state.data.length < 1) {
+    //   return (
+    //     <View
+    //       style={{
+    //         height: height / 1.75,
+    //         position: 'relative',
+    //         flexDirection: 'column',
+    //         alignSelf: 'center',
+    //         alignItems: 'center',
+    //         justifyContent: 'center',
+    //         backgroundColor: '#F0F0F0',
+    //         width: width - 20,
+    //         padding: 10,
+    //         borderRadius: 10,
+    //         marginBottom: 5,
+    //       }}>
+    //       <Image source={require('../images/Untitled-1.png')} />
+    //       <Text
+    //         style={{
+    //           color: '#929497',
+    //           fontSize: 20,
+    //           fontWeight: 'bold',
+    //           fontFamily: 'Open Sans',
+    //         }}>
+    //         No order found
+    //       </Text>
+    //     </View>
+    //   );
+    // } else {
       return (
-        <View
-          style={{
-            height: height / 1.75,
-            position: 'relative',
-            flexDirection: 'column',
-            alignSelf: 'center',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#F0F0F0',
-            width: width - 20,
-            padding: 10,
-            borderRadius: 10,
-            marginBottom: 5,
-          }}>
-          <Image source={require('../images/Untitled-1.png')} />
-          <Text
-            style={{
-              color: '#929497',
-              fontSize: 20,
-              fontWeight: 'bold',
-              fontFamily: 'Open Sans',
-            }}>
-            No order found
-          </Text>
-        </View>
-      );
-    } else {
-      return (
-        <View>
+       
           <FlatList
+          onRefresh={() => _that.onRefresh()}
+          refreshing={_that.state.spinner}
             style={{}}
             data={_that.state.data}
             ItemSeparatorComponent={
@@ -264,6 +354,8 @@ class BuyerProducts extends React.Component {
                 />
               ))
             }
+            ListEmptyComponent={<EmptyList title={"No Product Found"} />}
+            ListHeaderComponent={_that.renderHeader}
             renderItem={({item, index, separators}) => (
               <TouchableOpacity
                 key={item.key}
@@ -277,80 +369,86 @@ class BuyerProducts extends React.Component {
                 }
                 onShowUnderlay={separators.highlight}
                 onHideUnderlay={separators.unhighlight}>
-                <View
-                  style={{
-                    zIndex: -0.999,
-                    position: 'relative',
-                    alignSelf: 'center',
-                    flexDirection: 'row',
-                    backgroundColor: 'white',
-                    width: width - 20,
-                    padding: 10,
-                    borderRadius: 10,
-                    marginTop: 5,
-                  }}>
-                  <View style={[{zIndex: -0.999, flexDirection: 'row'}]}>
-                    {item.image == null ? (
-                      <Image
-                        style={[{height: 40, width: 40, marginRight: 5}]}
-                        source={require('../images/ticket.png')}
-                      />
-                    ) : (
-                      <Image
-                        style={[{height: 50, width: 50}]}
-                        source={{uri: item.image_url}}
-                      />
-                    )}
-                  </View>
-                  <View style={{position: 'relative', flex: 3, marginLeft: 10}}>
-                    <Text style={[{color: '#4E4D4D'}, fontStyles.bold15]}>
-                      {item.name}
-                    </Text>
-                    <View style={{flexDirection: 'row'}}>
-                      <Text style={[{color: '#929497'}, fontStyles.normal12]}>
-                        QTY: {item.no_qty_limit?"NO LIMIT": item.qnty}
-                      </Text>
-                      <Text style={[{color: '#929497'}, fontStyles.normal12]}>
-                        . {item.slug}
-                      </Text>
-                      {item.is_active == false ? (
-                        <View
-                          style={[
-                            {
-                              position: 'absolute',
-                              right: 0,
-                              backgroundColor: '#e3b8be',
-                              marginLeft: 10,
-                              paddingHorizontal: 10,
-                              borderRadius: 50,
-                            },
-                          ]}>
-                          <Text style={[{color: '#ba071f'}]}>IN ACTIVE</Text>
-                        </View>
-                      ) : (
-                        <View
-                          style={[
-                            {
-                              position: 'absolute',
-                              right: 0,
-                              backgroundColor: '#DAF8EC',
-                              marginLeft: 10,
-                              paddingHorizontal: 10,
-                              borderRadius: 50,
-                            },
-                          ]}>
-                          <Text style={[{color: '#26C281'}]}>ACTIVE</Text>
-                        </View>
-                      )}
-                    </View>
-                  </View>
-                </View>
+               
+               {_that.state.isListView ? 
+               <View
+               style={{
+                 zIndex: -0.999,
+                 position: 'relative',
+                 alignSelf: 'center',
+                 flexDirection: 'row',
+                 backgroundColor: 'white',
+                 width: width - 20,
+                 padding: 10,
+                 borderRadius: 10,
+                 marginTop: 5,
+               }}>
+               <View style={[{zIndex: -0.999, flexDirection: 'row'}]}>
+                 {item.image == null ? (
+                   <Image
+                     style={[{height: 40, width: 40, marginRight: 5}]}
+                     source={require('../images/ticket.png')}
+                   />
+                 ) : (
+                   <Image
+                     style={[{height: 50, width: 50}]}
+                     source={{uri: item.image_url}}
+                   />
+                 )}
+               </View>
+               <View style={{position: 'relative', flex: 3, marginLeft: 10}}>
+                 <Text style={[{color: '#4E4D4D'}, fontStyles.bold15]}>
+                   {item.name}
+                 </Text>
+                 <View style={{flexDirection: 'row'}}>
+                   <Text style={[{color: '#929497'}, fontStyles.normal12]}>
+                     QTY: {item.no_qty_limit?"NO LIMIT": item.qnty}
+                   </Text>
+                   <Text style={[{color: '#929497'}, fontStyles.normal12]}>
+                     . {item.slug}
+                   </Text>
+                   {item.is_active == false ? (
+                     <View
+                       style={[
+                         {
+                           position: 'absolute',
+                           right: 0,
+                           backgroundColor: '#e3b8be',
+                           marginLeft: 10,
+                           paddingHorizontal: 10,
+                           borderRadius: 50,
+                         },
+                       ]}>
+                       <Text style={[{color: '#ba071f'}]}>IN ACTIVE</Text>
+                     </View>
+                   ) : (
+                     <View
+                       style={[
+                         {
+                           position: 'absolute',
+                           right: 0,
+                           backgroundColor: '#DAF8EC',
+                           marginLeft: 10,
+                           paddingHorizontal: 10,
+                           borderRadius: 50,
+                         },
+                       ]}>
+                       <Text style={[{color: '#26C281'}]}>ACTIVE</Text>
+                     </View>
+                   )}
+                 </View>
+               </View>
+             </View>
+               :
+               <GridView item={item} supplierProd={true}/>
+               }
+                
               </TouchableOpacity>
             )}
           />
-        </View>
+        
       );
-    }
+    //}
   }
 
   render() {
@@ -370,12 +468,12 @@ class BuyerProducts extends React.Component {
             borderRadius: 10,
             flexDirection: 'column',
           }}>
-          <Spinner
+          {/* <Spinner
             visible={this.state.spinner}
             textContent={'Please Wait...'}
             textStyle={{color: '#fff'}}
             color={'#fff'}
-          />
+          /> */}
           <Header navigation={this.props.navigation} />
           <View style={{alignSelf: 'flex-start', paddingHorizontal: 10}}>
             <NavBack
@@ -384,73 +482,12 @@ class BuyerProducts extends React.Component {
             />
           </View>
 
-          <View
-            style={{
-              marginBottom: 5,
-              flexDirection: 'row',
-              width: width - 20,
-              alignSelf: 'center',
-              borderRadius: 5,
-              marginTop: 10,
-              alignItems: 'center',
-            }}>
-            <Searchbar
-              placeholder="Search product, Price and code"
-              style={[{color: '#D8D8D8'}, fontStyles.normal14,{
-                width: width / 1.3,
-                alignSelf: 'center',
-                marginTop: 5,
-                marginBottom: 5,
-                elevation: 0,
-                borderColor: '#D8DCDE',
-              }]}
-              iconColor="#929497"
-              
-              onChangeText={text => this.setState({search_product: text})}
-              onSubmitEditing={() => this.search()}
-              //update
-            ></Searchbar>
-            <View
-              style={[
-                {
-                  borderBottomColor: '#E6E6E6',
-                  borderBottomWidth: 0.5,
-                  width: width - 20,
-                  alignSelf: 'center',
-                  marginTop: 10,
-                  marginBottom: 10,
-                },
-              ]}></View>
-
-            <TouchableOpacity
-              style={{position: 'absolute', right: 0, alignSelf: 'center'}}
-              onPress={() => {
-                this.setState({
-                  reload: true,
-                  search_product: '',
-                });
-                this.props.navigation.navigate('ProductFilter');
-              }}>
-              <Image
-                style={{height: 50, width: 50}}
-                source={require('../images/Order/settingicon.png')}
-              />
-            </TouchableOpacity>
-          </View>
-          <View style={[{}, styles.formRowView]}>
-            <View
-              style={{
-                borderBottomWidth: 0.5,
-                borderBottomColor: '#E6E6E6',
-                width: width - 20,
-                alignSelf: 'center',
-                marginVertical: 10,
-              }}></View>
-          </View>
+         
+        
           {/* <ScrollView></ScrollView> */}
-          <ScrollView zIndex={-0.999}>
+          
             <this.listProducts _that={this} />
-          </ScrollView>
+         
         </View>
       </Scaffold>
     );

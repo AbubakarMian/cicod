@@ -61,7 +61,8 @@ class AddProduct extends React.Component {
       // catelog_products_total: 0,
       selected_product: [],
       pageNo:1,
-      totalPageCount:1
+      totalPageCount:1,
+      isFetching:false
     };
   }
 
@@ -91,6 +92,7 @@ class AddProduct extends React.Component {
       .then(async responseJson => {
         this.setState({
           spinner: false,
+          isFetching:false,
         });
         console.log('response !!!!!!!!', responseJson);
         if (responseJson.status == 'success') {
@@ -121,7 +123,7 @@ class AddProduct extends React.Component {
           this.unauthorizedLogout();
         } else {
           let message = responseJson.message;
-          this.this.getProductList(Constants.productslist + '?is_active=1&page=1');
+          this.getProductList(Constants.productslist + '?is_active=1&page=1');
           // Alert.alert('Error', message);
           // Alert.alert('Info', "Please click to reload products",[
           //   {
@@ -302,6 +304,22 @@ class AddProduct extends React.Component {
     // }
   };
 
+
+  onRefresh() {
+    console.log('222222222222', this.state.isFetching);
+    this.setState({isFetching: true, data: []});
+    // if(this.state.isFetching==true){
+
+    // let search_url = Constants.productslist + '?search=' + this.state.search_product;
+    let product_url = Constants.productslist + '?page=1' ;
+    this.getProductList(product_url);
+    return;
+    // }
+
+    // _that.setState({
+    //     url_orders: url,
+    // })
+  }
   renderFooter = () => {
     //it will show indicator at the bottom of the list when data is loading otherwise it returns null
     // if (!this.state.spinner) return null;
@@ -331,7 +349,7 @@ class AddProduct extends React.Component {
       alignSelf: 'center',
       marginTop: 7,
       paddingBottom:50,
-      marginBottom: 200,
+      marginBottom: 250,
     }}>
 
     </View>;
@@ -561,6 +579,8 @@ this.setState({data:[]})
                         />
                       ))
                     }
+                    refreshing={this.state.isFetching}
+                    onRefresh={() => this.onRefresh()}
                     keyExtractor={(item, index) => index}
                     ListFooterComponent={this.renderFooter}
                     renderItem={({item, index, separators}) => (

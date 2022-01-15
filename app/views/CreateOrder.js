@@ -548,29 +548,30 @@ console.log("item$#",item)
     //   console.log('step  1 ');
     //   await this.create_order_id(Constants.orderslist, bodyOrder);
     // } else {
-      if (this.state.valuePaymentKey == "PAY_USSD") {
-        this.setState({
+      // if (this.state.valuePaymentKey == "PAY_USSD") {
+      //   this.setState({
         
-          spinner: false,
-        });
-        //ussd
-        // [
-        //   // {label: 'Pay Now', value: 0},
-        //   {label: 'Pay Online', value: 0,key:"PAY_ONLINE"},
-        //   {label: 'Pay Account', value: 1,key:"PAY_ACCOUNT"},
-        //   {label: 'Pay Cash', value: 2,key:"PAY_CASH"},
-        //   {label: 'Pay By POS', value: 3,key:"PAY_POS"},
-        //   {label: 'Pay By USSD', value: 4,key:"PAY_USSD"},
-        //   // {label: 'Part Payment', value: 5},
-        //   {label: 'Send Invoice', value: 5,key:"SEND_INVOICE"},
-        // ];
-        this.props.navigation.navigate('PayByUssd', {
-          bodyOrder,
-          amount_payable,
+      //     spinner: false,
+      //   });
+      //   //ussd
+      //   // [
+      //   //   // {label: 'Pay Now', value: 0},
+      //   //   {label: 'Pay Online', value: 0,key:"PAY_ONLINE"},
+      //   //   {label: 'Pay Account', value: 1,key:"PAY_ACCOUNT"},
+      //   //   {label: 'Pay Cash', value: 2,key:"PAY_CASH"},
+      //   //   {label: 'Pay By POS', value: 3,key:"PAY_POS"},
+      //   //   {label: 'Pay By USSD', value: 4,key:"PAY_USSD"},
+      //   //   // {label: 'Part Payment', value: 5},
+      //   //   {label: 'Send Invoice', value: 5,key:"SEND_INVOICE"},
+      //   // ];
+      //   this.props.navigation.navigate('PayByUssd', {
+      //     bodyOrder,
+      //     amount_payable,
 
-          payment_mode: this.state.payment_mode,
-        });
-      }else if(this.state.valuePaymentKey == "PAY_CASH"){
+      //     payment_mode: this.state.payment_mode,
+      //   });
+      // }else
+       if(this.state.valuePaymentKey == "PAY_CASH"){
         this.setState({
         
           spinner: false,
@@ -722,6 +723,9 @@ console.log("item$#",item)
           //   this.payment_response(responseJson, 'PayByCash', params);
           //   //pay cash
           // }
+          else if(this.state.valuePaymentKey == "PAY_USSD"){
+            this.payment_response(responseJson, 'PayByUssd', params);
+          }
           
           else if (this.state.valuePaymentKey == "SEND_INVOICE") {
             // send invoice

@@ -148,7 +148,7 @@ iconView:{
 },
 orderDetailAmmountRow:{
     flexDirection:'row',
-    width:width-20,
+    // width:width-20,
     alignSelf:'center',
     paddingHorizontal:5,
     marginTop:10

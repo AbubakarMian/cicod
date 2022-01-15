@@ -453,7 +453,7 @@ class CreateOrderValueChain extends React.Component {
     console.log("this.state.amount_payable",this.state.amount_payable)
 //check if minimum spent is greater than total order amount
     if (this.props.supplier.detail && this.props.supplier.detail.minimum_spend && this.props.supplier.detail.minimum_spend>0 && this.props.supplier.detail.minimum_spend>this.state.amount_payable) {
-      Alert.alert("Info","Order cannot be less than amount.");
+      Alert.alert("Info","Order amount cannot be less than minimum spend.");
       return;
     }
 
@@ -667,6 +667,9 @@ class CreateOrderValueChain extends React.Component {
               seller_Id: this.props.route.params.item.seller_id,
               heading: 'SUPPLIERS',
             });
+          }
+          else if (this.state.valuePaymentKey == 'PAY_POS') { 
+            this.props.navigation.navigate('PayByPosValueChain',params);
           }
         } else if (responseJson.status == 401) {
           this.unauthorizedLogout();

@@ -46,6 +46,8 @@ import CategoryDropdown from './Components/CategoryDropdown';
 import Scaffold from './Components/Scaffold';
 import {getProducts} from '../redux/actions/product_action';
 import EmptyList from './Components/EmptyList';
+import MultiViewHeader from './Components/MultiViewHeader';
+import GridView from './Components/GridView';
 class Products extends React.Component {
   constructor(props) {
     super(props);
@@ -71,6 +73,7 @@ class Products extends React.Component {
       showFloatingButton: false,
       productImageModal: false,
       prodImage: '',
+      category_name:""
     };
     this.onDateChange = this.onDateChange.bind(this);
   }
@@ -214,18 +217,18 @@ class Products extends React.Component {
       });
   }
 
-  onCategoryText = category_id => {
+  onCategoryText = item => {
     console.log(
       ' category ID search !!!!!!!!!!!!!!!@@@@@@@@@@@@@@',
-      category_id,
+      item,
     );
-    this.setState({category_id, showdropDownModal: false, pageNo: 1, data: []});
+    this.setState({category_id:item.value,category_name:item.label, showdropDownModal: false, pageNo: 1, data: []});
     let url =
-      category_id == ''
+    item.value == ''
         ? Constants.productslist + '?page=' + this.state.pageNo
         : Constants.productslist +
           '?category_id=' +
-          category_id +
+          item.value +
           '&page=' +
           this.state.pageNo;
     //this.getData(url);
@@ -483,101 +486,7 @@ class Products extends React.Component {
                   </View>
                 </View>
               ) : (
-                <View
-                  style={{
-                    width: width - 20,
-                    height: width - 20,
-                    backgroundColor: '#ffffff',
-                    borderRadius: 10,
-                    marginTop: 20,
-                  }}>
-                  {item.is_active == false ? (
-                    <View
-                      style={[
-                        {
-                          zIndex: 1000,
-                          position: 'absolute',
-                          top: 20,
-                          right: 10,
-                          backgroundColor: '#e3b8be',
-
-                          paddingHorizontal: 10,
-                          borderRadius: 50,
-                        },
-                      ]}>
-                      <Text style={[{color: '#ba071f'}]}>IN ACTIVE</Text>
-                    </View>
-                  ) : (
-                    <View
-                      style={[
-                        {
-                          top: 20,
-                          zIndex: 1000,
-                          position: 'absolute',
-                          right: 10,
-                          backgroundColor: '#DAF8EC',
-
-                          paddingHorizontal: 10,
-                          borderRadius: 50,
-                        },
-                      ]}>
-                      <Text style={[{color: '#26C281'}]}>ACTIVE</Text>
-                    </View>
-                  )}
-                  <View style={{height: (width - 20) / 1.3}}>
-                    {item.image == null ? (
-                      <Image
-                        style={{
-                          flex: 1,
-                          width: '100%',
-                          height: '100%',
-                          resizeMode: 'contain',
-                          borderTopRightRadius: 10,
-                          borderTopLeftRadius: 10,
-                        }}
-                        source={require('../images/local-business.png')}
-                      />
-                    ) : (
-                      <Image
-                        style={[
-                          {
-                            flex: 1,
-                            width: '100%',
-                            height: '100%',
-
-                            borderTopRightRadius: 10,
-                            borderTopLeftRadius: 10,
-                            resizeMode: 'cover',
-                          },
-                        ]}
-                        source={{uri: item.image}}
-                      />
-                    )}
-                  </View>
-                  <View style={{paddingHorizontal: 20, paddingVertical: 20}}>
-                    <Text style={{color: '#B1272C', fontWeight: 'bold'}}>
-                      {item.name}
-                    </Text>
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        marginTop: 10,
-                      }}>
-                      <Text style={{fontSize: 12}}>
-                        QTY: {item.no_qty_limit ? 'NO LIMIT' : item.quantity}
-                      </Text>
-
-                      <Text>
-                        {item.currency}
-                        {item.has_vat
-                          ? item.price + item.vat_amount
-                          : item.price}
-                      </Text>
-                    </View>
-                  </View>
-                </View>
+                <GridView item={item} />
               )}
             </TouchableOpacity>
           )}
@@ -660,7 +569,7 @@ class Products extends React.Component {
               styles.formColumn,
             ]}>
             <CategoryDropdown
-              title="Select Product Category"
+              title={this.state.category_name==""?"Select Product Category" :this.state.category_name} 
               onPress={() => this.setState({showdropDownModal: true})}
             />
 
@@ -710,7 +619,9 @@ class Products extends React.Component {
           </TouchableOpacity>
         </View>
 
-        <View
+
+<MultiViewHeader isActive={this.state.isListView} onPressGridView={() => this.setState({isListView: false})} onPressListView={() => this.setState({isListView: true})} />
+        {/* <View
           style={{
             flexDirection: 'row',
             backgroundColor: '#fff',
@@ -736,7 +647,7 @@ class Products extends React.Component {
             ]}>
             <Text>Grid View</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
       </>
     );
   };
@@ -904,6 +815,7 @@ class Products extends React.Component {
           </OtherModal>
           <DropDownModal
             title="Product Categories"
+            itemFull={true}
             selected={this.state.category_id}
             showdropDownModal={this.state.showdropDownModal}
             handleClose={() => this.setState({showdropDownModal: false})}

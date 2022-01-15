@@ -138,18 +138,20 @@ class PayByPOS extends React.Component {
     return (
       <View style={[{}, styles.mainView]}>
         <Header navigation={_that.props.navigation} />
+        <TouchableOpacity onPress={() => _that.props.navigation.goBack()}>
         <View style={[{}, styles.backHeaderRowView]}>
-          <TouchableOpacity onPress={() => _that.props.navigation.goBack()}>
+         
             <Icon name="arrow-left" size={25} color="#929497" />
-          </TouchableOpacity>
+         
           <View style={[{}, styles.backHeadingView]}>
             <Text style={[{}, styles.backHeadingText]}>MAKE PAYMENT</Text>
           </View>
         </View>
+        </TouchableOpacity>
         <View>
           <ScrollView>
             <View style={[{}, styles.contentContainer]}>
-              <Text style={{fontSize:10,alignSelf:"center",paddingHorizontal:10,marginBottom:10}}>
+              <Text style={{fontSize:10,alignSelf:"center",paddingHorizontal:10,marginBottom:10,fontWeight:"bold"}}>
               if you have a CICOD Enabled payment card device (POS), enter the CICOD order ID and click confirm after a successful payment.
                 </Text>
               <Image

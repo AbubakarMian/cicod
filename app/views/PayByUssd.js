@@ -4,8 +4,7 @@ import {
   View,
   ImageBackground,
   ScrollView,
-  TouchableHighlight,
-  FlatList,
+  Clipboard,
   Dimensions,
   Alert,
   Image,
@@ -31,6 +30,8 @@ import {connect} from 'react-redux';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Scaffold from './Components/Scaffold';
 import {CLEAR_ORDER, SET_USER} from '../redux/constants';
+import CategoryDropdown from './Components/CategoryDropdown';
+import DropDownModal from './Components/DropDownModal';
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
 class PayByUssd extends React.Component {
@@ -42,14 +43,18 @@ class PayByUssd extends React.Component {
       ussd_codes: [],
       ussd_code_selected: null,
       spinner: false,
+      bank_name:"",
+      showdropDownModal:false,
+      order_id:0,
     };
   }
 
   componentDidMount() {
-    // console.log('~~~~~~~~~~~', this.props.route.params.data.id)
+     console.log('~~~~~~~~~~~', this.props.route.params)
     // this.setState({
     //     order_id:
     // })
+
     this.get_ussd_codes();
   }
 
@@ -104,10 +109,10 @@ class PayByUssd extends React.Component {
     if (this.props.route.params.data != undefined) {
       console.log(
         'in if this.props.route.params.data.id',
-        this.props.route.params.data.data.id,
+        this.props.route.params.data.id,
       );
       this.props.navigation.navigate('OrderDetail', {
-        id: this.props.route.params.data.data.id,
+        id: this.props.route.params.data.id,
       });
       return;
     }
@@ -174,8 +179,9 @@ class PayByUssd extends React.Component {
       .then(async responseJson => {
         if (responseJson.status === 'success') {
           let data = responseJson.data;
+          console.log("suc#$",data);
           let ussd_codes = data.map((x, key) => {
-            return {label: x.bank_name, value: x.cicod_code + x.bank_ussd_code};
+            return {label: x.bank_name, value: x.cicod_code + this.props.route.params.data.cicod_order_id+"#"};
           });
           this.setState({
             spinner: false,
@@ -192,6 +198,13 @@ class PayByUssd extends React.Component {
         // Alert.alert(error.message);
       });
   }
+
+onBankSelected=(item)=>{
+  // alert(item)
+  this.setState({ussd_code_selected: item.value,bank_name:item.label,showdropDownModal:false});
+}
+
+
   render() {
     return (
       <Scaffold>
@@ -238,33 +251,19 @@ class PayByUssd extends React.Component {
                             </View> */}
                 {/* </View> */}
               </View>
-              <DropDownPicker
-                items={this.state.ussd_codes}
-                placeholder="Select Bank"
-                containerStyle={{
-                  height: 50,
-                  marginTop: 5,
-                  width: width - 20,
-                  alignSelf: 'center',
-                }}
-                style={{
-                  backgroundColor: '#fff',
-                  borderWidth: 0,
-                  borderBottomWidth: 0.5,
-                  zIndex: 0.99,
-                }}
-                dropDownStyle={{
-                  height: 150,
-                  backgroundColor: '#fff',
-                  borderBottomLeftRadius: 20,
-                  borderBottomRightRadius: 10,
-                  opacity: 1,
-                }}
-                labelStyle={{color: '#A9A9A9'}}
-                onChangeItem={item =>
-                  this.setState({ussd_code_selected: item.value})
-                } //
-              />
+<View style={{paddingHorizontal:10,marginTop:10}}>
+<CategoryDropdown
+                        title={
+                          this.state.bank_name == ''
+                            ? 'Select Bank'
+                            : this.state.bank_name
+                        }
+                        onPress={() => this.setState({showdropDownModal: true})}
+                      />
+</View>
+              
+
+              
               <View style={[{}, styles.bankDetailView]}>
                 {this.state.ussd_code_selected == null ? (
                   <Text style={[{}, styles.bankDetailText]}>
@@ -276,9 +275,19 @@ class PayByUssd extends React.Component {
                       Dial the code below on your mobile phone to complete this
                       transaction
                     </Text>
+                    <View style={{flexDirection:"row",marginTop:10,justifyContent:"space-between",alignItems:"center"}}>
                     <Text style={{textAlign: 'center', color: 'red'}}>
                       {this.state.ussd_code_selected}
                     </Text>
+
+
+                  <TouchableOpacity onPress={()=>{
+                    Clipboard.setString(this.state.ussd_code_selected);
+                    alert("Copied to clipboard")
+                    }}>
+                    <Icon name="copy" color="##929497" size={30} />
+                  </TouchableOpacity>
+                    </View>
                   </View>
                 )}
                 <TouchableOpacity
@@ -294,8 +303,19 @@ class PayByUssd extends React.Component {
                   onPress={() => this.pay_redirect_detail()}>
                   <Text style={{color: '#fff'}}>ORDER DETAIL</Text>
                 </TouchableOpacity>
+
               </View>
             </ScrollView>
+
+            <DropDownModal
+            title="Banks"
+            selected={this.state.bank_name}
+            itemFull={true}
+            showdropDownModal={this.state.showdropDownModal}
+            handleClose={() => this.setState({showdropDownModal: false})}
+            onSelected={this.onBankSelected}
+            data={this.state.ussd_codes}
+          />
           </View>
         </View>
       </Scaffold>

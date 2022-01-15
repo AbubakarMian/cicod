@@ -374,7 +374,7 @@ class Supplier extends React.Component {
                     <View
                       style={{
                         backgroundColor: 'white',
-                        width: width - 9,
+                        // width: width - 9,
                         padding: 10,
                         borderRadius: 10,
                         marginTop: 10,

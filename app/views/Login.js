@@ -91,7 +91,7 @@ class Login extends React.Component {
       if (this.state.rememberIsChecked) {
         let user_credentials = {
           username: this.state.username, //cicodsandbox@yopmail.com
-          password: this.state.password, //Sandbox@123
+          password: "", //Sandbox@123
           tenantId: this.state.tenantId, //sandbox
         };
         AsyncStorage.setItem(
@@ -242,7 +242,7 @@ class Login extends React.Component {
               }}>
               <Image
                 source={require('../images/loginlogo.png')}
-                style={{height: width / 3, width: width / 3.6}}
+                style={{height: width / 2.6, width: width / 3.6}}
               />
             </View>
           </View>

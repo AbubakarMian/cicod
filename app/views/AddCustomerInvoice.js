@@ -5,6 +5,7 @@ import {
   ImageBackground,
   ScrollView,
   TouchableHighlight,
+  Modal,
   Alert,
   FlatList,
   Dimensions,
@@ -43,6 +44,11 @@ class AddCustomerInvoice extends React.Component {
       spinner: false,
       customerData: [],
       search_text: '',
+      isShowAddCustomer:false,
+      customer_email:"",
+      customer_phone:"",
+      customer_name:"",
+
     };
   }
 
@@ -133,6 +139,23 @@ class AddCustomerInvoice extends React.Component {
     this.props.navigation.navigate('CreateQuickInvoice');
   }
 
+  handleAddCustomer(){
+    let user_data = {
+      customer_id: 0,
+      customer_name: this.state.customer_name,
+      customer_email: this.state.customer_email,
+      customer_phone: this.state.customer_phone,
+      customer_country: "",
+      customer_state: "",
+      customer_lga:"",
+      customer_address: "",
+    };
+     this.props.setCustomer(user_data);
+     this.setState({isShowAddCustomer:false})
+   
+    this.props.navigation.navigate('CreateQuickInvoice');
+  }
+
   render() {
     return (
       <Scaffold>
@@ -212,9 +235,7 @@ class AddCustomerInvoice extends React.Component {
             <View style={[{marginBottom: 10}]}>
               <TouchableOpacity
                 onPress={() =>
-                  this.props.navigation.navigate('AddNewCustomer', {
-                    from: 'invoice',
-                  })
+                  this.setState({isShowAddCustomer:true})
                 }
                 style={[{}, styles.addCustommerRowView]}>
                 <Image source={require('../images/circlePlus.png')} />
@@ -298,6 +319,125 @@ class AddCustomerInvoice extends React.Component {
             )}
           </View>
         </View>
+
+        <Modal
+        onRequestClose={() => this.setState({isShowAddCustomer: false})}
+            visible={this.state.isShowAddCustomer}
+            onDismiss={() => this.setState({isShowAddCustomer: false})}>
+            <View
+              style={{
+                height: height - 350,
+                alignSelf: 'center',
+                backgroundColor: '#fff',
+                width: width - 50,
+                borderRadius: 10,
+                flexDirection: 'column',
+                padding: 25,
+              }}>
+                <ScrollView showsVerticalScrollIndicator={false} style={{flex:1}}>
+              <View style={{flexDirection: 'row', marginBottom: 30}}>
+                <Text
+                  style={{color: '#2F2E7C', fontWeight: 'bold', fontSize: 15}}>
+                 CREATE CUSTOMER
+                </Text>
+              </View>
+              <View>
+                <TextInput
+                  value={this.state.customer_name}
+                  onChangeText={text => this.setState({customer_name: text})}
+                  placeholder="Enter Customer Name"
+                  style={{
+                    paddingLeft: 0,
+                    height: 30,
+                    backgroundColor: '#fff',
+                    fontSize: 13,
+                  }}
+                />
+              
+              </View>
+
+              <View style={{marginTop:30}}>
+                <TextInput
+                keyboardType="email-address"
+                  value={this.state.customer_email}
+                  onChangeText={text => this.setState({customer_email: text})}
+                  placeholder="Enter Customer Email"
+                  style={{
+                    paddingLeft: 0,
+                    height: 30,
+                    backgroundColor: '#fff',
+                    fontSize: 13,
+                  }}
+                />
+              
+              </View>
+
+              <View style={{marginTop:30}}>
+                <TextInput
+                keyboardType="phone-pad"
+                  value={this.state.customer_phone}
+                  onChangeText={text => this.setState({customer_phone: text})}
+                  placeholder="Enter Customer Phone"
+                  style={{
+                    paddingLeft: 0,
+                    height: 30,
+                    backgroundColor: '#fff',
+                    fontSize: 13,
+                  }}
+                />
+              
+              </View>
+
+            
+             
+              <View style={{flexDirection: 'column', marginTop: 35}}>
+                <View
+                // style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}
+                >
+                  <TouchableOpacity
+                  onPress={()=>this.handleAddCustomer()}
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: '#B1272C',
+                      paddingVertical: 15,
+                      padding: 40,
+                      borderRadius: 100,
+                    }}
+                  >
+                    <Text style={{color: '#fff'}}>Save</Text>
+                  </TouchableOpacity>
+                </View>
+
+                <View
+                  style={{marginTop: 15}}
+                  // style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+                >
+                  <TouchableOpacity
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: '#fff',
+                      paddingVertical: 15,
+                      padding: 30,
+                      borderRadius: 100,
+                      borderWidth: 1,
+                      borderColor: '#E6E6E6',
+                    }}
+                    onPress={() => {
+                      this.setState({isShowAddCustomer: false});
+                    }}>
+                    <Text style={{color: '#E6E6E6', paddingHorizontal: 10}}>
+                      Cancel
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+              </ScrollView>
+            </View>
+          </Modal>
+
+
       </Scaffold>
     );
   }

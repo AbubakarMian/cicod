@@ -309,15 +309,7 @@ class QuickInvoice extends React.Component {
 
     return (
       <Scaffold>
-        <View
-          style={{
-            width: width,
-            backgroundColor: '#F0F0F0',
-            alignItems: 'center',
-            flex: 1,
-            borderRadius: 10,
-            flexDirection: 'column',
-          }}>
+      
           <Spinner
             visible={this.state.spinner}
             textContent={'Please Wait...'}
@@ -346,6 +338,7 @@ class QuickInvoice extends React.Component {
                             <Text style={{ fontSize: 12, color: '#B1272C', marginRight: 10 }}>View Product Category</Text>
                         </TouchableOpacity> */}
             <TouchableOpacity
+            // style={{backgroundColor:"red"}}
               onPress={() =>
                 this.props.navigation.navigate('CreateQuickInvoice', {
                   action: 'create',
@@ -422,7 +415,7 @@ class QuickInvoice extends React.Component {
                  backgroundColor={'#000'}
                  opacity={0.8}
                 > */}
-        </View>
+      
       </Scaffold>
     );
   }

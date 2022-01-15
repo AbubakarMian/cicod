@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import { View, Image, TouchableOpacity, Dimensions, Alert  } from 'react-native';
 import { Text, TextInput} from 'react-native-paper';
@@ -63,7 +64,7 @@ export default class ResetPassword extends React.Component {
                 if (responseJson.status === "SUCCESS") {
                     // rico@yopmail.com
                     let message = responseJson.status
-                    Alert.alert('SUCCESS', message)
+                    Alert.alert('SUCCESS', "A link has been sent to your email.")
                     this.props.navigation.navigate('Login')
                 } else {
                     this.setState({ spinner: false })
@@ -124,7 +125,7 @@ export default class ResetPassword extends React.Component {
                         width={width - 50}
                         alignSelf={'center'}
                         color={'#000'}
-                        color="#929497"
+                        // color="#929497"
                         keyboardType={'default'}
                         onChangeText={(text)=>this.setState({tenantId:text})}
                     />
@@ -134,7 +135,7 @@ export default class ResetPassword extends React.Component {
                         width={width - 50}
                         alignSelf={'center'}
                         color={'#000'}
-                        color="#929497"
+                        // color="#929497"
                         keyboardType={'email-address'}
                         onChangeText={(text)=>this.setState({email:text})}
                     />

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from "react";
 
 import { View, Text, Dimensions, StyleSheet, ImageBackground } from "react-native";
@@ -40,7 +41,7 @@ export default StyleSheet.create({
     },
     addressContainer:{
         // backgroundColor:'#fff',
-        width:width-20,
+       
         alignSelf:'center',
         padding:5,
         marginTop:5,

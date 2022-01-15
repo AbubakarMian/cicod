@@ -343,7 +343,7 @@ class ProductView extends React.Component {
           </View>
         </Modal>
 
-        <Modal visible={_that.state.supendModal} transparent={true}>
+        <Modal visible={_that.state.supendModal} onDismiss={()=>_that.setState({supendModal: false})} transparent={true}>
           <TouchableOpacity
             onPress={() => _that.setState({supendModal: false})}>
             <View style={[{}, styles.suspendmodalBackGround]}>
