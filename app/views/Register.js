@@ -66,8 +66,10 @@ export default class Register extends React.Component {
               }
             }}
             source={{
-             // uri: `${Constants.sass_url}/subscribe?offer=zZPjmFCBG6amyUvSfc0FkefEVPzTiH&trial=true&isBundle=true`,
-              uri: `${Constants.sass_url}/subscribe?offer=kMOR8wwTNaJjfzO1JVDSXNJfdz6bBk&trial=true&isBundle=true`,
+              //staging...
+              uri: `${Constants.sass_url}/subscribe?offer=zZPjmFCBG6amyUvSfc0FkefEVPzTiH&trial=true&isBundle=true`,
+             //prod
+              //uri: `${Constants.sass_url}/subscribe?offer=kMOR8wwTNaJjfzO1JVDSXNJfdz6bBk&trial=true&isBundle=true`,
             }}
             onError={()=>Alert.alert("Info","Slow or no internet connection. Please check your internet and try again.",[
               {

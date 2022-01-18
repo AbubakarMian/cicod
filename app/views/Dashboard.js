@@ -97,17 +97,26 @@ class Dashboard extends React.Component {
         console.log('response !!!!!!!!!!!!!@@@@@@@@@@@@@@', responseJson.data);
         console.log('url url url !!!!!!!!!!!!!@@@@@@@@@@@@@@', url);
         if (responseJson.status === 'success') {
-          console.log(
-            'response pending_orders 66666666666666666666666',
-            responseJson.data.graph.pending_orders,
-          );
-          console.log(
-            'response total_orders  66666666666666666666666',
-            responseJson.data.graph.total_orders,
-          );
+          // console.log(
+          //   'response pending_orders 66666666666666666666666',
+          //   responseJson.data.graph.pending_orders,
+          // );
+          // console.log(
+          //   'response total_orders  66666666666666666666666',
+          //   responseJson.data.graph.total_orders,
+          // );
           if (responseJson.data.length < 1) {
-            Alert.alert('Message', responseJson.message);
+            Alert.alert('Message', responseJson.message,[
+              {
+                text:"OK",
+                onPress:()=>this.props.navigation.goBack()
+              }
+            ]);
           }
+          // console.log(
+          //   'response pending_orders 66666666666666666666666',
+          //   responseJson.data.graph.pending_orders,
+          // );
           var total_orders = responseJson.data.graph.total_orders ?? [];
           var graph_total_orders_data = [];
           var graph_lable = [];

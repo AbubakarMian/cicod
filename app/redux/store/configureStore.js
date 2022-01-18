@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import userReducer from '../reducers/userReducer';
 import tabBarReducer from '../reducers/tabBarReducer';
