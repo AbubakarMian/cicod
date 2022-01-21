@@ -14,6 +14,8 @@ import productFilterReducer from "../reducers/productFilterReducer";
 import barcodeReducer from '../reducers/barcodeReducer';
 import cartChainReducer from '../reducers/cartChainReducer';
 import products_reducer from '../reducers/products_reducer';
+import product_categories_reducer from '../reducers/product_categories_reducer';
+
 import reduxThunk from "redux-thunk";
 const rootReducer = combineReducers({
       userReducer, 
@@ -29,7 +31,8 @@ const rootReducer = combineReducers({
       productFilterReducer,
       barcodeReducer,
       cartChainReducer,
-      products_reducer
+      products_reducer,
+      product_categories_reducer,
     });
 // const rootReducer = () => combineReducers(
 //     { count: reducer })

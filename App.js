@@ -3,24 +3,16 @@ import React, {Component} from 'react';
 import PushNotification from 'react-native-push-notification';
 import Firebase from '@react-native-firebase/app';
 import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
+ 
   View,
-  Text,
+ 
   StatusBar,
 } from 'react-native';
 import {MenuProvider} from 'react-native-popup-menu';
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
+
 import 'react-native-gesture-handler';
 import AppNavigation from './app/views/AppNavigater';
-import CustomSplashScreen from './app/views/Splash';
+
 import configureStore from './app/redux/store/configureStore';
 import {Provider} from 'react-redux';
 import {DefaultTheme, Provider as PaperProvider} from 'react-native-paper';

@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 
 const {width, height} = Dimensions.get('window');
-const GridView = ({item,supplierProd=false}) => {
+const GridView = ({item, supplierProd = false,addToCart=f=>f}) => {
   return (
     <View
       style={{
@@ -54,34 +54,36 @@ const GridView = ({item,supplierProd=false}) => {
         </View>
       )}
       <View style={{height: (width - 20) / 1.3}}>
-        {supplierProd ?  item.image_url == null || item.image_url === '' ? (
-          <Image
-            style={{
-              flex: 1,
-              width: '100%',
-              height: '100%',
-              resizeMode: 'contain',
-              borderTopRightRadius: 10,
-              borderTopLeftRadius: 10,
-            }}
-            source={require('../../images/local-business.png')}
-          />
-        ) : (
-          <Image
-            style={[
-              {
+        {supplierProd ? (
+          item.image_url == null || item.image_url === '' ? (
+            <Image
+              style={{
                 flex: 1,
                 width: '100%',
                 height: '100%',
-
+                resizeMode: 'contain',
                 borderTopRightRadius: 10,
                 borderTopLeftRadius: 10,
-                resizeMode: 'cover',
-              },
-            ]}
-            source={{uri: item.image_url}}
-          />
-        ):item.image == null ? (
+              }}
+              source={require('../../images/local-business.png')}
+            />
+          ) : (
+            <Image
+              style={[
+                {
+                  flex: 1,
+                  width: '100%',
+                  height: '100%',
+
+                  borderTopRightRadius: 10,
+                  borderTopLeftRadius: 10,
+                  resizeMode: 'cover',
+                },
+              ]}
+              source={{uri: item.image_url}}
+            />
+          )
+        ) : item.image == null ? (
           <Image
             style={{
               flex: 1,
@@ -120,15 +122,57 @@ const GridView = ({item,supplierProd=false}) => {
             marginTop: 10,
           }}>
           <Text style={{fontSize: 12}}>
-            QTY: { supplierProd?item.no_qty_limit ? 'NO LIMIT' : item.qnty: item.no_qty_limit ? 'NO LIMIT' : item.quantity}
+            QTY:{' '}
+            {supplierProd
+              ? item.no_qty_limit
+                ? 'NO LIMIT'
+                : item.qnty
+              : item.no_qty_limit
+              ? 'NO LIMIT'
+              : item.quantity}
           </Text>
 
           <Text>
             {item.currency}
-            {item.has_vat ? item.price + item.vat_amount : item.price}
+            {(item.has_vat ? item.price + item.vat_amount : item.price).toFixed(
+              2,
+            )}
           </Text>
         </View>
       </View>
+
+      {(!supplierProd &&  item.is_active) && <TouchableOpacity
+      onPress={()=>addToCart()}
+        style={{
+          padding: 10,
+          width: 50,
+          height: 50,
+          borderRadius: 50,
+          backgroundColor: '#fff',
+          position: 'absolute',
+          bottom: 55,
+          right: 20,
+          shadowColor: '#000',
+          shadowOffset: {
+            width: 0,
+            height: 2,
+          },
+          shadowOpacity: 0.25,
+          shadowRadius: 3.84,
+
+          elevation: 5,
+        }}
+        // onPress={()=>item.purchased_quantity > 0 ? _that.counterFun('sub', index):_that.counterFun('add', index)}
+        hitSlop={{top: 20, bottom: 20, right: 20, left: 20}}>
+        <Image
+          style={{width: 25, height: 25}}
+          source={
+            item.purchased_quantity > 0
+              ? require('../../images/shopping-cart-selected.png')
+              : require('../../images/shopping-cart-inactive.png')
+          }
+        />
+      </TouchableOpacity>}
     </View>
   );
 };

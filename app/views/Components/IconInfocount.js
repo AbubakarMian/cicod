@@ -1,8 +1,9 @@
+/* eslint-disable prettier/prettier */
 import React from 'react';
 import {View, Text} from 'react-native';
 const Device = require('react-native-device-detection');
 
-const IconInfocount = ({count}) => {
+const IconInfocount = ({count,iscart=false}) => {
   return (
     <View
       style={{
@@ -11,14 +12,14 @@ const IconInfocount = ({count}) => {
         top: 1,
         zIndex: 100,
         padding: 5,
-        backgroundColor: '#33A354',
-        borderRadius: 70,
-        width: count>100?50:30,
-        height: 35,
+        backgroundColor:iscart?"#2F2E7C" : '#33A354',
+        borderRadius: 50,
+        width: count>100?50:iscart?20:30,
+        height: iscart? 20:35,
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      <Text style={{color: '#fff', fontSize: 10}}>{count}</Text>
+      <Text style={{color: '#fff', fontSize: iscart?7:10}}>{count}</Text>
     </View>
   );
 };

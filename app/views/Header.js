@@ -23,6 +23,7 @@ const isAndroid = Platform.OS == 'android';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
+import IconInfocount from './Components/IconInfocount';
 class Headet extends React.Component {
   constructor(props) {
     super(props);
@@ -107,6 +108,13 @@ class Headet extends React.Component {
             top: 10,
             flexDirection: 'row',
           }}>
+            <TouchableOpacity style={{marginRight:15}} onPress={()=>this.props.navigation.navigate('CreateOrder', {screen_name: 'sell'})}>
+           {this.props.cart.cart.length>0 && <IconInfocount iscart={true} count={this.props.cart.cart.length} /> }
+             <Image
+            style={{width: 30, height: 30}}
+            source={require('../images/shopping-cart.png')}
+          />
+          </TouchableOpacity>
           <Image
             style={{width: 24, height: 24}}
             source={require('../images/bellIcon.png')}
@@ -121,6 +129,7 @@ class Headet extends React.Component {
 function mapStateToProps(state) {
   return {
     user: state.userReducer,
+    cart: state.cartReducer,
   };
 }
 

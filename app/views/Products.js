@@ -29,6 +29,9 @@ import {
   LOGOUT_USER,
   UpdateTabbar,
   PRODUCT_RELOAD,
+  UPDATE_PRODUCT_FROM_CART,
+  ADD_TO_PRODUCT,
+  REMOVE_FROM_CART,
 } from '../redux/constants/index';
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
@@ -48,6 +51,7 @@ import {getProducts} from '../redux/actions/product_action';
 import EmptyList from './Components/EmptyList';
 import MultiViewHeader from './Components/MultiViewHeader';
 import GridView from './Components/GridView';
+import {getProductCategories} from '../redux/actions/product_category_action';
 class Products extends React.Component {
   constructor(props) {
     super(props);
@@ -73,20 +77,20 @@ class Products extends React.Component {
       showFloatingButton: false,
       productImageModal: false,
       prodImage: '',
-      category_name:""
+      category_name: '',
     };
     this.onDateChange = this.onDateChange.bind(this);
   }
   onRefresh() {
     console.log('222222222222', this.state.isFetching);
-    this.setState({isFetching: true, data: []});
+    // this.setState({isFetching: true, data: []});
     // if(this.state.isFetching==true){
 
     // let search_url = Constants.productslist + '?search=' + this.state.search_product;
     let product_url = Constants.productslist + '?page=' + this.state.pageNo;
-    this.props.getProducts(product_url, false, () => {
-      this.unauthorizedLogout();
-    });
+    this.props.getProducts(product_url, false, () =>
+      this.callbackProdFunction(),
+    );
     return;
     // }
 
@@ -105,70 +109,116 @@ class Products extends React.Component {
       this.props.user.access_token,
     );
     let product_url = Constants.productslist + '?page=' + this.state.pageNo;
-    this.props.getProducts(product_url, false, () => {
-      this.unauthorizedLogout();
-    });
+    this.props.getProducts(product_url, false, () =>
+      this.callbackProdFunction(),
+    );
     // this.getData(product_url);
     const that = this;
     setTimeout(function () {
-      that.getCategoryList();
+      that.props.getProductCategories(
+        Constants.productcategorylist,
+        false,
+        () => {
+          that.unauthorizedLogout();
+        },
+      );
     }, 700);
+  }
+
+  callbackProdFunction() {
+    if (this.props.products.error == 'LOGOUT') {
+      this.unauthorizedLogout();
+      return;
+    } else if (this.props.products.error != '') {
+      Alert.alert('Info', this.props.products.error);
+      return;
+    }
+    this.updateCartOnProduct();
+  }
+
+  updateCartOnProduct() {
+    let cart_data = this.props.cart.cart;
+    console.log('cart data : ', cart_data);
+    let data = this.props.products.data;
+    console.log('arr#$prod', data);
+    for (let i = 0; i < data.length; i++) {
+      let product_found = false;
+      console.log('er#');
+      for (let c = 0; c < cart_data.length; c++) {
+        if (cart_data[c].id == data[i].id) {
+          data[i].purchased_quantity = cart_data[c].purchased_quantity;
+          data[i].is_added = true;
+          product_found = true;
+        }
+      }
+      if (!product_found) {
+        console.log('dh$he');
+        data[i].purchased_quantity = 0;
+        data[i].is_added = false;
+      }
+    }
+    console.log('do#$nj', data);
+    this.props.updateProductFromCart(data);
   }
 
   componentDidUpdate(prevProps) {
     console.log(prevProps.route.params, 'ds%0', this.props.route.params);
     if (!_.isEqual(prevProps.route.params, this.props.route.params)) {
       let product_url = Constants.productslist + '?page=' + this.state.pageNo;
-      this.getData(product_url);
+      //this.getData(product_url);
+
+      this.props.getProducts(product_url, false, () =>
+        this.callbackProdFunction(),
+      );
     }
   }
 
-  async getData(url) {
-    let _that = this;
-    if (_that.state.isFetching == true) {
-      _that.setState({isFetching: false});
-    }
+  // async getData(url) {
+  //   let _that = this;
+  //   if (_that.state.isFetching == true) {
+  //     _that.setState({isFetching: false});
+  //   }
 
-    this.setState({spinner: true});
-    console.log('search url ', url);
-    console.log('token ', this.props.user.access_token);
+  //   this.setState({spinner: true});
+  //   console.log('search url ', url);
+  //   console.log('token ', this.props.user.access_token);
 
-    let postData = {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: this.props.user.access_token,
-      },
-    };
-    fetch(url, postData)
-      .then(response => response.json())
-      .then(async responseJson => {
-        console.log(
-          '~~~~~~~~~~~~~~~~~~responseJson.responseJson responseJson responseJson @@@@@@@',
-          responseJson,
-        );
-        // console.log('responseJson.postData', postData);
-        this.setState({
-          spinner: false,
-          isFetching: false,
-        });
-        if (
-          responseJson.status === 'success' ||
-          responseJson.success === true
-        ) {
-          await this.setState({
-            data: [...this.state.data, ...responseJson.data],
-            totalPageCount: responseJson.pages,
-          });
-        } else if (responseJson.status === 401) {
-          this.unauthorizedLogout();
-        } else {
-          let message = responseJson.message;
-          // Alert.alert('Error', message);
-        }
-      });
-  }
+  //   let postData = {
+  //     method: 'GET',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type': 'application/json',
+  //       Authorization: this.props.user.access_token,
+  //     },
+  //   };
+  //   fetch(url, postData)
+  //     .then(response => response.json())
+  //     .then(async responseJson => {
+  //       console.log(
+  //         '~~~~~~~~~~~~~~~~~~responseJson.responseJson responseJson responseJson @@@@@@@',
+  //         responseJson,
+  //       );
+  //       // console.log('responseJson.postData', postData);
+  //       this.setState({
+  //         spinner: false,
+  //         isFetching: false,
+  //       });
+  //       if (
+  //         responseJson.status === 'success' ||
+  //         responseJson.success === true
+  //       ) {
+  //         await this.setState({
+  //           data: [...this.state.data, ...responseJson.data],
+  //           totalPageCount: responseJson.pages,
+  //         });
+  //       } else if (responseJson.status === 401) {
+  //         this.unauthorizedLogout();
+  //       } else {
+  //         let message = responseJson.message;
+  //         // Alert.alert('Error', message);
+  //       }
+  //     });
+  // }
 
   search() {
     this.setState({data: []});
@@ -176,55 +226,58 @@ class Products extends React.Component {
       Constants.productslist + '?search=' + this.state.search_product;
     console.log('urlsearch$#', search_url);
     // this.getData(search_url);
-    this.props.getProducts(search_url, false, () => {
-      this.unauthorizedLogout();
-    });
+    this.props.getProducts(search_url, false, () =>
+      this.callbackProdFunction(),
+    );
   }
 
-  getCategoryList() {
-    this.setState({spinner: true});
-    let postData = {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: this.props.user.access_token,
-      },
-    };
+  // getCategoryList() {
+  //   this.setState({spinner: true});
+  //   let postData = {
+  //     method: 'GET',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type': 'application/json',
+  //       Authorization: this.props.user.access_token,
+  //     },
+  //   };
 
-    fetch(Constants.productcategorylist, postData)
-      .then(response => response.json())
-      .then(async responseJson => {
-        this.setState({spinner: false});
-        console.log(' category body ', postData);
-        console.log('URLLLLLLLLLLLLLLLLLLLLLLL', Constants.productcategorylist);
-        // console.log('responseJson responseJson', responseJson);
+  //   fetch(Constants.productcategorylist, postData)
+  //     .then(response => response.json())
+  //     .then(async responseJson => {
+  //       this.setState({spinner: false});
+  //       console.log(' category body ', postData);
+  //       console.log('URLLLLLLLLLLLLLLLLLLLLLLL', Constants.productcategorylist);
+  //       // console.log('responseJson responseJson', responseJson);
 
-        if (responseJson.status === 'success') {
-          let res = responseJson.data;
-          let categoryarr = res.map((x, key) => {
-            return {label: x.name, value: x.id};
-          });
-          this.setState({
-            categoryarr: categoryarr,
-          });
-        } else if (responseJson.status == 401) {
-          this.unauthorizedLogout();
-        } else {
-          let message = responseJson.message;
-          // Alert.alert('Error', message);
-        }
-      });
-  }
+  //       if (responseJson.status === 'success') {
+  //         let res = responseJson.data;
+  //         let categoryarr = res.map((x, key) => {
+  //           return {label: x.name, value: x.id};
+  //         });
+  //         this.setState({
+  //           categoryarr: categoryarr,
+  //         });
+  //       } else if (responseJson.status == 401) {
+  //         this.unauthorizedLogout();
+  //       } else {
+  //         let message = responseJson.message;
+  //         // Alert.alert('Error', message);
+  //       }
+  //     });
+  // }
 
   onCategoryText = item => {
-    console.log(
-      ' category ID search !!!!!!!!!!!!!!!@@@@@@@@@@@@@@',
-      item,
-    );
-    this.setState({category_id:item.value,category_name:item.label, showdropDownModal: false, pageNo: 1, data: []});
+    console.log(' category ID search !!!!!!!!!!!!!!!@@@@@@@@@@@@@@', item);
+    this.setState({
+      category_id: item.value,
+      category_name: item.label,
+      showdropDownModal: false,
+      pageNo: 1,
+      data: [],
+    });
     let url =
-    item.value == ''
+      item.value == ''
         ? Constants.productslist + '?page=' + this.state.pageNo
         : Constants.productslist +
           '?category_id=' +
@@ -232,9 +285,7 @@ class Products extends React.Component {
           '&page=' +
           this.state.pageNo;
     //this.getData(url);
-    this.props.getProducts(url, false, () => {
-      this.unauthorizedLogout();
-    });
+    this.props.getProducts(url, false, () => this.callbackProdFunction());
   };
 
   unauthorizedLogout() {
@@ -259,15 +310,61 @@ class Products extends React.Component {
           pageNo;
 
     console.log('product_url$##@0', product_url);
-    this.props.getProducts(product_url, true, () => {
-      this.unauthorizedLogout();
-    });
+    this.props.getProducts(product_url, true, () =>
+      this.callbackProdFunction(),
+    );
 
     // method for API call
     // } else {
     //   alert('here');
     // }
   };
+
+
+   counterFun=async(action, index) =>{
+    //let data = this.state.data;
+    let data = this.props.products.data;
+    if (action === 'add') {
+      let updated_purchased_quantity = data[index].purchased_quantity + 1;
+      if (
+        updated_purchased_quantity > data[index].quantity &&
+        !data[index].no_qty_limit
+      ) {
+        alert('Out of stock');
+      } else {
+        console.log(
+          'here in else condition !!!!!!!!!',
+          data[index].purchased_quantity,
+        );
+        // await this.props.cartReducer(data[index]);
+        data[index].purchased_quantity = updated_purchased_quantity;
+        console.log(
+          'here in else condition !!!!!!!!! after : ',
+          data[index].purchased_quantity,
+        );
+
+        this.props.updateProductFromCart(data);
+        // this.setState({
+        //   data: data,
+        // });
+        // this.props.cartReducer(data[index]);
+        await this.props.cartReducer(data[index]);
+        console.log('cart : ', this.props.cart);
+      }
+    } else {
+      let updated_purchased_quantity = 0;
+
+      if (data[index].purchased_quantity > 0) {
+        await this.props.removeFromCart(data[index]);
+        data[index].purchased_quantity = updated_purchased_quantity;
+        // this.setState({
+        //   data: data,
+        // });
+        this.props.updateProductFromCart(data);
+        console.log(' remove from cart cart : ', this.props.cart);
+      }
+    }
+  }
 
   renderFooter = () => {
     //it will show indicator at the bottom of the list when data is loading otherwise it returns null
@@ -402,7 +499,7 @@ class Products extends React.Component {
           ListFooterComponent={_that.renderFooter}
           renderItem={({item, index, separators}) => (
             <TouchableOpacity
-            activeOpacity={0.5}
+              activeOpacity={0.5}
               key={item.key}
               onPress={() =>
                 _that.state.isListView
@@ -425,7 +522,7 @@ class Products extends React.Component {
                     flexDirection: 'row',
                     backgroundColor: 'white',
                     width: width - 20,
-                    padding: 10,
+                    padding: 15,
                     borderRadius: 10,
                     marginTop: 5,
                   }}>
@@ -453,40 +550,61 @@ class Products extends React.Component {
                       <Text style={[{color: '#929497'}, fontStyles.normal12]}>
                         . {item.slug}
                       </Text>
-                      {item.is_active == false ? (
-                        <View
-                          style={[
-                            {
-                              position: 'absolute',
-                              right: 0,
-                              backgroundColor: '#e3b8be',
-                              marginLeft: 10,
-                              paddingHorizontal: 10,
-                              borderRadius: 50,
-                            },
-                          ]}>
-                          <Text style={[{color: '#ba071f'}]}>IN ACTIVE</Text>
-                        </View>
-                      ) : (
-                        <View
-                          style={[
-                            {
-                              position: 'absolute',
-                              right: 0,
-                              backgroundColor: '#DAF8EC',
-                              marginLeft: 10,
-                              paddingHorizontal: 10,
-                              borderRadius: 50,
-                            },
-                          ]}>
-                          <Text style={[{color: '#26C281'}]}>ACTIVE</Text>
-                        </View>
-                      )}
                     </View>
+                  </View>
+                  <View
+                    style={{
+                      position: 'absolute',
+                      right: 10,
+                      top: 0,
+                      alignItems: 'center',
+                      paddingVertical: 5,
+                    }}>
+                   {item.is_active&& <TouchableOpacity
+                    onPress={()=>item.purchased_quantity > 0 ? _that.counterFun('sub', index):_that.counterFun('add', index)}
+                      hitSlop={{top: 20, bottom: 20, right: 20, left: 20}}>
+                      <Image
+                        style={{width: 25, height: 25}}
+                        source={item.purchased_quantity>0?require('../images/shopping-cart-selected.png') : require('../images/shopping-cart-inactive.png')}
+                      />
+                    </TouchableOpacity>}
+                    <Text>
+                      {item.currency}
+                      {(item.has_vat
+                        ? item.price + item.vat_amount
+                        : item.price
+                      ).toFixed(2)}
+                    </Text>
+
+                    {item.is_active == false ? (
+                      <View
+                        style={[
+                          {
+                            backgroundColor: '#e3b8be',
+                            marginLeft: 10,
+                            paddingHorizontal: 10,
+                            borderRadius: 50,
+                          },
+                        ]}>
+                        <Text style={[{color: '#ba071f'}]}>IN ACTIVE</Text>
+                      </View>
+                    ) : (
+                      <View
+                        style={[
+                          {
+                            backgroundColor: '#DAF8EC',
+                            marginLeft: 10,
+                            paddingHorizontal: 10,
+                            borderRadius: 50,
+                          },
+                        ]}>
+                        <Text style={[{color: '#26C281'}]}>ACTIVE</Text>
+                      </View>
+                    )}
                   </View>
                 </View>
               ) : (
-                <GridView item={item} />
+                <GridView addToCart={()=>item.purchased_quantity > 0 ? _that.counterFun('sub', index):_that.counterFun('add', index)} item={item} />
               )}
             </TouchableOpacity>
           )}
@@ -515,7 +633,7 @@ class Products extends React.Component {
               {color: '#D8D8D8'},
               fontStyles.normal14,
               {
-                width: width / 1.1,
+                width: width / 1,
                 alignSelf: 'center',
                 elevation: 0,
                 borderColor: '#D8DCDE',
@@ -553,27 +671,27 @@ class Products extends React.Component {
               />
             </TouchableOpacity> */}
         </View>
-        <View
-          style={{
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          <View
-            style={[
-              {
-                // position: 'relative',
-                borderBottomColor: '#E6E6E6',
-                borderBottomWidth: 1,
-                flex: 2,
-              },
-              styles.formColumn,
-            ]}>
-            <CategoryDropdown
-              title={this.state.category_name==""?"Select Product Category" :this.state.category_name} 
-              onPress={() => this.setState({showdropDownModal: true})}
-            />
 
-            {/* <DropDownPicker
+        <View
+          style={[
+            {
+              // position: 'relative',
+              borderBottomColor: '#E6E6E6',
+              borderBottomWidth: 1,
+              flex: 2,
+            },
+            styles.formColumn,
+          ]}>
+          <CategoryDropdown
+            title={
+              this.state.category_name == ''
+                ? 'Select Product Category'
+                : this.state.category_name
+            }
+            onPress={() => this.setState({showdropDownModal: true})}
+          />
+
+          {/* <DropDownPicker
                             scrollViewProps={{
                                 persistentScrollbar: true,
                             }}
@@ -588,7 +706,7 @@ class Products extends React.Component {
                             labelStyle={{ color: '#A9A9A9' }}
                             onChangeItem={item => this.onCategoryText(item.value)}
                         /> */}
-          </View>
+
           <View
             style={
               {
@@ -596,7 +714,7 @@ class Products extends React.Component {
               }
             }></View>
 
-          <TouchableOpacity
+          {/* <TouchableOpacity
             style={{
               height: 50,
               width: 50,
@@ -616,11 +734,14 @@ class Products extends React.Component {
               });
             }}>
             <Icon name="refresh" size={30} color="#929497" />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
         </View>
 
-
-<MultiViewHeader isActive={this.state.isListView} onPressGridView={() => this.setState({isListView: false})} onPressListView={() => this.setState({isListView: true})} />
+        <MultiViewHeader
+          isActive={this.state.isListView}
+          onPressGridView={() => this.setState({isListView: false})}
+          onPressListView={() => this.setState({isListView: true})}
+        />
         {/* <View
           style={{
             flexDirection: 'row',
@@ -820,20 +941,23 @@ class Products extends React.Component {
             showdropDownModal={this.state.showdropDownModal}
             handleClose={() => this.setState({showdropDownModal: false})}
             onSelected={this.onCategoryText}
-            data={this.state.categoryarr}
+            data={this.props.categories.dropDown}
           />
         </View>
 
-        <Modal visible={this.state.productImageModal} onDismiss={()=>this.setState({productImageModal: false})} transparent={true}>
-          <View style={[{flex:1,justifyContent:"center",alignItems:"center"}]}>
+        <Modal
+          visible={this.state.productImageModal}
+          onDismiss={() => this.setState({productImageModal: false})}
+          transparent={true}>
+          <View
+            style={[{flex: 1, justifyContent: 'center', alignItems: 'center'}]}>
             <TouchableOpacity
-            
               onPress={() => this.setState({productImageModal: false})}
               style={[{}, styles.modalCloseTouch]}>
               <Icon name="close" color={'#fff'} size={25} />
               <Text style={{color: '#fff', marginLeft: 10}}>Close</Text>
             </TouchableOpacity>
-            
+
             <Image
               style={{height: height / 2, width: width / 1.3}}
               // source={require('../images/juice.png')}
@@ -842,8 +966,6 @@ class Products extends React.Component {
                 uri: this.state.prodImage,
               }}
             />
-            
-            
           </View>
         </Modal>
       </Scaffold>
@@ -856,6 +978,8 @@ function mapStateToProps(state) {
     tabBar: state.tabBarReducer,
     reload: state.reloadReducer,
     products: state.products_reducer,
+    categories: state.product_categories_reducer,
+    cart: state.cartReducer,
   };
 }
 function mapDispatchToProps(dispatch) {
@@ -866,6 +990,12 @@ function mapDispatchToProps(dispatch) {
     setScreenReload: value => dispatch({type: PRODUCT_RELOAD, value: value}),
     getProducts: (url, loadmore, next) =>
       dispatch(getProducts(url, loadmore, next)),
+    getProductCategories: (url, loadmore, next) =>
+      dispatch(getProductCategories(url, loadmore, next)),
+      updateProductFromCart: value =>
+      dispatch({type: UPDATE_PRODUCT_FROM_CART, value: value}),
+      cartReducer: value => dispatch({type: ADD_TO_PRODUCT, value: value}),
+      removeFromCart: value => dispatch({type: REMOVE_FROM_CART, value: value}),
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Products);

@@ -16,7 +16,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import Spinner from 'react-native-loading-spinner-overlay';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {connect} from 'react-redux';
-import {SET_USER, LOGOUT_USER, CUSTOMER_RELOAD} from '../redux/constants/index';
+import {SET_USER, LOGOUT_USER, CUSTOMER_RELOAD, CUSTOMER_CREATED, CUSTOMER_UPDATED} from '../redux/constants/index';
 import {Constants} from '../views/Constant';
 import {Text, TextInput} from 'react-native-paper';
 import Modal from 'react-native-modal';
@@ -246,7 +246,10 @@ console.log("io##@",Constants.customerlist + '/' + customer_id)
             state_name: '',
             lgas_name: '',
           });
+
+
           if (this.props.route.params && this.props.route.params.action === 'update') {
+            this.props.updatedCustomer(responseJson.data.customer);
             Alert.alert("SUCCESS","Customer updated successfully",[
               {
                 text:"OK",
@@ -256,6 +259,7 @@ console.log("io##@",Constants.customerlist + '/' + customer_id)
             ])
 
           } else {
+            this.props.createdCustomer(responseJson.data.customer);
             this.createCustomerDelivery(customer_id);
           }
           
@@ -1059,6 +1063,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
   return {
     setUser: value => dispatch({type: SET_USER, value: value}),
+    createdCustomer: value => dispatch({type: CUSTOMER_CREATED, value: value}),
+   updatedCustomer: value => dispatch({type: CUSTOMER_UPDATED, value: value}),
+
     logoutUser: () => dispatch({type: LOGOUT_USER}),
     setScreenReload: value => dispatch({type: CUSTOMER_RELOAD, value: value}),
   };

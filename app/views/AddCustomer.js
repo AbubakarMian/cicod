@@ -32,6 +32,8 @@ import {Item} from 'native-base';
 import {Text, TextInput, Searchbar} from 'react-native-paper';
 import NavBack from './Components/NavBack';
 import Scaffold from './Components/Scaffold';
+import { getCustomers } from '../redux/actions/customer_action';
+import EmptyList from './Components/EmptyList';
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
 class AddCustomer extends React.Component {
@@ -50,7 +52,13 @@ class AddCustomer extends React.Component {
     };
   }
   componentDidMount() {
-    this.getCustomers(Constants.customerlist+"?page=1");
+    // this.getCustomers(Constants.customerlist+"?page=1");
+
+    this.props.getCustomers(Constants.customerlist + '?page=' + this.state.pageNo, false, () => {
+      this.unauthorizedLogout();
+    },()=>{
+      Alert.alert("ERROR",this.props.customers.error)
+    });
   }
 
 //   componentDidUpdate(prevProps){
@@ -70,71 +78,76 @@ class AddCustomer extends React.Component {
   searchText() {
     this.setState({isSearch: true});
     const search_text = this.state.search_text;
-    this.getCustomers(Constants.customerlist + '?search=' + search_text);
+   // this.getCustomers(Constants.customerlist + '?search=' + search_text);
+   this.props.getCustomers(Constants.customerlist + '?search=' + search_text, false, () => {
+    this.unauthorizedLogout();
+  },()=>{
+    Alert.alert("ERROR",this.props.customers.error);
+  });
   }
   unauthorizedLogout() {
     Alert.alert('Error', Constants.UnauthorizedErrorMsg);
     this.props.logoutUser();
     this.props.navigation.navigate('Login');
   }
-  getCustomers(url) {
-    let param = 'first_name';
-    // if(search_text == ''){
-    //     return;
-    // }
-    // if(search_text.test(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)==0){
-    //     para='email';
-    //     param='first_name';
-    //     return;
-    // }else{
-    //     param='phone'
-    // }
+  // getCustomers(url) {
+  //   let param = 'first_name';
+  //   // if(search_text == ''){
+  //   //     return;
+  //   // }
+  //   // if(search_text.test(/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/)==0){
+  //   //     para='email';
+  //   //     param='first_name';
+  //   //     return;
+  //   // }else{
+  //   //     param='phone'
+  //   // }
 
-    this.setState({spinner: true});
-    let postData = {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: this.props.user.access_token,
-      },
-    };
-    // console.log(
-    //   'url~~~~~~~~',
-    //   Constants.customerlist + '?' + param + '=' + search_text,
-    // );
-    console.log('TTTTTTTTT', this.props.user.access_token);
-    fetch(url, postData)
-      .then(response => response.json())
-      .then(async responseJson => {
-        this.setState({
-          isFetching:false,
-          spinner: false,
-        });
-        if (responseJson.status === 'success') {
-          console.log('KKKKKKKKK', responseJson);
-          if (this.state.isSearch) {
-            this.setState({
-              customerData: responseJson.data,
-              isSearch: false,
-            });
-          } else {
-            this.setState({
-              customerData: [...this.state.customerData, ...responseJson.data],
-              isSearch: false,
-            });
-          }
-        } else if (responseJson.status == 401) {
-          this.unauthorizedLogout();
-        } else {
-          let message = responseJson.message;
-          Alert.alert('Error', message);
-        }
-      })
-      .catch(error => {
-        console.log('Error !!!', error);
-      });
-  }
+  //   this.setState({spinner: true});
+  //   let postData = {
+  //     method: 'GET',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type': 'application/json',
+  //       Authorization: this.props.user.access_token,
+  //     },
+  //   };
+  //   // console.log(
+  //   //   'url~~~~~~~~',
+  //   //   Constants.customerlist + '?' + param + '=' + search_text,
+  //   // );
+  //   console.log('TTTTTTTTT', this.props.user.access_token);
+  //   fetch(url, postData)
+  //     .then(response => response.json())
+  //     .then(async responseJson => {
+  //       this.setState({
+  //         isFetching:false,
+  //         spinner: false,
+  //       });
+  //       if (responseJson.status === 'success') {
+  //         console.log('KKKKKKKKK', responseJson);
+  //         if (this.state.isSearch) {
+  //           this.setState({
+  //             customerData: responseJson.data,
+  //             isSearch: false,
+  //           });
+  //         } else {
+  //           this.setState({
+  //             customerData: [...this.state.customerData, ...responseJson.data],
+  //             isSearch: false,
+  //           });
+  //         }
+  //       } else if (responseJson.status == 401) {
+  //         this.unauthorizedLogout();
+  //       } else {
+  //         let message = responseJson.message;
+  //         Alert.alert('Error', message);
+  //       }
+  //     })
+  //     .catch(error => {
+  //       console.log('Error !!!', error);
+  //     });
+  // }
 
   async userInfo(item) {
     console.log('ITEMS !!!!!!!!!!', item);
@@ -161,7 +174,11 @@ class AddCustomer extends React.Component {
     this.setState({pageNo});
     const url = Constants.customerlist + '?page=' + pageNo;
 
-    this.getCustomers(url); // method for API call
+    this.props.getCustomers(url + '?page=' + this.state.pageNo, true, () => {
+      this.unauthorizedLogout();
+    },()=>{
+      Alert.alert("ERROR",this.props.customers.error);
+    }); // method for API call
     // } else {
     //   alert('here');
     // }
@@ -174,7 +191,12 @@ class AddCustomer extends React.Component {
 
     // let search_url = Constants.productslist + '?search=' + this.state.search_product;
     let url = Constants.customerlist + '?page=1';
-    this.getCustomers(url);
+    //this.getCustomers(url);
+    this.props.getCustomers(url, false, () => {
+      this.unauthorizedLogout();
+    },()=>{
+      Alert.alert("ERROR",this.props.customers.error);
+    });
     return;
     // }
   
@@ -186,7 +208,8 @@ class AddCustomer extends React.Component {
     //it will show indicator at the bottom of the list when data is loading otherwise it returns null
     // if (!this.state.spinner) return null;
     // return <ActivityIndicator style={{color: '#000'}} />;
-    if(this.state.customerData.length<2) return null; 
+    if(this.props.customers.totalPageCount > 1 &&
+      this.state.pageNo < this.props.customers.totalPageCount) 
     return (
       <TouchableOpacity
         onPress={() => this.handleLoadMore()}
@@ -194,17 +217,19 @@ class AddCustomer extends React.Component {
         <Text style={{letterSpacing: 1.1, fontWeight: 'bold'}}>Load More</Text>
       </TouchableOpacity>
     );
+
+    return null
   };
   render() {
 
-    if (this.props.reload.customer) {
-      let url = Constants.customerlist + '?page=1';
-      this.getCustomers(url);
+    // if (this.props.reload.customer) {
+    //   let url = Constants.customerlist + '?page=1';
+    //   this.getCustomers(url);
       
-      this.props.setScreenReload({
-        reload: false,
-      });
-    }
+    //   this.props.setScreenReload({
+    //     reload: false,
+    //   });
+    // }
     return (
       <Scaffold>
         <View style={[{}, styles.mainView]}>
@@ -286,13 +311,13 @@ class AddCustomer extends React.Component {
                           <Text style={[{},styles.contentViewDescText]}>Search for a customer</Text>
                         </View> */}
 
-            {this.state.customerData.length != 0 ? (
+            {/* {this.state.customerData.length != 0 ? ( */}
               <View style={{paddingBottom: 260}}>
                 <FlatList
-                refreshing={this.state.isFetching}
-                
+                refreshing={this.props.customers.isFetching}
+                ListEmptyComponent={<EmptyList title="No Customer Found" />}
                 onRefresh={this.onRefresh}
-                  data={this.state.customerData}
+                  data={this.props.customers.data}
                   ItemSeparatorComponent={
                     Platform.OS !== 'android' &&
                     (({highlighted}) => (
@@ -424,7 +449,7 @@ class AddCustomer extends React.Component {
                   )}
                 />
               </View>
-            ) : (
+            {/* ) : (
               <View style={[{}, styles.contentView]}>
                 <Image
                   style={{height: 100, width: 100}}
@@ -452,7 +477,7 @@ class AddCustomer extends React.Component {
                   </Text>
                 </TouchableOpacity>
               </View>
-            )}
+            )} */}
           </View>
         </View>
       </Scaffold>
@@ -466,6 +491,7 @@ function mapStateToProps(state) {
     customer: state.customReducer,
     currency: state.currencyReducer,
     reload: state.reloadReducer,
+    customers:state.customReducer,
   };
 }
 function mapDispatchToProps(dispatch) {
@@ -473,6 +499,8 @@ function mapDispatchToProps(dispatch) {
     setCustomer: value => dispatch({type: SET_CUSTOMER, value: value}),
     setScreenReload: value =>
     dispatch({type: CUSTOMER_RELOAD, value: value}),
+    getCustomers: (url, loadmore, next) =>
+    dispatch(getCustomers(url, loadmore, next)),
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(AddCustomer);

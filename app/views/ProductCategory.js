@@ -38,6 +38,8 @@ import {
 
 import NavBack from './Components/NavBack';
 import Scaffold from './Components/Scaffold';
+import { getProductCategories } from '../redux/actions/product_category_action';
+import EmptyList from './Components/EmptyList';
 const {width, height} = Dimensions.get('window');
 const isAndroid = Platform.OS == 'android';
 class ProductCategory extends React.Component {
@@ -56,40 +58,47 @@ class ProductCategory extends React.Component {
     };
   }
   componentDidMount() {
-    this.getCategoryList(Constants.productcategorylist);
+    // this.getCategoryList(Constants.productcategorylist);
+    this.props.getProductCategories(
+      Constants.productcategorylist,
+      false,
+      () => {
+        this.unauthorizedLogout();
+      },
+    );
   }
 
-  async getCategoryList(url) {
-    this.setState({spinner: true});
-    let postData = {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: this.props.user.access_token,
-      },
-    };
-    console.log(
-      'url product category',
-      url,
-      'token',
-      this.props.user.access_token,
-    );
-    await fetch(url, postData)
-      .then(response => response.json())
-      .then(async responseJson => {
-        this.setState({spinner: false});
-        console.log('responseJson responseJson category !!!!!!', responseJson);
-        if (responseJson.status === 'success') {
-          this.setState({
-            categoryarr: responseJson.data,
-          });
-        } else {
-          let message = responseJson.message;
-          // Alert.alert('Error', message);
-        }
-      });
-  }
+  // async getCategoryList(url) {
+  //   this.setState({spinner: true});
+  //   let postData = {
+  //     method: 'GET',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type': 'application/json',
+  //       Authorization: this.props.user.access_token,
+  //     },
+  //   };
+  //   console.log(
+  //     'url product category',
+  //     url,
+  //     'token',
+  //     this.props.user.access_token,
+  //   );
+  //   await fetch(url, postData)
+  //     .then(response => response.json())
+  //     .then(async responseJson => {
+  //       this.setState({spinner: false});
+  //       console.log('responseJson responseJson category !!!!!!', responseJson);
+  //       if (responseJson.status === 'success') {
+  //         this.setState({
+  //           categoryarr: responseJson.data,
+  //         });
+  //       } else {
+  //         let message = responseJson.message;
+  //         // Alert.alert('Error', message);
+  //       }
+  //     });
+  // }
 
   got_new_filters() {
     console.log(this.props.user.access_token);
@@ -166,7 +175,14 @@ class ProductCategory extends React.Component {
   search() {
     let search_url =
       Constants.productcategorylist + '?search=' + this.state.search_text;
-    this.getCategoryList(search_url);
+    // this.getCategoryList(search_url);
+    this.props.getProductCategories(
+      search_url,
+      false,
+      () => {
+        this.unauthorizedLogout();
+      },
+    );
   }
 
   filterCategory() {
@@ -182,15 +198,37 @@ class ProductCategory extends React.Component {
     });
   }
 
+  onRefresh() {
+    console.log('222222222222', this.state.isFetching);
+    // this.setState({isFetching: true, data: []});
+    // if(this.state.isFetching==true){
+
+    // let search_url = Constants.productslist + '?search=' + this.state.search_product;
+    // let product_list_url = Constants.productcategorylist + '?page=' + this.state.pageNo;
+    this.props.getProductCategories(
+      Constants.productcategorylist,
+      false,
+      () => {
+        this.unauthorizedLogout();
+      },
+    );
+    return;
+    // }
+
+    // _that.setState({
+    //     url_orders: url,
+    // })
+  }
+
   render() {
-    if (this.props.reload.product_category) {
-      if (!this.got_new_filters()) {
-        this.getCategoryList(Constants.productcategorylist);
-      }
-      this.props.setScreenReload({
-        reload: false,
-      });
-    }
+    // if (this.props.reload.product_category) {
+    //   if (!this.got_new_filters()) {
+    //     this.getCategoryList(Constants.productcategorylist);
+    //   }
+    //   this.props.setScreenReload({
+    //     reload: false,
+    //   });
+    // }
     // this.got_new_filters();
     return (
       <Scaffold>
@@ -297,7 +335,7 @@ class ProductCategory extends React.Component {
               borderBottomColor: '#E6E6E6',
               marginVertical: 10,
             }}></View>
-          {this.state.categoryarr.length > 0 ? (
+          {/* {this.props.categories.data.length > 0 ? ( */}
             <FlatList
               ItemSeparatorComponent={
                 Platform.OS !== 'android' &&
@@ -307,7 +345,10 @@ class ProductCategory extends React.Component {
                   />
                 ))
               }
-              data={this.state.categoryarr}
+              ListEmptyComponent={<EmptyList title="No Product Category Found" />}
+              onRefresh={() => this.onRefresh()}
+          refreshing={this.props.categories.isFetchingProducts}
+              data={this.props.categories.data}
               renderItem={({item, index, separators}) => (
                 // <TouchableOpacity
                 //     key={item.key}
@@ -395,7 +436,7 @@ class ProductCategory extends React.Component {
                 // </TouchableOpacity>
               )}
             />
-          ) : (
+          {/* ) : (
             <View
               style={{
                 height: height / 1.75,
@@ -421,7 +462,7 @@ class ProductCategory extends React.Component {
                 No Category found
               </Text>
             </View>
-          )}
+          )} */}
         </View>
 
         <OtherModal
@@ -498,6 +539,7 @@ function mapStateToProps(state) {
   return {
     user: state.userReducer,
     reload: state.reloadReducer,
+    categories: state.product_categories_reducer,
   };
 }
 function mapDispatchToProps(dispatch) {
@@ -508,6 +550,8 @@ function mapDispatchToProps(dispatch) {
       dispatch({type: PRODUCT_CATEGORY_RELOAD, value: value}),
     setScreenFilterReload: value =>
       dispatch({type: PRODUCT_CATEGORY_FILTER_RELOAD, value: value}),
+      getProductCategories: (url, loadmore, next) =>
+      dispatch(getProductCategories(url, loadmore, next)),
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(ProductCategory);

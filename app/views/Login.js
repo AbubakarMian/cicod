@@ -145,6 +145,23 @@ class Login extends React.Component {
               merchantStatus: responseJson.user.merchantStatus,
               tenantId: responseJson.user.tenantId,
             });
+
+          await  AsyncStorage.setItem(
+              'User',
+              JSON.stringify({
+                id: responseJson.user.id,
+                firstname: responseJson.user.firstname,
+                lastname: responseJson.user.lastname,
+                email: responseJson.user.email,
+                phone: responseJson.user.phone,
+                access_token:user_token,
+                kciInfo: responseJson.user.kciInfo,
+                merchantApps: responseJson.user.merchantApps,
+                merchantStatus: responseJson.user.merchantStatus,
+                tenantId: responseJson.user.tenantId,
+                roles: responseJson.user.roles,
+              }),
+            );
             this.setState({Spinner: false});
 
             this.setCurrency(user_token);

@@ -22,6 +22,8 @@ import {
   LOGOUT_USER,
   PRODUCT_RELOAD,
   PRODUCT_CATEGORY_RELOAD,
+  PRODUCT_CATEGORY_CREATED,
+  PRODUCT_CATEGORY_UPDATED,
 } from '../redux/constants/index';
 import DropDownPicker from 'react-native-dropdown-picker';
 import ImagePicker from 'react-native-image-crop-picker';
@@ -175,9 +177,10 @@ class CreateProductCategory extends React.Component {
           .post(url, formData, myheader)
           .then(function (response) {
             _that.setState({spinner: false});
-            console.log('axiso response 1111111', response.data);
+            console.log('axiso response 1111111', response.data.data);
             if (response.data.status === 'success') {
               console.log('GGGGGGGGGGG', response.data);
+              _that.props.createdCategory(response.data.data.product_category);
               _that.setState({
                 name:'',
                 description:'',
@@ -212,7 +215,8 @@ class CreateProductCategory extends React.Component {
             console.log('axiso response 2222222', response.data);
             _that.setState({spinner: false});
             if (response.data.status === 'success') {
-              console.log('GGGGGGGGGGG', response.data);
+              console.log('GGGGGGGGGGG', response.data.data);
+              _that.props.updatedCategory(response.data.data.product_category);
               _that.setState({
                 name:'',
                 description:'',
@@ -225,7 +229,7 @@ class CreateProductCategory extends React.Component {
                   on_webshop: false,
                 },
                 screen: 'new',
-              });;
+              });
               Alert.alert('Success','Product Category Updated Successfully!',[
                 {
                   text:'OK',
@@ -484,6 +488,8 @@ function mapDispatchToProps(dispatch) {
     logoutUser: () => dispatch({type: LOGOUT_USER}),
     setScreenReload: value =>
       dispatch({type: PRODUCT_CATEGORY_RELOAD, value: value}),
+      createdCategory: value => dispatch({type: PRODUCT_CATEGORY_CREATED, value: value}),
+      updatedCategory: value => dispatch({type: PRODUCT_CATEGORY_UPDATED, value: value}),
   };
 }
 export default connect(

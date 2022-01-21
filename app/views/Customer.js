@@ -31,6 +31,8 @@ import {connect} from 'react-redux';
 import {SET_USER, LOGOUT_USER, CUSTOMER_RELOAD} from '../redux/constants/index';
 import NavBack from './Components/NavBack';
 import Scaffold from './Components/Scaffold';
+import { getCustomers } from '../redux/actions/customer_action';
+import EmptyList from './Components/EmptyList';
 
 class Customer extends React.Component {
   constructor(props) {
@@ -57,7 +59,13 @@ class Customer extends React.Component {
 
   componentDidMount() {
     console.log('this.props.user', this.props.user.access_token);
-    this.getCustomers(Constants.customerlist + '?page=' + this.state.pageNo);
+   // this.getCustomers(Constants.customerlist + '?page=' + this.state.pageNo);
+
+    this.props.getCustomers(Constants.customerlist + '?page=' + this.state.pageNo, false, () => {
+      this.unauthorizedLogout();
+    },()=>{
+      Alert.alert("ERROR",this.props.customers.error)
+    });
   }
 
   handleLoadMore = () => {
@@ -69,7 +77,11 @@ class Customer extends React.Component {
     const customer_url = Constants.customerlist + '?page=' + pageNo;
 
     console.log('customer_url$##@0', customer_url);
-    this.getCustomers(customer_url);
+    this.props.getCustomers(customer_url + '?page=' + this.state.pageNo, true, () => {
+      this.unauthorizedLogout();
+    },()=>{
+      Alert.alert("ERROR",this.props.customers.error);
+    });
 
     // method for API call
     // } else {
@@ -82,8 +94,8 @@ class Customer extends React.Component {
     // if (!this.state.spinner) return null;
     // return <ActivityIndicator style={{color: '#000'}} />;
     if (
-      this.state.totalPageCount > 1 &&
-      this.state.pageNo < this.state.totalPageCount
+      this.props.customers.totalPageCount > 1 &&
+      this.state.pageNo < this.props.customers.totalPageCount
     ) {
       return (
         <TouchableOpacity
@@ -104,43 +116,43 @@ class Customer extends React.Component {
     return null;
   };
 
-  getCustomers(url) {
-    this.setState({spinner: true});
-    let postData = {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: this.props.user.access_token,
-      },
-    };
-    //'https://com.cicodsaasstaging.com/com/api/customers?page=1'
-    // Constants.customerlist+'?page='+this.state.page
-    fetch(url, postData)
-      .then(response => response.json())
-      .then(async responseJson => {
-        console.log('responseJson !!!! @@@@@@@@@@@@', responseJson);
-        this.setState({
-          spinner: false,
-          isFetching: false,
-        });
-        if (responseJson.status === 'success') {
-          this.setState({
-            data: [...this.state.data, ...responseJson.data],
-            totalPageCount: responseJson.pages,
-          });
-          // this.props.navigation.navigate('DrawerNavigation')
-        } else if (responseJson.status == 401) {
-          this.unauthorizedLogout();
-        } else {
-          let message = responseJson.message;
-          // Alert.alert('Error', message);
-        }
-      })
-      .catch(error => {
-        console.log('Error !!!', error);
-      });
-  }
+  // getCustomers(url) {
+  //   this.setState({spinner: true});
+  //   let postData = {
+  //     method: 'GET',
+  //     headers: {
+  //       Accept: 'application/json',
+  //       'Content-Type': 'application/json',
+  //       Authorization: this.props.user.access_token,
+  //     },
+  //   };
+  //   //'https://com.cicodsaasstaging.com/com/api/customers?page=1'
+  //   // Constants.customerlist+'?page='+this.state.page
+  //   fetch(url, postData)
+  //     .then(response => response.json())
+  //     .then(async responseJson => {
+  //       console.log('responseJson !!!! @@@@@@@@@@@@', responseJson);
+  //       this.setState({
+  //         spinner: false,
+  //         isFetching: false,
+  //       });
+  //       if (responseJson.status === 'success') {
+  //         this.setState({
+  //           data: [...this.state.data, ...responseJson.data],
+  //           totalPageCount: responseJson.pages,
+  //         });
+  //         // this.props.navigation.navigate('DrawerNavigation')
+  //       } else if (responseJson.status == 401) {
+  //         this.unauthorizedLogout();
+  //       } else {
+  //         let message = responseJson.message;
+  //         // Alert.alert('Error', message);
+  //       }
+  //     })
+  //     .catch(error => {
+  //       console.log('Error !!!', error);
+  //     });
+  // }
   unauthorizedLogout() {
     Alert.alert('Error', Constants.UnauthorizedErrorMsg);
     this.props.logoutUser();
@@ -158,17 +170,26 @@ class Customer extends React.Component {
       this.state.search_text +
       '&last_name=' +
       this.state.search_text;
-    this.getCustomers(url);
+      this.props.getCustomers(url, false, () => {
+        this.unauthorizedLogout();
+      },()=>{
+        Alert.alert("ERROR",this.props.customers.error);
+      });
   }
 
   onRefresh = () => {
     console.log('222222222222', this.state.isFetching);
-    this.setState({isFetching: true, data: []});
+   // this.setState({isFetching: true, data: []});
     // if(this.state.isFetching==true){
 
     // let search_url = Constants.productslist + '?search=' + this.state.search_product;
     let url = Constants.customerlist + '?page=1';
-    this.getCustomers(url);
+    this.props.getCustomers(url, false, () => {
+      this.unauthorizedLogout();
+    },()=>{
+      Alert.alert("ERROR",this.props.customers.error);
+    });
+    
     return;
     // }
     
@@ -177,12 +198,12 @@ class Customer extends React.Component {
     // })
   };
   render() {
-    if (this.props.reload.customer) {
-      this.getCustomers(Constants.customerlist + '?page=1');
-      this.props.setScreenReload({
-        reload: false,
-      });
-    }
+    // if (this.props.reload.customer) {
+    //   this.getCustomers(Constants.customerlist + '?page=1');
+    //   this.props.setScreenReload({
+    //     reload: false,
+    //   });
+    // }
 
     const {selectedStartDate} = this.state;
     const startDate = selectedStartDate ? selectedStartDate.toString() : '';
@@ -255,9 +276,9 @@ class Customer extends React.Component {
               },
             ]}></View>
           <View style={{flex: 1}}>
-            {this.state.data.length > 0 ? (
+            
               <FlatList
-                data={this.state.data}
+                data={this.props.customers.data}
                 ItemSeparatorComponent={
                   Platform.OS !== 'android' &&
                   (({highlighted}) => (
@@ -266,13 +287,14 @@ class Customer extends React.Component {
                     />
                   ))
                 }
-                refreshing={this.state.isFetching}
+                ListEmptyComponent={<EmptyList title="No Customer Found" />}
+                refreshing={this.props.customers.isFetching}
                 onRefresh={this.onRefresh}
                 keyExtractor={(item, index) => index}
                 ListFooterComponent={this.renderFooter}
                 renderItem={({item, index, separators}) => (
                   <TouchableOpacity
-                    key={item.key}
+                    // key={item.key}
                     onPress={() => this.customerDetails(item)} //=>this.props.navigation.navigate('CustomersDetal')
                     onShowUnderlay={separators.highlight}
                     onHideUnderlay={separators.unhighlight}>
@@ -327,33 +349,7 @@ class Customer extends React.Component {
                   </TouchableOpacity>
                 )}
               />
-            ) : (
-              <View
-                style={{
-                  height: height / 1.75,
-                  position: 'relative',
-                  flexDirection: 'column',
-                  alignSelf: 'center',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  backgroundColor: '#F0F0F0',
-                  width: width - 20,
-                  padding: 10,
-                  borderRadius: 10,
-                  marginBottom: 5,
-                }}>
-                <Image source={require('../images/Untitled-1.png')} />
-                <Text
-                  style={{
-                    color: '#929497',
-                    fontSize: 20,
-                    fontWeight: 'bold',
-                    fontFamily: 'Open Sans',
-                  }}>
-                  No Customer found
-                </Text>
-              </View>
-            )}
+           
           </View>
         </View>
       </Scaffold>
@@ -365,6 +361,7 @@ function mapStateToProps(state) {
   return {
     user: state.userReducer,
     reload: state.reloadReducer,
+    customers:state.customReducer,
   };
 }
 function mapDispatchToProps(dispatch) {
@@ -372,6 +369,8 @@ function mapDispatchToProps(dispatch) {
     setUser: value => dispatch({type: SET_USER, value: value}),
     logoutUser: () => dispatch({type: LOGOUT_USER}),
     setScreenReload: value => dispatch({type: CUSTOMER_RELOAD, value: value}),
+    getCustomers: (url, loadmore, next) =>
+    dispatch(getCustomers(url, loadmore, next)),
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(Customer);

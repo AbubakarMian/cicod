@@ -14,6 +14,7 @@ import {
   Platform,
   TouchableOpacity,
   SafeAreaView,
+  Linking
 } from 'react-native';
 import {Text, TextInput} from 'react-native-paper';
 import splashImg from '../images/splash.jpg';
@@ -45,6 +46,7 @@ import {serialize} from 'object-to-formdata';
 import CategoryDropdown from './Components/CategoryDropdown';
 import DropDownModal from './Components/DropDownModal';
 import Scaffold from './Components/Scaffold';
+import { createORUpdateProduct } from '../redux/actions/product_action';
 
 const {width, height} = Dimensions.get('window');
 
@@ -392,76 +394,40 @@ class CreateProduct extends React.Component {
         //     price:5,
         // }));//sel_attr.price
       }
-      this.setState({spinner: true});
+
+
+     
       let url = '';
-      let method = '';
-      if (this.props.route.params.action == 'update') {
-        url = Constants.productslist + '/' + this.state.prod_id;
-        method = 'PUT';
-      } else {
-        url = Constants.productslist;
-        method = 'POST';
-      }
+url=this.props.route.params.action == 'update'?Constants.productslist + '/' + this.state.prod_id:Constants.productslist;
 
-      let postData = {
-        method: method,
-        headers: {
-          Accept: 'application/json',
-          'Content-Type': 'multipart/form-data',
-          Authorization: this.props.user.access_token,
-        },
-        body: formData,
-      };
-      console.log('****************', JSON.stringify(postData));
-      fetch(url, postData)
-        .then(response => response.json())
-        .then(async responseJson => {
-          this.setState({spinner: false});
-          this.props.setScreenReload({
-            reload: true,
-          });
-          console.log("createdPRod$$",responseJson.data)
-          if (responseJson.status === 'success') {
-            
-            let customer_id = responseJson.data.id;
-            if (this.props.route.params.action == 'create') {
-              Alert.alert('SUCCESS', "Product Created Successfully!",[
-                {
-                  text:"OK",
-                  onPress:()=>this.props.navigation.navigate('Products', {seller_id: 1})
-                }
-              ]);
-              
-            } else {
-              Alert.alert('SUCCESS', "Product Updated Successfully!",[
-                {
-                  text:"OK",
-                  onPress:()=>{
-                    if (this.props.route.params.heading=="BUYERS") {
-                      this.props.navigation.navigate('BuyersProducts', {items:this.props.route.params.items,heading:this.props.route.params.heading})
-                    } else {
-                    this.props.navigation.navigate('Products', {seller_id: 1})
-                      
-                    }
-
-                  }
-                }
-              ]);
-              // this.props.navigation.navigate('Products', {seller_id: 0});
-              //this.props.navigation.goBack();
+      this.props.create_or_update_Product(url,formData,this.props.route.params.action,()=>{
+        if (this.props.route.params.action == 'create') {
+          Alert.alert('SUCCESS', "Product Created Successfully!",[
+            {
+              text:"OK",
+              onPress:()=>this.props.navigation.navigate('Products', {seller_id: 1})
             }
-          } else if (responseJson.status == 401) {
-            this.unauthorizedLogout();
-          } else {
-            let message = responseJson.message;
-            console.log('Error send req', responseJson);
-            Alert.alert('Error', message);
-          }
-        })
-        .catch(error => {
-          this.setState({spinner: false});
-          console.log('Api call error', error);
-        });
+          ]);
+          
+        } else {
+          Alert.alert('SUCCESS', "Product Updated Successfully!",[
+            {
+              text:"OK",
+              onPress:()=>{
+                if (this.props.route.params.heading=="BUYERS") {
+                  this.props.navigation.navigate('BuyersProducts', {items:this.props.route.params.items,heading:this.props.route.params.heading})
+                } else {
+                this.props.navigation.navigate('Products', {seller_id: 1})
+                  
+                }
+
+              }
+            }
+          ]);
+          // this.props.navigation.navigate('Products', {seller_id: 0});
+          //this.props.navigation.goBack();
+        }
+      }) 
     }
   }
   add_variation() {
@@ -742,7 +708,7 @@ console.log("caeee$#");
     // let selected_attributes = attributes[index].selected_attributes;
 
     let selected_variation = this.state.selected_variation;
-    let selected_attributes = selected_variation.selected_attributes;
+    let selected_attributes = selected_variation.selectfseed_attributes;
 
     let index_found = selected_attributes.indexOf(item.id);
 
@@ -859,7 +825,7 @@ console.log("caeee$#");
         <View style={[{}, styles.mainView]}>
           <Header navigation={this.props.navigation} />
           <Spinner
-            visible={this.state.spinner}
+            visible={ this.props.products.isSubmitting}
             textContent={'Please Wait...'}
             textStyle={{color: '#fff'}}
             color={'#fff'}
@@ -1054,7 +1020,11 @@ console.log("caeee$#");
                       checkBoxColor={'#4E4D4D'}
                     />
                   </View>
+                 
                 </View>
+                {this.state.is_web_shop&& <Text onPress={()=>Linking.openURL(`${Constants.sass_url}/login`)} style={{fontSize:12}}>
+                  For your products to be visible on your webshop, please make sure to set up your delivery rate card. Click here
+                  </Text>}
                 <View style={[{}, styles.formRowView]}>
                   <View style={[ {position: 'relative', width: 150,marginVertical:5}]}>
                 
@@ -1326,6 +1296,7 @@ function mapStateToProps(state) {
     user: state.userReducer,
     reload: state.reloadReducer,
     barcode: state.barcodeReducer,
+    products: state.products_reducer,
   };
 }
 function mapDispatchToProps(dispatch) {
@@ -1333,6 +1304,7 @@ function mapDispatchToProps(dispatch) {
     setUser: value => dispatch({type: SET_USER, value: value}),
     logoutUser: () => dispatch({type: LOGOUT_USER}),
     setScreenReload: value => dispatch({type: PRODUCT_RELOAD, value: value}),
+    create_or_update_Product:(url,body, type,next)=>dispatch(createORUpdateProduct(url,body,type,next))
   };
 }
 export default connect(mapStateToProps, mapDispatchToProps)(CreateProduct);

@@ -14,7 +14,18 @@ const InAppHeader=({onPress=f=>f})=>{
         backgroundColor: '#FFFFFF',
         paddingVertical: 10,
         paddingHorizontal: 10,}}>
-          <TouchableOpacity hitSlop={{top:20,bottom:20,right:20,left:20}} onPress={()=>onPress()}>
+          <TouchableOpacity hitSlop={{top:20,bottom:20,right:20,left:20}} onPress={()=>{
+             Alert.alert("Info","Do you want to exit?",[
+              {
+                text:"NO",
+              },
+              {
+                text:"YES",
+                onPress:()=>onPress()
+              }
+            ]);
+            
+            }}>
 <Icon name="arrow-left" size={25} color={'#929497'} />
 
 

@@ -501,6 +501,7 @@ console.log("item$#",item)
    
 
     let bodyOrder = {
+      delivery_amount:this.state.cart_detail.delivery_fee>0?this.state.cart_detail.delivery_fee:0,
       customer_name:
         this.state.customer_name == '' &&
        ( this.state.valuePaymentKey == "PAY_CASH" ||
@@ -771,35 +772,7 @@ console.log("item$#",item)
       });
   }
 
-  getSuppliersList(url) {
-    console.log('get Suppliers List');
-    this.setState({spinner: true});
-    let postData = {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: this.props.user.access_token,
-      },
-    };
-    fetch(url, postData)
-      .then(response => response.json())
-      .then(async responseJson => {
-        console.log('suppliers responseJson @@@@@@@@@@@@@@@@@@@', responseJson);
-        this.setState({
-          spinner: false,
-        });
-        if (responseJson.success === true) {
-          this.setState({
-            supplierlist: responseJson.data,
-          });
-        } else {
-          console.log('errorrrrr', responseJson);
-          let message = JSON.stringify(responseJson.error.message);
-          Alert.alert('Error', message);
-        }
-      });
-  }
+
   unauthorizedLogout() {
     Alert.alert('Error', Constants.UnauthorizedErrorMsg);
     this.props.logoutUser();
@@ -1686,85 +1659,7 @@ console.log("item$#",item)
               </View>
             </View>
           </ScrollView>
-          <Modal visible={this.state.suppliereModal} transparent={true}>
-            <View style={[{}, styles.mainContainer]}>
-              <TouchableOpacity
-                style={[{}, styles.backgroundTouch]}></TouchableOpacity>
-              <View style={[{}, styles.contentView]}>
-                <View style={[{}, styles.modalCancleRow]}>
-                  <Text style={[{}, styles.modalCancleText]}>
-                    SELECT SUPPLIERS
-                  </Text>
-                  <TouchableOpacity
-                    onPress={() => this.setState({suppliereModal: false})}
-                    style={[{}, styles.modalCancleTouch]}>
-                    <Icon name="times" size={20} color="#929497" />
-                  </TouchableOpacity>
-                </View>
-                <View style={[{}, styles.searchRow]}>
-                  <Icon name="search" size={20} color="#929497" />
-                  <TextInput
-                    label="Search supplier"
-                    style={{backgroundColor: 'transparent'}}
-                    width={width - 50}
-                    alignSelf={'center'}
-                    color={'#000'}
-                    onChangeText={text =>
-                      this.setState({search_supplier: text})
-                    }
-                    onSubmitEditing={() => this.searchSupplier()}
-                  />
-                </View>
-                
-                  <FlatList
-                    ItemSeparatorComponent={
-                      Platform.OS !== 'android' &&
-                      (({highlighted}) => (
-                        <View
-                          style={[
-                            styles.separator,
-                            highlighted && {marginLeft: 0},
-                          ]}
-                        />
-                      ))
-                    }
-                    data={this.state.supplierlist}
-                    renderItem={({item, index, separators}) => (
-                      <TouchableOpacity
-                        key={item.key}
-                        onPress={() => this.supplierModalFun(item)}
-                        onShowUnderlay={separators.highlight}
-                        onHideUnderlay={separators.unhighlight}>
-                        <View
-                          style={[{marginTop: 10}, styles.modalListContainer]}>
-                          <Image
-                            style={{width: 30, height: 30}}
-                            source={require('../images/bage.png')}
-                          />
-                          <View style={[{}, styles.modalListContentView]}>
-                            <Text
-                              style={[{color: '#4E4D4D'}, fontStyles.bold15]}>
-                              {item.seller_name}
-                            </Text>
-                            <Text
-                              style={[{color: '#929497'}, fontStyles.normal12]}>
-                              {item.seller_id}
-                            </Text>
-                          </View>
-                          <Icon
-                            style={[{}, styles.modalListContentRightIcon]}
-                            name="angle-right"
-                            size={20}
-                            color="#aaa"
-                          />
-                        </View>
-                      </TouchableOpacity>
-                    )}
-                  />
-                
-              </View>
-            </View>
-          </Modal>
+          
           <Modal
             onDismiss={() => {
               this.setState({

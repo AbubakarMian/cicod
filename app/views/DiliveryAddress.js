@@ -11,7 +11,7 @@ import {
   TouchableOpacity,
   FlatList,
 } from 'react-native';
-import {Text, TextInput} from 'react-native-paper';
+import {Text, TextInput,Modal} from 'react-native-paper';
 import styles from '../css/DiliveryAddressCss';
 import fontStyles from '../css/FontCss';
 import Icon from 'react-native-vector-icons/dist/FontAwesome';
@@ -48,6 +48,8 @@ class DiliveryAddress extends React.Component {
       selected_address_id: this.props.route.params.address_id ?? 0,
       delivery_type: this.props.route.params.type ?? '',
       isChecked: false,
+      isShowModal:false,
+      delivery_amount:""
     };
   }
 
@@ -260,7 +262,7 @@ class DiliveryAddress extends React.Component {
 
   selectAddressGoBack(object) {
     this.getDeliveryFee(object);
-    this.props.navigation.goBack();
+    
   }
 
   getDeliveryFee(object,same_as=false) {
@@ -317,13 +319,14 @@ class DiliveryAddress extends React.Component {
             });
           }
          
-         
+          this.props.navigation.goBack();
 
          
         } else {
           this.setState({spinner: false});
           let message = responseJson.status;
-          Alert.alert('Info', responseJson.message);
+          this.setState({isShowModal:true})
+          //Alert.alert('Info', responseJson.message);
         }
       })
       .catch(error => {
@@ -480,6 +483,120 @@ class DiliveryAddress extends React.Component {
             </View>
           </ScrollView>
         </View>
+
+        <Modal
+            visible={this.state.isShowModal}
+            onDismiss={() => this.setState({isShowModal: false})}>
+            <View
+              style={{
+                height: height - 350,
+                alignSelf: 'center',
+                backgroundColor: '#fff',
+                width: width - 50,
+                borderRadius: 10,
+                flexDirection: 'column',
+                padding: 25,
+              }}>
+                <ScrollView showsVerticalScrollIndicator={false} style={{flex:1}}>
+                  <View style={{alignSelf:"center",marginTop:20,marginBottom:10}}>
+                  <Image
+                  style={{height: 70, width: 70}}
+                  source={require('../images/home/AddUserInfo.png')}
+                />
+                  </View>
+              
+                <Text
+                  style={{color: '#343A40', fontWeight: 'bold', fontSize: 15,alignSelf:"center",marginBottom:20}}>
+                  Delivery price not set For location
+                </Text>
+              
+              <View>
+                <TextInput
+                keyboardType="numeric"
+                  value={this.state.delivery_amount}
+                  onChangeText={text => this.setState({delivery_amount: text})}
+                  placeholder="Enter Price"
+                  style={{
+                    paddingLeft: 0,
+                    height: 40,
+                    
+                    backgroundColor: '#fff',
+                    borderColor:"#DDE2E5",
+                    borderRadius:5,
+                    borderWidth:1,
+                    fontSize: 13,
+                  }}
+                />
+                
+              </View>
+
+            
+              
+              <View style={{flexDirection: 'column', marginTop: 20}}>
+                <View
+                // style={{ flex: 1, justifyContent: 'center', alignItems: 'center', }}
+                >
+                  <TouchableOpacity
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: '#B1272C',
+                      paddingVertical: 15,
+                      padding: 40,
+                      borderRadius: 100,
+                    }}
+                    onPress={() =>{ 
+                      this.props.addDeliveryFee({
+                      delivery_fee: this.state.delivery_amount,
+                    });
+
+                    this.props.setDeliveryAddress({
+                      address: this.props.customer.detail.address,
+                      country_id: this.props.customer.detail.country_id,
+                      state_id: this.props.customer.detail.state_id,
+                      type: 'Delivery',
+                      same_as_delivery: true,
+                      lga_id:this.props.customer.detail.lga_id,
+                      selected_address_id: this.props.customer.detail.list_id,
+                    });
+
+
+                    this.props.navigation.goBack();
+
+                  }
+                    }>
+                    <Text style={{color: '#ffffff'}}>Submit</Text>
+                  </TouchableOpacity>
+                </View>
+
+                <View
+                  style={{marginTop: 15}}
+                  // style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}
+                >
+                  <TouchableOpacity
+                    style={{
+                      justifyContent: 'center',
+                      alignItems: 'center',
+                      backgroundColor: '#fff',
+                      paddingVertical: 15,
+                      padding: 30,
+                      borderRadius: 100,
+                      borderWidth: 1,
+                      borderColor: '#E6E6E6',
+                    }}
+                    onPress={() => {
+                      this.setState({isShowProductModal: false});
+                      this.props.navigation.goBack();
+                    }}>
+                    <Text style={{color: '#E6E6E6', paddingHorizontal: 10}}>
+                      Cancel
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+              </ScrollView>
+            </View>
+          </Modal>
       </Scaffold>
     );
   }

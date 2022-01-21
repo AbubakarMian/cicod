@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {SET_USER, LOGOUT_USER} from '../constants';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 const initialState = {
@@ -18,22 +19,7 @@ const userReducer = (state = initialState, action) => {
   console.log('data----------user', action);
   switch (action.type) {
     case SET_USER:
-      AsyncStorage.setItem(
-        'User',
-        JSON.stringify({
-          id: action.value.id,
-          firstname: action.value.firstname,
-          lastname: action.value.lastname,
-          email: action.value.email,
-          phone: action.value.phone,
-          access_token: action.value.access_token,
-          kciInfo: action.value.kciInfo,
-          merchantApps: action.value.merchantApps,
-          merchantStatus: action.value.merchantStatus,
-          tenantId: action.value.tenantId,
-          roles: action.value.roles,
-        }),
-      );
+     
       return {
         ...state,
         id: action.value.id,
@@ -49,7 +35,7 @@ const userReducer = (state = initialState, action) => {
         roles: action.value.roles,
       };
 
-      break;
+     // break;
     case LOGOUT_USER:
       AsyncStorage.removeItem('User');
       return {
@@ -63,7 +49,7 @@ const userReducer = (state = initialState, action) => {
         kciInfo: null,
         tenantId: '',
       };
-      break;
+    //  break;
 
     default:
       return state;

@@ -24,6 +24,8 @@ export default class InAppWebView extends React.Component {
          <InAppHeader onPress={()=>this.props.navigation.goBack()} />
          
           <Spinner
+          
+          cancelable={true}
             visible={this.state.spinner}
             textContent={'Please Wait...'}
             textStyle={{color: '#fff'}}

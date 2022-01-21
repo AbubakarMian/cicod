@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {SET_DELIVERY_ADDRESS, RESET, RESET_DELIVERY_MAIN} from '../constants';
 const initialState = {
   country_id: 0,
@@ -27,7 +28,7 @@ const deliveryAddressReducer = (state = initialState, action) => {
         selected_address_id: action.value.selected_address_id,
       };
 
-      break;
+      
     case RESET_DELIVERY_MAIN:
       return {
         ...state,
@@ -40,7 +41,7 @@ const deliveryAddressReducer = (state = initialState, action) => {
         type: 'PICKUP',
       };
 
-      break;
+      
     default:
       return state;
   }

@@ -217,7 +217,7 @@ class Home extends React.Component {
       .then(response => response.json())
       .then(async responseJson => {
         console.log(
-          'responseJson @@@@@@@@###########',
+          'responseJson @@@@@@@@#s##########',
           Constants.marchantDetail,
           postData,
           responseJson,
@@ -428,8 +428,8 @@ class Home extends React.Component {
                       borderRadius: 10,
                       flexDirection: 'row',
                     }}>
-                    <Text style={{color: '#fff', fontSize: 13}}>
-                      Please provide your contact details on the web.
+                    <Text onPress={()=>Linking.openURL(`${Constants.sass_url}/login`)} style={{color: '#fff', fontSize: 13}}>
+                      Please provide your contact details on the web. Click here.
                     </Text>
                   </View>
                 )}
